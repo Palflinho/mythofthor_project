@@ -1,11 +1,19 @@
 # 📖 Diretrizes de Arquitetura e Guia de Colaboração (Myth of Thor)
 
 > **Documento Oficial de Alinhamento para a Equipe (Você, Claude e Antigravity)**  
-> Este documento registra todas as decisões de design de mundo, transições, controles, áudio dinâmico, exibição de dano e a divisão técnica de tarefas entre os copilotos.
+> Este documento registra todas as decisões de design de mundo, transições, controles, áudio dinâmico, exibição de dano, escopo de lançamento (Sem WoE inicial) e a divisão técnica de tarefas entre os copilotos.
 
 ---
 
-## 🎮 1. Controles e Câmera Híbridos
+## 🛡️ 1. Filosofia de Lançamento & Escopo (Sem WoE no Início)
+* **WoE (Guerra do Emperium) Desativada na Fase 1:**
+  * O lançamento é **100% focado em PvE, Exploração, Quests e Economia Inicial**.
+  * Permite que os jogadores aproveitem o jogo casualmente sem pressão de rush para castelos.
+  * A abertura dos castelos (Valkyrie Realm de Prontera) será reservada como o **primeiro grande evento sazonal de comunidade** após os clãs se consolidarem.
+
+---
+
+## 🎮 2. Controles e Câmera Híbridos
 
 ### A. Movimentação Dual Simultânea (Enhanced Input System)
 * **Mouse (Point & Click):** Clicar no chão move o personagem até o ponto desejado (fiel ao clássico de 2002).
@@ -18,7 +26,7 @@
 
 ---
 
-## 💥 2. Exibição de Dano & Combate Clássico (Floating Text)
+## 💥 3. Exibição de Dano & Combate Clássico (Floating Text)
 Preservação visual total da identidade clássica dos anos 2000:
 * **Dano Causado a Monstros:** Números brancos/amarelados com animação clássica de "salto" sobre o alvo.
 * **Dano Crítico:** Números ampliados acompanhados do SFX de impacto crítico.
@@ -27,14 +35,14 @@ Preservação visual total da identidade clássica dos anos 2000:
 
 ---
 
-## 🎵 3. Áudio Dinâmico de Dia e Noite (Sem Alterar Arquivos)
+## 🎵 4. Áudio Dinâmico de Dia e Noite (Sem Alterar Arquivos)
 Utilização das trilhas sonoras originais (`Theme of Prontera`, etc.) processadas em tempo real pelo sistema de áudio da Unreal 5:
 * **Dia:** Reprodução normal e vibrante da BGM clássica.
 * **Noite:** A Unreal aplica filtro passa-baixa (**Low-Pass Filter**) com redução de ~15% de volume e leve reverberação de ambiente, acompanhada de sons atmosféricos (grilos, corujas e vento suave).
 
 ---
 
-## 💀 4. Regras de Morte & Auto-Battle (Risco vs. Recompensa)
+## 💀 5. Regras de Morte & Auto-Battle (Risco vs. Recompensa)
 
 ### A. Morte em Jogo Manual
 * Penalidade clássica: Perda de **1% de EXP Base**. O jogador escolhe quando voltar ao ponto de retorno ou aguarda um suporte ressuscitar.
@@ -49,7 +57,7 @@ Para evitar abusos e impedir que jogadores deixem o bot farmando em áreas perig
 
 ---
 
-## 🗺️ 5. Arquitetura de Mundo & Transições
+## 🗺️ 6. Arquitetura de Mundo & Transições
 
 ### A. Regiões em Mundo Aberto Contínuo (Seamless Open World)
 * **Dentro da mesma região (ex: Região de Prontera):** Cidade Capital + Campos circundantes formam **um único mundo contínuo** via **World Partition** na UE5. Zero portais azuis e zero telas de loading entre cidade e campos.
@@ -63,7 +71,7 @@ Para evitar abusos e impedir que jogadores deixem o bot farmando em áreas perig
 
 ---
 
-## 🤝 6. Divisão de Papéis da Equipe
+## 🤝 7. Divisão de Papéis da Equipe
 
 ### 🧠 Papel do Claude (Arte Técnica, Unreal Engine 5 & Blueprints)
 1. **Controles & Câmera:** Enhanced Input System (WASD + Clique) e câmera alternável.
@@ -74,6 +82,6 @@ Para evitar abusos e impedir que jogadores deixem o bot farmando em áreas perig
 
 ### ⚙️ Papel do Antigravity (Engenharia de Rede C++, Servidor & Backend)
 1. **Protocolo Nativo de Rede rAthena:** Código C++ de sockets TCP na Unreal (`URagnarokNetworkSubsystem`) com serialização binária.
-2. **Infraestrutura no Ubuntu/Docker:** Manutenção do banco MariaDB (porta `3311`), compilação dos servidores e travas de mapas.
+2. **Infraestrutura no Ubuntu/Docker:** Manutenção do banco MariaDB (porta `3311`), compilação dos servidores e travas de mapas (WoE desativada).
 3. **Testes Automatizados Contínuos:** Manutenção e expansão da suíte headless em Python (`tests/ragnarok_net_test.py`).
 4. **Lógica Matemática do Auto-Battle:** Vigor de 3h diárias, travas de sobrepeso e penalidade de 5% de EXP ao morrer.
