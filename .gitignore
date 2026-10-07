@@ -1,0 +1,32 @@
+# Prerequisites
+*.dSYM/
+*.suo
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.opendb
+
+# Unreal Engine Files
+Binaries/
+Build/
+DerivedDataCache/
+Intermediate/
+Saved/
+.vscode/
+.vs/
+*.sln
+*.xcodeproj
+*.xcworkspace
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Docker / Logs / Data
+*.log
+db_data/
+rathenadb/
+*.grf

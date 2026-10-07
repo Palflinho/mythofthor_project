@@ -1,0 +1,61 @@
+version: "3.7"
+
+services:
+  db:
+    image: "mariadb:noble"
+    container_name: "mythofthor-db"
+    restart: always
+    ports:
+      - "3311:3306" # Mapeado para 3311 para evitar colisão na máquina host
+    volumes:
+      - "rathenadb:/var/lib/mysql"
+      - "./sql-files/:/docker-entrypoint-initdb.d"
+    environment:
+      MYSQL_ROOT_PASSWORD: ragnarok
+      MYSQL_DATABASE: ragnarok
+      MYSQL_USER: ragnarok
+      MYSQL_PASSWORD: ragnarok
+
+  builder:
+    image: "rathena:local"
+    container_name: "mythofthor-builder"
+    volumes:
+      - "./rathena:/rathena"
+    environment:
+      BUILDER_CONFIGURE: "--enable-packetver=20211103"
+
+  login:
+    image: "rathena:local"
+    container_name: "mythofthor-login"
+    restart: always
+    ports:
+      - "6900:6900"
+    volumes:
+      - "./rathena:/rathena"
+    depends_on:
+      - db
+
+  char:
+    image: "rathena:local"
+    container_name: "mythofthor-char"
+    restart: always
+    ports:
+      - "6121:6121"
+    volumes:
+      - "./rathena:/rathena"
+    depends_on:
+      - login
+
+  map:
+    image: "rathena:local"
+    container_name: "mythofthor-map"
+    restart: always
+    ports:
+      - "5121:5121"
+    volumes:
+      - "./rathena:/rathena"
+    depends_on:
+      - char
+
+volumes:
+  rathenadb:
