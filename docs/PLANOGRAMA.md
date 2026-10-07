@@ -1,6 +1,8 @@
 # Planograma de Desenvolvimento: Myth of Thor (UE5 + rAthena)
 
-Este documento estabelece o roteiro completo de engenharia e arte para entregar uma versão jogável focada na região de **Prontera como Mundo Contínuo (Sem portais azuis/loading entre cidade e campos)**, incluindo o **Campo de Treinamento**, **Ciclo Dia/Noite**, **Clima Dinâmico** e **Auto-Battle com limite de 3h diárias**.
+Este documento estabelece o roteiro completo de engenharia e arte para entregar uma versão jogável focada na região de **Prontera como Mundo Contínuo** e **Dungeons Híbridas (Fade suave em escadas)**, incluindo o **Campo de Treinamento**, **Ciclo Dia/Noite**, **Clima Dinâmico** e **Auto-Battle com limite de 3h diárias**.
+
+> 📌 **Nota:** Consulte o arquivo [`docs/DIRETRIZES_PROJETO_E_CLAUDE.md`](./DIRETRIZES_PROJETO_E_CLAUDE.md) para a divisão detalhada de tarefas entre Claude e Antigravity.
 
 ---
 
@@ -25,6 +27,7 @@ flowchart TD
         C1["3.1 Prontera & Campos Unificados (World Partition)"]
         C2["3.2 Sprites 2D do Aprendiz e Monstros (PaperZD)"]
         C3["3.3 Ciclo Dia/Noite (Lumen) & Clima (Niagara)"]
+        C4["3.4 Dungeons Híbridas (Fade-out 0.5s em escadas)"]
     end
 
     subgraph Marco 4: Gameplay Sincronizado & Combate
@@ -65,6 +68,7 @@ flowchart TD
 
 ### 🎨 Marco 3: Mundo Contínuo HD-2D & Atmosfera
 - [ ] **World Partition:** Integrar Prontera 3D e os campos adjacentes em um cenário contínuo (sem portais azuis ou telas de loading entre cidade e campo).
+- [ ] **Dungeons Híbridas:** Transição suave entre andares subterrâneos usando Fade-out de 0.5s para preto com troca de ambiência sonora.
 - [ ] Configurar **NavMesh** global contínuo para cálculo de rotas do personagem.
 - [ ] Configurar **PaperZD** para gerenciar os sprites do Aprendiz e monstros (8 direções).
 - [ ] Blueprint de **Ciclo Dia/Noite** (Sol rotativo, céu dinâmico e postes que acendem à noite).
