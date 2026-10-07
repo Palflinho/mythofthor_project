@@ -1,6 +1,6 @@
 # Planograma de Desenvolvimento: Myth of Thor (UE5 + rAthena)
 
-Este documento estabelece o roteiro completo de engenharia e arte para entregar uma versão jogável focada na região de **Prontera**, incluindo o **Campo de Treinamento**, **Ciclo Dia/Noite**, **Clima Dinâmico** e **Auto-Battle com limite de 3h diárias**.
+Este documento estabelece o roteiro completo de engenharia e arte para entregar uma versão jogável focada na região de **Prontera como Mundo Contínuo (Sem portais azuis/loading entre cidade e campos)**, incluindo o **Campo de Treinamento**, **Ciclo Dia/Noite**, **Clima Dinâmico** e **Auto-Battle com limite de 3h diárias**.
 
 ---
 
@@ -10,7 +10,7 @@ Este documento estabelece o roteiro completo de engenharia e arte para entregar 
 flowchart TD
     subgraph Marco 1: Servidor & Infraestrutura
         A1["1.1 rAthena no Docker (Ubuntu)"] --> A2["1.2 Versão de Pacotes PACKETVER 20211103"]
-        A2 --> A3["1.3 Limitação de Mapas (Prontera + Treinamento)"]
+        A2 --> A3["1.3 Região Contínua Prontera + Treinamento"]
     end
 
     subgraph Marco 2: Subsistema de Rede C++ (Unreal Engine 5)
@@ -21,15 +21,15 @@ flowchart TD
         B1 --> B2 --> B3 --> B4
     end
 
-    subgraph Marco 3: Renderização & Atmosfera HD-2D
-        C1["3.1 Prontera & Campo 3D + NavMesh"]
+    subgraph Marco 3: Mundo Contínuo & Atmosfera HD-2D
+        C1["3.1 Prontera & Campos Unificados (World Partition)"]
         C2["3.2 Sprites 2D do Aprendiz e Monstros (PaperZD)"]
         C3["3.3 Ciclo Dia/Noite (Lumen) & Clima (Niagara)"]
     end
 
     subgraph Marco 4: Gameplay Sincronizado & Combate
-        D1["4.1 Pacotes de Movimento (CZ_REQUEST_MOVE / ZC_NOTIFY_MOVE)"]
-        D2["4.2 Spawning de Atores e Monstros"]
+        D1["4.1 Movimentação Sem Costura (Seamless Transição)"]
+        D2["4.2 Spawning de Atores e Monstros no Campo"]
         D3["4.3 Combate, Cálculo de Dano e Quests"]
     end
 
@@ -53,7 +53,7 @@ flowchart TD
 - [x] Repositório rAthena configurado com Dockerfile e MariaDB no Docker.
 - [x] Porta do MariaDB mapeada para `3311` (evitando conflitos com portas locais).
 - [ ] Compilar os servidores com `PACKETVER=20211103`.
-- [ ] Travar o carregamento de mapas ativos no `map_athena.conf` apenas para Prontera e Campos de Treinamento.
+- [ ] Configuração de mapa unificado / transição silenciosa para a região de Prontera.
 - [ ] Criar conta inicial de GM e configurar rates 1x progressivo.
 
 ### 🌐 Marco 2: O Módulo de Rede C++ na Unreal (Protocolo Nativo)
@@ -63,15 +63,15 @@ flowchart TD
 - [ ] **Char-Server (`6121`):** Envio de `CH_ENTER`, recepção de `HC_CHAR_LIST`, seleção de personagem (`CH_SELECT_CHAR`).
 - [ ] **Map-Server (`5121`):** Envio de `CZ_ENTER` e validação do token de zona.
 
-### 🎨 Marco 3: Visual HD-2D & Atmosfera
-- [ ] Importar mapa 3D de Prontera e Campo de Treinamento para a UE5.
-- [ ] Configurar **NavMesh** para cálculo de rotas no chão 3D.
+### 🎨 Marco 3: Mundo Contínuo HD-2D & Atmosfera
+- [ ] **World Partition:** Integrar Prontera 3D e os campos adjacentes em um cenário contínuo (sem portais azuis ou telas de loading entre cidade e campo).
+- [ ] Configurar **NavMesh** global contínuo para cálculo de rotas do personagem.
 - [ ] Configurar **PaperZD** para gerenciar os sprites do Aprendiz e monstros (8 direções).
 - [ ] Blueprint de **Ciclo Dia/Noite** (Sol rotativo, céu dinâmico e postes que acendem à noite).
 - [ ] Sistema **Niagara de Chuva** com poças d'água dinâmicas refletindo luzes com **Lumen**.
 
 ### ⚔️ Marco 4: Gameplay Sincronizado
-- [ ] Movimentação: Clique no chão $\rightarrow$ `CZ_REQUEST_MOVE` $\rightarrow$ rAthena valida $\rightarrow$ `ZC_NOTIFY_PLAYERMOVE`.
+- [ ] Movimentação Contínua: O jogador atravessa o portão da cidade para o campo sem interrupção de câmera.
 - [ ] Combate: Clique em monstro $\rightarrow$ `CZ_REQUEST_ACT` $\rightarrow$ rAthena calcula esquiva/acerto/dano $\rightarrow$ atualiza HUD.
 - [ ] NPCs: Diálogos clássicos com suporte às quests de boas-vindas do Campo de Treinamento.
 
