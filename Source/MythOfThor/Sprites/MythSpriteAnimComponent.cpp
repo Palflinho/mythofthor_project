@@ -70,6 +70,10 @@ void UMythSpriteAnimComponent::ApplyFlipbook(bool bKeepPlaybackPosition)
 		SetFlipbook(Flipbook);
 	}
 	SetLooping(bLoop);
+	if (State != EMythSpriteState::Attack)
+	{
+		SetPlayRate(1.f);
+	}
 	// Trocar so a direcao nao deve reiniciar o ciclo de caminhada.
 	SetPlaybackPosition(bKeepPlaybackPosition ? FMath::Min(Position, Flipbook->GetTotalDuration()) : 0.f, false);
 	Play();
@@ -140,7 +144,21 @@ void UMythSpriteAnimComponent::HandleFinishedPlaying()
 	// Dead permanece no ultimo frame (flipbook nao-loop termina parado).
 }
 
-void UMythSpriteAnimComponent::PlayAttack() { EnterOneShot(EMythSpriteState::Attack); }
+void UMythSpriteAnimComponent::PlayAttack(float AttackDuration)
+{
+	EnterOneShot(EMythSpriteState::Attack);
+	if (AttackDuration > 0.f)
+	{
+		if (const UPaperFlipbook* FB = GetFlipbook())
+		{
+			const float Total = FB->GetTotalDuration();
+			if (Total > AttackDuration)
+			{
+				SetPlayRate(Total / AttackDuration);
+			}
+		}
+	}
+}
 void UMythSpriteAnimComponent::PlayHit()    { EnterOneShot(EMythSpriteState::Hit); }
 void UMythSpriteAnimComponent::Die()        { EnterOneShot(EMythSpriteState::Dead); }
 

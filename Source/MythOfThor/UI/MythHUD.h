@@ -51,6 +51,8 @@ public:
 	float BaseScale = 1.3f;
 
 private:
+	void DrawTargetRing();
+
 	struct FEntry
 	{
 		FVector Location;

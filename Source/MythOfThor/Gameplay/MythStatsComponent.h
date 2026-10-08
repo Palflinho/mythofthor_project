@@ -24,6 +24,16 @@ public:
 	void SetVitals(int32 InHP, int32 InMaxHP, int32 InSP, int32 InMaxSP);
 
 	UFUNCTION(BlueprintCallable, Category = "Myth|Stats")
+	void SetCombat(int32 InASPD, float InAttackRangeUU);
+
+	/** Atraso entre ataques no RO: (200 - ASPD) / 50 segundos (ASPD 150 = 1.0 s). */
+	UFUNCTION(BlueprintPure, Category = "Myth|Stats")
+	float GetAttackDelaySeconds() const { return FMath::Max(0.2f, (200.f - ASPD) / 50.f); }
+
+	UFUNCTION(BlueprintPure, Category = "Myth|Stats") int32 GetASPD() const { return ASPD; }
+	UFUNCTION(BlueprintPure, Category = "Myth|Stats") float GetAttackRangeUU() const { return AttackRangeUU; }
+
+	UFUNCTION(BlueprintCallable, Category = "Myth|Stats")
 	void SetExp(int64 InBaseExp, int64 InBaseExpToNext);
 
 	UFUNCTION(BlueprintPure, Category = "Myth|Stats") const FString& GetCharName() const { return CharName; }
@@ -47,6 +57,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Myth|Stats") int32 MaxHP = 40;
 	UPROPERTY(EditAnywhere, Category = "Myth|Stats") int32 SP = 11;
 	UPROPERTY(EditAnywhere, Category = "Myth|Stats") int32 MaxSP = 11;
+	UPROPERTY(EditAnywhere, Category = "Myth|Stats") int32 ASPD = 150;
+	/** Alcance corpo a corpo em cm, medido da borda do alvo (1 celula ~ 50 cm + folga). */
+	UPROPERTY(EditAnywhere, Category = "Myth|Stats") float AttackRangeUU = 80.f;
 	UPROPERTY(EditAnywhere, Category = "Myth|Stats") int64 BaseExp = 0;
 	UPROPERTY(EditAnywhere, Category = "Myth|Stats") int64 BaseExpToNext = 100;
 };

@@ -38,8 +38,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprite")
 	float WalkSpeedThreshold = 10.f;
 
+	/** AttackDuration > 0 acelera a animacao para caber no intervalo do ASPD (nunca a desacelera). */
 	UFUNCTION(BlueprintCallable, Category = "Sprite")
-	void PlayAttack();
+	void PlayAttack(float AttackDuration = 0.f);
 
 	UFUNCTION(BlueprintCallable, Category = "Sprite")
 	void PlayHit();

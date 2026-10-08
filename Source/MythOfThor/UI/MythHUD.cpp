@@ -3,6 +3,9 @@
 #include "Engine/Canvas.h"
 #include "Engine/Engine.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/CapsuleComponent.h"
+#include "Player/MythPlayerController.h"
+#include "Sprites/MythMonster.h"
 
 namespace
 {
@@ -36,6 +39,7 @@ void AMythHUD::AddDamageNumber(const FVector& WorldLocation, int32 Amount, EComb
 void AMythHUD::DrawHUD()
 {
 	Super::DrawHUD();
+	DrawTargetRing();
 
 	if (!Canvas || Entries.IsEmpty())
 	{
@@ -103,4 +107,52 @@ void UMythCombatText::ShowDamage(const UObject* WorldContextObject, const FVecto
 void UMythCombatText::ShowMiss(const UObject* WorldContextObject, const FVector& WorldLocation)
 {
 	ShowDamage(WorldContextObject, WorldLocation, 0, ECombatTextType::Miss);
+}
+
+void AMythHUD::DrawTargetRing()
+{
+	const AMythPlayerController* PC = Cast<AMythPlayerController>(PlayerOwner);
+	const AMythMonster* Target = PC ? PC->GetFocusedTarget() : nullptr;
+	if (!Canvas || !Target || Target->IsDead())
+	{
+		return;
+	}
+
+	// Circulo no chao, sob o alvo: projeta pontos do plano do piso para a tela (vira uma elipse).
+	const UCapsuleComponent* Cap = Target->GetCapsuleComponent();
+	FVector Center = Target->GetActorLocation();
+	Center.Z -= Cap->GetScaledCapsuleHalfHeight() - 2.f;
+
+	const float Pulse = 1.f + 0.06f * FMath::Sin(GetWorld()->GetTimeSeconds() * 6.f);
+	const float BaseRadius = (Cap->GetScaledCapsuleRadius() + 22.f) * Pulse;
+
+	constexpr int32 Segments = 40;
+	struct FRing { float Scale; float Thickness; FLinearColor Color; };
+	const FRing Rings[] = {
+		{ 1.00f, 2.5f, FLinearColor(1.f, 0.25f, 0.2f, 0.95f) },
+		{ 0.82f, 1.5f, FLinearColor(1.f, 0.9f, 0.9f, 0.8f) },
+	};
+
+	for (const FRing& Ring : Rings)
+	{
+		FVector2D Prev = FVector2D::ZeroVector;
+		bool bHavePrev = false;
+		for (int32 i = 0; i <= Segments; ++i)
+		{
+			const float A = (2.f * PI * i) / Segments;
+			const FVector P = Center + FVector(FMath::Cos(A), FMath::Sin(A), 0.f) * BaseRadius * Ring.Scale;
+			FVector2D Screen;
+			if (!PC->ProjectWorldLocationToScreen(P, Screen, false))
+			{
+				bHavePrev = false;
+				continue;
+			}
+			if (bHavePrev)
+			{
+				DrawLine(Prev.X, Prev.Y, Screen.X, Screen.Y, Ring.Color, Ring.Thickness);
+			}
+			Prev = Screen;
+			bHavePrev = true;
+		}
+	}
 }

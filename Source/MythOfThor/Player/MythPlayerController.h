@@ -9,6 +9,9 @@ class UInputMappingContext;
 class UInputAction;
 class AMythPlayerCharacter;
 class UMythClassicHUDWidget;
+class AMythMonster;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMythAttackPerformed, AMythMonster*, Target);
 
 /**
  * Controles hibridos: Point & Click (mouse) e WASD (teclado) ao mesmo tempo, sem tela de opcoes.
@@ -54,6 +57,28 @@ public:
 	UFUNCTION(Exec)
 	void MythTestHud();
 
+	/** Alvo focado (clique esquerdo em um monstro). Nulo se nao houver. */
+	UFUNCTION(BlueprintPure, Category = "Myth|Targeting")
+	AMythMonster* GetFocusedTarget() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Myth|Targeting")
+	void SetFocusedTarget(AMythMonster* NewTarget);
+
+	UFUNCTION(BlueprintCallable, Category = "Myth|Targeting")
+	void ClearFocusedTarget();
+
+	/** Disparado a cada golpe (apos PlayAttack); ponto de ligacao para o pacote de ataque e o dano. */
+	UPROPERTY(BlueprintAssignable, Category = "Myth|Targeting")
+	FOnMythAttackPerformed OnAttackPerformed;
+
+	/** Console: MythSpawnMonster -> cria um AMythMonster de teste 400 cm a frente do personagem. */
+	UFUNCTION(Exec)
+	void MythSpawnMonster();
+
+	/** Console: MythKillTarget -> mata o alvo focado. */
+	UFUNCTION(Exec)
+	void MythKillTarget();
+
 	/** Converte posicao do mundo em celula do grid do servidor. */
 	UFUNCTION(BlueprintPure, Category = "Myth|Network")
 	FIntPoint WorldToCell(const FVector& WorldLocation) const;
@@ -65,6 +90,10 @@ protected:
 	virtual void PlayerTick(float DeltaTime) override;
 
 private:
+	TWeakObjectPtr<AMythMonster> FocusedTarget;
+	double LastAttackTime = -1000.0;
+	float ChaseRepathTimer = 0.f;
+
 	UPROPERTY() TObjectPtr<UMythClassicHUDWidget> HudWidget;
 
 	UPROPERTY() TObjectPtr<UInputMappingContext> MappingContext;
@@ -96,7 +125,8 @@ private:
 	void OnToggleCamera(const FInputActionValue& Value);
 
 	void MoveToCursor();
-	void MoveToLocation(const FVector& Destination);
+	void MoveToLocation(const FVector& Destination, bool bForceSend = true);
+	void UpdateCombat(float DeltaTime);
 	void SendCellToServer(const FVector& WorldLocation, bool bForce);
 	AMythPlayerCharacter* GetMythCharacter() const;
 };

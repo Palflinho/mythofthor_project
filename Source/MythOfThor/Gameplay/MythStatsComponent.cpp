@@ -16,6 +16,13 @@ void UMythStatsComponent::SetVitals(int32 InHP, int32 InMaxHP, int32 InSP, int32
 	OnStatsChanged.Broadcast();
 }
 
+void UMythStatsComponent::SetCombat(int32 InASPD, float InAttackRangeUU)
+{
+	ASPD = FMath::Clamp(InASPD, 0, 199);
+	AttackRangeUU = FMath::Max(0.f, InAttackRangeUU);
+	OnStatsChanged.Broadcast();
+}
+
 void UMythStatsComponent::SetExp(int64 InBaseExp, int64 InBaseExpToNext)
 {
 	BaseExpToNext = FMath::Max<int64>(1, InBaseExpToNext);

@@ -3,6 +3,9 @@
 #include "Player/MythPlayerCharacter.h"
 #include "Network/RagnarokNetworkSubsystem.h"
 #include "UI/MythHUD.h"
+#include "Sprites/MythMonster.h"
+#include "Sprites/MythSpriteAnimComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "UI/MythClassicHUDWidget.h"
 #include "Gameplay/MythStatsComponent.h"
 #include "Gameplay/AutoBattleComponent.h"
@@ -159,11 +162,20 @@ void AMythPlayerController::MoveToCursor()
 	FHitResult Hit;
 	if (GetHitResultUnderCursor(ECC_Visibility, false, Hit) && Hit.bBlockingHit)
 	{
+		if (AMythMonster* Monster = Cast<AMythMonster>(Hit.GetActor()))
+		{
+			if (!Monster->IsDead())
+			{
+				SetFocusedTarget(Monster);
+				return;
+			}
+		}
+		ClearFocusedTarget(); // clicar no chao cancela o alvo
 		MoveToLocation(Hit.ImpactPoint);
 	}
 }
 
-void AMythPlayerController::MoveToLocation(const FVector& Destination)
+void AMythPlayerController::MoveToLocation(const FVector& Destination, bool bForceSend)
 {
 	UWorld* World = GetWorld();
 	const UNavigationSystemV1* Nav = World ? FNavigationSystem::GetCurrent<UNavigationSystemV1>(World) : nullptr;
@@ -180,14 +192,15 @@ void AMythPlayerController::MoveToLocation(const FVector& Destination)
 		DirectTarget = Destination;
 	}
 
-	SendCellToServer(Destination, /*bForce=*/true);
+	SendCellToServer(Destination, bForceSend);
 }
 
 // ------------------------------------------------------------------------- WASD
 
 void AMythPlayerController::OnMoveStarted(const FInputActionValue&)
 {
-	// Teclado assume o controle imediatamente, cancelando o movimento por clique.
+	// Teclado assume o controle imediatamente, cancelando o movimento por clique e o alvo.
+	ClearFocusedTarget();
 	StopMovement();
 	bHasDirectTarget = false;
 	bWasdActive = true;
@@ -230,6 +243,8 @@ void AMythPlayerController::PlayerTick(float DeltaTime)
 	{
 		return;
 	}
+
+	UpdateCombat(DeltaTime);
 
 	if (bWasdActive)
 	{
@@ -343,5 +358,98 @@ void AMythPlayerController::MythTestHud()
 	{
 		// alterna entre peso normal e sobrepeso a cada chamada
 		Auto->UpdateInventoryWeight(Auto->IsOverweight() ? 40.f : 92.f);
+	}
+}
+
+// --------------------------------------------------------------------- Targeting
+
+AMythMonster* AMythPlayerController::GetFocusedTarget() const
+{
+	return FocusedTarget.Get();
+}
+
+void AMythPlayerController::SetFocusedTarget(AMythMonster* NewTarget)
+{
+	if (FocusedTarget.Get() == NewTarget)
+	{
+		return; // re-clicar no mesmo alvo nao reinicia a recarga do ataque
+	}
+	FocusedTarget = NewTarget;
+	ChaseRepathTimer = 0.f;
+}
+
+void AMythPlayerController::ClearFocusedTarget()
+{
+	FocusedTarget = nullptr;
+}
+
+void AMythPlayerController::UpdateCombat(float DeltaTime)
+{
+	AMythPlayerCharacter* Char = GetMythCharacter();
+	AMythMonster* Target = FocusedTarget.Get();
+	if (!Char || !Target)
+	{
+		return;
+	}
+	if (Target->IsDead())
+	{
+		ClearFocusedTarget();
+		return;
+	}
+
+	const UMythStatsComponent* Stats = Char->Stats;
+	const float Range = Stats ? Stats->GetAttackRangeUU() : 80.f;
+	const float Delay = Stats ? Stats->GetAttackDelaySeconds() : 1.f;
+
+	// Distancia ate a borda do alvo, no plano.
+	const float Dist = FVector::Dist2D(Char->GetActorLocation(), Target->GetActorLocation())
+		- Target->GetCapsuleComponent()->GetScaledCapsuleRadius()
+		- Char->GetCapsuleComponent()->GetScaledCapsuleRadius();
+
+	if (Dist <= Range)
+	{
+		StopMovement();
+		bHasDirectTarget = false;
+
+		const double Now = GetWorld()->GetTimeSeconds();
+		if (Now - LastAttackTime >= Delay)
+		{
+			LastAttackTime = Now;
+			if (Char->Sprite)
+			{
+				Char->Sprite->FaceLocation(Target->GetActorLocation());
+				Char->Sprite->PlayAttack(Delay);
+			}
+			OnAttackPerformed.Broadcast(Target);
+		}
+	}
+	else
+	{
+		// Persegue: refaz o caminho a cada 0.25 s porque o alvo se move.
+		ChaseRepathTimer -= DeltaTime;
+		if (ChaseRepathTimer <= 0.f)
+		{
+			ChaseRepathTimer = 0.25f;
+			MoveToLocation(Target->GetActorLocation(), /*bForceSend=*/false);
+		}
+	}
+}
+
+void AMythPlayerController::MythSpawnMonster()
+{
+	if (APawn* P = GetPawn())
+	{
+		FActorSpawnParameters Params;
+		Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		const FVector Loc = P->GetActorLocation() + FVector(400.f, 0.f, 0.f);
+		GetWorld()->SpawnActor<AMythMonster>(AMythMonster::StaticClass(), Loc, FRotator::ZeroRotator, Params);
+	}
+}
+
+void AMythPlayerController::MythKillTarget()
+{
+	if (AMythMonster* T = GetFocusedTarget())
+	{
+		T->Kill();
 	}
 }
