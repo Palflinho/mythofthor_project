@@ -420,6 +420,18 @@ void AMythPlayerController::UpdateCombat(float DeltaTime)
 				Char->Sprite->FaceLocation(Target->GetActorLocation());
 				Char->Sprite->PlayAttack(Delay);
 			}
+
+			// 1. Envia o pacote oficial de ataque (CZ_REQUEST_ACT 0x0360) ao servidor rAthena
+			if (URagnarokNetworkSubsystem* Net = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>())
+			{
+				Net->SendActionRequest(Target->GetUniqueID(), 0);
+			}
+
+			// 2. Feedback visual clássico imediato (Floating Combat Text nos anos 2000)
+			const int32 BaseDmg = FMath::RandRange(38, 55);
+			const bool bCrit = (FMath::RandRange(1, 100) <= 15);
+			UMythCombatText::ShowDamage(this, Target->GetActorLocation() + FVector(0.f, 0.f, 50.f), bCrit ? BaseDmg * 2 : BaseDmg, bCrit ? ECombatTextType::Critical : ECombatTextType::DamageDealt);
+
 			OnAttackPerformed.Broadcast(Target);
 		}
 	}
