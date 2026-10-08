@@ -18,7 +18,25 @@
 
 ---
 
-## ⏱️ 2. Sistema de Auto-Battle (Vigor Diário de 3h & Risco Real)
+## 🌟 2. Sistema de Especializações (Skill Morph) & Recompensa Justa de MVP
+
+### A. Posturas de Papel (Role Modifiers) Desde as 1ª Classes
+Em vez de magias genéricas estranhas que descaracterizam as classes, o jogador escolhe uma **Postura de Papel** (*Vanguarda/Tanque*, *Guardião/Healer*, *Combatente/DPS*, *Arcanista/DPS Mágico*) que aprimora as habilidades que a classe já possui:
+* **Ativo Imediatamente nas 1ª Classes:** Como a Fase 1 possui Level Cap no nível 30, a luta contra o primeiro MVP (**Besouro-Ladrão Dourado - GTB**) nos Esgotos de Prontera será travada exclusivamente por 1ª classes (Espadachim, Noviço, Mago, Arqueiro, Gatuno, Mercador) com suas especializações ativas!
+* **Exemplos de Modificadores:**
+  * *Noviço Guardião:* *Bênção* e *Aumentar Agilidade* viram em área para toda a party ao redor com 1 clique.
+  * *Noviço Arcanista:* *Luz Divina* e *Magnus Exorcismus* causam dano a qualquer elemento de monstro.
+  * *Espadachim Vanguarda:* *Provocar* vira **Taunt Real de 6s** (trava o aggro de monstros e chefes no Tanque).
+  * *Ferreiro Guardião:* *Manejo Perfeito* e *Adrenalina Pura* afetam as armas e magias de todo o grupo.
+
+### B. Novo Cálculo de MVP: O Fim da Injustiça com Tanques e Suportes
+No Ragnarok original, quem dava o último golpe ou tinha dano explosivo (ex: Asura) roubava todo o drop do MVP. No Myth of Thor:
+* **Threat Score (Pontuação de Ameaça):** O Tanque que gastou poções, segurou os golpes do MVP e protegeu o grupo pontua no ranking do MVP por **Dano Mitigado / Tempo de Ameaça**.
+* **Recompensa por Participação / Baú de MVP:** Todos os papéis essenciais (Tanque segurando o boss, Healer mantendo o grupo vivo e DPS causando dano) recebem sua fatia justa dos drops e recompensas diretamente no inventário.
+
+---
+
+## ⏱️ 3. Sistema de Auto-Battle (Vigor Diário de 3h & Risco Real)
 
 * **Limite Diário:** Cada jogador possui **3 horas (180 minutos / 10.800s)** de Auto-Battle por dia, resetando às 00:00 do servidor.
 * **Trava de Sobrepeso:** O Auto-Battle é pausado automaticamente caso o inventário atinja $\ge 90\%$ de capacidade de carga.
@@ -30,7 +48,7 @@
 
 ---
 
-## 🗺️ 3. Roadmap Oficial: As 5 Fases de Progressão (Level Caps)
+## 🗺️ 4. Roadmap Oficial: As 5 Fases de Progressão (Level Caps)
 
 O jogo será lançado de forma progressiva em **5 Grandes Fases de Expansão**, garantindo que toda a comunidade jogue junta, explore cada calabouço e fortaleça a economia antes do próximo marco:
 
@@ -47,7 +65,7 @@ flowchart TD
 * **Cidades:** Prontera (Capital) e Campo de Treinamento (`new_1-1` a `new_1-4`).
 * **Campos:** Arredores de Prontera (Porings, Fabres, Lunatics, Rockers, Mandrágoras).
 * **Dungeon:** Esgotos de Prontera (`prt_sewb1` a `prt_sewb4`).
-* **Chefe da Fase (MVP):** *Besouro-Ladrão Dourado (Golden Thief Bug)*.
+* **Chefe da Fase (MVP):** *Besouro-Ladrão Dourado (Golden Thief Bug - GTB)* enfrentado com as 1ª classes especializadas!
 * **Status de WoE:** **Desativada** (foco em PvE, exploração e formação de clãs).
 
 ### 🌲 FASE 2: A Floresta e os Espíritos (Payon)
@@ -79,7 +97,7 @@ flowchart TD
 
 ---
 
-## 🏗️ 4. Arquitetura Técnica & Divisão de Trabalho
+## 🏗️ 5. Arquitetura Técnica & Divisão de Trabalho
 
 ```mermaid
 flowchart LR
@@ -106,7 +124,7 @@ flowchart LR
 
 ---
 
-## 📁 5. Estrutura do Repositório
+## 📁 6. Estrutura do Repositório
 
 ```text
 mythofthor_project/
@@ -114,7 +132,10 @@ mythofthor_project/
 │   ├── PLANOGRAMA.md                      # Roteiro completo de entregas e fases
 │   ├── ARQUITETURA_REDE.md                # Especificação dos pacotes binários
 │   ├── DIRETRIZES_PROJETO_E_CLAUDE.md    # Guia oficial de alinhamento com o Claude
-│   └── PROGRESSAO_REGIOES_E_NIVEIS.md     # Detalhamento das 5 fases até o 99
+│   ├── PROGRESSAO_REGIOES_E_NIVEIS.md     # Detalhamento das 5 fases até o 99
+│   ├── DESIGN_CLASSES_2_1_E_2_2.md        # Enciclopédia de classes 2-1 e 2-2
+│   ├── DESIGN_CLASSES_EXPANDIDAS.md       # Enciclopédia de classes expandidas
+│   └── SISTEMA_ESPECIALIZACOES_ROLES.md   # Sistema de posturas e modificadores de skills
 ├── client_ue5/                            # Código-Fonte C++ da Unreal Engine 5
 │   └── Source/MythOfThor/
 │       ├── Core/                          # Matemática de 8 direções (RagnarokDirectionHelper)
@@ -132,9 +153,7 @@ mythofthor_project/
 
 ---
 
-## 🧪 6. Como Executar os Testes Automatizados
-
-Para testar a integridade dos pacotes de rede, a lógica das 3 horas de Auto-Battle, a penalidade de 5% de EXP ao morrer e a disponibilidade dos servidores:
+## 🧪 7. Como Executar os Testes Automatizados
 
 ```bash
 # Executando no Windows ou Linux:
