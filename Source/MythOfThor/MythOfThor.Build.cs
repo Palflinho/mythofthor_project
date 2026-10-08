@@ -12,6 +12,8 @@ public class MythOfThor : ModuleRules
 			"Engine",
 			"InputCore",
 			"EnhancedInput",
+			"AIModule",
+			"NavigationSystem",
 			"Sockets",
 			"Networking"
 		});
