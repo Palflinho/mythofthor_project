@@ -3,6 +3,7 @@
 #include "Player/MythPlayerCharacter.h"
 #include "Network/RagnarokNetworkSubsystem.h"
 #include "UI/MythHUD.h"
+#include "World/MythMapInfo.h"
 #include "World/MythDayNightActor.h"
 #include "EngineUtils.h"
 #include "Sprites/MythMonster.h"
@@ -53,6 +54,10 @@ void AMythPlayerController::SetPawn(APawn* InPawn)
 
 FIntPoint AMythPlayerController::WorldToCell(const FVector& WorldLocation) const
 {
+	if (const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld()))
+	{
+		return Info->WorldToCell(WorldLocation);
+	}
 	const float Size = FMath::Max(CellSizeUU, 1.f);
 	// O pacote do rAthena usa 10 bits por eixo (0..1023).
 	return FIntPoint(

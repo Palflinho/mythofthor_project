@@ -4,6 +4,8 @@
 #include "Player/MythPlayerController.h"
 #include "UI/MythHUD.h"
 #include "World/MythDayNightActor.h"
+#include "World/MythMapInfo.h"
+#include "World/MythNightAudioComponent.h"
 #include "EngineUtils.h"
 
 AMythGameMode::AMythGameMode()
@@ -21,7 +23,18 @@ void AMythGameMode::BeginPlay()
 	for (TActorIterator<AMythDayNightActor> It(GetWorld()); It; ++It)
 	{
 		DayNight = *It;
-		return;
+		break;
 	}
-	DayNight = GetWorld()->SpawnActor<AMythDayNightActor>();
+	if (!DayNight)
+	{
+		DayNight = GetWorld()->SpawnActor<AMythDayNightActor>();
+	}
+
+	if (const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld()))
+	{
+		if (Info->Bgm && DayNight && DayNight->Audio)
+		{
+			DayNight->Audio->PlayBGM(Info->Bgm, Info->BgmVolume);
+		}
+	}
 }
