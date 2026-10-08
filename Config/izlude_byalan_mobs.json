@@ -1,0 +1,64 @@
+{
+  "izlude": {
+    "name": "izlude (Cidade Portuária de Izlude)",
+    "bgm": "26.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Izlude/izlude/data/izlude_full.obj",
+    "mobs": []
+  },
+  "iz_dun00": {
+    "name": "iz_dun00 (Túnel Submarino de Byalan - 1º Andar)",
+    "bgm": "13.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Izlude/iz_dun00/data/iz_dun00_full.obj",
+    "mobs": [
+      { "id": 1064, "name": "Vadon", "level": 11, "sprite": "vadon", "behavior": "Passivo" },
+      { "id": 1066, "name": "Kukre", "level": 9, "sprite": "kukre", "behavior": "Passivo" },
+      { "id": 1065, "name": "Marina", "level": 15, "sprite": "marina", "behavior": "Passivo/Freezing" },
+      { "id": 1068, "name": "Hydra", "level": 14, "sprite": "hydra", "behavior": "Imovel/Agressivo" }
+    ]
+  },
+  "iz_dun01": {
+    "name": "iz_dun01 (Túnel Submarino de Byalan - 2º Andar)",
+    "bgm": "13.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Izlude/iz_dun01/data/iz_dun01_full.obj",
+    "mobs": [
+      { "id": 1064, "name": "Vadon", "level": 11, "sprite": "vadon", "behavior": "Passivo" },
+      { "id": 1067, "name": "Cornutus", "level": 21, "sprite": "cornutus", "behavior": "Passivo/Def" },
+      { "id": 1065, "name": "Marina", "level": 15, "sprite": "marina", "behavior": "Passivo/Freezing" },
+      { "id": 1068, "name": "Hydra", "level": 14, "sprite": "hydra", "behavior": "Imovel/Agressivo" }
+    ]
+  },
+  "iz_dun02": {
+    "name": "iz_dun02 (Túnel Submarino de Byalan - 3º Andar)",
+    "bgm": "13.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Izlude/iz_dun02/data/iz_dun02_full.obj",
+    "mobs": [
+      { "id": 1067, "name": "Cornutus", "level": 21, "sprite": "cornutus", "behavior": "Passivo/Def" },
+      { "id": 1044, "name": "Obeaune", "level": 29, "sprite": "obeaune", "behavior": "Agressivo" },
+      { "id": 1069, "name": "Swordfish", "level": 27, "sprite": "sword_fish", "behavior": "Passivo" },
+      { "id": 1068, "name": "Hydra", "level": 14, "sprite": "hydra", "behavior": "Imovel/Agressivo" }
+    ]
+  },
+  "iz_dun03": {
+    "name": "iz_dun03 (Túnel Submarino de Byalan - 4º Andar)",
+    "bgm": "60.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Izlude/iz_dun03/data/iz_dun03_full.obj",
+    "mobs": [
+      { "id": 1044, "name": "Obeaune", "level": 29, "sprite": "obeaune", "behavior": "Agressivo" },
+      { "id": 1069, "name": "Swordfish", "level": 27, "sprite": "sword_fish", "behavior": "Passivo" },
+      { "id": 1045, "name": "Marc", "level": 32, "sprite": "marc", "behavior": "Agressivo" },
+      { "id": 1070, "name": "Deviace", "level": 34, "sprite": "deviace", "behavior": "Agressivo" },
+      { "id": 1068, "name": "Hydra", "level": 14, "sprite": "hydra", "behavior": "Imovel/Agressivo" }
+    ]
+  },
+  "iz_dun04": {
+    "name": "iz_dun04 (Túnel Submarino de Byalan - 5º Andar / Fundo do Mar)",
+    "bgm": "60.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Izlude/iz_dun04/data/iz_dun04_full.obj",
+    "mobs": [
+      { "id": 1045, "name": "Marc", "level": 32, "sprite": "marc", "behavior": "Agressivo" },
+      { "id": 1070, "name": "Deviace", "level": 34, "sprite": "deviace", "behavior": "Agressivo" },
+      { "id": 1071, "name": "Strouf", "level": 40, "sprite": "strouf", "behavior": "Agressivo/Magic" },
+      { "id": 2249, "name": "Kraken (MVP)", "level": 82, "sprite": "kraken", "behavior": "Boss/MVP" }
+    ]
+  }
+}

@@ -33,14 +33,17 @@ Este documento orienta a extração e compilação metódica de todo o mundo do 
 
 ---
 
-## 📍 Região 2: Izlude & Ilha de Byalan (Próxima da Fila 🌊)
-* **Tema:** Cidade marítima dos Espadachins e o lendário Túnel Submarino.
-* **Cidade:** `izlude` (Guilda dos Espadachins, Arena PVP). BGM: `26.mp3`.
-* **Campos:** `iz_dun00` a `iz_dun04` (Túnel Submarino / Ilha de Byalan - 5 andares). BGM: `13.mp3`, `60.mp3`.
-* **Monstros da Região:**
-  * Andares 1 e 2: *Vadon, Kukre, Marina, Cornutus, Hidra*.
-  * Andares 3 e 4: *Cavalo-Marinho (Obeaune), Peixe-Espada (Swordfish), Marc, Fen*.
-  * Andar 5: *Strouf, Deviace, e o MVP Kraken*.
+## 📍 Região 2: Izlude & Ilha de Byalan — [STATUS: 100% CONCLUÍDA ✅]
+* **Tema:** Cidade marítima dos Espadachins e o lendário Túnel Submarino (Byalan).
+* **Cidade:** `izlude` (`izlude_full.obj` - 552 modelos 3D compilados). BGM: `26.mp3`.
+* **Túnel Submarino de Byalan (5 andares compilados em 3D):**
+  * `iz_dun00` (Andar 1 - 241 modelos 3D). BGM: `13.mp3`.
+  * `iz_dun01` (Andar 2 - 210 modelos 3D). BGM: `13.mp3`.
+  * `iz_dun02` (Andar 3 - 617 modelos 3D). BGM: `13.mp3`.
+  * `iz_dun03` (Andar 4 - 446 modelos 3D). BGM: `60.mp3`.
+  * `iz_dun04` (Andar 5 - 440 modelos 3D - Fundo do Mar). BGM: `60.mp3`.
+* **Monstros:** 11 spritesheets PNG transparentes gerados (Vadon, Kukre, Marina, Cornutus, Hydra, Obeaune, Swordfish, Marc, Strouf, Deviace, Kraken). MVP: **Kraken**.
+* **Configuração:** `Config/izlude_byalan_mobs.json`.
 
 ---
 

@@ -277,11 +277,12 @@ def read_rsm(rsm_path: str):
 def compile_map(map_dir: str, output_obj: str = None):
     """Compila o mapa completo para OBJ"""
     map_dir = os.path.abspath(map_dir)
-    rsw_files = glob.glob(os.path.join(map_dir, "*.rsw"))
+    rsw_files = glob.glob(os.path.join(map_dir, "*.rsw")) or glob.glob(os.path.join(map_dir, "data", "*.rsw")) or glob.glob(os.path.join(map_dir, "**", "*.rsw"), recursive=True)
     if not rsw_files:
         raise FileNotFoundError(f"Nenhum arquivo .rsw encontrado em {map_dir}")
         
     rsw_path = rsw_files[0]
+    map_dir = os.path.dirname(rsw_path)
     map_name = os.path.splitext(os.path.basename(rsw_path))[0]
     
     if output_obj is None:
@@ -322,14 +323,23 @@ def compile_map(map_dir: str, output_obj: str = None):
         get_material_name(t)
 
     # 2. Carrega RSMs em cache
-    models_dir = os.path.join(map_dir, 'model')
+    models_search_dirs = [
+        os.path.join(map_dir, 'model'),
+        r"D:\Ragnarok_Assets\shared\data\model",
+        r"D:\Ragnarok_Assets\Prontera\Prontera_Cidade\model"
+    ]
     rsm_cache: Dict[str, dict] = {}
     
     unique_models = set(m['filename'] for m in rsw['models'])
     print(f"Modelos referenciados no mapa: {len(rsw['models'])} ({len(unique_models)} únicos)")
     
     for m_filename in unique_models:
-        rsm_path = resolve_asset_path(models_dir, m_filename)
+        rsm_path = ""
+        for m_dir in models_search_dirs:
+            if os.path.exists(m_dir):
+                rsm_path = resolve_asset_path(m_dir, m_filename)
+                if rsm_path and os.path.exists(rsm_path):
+                    break
         if rsm_path and os.path.exists(rsm_path):
             try:
                 rsm_data = read_rsm(rsm_path)
@@ -337,18 +347,35 @@ def compile_map(map_dir: str, output_obj: str = None):
                 for t in rsm_data['textures']:
                     get_material_name(t)
             except Exception as e:
-                # Modelo corrompido ou formato não suportado
                 pass
                 
     print(f"Modelos carregados com sucesso: {len(rsm_cache)}/{len(unique_models)}")
     
-    # 3. Escreve arquivo MTL
+    # 3. Escreve arquivo MTL resolvendo caminhos de texturas existentes
+    tex_search_dirs = [
+        os.path.join(map_dir, 'texture'),
+        r"D:\Ragnarok_Assets\shared\data\texture",
+        r"D:\Ragnarok_Assets\Prontera\Prontera_Cidade\texture"
+    ]
+    tex_index = {}
+    for td in tex_search_dirs:
+        if os.path.exists(td):
+            for root, _, files in os.walk(td):
+                for f in files:
+                    tex_index.setdefault(f.lower(), os.path.relpath(os.path.join(root, f), map_dir).replace('\\', '/'))
+                    try:
+                        korean = f.encode('latin1').decode('cp949', errors='ignore').lower()
+                        tex_index.setdefault(korean, os.path.relpath(os.path.join(root, f), map_dir).replace('\\', '/'))
+                    except Exception:
+                        pass
+
     print(f"Escrevendo materiais em {output_mtl}...")
     with open(output_mtl, 'w', encoding='utf-8') as mtl:
         for tex_base, mat_name in materials.items():
             mtl.write(f"newmtl {mat_name}\n")
             mtl.write("Ka 1.0 1.0 1.0\nKd 1.0 1.0 1.0\nKs 0.0 0.0 0.0\n")
-            mtl.write(f"map_Kd texture/{tex_base}\n\n")
+            rel_tex = tex_index.get(tex_base.lower(), f"texture/{tex_base}")
+            mtl.write(f"map_Kd {rel_tex}\n\n")
 
     # 4. Escreve arquivo OBJ
     print(f"Escrevendo geometria em {output_obj}...")
