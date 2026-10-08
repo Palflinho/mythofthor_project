@@ -8,9 +8,9 @@
 ---
 
 ## 1. Visão do Projeto & Regras Inegociáveis
-1. **Fidelidade RO Clássico:** Fórmulas originais (ASPD `(200 - ASPD)/50 s`, Cast Time, Flee, Hit, Def).
-2. **Cap Progressivo (Fase 1: Cap 30):** Novice, classes 1-1 (Espadachim, Mago, Arqueiro, Gatuno, Noviço, Mercador). Doram e 4ª classe estritamente proibidos. WoE desativada na Fase 1.
-3. **Estética HD-2D:** Sprites 2D pixel-art sem filtro bilinear (`Nearest`, `2D Pixels Unfiltered`) em cenários 3D com iluminação Lumen dinâmica, sombras e ciclo Dia/Noite.
+1. **Fidelidade RO Clássico & Progressão 1-99:** Fórmulas oficiais da Gravity no rAthena (ASPD `(200 - ASPD)/50 s`, Cast Time, Flee, Hit, Def, tabelas de EXP). Progressão orgânica de 1 a 99 (Novice -> 1ª Classe -> 2ª Classe 2-1/2-2 -> Transcendente). Doram e 4ª classe estritamente excluídos.
+2. **Sistema de Funções / Roles Estruturadas:** Sinergia de grupo moderna e papéis claros de classes (Tank, DPS Físico, DPS Mágico, Suporte/Curador, Controle de Grupo/Debuffer, Criador/Comerciante).
+3. **Estética HD-2D Imersiva:** Sprites 2D pixel-art sem filtro bilinear (`Nearest`, `2D Pixels Unfiltered`) em cenários 3D com iluminação Lumen dinâmica, sombras, ciclo Dia/Noite e efeitos sonoros clássicos.
 4. **Auto-Battle com Limites:** Vigor diário de 3 horas, trava de sobrepeso em 90%, penalidade de morte de 5% Base EXP, temporizador de 2 min caído e retorno a Prontera com bot pausado.
 
 ---
