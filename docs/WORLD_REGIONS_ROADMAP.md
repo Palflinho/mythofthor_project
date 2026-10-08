@@ -121,6 +121,23 @@ Este documento orienta a extração e compilação metódica de todo o mundo do 
 
 ---
 
+## 📍 Região 8: Glast Heim (O Reino dos Mortos) — [STATUS: 100% CONCLUÍDA ✅]
+* **Tema:** A maior e mais complexa fortaleza decaída do mundo Pre-Renewal (Castelos, Prisões, Esgotos e Monastério 🏰💀).
+* **Entrada e Castelos (3 mapas):** `glast_01` (42.mp3), `gl_cas01` (43.mp3), `gl_cas02` (43.mp3).
+* **Abadia e Cemitério (2 mapas):** `gl_church` (40.mp3), `gl_chyard` (40.mp3 - Toca do Dark Lord).
+* **Cavalaria (2 mapas):** `gl_knt01` (1.047 modelos), `gl_knt02` (674 modelos). BGM: `44.mp3`.
+* **Prisão (2 mapas):** `gl_prison` (751 modelos), `gl_prison1` (486 modelos). BGM: `40.mp3`.
+* **Esgotos (4 andares):** `gl_sew01` (1.019 modelos), `gl_sew02` (1.180 modelos), `gl_sew03` (401 modelos), `gl_sew04` (211 modelos). BGM: `48.mp3`.
+* **Escadarias e Caverna (3 mapas):** `gl_step` (283 modelos), `gl_dun01` (433 modelos), `gl_dun02` (290 modelos). BGM: `42.mp3`.
+* **Monstros da Região (16 Spritesheets PNG):**
+  * Raydric, Raydric Archer, Knight of Abyss, Bloody Knight, Khalitzburg.
+  * Evil Druid, Wraith, Injustice, Zombie Prisoner, Skel Prisoner, Rybio.
+  * Sting, Anolian, Gargoyle, Carat.
+  * MVP Lendário: **Dark Lord (Senhor das Trevas)**.
+* **Configuração:** `Config/glastheim_mobs.json`.
+
+---
+
 ## 🎭 Sprites das Classes Prontos para o Claude (`D:\Ragnarok_Assets\Sprites\PNG`)
 
 Todas as 36 combinações de classes masculinas e femininas foram decodificadas e convertidas em spritesheets com canal alfa transparente:

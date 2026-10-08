@@ -1,0 +1,151 @@
+{
+  "glast_01": {
+    "name": "glast_01 (Entrada de Glast Heim)",
+    "bgm": "42.mp3",
+    "obj": "D:/Ragnarok_Assets/World/GlastHeim/glast_01/data/glast_01_full.obj",
+    "mobs": []
+  },
+  "gl_cas01": {
+    "name": "gl_cas01 (Castelo de Glast Heim - 1º Andar)",
+    "bgm": "43.mp3",
+    "obj": "D:/Ragnarok_Assets/World/GlastHeim/gl_cas01/data/gl_cas01_full.obj",
+    "mobs": [
+      { "id": 1163, "name": "Raydric", "level": 52, "sprite": "raydric", "behavior": "Agressivo/Shadow" },
+      { "id": 1276, "name": "Raydric Archer", "level": 54, "sprite": "raydric_archer", "behavior": "Agressivo/Ranged" }
+    ]
+  },
+  "gl_cas02": {
+    "name": "gl_cas02 (Castelo de Glast Heim - 2º Andar)",
+    "bgm": "43.mp3",
+    "obj": "D:/Ragnarok_Assets/World/GlastHeim/gl_cas02/data/gl_cas02_full.obj",
+    "mobs": [
+      { "id": 1163, "name": "Raydric", "level": 52, "sprite": "raydric", "behavior": "Agressivo/Shadow" },
+      { "id": 1132, "name": "Khalitzburg", "level": 56, "sprite": "khalitzburg", "behavior": "Agressivo/Undead" }
+    ]
+  },
+  "gl_church": {
+    "name": "gl_church (Abadia de Glast Heim)",
+    "bgm": "40.mp3",
+    "obj": "D:/Ragnarok_Assets/World/GlastHeim/gl_church/data/gl_church_full.obj",
+    "mobs": [
+      { "id": 1116, "name": "Evil Druid", "level": 60, "sprite": "evil_druid", "behavior": "Agressivo/Undead" },
+      { "id": 1192, "name": "Wraith", "level": 50, "sprite": "wraith", "behavior": "Agressivo/Ghost" }
+    ]
+  },
+  "gl_chyard": {
+    "name": "gl_chyard (Cemitério de Glast Heim)",
+    "bgm": "40.mp3",
+    "obj": "D:/Ragnarok_Assets/World/GlastHeim/gl_chyard/data/gl_chyard_full.obj",
+    "mobs": [
+      { "id": 1192, "name": "Wraith", "level": 50, "sprite": "wraith", "behavior": "Agressivo/Ghost" },
+      { "id": 1116, "name": "Evil Druid", "level": 60, "sprite": "evil_druid", "behavior": "Agressivo/Undead" },
+      { "id": 1272, "name": "Dark Lord", "level": 80, "sprite": "dark_lord", "behavior": "MVP/Agressivo" }
+    ]
+  },
+  "gl_knt01": {
+    "name": "gl_knt01 (Cavalaria de Glast Heim - 1º Andar)",
+    "bgm": "44.mp3",
+    "obj": "D:/Ragnarok_Assets/World/GlastHeim/gl_knt01/data/gl_knt01_full.obj",
+    "mobs": [
+      { "id": 1163, "name": "Raydric", "level": 52, "sprite": "raydric", "behavior": "Agressivo/Shadow" },
+      { "id": 1276, "name": "Raydric Archer", "level": 54, "sprite": "raydric_archer", "behavior": "Agressivo/Ranged" },
+      { "id": 1132, "name": "Khalitzburg", "level": 56, "sprite": "khalitzburg", "behavior": "Agressivo/Undead" }
+    ]
+  },
+  "gl_knt02": {
+    "name": "gl_knt02 (Cavalaria de Glast Heim - 2º Andar / Salão dos Cavaleiros)",
+    "bgm": "44.mp3",
+    "obj": "D:/Ragnarok_Assets/World/GlastHeim/gl_knt02/data/gl_knt02_full.obj",
+    "mobs": [
+      { "id": 1219, "name": "Knight of Abyss", "level": 74, "sprite": "knight_of_abyss", "behavior": "Agressivo/Shadow" },
+      { "id": 1268, "name": "Bloody Knight", "level": 77, "sprite": "bloody_knight", "behavior": "Agressivo/Shadow" },
+      { "id": 1163, "name": "Raydric", "level": 52, "sprite": "raydric", "behavior": "Agressivo/Shadow" },
+      { "id": 1132, "name": "Khalitzburg", "level": 56, "sprite": "khalitzburg", "behavior": "Agressivo/Undead" }
+    ]
+  },
+  "gl_prison": {
+    "name": "gl_prison (Prisão de Glast Heim - Ala Norte)",
+    "bgm": "40.mp3",
+    "obj": "D:/Ragnarok_Assets/World/GlastHeim/gl_prison/data/gl_prison_full.obj",
+    "mobs": [
+      { "id": 1196, "name": "Zombie Prisoner", "level": 53, "sprite": "zombie_prisoner", "behavior": "Agressivo/Undead" },
+      { "id": 1197, "name": "Skel Prisoner", "level": 55, "sprite": "skel_prisoner", "behavior": "Agressivo/Undead" },
+      { "id": 1257, "name": "Injustice", "level": 51, "sprite": "injustice", "behavior": "Agressivo/Shadow" },
+      { "id": 1260, "name": "Rybio", "level": 60, "sprite": "rybio", "behavior": "Agressivo/Demon" }
+    ]
+  },
+  "gl_prison1": {
+    "name": "gl_prison1 (Prisão de Glast Heim - Ala Sul)",
+    "bgm": "40.mp3",
+    "obj": "D:/Ragnarok_Assets/World/GlastHeim/gl_prison1/data/gl_prison1_full.obj",
+    "mobs": [
+      { "id": 1196, "name": "Zombie Prisoner", "level": 53, "sprite": "zombie_prisoner", "behavior": "Agressivo/Undead" },
+      { "id": 1197, "name": "Skel Prisoner", "level": 55, "sprite": "skel_prisoner", "behavior": "Agressivo/Undead" },
+      { "id": 1257, "name": "Injustice", "level": 51, "sprite": "injustice", "behavior": "Agressivo/Shadow" },
+      { "id": 1260, "name": "Rybio", "level": 60, "sprite": "rybio", "behavior": "Agressivo/Demon" }
+    ]
+  },
+  "gl_sew01": {
+    "name": "gl_sew01 (Esgotos de Glast Heim - 1º Andar)",
+    "bgm": "48.mp3",
+    "obj": "D:/Ragnarok_Assets/World/GlastHeim/gl_sew01/data/gl_sew01_full.obj",
+    "mobs": [
+      { "id": 1208, "name": "Sting", "level": 59, "sprite": "sting", "behavior": "Agressivo/Earth" },
+      { "id": 1253, "name": "Gargoyle", "level": 62, "sprite": "gargoyle", "behavior": "Agressivo/Ranged" }
+    ]
+  },
+  "gl_sew02": {
+    "name": "gl_sew02 (Esgotos de Glast Heim - 2º Andar)",
+    "bgm": "48.mp3",
+    "obj": "D:/Ragnarok_Assets/World/GlastHeim/gl_sew02/data/gl_sew02_full.obj",
+    "mobs": [
+      { "id": 1208, "name": "Sting", "level": 59, "sprite": "sting", "behavior": "Agressivo/Earth" },
+      { "id": 1253, "name": "Gargoyle", "level": 62, "sprite": "gargoyle", "behavior": "Agressivo/Ranged" }
+    ]
+  },
+  "gl_sew03": {
+    "name": "gl_sew03 (Esgotos de Glast Heim - 3º Andar)",
+    "bgm": "48.mp3",
+    "obj": "D:/Ragnarok_Assets/World/GlastHeim/gl_sew03/data/gl_sew03_full.obj",
+    "mobs": [
+      { "id": 1206, "name": "Anolian", "level": 65, "sprite": "anolian", "behavior": "Agressivo/Water" },
+      { "id": 1208, "name": "Sting", "level": 59, "sprite": "sting", "behavior": "Agressivo/Earth" }
+    ]
+  },
+  "gl_sew04": {
+    "name": "gl_sew04 (Esgotos de Glast Heim - 4º Andar)",
+    "bgm": "48.mp3",
+    "obj": "D:/Ragnarok_Assets/World/GlastHeim/gl_sew04/data/gl_sew04_full.obj",
+    "mobs": [
+      { "id": 1206, "name": "Anolian", "level": 65, "sprite": "anolian", "behavior": "Agressivo/Water" },
+      { "id": 1208, "name": "Sting", "level": 59, "sprite": "sting", "behavior": "Agressivo/Earth" }
+    ]
+  },
+  "gl_step": {
+    "name": "gl_step (Escadarias de Glast Heim)",
+    "bgm": "42.mp3",
+    "obj": "D:/Ragnarok_Assets/World/GlastHeim/gl_step/data/gl_step_full.obj",
+    "mobs": [
+      { "id": 1253, "name": "Gargoyle", "level": 62, "sprite": "gargoyle", "behavior": "Agressivo/Ranged" },
+      { "id": 1279, "name": "Carat", "level": 58, "sprite": "carat", "behavior": "Agressivo/Shadow" }
+    ]
+  },
+  "gl_dun01": {
+    "name": "gl_dun01 (Caverna de Glast Heim - 1º Andar)",
+    "bgm": "42.mp3",
+    "obj": "D:/Ragnarok_Assets/World/GlastHeim/gl_dun01/data/gl_dun01_full.obj",
+    "mobs": [
+      { "id": 1279, "name": "Carat", "level": 58, "sprite": "carat", "behavior": "Agressivo/Shadow" },
+      { "id": 1253, "name": "Gargoyle", "level": 62, "sprite": "gargoyle", "behavior": "Agressivo/Ranged" }
+    ]
+  },
+  "gl_dun02": {
+    "name": "gl_dun02 (Caverna de Glast Heim - 2º Andar / Templo Profano)",
+    "bgm": "42.mp3",
+    "obj": "D:/Ragnarok_Assets/World/GlastHeim/gl_dun02/data/gl_dun02_full.obj",
+    "mobs": [
+      { "id": 1219, "name": "Knight of Abyss", "level": 74, "sprite": "knight_of_abyss", "behavior": "Agressivo/Shadow" },
+      { "id": 1268, "name": "Bloody Knight", "level": 77, "sprite": "bloody_knight", "behavior": "Agressivo/Shadow" }
+    ]
+  }
+}

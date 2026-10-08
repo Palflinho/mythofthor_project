@@ -6,6 +6,7 @@
 
 class UMythSpriteAnimComponent;
 class UBoxComponent;
+class USoundBase;
 
 /**
  * Monstro base (Poring, Lunatic...). Crie um Blueprint filho e aponte
@@ -18,6 +19,8 @@ class MYTHOFTHOR_API AMythMonster : public ACharacter
 
 public:
 	AMythMonster();
+
+	virtual void Tick(float DeltaSeconds) override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprite")
 	TObjectPtr<UMythSpriteAnimComponent> Sprite;
@@ -37,6 +40,24 @@ public:
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Combat")
 	int32 HP = 50;
+
+	/** Efeitos sonoros (opcionais). Tocam em 3D na posicao do monstro. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
+	TObjectPtr<USoundBase> SfxAttack;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
+	TObjectPtr<USoundBase> SfxHit;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
+	TObjectPtr<USoundBase> SfxDie;
+
+	/** Tocado ao comecar a andar. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
+	TObjectPtr<USoundBase> SfxMove;
+
+	/** Para a IA de combate: toca a animacao e o som de ataque. */
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void PlayAttackFeedback();
 
 	/** Segundos entre a morte e o Destroy do ator (tempo da animacao de morte). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
@@ -70,4 +91,7 @@ protected:
 
 private:
 	bool bIsDead = false;
+	bool bWasMoving = false;
+
+	void PlaySfx(USoundBase* Sound) const;
 };

@@ -7,6 +7,7 @@
 #include "World/MythDayNightActor.h"
 #include "EngineUtils.h"
 #include "Sprites/MythMonster.h"
+#include "Sprites/MythPoring.h"
 #include "Sprites/MythSpriteAnimComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "UI/MythClassicHUDWidget.h"
@@ -466,7 +467,7 @@ void AMythPlayerController::MythSpawnMonster()
 		FActorSpawnParameters Params;
 		Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 		const FVector Loc = P->GetActorLocation() + FVector(400.f, 0.f, 0.f);
-		GetWorld()->SpawnActor<AMythMonster>(AMythMonster::StaticClass(), Loc, FRotator::ZeroRotator, Params);
+		GetWorld()->SpawnActor<AMythPoring>(AMythPoring::StaticClass(), Loc, FRotator::ZeroRotator, Params);
 	}
 }
 

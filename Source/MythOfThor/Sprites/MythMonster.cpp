@@ -4,11 +4,14 @@
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Player/MythPlayerController.h"
 
 AMythMonster::AMythMonster()
 {
+	PrimaryActorTick.bCanEverTick = true;
 	GetCapsuleComponent()->InitCapsuleSize(30.f, 40.f);
 
 	Sprite = CreateDefaultSubobject<UMythSpriteAnimComponent>(TEXT("Sprite"));
@@ -22,6 +25,38 @@ AMythMonster::AMythMonster()
 
 	// Pivo do sprite fica nos pes (bottom-center): desce ate o chao da capsula.
 	Sprite->SetRelativeLocation(FVector(0.f, 0.f, -40.f));
+}
+
+void AMythMonster::PlaySfx(USoundBase* Sound) const
+{
+	if (Sound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, Sound, GetActorLocation());
+	}
+}
+
+void AMythMonster::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	if (bIsDead)
+	{
+		return;
+	}
+	const bool bMoving = GetVelocity().Size2D() > 10.f;
+	if (bMoving && !bWasMoving)
+	{
+		PlaySfx(SfxMove);
+	}
+	bWasMoving = bMoving;
+}
+
+void AMythMonster::PlayAttackFeedback()
+{
+	if (!bIsDead)
+	{
+		Sprite->PlayAttack();
+		PlaySfx(SfxAttack);
+	}
 }
 
 void AMythMonster::BeginPlay()
@@ -62,6 +97,7 @@ bool AMythMonster::ReceiveMythDamage(int32 Amount)
 	}
 
 	Sprite->PlayHit();
+	PlaySfx(SfxHit);
 	return false;
 }
 
@@ -95,6 +131,7 @@ void AMythMonster::Kill()
 		}
 	}
 
+	PlaySfx(SfxDie);
 	Sprite->Die();
 	SetLifeSpan(DeathDestroyDelay); // auto-Destroy apos a animacao de morte
 }
