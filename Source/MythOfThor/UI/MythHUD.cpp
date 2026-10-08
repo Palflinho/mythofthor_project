@@ -155,4 +155,34 @@ void AMythHUD::DrawTargetRing()
 			bHavePrev = true;
 		}
 	}
+
+	// Placa do alvo: nome e nivel, barra fina de HP (verde sobre vermelho) e porcentagem.
+	FVector2D Head;
+	if (!PC->ProjectWorldLocationToScreen(Target->GetActorLocation() + FVector(0.f, 0.f, Cap->GetScaledCapsuleHalfHeight() + 70.f), Head, false))
+	{
+		return;
+	}
+
+	UFont* Font = GEngine->GetLargeFont();
+	FFontRenderInfo Info;
+	Info.bEnableShadow = true;
+
+	const FString Name = Target->GetDisplayName();
+	float TW = 0.f, TH = 0.f;
+	Canvas->TextSize(Font, Name, TW, TH, 0.8f, 0.8f);
+	Canvas->SetDrawColor(FColor::White);
+	Canvas->DrawText(Font, Name, Head.X - TW * 0.5f, Head.Y - TH - 8.f, 0.8f, 0.8f, Info);
+
+	constexpr float BarW = 64.f, BarH = 5.f;
+	const float Frac = Target->GetHealthFraction();
+	const float X = Head.X - BarW * 0.5f;
+	const float Y = Head.Y;
+	DrawRect(FLinearColor(0.f, 0.f, 0.f, 0.85f), X - 1.f, Y - 1.f, BarW + 2.f, BarH + 2.f);
+	DrawRect(FLinearColor(0.85f, 0.1f, 0.1f, 1.f), X, Y, BarW, BarH);
+	DrawRect(FLinearColor(0.2f, 0.9f, 0.25f, 1.f), X, Y, BarW * Frac, BarH);
+
+	const FString Pct = FString::Printf(TEXT("%d%%"), FMath::CeilToInt(Frac * 100.f));
+	float PW = 0.f, PH = 0.f;
+	Canvas->TextSize(Font, Pct, PW, PH, 0.55f, 0.55f);
+	Canvas->DrawText(Font, Pct, Head.X - PW * 0.5f, Y + BarH + 3.f, 0.55f, 0.55f, Info);
 }

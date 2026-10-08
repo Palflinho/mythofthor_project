@@ -29,12 +29,43 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Targeting")
 	FString MonsterName = TEXT("Monstro");
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	int32 BaseLevel = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	int32 MaxHP = 50;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Combat")
+	int32 HP = 50;
+
+	/** Segundos entre a morte e o Destroy do ator (tempo da animacao de morte). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float DeathDestroyDelay = 2.f;
+
+	/** Ex.: "Poring [Lv 1]". */
+	UFUNCTION(BlueprintPure, Category = "Combat")
+	FString GetDisplayName() const;
+
+	UFUNCTION(BlueprintPure, Category = "Combat")
+	float GetHealthFraction() const;
+
+	/**
+	 * Aplica dano: perde HP e toca a animacao Hit; se o HP chegar a 0, chama Kill().
+	 * Ponto de entrada unico, usado pelo combate local e (depois) pelos pacotes de dano do servidor.
+	 * @return true se o golpe matou o monstro.
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	bool ReceiveMythDamage(int32 Amount);
+
 	UFUNCTION(BlueprintPure, Category = "Targeting")
 	bool IsDead() const { return bIsDead; }
 
-	/** Marca como morto: toca a animacao de morte e deixa de ser alvo. */
+	/** Morte: desliga colisoes, limpa o alvo dos jogadores, toca a animacao e destroi o ator apos DeathDestroyDelay. */
 	UFUNCTION(BlueprintCallable, Category = "Targeting")
 	void Kill();
+
+protected:
+	virtual void BeginPlay() override;
 
 private:
 	bool bIsDead = false;

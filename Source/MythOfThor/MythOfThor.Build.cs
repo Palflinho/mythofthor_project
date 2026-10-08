@@ -17,6 +17,8 @@ public class MythOfThor : ModuleRules
 			"Paper2D",
 			"UMG",
 			"Synthesis",
+			"MeshDescription",
+			"StaticMeshDescription",
 			"Slate",
 			"SlateCore",
 			"NavigationSystem",

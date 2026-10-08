@@ -437,7 +437,12 @@ void AMythPlayerController::UpdateCombat(float DeltaTime)
 			// 2. Feedback visual clássico imediato (Floating Combat Text nos anos 2000)
 			const int32 BaseDmg = FMath::RandRange(38, 55);
 			const bool bCrit = (FMath::RandRange(1, 100) <= 15);
-			UMythCombatText::ShowDamage(this, Target->GetActorLocation() + FVector(0.f, 0.f, 50.f), bCrit ? BaseDmg * 2 : BaseDmg, bCrit ? ECombatTextType::Critical : ECombatTextType::DamageDealt);
+			const int32 Damage = bCrit ? BaseDmg * 2 : BaseDmg;
+			UMythCombatText::ShowDamage(this, Target->GetActorLocation() + FVector(0.f, 0.f, 50.f), Damage, bCrit ? ECombatTextType::Critical : ECombatTextType::DamageDealt);
+
+			// 3. Aplica o dano ao monstro (HP, animacao Hit e morte). Dano ainda sorteado no cliente;
+			// quando o servidor enviar o dano real, ele deve chamar este mesmo ReceiveMythDamage.
+			Target->ReceiveMythDamage(Damage);
 
 			OnAttackPerformed.Broadcast(Target);
 		}
