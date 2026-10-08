@@ -47,16 +47,18 @@ Este documento orienta a extração e compilação metódica de todo o mundo do 
 
 ---
 
-## 📍 Região 3: Geffen & Vila/Caverna dos Orcs (Mid-Game 30-60 ⚔️)
-* **Tema:** Magia, misticismo e as tribos orcs.
-* **Cidade:** `geffen` (Torre dos Magos). BGM: `211.mp3`.
-* **Campos:** `gef_fild10` (Vila dos Orcs). BGM: `48.mp3`.
+## 📍 Região 3: Geffen & Vila/Caverna dos Orcs — [STATUS: 100% CONCLUÍDA ✅]
+* **Tema:** Magia, misticismo e as tribos orcs (Mid-Game 30-60 ⚔️).
+* **Cidade:** `geffen` (Torre dos Magos - `geffen_full.obj`, 634 modelos). BGM: `211.mp3`.
+* **Campos:** `gef_fild10` (Vila dos Orcs - `gef_fild10_full.obj`, 1.497 modelos). BGM: `48.mp3`.
 * **Dungeons:**
-  * Caverna dos Orcs: `orcsdun01` e `orcsdun02`. BGM: `23.mp3`.
-  * Torre de Geffen: `gef_dun00` a `gef_dun03`. BGM: `22.mp3`.
-* **Monstros da Região:**
-  * Orc Warrior, Orc Lady, Orc Baby, Orc Zombie, Orc Skeleton.
-  * MVPs: **Orc Hero** e **Orc Lord**.
+  * Caverna dos Orcs: `orcsdun01` (162 modelos) e `orcsdun02` (109 modelos). BGM: `23.mp3`.
+  * Torre de Geffen: `gef_dun00` (143 modelos), `gef_dun01` (373 modelos), `gef_dun02` (395 modelos), `gef_dun03` (273 modelos). BGM: `22.mp3`.
+* **Monstros da Região (17 Spritesheets PNG):**
+  * Orc Warrior, Orc Lady, Orc Baby, Orc Zombie, Orc Skeleton, Orc Archer, High Orc.
+  * Ghoul, Whisper, Jakk, Nightmare, Hunter Fly, Marionette, Deviruchi.
+  * MVPs: **Orc Hero**, **Orc Lord** e **Doppelganger**.
+* **Configuração:** `Config/geffen_orcs_mobs.json`.
 
 ---
 

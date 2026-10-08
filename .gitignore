@@ -12,6 +12,7 @@ Build/
 DerivedDataCache/
 Intermediate/
 Saved/
+Content/Maps/
 .vscode/
 .vs/
 *.sln

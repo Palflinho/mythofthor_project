@@ -7,6 +7,7 @@
 #include "World/MythMapInfo.h"
 #include "World/MythNightAudioComponent.h"
 #include "EngineUtils.h"
+#include "NavigationSystem.h"
 
 AMythGameMode::AMythGameMode()
 {
@@ -28,6 +29,14 @@ void AMythGameMode::BeginPlay()
 	if (!DayNight)
 	{
 		DayNight = GetWorld()->SpawnActor<AMythDayNightActor>();
+	}
+
+	// O Python do editor nao consegue criar o RecastNavMesh; cria aqui (se faltar) e gera a navegacao
+	// dentro dos NavMeshBoundsVolume do nivel para o Point & Click achar caminho.
+	if (UNavigationSystemV1* Nav = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld()))
+	{
+		Nav->GetDefaultNavDataInstance(FNavigationSystem::Create);
+		Nav->Build();
 	}
 
 	if (const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld()))

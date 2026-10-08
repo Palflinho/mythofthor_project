@@ -1,0 +1,80 @@
+{
+  "geffen": {
+    "name": "geffen (Cidade da Magia de Geffen)",
+    "bgm": "211.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Geffen/geffen/data/geffen_full.obj",
+    "mobs": []
+  },
+  "gef_fild10": {
+    "name": "gef_fild10 (Vila dos Orcs)",
+    "bgm": "48.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Geffen/gef_fild10/data/gef_fild10_full.obj",
+    "mobs": [
+      { "id": 1023, "name": "Orc Warrior", "level": 24, "sprite": "orc_warrior", "behavior": "Passivo" },
+      { "id": 1273, "name": "Orc Lady", "level": 26, "sprite": "orc_lady", "behavior": "Passivo" },
+      { "id": 1686, "name": "Orc Baby", "level": 22, "sprite": "orc_baby", "behavior": "Passivo" },
+      { "id": 1087, "name": "Orc Hero", "level": 50, "sprite": "orc_hero", "behavior": "MVP/Agressivo" }
+    ]
+  },
+  "orcsdun01": {
+    "name": "orcsdun01 (Caverna dos Orcs - 1º Andar)",
+    "bgm": "23.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Geffen/orcsdun01/data/orcsdun01_full.obj",
+    "mobs": [
+      { "id": 1152, "name": "Orc Zombie", "level": 34, "sprite": "orc_zombie", "behavior": "Agressivo/Undead" },
+      { "id": 1153, "name": "Orc Skeleton", "level": 36, "sprite": "orc_skeleton", "behavior": "Agressivo/Undead" }
+    ]
+  },
+  "orcsdun02": {
+    "name": "orcsdun02 (Caverna dos Orcs - 2º Andar)",
+    "bgm": "23.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Geffen/orcsdun02/data/orcsdun02_full.obj",
+    "mobs": [
+      { "id": 1152, "name": "Orc Zombie", "level": 34, "sprite": "orc_zombie", "behavior": "Agressivo/Undead" },
+      { "id": 1153, "name": "Orc Skeleton", "level": 36, "sprite": "orc_skeleton", "behavior": "Agressivo/Undead" },
+      { "id": 1189, "name": "Orc Archer", "level": 44, "sprite": "orc_archer", "behavior": "Agressivo/Ranged" },
+      { "id": 1213, "name": "High Orc", "level": 58, "sprite": "high_orc", "behavior": "Agressivo" },
+      { "id": 1190, "name": "Orc Lord", "level": 55, "sprite": "orc_lord", "behavior": "MVP/Agressivo" }
+    ]
+  },
+  "gef_dun00": {
+    "name": "gef_dun00 (Masmorra de Geffen - 1º Andar)",
+    "bgm": "22.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Geffen/gef_dun00/data/gef_dun00_full.obj",
+    "mobs": [
+      { "id": 1036, "name": "Ghoul", "level": 38, "sprite": "ghoul", "behavior": "Agressivo/Undead" }
+    ]
+  },
+  "gef_dun01": {
+    "name": "gef_dun01 (Masmorra de Geffen - 2º Andar)",
+    "bgm": "22.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Geffen/gef_dun01/data/gef_dun01_full.obj",
+    "mobs": [
+      { "id": 1036, "name": "Ghoul", "level": 38, "sprite": "ghoul", "behavior": "Agressivo/Undead" },
+      { "id": 1179, "name": "Whisper", "level": 35, "sprite": "whisper", "behavior": "Agressivo/Ghost" },
+      { "id": 1130, "name": "Jakk", "level": 46, "sprite": "jakk", "behavior": "Passivo/Fire" }
+    ]
+  },
+  "gef_dun02": {
+    "name": "gef_dun02 (Masmorra de Geffen - 3º Andar)",
+    "bgm": "22.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Geffen/gef_dun02/data/gef_dun02_full.obj",
+    "mobs": [
+      { "id": 1059, "name": "Nightmare", "level": 49, "sprite": "nightmare", "behavior": "Agressivo/Ghost" },
+      { "id": 1056, "name": "Hunter Fly", "level": 45, "sprite": "hunter_fly", "behavior": "Agressivo" },
+      { "id": 1143, "name": "Marionette", "level": 44, "sprite": "marionette", "behavior": "Passivo/Ghost" },
+      { "id": 1109, "name": "Deviruchi", "level": 55, "sprite": "deviruchi", "behavior": "Agressivo/Demon" },
+      { "id": 1046, "name": "Doppelganger", "level": 69, "sprite": "doppelganger", "behavior": "MVP/Agressivo" }
+    ]
+  },
+  "gef_dun03": {
+    "name": "gef_dun03 (Masmorra de Geffen - 4º Andar / Santuário Subterrâneo)",
+    "bgm": "22.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Geffen/gef_dun03/data/gef_dun03_full.obj",
+    "mobs": [
+      { "id": 1059, "name": "Nightmare", "level": 49, "sprite": "nightmare", "behavior": "Agressivo/Ghost" },
+      { "id": 1109, "name": "Deviruchi", "level": 55, "sprite": "deviruchi", "behavior": "Agressivo/Demon" },
+      { "id": 1046, "name": "Doppelganger", "level": 69, "sprite": "doppelganger", "behavior": "MVP/Agressivo" }
+    ]
+  }
+}

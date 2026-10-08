@@ -459,7 +459,11 @@ def add_navigation(center, extent):
     vol = spawn(unreal.NavMeshBoundsVolume, (center.x, center.y, center.z), label='NavBounds')
     # O brush padrao tem 200 uu de lado; escala para cobrir a malha inteira (com folga em Z).
     vol.set_actor_scale3d(unreal.Vector(extent.x * 2 / 200.0, extent.y * 2 / 200.0, (extent.z * 2 + 600) / 200.0))
-    # A geracao dinamica do NavMesh vem de Config/DefaultEngine.ini ([RecastNavMesh] RuntimeGeneration=Dynamic).
+    # Sem um RecastNavMesh no nivel o jogo nao gera navegacao ("Unable to find RecastNavMesh instance").
+    # A geracao dinamica vem de Config/DefaultEngine.ini ([RecastNavMesh] RuntimeGeneration=Dynamic).
+    nav = spawn(unreal.RecastNavMesh, (center.x, center.y, center.z), label='RecastNavMesh')
+    if not nav:
+        warn('RecastNavMesh nao foi criado: o Point & Click cai no movimento em linha reta')
 
 
 def run():
