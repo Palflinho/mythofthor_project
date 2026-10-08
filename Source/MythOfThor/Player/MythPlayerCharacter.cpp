@@ -4,6 +4,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Sprites/MythSpriteAnimComponent.h"
 
 AMythPlayerCharacter::AMythPlayerCharacter()
 {
@@ -21,6 +22,10 @@ AMythPlayerCharacter::AMythPlayerCharacter()
 	Move->MaxWalkSpeed = 400.f;
 	Move->bConstrainToPlane = true;
 	Move->bSnapToPlaneAtStart = true;
+
+	Sprite = CreateDefaultSubobject<UMythSpriteAnimComponent>(TEXT("Sprite"));
+	Sprite->SetupAttachment(RootComponent);
+	Sprite->SetRelativeLocation(FVector(0.f, 0.f, -90.f)); // pes do sprite no chao da capsula
 
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);

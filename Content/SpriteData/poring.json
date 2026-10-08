@@ -1,0 +1,7360 @@
+{
+ "source": "poring.act",
+ "version": "2.5",
+ "sprite_count": 49,
+ "grid_columns": 8,
+ "actions": [
+  {
+   "index": 0,
+   "group": 0,
+   "direction": 0,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 0,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 1,
+     "x": 0,
+     "y": -11,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 2,
+     "x": 0,
+     "y": -11,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 3,
+     "x": 0,
+     "y": -9,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 1,
+   "group": 0,
+   "direction": 1,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 0,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 1,
+     "x": 0,
+     "y": -11,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 2,
+     "x": 0,
+     "y": -11,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 3,
+     "x": 0,
+     "y": -9,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 2,
+   "group": 0,
+   "direction": 2,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 4,
+     "x": 1,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 5,
+     "x": 1,
+     "y": -11,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 6,
+     "x": 1,
+     "y": -11,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 7,
+     "x": 1,
+     "y": -9,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 3,
+   "group": 0,
+   "direction": 3,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 4,
+     "x": 1,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 5,
+     "x": 1,
+     "y": -11,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 6,
+     "x": 1,
+     "y": -11,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 7,
+     "x": 1,
+     "y": -9,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 4,
+   "group": 0,
+   "direction": 4,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 4,
+     "x": 0,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 5,
+     "x": 0,
+     "y": -11,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 6,
+     "x": 0,
+     "y": -11,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 7,
+     "x": 0,
+     "y": -9,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 5,
+   "group": 0,
+   "direction": 5,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 4,
+     "x": 0,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 5,
+     "x": 0,
+     "y": -11,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 6,
+     "x": 0,
+     "y": -11,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 7,
+     "x": 0,
+     "y": -9,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 6,
+   "group": 0,
+   "direction": 6,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 0,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 1,
+     "x": 1,
+     "y": -11,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 2,
+     "x": 1,
+     "y": -11,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 3,
+     "x": 1,
+     "y": -9,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 7,
+   "group": 0,
+   "direction": 7,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 0,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 1,
+     "x": 1,
+     "y": -11,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 2,
+     "x": 1,
+     "y": -11,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 3,
+     "x": 1,
+     "y": -9,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 8,
+   "group": 1,
+   "direction": 0,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 8,
+     "x": 1,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 8,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 9,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 10,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 10,
+     "x": 0,
+     "y": -16,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": 0,
+     "y": -20,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 12,
+     "x": 1,
+     "y": -24,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 12,
+     "x": 1,
+     "y": -24,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 14,
+     "x": 2,
+     "y": -22,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 14,
+     "x": 2,
+     "y": -19,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 9,
+   "group": 1,
+   "direction": 1,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 8,
+     "x": 1,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 8,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 9,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 10,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 10,
+     "x": 0,
+     "y": -16,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": 0,
+     "y": -20,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 12,
+     "x": 1,
+     "y": -24,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 12,
+     "x": 1,
+     "y": -24,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 14,
+     "x": 2,
+     "y": -22,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 14,
+     "x": 2,
+     "y": -19,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 10,
+   "group": 1,
+   "direction": 2,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 16,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 16,
+     "x": -1,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 18,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 18,
+     "x": 0,
+     "y": -14,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": 0,
+     "y": -17,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 20,
+     "x": 0,
+     "y": -20,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 20,
+     "x": 0,
+     "y": -20,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 21,
+     "x": 0,
+     "y": -20,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 22,
+     "x": 1,
+     "y": -18,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 11,
+   "group": 1,
+   "direction": 3,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 16,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 16,
+     "x": -1,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 18,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 18,
+     "x": 0,
+     "y": -14,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": 0,
+     "y": -17,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 20,
+     "x": 0,
+     "y": -20,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 20,
+     "x": 0,
+     "y": -20,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 21,
+     "x": 0,
+     "y": -20,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 22,
+     "x": 1,
+     "y": -18,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 12,
+   "group": 1,
+   "direction": 4,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 16,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 16,
+     "x": 2,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 18,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 18,
+     "x": 1,
+     "y": -14,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": 1,
+     "y": -17,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 20,
+     "x": 0,
+     "y": -20,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 20,
+     "x": 0,
+     "y": -20,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 21,
+     "x": 0,
+     "y": -20,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 22,
+     "x": 0,
+     "y": -18,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 13,
+   "group": 1,
+   "direction": 5,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 16,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 16,
+     "x": 2,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 18,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 18,
+     "x": 1,
+     "y": -14,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": 1,
+     "y": -17,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 20,
+     "x": 0,
+     "y": -20,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 20,
+     "x": 0,
+     "y": -20,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 21,
+     "x": 0,
+     "y": -20,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 22,
+     "x": 0,
+     "y": -18,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 14,
+   "group": 1,
+   "direction": 6,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 8,
+     "x": 0,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 8,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 9,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 10,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 10,
+     "x": 1,
+     "y": -16,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": 1,
+     "y": -20,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 12,
+     "x": -1,
+     "y": -24,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 12,
+     "x": -1,
+     "y": -24,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 14,
+     "x": -1,
+     "y": -22,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 14,
+     "x": -1,
+     "y": -19,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 15,
+   "group": 1,
+   "direction": 7,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 8,
+     "x": 0,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 8,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 9,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 10,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 10,
+     "x": 1,
+     "y": -16,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": 1,
+     "y": -20,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 12,
+     "x": -1,
+     "y": -24,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 12,
+     "x": -1,
+     "y": -24,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 14,
+     "x": -1,
+     "y": -22,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 14,
+     "x": -1,
+     "y": -19,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 16,
+   "group": 2,
+   "direction": 0,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 8,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 8,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 8,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 8,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 9,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 9,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 9,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 9,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 10,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 10,
+     "x": -4,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 10,
+     "x": -13,
+     "y": -15,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": -18,
+     "y": -17,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": -18,
+     "y": -17,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": -18,
+     "y": -17,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": -18,
+     "y": -17,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": -19,
+     "y": -17,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": -18,
+     "y": -19,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": -16,
+     "y": -20,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": -14,
+     "y": -21,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": -13,
+     "y": -24,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": -12,
+     "y": -24,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": -10,
+     "y": -25,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": -9,
+     "y": -24,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": -7,
+     "y": -23,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": -6,
+     "y": -21,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": -4,
+     "y": -19,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": -4,
+     "y": -17,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": -3,
+     "y": -15,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 17,
+   "group": 2,
+   "direction": 1,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 8,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 8,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 8,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 8,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 9,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 9,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 9,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 9,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 10,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 10,
+     "x": -4,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 10,
+     "x": -13,
+     "y": -15,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": -18,
+     "y": -17,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": -18,
+     "y": -17,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": -18,
+     "y": -17,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": -18,
+     "y": -17,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": -19,
+     "y": -17,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": -18,
+     "y": -19,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": -16,
+     "y": -20,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": -14,
+     "y": -21,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": -13,
+     "y": -24,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": -12,
+     "y": -24,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": -10,
+     "y": -25,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": -9,
+     "y": -24,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": -7,
+     "y": -23,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": -6,
+     "y": -21,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": -4,
+     "y": -19,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": -4,
+     "y": -17,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": -3,
+     "y": -15,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 18,
+   "group": 2,
+   "direction": 2,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 16,
+     "x": 1,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 16,
+     "x": 1,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 16,
+     "x": 1,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 16,
+     "x": 1,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 18,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 18,
+     "x": -4,
+     "y": -15,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 18,
+     "x": -12,
+     "y": -21,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": -17,
+     "y": -24,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": -17,
+     "y": -24,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": -17,
+     "y": -24,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": -17,
+     "y": -24,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": -18,
+     "y": -25,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": -16,
+     "y": -26,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": -14,
+     "y": -29,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": -12,
+     "y": -31,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": -9,
+     "y": -32,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": -8,
+     "y": -31,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": -6,
+     "y": -30,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": -5,
+     "y": -28,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": -4,
+     "y": -25,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": -3,
+     "y": -23,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": -2,
+     "y": -21,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": -1,
+     "y": -19,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": 0,
+     "y": -17,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 19,
+   "group": 2,
+   "direction": 3,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 16,
+     "x": 1,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 16,
+     "x": 1,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 16,
+     "x": 1,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 16,
+     "x": 1,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 18,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 18,
+     "x": -4,
+     "y": -15,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 18,
+     "x": -12,
+     "y": -21,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": -17,
+     "y": -24,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": -17,
+     "y": -24,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": -17,
+     "y": -24,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": -17,
+     "y": -24,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": -18,
+     "y": -25,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": -16,
+     "y": -26,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": -14,
+     "y": -29,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": -12,
+     "y": -31,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": -9,
+     "y": -32,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": -8,
+     "y": -31,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": -6,
+     "y": -30,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": -5,
+     "y": -28,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": -4,
+     "y": -25,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": -3,
+     "y": -23,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": -2,
+     "y": -21,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": -1,
+     "y": -19,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": 0,
+     "y": -17,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 20,
+   "group": 2,
+   "direction": 4,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 16,
+     "x": 0,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 16,
+     "x": 0,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 16,
+     "x": 0,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 16,
+     "x": 0,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 18,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 18,
+     "x": 5,
+     "y": -15,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 18,
+     "x": 13,
+     "y": -21,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": 18,
+     "y": -24,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": 18,
+     "y": -24,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": 18,
+     "y": -24,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": 18,
+     "y": -24,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": 19,
+     "y": -25,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": 17,
+     "y": -26,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": 15,
+     "y": -29,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": 13,
+     "y": -31,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": 10,
+     "y": -32,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": 9,
+     "y": -31,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": 7,
+     "y": -30,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": 6,
+     "y": -28,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": 5,
+     "y": -25,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": 4,
+     "y": -23,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": 3,
+     "y": -21,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": 2,
+     "y": -19,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": 1,
+     "y": -17,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 21,
+   "group": 2,
+   "direction": 5,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 16,
+     "x": 0,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 16,
+     "x": 0,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 16,
+     "x": 0,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 16,
+     "x": 0,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 18,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 18,
+     "x": 5,
+     "y": -15,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 18,
+     "x": 13,
+     "y": -21,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": 18,
+     "y": -24,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": 18,
+     "y": -24,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": 18,
+     "y": -24,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": 18,
+     "y": -24,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": 19,
+     "y": -25,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": 17,
+     "y": -26,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": 15,
+     "y": -29,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 19,
+     "x": 13,
+     "y": -31,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": 10,
+     "y": -32,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": 9,
+     "y": -31,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": 7,
+     "y": -30,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": 6,
+     "y": -28,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": 5,
+     "y": -25,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": 4,
+     "y": -23,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": 3,
+     "y": -21,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": 2,
+     "y": -19,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 23,
+     "x": 1,
+     "y": -17,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 22,
+   "group": 2,
+   "direction": 6,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 8,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 8,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 8,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 8,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 9,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 9,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 9,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 9,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 10,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 10,
+     "x": 5,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 10,
+     "x": 14,
+     "y": -15,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": 19,
+     "y": -17,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": 19,
+     "y": -17,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": 19,
+     "y": -17,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": 19,
+     "y": -17,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": 20,
+     "y": -17,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": 19,
+     "y": -19,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": 17,
+     "y": -20,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": 15,
+     "y": -21,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": 14,
+     "y": -24,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": 13,
+     "y": -24,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": 11,
+     "y": -25,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": 10,
+     "y": -24,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": 8,
+     "y": -23,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": 7,
+     "y": -21,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": 5,
+     "y": -19,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": 5,
+     "y": -17,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": 4,
+     "y": -15,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 23,
+   "group": 2,
+   "direction": 7,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 8,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 8,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 8,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 8,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 9,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 9,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 9,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 9,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 10,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 10,
+     "x": 5,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 10,
+     "x": 14,
+     "y": -15,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": 19,
+     "y": -17,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": 19,
+     "y": -17,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": 19,
+     "y": -17,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": 19,
+     "y": -17,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": 20,
+     "y": -17,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": 19,
+     "y": -19,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": 17,
+     "y": -20,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 11,
+     "x": 15,
+     "y": -21,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": 14,
+     "y": -24,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": 13,
+     "y": -24,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": 11,
+     "y": -25,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": 10,
+     "y": -24,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": 8,
+     "y": -23,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": 7,
+     "y": -21,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": 5,
+     "y": -19,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": 5,
+     "y": -17,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 15,
+     "x": 4,
+     "y": -15,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 24,
+   "group": 3,
+   "direction": 0,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 24,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": 8,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": 9,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": 10,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": 10,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 25,
+   "group": 3,
+   "direction": 1,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 24,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": 8,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": 9,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": 10,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": 10,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 26,
+   "group": 3,
+   "direction": 2,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": 6,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": 7,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": 8,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": 8,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 27,
+   "group": 3,
+   "direction": 3,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": 6,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": 7,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": 8,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": 8,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 28,
+   "group": 3,
+   "direction": 4,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": -6,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": -7,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": -8,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": -8,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 29,
+   "group": 3,
+   "direction": 5,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": -6,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": -7,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": -8,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": -8,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 30,
+   "group": 3,
+   "direction": 6,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 24,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": -7,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": -8,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": -9,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": -9,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 31,
+   "group": 3,
+   "direction": 7,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 24,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": -7,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": -8,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": -9,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": -9,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 32,
+   "group": 4,
+   "direction": 0,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 25,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 26,
+     "x": -2,
+     "y": -16,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    }
+   ]
+  },
+  {
+   "index": 33,
+   "group": 4,
+   "direction": 1,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 25,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 26,
+     "x": -2,
+     "y": -16,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    }
+   ]
+  },
+  {
+   "index": 34,
+   "group": 4,
+   "direction": 2,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 31,
+     "x": -1,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 26,
+     "x": -2,
+     "y": -16,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    }
+   ]
+  },
+  {
+   "index": 35,
+   "group": 4,
+   "direction": 3,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 31,
+     "x": -1,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 26,
+     "x": -2,
+     "y": -16,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": false,
+     "layers": 9
+    }
+   ]
+  },
+  {
+   "index": 36,
+   "group": 4,
+   "direction": 4,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 31,
+     "x": 1,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 26,
+     "x": 2,
+     "y": -16,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    }
+   ]
+  },
+  {
+   "index": 37,
+   "group": 4,
+   "direction": 5,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 31,
+     "x": 1,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 26,
+     "x": 2,
+     "y": -16,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    }
+   ]
+  },
+  {
+   "index": 38,
+   "group": 4,
+   "direction": 6,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 25,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 26,
+     "x": 2,
+     "y": -16,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    }
+   ]
+  },
+  {
+   "index": 39,
+   "group": 4,
+   "direction": 7,
+   "interval_ms": 25.0,
+   "frames": [
+    {
+     "sprite": 25,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 26,
+     "x": 2,
+     "y": -16,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 0,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    },
+    {
+     "sprite": 40,
+     "x": 1,
+     "y": 0,
+     "flip": true,
+     "layers": 9
+    }
+   ]
+  },
+  {
+   "index": 40,
+   "group": 5,
+   "direction": 0,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    }
+   ]
+  },
+  {
+   "index": 41,
+   "group": 5,
+   "direction": 1,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 1
+    }
+   ]
+  },
+  {
+   "index": 42,
+   "group": 5,
+   "direction": 2,
+   "interval_ms": 62.5,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 43,
+   "group": 5,
+   "direction": 3,
+   "interval_ms": 62.5,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 44,
+   "group": 5,
+   "direction": 4,
+   "interval_ms": 62.5,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 45,
+   "group": 5,
+   "direction": 5,
+   "interval_ms": 62.5,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 46,
+   "group": 5,
+   "direction": 6,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    }
+   ]
+  },
+  {
+   "index": 47,
+   "group": 5,
+   "direction": 7,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 1
+    }
+   ]
+  },
+  {
+   "index": 48,
+   "group": 6,
+   "direction": 0,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 24,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": 8,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": 9,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": 10,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": 10,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": 10,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": 10,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -8,
+     "flip": false,
+     "layers": 4
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -8,
+     "flip": false,
+     "layers": 4
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -8,
+     "flip": false,
+     "layers": 4
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -8,
+     "flip": false,
+     "layers": 4
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -8,
+     "flip": false,
+     "layers": 2
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -8,
+     "flip": false,
+     "layers": 2
+    }
+   ]
+  },
+  {
+   "index": 49,
+   "group": 6,
+   "direction": 1,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 24,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": 8,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": 9,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": 10,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": 10,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": 10,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": 10,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -8,
+     "flip": false,
+     "layers": 4
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -8,
+     "flip": false,
+     "layers": 4
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -8,
+     "flip": false,
+     "layers": 4
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -8,
+     "flip": false,
+     "layers": 4
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -8,
+     "flip": false,
+     "layers": 2
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -8,
+     "flip": false,
+     "layers": 2
+    }
+   ]
+  },
+  {
+   "index": 50,
+   "group": 6,
+   "direction": 2,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": 6,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": 7,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": 8,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": 8,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": 8,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": 8,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 39,
+     "x": -15,
+     "y": -16,
+     "flip": false,
+     "layers": 3
+    },
+    {
+     "sprite": 39,
+     "x": -17,
+     "y": -18,
+     "flip": false,
+     "layers": 3
+    },
+    {
+     "sprite": 39,
+     "x": -19,
+     "y": -20,
+     "flip": false,
+     "layers": 3
+    },
+    {
+     "sprite": 39,
+     "x": -21,
+     "y": -23,
+     "flip": false,
+     "layers": 3
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -8,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -8,
+     "flip": false,
+     "layers": 1
+    }
+   ]
+  },
+  {
+   "index": 51,
+   "group": 6,
+   "direction": 3,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": 6,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": 7,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": 8,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": 8,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": 8,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": 8,
+     "y": -8,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 39,
+     "x": -15,
+     "y": -16,
+     "flip": false,
+     "layers": 3
+    },
+    {
+     "sprite": 39,
+     "x": -17,
+     "y": -18,
+     "flip": false,
+     "layers": 3
+    },
+    {
+     "sprite": 39,
+     "x": -19,
+     "y": -20,
+     "flip": false,
+     "layers": 3
+    },
+    {
+     "sprite": 39,
+     "x": -21,
+     "y": -23,
+     "flip": false,
+     "layers": 3
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -8,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -8,
+     "flip": false,
+     "layers": 1
+    }
+   ]
+  },
+  {
+   "index": 52,
+   "group": 6,
+   "direction": 4,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": -6,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": -7,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": -8,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": -8,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": -8,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": -8,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 39,
+     "x": 16,
+     "y": -16,
+     "flip": true,
+     "layers": 3
+    },
+    {
+     "sprite": 39,
+     "x": 18,
+     "y": -18,
+     "flip": true,
+     "layers": 3
+    },
+    {
+     "sprite": 39,
+     "x": 20,
+     "y": -20,
+     "flip": true,
+     "layers": 3
+    },
+    {
+     "sprite": 39,
+     "x": 22,
+     "y": -23,
+     "flip": true,
+     "layers": 3
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -8,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -8,
+     "flip": true,
+     "layers": 1
+    }
+   ]
+  },
+  {
+   "index": 53,
+   "group": 6,
+   "direction": 5,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": -6,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": -7,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": -8,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": -8,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": -8,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 31,
+     "x": -8,
+     "y": -8,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 39,
+     "x": 16,
+     "y": -16,
+     "flip": true,
+     "layers": 3
+    },
+    {
+     "sprite": 39,
+     "x": 18,
+     "y": -18,
+     "flip": true,
+     "layers": 3
+    },
+    {
+     "sprite": 39,
+     "x": 20,
+     "y": -20,
+     "flip": true,
+     "layers": 3
+    },
+    {
+     "sprite": 39,
+     "x": 22,
+     "y": -23,
+     "flip": true,
+     "layers": 3
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -8,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -8,
+     "flip": true,
+     "layers": 1
+    }
+   ]
+  },
+  {
+   "index": 54,
+   "group": 6,
+   "direction": 6,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 24,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": -7,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": -8,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": -9,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": -9,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": -9,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": -9,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -8,
+     "flip": true,
+     "layers": 4
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -8,
+     "flip": true,
+     "layers": 4
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -8,
+     "flip": true,
+     "layers": 4
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -8,
+     "flip": true,
+     "layers": 4
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -8,
+     "flip": true,
+     "layers": 2
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -8,
+     "flip": true,
+     "layers": 2
+    }
+   ]
+  },
+  {
+   "index": 55,
+   "group": 6,
+   "direction": 7,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 24,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": -7,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": -8,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": -9,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": -9,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": -9,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 25,
+     "x": -9,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -8,
+     "flip": true,
+     "layers": 4
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -8,
+     "flip": true,
+     "layers": 4
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -8,
+     "flip": true,
+     "layers": 4
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -8,
+     "flip": true,
+     "layers": 4
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -8,
+     "flip": true,
+     "layers": 2
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -8,
+     "flip": true,
+     "layers": 2
+    }
+   ]
+  },
+  {
+   "index": 56,
+   "group": 7,
+   "direction": 0,
+   "interval_ms": 62.5,
+   "frames": [
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 1
+    }
+   ]
+  },
+  {
+   "index": 57,
+   "group": 7,
+   "direction": 1,
+   "interval_ms": 62.5,
+   "frames": [
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 1
+    }
+   ]
+  },
+  {
+   "index": 58,
+   "group": 7,
+   "direction": 2,
+   "interval_ms": 62.5,
+   "frames": [
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 59,
+   "group": 7,
+   "direction": 3,
+   "interval_ms": 62.5,
+   "frames": [
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 0,
+     "y": -7,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 60,
+   "group": 7,
+   "direction": 4,
+   "interval_ms": 62.5,
+   "frames": [
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 61,
+   "group": 7,
+   "direction": 5,
+   "interval_ms": 62.5,
+   "frames": [
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 62,
+   "group": 7,
+   "direction": 6,
+   "interval_ms": 62.5,
+   "frames": [
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 1
+    }
+   ]
+  },
+  {
+   "index": 63,
+   "group": 7,
+   "direction": 7,
+   "interval_ms": 62.5,
+   "frames": [
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 1
+    },
+    {
+     "sprite": 17,
+     "x": 1,
+     "y": -7,
+     "flip": true,
+     "layers": 1
+    }
+   ]
+  },
+  {
+   "index": 64,
+   "group": 8,
+   "direction": 0,
+   "interval_ms": 62.5,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 2
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 2
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 2
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 2
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 2
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 2
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 65,
+   "group": 8,
+   "direction": 1,
+   "interval_ms": 62.5,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 2
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 2
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 2
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 2
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 2
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 2
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 66,
+   "group": 8,
+   "direction": 2,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 67,
+   "group": 8,
+   "direction": 3,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -13,
+     "flip": false,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 0,
+     "y": -12,
+     "flip": false,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 68,
+   "group": 8,
+   "direction": 4,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 69,
+   "group": 8,
+   "direction": 5,
+   "interval_ms": 100.0,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 70,
+   "group": 8,
+   "direction": 6,
+   "interval_ms": 62.5,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 2
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 2
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 2
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 2
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 2
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 2
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  },
+  {
+   "index": 71,
+   "group": 8,
+   "direction": 7,
+   "interval_ms": 62.5,
+   "frames": [
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 2
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 2
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 2
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 2
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 2
+    },
+    {
+     "sprite": 30,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 2
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -13,
+     "flip": true,
+     "layers": 0
+    },
+    {
+     "sprite": 43,
+     "x": 1,
+     "y": -12,
+     "flip": true,
+     "layers": 0
+    }
+   ]
+  }
+ ]
+}
