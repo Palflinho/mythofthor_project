@@ -1,7 +1,7 @@
 #include "AutoBattleComponent.h"
 
 UAutoBattleComponent::UAutoBattleComponent()
-	: bIsActive(false)
+	: bAutoBattleActive(false)
 	, RemainingStaminaSeconds(MAX_DAILY_STAMINA_SECONDS)
 	, InventoryWeightPercent(0.0f)
 	, bIsDowned(false)
@@ -20,7 +20,7 @@ void UAutoBattleComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// Consome vigor se o Auto-Battle estiver ativo
-	if (bIsActive)
+	if (bAutoBattleActive)
 	{
 		RemainingStaminaSeconds = FMath::Max(0.0f, RemainingStaminaSeconds - DeltaTime);
 		OnAutoBattleTimeUpdated.Broadcast(RemainingStaminaSeconds);
@@ -67,13 +67,13 @@ bool UAutoBattleComponent::ToggleAutoBattle(bool bEnable)
 			return false;
 		}
 
-		bIsActive = true;
+		bAutoBattleActive = true;
 		OnAutoBattleStateChanged.Broadcast(true);
 		return true;
 	}
 	else
 	{
-		bIsActive = false;
+		bAutoBattleActive = false;
 		OnAutoBattleStateChanged.Broadcast(false);
 		return true;
 	}
@@ -86,10 +86,10 @@ float UAutoBattleComponent::NotifyPlayerDeath()
 
 	float ExpLostPercent = DEATH_PENALTY_MANUAL_PERCENT;
 
-	if (bIsActive)
+	if (bAutoBattleActive)
 	{
 		// Morte durante o Auto-Battle: desativa imediatamente e aplica 5% de penalidade
-		bIsActive = false;
+		bAutoBattleActive = false;
 		ExpLostPercent = DEATH_PENALTY_AUTOBATTLE_PERCENT;
 		OnAutoBattleStateChanged.Broadcast(false);
 	}
@@ -104,7 +104,7 @@ void UAutoBattleComponent::UpdateInventoryWeight(float CurrentWeightPercent)
 	OnInventoryWeightChanged.Broadcast(InventoryWeightPercent, IsOverweight());
 
 	// Trava de segurança: se o peso atingir 90% durante o combate, desativa na hora
-	if (bIsActive && InventoryWeightPercent >= OVERWEIGHT_THRESHOLD_PERCENT)
+	if (bAutoBattleActive && InventoryWeightPercent >= OVERWEIGHT_THRESHOLD_PERCENT)
 	{
 		ToggleAutoBattle(false);
 		OnAutoBattleError.Broadcast(TEXT("Auto-Battle pausado: Inventário atingiu 90% de peso."));
@@ -116,6 +116,6 @@ void UAutoBattleComponent::RespawnToSavePoint()
 	bIsDowned = false;
 	DownedTimer = 0.0f;
 	// Auto-Battle permanece RIGOROSAMENTE desligado após respawn na cidade
-	bIsActive = false;
+	bAutoBattleActive = false;
 	OnAutoBattleStateChanged.Broadcast(false);
 }

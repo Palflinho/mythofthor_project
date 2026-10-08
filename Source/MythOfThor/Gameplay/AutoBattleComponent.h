@@ -59,7 +59,7 @@ public:
 
 	// Getters
 	UFUNCTION(BlueprintPure, Category = "Ragnarok|AutoBattle")
-	bool IsAutoBattleActive() const { return bIsActive; }
+	bool IsAutoBattleActive() const { return bAutoBattleActive; }
 
 	UFUNCTION(BlueprintPure, Category = "Ragnarok|AutoBattle")
 	float GetRemainingStaminaSeconds() const { return RemainingStaminaSeconds; }
@@ -94,7 +94,7 @@ public:
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Ragnarok|AutoBattle")
-	bool bIsActive;
+	bool bAutoBattleActive;
 
 	UPROPERTY(VisibleAnywhere, Category = "Ragnarok|AutoBattle")
 	float RemainingStaminaSeconds;
