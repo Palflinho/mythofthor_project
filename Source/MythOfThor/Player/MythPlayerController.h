@@ -45,11 +45,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
 	float KeyRotateSpeed = 90.f; // graus/s para Q/E
 
-	/** Converte posicao do mundo em celula do grid do servidor. */
 	/** Console: MythTestDamage -> mostra os 5 tipos de texto sobre o personagem. */
 	UFUNCTION(Exec)
 	void MythTestDamage();
 
+	/** Converte posicao do mundo em celula do grid do servidor. */
 	UFUNCTION(BlueprintPure, Category = "Myth|Network")
 	FIntPoint WorldToCell(const FVector& WorldLocation) const;
 
