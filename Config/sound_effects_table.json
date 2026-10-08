@@ -1,0 +1,63 @@
+{
+  "system": {
+    "level_up": "levelup.wav",
+    "heal": "_heal_effect.wav",
+    "warp": "jupe_warp.wav"
+  },
+  "weapons": {
+    "dagger": {
+      "attack": "_attack_dagger.wav",
+      "hit": "_hit_dagger.wav"
+    },
+    "sword": {
+      "attack": "_attack_sword.wav",
+      "hit": "_hit_sword.wav"
+    },
+    "short_sword": {
+      "attack": "attack_short_sword.wav"
+    },
+    "two_hand_sword": {
+      "attack": "attack_twohand_sword.wav"
+    }
+  },
+  "player": {
+    "novice": {
+      "attack": "_novice_attack.wav",
+      "hit": "_novice_hit.wav",
+      "damage_female": "damage_novice_female.wav",
+      "die_female": "die_novice_female.wav"
+    },
+    "swordman": {
+      "attack": "_swordman_attack.wav",
+      "hit": "_swordman_hit.wav",
+      "damage_female": "damage_swordman_female.wav",
+      "die_female": "die_swordman_female.wav"
+    }
+  },
+  "monsters": {
+    "poring": {
+      "attack": "poring_attack.wav",
+      "damage": "poring_damage.wav",
+      "die": "poring_die.wav",
+      "move": "poring_move.wav"
+    },
+    "fabre": {
+      "attack": "fabre_attack.wav",
+      "damage": "fabre_damage.wav",
+      "die": "fabre_die.wav"
+    },
+    "lunatic": {
+      "attack": "lunatic_attack.wav",
+      "die": "lunatic_die.wav"
+    },
+    "pupa": {
+      "die": "pupa_die.wav"
+    },
+    "king_poring": {
+      "attack": "king_poring_atk.wav",
+      "damage": "king_poring_dam.wav",
+      "die": "king_poring_die.wav",
+      "move": "king_poring_move.wav"
+    }
+  }
+}
