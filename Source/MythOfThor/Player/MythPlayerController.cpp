@@ -493,3 +493,27 @@ void AMythPlayerController::MythDayLength(float Seconds)
 		It->DayLengthSeconds = FMath::Max(1.f, Seconds);
 	}
 }
+
+void AMythPlayerController::MythHurtMonster(int32 Damage)
+{
+	AMythMonster* Target = GetFocusedTarget();
+	if (!Target && GetPawn())
+	{
+		float Best = TNumericLimits<float>::Max();
+		for (TActorIterator<AMythMonster> It(GetWorld()); It; ++It)
+		{
+			const float D = FVector::DistSquared(It->GetActorLocation(), GetPawn()->GetActorLocation());
+			if (!It->IsDead() && D < Best)
+			{
+				Best = D;
+				Target = *It;
+			}
+		}
+	}
+	if (Target)
+	{
+		SetFocusedTarget(Target);
+		UMythCombatText::ShowDamage(this, Target->GetActorLocation() + FVector(0.f, 0.f, 50.f), Damage, ECombatTextType::DamageDealt);
+		Target->ReceiveMythDamage(Damage);
+	}
+}

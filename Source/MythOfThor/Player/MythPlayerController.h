@@ -83,6 +83,10 @@ public:
 	UFUNCTION(Exec)
 	void MythDayLength(float Seconds);
 
+	/** Console: MythHurtMonster <dano> -> da dano ao alvo focado (ou ao monstro mais proximo). */
+	UFUNCTION(Exec)
+	void MythHurtMonster(int32 Damage);
+
 	/** Console: MythKillTarget -> mata o alvo focado. */
 	UFUNCTION(Exec)
 	void MythKillTarget();

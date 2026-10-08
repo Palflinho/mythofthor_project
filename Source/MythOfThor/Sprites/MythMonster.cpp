@@ -30,6 +30,12 @@ void AMythMonster::BeginPlay()
 	HP = MaxHP;
 }
 
+void AMythMonster::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	UE_LOG(LogTemp, Log, TEXT("[Monster] %s removido (%d)"), *GetDisplayName(), static_cast<int32>(EndPlayReason));
+	Super::EndPlay(EndPlayReason);
+}
+
 FString AMythMonster::GetDisplayName() const
 {
 	return FString::Printf(TEXT("%s [Lv %d]"), *MonsterName, BaseLevel);
@@ -48,6 +54,7 @@ bool AMythMonster::ReceiveMythDamage(int32 Amount)
 	}
 
 	HP = FMath::Max(0, HP - Amount);
+	UE_LOG(LogTemp, Log, TEXT("[Monster] %s recebeu %d de dano: HP %d/%d"), *GetDisplayName(), Amount, HP, MaxHP);
 	if (HP == 0)
 	{
 		Kill();
@@ -66,6 +73,7 @@ void AMythMonster::Kill()
 	}
 	bIsDead = true;
 	HP = 0;
+	UE_LOG(LogTemp, Log, TEXT("[Monster] %s morreu; Destroy em %.1f s"), *GetDisplayName(), DeathDestroyDelay);
 
 	// Sem colisao nem movimento: deixa de ser clicavel, bloquear passagem ou perseguir.
 	ClickBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);

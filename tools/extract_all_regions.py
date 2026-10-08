@@ -38,6 +38,34 @@ REGIONS = {
         "alberta",
         "treasure01", "treasure02",
         "tur_dun01", "tur_dun02", "tur_dun03", "tur_dun04"
+    ],
+    "Aldebaran": [
+        "aldebaran",
+        "c_tower1", "c_tower2", "c_tower3", "c_tower4",
+        "alde_dun01", "alde_dun02", "alde_dun03", "alde_dun04"
+    ],
+    "GlastHeim": [
+        "glast_01",
+        "gl_cas01", "gl_cas02",
+        "gl_church", "gl_chyard",
+        "gl_knt01", "gl_knt02",
+        "gl_prison", "gl_prison1",
+        "gl_sew01", "gl_sew02", "gl_sew03", "gl_sew04",
+        "gl_step",
+        "gl_dun01", "gl_dun02"
+    ],
+    "Lutie": [
+        "xmas", "xmas_fild01",
+        "xmas_dun01", "xmas_dun02"
+    ],
+    "Comodo": [
+        "comodo",
+        "beach_dun", "beach_dun2", "beach_dun3"
+    ],
+    "Yuno": [
+        "yuno",
+        "mag_dun01", "mag_dun02",
+        "yuno_fild01"
     ]
 }
 

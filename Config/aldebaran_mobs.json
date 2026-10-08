@@ -1,0 +1,85 @@
+{
+  "aldebaran": {
+    "name": "aldebaran (Cidade dos Canais de Aldebaran)",
+    "bgm": "213.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Aldebaran/aldebaran/data/aldebaran_full.obj",
+    "mobs": []
+  },
+  "c_tower1": {
+    "name": "c_tower1 (Torre do Relógio - 1º Andar)",
+    "bgm": "60.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Aldebaran/c_tower1/data/c_tower1_full.obj",
+    "mobs": [
+      { "id": 1215, "name": "Punk", "level": 39, "sprite": "punk", "behavior": "Agressivo" },
+      { "id": 1195, "name": "Rideword", "level": 47, "sprite": "rideword", "behavior": "Agressivo/Ghost" }
+    ]
+  },
+  "c_tower2": {
+    "name": "c_tower2 (Torre do Relógio - 2º Andar)",
+    "bgm": "60.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Aldebaran/c_tower2/data/c_tower2_full.obj",
+    "mobs": [
+      { "id": 1269, "name": "Clock", "level": 55, "sprite": "clock", "behavior": "Passivo" },
+      { "id": 1215, "name": "Punk", "level": 39, "sprite": "punk", "behavior": "Agressivo" },
+      { "id": 1195, "name": "Rideword", "level": 47, "sprite": "rideword", "behavior": "Agressivo/Ghost" }
+    ]
+  },
+  "c_tower3": {
+    "name": "c_tower3 (Torre do Relógio - 3º Andar)",
+    "bgm": "60.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Aldebaran/c_tower3/data/c_tower3_full.obj",
+    "mobs": [
+      { "id": 1193, "name": "Alarm", "level": 68, "sprite": "alarm", "behavior": "Agressivo" },
+      { "id": 1269, "name": "Clock", "level": 55, "sprite": "clock", "behavior": "Passivo" },
+      { "id": 1191, "name": "Mimic", "level": 48, "sprite": "mimic", "behavior": "Agressivo/Looter" }
+    ]
+  },
+  "c_tower4": {
+    "name": "c_tower4 (Torre do Relógio - 4º Andar / Topo da Torre)",
+    "bgm": "60.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Aldebaran/c_tower4/data/c_tower4_full.obj",
+    "mobs": [
+      { "id": 1193, "name": "Alarm", "level": 68, "sprite": "alarm", "behavior": "Agressivo" },
+      { "id": 1292, "name": "Owl Baron", "level": 78, "sprite": "owl_baron", "behavior": "Agressivo/Demon" },
+      { "id": 1291, "name": "Owl Duke", "level": 82, "sprite": "owl_duke", "behavior": "Agressivo/Demon" }
+    ]
+  },
+  "alde_dun01": {
+    "name": "alde_dun01 (Porão da Torre do Relógio - B1F)",
+    "bgm": "61.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Aldebaran/alde_dun01/data/alde_dun01_full.obj",
+    "mobs": [
+      { "id": 1213, "name": "High Orc", "level": 58, "sprite": "high_orc", "behavior": "Agressivo" },
+      { "id": 1189, "name": "Orc Archer", "level": 44, "sprite": "orc_archer", "behavior": "Agressivo/Ranged" }
+    ]
+  },
+  "alde_dun02": {
+    "name": "alde_dun02 (Porão da Torre do Relógio - B2F)",
+    "bgm": "61.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Aldebaran/alde_dun02/data/alde_dun02_full.obj",
+    "mobs": [
+      { "id": 1100, "name": "Bathory", "level": 61, "sprite": "bathory", "behavior": "Passivo/Shadow" },
+      { "id": 1194, "name": "Arclouse", "level": 63, "sprite": "arclouse", "behavior": "Agressivo" }
+    ]
+  },
+  "alde_dun03": {
+    "name": "alde_dun03 (Porão da Torre do Relógio - B3F)",
+    "bgm": "61.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Aldebaran/alde_dun03/data/alde_dun03_full.obj",
+    "mobs": [
+      { "id": 1100, "name": "Bathory", "level": 61, "sprite": "bathory", "behavior": "Passivo/Shadow" },
+      { "id": 1193, "name": "Alarm", "level": 68, "sprite": "alarm", "behavior": "Agressivo" },
+      { "id": 1191, "name": "Mimic", "level": 48, "sprite": "mimic", "behavior": "Agressivo/Looter" }
+    ]
+  },
+  "alde_dun04": {
+    "name": "alde_dun04 (Porão da Torre do Relógio - B4F / Santuário do Tempo)",
+    "bgm": "61.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Aldebaran/alde_dun04/data/alde_dun04_full.obj",
+    "mobs": [
+      { "id": 1100, "name": "Bathory", "level": 61, "sprite": "bathory", "behavior": "Passivo/Shadow" },
+      { "id": 1292, "name": "Owl Baron", "level": 78, "sprite": "owl_baron", "behavior": "Agressivo/Demon" },
+      { "id": 1291, "name": "Owl Duke", "level": 82, "sprite": "owl_duke", "behavior": "Agressivo/Demon" }
+    ]
+  }
+}

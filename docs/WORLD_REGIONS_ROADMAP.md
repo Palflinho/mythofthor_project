@@ -109,6 +109,18 @@ Este documento orienta a extração e compilação metódica de todo o mundo do 
 
 ---
 
+## 📍 Região 7: Aldebaran & Torre do Relógio — [STATUS: 100% CONCLUÍDA ✅]
+* **Tema:** Cidade dos Canais e a lendária Torre do Relógio (Clock Tower 🕰️).
+* **Cidade:** `aldebaran` (`aldebaran_full.obj`, 1.586 modelos). BGM: `213.mp3`.
+* **Dungeons (8 andares compilados em 3D):**
+  * Torre do Relógio (4 andares): `c_tower1` (1.560 modelos), `c_tower2` (439 modelos), `c_tower3` (500 modelos), `c_tower4` (1.031 modelos). BGM: `60.mp3`.
+  * Porão da Torre (4 andares): `alde_dun01` (346 modelos), `alde_dun02` (261 modelos), `alde_dun03` (563 modelos), `alde_dun04` (235 modelos). BGM: `61.mp3`.
+* **Monstros da Região (8 Spritesheets PNG):**
+  * Alarm, Clock, Bathory, Rideword, Punk, Arclouse, Owl Baron, Owl Duke.
+* **Configuração:** `Config/aldebaran_mobs.json`.
+
+---
+
 ## 🎭 Sprites das Classes Prontos para o Claude (`D:\Ragnarok_Assets\Sprites\PNG`)
 
 Todas as 36 combinações de classes masculinas e femininas foram decodificadas e convertidas em spritesheets com canal alfa transparente:
