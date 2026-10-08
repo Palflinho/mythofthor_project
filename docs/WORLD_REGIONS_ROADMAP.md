@@ -102,3 +102,4 @@ Todas as 36 combinações de classes masculinas e femininas foram decodificadas 
 | **1-1 Mágico / Suporte** | `mage_male`, `acolyte_male` | `mage_female`, `acolyte_female` |
 | **2-1 Classes** | `knight_male`, `wizard_male`, `hunter_male`, `assassin_male`, `priest_male`, `blacksmith_male` | `knight_female`, `wizard_female`, `hunter_female`, `assassin_female`, `priest_female`, `blacksmith_female` |
 | **2-2 Classes** | `crusader_male`, `sage_male`, `rogue_male`, `monk_male`, `alchemist_male` | `crusader_female`, `sage_female`, `rogue_female`, `monk_female`, `alchemist_female` |
+| **Expandidas** | `super_novice_male`, `taekwon_male`, `star_gladiator_male`, `soul_linker_male`, `ninja_male`, `gunslinger_male` | `super_novice_female`, `taekwon_female`, `star_gladiator_female`, `soul_linker_female`, `ninja_female`, `gunslinger_female` |
