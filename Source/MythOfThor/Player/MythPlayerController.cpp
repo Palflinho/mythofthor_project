@@ -3,6 +3,8 @@
 #include "Player/MythPlayerCharacter.h"
 #include "Network/RagnarokNetworkSubsystem.h"
 #include "UI/MythHUD.h"
+#include "World/MythDayNightActor.h"
+#include "EngineUtils.h"
 #include "Sprites/MythMonster.h"
 #include "Sprites/MythSpriteAnimComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -463,5 +465,21 @@ void AMythPlayerController::MythKillTarget()
 	if (AMythMonster* T = GetFocusedTarget())
 	{
 		T->Kill();
+	}
+}
+
+void AMythPlayerController::MythSetHour(float Hour)
+{
+	for (TActorIterator<AMythDayNightActor> It(GetWorld()); It; ++It)
+	{
+		It->SetTimeOfDay(Hour);
+	}
+}
+
+void AMythPlayerController::MythDayLength(float Seconds)
+{
+	for (TActorIterator<AMythDayNightActor> It(GetWorld()); It; ++It)
+	{
+		It->DayLengthSeconds = FMath::Max(1.f, Seconds);
 	}
 }

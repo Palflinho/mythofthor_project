@@ -12,4 +12,11 @@ class MYTHOFTHOR_API AMythGameMode : public AGameModeBase
 
 public:
 	AMythGameMode();
+
+	/** Ciclo dia/noite do mundo (criado no BeginPlay se o nivel nao tiver um). */
+	UPROPERTY(BlueprintReadOnly, Category = "Myth")
+	TObjectPtr<class AMythDayNightActor> DayNight;
+
+protected:
+	virtual void BeginPlay() override;
 };

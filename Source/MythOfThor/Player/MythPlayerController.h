@@ -75,6 +75,14 @@ public:
 	UFUNCTION(Exec)
 	void MythSpawnMonster();
 
+	/** Console: MythSetHour <0-24> -> muda a hora do dia (ex.: MythSetHour 22). */
+	UFUNCTION(Exec)
+	void MythSetHour(float Hour);
+
+	/** Console: MythDayLength <segundos> -> duracao de um dia de jogo (ex.: MythDayLength 60). */
+	UFUNCTION(Exec)
+	void MythDayLength(float Seconds);
+
 	/** Console: MythKillTarget -> mata o alvo focado. */
 	UFUNCTION(Exec)
 	void MythKillTarget();
