@@ -2,7 +2,14 @@
 	"FileVersion": 3,
 	"EngineAssociation": "{E62DDD45-4A66-1A7E-DA06-558A9B2CCDFE}",
 	"Category": "",
-	"Description": "",
+	"Description": "Myth of Thor - Ragnarok Online HD-2D",
+	"Modules": [
+		{
+			"Name": "MythOfThor",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
 	"Plugins": [
 		{
 			"Name": "ModelingToolsEditorMode",
