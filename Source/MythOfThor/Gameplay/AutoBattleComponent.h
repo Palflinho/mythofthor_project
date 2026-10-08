@@ -8,6 +8,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAutoBattleStateChanged, bool, bIsActive);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAutoBattleTimeUpdated, float, RemainingSeconds);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAutoBattleError, const FString&, Reason);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnInventoryWeightChanged, float, WeightPercent, bool, bOverweight);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerDiedInAutoBattle, float, ExpLostPercent, float, DownedSecondsRemaining);
 
 /**
@@ -69,7 +70,16 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Ragnarok|AutoBattle")
 	float GetDownedTimerRemaining() const { return DownedTimer; }
 
+	UFUNCTION(BlueprintPure, Category = "Ragnarok|AutoBattle")
+	float GetInventoryWeightPercent() const { return InventoryWeightPercent; }
+
+	UFUNCTION(BlueprintPure, Category = "Ragnarok|AutoBattle")
+	bool IsOverweight() const { return InventoryWeightPercent >= OVERWEIGHT_THRESHOLD_PERCENT; }
+
 	// Eventos Dispatchers para Blueprint/HUD
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|AutoBattle|Events")
+	FOnInventoryWeightChanged OnInventoryWeightChanged;
+
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|AutoBattle|Events")
 	FOnAutoBattleStateChanged OnAutoBattleStateChanged;
 

@@ -5,6 +5,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Sprites/MythSpriteAnimComponent.h"
+#include "Gameplay/MythStatsComponent.h"
+#include "Gameplay/AutoBattleComponent.h"
 
 AMythPlayerCharacter::AMythPlayerCharacter()
 {
@@ -26,6 +28,9 @@ AMythPlayerCharacter::AMythPlayerCharacter()
 	Sprite = CreateDefaultSubobject<UMythSpriteAnimComponent>(TEXT("Sprite"));
 	Sprite->SetupAttachment(RootComponent);
 	Sprite->SetRelativeLocation(FVector(0.f, 0.f, -90.f)); // pes do sprite no chao da capsula
+
+	Stats = CreateDefaultSubobject<UMythStatsComponent>(TEXT("Stats"));
+	AutoBattle = CreateDefaultSubobject<UAutoBattleComponent>(TEXT("AutoBattle"));
 
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);

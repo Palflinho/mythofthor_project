@@ -14,6 +14,9 @@ public class MythOfThor : ModuleRules
 			"EnhancedInput",
 			"AIModule",
 			"Paper2D",
+			"UMG",
+			"Slate",
+			"SlateCore",
 			"NavigationSystem",
 			"Sockets",
 			"Networking"

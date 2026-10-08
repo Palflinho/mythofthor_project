@@ -3,6 +3,10 @@
 #include "Player/MythPlayerCharacter.h"
 #include "Network/RagnarokNetworkSubsystem.h"
 #include "UI/MythHUD.h"
+#include "UI/MythClassicHUDWidget.h"
+#include "Gameplay/MythStatsComponent.h"
+#include "Gameplay/AutoBattleComponent.h"
+#include "Blueprint/UserWidget.h"
 
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Engine/LocalPlayer.h"
@@ -17,6 +21,29 @@ AMythPlayerController::AMythPlayerController()
 {
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;
+}
+
+void AMythPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+	if (IsLocalController())
+	{
+		HudWidget = CreateWidget<UMythClassicHUDWidget>(this, UMythClassicHUDWidget::StaticClass());
+		if (HudWidget)
+		{
+			HudWidget->AddToViewport(0);
+			HudWidget->BindToPawn(GetPawn());
+		}
+	}
+}
+
+void AMythPlayerController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (HudWidget)
+	{
+		HudWidget->BindToPawn(InPawn);
+	}
 }
 
 FIntPoint AMythPlayerController::WorldToCell(const FVector& WorldLocation) const
@@ -298,5 +325,23 @@ void AMythPlayerController::MythTestDamage()
 		UMythCombatText::ShowDamage(this, Loc, 55, ECombatTextType::DamageTaken);
 		UMythCombatText::ShowDamage(this, Loc, 210, ECombatTextType::Heal);
 		UMythCombatText::ShowMiss(this, Loc);
+	}
+}
+
+void AMythPlayerController::MythTestHud()
+{
+	APawn* P = GetPawn();
+	UMythStatsComponent* Stats = P ? P->FindComponentByClass<UMythStatsComponent>() : nullptr;
+	UAutoBattleComponent* Auto = P ? P->FindComponentByClass<UAutoBattleComponent>() : nullptr;
+	if (Stats)
+	{
+		Stats->SetIdentity(TEXT("Thor"), 12);
+		Stats->SetVitals(312, 480, 41, 95);
+		Stats->SetExp(4370, 9800);
+	}
+	if (Auto)
+	{
+		// alterna entre peso normal e sobrepeso a cada chamada
+		Auto->UpdateInventoryWeight(Auto->IsOverweight() ? 40.f : 92.f);
 	}
 }

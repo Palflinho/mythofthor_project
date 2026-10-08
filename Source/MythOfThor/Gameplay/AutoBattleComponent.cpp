@@ -101,6 +101,7 @@ float UAutoBattleComponent::NotifyPlayerDeath()
 void UAutoBattleComponent::UpdateInventoryWeight(float CurrentWeightPercent)
 {
 	InventoryWeightPercent = CurrentWeightPercent;
+	OnInventoryWeightChanged.Broadcast(InventoryWeightPercent, IsOverweight());
 
 	// Trava de segurança: se o peso atingir 90% durante o combate, desativa na hora
 	if (bIsActive && InventoryWeightPercent >= OVERWEIGHT_THRESHOLD_PERCENT)

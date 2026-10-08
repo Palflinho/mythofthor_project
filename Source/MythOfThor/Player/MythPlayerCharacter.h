@@ -7,6 +7,8 @@
 class USpringArmComponent;
 class UCameraComponent;
 class UMythSpriteAnimComponent;
+class UMythStatsComponent;
+class UAutoBattleComponent;
 
 /** Modos de câmera alternáveis em jogo (diretrizes, seção 4.B). */
 UENUM(BlueprintType)
@@ -70,6 +72,12 @@ public:
 	/** Sprite 2D do personagem; aponte Sprite->SpriteSet para o DA do Aprendiz. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprite")
 	TObjectPtr<UMythSpriteAnimComponent> Sprite;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Myth|Stats")
+	TObjectPtr<UMythStatsComponent> Stats;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Myth|AutoBattle")
+	TObjectPtr<UAutoBattleComponent> AutoBattle;
 
 protected:
 	virtual void BeginPlay() override;

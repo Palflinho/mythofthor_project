@@ -8,6 +8,7 @@
 class UInputMappingContext;
 class UInputAction;
 class AMythPlayerCharacter;
+class UMythClassicHUDWidget;
 
 /**
  * Controles hibridos: Point & Click (mouse) e WASD (teclado) ao mesmo tempo, sem tela de opcoes.
@@ -49,15 +50,23 @@ public:
 	UFUNCTION(Exec)
 	void MythTestDamage();
 
+	/** Console: MythTestHud -> mexe em HP/SP/EXP/peso para testar o HUD. */
+	UFUNCTION(Exec)
+	void MythTestHud();
+
 	/** Converte posicao do mundo em celula do grid do servidor. */
 	UFUNCTION(BlueprintPure, Category = "Myth|Network")
 	FIntPoint WorldToCell(const FVector& WorldLocation) const;
 
 protected:
+	virtual void BeginPlay() override;
+	virtual void SetPawn(APawn* InPawn) override;
 	virtual void SetupInputComponent() override;
 	virtual void PlayerTick(float DeltaTime) override;
 
 private:
+	UPROPERTY() TObjectPtr<UMythClassicHUDWidget> HudWidget;
+
 	UPROPERTY() TObjectPtr<UInputMappingContext> MappingContext;
 	UPROPERTY() TObjectPtr<UInputAction> MoveAction;
 	UPROPERTY() TObjectPtr<UInputAction> ClickAction;
