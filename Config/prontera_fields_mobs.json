@@ -1,0 +1,145 @@
+{
+  "prt_fild00": {
+    "name": "prt_fild00 (Fortaleza de Saint Darmain)",
+    "bgm": "12.mp3",
+    "obj": "D:/Ragnarok_Assets/Prontera/Prontera_Campos/prt_fild00/prt_fild00_full.obj",
+    "mobs": [
+      { "id": 1024, "name": "Condor", "level": 11, "sprite": "condor", "behavior": "Passivo" },
+      { "id": 1056, "name": "Savage Babe", "level": 7, "sprite": "savage_babe", "behavior": "Passivo" },
+      { "id": 1031, "name": "Poporing", "level": 14, "sprite": "poporing", "behavior": "Loot" },
+      { "id": 1012, "name": "Roda Frog", "level": 5, "sprite": "roda_frog", "behavior": "Passivo" }
+    ]
+  },
+  "prt_fild01": {
+    "name": "prt_fild01 (Norte de Prontera)",
+    "bgm": "12.mp3",
+    "obj": "D:/Ragnarok_Assets/Prontera/Prontera_Campos/prt_fild01/prt_fild01_full.obj",
+    "mobs": [
+      { "id": 1002, "name": "Poring", "level": 1, "sprite": "poring", "behavior": "Loot" },
+      { "id": 1063, "name": "Lunatic", "level": 3, "sprite": "lunatic", "behavior": "Passivo" },
+      { "id": 1007, "name": "Fabre", "level": 2, "sprite": "fabre", "behavior": "Passivo" },
+      { "id": 1008, "name": "Pupa", "level": 4, "sprite": "pupa", "behavior": "Imovel" },
+      { "id": 1020, "name": "Mandragora", "level": 12, "sprite": "mandragora", "behavior": "Imovel/Agressivo" },
+      { "id": 1011, "name": "Chonchon", "level": 4, "sprite": "chonchon", "behavior": "Loot" },
+      { "id": 1093, "name": "Eclipse (Mini-Boss)", "level": 15, "sprite": "eclipse", "behavior": "Agressivo" }
+    ]
+  },
+  "prt_fild02": {
+    "name": "prt_fild02 (Noroeste de Prontera)",
+    "bgm": "12.mp3",
+    "obj": "D:/Ragnarok_Assets/Prontera/Prontera_Campos/prt_fild02/prt_fild02_full.obj",
+    "mobs": [
+      { "id": 1063, "name": "Lunatic", "level": 3, "sprite": "lunatic", "behavior": "Passivo" },
+      { "id": 1007, "name": "Fabre", "level": 2, "sprite": "fabre", "behavior": "Passivo" },
+      { "id": 1008, "name": "Pupa", "level": 4, "sprite": "pupa", "behavior": "Imovel" },
+      { "id": 1020, "name": "Mandragora", "level": 12, "sprite": "mandragora", "behavior": "Imovel/Agressivo" },
+      { "id": 1060, "name": "Yoyo", "level": 16, "sprite": "yoyo", "behavior": "Assist" }
+    ]
+  },
+  "prt_fild03": {
+    "name": "prt_fild03 (Nordeste de Prontera / Caminho de Aldebaran)",
+    "bgm": "12.mp3",
+    "obj": "D:/Ragnarok_Assets/Prontera/Prontera_Campos/prt_fild03/prt_fild03_full.obj",
+    "mobs": [
+      { "id": 1060, "name": "Yoyo", "level": 16, "sprite": "yoyo", "behavior": "Assist" },
+      { "id": 1061, "name": "Smokie", "level": 17, "sprite": "smokie", "behavior": "Loot" },
+      { "id": 1011, "name": "Chonchon", "level": 4, "sprite": "chonchon", "behavior": "Loot" },
+      { "id": 1020, "name": "Mandragora", "level": 12, "sprite": "mandragora", "behavior": "Imovel/Agressivo" }
+    ]
+  },
+  "prt_fild04": {
+    "name": "prt_fild04 (Portão Leste de Prontera)",
+    "bgm": "12.mp3",
+    "obj": "D:/Ragnarok_Assets/Prontera/Prontera_Campos/prt_fild04/prt_fild04_full.obj",
+    "mobs": [
+      { "id": 1002, "name": "Poring", "level": 1, "sprite": "poring", "behavior": "Loot" },
+      { "id": 1063, "name": "Lunatic", "level": 3, "sprite": "lunatic", "behavior": "Passivo" },
+      { "id": 1007, "name": "Fabre", "level": 2, "sprite": "fabre", "behavior": "Passivo" },
+      { "id": 1008, "name": "Pupa", "level": 4, "sprite": "pupa", "behavior": "Imovel" },
+      { "id": 1011, "name": "Chonchon", "level": 4, "sprite": "chonchon", "behavior": "Loot" }
+    ]
+  },
+  "prt_fild05": {
+    "name": "prt_fild05 (Portão Oeste de Prontera)",
+    "bgm": "12.mp3",
+    "obj": "D:/Ragnarok_Assets/Prontera/Prontera_Campos/prt_fild05/prt_fild05_full.obj",
+    "mobs": [
+      { "id": 1002, "name": "Poring", "level": 1, "sprite": "poring", "behavior": "Loot" },
+      { "id": 1063, "name": "Lunatic", "level": 3, "sprite": "lunatic", "behavior": "Passivo" },
+      { "id": 1007, "name": "Fabre", "level": 2, "sprite": "fabre", "behavior": "Passivo" },
+      { "id": 1008, "name": "Pupa", "level": 4, "sprite": "pupa", "behavior": "Imovel" },
+      { "id": 1012, "name": "Roda Frog", "level": 5, "sprite": "roda_frog", "behavior": "Passivo" },
+      { "id": 1024, "name": "Condor", "level": 11, "sprite": "condor", "behavior": "Passivo" }
+    ]
+  },
+  "prt_fild06": {
+    "name": "prt_fild06 (Sudoeste de Prontera)",
+    "bgm": "12.mp3",
+    "obj": "D:/Ragnarok_Assets/Prontera/Prontera_Campos/prt_fild06/prt_fild06_full.obj",
+    "mobs": [
+      { "id": 1007, "name": "Fabre", "level": 2, "sprite": "fabre", "behavior": "Passivo" },
+      { "id": 1008, "name": "Pupa", "level": 4, "sprite": "pupa", "behavior": "Imovel" },
+      { "id": 1025, "name": "Wormtail", "level": 15, "sprite": "wormtail", "behavior": "Agressivo" },
+      { "id": 1014, "name": "Spore", "level": 16, "sprite": "spore", "behavior": "Loot" },
+      { "id": 1028, "name": "Boa", "level": 13, "sprite": "boa", "behavior": "Passivo" }
+    ]
+  },
+  "prt_fild07": {
+    "name": "prt_fild07 (Sudeste de Prontera / Caminho de Payon)",
+    "bgm": "12.mp3",
+    "obj": "D:/Ragnarok_Assets/Prontera/Prontera_Campos/prt_fild07/prt_fild07_full.obj",
+    "mobs": [
+      { "id": 1007, "name": "Fabre", "level": 2, "sprite": "fabre", "behavior": "Passivo" },
+      { "id": 1008, "name": "Pupa", "level": 4, "sprite": "pupa", "behavior": "Imovel" },
+      { "id": 1052, "name": "Rocker", "level": 9, "sprite": "rocker", "behavior": "Passivo" },
+      { "id": 1014, "name": "Spore", "level": 16, "sprite": "spore", "behavior": "Loot" },
+      { "id": 1010, "name": "Willow", "level": 6, "sprite": "willow", "behavior": "Passivo" },
+      { "id": 1089, "name": "Vocal (Mini-Boss)", "level": 19, "sprite": "vocal", "behavior": "Agressivo" }
+    ]
+  },
+  "prt_fild08": {
+    "name": "prt_fild08 (Portão Sul de Prontera / Poring Island)",
+    "bgm": "12.mp3",
+    "obj": "D:/Ragnarok_Assets/Prontera/Prontera_Campos/prt_fild08/prt_fild08_full.obj",
+    "mobs": [
+      { "id": 1002, "name": "Poring", "level": 1, "sprite": "poring", "behavior": "Loot" },
+      { "id": 1063, "name": "Lunatic", "level": 3, "sprite": "lunatic", "behavior": "Passivo" },
+      { "id": 1007, "name": "Fabre", "level": 2, "sprite": "fabre", "behavior": "Passivo" },
+      { "id": 1008, "name": "Pupa", "level": 4, "sprite": "pupa", "behavior": "Imovel" },
+      { "id": 1113, "name": "Drops", "level": 5, "sprite": "drops", "behavior": "Loot" },
+      { "id": 1090, "name": "Mastering (Mini-Boss)", "level": 25, "sprite": "mastering", "behavior": "Assist" }
+    ]
+  },
+  "prt_fild09": {
+    "name": "prt_fild09 (Extremo Sul / Caminho de Morroc)",
+    "bgm": "12.mp3",
+    "obj": "D:/Ragnarok_Assets/Prontera/Prontera_Campos/prt_fild09/prt_fild09_full.obj",
+    "mobs": [
+      { "id": 1002, "name": "Poring", "level": 1, "sprite": "poring", "behavior": "Loot" },
+      { "id": 1019, "name": "Peco Peco", "level": 17, "sprite": "peco_peco", "behavior": "Passivo" },
+      { "id": 1024, "name": "Condor", "level": 11, "sprite": "condor", "behavior": "Passivo" },
+      { "id": 1105, "name": "Baby Desert Wolf", "level": 12, "sprite": "baby_desert_wolf", "behavior": "Assist" },
+      { "id": 1091, "name": "Dragon Fly (Mini-Boss)", "level": 23, "sprite": "dragon_fly", "behavior": "Agressivo" }
+    ]
+  },
+  "prt_fild10": {
+    "name": "prt_fild10 (Entrada de Izlude)",
+    "bgm": "12.mp3",
+    "obj": "D:/Ragnarok_Assets/Prontera/Prontera_Campos/prt_fild10/prt_fild10_full.obj",
+    "mobs": [
+      { "id": 1012, "name": "Roda Frog", "level": 5, "sprite": "roda_frog", "behavior": "Passivo" },
+      { "id": 1016, "name": "Thief Bug", "level": 10, "sprite": "thief_bug", "behavior": "Loot" },
+      { "id": 1014, "name": "Spore", "level": 16, "sprite": "spore", "behavior": "Loot" }
+    ]
+  },
+  "prt_fild11": {
+    "name": "prt_fild11 (Praia / Ilha dos Sapos)",
+    "bgm": "12.mp3",
+    "obj": "D:/Ragnarok_Assets/Prontera/Prontera_Campos/prt_fild11/prt_fild11_full.obj",
+    "mobs": [
+      { "id": 1012, "name": "Roda Frog", "level": 5, "sprite": "roda_frog", "behavior": "Passivo" },
+      { "id": 1058, "name": "Ambernite", "level": 18, "sprite": "ambernite", "behavior": "Passivo" },
+      { "id": 1092, "name": "Toad (Mini-Boss)", "level": 25, "sprite": "toad", "behavior": "Agressivo" }
+    ]
+  }
+}
