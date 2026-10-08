@@ -1,17 +1,27 @@
 # 📖 Diretrizes de Arquitetura e Guia de Colaboração (Myth of Thor)
 
 > **Documento Oficial de Alinhamento para a Equipe (Você, Claude e Antigravity)**  
-> Este documento registra todas as decisões de design de mundo, transições, controles, áudio dinâmico, exibição de dano, escopo de lançamento (Sem WoE inicial), sistema de classes flexíveis (Trindade MMORPG) e a divisão técnica de tarefas entre os copilotos.
+> Este documento registra todas as decisões de design de mundo, transições, controles, áudio dinâmico, exibição de dano, escopo de lançamento (Sem WoE inicial), sistema de classes flexíveis (Trindade MMORPG), delimitação de classes clássicas e a divisão técnica de tarefas entre os copilotos.
 
 ---
 
-## 🛡️ 1. Sistema de Papéis Flexíveis (A Trindade de MMORPG)
+## 🛡️ 1. Filosofia de Classes & Escopo de Lançamento
+* **Roster Oficial Exclusivo (A Era de Ouro Clássica):**
+  * **1ª Classes:** Espadachim, Mago, Arqueiro, Noviço, Gatuno, Mercador.
+  * **2-1 & 2-2:** Cavaleiro, Templário, Bruxo, Sábio, Caçador, Bardo/Odalisca, Sacerdote, Monge, Mercenário, Arruaceiro, Ferreiro, Alquimista.
+  * **Expandidas Clássicas:** Mestre Taekwon, Espiritualista, Ninja, Justiceiro, Superaprendiz.
+  * **Exclusões Deliberadas:** Raças modernas (Doram / Gatinhos) e classes de Renewal/4th classes estão **totalmente descartadas** para preservar a imersão medieval/nórdica de Rune-Midgard e o balanceamento clássico de atributos até o Nível 99.
+* **WoE Desativada na Fase 1:** Foco em PvE, Exploração, Quests temáticas e formação de clãs. Abertura solene dos castelos guardada para o grande evento da Fase 5.
+
+---
+
+## ⚔️ 2. Sistema de Papéis Flexíveis (A Trindade de MMORPG)
 Cada classe é balanceada para permitir **múltiplos papéis legítimos** baseados em atributos e equipamentos:
 
 * **Mecânica de Taunt Real (Provocar):** A habilidade *Provocar* agora afeta monstros comuns e **Chefes/MVPs**, forçando o alvo a focar no Tanque por 6 a 8 segundos com cooldown equilibrado.
 * **🛡️ Cavaleiro (Tanque / DPS):**
-  * *Tanque:* Espada de uma mão + Escudo com Provocar e Vigor mantendo o foco do chefe.
-  * *DPS:* Lança de duas mãos (Impacto de Tyr, Perfurar, Brandir Lança).
+  * *Tanque:* Espada de 1 Mão + Escudo com Provocar e Vigor mantendo o foco do chefe.
+  * *DPS:* Lança de 2 Mãos (Impacto de Tyr, Perfurar, Brandir Lança).
 * **⚔️ Templário (Tanque / DPS / Suporte):**
   * *Tanque:* Bloqueio e Redenção para absorver dano de aliados frágeis.
   * *DPS Mágico/Híbrido:* Crux Divinum e Crux Magnum.
@@ -27,10 +37,11 @@ Cada classe é balanceada para permitir **múltiplos papéis legítimos** basead
   * *DPS:* Golpe Estilhaçante e machados pesados de forja.
   * *Suporte:* Buffs de armas (*Manejo Perfeito*, *Adrenalina Pura*) expandidos para beneficiar todo o grupo ao redor.
 * **🏹 Caçador, 🧙 Bruxo e 🗡️ Mercenário:** Foco como especialistas primários de dano sustentado, dano em área e dano crítico/furtivo.
+* **Expandidas no Topo:** Mestre Taekwon, Espiritualista, Ninja, Justiceiro e Superaprendiz escalam com força total até o Nível 99.
 
 ---
 
-## 💀 2. Regras de Morte & Auto-Battle (Risco vs. Recompensa)
+## 💀 3. Regras de Morte & Auto-Battle (Risco vs. Recompensa)
 
 ### A. Morte em Jogo Manual
 * Penalidade clássica: Perda de **1% de EXP Base**. O jogador escolhe quando voltar ao ponto de retorno ou aguarda um suporte ressuscitar.
@@ -45,7 +56,7 @@ Para evitar abusos e impedir que jogadores deixem o bot farmando em áreas perig
 
 ---
 
-## 🎮 3. Controles e Câmera Híbridos
+## 🎮 4. Controles e Câmera Híbridos
 
 ### A. Movimentação Dual Simultânea (Enhanced Input System)
 * **Mouse (Point & Click):** Clicar no chão move o personagem até o ponto desejado (fiel ao clássico de 2002).
@@ -58,7 +69,7 @@ Para evitar abusos e impedir que jogadores deixem o bot farmando em áreas perig
 
 ---
 
-## 💥 4. Exibição de Dano & Combate Clássico (Floating Text)
+## 💥 5. Exibição de Dano & Combate Clássico (Floating Text)
 Preservação visual total da identidade clássica dos anos 2000:
 * **Dano Causado a Monstros:** Números brancos/amarelados com animação clássica de "salto" sobre o alvo.
 * **Dano Crítico:** Números ampliados acompanhados do SFX de impacto crítico.
@@ -67,14 +78,14 @@ Preservação visual total da identidade clássica dos anos 2000:
 
 ---
 
-## 🎵 5. Áudio Dinâmico de Dia e Noite (Sem Alterar Arquivos)
+## 🎵 6. Áudio Dinâmico de Dia e Noite (Sem Alterar Arquivos)
 Utilização das trilhas sonoras originais (`Theme of Prontera`, etc.) processadas em tempo real pelo sistema de áudio da Unreal 5:
 * **Dia:** Reprodução normal e vibrante da BGM clássica.
 * **Noite:** A Unreal aplica filtro passa-baixa (**Low-Pass Filter**) com redução de ~15% de volume e leve reverberação de ambiente, acompanhada de sons atmosféricos (grilos, corujas e vento suave).
 
 ---
 
-## 🗺️ 6. Arquitetura de Mundo & Transições
+## 🗺️ 7. Arquitetura de Mundo & Transições
 
 ### A. Regiões em Mundo Aberto Contínuo (Seamless Open World)
 * **Dentro da mesma região (ex: Região de Prontera):** Cidade Capital + Campos circundantes formam **um único mundo contínuo** via **World Partition** na UE5. Zero portais azuis e zero telas de loading entre cidade e campos.
@@ -85,11 +96,6 @@ Utilização das trilhas sonoras originais (`Theme of Prontera`, etc.) processad
 ### C. Arquitetura Híbrida de Dungeons (Calabouços & Esgotos)
 * **Superfície $\rightarrow$ Entrada:** Entrada natural contínua sem loading.
 * **Entre Andares Subterrâneos:** Transição suave nas escadas com **Fade-out suave de 0.5s para preto** e transição de ambiência sonora.
-
----
-
-## 🛡️ 7. Filosofia de Lançamento & Escopo (Sem WoE no Início)
-* **WoE Desativada na Fase 1:** Foco em PvE, Exploração, Quests temáticas e formação de clãs. Abertura solene dos castelos guardada para o grande evento da Fase 5.
 
 ---
 
