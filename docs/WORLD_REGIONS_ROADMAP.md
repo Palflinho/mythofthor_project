@@ -95,15 +95,17 @@ Este documento orienta a extração e compilação metódica de todo o mundo do 
 
 ---
 
-## 📍 Região 6: Alberta & Navio Fantasma (Comércio & Pirataria ⚓)
-* **Tema:** Cidade portuária dos Mercadores, alto mar e tesouros.
-* **Cidade:** `alberta` (Guilda dos Mercadores, Porto Marítimo). BGM: `24.mp3`.
-* **Dungeons:**
-  * Navio Fantasma: `treasure01` e `treasure02`. BGM: `25.mp3`.
-  * Ilha das Tartarugas: `tur_dun01` a `tur_dun04`. BGM: `66.mp3`.
-* **Monstros da Região:**
-  * Pirata Esqueleto, Alma Penada, Mimico, Tartaruga Soldado, Tartaruga Batedora.
+## 📍 Região 6: Alberta & Navio Fantasma — [STATUS: 100% CONCLUÍDA ✅]
+* **Tema:** Cidade portuária dos Mercadores, alto mar e tesouros (Comércio & Pirataria ⚓).
+* **Cidade:** `alberta` (Guilda dos Mercadores, Porto Marítimo - `alberta_full.obj`, 758 modelos). BGM: `212.mp3`.
+* **Dungeons (6 andares compilados em 3D):**
+  * Navio Fantasma: `treasure01` (412 modelos) e `treasure02` (484 modelos - Cabine do Drake). BGM: `17.mp3`.
+  * Ilha das Tartarugas: `tur_dun01` (624 modelos), `tur_dun02` (627 modelos), `tur_dun03` (622 modelos), `tur_dun04` (589 modelos - Palácio do General). BGM: `65.mp3`.
+* **Monstros da Região (12 Spritesheets PNG):**
+  * Sailor Skeleton, Mimic, Thara Frog, Megalodon, Spring Rabbit.
+  * Exército das Tartarugas: Permeter, Solider, Freezer, Assulter, Heater.
   * MVPs: **Drake** e **Turtle General**.
+* **Configuração:** `Config/alberta_mobs.json`.
 
 ---
 

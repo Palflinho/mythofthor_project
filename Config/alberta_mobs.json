@@ -1,0 +1,67 @@
+{
+  "alberta": {
+    "name": "alberta (Cidade Portuária de Alberta)",
+    "bgm": "212.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Alberta/alberta/data/alberta_full.obj",
+    "mobs": []
+  },
+  "treasure01": {
+    "name": "treasure01 (Navio Fantasma - 1º Andar)",
+    "bgm": "17.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Alberta/treasure01/data/treasure01_full.obj",
+    "mobs": [
+      { "id": 1060, "name": "Sailor Skeleton", "level": 28, "sprite": "sailor_skeleton", "behavior": "Agressivo/Undead" },
+      { "id": 1179, "name": "Whisper", "level": 35, "sprite": "whisper", "behavior": "Agressivo/Ghost" },
+      { "id": 1191, "name": "Mimic", "level": 48, "sprite": "mimic", "behavior": "Agressivo/Looter" }
+    ]
+  },
+  "treasure02": {
+    "name": "treasure02 (Navio Fantasma - 2º Andar / Cabine do Capitão)",
+    "bgm": "17.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Alberta/treasure02/data/treasure02_full.obj",
+    "mobs": [
+      { "id": 1060, "name": "Sailor Skeleton", "level": 28, "sprite": "sailor_skeleton", "behavior": "Agressivo/Undead" },
+      { "id": 1191, "name": "Mimic", "level": 48, "sprite": "mimic", "behavior": "Agressivo/Looter" },
+      { "id": 1112, "name": "Drake", "level": 57, "sprite": "drake", "behavior": "MVP/Agressivo" }
+    ]
+  },
+  "tur_dun01": {
+    "name": "tur_dun01 (Ilha das Tartarugas - Superfície)",
+    "bgm": "65.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Alberta/tur_dun01/data/tur_dun01_full.obj",
+    "mobs": [
+      { "id": 1314, "name": "Spring Rabbit", "level": 43, "sprite": "spring_rabbit", "behavior": "Passivo" },
+      { "id": 1034, "name": "Thara Frog", "level": 23, "sprite": "thara_frog", "behavior": "Passivo" }
+    ]
+  },
+  "tur_dun02": {
+    "name": "tur_dun02 (Ilha das Tartarugas - Caverna das Águas)",
+    "bgm": "65.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Alberta/tur_dun02/data/tur_dun02_full.obj",
+    "mobs": [
+      { "id": 1315, "name": "Permeter", "level": 50, "sprite": "permeter", "behavior": "Agressivo" },
+      { "id": 1316, "name": "Solider", "level": 52, "sprite": "solider", "behavior": "Agressivo" },
+      { "id": 1317, "name": "Freezer", "level": 54, "sprite": "freezer", "behavior": "Agressivo/Water" }
+    ]
+  },
+  "tur_dun03": {
+    "name": "tur_dun03 (Ilha das Tartarugas - Templo Antigo)",
+    "bgm": "65.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Alberta/tur_dun03/data/tur_dun03_full.obj",
+    "mobs": [
+      { "id": 1318, "name": "Assulter", "level": 56, "sprite": "assulter", "behavior": "Agressivo" },
+      { "id": 1319, "name": "Heater", "level": 58, "sprite": "heater", "behavior": "Agressivo/Fire" },
+      { "id": 1316, "name": "Solider", "level": 52, "sprite": "solider", "behavior": "Agressivo" }
+    ]
+  },
+  "tur_dun04": {
+    "name": "tur_dun04 (Ilha das Tartarugas - Palácio do General)",
+    "bgm": "65.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Alberta/tur_dun04/data/tur_dun04_full.obj",
+    "mobs": [
+      { "id": 1318, "name": "Assulter", "level": 56, "sprite": "assulter", "behavior": "Agressivo" },
+      { "id": 1319, "name": "Heater", "level": 58, "sprite": "heater", "behavior": "Agressivo/Fire" },
+      { "id": 1312, "name": "Turtle General", "level": 77, "sprite": "turtle_general", "behavior": "MVP/Agressivo" }
+    ]
+  }
+}

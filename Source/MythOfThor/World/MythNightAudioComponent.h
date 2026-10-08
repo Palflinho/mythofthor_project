@@ -6,6 +6,7 @@
 
 class USoundBase;
 class USoundSubmix;
+class USoundSubmixBase;
 class USoundWaveProcedural;
 class UAudioComponent;
 class USubmixEffectFilterPreset;
