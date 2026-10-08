@@ -1,0 +1,113 @@
+{
+  "morocc": {
+    "name": "morocc (Cidade de Morroc)",
+    "bgm": "119.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Morroc/morocc/data/morocc_full.obj",
+    "mobs": []
+  },
+  "moc_pryd01": {
+    "name": "moc_pryd01 (Pirâmides - 1º Andar)",
+    "bgm": "22.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Morroc/moc_pryd01/data/moc_pryd01_full.obj",
+    "mobs": [
+      { "id": 1001, "name": "Skeleton", "level": 10, "sprite": "skeleton", "behavior": "Passivo/Undead" },
+      { "id": 1018, "name": "Poporing", "level": 14, "sprite": "poporing", "behavior": "Looter" }
+    ]
+  },
+  "moc_pryd02": {
+    "name": "moc_pryd02 (Pirâmides - 2º Andar)",
+    "bgm": "22.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Morroc/moc_pryd02/data/moc_pryd02_full.obj",
+    "mobs": [
+      { "id": 1047, "name": "Mummy", "level": 37, "sprite": "mummy", "behavior": "Agressivo/Undead" },
+      { "id": 1020, "name": "Drainliar", "level": 18, "sprite": "drainliar", "behavior": "Agressivo" }
+    ]
+  },
+  "moc_pryd03": {
+    "name": "moc_pryd03 (Pirâmides - 3º Andar)",
+    "bgm": "22.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Morroc/moc_pryd03/data/moc_pryd03_full.obj",
+    "mobs": [
+      { "id": 1047, "name": "Mummy", "level": 37, "sprite": "mummy", "behavior": "Agressivo/Undead" },
+      { "id": 1029, "name": "Verit", "level": 38, "sprite": "verit", "behavior": "Passivo/Undead" },
+      { "id": 1048, "name": "Isis", "level": 47, "sprite": "isis", "behavior": "Agressivo/Shadow" }
+    ]
+  },
+  "moc_pryd04": {
+    "name": "moc_pryd04 (Pirâmides - 4º Andar / Tumba Real)",
+    "bgm": "22.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Morroc/moc_pryd04/data/moc_pryd04_full.obj",
+    "mobs": [
+      { "id": 1048, "name": "Isis", "level": 47, "sprite": "isis", "behavior": "Agressivo/Shadow" },
+      { "id": 1047, "name": "Mummy", "level": 37, "sprite": "mummy", "behavior": "Agressivo/Undead" },
+      { "id": 1035, "name": "Osiris", "level": 68, "sprite": "osiris", "behavior": "MVP/Agressivo" }
+    ]
+  },
+  "moc_pryd05": {
+    "name": "moc_pryd05 (Pirâmides - Subsolo 1)",
+    "bgm": "22.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Morroc/moc_pryd05/data/moc_pryd05_full.obj",
+    "mobs": [
+      { "id": 1047, "name": "Mummy", "level": 37, "sprite": "mummy", "behavior": "Agressivo/Undead" },
+      { "id": 1029, "name": "Verit", "level": 38, "sprite": "verit", "behavior": "Passivo/Undead" }
+    ]
+  },
+  "moc_pryd06": {
+    "name": "moc_pryd06 (Pirâmides - Subsolo 2 / Catacumbas dos Antigos)",
+    "bgm": "22.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Morroc/moc_pryd06/data/moc_pryd06_full.obj",
+    "mobs": [
+      { "id": 1289, "name": "Ancient Mummy", "level": 54, "sprite": "ancient_mummy", "behavior": "Agressivo/Undead" },
+      { "id": 1157, "name": "Minorous", "level": 46, "sprite": "minorous", "behavior": "Agressivo/Earth" },
+      { "id": 1035, "name": "Osiris", "level": 68, "sprite": "osiris", "behavior": "MVP/Agressivo" }
+    ]
+  },
+  "in_sphinx1": {
+    "name": "in_sphinx1 (Esfinge - 1º Andar)",
+    "bgm": "38.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Morroc/in_sphinx1/data/in_sphinx1_full.obj",
+    "mobs": [
+      { "id": 1049, "name": "Matyr", "level": 37, "sprite": "matyr", "behavior": "Agressivo/Agile" },
+      { "id": 1029, "name": "Verit", "level": 38, "sprite": "verit", "behavior": "Passivo/Undead" }
+    ]
+  },
+  "in_sphinx2": {
+    "name": "in_sphinx2 (Esfinge - 2º Andar)",
+    "bgm": "38.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Morroc/in_sphinx2/data/in_sphinx2_full.obj",
+    "mobs": [
+      { "id": 1049, "name": "Matyr", "level": 37, "sprite": "matyr", "behavior": "Agressivo/Agile" },
+      { "id": 1162, "name": "Zerom", "level": 40, "sprite": "zerom", "behavior": "Passivo" }
+    ]
+  },
+  "in_sphinx3": {
+    "name": "in_sphinx3 (Esfinge - 3º Andar)",
+    "bgm": "38.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Morroc/in_sphinx3/data/in_sphinx3_full.obj",
+    "mobs": [
+      { "id": 1154, "name": "Marduk", "level": 45, "sprite": "marduk", "behavior": "Agressivo/Fire" },
+      { "id": 1163, "name": "Requiem", "level": 44, "sprite": "requiem", "behavior": "Agressivo/Undead" },
+      { "id": 1162, "name": "Zerom", "level": 40, "sprite": "zerom", "behavior": "Passivo" }
+    ]
+  },
+  "in_sphinx4": {
+    "name": "in_sphinx4 (Esfinge - 4º Andar)",
+    "bgm": "38.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Morroc/in_sphinx4/data/in_sphinx4_full.obj",
+    "mobs": [
+      { "id": 1155, "name": "Pasana", "level": 52, "sprite": "pasana", "behavior": "Agressivo/Fire" },
+      { "id": 1154, "name": "Marduk", "level": 45, "sprite": "marduk", "behavior": "Agressivo/Fire" },
+      { "id": 1157, "name": "Minorous", "level": 46, "sprite": "minorous", "behavior": "Agressivo/Earth" }
+    ]
+  },
+  "in_sphinx5": {
+    "name": "in_sphinx5 (Esfinge - 5º Andar / Câmara do Faraó)",
+    "bgm": "38.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Morroc/in_sphinx5/data/in_sphinx5_full.obj",
+    "mobs": [
+      { "id": 1155, "name": "Pasana", "level": 52, "sprite": "pasana", "behavior": "Agressivo/Fire" },
+      { "id": 1157, "name": "Minorous", "level": 46, "sprite": "minorous", "behavior": "Agressivo/Earth" },
+      { "id": 1159, "name": "Pharaoh", "level": 74, "sprite": "pharaoh", "behavior": "MVP/Agressivo" }
+    ]
+  }
+}

@@ -81,15 +81,17 @@ Este documento orienta a extração e compilação metódica de todo o mundo do 
 
 ---
 
-## 📍 Região 5: Morroc & As Pirâmides do Deserto (Gatunos & Assassinos 🏜️)
-* **Tema:** Oásis do deserto, ruínas egípcias e catacumbas.
-* **Cidade:** `morocc` (Guilda dos Gatunos). BGM: `119.mp3`.
-* **Dungeons:**
-  * Pirâmides: `moc_pryd01` a `moc_pryd06`. BGM: `18.mp3`.
-  * Esfinge: `in_sphinx1` a `in_sphinx5`. BGM: `20.mp3`.
-* **Monstros da Região:**
-  * Múmia, Isis, Matyr, Verit, Minotauro, Zerom, Pasana.
-  * MVPs: **Osíris** e **Faraó**.
+## 📍 Região 5: Morroc & As Pirâmides do Deserto — [STATUS: 100% CONCLUÍDA ✅]
+* **Tema:** Oásis do deserto, ruínas egípcias e catacumbas (Gatunos & Assassinos 🏜️).
+* **Cidade:** `morocc` (Guilda dos Gatunos - `morocc_full.obj`, 699 modelos). BGM: `119.mp3`.
+* **Dungeons (11 andares compilados em 3D):**
+  * Pirâmides: `moc_pryd01` (71 modelos), `moc_pryd02` (124 modelos), `moc_pryd03` (24 modelos), `moc_pryd04` (140 modelos - Tumba Real), `moc_pryd05` (1.123 modelos), `moc_pryd06` (553 modelos - Catacumbas). BGM: `22.mp3`.
+  * Esfinge: `in_sphinx1` (888 modelos), `in_sphinx2` (1.014 modelos), `in_sphinx3` (488 modelos), `in_sphinx4` (631 modelos), `in_sphinx5` (658 modelos - Câmara Real). BGM: `38.mp3`.
+* **Monstros da Região (17 Spritesheets PNG):**
+  * Mummy, Ancient Mummy, Isis, Matyr, Verit, Minorous, Pasana, Marduk, Zerom, Requiem.
+  * Andre, Deniro, Piere, Maya, Picky.
+  * MVPs: **Osíris**, **Pharaoh** e **Maya**.
+* **Configuração:** `Config/morroc_mobs.json`.
 
 ---
 
