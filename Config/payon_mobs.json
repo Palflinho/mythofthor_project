@@ -1,0 +1,66 @@
+{
+  "payon": {
+    "name": "payon (Vila de Payon)",
+    "bgm": "14.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Payon/payon/data/payon_full.obj",
+    "mobs": []
+  },
+  "pay_arche": {
+    "name": "pay_arche (Vila dos Arqueiros)",
+    "bgm": "14.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Payon/pay_arche/data/pay_arche_full.obj",
+    "mobs": []
+  },
+  "pay_dun00": {
+    "name": "pay_dun00 (Caverna de Payon - 1º Andar)",
+    "bgm": "20.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Payon/pay_dun00/data/pay_dun00_full.obj",
+    "mobs": [
+      { "id": 1015, "name": "Zombie", "level": 15, "sprite": "zombie", "behavior": "Agressivo/Undead" },
+      { "id": 1001, "name": "Skeleton", "level": 10, "sprite": "skeleton", "behavior": "Passivo/Undead" },
+      { "id": 1031, "name": "Poporing", "level": 14, "sprite": "poporing", "behavior": "Looter" }
+    ]
+  },
+  "pay_dun01": {
+    "name": "pay_dun01 (Caverna de Payon - 2º Andar)",
+    "bgm": "20.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Payon/pay_dun01/data/pay_dun01_full.obj",
+    "mobs": [
+      { "id": 1015, "name": "Zombie", "level": 15, "sprite": "zombie", "behavior": "Agressivo/Undead" },
+      { "id": 1001, "name": "Skeleton", "level": 10, "sprite": "skeleton", "behavior": "Passivo/Undead" },
+      { "id": 1032, "name": "Eggyra", "level": 19, "sprite": "eggyra", "behavior": "Passivo/Ghost" }
+    ]
+  },
+  "pay_dun02": {
+    "name": "pay_dun02 (Caverna de Payon - 3º Andar)",
+    "bgm": "20.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Payon/pay_dun02/data/pay_dun02_full.obj",
+    "mobs": [
+      { "id": 1026, "name": "Munak", "level": 25, "sprite": "munak", "behavior": "Agressivo/Undead" },
+      { "id": 1027, "name": "Bongun", "level": 27, "sprite": "bongun", "behavior": "Agressivo/Undead" },
+      { "id": 1110, "name": "Dokebi", "level": 30, "sprite": "dokebi", "behavior": "Passivo/Looter" }
+    ]
+  },
+  "pay_dun03": {
+    "name": "pay_dun03 (Caverna de Payon - 4º Andar)",
+    "bgm": "47.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Payon/pay_dun03/data/pay_dun03_full.obj",
+    "mobs": [
+      { "id": 1170, "name": "Sohee", "level": 37, "sprite": "sohee", "behavior": "Agressivo/Water" },
+      { "id": 1129, "name": "Horong", "level": 33, "sprite": "horong", "behavior": "Passivo/Fire" },
+      { "id": 1026, "name": "Munak", "level": 25, "sprite": "munak", "behavior": "Agressivo/Undead" },
+      { "id": 1027, "name": "Bongun", "level": 27, "sprite": "bongun", "behavior": "Agressivo/Undead" }
+    ]
+  },
+  "pay_dun04": {
+    "name": "pay_dun04 (Caverna de Payon - 5º Andar / Covil Sagrado)",
+    "bgm": "47.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Payon/pay_dun04/data/pay_dun04_full.obj",
+    "mobs": [
+      { "id": 1180, "name": "Nine Tail", "level": 48, "sprite": "nine_tail", "behavior": "Agressivo/Fire" },
+      { "id": 1170, "name": "Sohee", "level": 37, "sprite": "sohee", "behavior": "Agressivo/Water" },
+      { "id": 1129, "name": "Horong", "level": 33, "sprite": "horong", "behavior": "Passivo/Fire" },
+      { "id": 1150, "name": "Moonlight Flower", "level": 58, "sprite": "moonlight", "behavior": "MVP/Agressivo" }
+    ]
+  }
+}

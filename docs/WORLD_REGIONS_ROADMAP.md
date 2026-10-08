@@ -62,13 +62,22 @@ Este documento orienta a extração e compilação metódica de todo o mundo do 
 
 ---
 
-## 📍 Região 4: Payon & A Caverna dos Mortos (Oriente & Arqueiros 🌸)
-* **Tema:** Florestas orientais, montanhas sagradas e folclore asiático.
-* **Cidades:** `payon` e `pay_arche` (Guilda dos Arqueiros). BGM: `14.mp3`.
-* **Dungeon:** `pay_dun00` a `pay_dun04` (Caverna de Payon - 5 andares). BGM: `15.mp3`.
-* **Monstros da Região:**
-  * Zumbis, Esqueletos, Poporing, Munak, Bongun, Eggyra, Dokebi, Sohee, Ninetails.
-  * MVP: **Moonlight Flower (Flor do Luar)**.
+## 📍 Região 4: Payon & A Caverna dos Mortos — [STATUS: 100% CONCLUÍDA ✅]
+* **Tema:** Florestas orientais, montanhas sagradas e folclore asiático (Oriente & Arqueiros 🌸).
+* **Cidades:**
+  * `payon` (Vila de Payon - `payon_full.obj`, 1.056 modelos). BGM: `14.mp3`.
+  * `pay_arche` (Vila dos Arqueiros - `pay_arche_full.obj`, 244 modelos). BGM: `14.mp3`.
+* **Dungeon (Caverna de Payon - 5 andares compilados em 3D):**
+  * `pay_dun00` (Andar 1 - 38 modelos 3D). BGM: `20.mp3`.
+  * `pay_dun01` (Andar 2 - 97 modelos 3D). BGM: `20.mp3`.
+  * `pay_dun02` (Andar 3 - 145 modelos 3D). BGM: `20.mp3`.
+  * `pay_dun03` (Andar 4 - 1.091 modelos 3D). BGM: `47.mp3`.
+  * `pay_dun04` (Andar 5 - 805 modelos 3D - Covil Sagrado). BGM: `47.mp3`.
+* **Monstros da Região (16 Spritesheets PNG):**
+  * Zombie, Skeleton, Munak, Bongun, Eggyra, Dokebi, Sohee, Nine Tail, Horong.
+  * Smokie, Wolf, Snake, Willow, Elder Willow.
+  * MVPs: **Moonlight Flower (Flor do Luar)** e **Eddga**.
+* **Configuração:** `Config/payon_mobs.json`.
 
 ---
 
