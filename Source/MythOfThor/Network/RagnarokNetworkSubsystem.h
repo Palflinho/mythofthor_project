@@ -11,6 +11,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnNetworkConnected, const FString&,
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnNetworkDisconnected, const FString&, Reason);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnLoginResult, bool, bSuccess, const FString&, Message);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerMoveConfirmed, int32, TargetX, int32, TargetY);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnDamageReceived, int64, TargetID, int32, Damage, bool, bIsCritical, bool, bIsMiss);
 
 /**
  * Subsistema de Rede nativo em C++ para comunicação TCP entre o cliente
@@ -45,6 +46,18 @@ public:
 	bool SendMoveRequest(int32 TargetX, int32 TargetY);
 
 	/**
+	 * Envia requisição de ação/ataque básico para o Map-Server (CZ_REQUEST_ACT 0x0360).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
+	bool SendActionRequest(int64 TargetID, uint8 ActionType = 0);
+
+	/**
+	 * Envia requisição de conjuração de habilidade para o Map-Server (CZ_USE_SKILL 0x0113).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
+	bool SendUseSkillRequest(int32 SkillID, int32 SkillLevel, int64 TargetID);
+
+	/**
 	 * Desconecta todos os sockets ativos de forma limpa.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
@@ -62,6 +75,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
 	FOnPlayerMoveConfirmed OnPlayerMoveConfirmed;
+
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
+	FOnDamageReceived OnDamageReceived;
 
 private:
 	FSocket* CurrentSocket;

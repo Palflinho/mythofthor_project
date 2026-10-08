@@ -27,6 +27,8 @@ PACKET_AC_ACCEPT_LOGIN = 0x0069
 PACKET_CH_ENTER = 0x0065
 PACKET_CZ_ENTER = 0x0072
 PACKET_CZ_REQUEST_MOVE = 0x035F
+PACKET_CZ_REQUEST_ACT = 0x0360
+PACKET_CZ_USE_SKILL = 0x0113
 
 GREEN = "\033[92m"
 RED = "\033[91m"
@@ -116,6 +118,39 @@ def test_packet_serialization(reporter: TestReporter):
             reporter.record_fail("Pacote CZ_REQUEST_MOVE", f"Tamanho incorreto: {len(move_packet)} != 5")
     except Exception as e:
         reporter.record_fail("Pacote CZ_REQUEST_MOVE", str(e))
+
+    # 1.3 Teste CZ_REQUEST_ACT (Ataque Normal)
+    try:
+        target_id = 110023
+        action_type = 0
+        act_packet = struct.pack("<HIB", PACKET_CZ_REQUEST_ACT, target_id, action_type)
+        if len(act_packet) == 7:
+            p_id, t_id, a_type = struct.unpack("<HIB", act_packet)
+            if p_id == PACKET_CZ_REQUEST_ACT and t_id == target_id and a_type == 0:
+                reporter.record_pass("Pacote CZ_REQUEST_ACT (Ataque Básico)", f"7 bytes corretos, TargetID={t_id}")
+            else:
+                reporter.record_fail("Pacote CZ_REQUEST_ACT", "Campos desempacotados incorretos")
+        else:
+            reporter.record_fail("Pacote CZ_REQUEST_ACT", f"Tamanho incorreto: {len(act_packet)} != 7")
+    except Exception as e:
+        reporter.record_fail("Pacote CZ_REQUEST_ACT", str(e))
+
+    # 1.4 Teste CZ_USE_SKILL (Conjuração de Habilidade)
+    try:
+        skill_id = 8   # Bash / Golpe Fatal
+        skill_lvl = 10
+        target_id = 110023
+        skill_packet = struct.pack("<HHHI", PACKET_CZ_USE_SKILL, skill_lvl, skill_id, target_id)
+        if len(skill_packet) == 10:
+            p_id, s_lvl, s_id, t_id = struct.unpack("<HHHI", skill_packet)
+            if s_id == skill_id and s_lvl == skill_lvl and t_id == target_id:
+                reporter.record_pass("Pacote CZ_USE_SKILL (Conjuração de Bash Lvl 10)", f"10 bytes corretos, Skill={s_id}, Lvl={s_lvl}")
+            else:
+                reporter.record_fail("Pacote CZ_USE_SKILL", "Campos desempacotados incorretos")
+        else:
+            reporter.record_fail("Pacote CZ_USE_SKILL", f"Tamanho incorreto: {len(skill_packet)} != 10")
+    except Exception as e:
+        reporter.record_fail("Pacote CZ_USE_SKILL", str(e))
 
 
 class AutoBattleManager:

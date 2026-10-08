@@ -122,6 +122,60 @@ bool URagnarokNetworkSubsystem::SendMoveRequest(int32 TargetX, int32 TargetY)
 	return true;
 }
 
+bool URagnarokNetworkSubsystem::SendActionRequest(int64 TargetID, uint8 ActionType)
+{
+	if (!CurrentSocket)
+	{
+		return false;
+	}
+
+	// Montagem do pacote CZ_REQUEST_ACT (0x0360) - 7 Bytes
+	// Estrutura: PacketID (2B), TargetID (4B), ActionType (1B)
+	#pragma pack(push, 1)
+	struct FCZ_ActionPacket
+	{
+		uint16 PacketID = 0x0360;
+		uint32 TargetID = 0;
+		uint8 ActionType = 0; // 0 = Ataque normal
+	};
+	#pragma pack(pop)
+
+	FCZ_ActionPacket Packet;
+	Packet.TargetID = static_cast<uint32>(TargetID);
+	Packet.ActionType = ActionType;
+
+	SendData(reinterpret_cast<const uint8*>(&Packet), sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendUseSkillRequest(int32 SkillID, int32 SkillLevel, int64 TargetID)
+{
+	if (!CurrentSocket)
+	{
+		return false;
+	}
+
+	// Montagem do pacote CZ_USE_SKILL (0x0113) - 10 Bytes
+	// Estrutura: PacketID (2B), SkillLevel (2B), SkillID (2B), TargetID (4B)
+	#pragma pack(push, 1)
+	struct FCZ_UseSkillPacket
+	{
+		uint16 PacketID = 0x0113;
+		uint16 SkillLevel = 1;
+		uint16 SkillID = 0;
+		uint32 TargetID = 0;
+	};
+	#pragma pack(pop)
+
+	FCZ_UseSkillPacket Packet;
+	Packet.SkillLevel = static_cast<uint16>(SkillLevel);
+	Packet.SkillID = static_cast<uint16>(SkillID);
+	Packet.TargetID = static_cast<uint32>(TargetID);
+
+	SendData(reinterpret_cast<const uint8*>(&Packet), sizeof(Packet));
+	return true;
+}
+
 void URagnarokNetworkSubsystem::SendData(const uint8* Data, int32 Size)
 {
 	if (!CurrentSocket || !Data || Size <= 0)
