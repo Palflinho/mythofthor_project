@@ -2,6 +2,7 @@
 
 #include "Player/MythPlayerCharacter.h"
 #include "Network/RagnarokNetworkSubsystem.h"
+#include "UI/MythHUD.h"
 
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "Engine/LocalPlayer.h"
@@ -284,5 +285,18 @@ void AMythPlayerController::SendCellToServer(const FVector& WorldLocation, bool 
 			// Retorna false se nao houver sessao; o jogo segue jogavel offline para testes.
 			Net->SendMoveRequest(Cell.X, Cell.Y);
 		}
+	}
+}
+
+void AMythPlayerController::MythTestDamage()
+{
+	if (APawn* P = GetPawn())
+	{
+		const FVector Loc = P->GetActorLocation() + FVector(0, 0, 90);
+		UMythCombatText::ShowDamage(this, Loc, 137, ECombatTextType::DamageDealt);
+		UMythCombatText::ShowDamage(this, Loc, 482, ECombatTextType::Critical);
+		UMythCombatText::ShowDamage(this, Loc, 55, ECombatTextType::DamageTaken);
+		UMythCombatText::ShowDamage(this, Loc, 210, ECombatTextType::Heal);
+		UMythCombatText::ShowMiss(this, Loc);
 	}
 }
