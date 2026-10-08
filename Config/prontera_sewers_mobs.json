@@ -1,0 +1,50 @@
+{
+  "prt_sewb1": {
+    "name": "prt_sewb1 (Esgoto de Prontera - 1º Andar)",
+    "bgm": "19.mp3",
+    "obj": "D:/Ragnarok_Assets/Prontera/Prontera_Esgoto/prt_sewb1/prt_sewb1_full.obj",
+    "mobs": [
+      { "id": 1004, "name": "Thief Bug Egg", "level": 1, "sprite": "thief_bug_egg", "behavior": "Imovel" },
+      { "id": 1016, "name": "Thief Bug", "level": 10, "sprite": "thief_bug", "behavior": "Loot" },
+      { "id": 1005, "name": "Familiar", "level": 8, "sprite": "familiar", "behavior": "Agressivo" },
+      { "id": 1017, "name": "Tarou", "level": 10, "sprite": "tarou", "behavior": "Passivo" },
+      { "id": 1014, "name": "Spore", "level": 16, "sprite": "spore", "behavior": "Loot" }
+    ]
+  },
+  "prt_sewb2": {
+    "name": "prt_sewb2 (Esgoto de Prontera - 2º Andar)",
+    "bgm": "19.mp3",
+    "obj": "D:/Ragnarok_Assets/Prontera/Prontera_Esgoto/prt_sewb2/prt_sewb2_full.obj",
+    "mobs": [
+      { "id": 1016, "name": "Thief Bug", "level": 10, "sprite": "thief_bug", "behavior": "Loot" },
+      { "id": 1005, "name": "Familiar", "level": 8, "sprite": "familiar", "behavior": "Agressivo" },
+      { "id": 1017, "name": "Tarou", "level": 10, "sprite": "tarou", "behavior": "Passivo" },
+      { "id": 1014, "name": "Spore", "level": 16, "sprite": "spore", "behavior": "Loot" }
+    ]
+  },
+  "prt_sewb3": {
+    "name": "prt_sewb3 (Esgoto de Prontera - 3º Andar)",
+    "bgm": "19.mp3",
+    "obj": "D:/Ragnarok_Assets/Prontera/Prontera_Esgoto/prt_sewb3/prt_sewb3_full.obj",
+    "mobs": [
+      { "id": 1051, "name": "Thief Bug Female", "level": 15, "sprite": "thief_bug_female", "behavior": "Agressivo" },
+      { "id": 1050, "name": "Thief Bug Male", "level": 18, "sprite": "thief_bug_male", "behavior": "Agressivo" },
+      { "id": 1005, "name": "Familiar", "level": 8, "sprite": "familiar", "behavior": "Agressivo" },
+      { "id": 1017, "name": "Tarou", "level": 10, "sprite": "tarou", "behavior": "Passivo" },
+      { "id": 1077, "name": "Poison Spore", "level": 19, "sprite": "poison_spore", "behavior": "Loot/Cast" },
+      { "id": 1111, "name": "Drainliar", "level": 23, "sprite": "drainliar", "behavior": "Agressivo" }
+    ]
+  },
+  "prt_sewb4": {
+    "name": "prt_sewb4 (Esgoto de Prontera - 4º Andar / Toca do MVP)",
+    "bgm": "19.mp3",
+    "obj": "D:/Ragnarok_Assets/Prontera/Prontera_Esgoto/prt_sewb4/prt_sewb4_full.obj",
+    "mobs": [
+      { "id": 1051, "name": "Thief Bug Female", "level": 15, "sprite": "thief_bug_female", "behavior": "Agressivo" },
+      { "id": 1050, "name": "Thief Bug Male", "level": 18, "sprite": "thief_bug_male", "behavior": "Agressivo" },
+      { "id": 1111, "name": "Drainliar", "level": 23, "sprite": "drainliar", "behavior": "Agressivo" },
+      { "id": 1206, "name": "Cramp", "level": 37, "sprite": "cramp", "behavior": "Agressivo/Loot" },
+      { "id": 1086, "name": "Golden Thief Bug (MVP)", "level": 65, "sprite": "golden_thief_bug", "behavior": "Boss/MVP/MagicImmune" }
+    ]
+  }
+}
