@@ -138,6 +138,20 @@ Este documento orienta a extração e compilação metódica de todo o mundo do 
 
 ---
 
+## 📍 Região 9: Lutie & Fábrica de Brinquedos — [STATUS: 100% CONCLUÍDA ✅]
+* **Tema:** A Vila Nevada do Natal e a Fábrica de Brinquedos (Lutie ❄️🎁).
+* **Cidade:** `xmas` (Vila Natalina - `xmas_full.obj`, 1.175 modelos). BGM: `59.mp3`.
+* **Campo:** `xmas_fild01` (Campos Nevados - `xmas_fild01_full.obj`, 731 modelos). BGM: `55.mp3`.
+* **Fábrica de Brinquedos (2 andares compilados em 3D):**
+  * `xmas_dun01` (Andar 1 - 1.027 modelos 3D). BGM: `58.mp3`.
+  * `xmas_dun02` (Andar 2 - 1.701 modelos 3D). BGM: `58.mp3`.
+* **Monstros da Região (10 Spritesheets PNG):**
+  * Myst Case, Teddy Bear, Cookie, Cookie Xmas, Cruiser, Sasquatch, Marin.
+  * MVPs: **Stormy Knight (Cavaleiro da Tempestade)**, **Hatii** e **Hatii Baby**.
+* **Configuração:** `Config/lutie_mobs.json`.
+
+---
+
 ## 🎭 Sprites das Classes Prontos para o Claude (`D:\Ragnarok_Assets\Sprites\PNG`)
 
 Todas as 36 combinações de classes masculinas e femininas foram decodificadas e convertidas em spritesheets com canal alfa transparente:

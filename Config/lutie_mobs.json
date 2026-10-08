@@ -1,0 +1,40 @@
+{
+  "xmas": {
+    "name": "xmas (Vila Natalina de Lutie)",
+    "bgm": "59.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Lutie/xmas/data/xmas_full.obj",
+    "mobs": []
+  },
+  "xmas_fild01": {
+    "name": "xmas_fild01 (Campos Nevados de Lutie)",
+    "bgm": "55.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Lutie/xmas_fild01/data/xmas_fild01_full.obj",
+    "mobs": [
+      { "id": 1259, "name": "Sasquatch", "level": 42, "sprite": "sasquatch", "behavior": "Passivo" },
+      { "id": 1242, "name": "Marin", "level": 12, "sprite": "marin", "behavior": "Passivo" },
+      { "id": 1258, "name": "Hatii Baby", "level": 45, "sprite": "hatii_baby", "behavior": "Agressivo" },
+      { "id": 1251, "name": "Hatii", "level": 66, "sprite": "hatii", "behavior": "MVP/Agressivo" }
+    ]
+  },
+  "xmas_dun01": {
+    "name": "xmas_dun01 (Fábrica de Brinquedos - 1º Andar)",
+    "bgm": "58.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Lutie/xmas_dun01/data/xmas_dun01_full.obj",
+    "mobs": [
+      { "id": 1198, "name": "Myst Case", "level": 41, "sprite": "mystcase", "behavior": "Passivo/Looter" },
+      { "id": 1245, "name": "Cookie", "level": 35, "sprite": "cookie", "behavior": "Passivo" },
+      { "id": 1249, "name": "Cruiser", "level": 44, "sprite": "cruiser", "behavior": "Agressivo/Ranged" }
+    ]
+  },
+  "xmas_dun02": {
+    "name": "xmas_dun02 (Fábrica de Brinquedos - 2º Andar)",
+    "bgm": "58.mp3",
+    "obj": "D:/Ragnarok_Assets/World/Lutie/xmas_dun02/data/xmas_dun02_full.obj",
+    "mobs": [
+      { "id": 1198, "name": "Myst Case", "level": 41, "sprite": "mystcase", "behavior": "Passivo/Looter" },
+      { "id": 1246, "name": "Cookie Xmas", "level": 38, "sprite": "cookie_xmas", "behavior": "Passivo" },
+      { "id": 1249, "name": "Cruiser", "level": 44, "sprite": "cruiser", "behavior": "Agressivo/Ranged" },
+      { "id": 1252, "name": "Stormy Knight", "level": 65, "sprite": "stormy_knight", "behavior": "MVP/Agressivo" }
+    ]
+  }
+}

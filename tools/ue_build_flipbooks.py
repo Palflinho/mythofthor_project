@@ -26,7 +26,7 @@ GROUPS = {
     'player':  {'Idle': 0, 'Walk': 1, 'Attack': 5, 'Hit': 6, 'Die': 7},
     'monster': {'Idle': 0, 'Walk': 1, 'Attack': 2, 'Hit': 3, 'Die': 4},
 }
-PIXELS_PER_UU = 1.0  # 1 px = 1 cm. Ajuste junto com CellSizeUU se os sprites ficarem pequenos/grandes.
+PIXELS_PER_UU = 0.5  # 1 px = 2 cm: Aprendiz ~140 cm e Poring ~80 cm de largura (celula do RO = 50 cm).
 
 tools = unreal.AssetToolsHelpers.get_asset_tools()
 eal = unreal.EditorAssetLibrary
