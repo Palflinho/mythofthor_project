@@ -127,6 +127,13 @@ public:
 	UFUNCTION(Exec)
 	void MythAttackNearest();
 
+	/** Console: MythTalkNearest -> conversa com o NPC do servidor mais proximo; MythNpcNext = Enter no dialogo. */
+	UFUNCTION(Exec)
+	void MythTalkNearest();
+
+	UFUNCTION(Exec)
+	void MythNpcNext();
+
 	UMythRoHUDWidget* GetHud() const { return HudWidget; }
 
 	/** Console: MythQuitAfter 40 -> fecha o jogo apos 40 s (usado com -ExecCmds nos testes automaticos). */

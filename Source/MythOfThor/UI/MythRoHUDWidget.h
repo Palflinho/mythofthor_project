@@ -81,6 +81,21 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Myth|HUD")
 	void ToggleWindow(EMythRoWindow Window);
 
+	// ---- Dialogo de NPC (ZC_SAY_DIALOG / ZC_WAIT_DIALOG / ZC_CLOSE_DIALOG / ZC_MENU_LIST do rAthena)
+
+	/** Acrescenta uma fala do NPC (mes). Cores do RO (^RRGGBB) sao respeitadas. */
+	void NpcSay(int64 NpcID, const FString& Text);
+	/** next; do script: mostra o botao "Proximo". */
+	void NpcWait(int64 NpcID);
+	/** close; do script: mostra o botao "Fechar". */
+	void NpcCloseButton(int64 NpcID);
+	/** select(...) do script: lista de opcoes (vazias ficam ocultas, mas contam no indice enviado). */
+	void NpcMenu(int64 NpcID, const TArray<FString>& Options);
+	/** Fecha a janela de dialogo sem enviar nada (ex.: o servidor encerrou). */
+	void HideNpcDialog();
+	/** Enter: avanca/fecha o dialogo aberto. Devolve false se nao havia dialogo esperando. */
+	bool NpcDialogConfirm();
+
 	/** Esc: fecha a janela classica aberta mais recente. Devolve false se nao havia nenhuma. */
 	UFUNCTION(BlueprintCallable, Category = "Myth|HUD")
 	bool CloseTopWindow();
@@ -217,6 +232,26 @@ private:
 	UPROPERTY() TObjectPtr<UTextBlock> SkillPointsText;
 
 	float WindowRefreshTimer = 0.f;
+
+	// Dialogo de NPC (MythRoNpcDialog.cpp)
+	UPROPERTY() TObjectPtr<UCanvasPanel> NpcWindow;
+	UPROPERTY() TObjectPtr<class UWrapBox> NpcText;
+	UPROPERTY() TObjectPtr<UImage> NpcNextButton;
+	UPROPERTY() TObjectPtr<UImage> NpcCloseBtn;
+	UPROPERTY() TObjectPtr<UCanvasPanel> NpcMenuWindow;
+	UPROPERTY() TArray<TObjectPtr<UImage>> NpcMenuRows;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> NpcMenuTexts;
+	UPROPERTY() TObjectPtr<UImage> NpcMenuOk;
+	UPROPERTY() TObjectPtr<UImage> NpcMenuCancel;
+	UPROPERTY() TObjectPtr<UImage> NpcMenuEdge;
+	UPROPERTY() TObjectPtr<UImage> NpcMenuBody;
+	TArray<int32> NpcMenuIndex; // indice (1..N) enviado ao servidor para cada linha visivel
+	int32 NpcMenuSelected = 0;
+	int64 NpcTalking = 0;
+	bool bNpcClearOnNextSay = false;
+	void BuildNpcDialog();
+	bool HandleNpcClick(const FVector2D& ScreenPos, bool bDouble);
+	void RefreshNpcMenuHighlight();
 
 	URagnarokNetworkSubsystem* GetNet() const;
 	UCanvasPanel* MakeRoPanel(const FString& Title, const FVector2D& Size, const FVector2D& Offset);

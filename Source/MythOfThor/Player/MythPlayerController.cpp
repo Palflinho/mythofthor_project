@@ -276,8 +276,8 @@ void AMythPlayerController::PlayerTick(float DeltaTime)
 
 	UpdateCombat(DeltaTime);
 	UpdateCameraReset();
-	// Enter abre o chat, como no cliente original (com o campo focado, o proprio Enter envia).
-	if (HudWidget && WasInputKeyJustPressed(EKeys::Enter) && !HudWidget->IsChatFocused())
+	// Enter: com dialogo de NPC aberto avanca/escolhe/fecha; senao abre o chat (como no cliente original).
+	if (HudWidget && WasInputKeyJustPressed(EKeys::Enter) && !HudWidget->IsChatFocused() && !HudWidget->NpcDialogConfirm())
 	{
 		HudWidget->FocusChat();
 	}
@@ -673,6 +673,35 @@ void AMythPlayerController::MythSay(const FString& Text)
 	if (URagnarokNetworkSubsystem* Net = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>())
 	{
 		Net->SendGlobalMessage(Text.Replace(TEXT("+"), TEXT(" ")));
+	}
+}
+
+void AMythPlayerController::MythTalkNearest()
+{
+	const APawn* P = GetPawn();
+	AMythMonster* Best = nullptr;
+	float BestDist = TNumericLimits<float>::Max();
+	for (TActorIterator<AMythMonster> It(GetWorld()); It && P; ++It)
+	{
+		const float D = FVector::DistSquared(It->GetActorLocation(), P->GetActorLocation());
+		if (It->IsNpc() && D < BestDist)
+		{
+			BestDist = D;
+			Best = *It;
+		}
+	}
+	if (Best)
+	{
+		UE_LOG(LogTemp, Log, TEXT("MythNet: falando com %s"), *Best->MonsterName);
+		SetFocusedTarget(Best);
+	}
+}
+
+void AMythPlayerController::MythNpcNext()
+{
+	if (HudWidget)
+	{
+		HudWidget->NpcDialogConfirm();
 	}
 }
 

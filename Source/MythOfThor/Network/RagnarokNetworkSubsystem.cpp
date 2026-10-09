@@ -1524,23 +1524,10 @@ void URagnarokNetworkSubsystem::HandleNpcMenu(const uint8* PacketData, int32 Pac
 	TArray<FString> Parts;
 	RawMenu.ParseIntoArray(Parts, TEXT(":"), false);
 
-	FString Title = TEXT("");
-	TArray<FString> Options;
-	if (Parts.Num() > 1)
-	{
-		Title = Parts[0];
-		for (int32 i = 1; i < Parts.Num(); ++i)
-		{
-			if (!Parts[i].IsEmpty())
-			{
-				Options.Add(Parts[i]);
-			}
-		}
-	}
-	else if (Parts.Num() == 1)
-	{
-		Options.Add(Parts[0]);
-	}
+	// select("A:B:C") do script: todos os itens sao opcoes (nao ha titulo). Itens vazios ficam na lista para manter
+	// o indice: o CZ_CHOOSE_MENU envia a posicao original (1..N; 255 = cancelar), como no clif_parse_NpcSelectMenu.
+	const FString Title;
+	TArray<FString> Options = Parts;
 
 	OnNpcMenu.Broadcast(NpcID, Title, Options);
 }

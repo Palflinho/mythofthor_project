@@ -534,20 +534,30 @@ void AMythNetWorld::HandleDisconnected(const FString& Reason)
 
 void AMythNetWorld::HandleNpcDialog(int64 NpcID, const FString& Text)
 {
-	if (Text.IsEmpty() || Text == TEXT("[CLOSE]") || Text == TEXT("[NEXT]"))
+	UMythRoHUDWidget* Hud = GetHud();
+	if (!Hud)
 	{
-		return; // marcadores de controle do dialogo, nao sao fala
+		return;
 	}
-	const AMythMonster* Npc = Cast<AMythMonster>(FindUnit(NpcID));
-	Chat(FString::Printf(TEXT("[%s] %s"), Npc ? *Npc->MonsterName : TEXT("NPC"), *Text), NetNpcColor);
+	// O subsistema manda as falas (mes) e os marcadores de controle do script (next; e close;)
+	if (Text == TEXT("[WAIT]") || Text == TEXT("[NEXT]"))
+	{
+		Hud->NpcWait(NpcID);
+	}
+	else if (Text == TEXT("[CLOSE]"))
+	{
+		Hud->NpcCloseButton(NpcID);
+	}
+	else
+	{
+		Hud->NpcSay(NpcID, Text);
+	}
 }
 
 void AMythNetWorld::HandleNpcMenu(int64 NpcID, const FString& Title, const TArray<FString>& Options)
 {
-	FString Line = Title.IsEmpty() ? TEXT("Escolha:") : Title;
-	for (int32 i = 0; i < Options.Num(); ++i)
+	if (UMythRoHUDWidget* Hud = GetHud())
 	{
-		Line += FString::Printf(TEXT("  %d) %s"), i + 1, *Options[i]);
+		Hud->NpcMenu(NpcID, Options);
 	}
-	Chat(Line, NetNpcColor);
 }

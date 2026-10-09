@@ -229,6 +229,7 @@ void UMythRoHUDWidget::BuildLayout()
 	BuildItemsWindow();
 	BuildEquipWindow();
 	BuildSkillsWindow();
+	BuildNpcDialog();
 	AddChatLine(TEXT("Bem-vindo a Rune-Midgard."), ColSystem);
 }
 
@@ -603,6 +604,10 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, co
 		return Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 	}
 	const FVector2D Screen = InMouseEvent.GetScreenSpacePosition();
+	if (HandleNpcClick(Screen, false))
+	{
+		return FReply::Handled();
+	}
 	if (HandleWindowClick(Screen))
 	{
 		return FReply::Handled();

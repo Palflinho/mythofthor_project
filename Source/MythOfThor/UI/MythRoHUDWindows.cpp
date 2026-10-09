@@ -494,6 +494,10 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 FReply UMythRoHUDWidget::NativeOnMouseButtonDoubleClick(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
 	const FVector2D Screen = InMouseEvent.GetScreenSpacePosition();
+	if (HandleNpcClick(Screen, true))
+	{
+		return FReply::Handled();
+	}
 	URagnarokNetworkSubsystem* Net = GetNet();
 	if (Net && ItemsWindow && ItemsWindow->IsVisible())
 	{
