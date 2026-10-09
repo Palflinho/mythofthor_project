@@ -308,6 +308,9 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnNotifyEffect, int64, UnitID, int
 // Equipar / Desequipar (Tarefa A4)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnEquipResult, int32, Index, int32, WearLocation, bool, bSuccess);
 
+// Ataque fora de alcance (Tarefa A5)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnAttackOutOfRange, int64, TargetID, int32, TargetX, int32, TargetY, int32, Range);
+
 // Delegates de compatibilidade anterior
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerMoveConfirmed, int32, TargetX, int32, TargetY);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnDamageReceived, int64, TargetID, int32, Damage, bool, bIsCritical, bool, bIsMiss);
@@ -628,6 +631,10 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Inventory")
 	FOnEquipResult OnEquipResult;
 
+	/** Notificacao de alvo fora de alcance de ataque (ZC_ATTACK_FAILURE_FOR_DISTANCE 0x0139). */
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Combat")
+	FOnAttackOutOfRange OnAttackOutOfRange;
+
 	// Compatibilidade
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
 	FOnPlayerMoveConfirmed OnPlayerMoveConfirmed;
@@ -709,4 +716,5 @@ private:
 	void HandleSkillUnitDisappear(const uint8* PacketData, int32 PacketSize);
 	void HandleNotifyEffect(const uint8* PacketData, int32 PacketSize);
 	void HandleEquipAck(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	void HandleAttackOutOfRange(const uint8* PacketData, int32 PacketSize);
 };

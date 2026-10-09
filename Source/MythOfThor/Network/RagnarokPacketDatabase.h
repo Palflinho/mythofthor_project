@@ -34,6 +34,7 @@ namespace RagnarokPackets
     static constexpr uint16 HEADER_ZC_NOTIFY_PLAYERMOVE = 0x0087; // 12 bytes
     static constexpr uint16 HEADER_CZ_REQUEST_ACT       = 0x088e; // 7 bytes (ou 0x0360)
     static constexpr uint16 HEADER_ZC_NOTIFY_ACT        = 0x08c8; // 34 bytes
+    static constexpr uint16 HEADER_ZC_ATTACK_FAILURE_FOR_DISTANCE = 0x0139; // 16 bytes (alvo longe ao atacar)
     static constexpr uint16 HEADER_ZC_NOTIFY_VANISH     = 0x0080; // 7 bytes
     static constexpr uint16 HEADER_ZC_PAR_CHANGE        = 0x00b0; // 8 bytes
     static constexpr uint16 HEADER_ZC_LONGPAR_CHANGE    = 0x00b1; // 8 bytes
@@ -88,6 +89,7 @@ namespace RagnarokPackets
     static constexpr uint16 HEADER_ZC_SKILL_INFO_LIST   = 0x010f; // Dinâmico (-1)
     static constexpr uint16 HEADER_ZC_SKILLINFO_LIST_RE = 0x0b32; // Dinâmico (-1) (PACKETVER >= 20190807)
     static constexpr uint16 HEADER_ZC_ADD_SKILL         = 0x0b31; // 17 bytes (PACKETVER >= 20190807)
+    static constexpr uint16 HEADER_ZC_SKILLINFO_UPDATE  = 0x010e; // 11 bytes (atualizacao apos subir nivel de skill)
     static constexpr uint16 HEADER_ZC_SKILLINFO_UPDATE2 = 0x0b33; // 17 bytes (PACKETVER >= 20190807)
     static constexpr uint16 HEADER_CZ_USE_SKILL         = 0x089b; // 10 bytes (clif_parse_UseSkillToId; 0x0438 e DropItem)
     static constexpr uint16 HEADER_CZ_UPGRADE_SKILLLEVEL= 0x0112; // 4 bytes (uint16 type, uint16 skill_id)
@@ -238,6 +240,7 @@ namespace RagnarokPackets
             case 0x0104: return 79;
             case 0x0108: return -1;
             case 0x0109: return -1;
+            case 0x010e: return 11;
             case 0x010f: return -1;
             case 0x0112: return 4;
             case 0x0113: return 25;
@@ -260,6 +263,7 @@ namespace RagnarokPackets
             case 0x0130: return 6;
             case 0x0134: return -1;
             case 0x0138: return 3;
+            case 0x0139: return 16;
             case 0x013f: return 26;
             case 0x0140: return 22;
             case 0x0141: return 14;

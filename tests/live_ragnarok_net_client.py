@@ -574,10 +574,182 @@ def run_test():
         except (socket.timeout, BlockingIOError):
             break
 
-    s_map.close()
-
     if not (got_wear_shirt and got_wear_knife and got_takeoff_shirt and got_takeoff_knife):
         print("\nFalha na confirmação de algum dos pacotes de equipar/desequipar!")
+        s_map.close()
+        return False
+
+    # -------------------------------------------------------------------------
+    # 12. PONTOS DE ATRIBUTO (CZ_STATUS_CHANGE 0x00bb -> ZC_STATUS_CHANGE_ACK 0x00bc)
+    # -------------------------------------------------------------------------
+    print("\n=== [12] Teste de Distribuição de Atributos (CZ_STATUS_CHANGE 0x00bb) ===")
+    send_chat_message(s_map, char_name, "@stpoint 10")
+    time.sleep(0.1)
+
+    # CZ_STATUS_CHANGE (0x00bb) - 5 bytes: [0x00bb][StatusType: uint16][Amount: uint8]
+    # StatusType: 13 = SP_STR
+    pkt_status_up = struct.pack("<HHB", 0x00bb, 13, 1)
+    s_map.sendall(pkt_status_up)
+    print("Enviado CZ_STATUS_CHANGE para SP_STR (13) +1")
+
+    got_status_ack = False
+    start_wait = time.time()
+    while time.time() - start_wait < 3.0 and not got_status_ack:
+        try:
+            chunk = s_map.recv(4096)
+            if not chunk:
+                break
+            if b'\xbc\x00' in chunk: # 0x00bc (ZC_STATUS_CHANGE_ACK: 6 bytes)
+                pos = chunk.find(b'\xbc\x00')
+                if pos + 6 <= len(chunk):
+                    p_type, ack_sp, ack_ok, ack_val = struct.unpack_from("<HHBB", chunk, pos)
+                    print(f">>> ZC_STATUS_CHANGE_ACK (0x00bc) recebido! SP={ack_sp}, OK={ack_ok}, NovoValor={ack_val}")
+                    if ack_sp == 13 and ack_ok == 1:
+                        got_status_ack = True
+                        break
+        except (socket.timeout, BlockingIOError):
+            break
+
+    if not got_status_ack:
+        print("Falha ao receber ZC_STATUS_CHANGE_ACK (0x00bc)!")
+        s_map.close()
+        return False
+
+    # -------------------------------------------------------------------------
+    # 13. PONTOS DE HABILIDADE (CZ_UPGRADE_SKILLLEVEL 0x0112 -> 0x010e / 0x0b33)
+    # -------------------------------------------------------------------------
+    print("\n=== [13] Teste de Subir Habilidade (CZ_UPGRADE_SKILLLEVEL 0x0112) ===")
+    send_chat_message(s_map, char_name, "@job 0") # Aprendiz
+    time.sleep(0.1)
+    send_chat_message(s_map, char_name, "@resetskill") # Reseta habilidades
+    time.sleep(0.1)
+    send_chat_message(s_map, char_name, "@skpoint 10") # Concede pontos para subir
+    time.sleep(0.2)
+
+    # CZ_UPGRADE_SKILLLEVEL (0x0112) - 4 bytes: [0x0112][SkillID: uint16]
+    pkt_skill_up = struct.pack("<HH", 0x0112, 1)
+    s_map.sendall(pkt_skill_up)
+    print("Enviado CZ_UPGRADE_SKILLLEVEL para Habilidade Básica (Skill 1)")
+
+    got_skill_up_ack = False
+    start_wait = time.time()
+    while time.time() - start_wait < 3.0 and not got_skill_up_ack:
+        try:
+            chunk = s_map.recv(4096)
+            if not chunk:
+                break
+            if b'\x0e\x01' in chunk: # 0x010e (ZC_SKILLINFO_UPDATE: 11 bytes)
+                pos = chunk.find(b'\x0e\x01')
+                if pos + 11 <= len(chunk):
+                    p_type, s_id, s_lv, s_sp, s_rng, s_up = struct.unpack_from("<HHHHHB", chunk, pos)
+                    print(f">>> ZC_SKILLINFO_UPDATE (0x010e) recebido! SkillID={s_id}, Lv={s_lv}, SP={s_sp}, Range={s_rng}, Up={s_up}")
+                    got_skill_up_ack = True
+                    break
+            elif b'\x33\x0b' in chunk: # 0x0b33 (ZC_SKILLINFO_UPDATE2: 17 bytes)
+                pos = chunk.find(b'\x33\x0b')
+                if pos + 17 <= len(chunk):
+                    p_type, s_id, s_inf, s_lv, s_sp, s_rng, s_up = struct.unpack_from("<HIHHHHB", chunk, pos)
+                    print(f">>> ZC_SKILLINFO_UPDATE2 (0x0b33) recebido! SkillID={s_id}, Lv={s_lv}, SP={s_sp}, Range={s_rng}")
+                    got_skill_up_ack = True
+                    break
+        except (socket.timeout, BlockingIOError):
+            break
+
+    if not got_skill_up_ack:
+        print("Falha ao receber atualização de skill (0x010e ou 0x0b33)!")
+        s_map.close()
+        return False
+
+    # -------------------------------------------------------------------------
+    # 14. ATAQUE FORA DE ALCANCE (0x0139 ZC_ATTACK_FAILURE_FOR_DISTANCE)
+    # -------------------------------------------------------------------------
+    print("\n=== [14] Teste de Ataque Fora de Alcance (ZC_ATTACK_FAILURE_FOR_DISTANCE 0x0139) ===")
+    send_chat_message(s_map, char_name, "@monster poring 1")
+    time.sleep(0.2)
+
+    poring_aid = None
+    poring_x, poring_y = cur_x + 5, cur_y + 5
+    start_wait = time.time()
+    while time.time() - start_wait < 3.0 and poring_aid is None:
+        try:
+            chunk = s_map.recv(4096)
+            if not chunk:
+                break
+            idx = 0
+            while idx < len(chunk):
+                p_cmd, = struct.unpack_from("<H", chunk, idx)
+                if p_cmd == 0x09fe and idx + 66 <= len(chunk):
+                    m_aid, = struct.unpack_from("<I", chunk, idx + 5)
+                    if m_aid != account_id:
+                        poring_aid = m_aid
+                        px, py, pdir = unpack_pos(chunk[idx + 63 : idx + 66])
+                        poring_x, poring_y = px, py
+                        print(f"Poring detectado: AID={poring_aid} em ({poring_x}, {poring_y})")
+                        break
+                    idx += 107
+                elif p_cmd == 0x09ff and idx + 66 <= len(chunk):
+                    m_aid, = struct.unpack_from("<I", chunk, idx + 5)
+                    if m_aid != account_id:
+                        poring_aid = m_aid
+                        px, py, pdir = unpack_pos(chunk[idx + 63 : idx + 66])
+                        poring_x, poring_y = px, py
+                        print(f"Poring detectado: AID={poring_aid} em ({poring_x}, {poring_y})")
+                        break
+                    idx += 108
+                else:
+                    idx += 1
+        except (socket.timeout, BlockingIOError):
+            break
+
+    got_attack_failure_distance = False
+    if poring_aid:
+        # Se o Poring nasceu adjacente (dist <= 1), movemos o jogador para longe
+        dist_x = abs(cur_x - poring_x)
+        dist_y = abs(cur_y - poring_y)
+        print(f"Distância até o Poring: dx={dist_x}, dy={dist_y} (Alcance Desarmado=1)")
+
+        if dist_x <= 1 and dist_y <= 1:
+            far_x, far_y = cur_x + 4, cur_y + 4
+            cz_move = struct.pack("<H", 0x035f) + pack_pos(far_x, far_y)
+            s_map.sendall(cz_move)
+            print(f"Movendo jogador para ({far_x}, {far_y}) para afastar do Poring...")
+            time.sleep(1.5) # Aguarda o jogador parar de andar
+
+        # Drena o socket antes de pedir ataque
+        try:
+            while True:
+                junk = s_map.recv(4096)
+                if not junk:
+                    break
+        except (socket.timeout, BlockingIOError):
+            pass
+
+        # Envia CZ_REQUEST_ACT (0x088e) atacando o Poring de longe
+        # [0x088e: 2B][TargetAID: uint32 = 4B][ActionType: uint8 = 0 (ataque)] Total: 7 bytes
+        pkt_act = struct.pack("<HIB", 0x088e, poring_aid, 0)
+        s_map.sendall(pkt_act)
+        print(f"Enviado CZ_REQUEST_ACT (0x088e) contra Poring AID={poring_aid}")
+
+        start_wait = time.time()
+        while time.time() - start_wait < 3.0 and not got_attack_failure_distance:
+            try:
+                chunk = s_map.recv(4096)
+                if not chunk:
+                    break
+                if b'\x39\x01' in chunk: # 0x0139 (ZC_ATTACK_FAILURE_FOR_DISTANCE: 16 bytes)
+                    pos = chunk.find(b'\x39\x01')
+                    if pos + 16 <= len(chunk):
+                        p_type, t_aid, tx, ty, px, py, rng = struct.unpack_from("<HIhhhhh", chunk, pos)
+                        print(f">>> ZC_ATTACK_FAILURE_FOR_DISTANCE (0x0139) recebido! TargetAID={t_aid}, TargetPos=({tx},{ty}), Pos=({px},{py}), Range={rng}")
+                        if t_aid == poring_aid:
+                            got_attack_failure_distance = True
+                            break
+            except (socket.timeout, BlockingIOError):
+                break
+
+    if not got_attack_failure_distance:
+        print("Falha ao receber ZC_ATTACK_FAILURE_FOR_DISTANCE (0x0139)!")
+        s_map.close()
         return False
 
     print("\n==================================================================")

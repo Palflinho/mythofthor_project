@@ -962,6 +962,12 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case RagnarokPackets::HEADER_ZC_REQ_TAKEOFF_EQUIP_ACK:
 				HandleEquipAck(PacketData, ActualLen, PacketID);
 				break;
+			case RagnarokPackets::HEADER_ZC_ATTACK_FAILURE_FOR_DISTANCE:
+				HandleAttackOutOfRange(PacketData, ActualLen);
+				break;
+			case RagnarokPackets::HEADER_ZC_SKILLINFO_UPDATE:
+				HandleSkillList(PacketData, ActualLen);
+				break;
 			default:
 				// Pacote conhecido mas sem tratamento visual imediato (ex.: slots, ticks, ping)
 				break;
@@ -1769,6 +1775,22 @@ void URagnarokNetworkSubsystem::HandleSkillList(const uint8* PacketData, int32 P
 			}
 		}
 	}
+	else if (PacketID == RagnarokPackets::HEADER_ZC_SKILLINFO_UPDATE) // 0x010e (11 bytes)
+	{
+		if (PacketSize >= 11)
+		{
+			uint16 SkillID = *reinterpret_cast<const uint16*>(PacketData + 2);
+			int32 ExistingIdx = SkillList.IndexOfByPredicate([&](const FRagnarokSkillInfo& Item) { return Item.SkillID == SkillID; });
+			if (ExistingIdx != INDEX_NONE)
+			{
+				SkillList[ExistingIdx].Level = *reinterpret_cast<const uint16*>(PacketData + 4);
+				SkillList[ExistingIdx].SpCost = *reinterpret_cast<const uint16*>(PacketData + 6);
+				SkillList[ExistingIdx].Range = *reinterpret_cast<const uint16*>(PacketData + 8);
+				SkillList[ExistingIdx].bUpgradable = (PacketData[10] != 0);
+				OnSkillList.Broadcast(SkillList);
+			}
+		}
+	}
 	else if (PacketID == RagnarokPackets::HEADER_ZC_SKILL_INFO_LIST) // 0x010f (legado)
 	{
 		static constexpr int32 HEADER_SIZE = 4;
@@ -2223,5 +2245,38 @@ void URagnarokNetworkSubsystem::HandleEquipAck(const uint8* PacketData, int32 Pa
 			OnEquipResult.Broadcast(Ack->Index, Ack->WearLocation, false);
 		}
 	}
+}
+
+void URagnarokNetworkSubsystem::HandleAttackOutOfRange(const uint8* PacketData, int32 PacketSize)
+{
+	// 0x0139 ZC_ATTACK_FAILURE_FOR_DISTANCE (16 bytes)
+	// targetAID: +2 (u32), targetXPos: +6 (i16), targetYPos: +8 (i16), xPos: +10 (i16), yPos: +12 (i16), currentAttRange: +14 (i16)
+	if (PacketSize < 16)
+	{
+		return;
+	}
+
+	#pragma pack(push, 1)
+	struct FZC_AttackFailureForDistancePacket
+	{
+		int16 PacketType;
+		uint32 TargetAID;
+		int16 TargetX;
+		int16 TargetY;
+		int16 X;
+		int16 Y;
+		int16 CurrentAttRange;
+	};
+	#pragma pack(pop)
+
+	const FZC_AttackFailureForDistancePacket* Pkt = reinterpret_cast<const FZC_AttackFailureForDistancePacket*>(PacketData);
+
+	if (bLogPackets)
+	{
+		UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] [OnAttackOutOfRange] TargetAID=%u TargetPos=(%d,%d) Pos=(%d,%d) Range=%d"),
+			Pkt->TargetAID, Pkt->TargetX, Pkt->TargetY, Pkt->X, Pkt->Y, Pkt->CurrentAttRange);
+	}
+
+	OnAttackOutOfRange.Broadcast(Pkt->TargetAID, Pkt->TargetX, Pkt->TargetY, Pkt->CurrentAttRange);
 }
 
