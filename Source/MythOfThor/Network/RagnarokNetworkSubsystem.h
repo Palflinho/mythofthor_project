@@ -132,6 +132,10 @@ struct FRagnarokUnitVisualInfo
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Unit")
 	int32 BodyPalette = 0;
 
+	/** 0 = feminino, 1 = masculino (byte "sex" antes de PosDir/MoveData). */
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Unit")
+	uint8 Sex = 1;
+
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Unit")
 	int32 HP = 0;
 
@@ -470,6 +474,10 @@ public:
 
 	/** ID do proprio jogador nos pacotes do map-server (AID da conta), para separar "eu" das outras unidades. */
 	int64 GetSelfID() const { return SavedAccountID; }
+	/** Sexo da conta (AC_ACCEPT_LOGIN): 0 = feminino, 1 = masculino. */
+	uint8 GetSelfSex() const { return SavedSex; }
+	/** Personagem escolhido na selecao (cabelo, classe inicial...). */
+	const FRagnarokCharacterSlotInfo& GetSelectedSlot() const { return SelectedSlotInfo; }
 
 	/** Atalhos F1.. da barra (aba 0), como o servidor guardou. */
 	const TArray<FRagnarokHotkey>& GetHotkeys() const { return Hotkeys; }
@@ -608,6 +616,7 @@ private:
 	uint32 PendingCharID;
 	FString PendingMapName;
 	FString SelectedCharName;
+	FRagnarokCharacterSlotInfo SelectedSlotInfo;
 	TArray<FRagnarokCharacterSlotInfo> CachedCharacterSlots;
 
 	FRagnarokPlayerStats CurrentStats;

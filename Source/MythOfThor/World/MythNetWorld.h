@@ -71,6 +71,10 @@ private:
 	UFUNCTION() void HandleSkillCast(int64 SourceID, int64 TargetID, int32 SkillID, int32 CastMs, int32 CellX, int32 CellY);
 	UFUNCTION() void HandleSkillFailed(int32 SkillID, int32 Cause);
 	UFUNCTION() void HandleSpecialEffect(int64 UnitID, int32 EffectID);
+	UFUNCTION() void HandleEquipChanged(int64 UnitID, uint8 Look, int32 Value);
+
+	/** Classe, sexo e cabelo do proprio personagem a partir do login/selecao (o sprite padrao e Aprendiz). */
+	void ApplySelfAppearance();
 	class AMythHUD* GetGameHud() const;
 
 	UPROPERTY() TMap<int64, TObjectPtr<class AMythGroundItem>> GroundItems;

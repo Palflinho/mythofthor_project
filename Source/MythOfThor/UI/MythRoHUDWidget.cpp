@@ -415,18 +415,21 @@ void UMythRoHUDWidget::RefreshStats()
 		return;
 	}
 	NameText->SetText(FText::FromString(Stats->GetCharName()));
-	// Classe/nivel de classe/zeny ainda nao vem do servidor: valores do Aprendiz ate a rede ser ligada.
-	JobText->SetText(FText::FromString(TEXT("Aprendiz")));
+	// Classe, nivel de classe, exp de classe e zeny vem do servidor; offline ficam os valores do Aprendiz.
+	const URagnarokNetworkSubsystem* Net = GetNet();
+	const bool bOnline = Net && Net->GetNetworkState() == ERagnarokNetworkState::ConnectedMap;
+	const FRagnarokPlayerStats* NetStats = bOnline ? &Net->GetPlayerStats() : nullptr;
+	JobText->SetText(FText::FromString(NetStats ? NetStats->JobName : FString(TEXT("Aprendiz"))));
 	BaseLvText->SetText(FText::FromString(FString::Printf(TEXT("Base Lv. %d"), Stats->GetBaseLevel())));
-	JobLvText->SetText(FText::FromString(TEXT("Job Lv. 1")));
+	JobLvText->SetText(FText::FromString(FString::Printf(TEXT("Job Lv. %d"), NetStats ? NetStats->JobLevel : 1)));
 
 	HPGauge.SetFraction(static_cast<float>(Stats->GetHP()) / FMath::Max(1, Stats->GetMaxHP()));
 	HPText->SetText(FText::FromString(FString::Printf(TEXT("%d / %d"), Stats->GetHP(), Stats->GetMaxHP())));
 	SPGauge.SetFraction(static_cast<float>(Stats->GetSP()) / FMath::Max(1, Stats->GetMaxSP()));
 	SPText->SetText(FText::FromString(FString::Printf(TEXT("%d / %d"), Stats->GetSP(), Stats->GetMaxSP())));
 	BaseExpGauge.SetFraction(Stats->GetExpFraction());
-	JobExpGauge.SetFraction(0.f);
-	WeightZenyText->SetText(FText::FromString(FString::Printf(TEXT("Peso : %.0f%%      Zeny : 0"), WeightPercent)));
+	JobExpGauge.SetFraction(NetStats && NetStats->NextJobExp > 0 ? static_cast<float>(static_cast<double>(NetStats->JobExp) / NetStats->NextJobExp) : 0.f);
+	WeightZenyText->SetText(FText::FromString(FString::Printf(TEXT("Peso : %.0f%%      Zeny : %lld"), WeightPercent, NetStats ? NetStats->Zeny : 0LL)));
 }
 
 void UMythRoHUDWidget::RefreshAutoAll()

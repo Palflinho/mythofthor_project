@@ -101,3 +101,10 @@ e talvez adaptar algumas habilidades de 3ª classe para as classes atuais.
   usuário. Deixe um exemplo e um modelo fácil de copiar.
 - **Habilidades de 3ª classe adaptadas:** só levantar quais funcionam no pre-re sem mudar o código do servidor, e
   listar num doc. Não implementar ainda.
+
+## Nota do Claude (já feito em `RagnarokNetworkSubsystem`, não refazer)
+
+- `FRagnarokUnitVisualInfo::Sex`: lido de +62 (idle/spawn) ou +66 (walking), conferido em `packets_struct.hpp`.
+- `GetSelfSex()` e `GetSelectedSlot()`.
+- `HandleSpriteChange`: com LOOK_BASE do próprio personagem, atualiza `JobClass`/`JobName` e dispara `OnPlayerStatsChanged`.
+- `GetJobNameFromClass` reescrito com os IDs do `e_job` (estava deslocado a partir do 13).

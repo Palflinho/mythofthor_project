@@ -86,33 +86,48 @@ namespace
 		return !Name.IsEmpty() && FPaths::FileExists(FPaths::Combine(UMythRoSpriteComponent::GetAssetsRoot(), TEXT("data"), TEXT("sprite"), Folder, Name + TEXT(".spr")));
 	}
 
-	/** Pasta do corpo do jogador por classe (data/sprite/인간족/몸통/<sexo>/<classe>_<sexo>.spr). */
-	FString NetJobSprite(int32 JobClass)
+	/** Classe -> nome do corpo (data/sprite/인간족/몸통/<sexo>/<nome>_<sexo>.spr), de Config/job_sprites.json. */
+	const TMap<int32, FString>& NetJobSpriteTable()
 	{
-		switch (JobClass)
+		static TMap<int32, FString> Table;
+		static bool bLoaded = false;
+		if (!bLoaded)
 		{
-		case 1: return TEXT("검사");      // espadachim
-		case 2: return TEXT("마법사");    // mago
-		case 3: return TEXT("궁수");      // arqueiro
-		case 4: return TEXT("성직자");    // novico
-		case 5: return TEXT("상인");      // mercador
-		case 6: return TEXT("도둑");      // gatuno
-		case 7: return TEXT("기사");      // cavaleiro
-		case 8: return TEXT("프리스트");  // sacerdote
-		case 9: return TEXT("위저드");    // bruxo
-		case 10: return TEXT("제철공");   // ferreiro
-		case 11: return TEXT("헌터");     // cacador
-		case 12: return TEXT("어세신");   // mercenario
-		case 14: return TEXT("크루세이더"); // templario
-		case 15: return TEXT("몽크");     // monge
-		case 16: return TEXT("세이지");   // sabio
-		case 17: return TEXT("로그");     // arruaceiro
-		case 18: return TEXT("연금술사"); // alquimista
-		case 19: return TEXT("바드");     // bardo
-		case 20: return TEXT("무희");     // odalisca
-		case 23: return TEXT("슈퍼노비스"); // superaprendiz
-		default: return TEXT("초보자");   // aprendiz
+			bLoaded = true;
+			FString Text;
+			TSharedPtr<FJsonObject> Root;
+			if (FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("job_sprites.json")))
+				&& FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) && Root.IsValid())
+			{
+				for (const auto& Pair : Root->Values)
+				{
+					Table.Add(FCString::Atoi(*Pair.Key), Pair.Value->AsString());
+				}
+			}
+			UE_LOG(LogTemp, Log, TEXT("MythNetWorld: %d sprites de classe"), Table.Num());
 		}
+		return Table;
+	}
+
+	/**
+	 * Corpo da classe para o sexo pedido. Classes de um sexo so (Bardo/Odalisca) usam o arquivo que existe,
+	 * trocando bInOutMale. Classe sem sprite (fora do jogo) cai no Aprendiz.
+	 */
+	FString NetJobSprite(int32 JobClass, bool& bInOutMale)
+	{
+		const FString* Found = NetJobSpriteTable().Find(JobClass);
+		const FString Name = Found ? *Found : FString(TEXT("초보자"));
+		auto Exists = [&Name](bool bMale)
+		{
+			const TCHAR* Sex = bMale ? TEXT("남") : TEXT("여");
+			return FPaths::FileExists(FPaths::Combine(UMythRoSpriteComponent::GetAssetsRoot(), TEXT("data"), TEXT("sprite"),
+				TEXT("인간족"), TEXT("몸통"), Sex, FString::Printf(TEXT("%s_%s.spr"), *Name, Sex)));
+		};
+		if (!Exists(bInOutMale) && Exists(!bInOutMale))
+		{
+			bInOutMale = !bInOutMale;
+		}
+		return Name;
 	}
 
 	FLinearColor NetParseColor(const FString& Hex, const FLinearColor& Fallback)
@@ -190,6 +205,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnSkillCast.AddDynamic(this, &AMythNetWorld::HandleSkillCast);
 	Net->OnSkillFailed.AddDynamic(this, &AMythNetWorld::HandleSkillFailed);
 	Net->OnSpecialEffect.AddDynamic(this, &AMythNetWorld::HandleSpecialEffect);
+	Net->OnEquipChanged.AddDynamic(this, &AMythNetWorld::HandleEquipChanged);
 
 	// Chegou num mapa novo por ordem do servidor (portal/warp): termina a entrada no proximo quadro, com o
 	// personagem ja criado pelo GameMode, e so entao avisa o servidor (ACTORINIT)
@@ -237,6 +253,7 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnSkillCast.RemoveAll(this);
 		Net->OnSkillFailed.RemoveAll(this);
 		Net->OnSpecialEffect.RemoveAll(this);
+		Net->OnEquipChanged.RemoveAll(this);
 	}
 	Super::EndPlay(EndPlayReason);
 }
@@ -384,6 +401,7 @@ void AMythNetWorld::FinishMapEnter(const FString& Map, int32 CellX, int32 CellY)
 	if (URagnarokNetworkSubsystem* Net = GetNet())
 	{
 		Net->NotifyMapLoaded(); // CZ_NOTIFY_ACTORINIT: agora o servidor manda NPCs, monstros e jogadores daqui
+		ApplySelfAppearance();
 		HandleStats(Net->GetPlayerStats());
 	}
 	Chat(FString::Printf(TEXT("Entrou em %s (%d, %d)."), *Map, CellX, CellY), NetSystemColor);
@@ -478,7 +496,8 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 		if (bPlayer)
 		{
 			S->MonsterSpriteName.Empty();
-			S->JobSpriteName = NetJobSprite(Info.JobClass);
+			S->bMale = Info.Sex != 0;
+			S->JobSpriteName = NetJobSprite(Info.JobClass, S->bMale);
 			S->HairStyle = FMath::Max(Info.Head, 1);
 			S->HairColor = Info.HeadPalette;
 		}
@@ -764,6 +783,49 @@ void AMythNetWorld::HandleSkillCast(int64 SourceID, int64 TargetID, int32 SkillI
 			Char->Sprite->FaceLocation(Target->GetActorLocation());
 		}
 	}
+}
+
+void AMythNetWorld::ApplySelfAppearance()
+{
+	const URagnarokNetworkSubsystem* Net = GetNet();
+	const APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	const AMythPlayerCharacter* Char = PC ? Cast<AMythPlayerCharacter>(PC->GetPawn()) : nullptr;
+	if (!Net || !Char || !Char->Sprite)
+	{
+		return;
+	}
+	UMythRoSpriteComponent* S = Char->Sprite;
+	const FRagnarokCharacterSlotInfo& Slot = Net->GetSelectedSlot();
+	S->bMale = Net->GetSelfSex() != 0;
+	S->JobSpriteName = NetJobSprite(Net->GetPlayerStats().JobClass, S->bMale);
+	S->HairStyle = FMath::Max(Slot.HairStyle, 1);
+	S->HairColor = Slot.HairColor;
+	S->ReloadSprites();
+}
+
+void AMythNetWorld::HandleEquipChanged(int64 UnitID, uint8 Look, int32 Value)
+{
+	// ZC_SPRITE_CHANGE: Look e o enum _look do rAthena (0 classe, 1 cabelo, 6 cor do cabelo)
+	AActor* Unit = ResolveActor(UnitID);
+	UMythRoSpriteComponent* S = Unit ? Unit->FindComponentByClass<UMythRoSpriteComponent>() : nullptr;
+	if (!S || !S->MonsterSpriteName.IsEmpty())
+	{
+		return;
+	}
+	switch (Look)
+	{
+	case 0:
+		if (const URagnarokNetworkSubsystem* Net = GetNet(); Net && UnitID == Net->GetSelfID())
+		{
+			S->bMale = Net->GetSelfSex() != 0; // volta ao sexo da conta antes de checar classes de um sexo so
+		}
+		S->JobSpriteName = NetJobSprite(Value, S->bMale);
+		break;
+	case 1: S->HairStyle = FMath::Max(Value, 1); break;
+	case 6: S->HairColor = Value; break;
+	default: return; // equipamentos visuais: ainda nao desenhados
+	}
+	S->ReloadSprites();
 }
 
 void AMythNetWorld::HandleSpecialEffect(int64 UnitID, int32 EffectID)

@@ -156,6 +156,7 @@ bool URagnarokNetworkSubsystem::SelectCharacter(int32 SlotIndex)
 		if (Slot.Slot == SlotIndex)
 		{
 			SelectedCharName = Slot.Name;
+			SelectedSlotInfo = Slot;
 			CurrentStats.JobClass = Slot.JobClass;
 			CurrentStats.JobName = GetJobNameFromClass(Slot.JobClass);
 			CurrentStats.BaseLevel = Slot.BaseLevel;
@@ -171,6 +172,7 @@ bool URagnarokNetworkSubsystem::SelectCharacter(int32 SlotIndex)
 	{
 		const FRagnarokCharacterSlotInfo& Slot = CachedCharacterSlots[SlotIndex];
 		SelectedCharName = Slot.Name;
+		SelectedSlotInfo = Slot;
 		CurrentStats.JobClass = Slot.JobClass;
 		CurrentStats.JobName = GetJobNameFromClass(Slot.JobClass);
 		CurrentStats.BaseLevel = Slot.BaseLevel;
@@ -532,45 +534,37 @@ bool URagnarokNetworkSubsystem::SendSkillUp(int32 SkillID)
 
 FString URagnarokNetworkSubsystem::GetJobNameFromClass(int32 JobClass)
 {
+	// IDs do enum e_job (rathena/src/common/mmo.hpp); nomes do bRO
+	static const TCHAR* Base[] = {
+		TEXT("Aprendiz"), TEXT("Espadachim"), TEXT("Mago"), TEXT("Arqueiro"), TEXT("Noviço"), TEXT("Mercador"), TEXT("Gatuno"),
+		TEXT("Cavaleiro"), TEXT("Sacerdote"), TEXT("Bruxo"), TEXT("Ferreiro"), TEXT("Caçador"), TEXT("Mercenário"),
+		TEXT("Cavaleiro"), TEXT("Templário"), TEXT("Monge"), TEXT("Sábio"), TEXT("Arruaceiro"), TEXT("Alquimista"),
+		TEXT("Bardo"), TEXT("Odalisca"), TEXT("Templário"), TEXT("Casamento"), TEXT("Super Aprendiz"), TEXT("Justiceiro"),
+		TEXT("Ninja"), TEXT("Natal") };
+	// 4001..4022: transclasses (a 1a classe transcendental leva "T.")
+	static const TCHAR* Trans[] = {
+		TEXT("Aprendiz T."), TEXT("Espadachim T."), TEXT("Mago T."), TEXT("Arqueiro T."), TEXT("Noviço T."), TEXT("Mercador T."),
+		TEXT("Gatuno T."), TEXT("Lorde"), TEXT("Sumo Sacerdote"), TEXT("Arquimago"), TEXT("Mestre-Ferreiro"),
+		TEXT("Atirador de Elite"), TEXT("Algoz"), TEXT("Lorde"), TEXT("Paladino"), TEXT("Mestre"), TEXT("Professor"),
+		TEXT("Desordeiro"), TEXT("Criador"), TEXT("Menestrel"), TEXT("Cigana"), TEXT("Paladino") };
+	if (JobClass >= 0 && JobClass < UE_ARRAY_COUNT(Base))
+	{
+		return Base[JobClass];
+	}
+	if (JobClass >= 4001 && JobClass < 4001 + UE_ARRAY_COUNT(Trans))
+	{
+		return Trans[JobClass - 4001];
+	}
+	if (JobClass >= 4023 && JobClass <= 4044) // bebes: 4023 = Aprendiz ... na mesma ordem das classes basicas
+	{
+		return FString::Printf(TEXT("%s Bebê"), Base[JobClass - 4023]);
+	}
 	switch (JobClass)
 	{
-		case 0: return TEXT("Aprendiz");
-		case 1: return TEXT("Espadachim");
-		case 2: return TEXT("Mago");
-		case 3: return TEXT("Arqueiro");
-		case 4: return TEXT("Acólito");
-		case 5: return TEXT("Mercador");
-		case 6: return TEXT("Gatuno");
-		case 7: return TEXT("Cavaleiro");
-		case 8: return TEXT("Sacerdote");
-		case 9: return TEXT("Bruxo");
-		case 10: return TEXT("Ferreiro");
-		case 11: return TEXT("Caçador");
-		case 12: return TEXT("Mercenário");
-		case 14: return TEXT("Cavaleiro");
-		case 15: return TEXT("Templário");
-		case 16: return TEXT("Monge");
-		case 17: return TEXT("Sábio");
-		case 18: return TEXT("Arruaceiro");
-		case 19: return TEXT("Alquimista");
-		case 20: return TEXT("Bardo");
-		case 21: return TEXT("Odalisca");
-		case 23: return TEXT("Super Aprendiz");
-		case 24: return TEXT("Justiceiro");
-		case 25: return TEXT("Ninja");
-		case 4001: return TEXT("Lorde");
-		case 4002: return TEXT("Sumo Sacerdote");
-		case 4003: return TEXT("Arquimago");
-		case 4004: return TEXT("Mestre-Ferreiro");
-		case 4005: return TEXT("Atirador de Elite");
-		case 4006: return TEXT("Algoz");
-		case 4008: return TEXT("Paladino");
-		case 4009: return TEXT("Mestre");
-		case 4010: return TEXT("Professor");
-		case 4011: return TEXT("Desordeiro");
-		case 4012: return TEXT("Criador");
-		case 4013: return TEXT("Menestrel");
-		case 4014: return TEXT("Cigana");
+		case 4045: return TEXT("Super Aprendiz Bebê");
+		case 4046: return TEXT("Taekwon");
+		case 4047: case 4048: return TEXT("Mestre Taekwon");
+		case 4049: return TEXT("Espiritualista");
 		default: return FString::Printf(TEXT("Classe %d"), JobClass);
 	}
 }
@@ -1153,6 +1147,7 @@ void URagnarokNetworkSubsystem::HandleUnitAppear(const uint8* PacketData, int32 
 	Unit.HeadPalette = I16(41 + Shift);
 	Unit.BodyPalette = I16(43 + Shift);
 	Unit.Robe = U16(47 + Shift);
+	Unit.Sex = PacketData[bWalking ? 66 : 62]; // logo antes de MoveData (walking) / PosDir
 
 	// PosDir em 63 (idle/spawn); MoveData em 67 (walking). Depois: xSize, ySize, [state], clevel, font, maxHP, HP
 	if (!bWalking)
@@ -1306,6 +1301,12 @@ void URagnarokNetworkSubsystem::HandleSpriteChange(const uint8* PacketData, int3
 	uint32 GID = *reinterpret_cast<const uint32*>(PacketData + 2);
 	uint8 Slot = PacketData[6];
 	int32 VisualID = *reinterpret_cast<const int32*>(PacketData + 7);
+	if (Slot == 0 && GID == SavedAccountID) // LOOK_BASE do proprio personagem: mudou de classe
+	{
+		CurrentStats.JobClass = VisualID;
+		CurrentStats.JobName = GetJobNameFromClass(VisualID);
+		OnPlayerStatsChanged.Broadcast(CurrentStats);
+	}
 	OnEquipChanged.Broadcast(GID, Slot, VisualID);
 }
 
