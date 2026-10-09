@@ -5,6 +5,7 @@
 #include "UI/MythHUD.h"
 #include "World/MythMapInfo.h"
 #include "World/MythDayNightActor.h"
+#include "World/MythWeatherActor.h"
 #include "EngineUtils.h"
 #include "Sprites/MythMonster.h"
 #include "Sprites/MythPoring.h"
@@ -559,12 +560,28 @@ void AMythPlayerController::MythShot(float DelaySeconds, float Hour, const FStri
 	}), FMath::Max(DelaySeconds, 0.1f), false);
 }
 
+void AMythPlayerController::MythWeather(const FString& Type)
+{
+	AMythWeatherActor* Weather = AMythWeatherActor::FindOrSpawn(GetWorld());
+	if (!Weather)
+	{
+		return;
+	}
+	EMythWeather W = EMythWeather::Clear;
+	if (Type.Equals(TEXT("Rain"), ESearchCase::IgnoreCase) || Type.Equals(TEXT("Chuva"), ESearchCase::IgnoreCase)) { W = EMythWeather::Rain; }
+	else if (Type.Equals(TEXT("Snow"), ESearchCase::IgnoreCase) || Type.Equals(TEXT("Neve"), ESearchCase::IgnoreCase)) { W = EMythWeather::Snow; }
+	else if (Type.Equals(TEXT("Fog"), ESearchCase::IgnoreCase) || Type.Equals(TEXT("Neblina"), ESearchCase::IgnoreCase)) { W = EMythWeather::Fog; }
+	Weather->SetWeather(W);
+}
+
 void AMythPlayerController::MythDelayed(float DelaySeconds, const FString& Command)
 {
+	// '+' vira espaco: o -ExecCmds nao preserva aspas (ex.: MythDelayed 30 MythWeather+Rain)
+	const FString Cmd = Command.Replace(TEXT("+"), TEXT(" "));
 	FTimerHandle Handle;
-	GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateWeakLambda(this, [this, Command]()
+	GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateWeakLambda(this, [this, Cmd]()
 	{
-		ConsoleCommand(Command);
+		ConsoleCommand(Cmd);
 	}), FMath::Max(DelaySeconds, 0.1f), false);
 }
 

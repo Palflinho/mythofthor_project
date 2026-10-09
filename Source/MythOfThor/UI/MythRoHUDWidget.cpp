@@ -266,6 +266,7 @@ void UMythRoHUDWidget::BuildBasicInfo()
 	B = AddRoButton(Win, TEXT("skill"), 242.f, 46.f);  B->OnClicked.AddDynamic(this, &UMythRoHUDWidget::OnSkillClicked);
 	B = AddRoButton(Win, TEXT("map"), 206.f, 70.f);    B->OnClicked.AddDynamic(this, &UMythRoHUDWidget::OnMapClicked);
 	B = AddRoButton(Win, TEXT("option"), 242.f, 70.f); B->OnClicked.AddDynamic(this, &UMythRoHUDWidget::OnOptionClicked);
+	MakeDraggable(Win, 280.f, 17.f);
 }
 
 void UMythRoHUDWidget::BuildMinimap()
@@ -283,6 +284,7 @@ void UMythRoHUDWidget::BuildMinimap()
 	PlayerDot = AddColor(MinimapWindow, FLinearColor(1.f, 0.85f, 0.1f), 0.f, 0.f, 4.f, 4.f);
 	PlayerDot->SetVisibility(ESlateVisibility::Collapsed);
 	CoordsText = AddText(MinimapWindow, 6.f, 149.f, 7, ColText);
+	MakeDraggable(MinimapWindow, W, 17.f);
 }
 
 void UMythRoHUDWidget::BuildHotbar()
@@ -295,6 +297,7 @@ void UMythRoHUDWidget::BuildHotbar()
 		UTextBlock* T = AddText(Win, 6.f + 29.f * i, 3.f, 6, ColLabel);
 		T->SetText(FText::FromString(FString::Printf(TEXT("F%d"), i + 1)));
 	}
+	MakeDraggable(Win, 280.f, 34.f);
 }
 
 void UMythRoHUDWidget::BuildChat()
@@ -321,6 +324,7 @@ void UMythRoHUDWidget::BuildChat()
 		S->SetPosition(FVector2D(0.f, 120.f) * UIScale);
 		S->SetSize(FVector2D(W, 19.f) * UIScale);
 	}
+	MakeDraggable(Win, W, 21.f); // pela faixa das abas
 }
 
 void UMythRoHUDWidget::BuildAutoBattle()
@@ -347,6 +351,7 @@ void UMythRoHUDWidget::BuildAutoBattle()
 	StaminaText = AddText(Win, 72.f, 36.f, 6, ColText);
 	UTextBlock* Hint = AddText(Win, 6.f, 52.f, 6, ColLabel);
 	Hint->SetText(FText::FromString(TEXT("Vigor diario: 3h  |  trava com peso >= 90%")));
+	MakeDraggable(Win, W, 17.f);
 }
 
 // ------------------------------------------------------------------------------------------------ dados
@@ -553,6 +558,96 @@ void UMythRoHUDWidget::OnMapClicked()
 		const bool bVisible = MinimapWindow->GetVisibility() != ESlateVisibility::Collapsed;
 		MinimapWindow->SetVisibility(bVisible ? ESlateVisibility::Collapsed : ESlateVisibility::SelfHitTestInvisible);
 	}
+}
+
+// ------------------------------------------------------------------------------------------------ arrastar
+
+void UMythRoHUDWidget::MakeDraggable(UCanvasPanel* Window, float Width, float HandleHeight)
+{
+	if (!Window)
+	{
+		return;
+	}
+	// Alca invisivel mas "clicavel" (Visible): o clique nao vai para o jogo e chega aqui pelo NativeOnMouseButtonDown.
+	UImage* Handle = WidgetTree->ConstructWidget<UImage>();
+	Handle->SetColorAndOpacity(FLinearColor::Transparent);
+	Handle->SetVisibility(ESlateVisibility::Visible);
+	if (UCanvasPanelSlot* S = Window->AddChildToCanvas(Handle))
+	{
+		S->SetPosition(FVector2D::ZeroVector);
+		S->SetSize(FVector2D(Width, HandleHeight) * UIScale);
+	}
+	DragWindows.Add({ Window, HandleHeight });
+}
+
+FReply UMythRoHUDWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+{
+	if (InMouseEvent.GetEffectingButton() != EKeys::LeftMouseButton || !Root)
+	{
+		return Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
+	}
+	const FVector2D Screen = InMouseEvent.GetScreenSpacePosition();
+	for (int32 i = DragWindows.Num() - 1; i >= 0; --i)
+	{
+		UCanvasPanel* Win = DragWindows[i].Window.Get();
+		if (!Win || Win->GetVisibility() == ESlateVisibility::Collapsed)
+		{
+			continue;
+		}
+		const FGeometry& WinGeo = Win->GetCachedGeometry();
+		const FVector2D Local = WinGeo.AbsoluteToLocal(Screen);
+		if (Local.X < 0.f || Local.Y < 0.f || Local.X > WinGeo.GetLocalSize().X || Local.Y > DragWindows[i].HandleHeight * UIScale)
+		{
+			continue;
+		}
+		// Passa a janela para ancora no topo-esquerda (a posicao vira simples) e traz para a frente.
+		UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(Win->Slot);
+		if (!S)
+		{
+			continue;
+		}
+		const FGeometry& RootGeo = Root->GetCachedGeometry();
+		const FVector2D TopLeft = RootGeo.AbsoluteToLocal(WinGeo.GetAbsolutePosition());
+		const FVector2D Size = S->GetSize();
+		S->SetAnchors(FAnchors(0.f, 0.f));
+		S->SetAlignment(FVector2D::ZeroVector);
+		S->SetPosition(TopLeft);
+		S->SetSize(Size);
+		S->SetZOrder(++TopZOrder);
+		Dragging = Win;
+		DragOffset = RootGeo.AbsoluteToLocal(Screen) - TopLeft;
+		return FReply::Handled().CaptureMouse(TakeWidget());
+	}
+	return Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
+}
+
+FReply UMythRoHUDWidget::NativeOnMouseMove(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+{
+	if (UCanvasPanel* Win = Dragging.Get())
+	{
+		if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(Win->Slot))
+		{
+			const FVector2D Mouse = Root->GetCachedGeometry().AbsoluteToLocal(InMouseEvent.GetScreenSpacePosition());
+			// Mantem pelo menos a barra de titulo dentro da tela
+			const FVector2D Limit = Root->GetCachedGeometry().GetLocalSize();
+			FVector2D Pos = Mouse - DragOffset;
+			Pos.X = FMath::Clamp(Pos.X, -S->GetSize().X + 40.f, Limit.X - 40.f);
+			Pos.Y = FMath::Clamp(Pos.Y, 0.f, Limit.Y - 20.f);
+			S->SetPosition(Pos);
+		}
+		return FReply::Handled();
+	}
+	return Super::NativeOnMouseMove(InGeometry, InMouseEvent);
+}
+
+FReply UMythRoHUDWidget::NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+{
+	if (Dragging.IsValid())
+	{
+		Dragging = nullptr;
+		return FReply::Handled().ReleaseMouseCapture();
+	}
+	return Super::NativeOnMouseButtonUp(InGeometry, InMouseEvent);
 }
 
 // ------------------------------------------------------------------------------------------------ minimapa

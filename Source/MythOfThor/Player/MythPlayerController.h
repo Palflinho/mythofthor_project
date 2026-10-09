@@ -95,6 +95,10 @@ public:
 	UFUNCTION(Exec)
 	void MythShot(float DelaySeconds, float Hour, const FString& Name);
 
+	/** Console: MythWeather Rain | Snow | Fog | Clear -> muda o clima (transicao suave). */
+	UFUNCTION(Exec)
+	void MythWeather(const FString& Type);
+
 	/** Console: MythDelayed 24.5 MythTestDamage -> roda um comando de console depois de N segundos (testes automaticos). */
 	UFUNCTION(Exec)
 	void MythDelayed(float DelaySeconds, const FString& Command);

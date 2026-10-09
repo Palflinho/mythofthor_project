@@ -66,8 +66,24 @@ public:
 protected:
 	virtual void NativeOnInitialized() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+	// Arrastar janelas pela barra de titulo, como no cliente original
+	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+	virtual FReply NativeOnMouseMove(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+	virtual FReply NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 
 private:
+	/** Janelas arrastaveis e a altura (px originais) da faixa que serve de "alca" (barra de titulo). */
+	struct FDragWindow
+	{
+		TWeakObjectPtr<UCanvasPanel> Window;
+		float HandleHeight = 17.f;
+	};
+	TArray<FDragWindow> DragWindows;
+	TWeakObjectPtr<UCanvasPanel> Dragging;
+	FVector2D DragOffset = FVector2D::ZeroVector;
+	int32 TopZOrder = 10;
+	/** Torna a janela arrastavel: cria a alca invisivel (recebe o clique) sobre a faixa do topo. */
+	void MakeDraggable(UCanvasPanel* Window, float Width, float HandleHeight);
 	UPROPERTY() TObjectPtr<UCanvasPanel> Root;
 
 	// Informacoes basicas

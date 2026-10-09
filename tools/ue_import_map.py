@@ -246,6 +246,59 @@ def make_asset(name, folder, cls, factory):
     return asset
 
 
+def add_window_glow(mat, tex):
+    """
+    Janelas acesas a noite: emissivo = mascara do vidro (pixel escuro e frio) x WindowGlow (1 so nas texturas de
+    fachada listadas pelo compile_map_to_obj.py) x NightGlow (Custom Primitive Data 0 da malha do mapa, atualizado pelo AMythDayNightActor) x cor quente. Com o Lumen a luz chega na rua.
+    """
+    def k(v, x, y):
+        c = mel.create_material_expression(mat, unreal.MaterialExpressionConstant, x, y)
+        c.set_editor_property('r', v)
+        return c
+
+    def bin_op(cls, a, b, x, y, a_out='', b_out=''):
+        n = mel.create_material_expression(mat, cls, x, y)
+        mel.connect_material_expressions(a, a_out, n, 'A')
+        mel.connect_material_expressions(b, b_out, n, 'B')
+        return n
+
+    def channel(weights, x, y):
+        # canal unico por produto escalar (ComponentMask criado pelo Python sai float3 e quebra a compilacao)
+        w = mel.create_material_expression(mat, unreal.MaterialExpressionConstant3Vector, x - 120, y)
+        w.set_editor_property('constant', unreal.LinearColor(weights[0], weights[1], weights[2], 1.0))
+        return bin_op(unreal.MaterialExpressionDotProduct, tex, w, x, y, 'RGB', '')
+
+    r, g, b = channel((1, 0, 0), -700, 400), channel((0, 1, 0), -700, 470), channel((0, 0, 1), -700, 540)
+    lum_w = mel.create_material_expression(mat, unreal.MaterialExpressionConstant3Vector, -700, 620)
+    lum_w.set_editor_property('constant', unreal.LinearColor(0.3, 0.59, 0.11, 1.0))
+    lum = bin_op(unreal.MaterialExpressionDotProduct, tex, lum_w, -560, 600, 'RGB', '')
+    dark = bin_op(unreal.MaterialExpressionMultiply, bin_op(unreal.MaterialExpressionSubtract, k(0.16, -560, 680), lum, -460, 640), k(25.0, -460, 700), -360, 640)
+    cool_r = bin_op(unreal.MaterialExpressionMultiply, bin_op(unreal.MaterialExpressionSubtract, bin_op(unreal.MaterialExpressionAdd, b, k(0.025, -560, 520), -500, 500), r, -420, 480), k(20.0, -420, 560), -330, 480)
+    cool_g = bin_op(unreal.MaterialExpressionMultiply, bin_op(unreal.MaterialExpressionSubtract, bin_op(unreal.MaterialExpressionAdd, b, k(0.03, -560, 580), -500, 560), g, -420, 540), k(20.0, -420, 620), -330, 540)
+    sats = []
+    for i, node in enumerate((dark, cool_r, cool_g)):
+        st = mel.create_material_expression(mat, unreal.MaterialExpressionSaturate, -250, 480 + 60 * i)
+        mel.connect_material_expressions(node, '', st, '')
+        sats.append(st)
+    glass = bin_op(unreal.MaterialExpressionMultiply, bin_op(unreal.MaterialExpressionMultiply, sats[0], sats[1], -170, 500), sats[2], -100, 520)
+
+    window = mel.create_material_expression(mat, unreal.MaterialExpressionScalarParameter, -250, 700)
+    window.set_editor_property('parameter_name', 'WindowGlow')
+    window.set_editor_property('default_value', 0.0)
+    night = mel.create_material_expression(mat, unreal.MaterialExpressionScalarParameter, -250, 760)
+    night.set_editor_property('parameter_name', 'NightGlow')
+    night.set_editor_property('default_value', 0.0)
+    night.set_editor_property('use_custom_primitive_data', True)
+    night.set_editor_property('primitive_data_index', 0)
+    warm = mel.create_material_expression(mat, unreal.MaterialExpressionConstant3Vector, -250, 820)
+    warm.set_editor_property('constant', unreal.LinearColor(4.0, 2.4, 1.0, 1.0))
+
+    gate = bin_op(unreal.MaterialExpressionMultiply, window, night, -100, 720)
+    lit = bin_op(unreal.MaterialExpressionMultiply, glass, gate, 0, 600)
+    emissive = bin_op(unreal.MaterialExpressionMultiply, lit, warm, 100, 620)
+    mel.connect_material_property(emissive, '', unreal.MaterialProperty.MP_EMISSIVE_COLOR)
+
+
 def build_parent_materials(folder):
     """Cria M_RO_Opaque e M_RO_Masked (parametro de textura 'Tex'). Devolve {masked: material}."""
     result = {}
@@ -284,6 +337,7 @@ def build_parent_materials(folder):
             sat = mel.create_material_expression(mat, unreal.MaterialExpressionSaturate, 0, 100)
             mel.connect_material_expressions(mul, '', sat, '')
             mel.connect_material_property(sat, '', unreal.MaterialProperty.MP_OPACITY_MASK)
+        add_window_glow(mat, tex)
         mel.recompile_material(mat)
         result[masked] = mat
     return result
@@ -476,6 +530,16 @@ def read_gat_size(obj_path, map_name):
     return struct.unpack_from('<II', head, 6)
 
 
+def read_window_textures(obj_path):
+    """Nomes (minusculos) das texturas de fachada com janelas, do <mapa>_lights.json."""
+    path = os.path.splitext(obj_path)[0] + '_lights.json'
+    if not os.path.exists(path):
+        return set()
+    import json
+    with open(path, encoding='utf-8') as f:
+        return {n.lower() for n in json.load(f).get('window_textures', [])}
+
+
 def add_gat_collision(obj_path, dest, name, scale, center):
     """
     Cria a colisao do mapa a partir do <mapa>_gat_floor.obj / _gat_walls.obj (gerados do .gat):
@@ -561,6 +625,8 @@ def run():
     parents = build_parent_materials(dest + '/Materials')
 
     mat_to_instance = {}
+    window_textures = read_window_textures(obj_path)
+    glowing = 0
     for i, (mat_name, tex_name) in enumerate(mats.items()):
         tex, masked = textures.get(tex_name, (None, False))
         inst = make_asset('MI_%s_%03d' % (name, i), dest + '/Materials', unreal.MaterialInstanceConstant,
@@ -568,8 +634,12 @@ def run():
         inst.set_editor_property('parent', parents[masked])
         if tex:
             mel.set_material_instance_texture_parameter_value(inst, 'Tex', tex)
+        if os.path.basename(str(tex_name).replace(chr(92), '/')).lower() in window_textures:
+            mel.set_material_instance_scalar_parameter_value(inst, 'WindowGlow', 1.0)
+            glowing += 1
         mat_to_instance[mat_name] = inst
     log('%d material instances criados' % len(mat_to_instance))
+    log('%d materiais com janelas que brilham a noite' % glowing)
 
     mesh = build_mesh(dest, name, verts, uvs, tris, mat_to_instance, scale, (cx, cy))
     bgm = import_bgm(args['bgm'], dest, name)

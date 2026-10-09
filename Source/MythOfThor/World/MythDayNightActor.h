@@ -8,6 +8,7 @@ class UDirectionalLightComponent;
 class USkyLightComponent;
 class USkyAtmosphereComponent;
 class UMythNightAudioComponent;
+class UPostProcessComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMythNightFactorChanged, float, NightFactor);
 
@@ -54,6 +55,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight|Light")
 	float NightSkyLightIntensity = 0.4f;
 
+	/** Ajuste de exposicao em plena noite (EV, negativo = mais escuro): impede a camera de "clarear" a noite. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight|Light")
+	float NightExposureBias = -2.f;
+
 	/** Esconde (so em runtime) as luzes/atmosfera ja existentes no nivel. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight")
 	bool bReplaceLevelLights = true;
@@ -75,6 +80,10 @@ public:
 	UFUNCTION(BlueprintPure, Category = "DayNight")
 	FVector GetLightDirection() const;
 
+	/** 0..1: quanto o clima escurece o dia (escrito pelo AMythWeatherActor). */
+	UPROPERTY(Transient, BlueprintReadOnly, Category = "DayNight")
+	float WeatherDim = 0.f;
+
 	/** O ator de dia/noite do mundo (ou nulo). */
 	static AMythDayNightActor* Find(const UObject* WorldContext);
 
@@ -93,9 +102,12 @@ private:
 	UPROPERTY(VisibleAnywhere) TObjectPtr<UDirectionalLightComponent> Moon;
 	UPROPERTY(VisibleAnywhere) TObjectPtr<USkyLightComponent> SkyLight;
 	UPROPERTY(VisibleAnywhere) TObjectPtr<USkyAtmosphereComponent> Atmosphere;
+	UPROPERTY(VisibleAnywhere) TObjectPtr<UPostProcessComponent> Grading;
 
 	float TimeOfDay = 9.f;
 	float NightFactor = 0.f;
+
+	float AppliedNightGlow = -1.f;
 
 	void HideLevelLights();
 	void UpdateLighting();
