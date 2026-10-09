@@ -1,0 +1,3794 @@
+{
+"effects": {
+"1": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_hit2"
+}
+],
+"10": [
+{
+"attached": true,
+"file": "maemor",
+"type": "STR",
+"wav": "effect/ef_coin2"
+}
+],
+"100": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/hunter_removetrap"
+}
+],
+"101": [
+{
+"attached": true,
+"file": "repairweapon",
+"type": "STR",
+"wav": "effect/black_weapon_repear"
+}
+],
+"1015": [
+{
+"attached": true,
+"file": "rune_success",
+"type": "STR",
+"wav": ""
+}
+],
+"1016": [
+{
+"attached": true,
+"file": "rune_fail",
+"type": "STR",
+"wav": ""
+}
+],
+"1017": [
+{
+"attached": true,
+"file": "changematerial_su",
+"type": "STR",
+"wav": ""
+}
+],
+"1018": [
+{
+"attached": true,
+"file": "changematerial_fa",
+"type": "STR",
+"wav": ""
+}
+],
+"1019": [
+{
+"attached": true,
+"file": "guardian",
+"type": "STR",
+"wav": ""
+}
+],
+"102": [
+{
+"attached": false,
+"file": "crashearth",
+"type": "STR",
+"wav": "effect/black_hammerfall"
+}
+],
+"1020": [
+{
+"attached": true,
+"file": "bubble%d_1",
+"type": "STR",
+"wav": ""
+}
+],
+"1021": [
+{
+"attached": true,
+"file": "dust",
+"type": "STR",
+"wav": ""
+}
+],
+"1029": [
+{
+"attached": true,
+"file": "dancingblade",
+"type": "STR",
+"wav": ""
+}
+],
+"103": [
+{
+"attached": true,
+"file": "weaponperfection",
+"type": "STR",
+"wav": "effect/black_weapon_perfection"
+}
+],
+"1031": [
+{
+"attached": true,
+"file": "invincibleoff2",
+"type": "STR",
+"wav": ""
+}
+],
+"1033": [
+{
+"attached": true,
+"file": "devil",
+"type": "STR",
+"wav": ""
+}
+],
+"104": [
+{
+"attached": true,
+"file": "maximizepower",
+"type": "STR",
+"wav": "effect/black_maximize_power_sword"
+}
+],
+"1040": [
+{
+"attached": true,
+"file": "gc_darkcrow",
+"type": "STR",
+"wav": ""
+}
+],
+"1042": [
+{
+"attached": true,
+"file": "all_full_throttle",
+"type": "STR",
+"wav": ""
+}
+],
+"1043": [
+{
+"attached": true,
+"file": "sr_flashcombo",
+"type": "STR",
+"wav": ""
+}
+],
+"1044": [
+{
+"attached": true,
+"file": "rk_luxanima",
+"type": "STR",
+"wav": ""
+}
+],
+"1046": [
+{
+"attached": true,
+"file": "so_elemental_shield",
+"type": "STR",
+"wav": ""
+}
+],
+"1047": [
+{
+"attached": true,
+"file": "ab_offertorium",
+"type": "STR",
+"wav": ""
+}
+],
+"1048": [
+{
+"attached": true,
+"file": "wl_telekinesis_intense",
+"type": "STR",
+"wav": ""
+}
+],
+"1049": [
+{
+"attached": true,
+"file": "gn_illusiondoping",
+"type": "STR",
+"wav": ""
+}
+],
+"1050": [
+{
+"attached": true,
+"file": "nc_magma_eruption",
+"type": "STR",
+"wav": ""
+}
+],
+"1055": [
+{
+"attached": true,
+"file": "chill",
+"type": "STR",
+"wav": ""
+}
+],
+"1057": [
+{
+"attached": true,
+"file": "ab_offertorium_ring",
+"type": "STR",
+"wav": ""
+}
+],
+"106": [
+{
+"attached": false,
+"file": "blastmine",
+"type": "STR",
+"wav": "effect/hunter_blastmine"
+}
+],
+"1062": [
+{
+"attached": true,
+"file": "stormgust",
+"type": "STR",
+"wav": ""
+}
+],
+"107": [
+{
+"attached": false,
+"file": "claymore",
+"type": "STR",
+"wav": "effect/hunter_claymoretrap"
+}
+],
+"108": [
+{
+"attached": false,
+"file": "freezing",
+"type": "STR",
+"wav": "effect/hunter_freezingtrap"
+}
+],
+"109": [
+{
+"attached": false,
+"file": "bubble%d",
+"type": "STR",
+"wav": ""
+}
+],
+"11": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_endure"
+}
+],
+"110": [
+{
+"attached": false,
+"file": "gaspush",
+"type": "STR",
+"wav": "effect/se_gas_pushhh"
+}
+],
+"111": [
+{
+"attached": false,
+"file": "spring",
+"type": "STR",
+"wav": "effect/hunter_springtrap"
+}
+],
+"112": [
+{
+"attached": true,
+"file": "kyrie",
+"type": "STR",
+"wav": "effect/priest_kyrie_eleison_a"
+}
+],
+"113": [
+{
+"attached": false,
+"file": "magnus",
+"type": "STR",
+"wav": "effect/priest_magnus"
+}
+],
+"12": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_beginspell"
+}
+],
+"124": [
+{
+"attached": false,
+"file": "venomdust",
+"type": "STR",
+"wav": "effect/assasin_venomdust"
+}
+],
+"126": [
+{
+"attached": true,
+"file": "poisonreact_1st",
+"type": "STR",
+"wav": "effect/assasin_poisonreact"
+}
+],
+"127": [
+{
+"attached": true,
+"file": "poisonreact",
+"type": "STR",
+"wav": "effect/assasin_poisonreact"
+}
+],
+"129": [
+{
+"attached": true,
+"file": "venomsplasher",
+"type": "STR",
+"wav": "effect/assasin_venomsplasher"
+}
+],
+"13": [
+{
+"attached": false,
+"file": "effect/safetywall",
+"type": "STR",
+"wav": "effect/ef_glasswall"
+}
+],
+"130": [
+{
+"attached": true,
+"file": "twohand",
+"type": "STR",
+"wav": "effect/knight_twohandquicken"
+}
+],
+"131": [
+{
+"attached": true,
+"file": "autocounter",
+"type": "STR",
+"wav": "effect/knight_autocounter"
+}
+],
+"133": [
+{
+"attached": true,
+"file": "freeze",
+"type": "STR",
+"wav": ""
+}
+],
+"134": [
+{
+"attached": true,
+"file": "freezed",
+"type": "STR",
+"wav": ""
+}
+],
+"135": [
+{
+"attached": true,
+"file": "icecrash",
+"type": "STR",
+"wav": ""
+}
+],
+"136": [
+{
+"attached": false,
+"file": "slowp",
+"type": "STR",
+"wav": ""
+}
+],
+"139": [
+{
+"attached": false,
+"file": "sandman",
+"type": "STR",
+"wav": "effect/hunter_sandman"
+}
+],
+"14": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "_heal_effect"
+}
+],
+"141": [
+{
+"attached": false,
+"file": "pneuma%d",
+"type": "STR",
+"wav": ""
+}
+],
+"143": [
+{
+"attached": true,
+"file": "sonicblow",
+"type": "STR",
+"wav": ""
+}
+],
+"144": [
+{
+"attached": true,
+"file": "brandish2",
+"type": "STR",
+"wav": "effect/knight_brandish_spear"
+}
+],
+"145": [
+{
+"attached": true,
+"file": "shockwave",
+"type": "STR",
+"wav": "effect/hunter_shockwavetrap"
+}
+],
+"146": [
+{
+"attached": true,
+"file": "shockwavehit",
+"type": "STR",
+"wav": ""
+}
+],
+"147": [
+{
+"attached": true,
+"file": "earthhit",
+"type": "STR",
+"wav": ""
+}
+],
+"148": [
+{
+"attached": true,
+"file": "pierce",
+"type": "STR",
+"wav": ""
+}
+],
+"149": [
+{
+"attached": true,
+"file": "bowling",
+"type": "STR",
+"wav": "effect/knight_bowling_bash"
+}
+],
+"15": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_soulstrike"
+}
+],
+"150": [
+{
+"attached": true,
+"file": "spearstab",
+"type": "STR",
+"wav": ""
+}
+],
+"151": [
+{
+"attached": true,
+"file": "spearboomerang",
+"type": "STR",
+"wav": "effect/knight_spear_boomerang"
+}
+],
+"152": [
+{
+"attached": true,
+"file": "holyhit",
+"type": "STR",
+"wav": ""
+}
+],
+"153": [
+{
+"attached": true,
+"file": "concentration",
+"type": "STR",
+"wav": "effect/ac_concentration"
+}
+],
+"154": [
+{
+"attached": true,
+"file": "bs_refinesuccess",
+"type": "STR",
+"wav": "effect/bs_refinesuccess"
+}
+],
+"155": [
+{
+"attached": true,
+"file": "bs_refinefailed",
+"type": "STR",
+"wav": "effect/bs_refinefailed"
+}
+],
+"158": [
+{
+"attached": true,
+"file": "joblvup",
+"type": "STR",
+"wav": ""
+}
+],
+"16": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_bash"
+}
+],
+"169": [
+{
+"attached": true,
+"file": "energycoat",
+"type": "STR",
+"wav": ""
+}
+],
+"17": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_magnumbreak"
+}
+],
+"170": [
+{
+"attached": true,
+"file": "cartrevolution",
+"type": "STR",
+"wav": ""
+}
+],
+"18": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_steal"
+}
+],
+"181": [
+{
+"attached": true,
+"file": "mentalbreak",
+"type": "STR",
+"wav": ""
+}
+],
+"182": [
+{
+"attached": true,
+"file": "magical",
+"type": "STR",
+"wav": ""
+}
+],
+"183": [
+{
+"attached": true,
+"file": "sui_explosion",
+"type": "STR",
+"wav": ""
+}
+],
+"185": [
+{
+"attached": true,
+"file": "suicide",
+"type": "STR",
+"wav": ""
+}
+],
+"186": [
+{
+"attached": true,
+"file": "yunta_1",
+"type": "STR",
+"wav": ""
+}
+],
+"187": [
+{
+"attached": true,
+"file": "yunta_2",
+"type": "STR",
+"wav": ""
+}
+],
+"188": [
+{
+"attached": true,
+"file": "yunta_3",
+"type": "STR",
+"wav": ""
+}
+],
+"189": [
+{
+"attached": true,
+"file": "yunta_4",
+"type": "STR",
+"wav": ""
+}
+],
+"190": [
+{
+"attached": true,
+"file": "yunta_5",
+"type": "STR",
+"wav": ""
+}
+],
+"191": [
+{
+"attached": true,
+"file": "homing",
+"type": "STR",
+"wav": ""
+}
+],
+"192": [
+{
+"attached": true,
+"file": "poison",
+"type": "STR",
+"wav": ""
+}
+],
+"193": [
+{
+"attached": true,
+"file": "silence",
+"type": "STR",
+"wav": ""
+}
+],
+"194": [
+{
+"attached": true,
+"file": "stun",
+"type": "STR",
+"wav": ""
+}
+],
+"195": [
+{
+"attached": true,
+"file": "stonecurse",
+"type": "STR",
+"wav": ""
+}
+],
+"197": [
+{
+"attached": true,
+"file": "sleep",
+"type": "STR",
+"wav": ""
+}
+],
+"199": [
+{
+"attached": false,
+"file": "pong%d",
+"type": "STR",
+"wav": ""
+}
+],
+"2": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_hit3"
+}
+],
+"20": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/assasin_enchantpoison"
+}
+],
+"204": [
+{
+"attached": true,
+"file": "Â»Â¡Â°Â£ÃÃ·Â¼Ã",
+"type": "STR",
+"wav": ""
+}
+],
+"205": [
+{
+"attached": true,
+"file": "ÃÃÃÂ«ÃÃ·Â¼Ã",
+"type": "STR",
+"wav": ""
+}
+],
+"206": [
+{
+"attached": true,
+"file": "Â³Ã«Â¶ÃµÃÃ·Â¼Ã",
+"type": "STR",
+"wav": ""
+}
+],
+"207": [
+{
+"attached": true,
+"file": "ÃÃÂ¾Ã¡ÃÃ·Â¼Ã",
+"type": "STR",
+"wav": ""
+}
+],
+"208": [
+{
+"attached": true,
+"file": "ÃÃÂ¶ÃµÃÃ·Â¼Ã",
+"type": "STR",
+"wav": ""
+}
+],
+"209": [
+{
+"attached": true,
+"file": "ÃÃÂ·ÃÃÃ·Â¼Ã",
+"type": "STR",
+"wav": ""
+}
+],
+"21": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_detoxication"
+}
+],
+"210": [
+{
+"attached": true,
+"file": "fruit",
+"type": "STR",
+"wav": ""
+}
+],
+"211": [
+{
+"attached": true,
+"file": "fruit_",
+"type": "STR",
+"wav": ""
+}
+],
+"212": [
+{
+"attached": true,
+"file": "darkbreath",
+"type": "SPR",
+"wav": ""
+}
+],
+"213": [
+{
+"attached": true,
+"file": "deffender",
+"type": "STR",
+"wav": ""
+}
+],
+"214": [
+{
+"attached": true,
+"file": "keeping",
+"type": "STR",
+"wav": ""
+}
+],
+"218": [
+{
+"attached": true,
+"file": "ÃÃ½ÃÃ",
+"type": "STR",
+"wav": ""
+}
+],
+"219": [
+{
+"attached": true,
+"file": "Â°Â¢Â¼Âº",
+"type": "STR",
+"wav": ""
+}
+],
+"220": [
+{
+"attached": true,
+"file": "Â¹Ã¶Â¼Â­Ã\nÂ©",
+"type": "STR",
+"wav": ""
+}
+],
+"23": [
+{
+"attached": true,
+"file": "stonecurse",
+"type": "STR",
+"wav": ""
+}
+],
+"234": [
+{
+"attached": true,
+"file": "spell",
+"type": "STR",
+"wav": ""
+}
+],
+"235": [
+{
+"attached": true,
+"file": "ÂµÃ°Â½ÂºÃÃ§",
+"type": "STR",
+"wav": ""
+}
+],
+"24": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_fireball"
+}
+],
+"244": [
+{
+"attached": true,
+"file": "Â¸Ã\nÃÃ·Â·ÃÂµÃ¥",
+"type": "STR",
+"wav": ""
+}
+],
+"245": [
+{
+"attached": true,
+"file": "holy_cross",
+"type": "STR",
+"wav": "effect/cru_holycross"
+}
+],
+"246": [
+{
+"attached": true,
+"file": "shield_charge",
+"type": "STR",
+"wav": ""
+}
+],
+"248": [
+{
+"attached": true,
+"file": "providence",
+"type": "STR",
+"wav": ""
+}
+],
+"249": [
+{
+"attached": true,
+"file": "twohand",
+"type": "STR",
+"wav": ""
+}
+],
+"25": [
+{
+"attached": false,
+"file": "firewall%d",
+"type": "STR",
+"wav": "effect/ef_firewall"
+}
+],
+"251": [
+{
+"attached": true,
+"file": "devotion",
+"type": "STR",
+"wav": ""
+}
+],
+"255": [
+{
+"attached": true,
+"file": "enc_fire",
+"type": "STR",
+"wav": ""
+}
+],
+"256": [
+{
+"attached": true,
+"file": "enc_ice",
+"type": "STR",
+"wav": ""
+}
+],
+"257": [
+{
+"attached": true,
+"file": "enc_wind",
+"type": "STR",
+"wav": ""
+}
+],
+"258": [
+{
+"attached": true,
+"file": "enc_earth",
+"type": "STR",
+"wav": ""
+}
+],
+"26": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_icearrow%d"
+}
+],
+"268": [
+{
+"attached": true,
+"file": "steal_coin",
+"type": "STR",
+"wav": ""
+}
+],
+"269": [
+{
+"attached": true,
+"file": "strip_weapon",
+"type": "STR",
+"wav": "effect/t_ÂºÂ®ÃÂ¨Â±Ã¨"
+}
+],
+"270": [
+{
+"attached": true,
+"file": "strip_shield",
+"type": "STR",
+"wav": "effect/t_ÂºÂ®ÃÂ¨Â±Ã¨"
+}
+],
+"271": [
+{
+"attached": true,
+"file": "strip_armor",
+"type": "STR",
+"wav": "effect/t_ÂºÂ®ÃÂ¨Â±Ã¨"
+}
+],
+"272": [
+{
+"attached": true,
+"file": "strip_helm",
+"type": "STR",
+"wav": "effect/t_ÂºÂ®ÃÂ¨Â±Ã¨"
+}
+],
+"273": [
+{
+"attached": true,
+"file": "Â¿Â¬ÃÂ¯",
+"type": "STR",
+"wav": ""
+}
+],
+"28": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_frostdiver2"
+}
+],
+"29": [
+{
+"attached": true,
+"file": "lightning",
+"type": "STR",
+"wav": ""
+}
+],
+"3": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_hit4"
+}
+],
+"30": [
+{
+"attached": false,
+"file": "thunderstorm",
+"type": "STR",
+"wav": "effect/magician_thunderstorm"
+}
+],
+"302": [
+{
+"attached": false,
+"file": "ÂµÂ¥Â¸Ã³Â½ÂºÃÂ®Â·Â¹ÃÃÂ¼Ã",
+"type": "SPR",
+"wav": ""
+}
+],
+"305": [
+{
+"attached": true,
+"file": "p_success",
+"type": "STR",
+"wav": ""
+}
+],
+"306": [
+{
+"attached": true,
+"file": "p_failed",
+"type": "STR",
+"wav": ""
+}
+],
+"31": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_firearrow1"
+}
+],
+"311": [
+{
+"attached": true,
+"file": "loud",
+"type": "STR",
+"wav": ""
+}
+],
+"315": [
+{
+"attached": false,
+"file": "safetywall",
+"type": "STR",
+"wav": ""
+}
+],
+"32": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_napalmbeat"
+}
+],
+"337": [
+{
+"attached": true,
+"file": "joblvup",
+"type": "STR",
+"wav": ""
+}
+],
+"34": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_teleportation"
+}
+],
+"35": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_readyportal"
+}
+],
+"363": [
+{
+"attached": true,
+"file": "vallentine",
+"type": "SPR",
+"wav": ""
+}
+],
+"369": [
+{
+"attached": true,
+"file": "twohand",
+"type": "STR",
+"wav": ""
+}
+],
+"37": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_incagility"
+}
+],
+"371": [
+{
+"attached": true,
+"file": "angel",
+"type": "STR",
+"wav": "levelup"
+}
+],
+"372": [
+{
+"attached": true,
+"file": "devil",
+"type": "STR",
+"wav": ""
+}
+],
+"373": [
+{
+"attached": true,
+"file": "poisonhit",
+"type": "SPR",
+"wav": ""
+}
+],
+"38": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_decagility"
+}
+],
+"382": [
+{
+"attached": true,
+"file": "ÃÃÂºÂ¹ÃÂµÂ»Ã§",
+"type": "SPR",
+"wav": ""
+}
+],
+"39": [
+{
+"attached": true,
+"file": "Â¼ÂºÂ¼Ã¶Â¶ÃÂ±Ã¢",
+"type": "SPR",
+"wav": "effect/ef_aqua"
+}
+],
+"390": [
+{
+"attached": true,
+"file": "melt",
+"type": "STR",
+"wav": ""
+}
+],
+"391": [
+{
+"attached": true,
+"file": "cart",
+"type": "STR",
+"wav": ""
+}
+],
+"392": [
+{
+"attached": true,
+"file": "sword",
+"type": "STR",
+"wav": ""
+}
+],
+"4": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_hit5"
+}
+],
+"40": [
+{
+"attached": true,
+"file": "cross",
+"type": "STR",
+"wav": "effect/ef_signum"
+}
+],
+"406": [
+{
+"attached": true,
+"file": "Â¼ÃÂ¿Ã¯Â¹Ã¸",
+"type": "STR",
+"wav": ""
+}
+],
+"407": [
+{
+"attached": true,
+"file": "Â»Ã§Â¶Ã·ÃÂ¿Â°Ãº",
+"type": "STR",
+"wav": ""
+}
+],
+"41": [
+{
+"attached": true,
+"file": "angelus",
+"type": "STR",
+"wav": "effect/ef_angelus"
+}
+],
+"42": [
+{
+"attached": true,
+"file": "ÃÃ ÂºÂ¹",
+"type": "SPR",
+"wav": "effect/ef_blessing"
+}
+],
+"43": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_incagidex"
+}
+],
+"440": [
+{
+"attached": true,
+"file": "asum",
+"type": "STR",
+"wav": ""
+}
+],
+"47": [
+{
+"attached": false,
+"file": "torch_01",
+"type": "SPR",
+"wav": ""
+}
+],
+"49": [
+{
+"attached": true,
+"file": "firehit%d",
+"type": "STR",
+"wav": "effect/ef_firehit"
+}
+],
+"491": [
+{
+"attached": true,
+"file": "ÃÃ½Â½ÃÂ¶Â±",
+"type": "STR",
+"wav": ""
+}
+],
+"492": [
+{
+"attached": true,
+"file": "ramadan",
+"type": "STR",
+"wav": ""
+}
+],
+"5": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_hit6"
+}
+],
+"507": [
+{
+"attached": true,
+"file": "mapae",
+"type": "STR",
+"wav": ""
+}
+],
+"508": [
+{
+"attached": true,
+"file": "itempokjuk",
+"type": "STR",
+"wav": ""
+}
+],
+"509": [
+{
+"attached": true,
+"file": "05vallentine",
+"type": "SPR",
+"wav": ""
+}
+],
+"519": [
+{
+"attached": true,
+"file": "fast",
+"type": "SPR",
+"wav": ""
+}
+],
+"52": [
+{
+"attached": true,
+"file": "windhit%d",
+"type": "STR",
+"wav": ""
+}
+],
+"53": [
+{
+"attached": false,
+"file": "poisonhit",
+"type": "SPR",
+"wav": ""
+}
+],
+"54": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_beginspell"
+}
+],
+"55": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_beginspell"
+}
+],
+"56": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_beginspell"
+}
+],
+"565": [
+{
+"attached": true,
+"file": "moonlight_1",
+"type": "STR",
+"wav": ""
+}
+],
+"566": [
+{
+"attached": true,
+"file": "moonlight_2",
+"type": "STR",
+"wav": ""
+}
+],
+"567": [
+{
+"attached": true,
+"file": "moonlight_3",
+"type": "STR",
+"wav": ""
+}
+],
+"568": [
+{
+"attached": true,
+"file": "h_levelup",
+"type": "STR",
+"wav": ""
+}
+],
+"569": [
+{
+"attached": true,
+"file": "defense",
+"type": "STR",
+"wav": ""
+}
+],
+"57": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_beginspell"
+}
+],
+"570": [
+{
+"attached": true,
+"file": "ÃÂ³Â½Â½Â¸Âµ",
+"type": "SPR",
+"wav": ""
+}
+],
+"571": [
+{
+"attached": true,
+"file": "ÂºÃ­Â·Â¯ÂµÃ¥Â·Â¯Â½ÂºÃÂ®",
+"type": "SPR",
+"wav": ""
+}
+],
+"576": [
+{
+"attached": true,
+"file": "item_thunder",
+"type": "SPR",
+"wav": ""
+}
+],
+"577": [
+{
+"attached": true,
+"file": "item_cloud",
+"type": "SPR",
+"wav": ""
+}
+],
+"578": [
+{
+"attached": true,
+"file": "item_curse",
+"type": "SPR",
+"wav": ""
+}
+],
+"579": [
+{
+"attached": true,
+"file": "item_zzz",
+"type": "SPR",
+"wav": ""
+}
+],
+"58": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_beginspell"
+}
+],
+"580": [
+{
+"attached": true,
+"file": "item_rain",
+"type": "SPR",
+"wav": ""
+}
+],
+"583": [
+{
+"attached": true,
+"file": "m_ef01",
+"type": "SPR",
+"wav": ""
+}
+],
+"584": [
+{
+"attached": true,
+"file": "m_ef02",
+"type": "SPR",
+"wav": ""
+}
+],
+"585": [
+{
+"attached": true,
+"file": "m_ef03",
+"type": "SPR",
+"wav": ""
+}
+],
+"586": [
+{
+"attached": true,
+"file": "m_ef04",
+"type": "SPR",
+"wav": ""
+}
+],
+"587": [
+{
+"attached": true,
+"file": "m_ef05",
+"type": "SPR",
+"wav": ""
+}
+],
+"588": [
+{
+"attached": true,
+"file": "m_ef06",
+"type": "SPR",
+"wav": ""
+}
+],
+"589": [
+{
+"attached": true,
+"file": "m_ef07",
+"type": "SPR",
+"wav": ""
+}
+],
+"59": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_beginspell"
+}
+],
+"593": [
+{
+"attached": true,
+"file": "food_str",
+"type": "STR",
+"wav": ""
+}
+],
+"594": [
+{
+"attached": true,
+"file": "food_int",
+"type": "STR",
+"wav": ""
+}
+],
+"595": [
+{
+"attached": true,
+"file": "food_vit",
+"type": "STR",
+"wav": ""
+}
+],
+"596": [
+{
+"attached": true,
+"file": "food_agi",
+"type": "STR",
+"wav": ""
+}
+],
+"597": [
+{
+"attached": true,
+"file": "food_dex",
+"type": "STR",
+"wav": ""
+}
+],
+"598": [
+{
+"attached": true,
+"file": "food_luk",
+"type": "STR",
+"wav": ""
+}
+],
+"603": [
+{
+"attached": true,
+"file": "firehit%d",
+"type": "STR",
+"wav": ""
+}
+],
+"604": [
+{
+"attached": true,
+"file": "cconfine",
+"type": "SPR",
+"wav": ""
+}
+],
+"608": [
+{
+"attached": true,
+"file": "cook_suc",
+"type": "STR",
+"wav": ""
+}
+],
+"609": [
+{
+"attached": true,
+"file": "cook_fail",
+"type": "STR",
+"wav": ""
+}
+],
+"612": [
+{
+"attached": true,
+"file": "ÃÃÂ°Ã_",
+"type": "SPR",
+"wav": ""
+},
+{
+"attached": true,
+"file": "itempokjuk",
+"type": "STR",
+"wav": ""
+}
+],
+"62": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/wizard_sightrasher"
+}
+],
+"630": [
+{
+"attached": true,
+"file": "Â±ÃÂ¸Â²ÃÃÂºÂ£Â±Ã¢",
+"type": "SPR",
+"wav": ""
+}
+],
+"631": [
+{
+"attached": true,
+"file": "Â´ÃÂ´ÃÂ¹Ã",
+"type": "SPR",
+"wav": ""
+}
+],
+"632": [
+{
+"attached": true,
+"file": "Â¾ÃÂ°Â³ÂºÂ£Â±Ã¢",
+"type": "SPR",
+"wav": ""
+}
+],
+"633": [
+{
+"attached": true,
+"file": "ÃÃÂ¼Â¶",
+"type": "SPR",
+"wav": ""
+}
+],
+"634": [
+{
+"attached": false,
+"file": "ÃÂ­Â¿Â°ÃÃ¸",
+"type": "SPR",
+"wav": ""
+}
+],
+"635": [
+{
+"attached": false,
+"file": "fire dragon",
+"type": "STR",
+"wav": ""
+}
+],
+"636": [
+{
+"attached": false,
+"file": "icy",
+"type": "STR",
+"wav": ""
+}
+],
+"637": [
+{
+"attached": true,
+"file": "ÂµÂ¥Â½ÂºÃÃ¤Â¶Ã³ÂµÂµ",
+"type": "SPR",
+"wav": ""
+}
+],
+"638": [
+{
+"attached": false,
+"file": "Â¶Ã³ÃÃÃÂ®Â´ÃÂ½ÂºÃÃÂ¾Ã®",
+"type": "SPR",
+"wav": ""
+}
+],
+"639": [
+{
+"attached": false,
+"file": "ÂºÃ­Â¶Ã³ÃÃÂµÃ¥Â½ÂºÃÃÂ¾Ã®",
+"type": "SPR",
+"wav": ""
+}
+],
+"64": [
+{
+"attached": true,
+"file": "arrowshot",
+"type": "STR",
+"wav": ""
+}
+],
+"640": [
+{
+"attached": false,
+"file": "ÃÃ·ÃÃÃÃ°Â½ÂºÃÃÂ¾Ã®",
+"type": "SPR",
+"wav": ""
+}
+],
+"641": [
+{
+"attached": false,
+"file": "ÃÃÂ¸Â®ÃÂ¡Â½ÂºÃÃÂ¾Ã®",
+"type": "SPR",
+"wav": ""
+}
+],
+"642": [
+{
+"attached": false,
+"file": "ÃÃÂ·Â¹Â¾Ã®Â½ÂºÃÃÂ¾Ã®",
+"type": "SPR",
+"wav": ""
+}
+],
+"643": [
+{
+"attached": true,
+"file": "Â·Â¡ÃÃÂµÃ¥Â»Ã¾Â¿Ã¶",
+"type": "SPR",
+"wav": ""
+}
+],
+"644": [
+{
+"attached": true,
+"file": "Â¸Ã\nÃÃ¶ÃÃÂºÃÂ¸Â´",
+"type": "SPR",
+"wav": ""
+}
+],
+"645": [
+{
+"attached": true,
+"file": "Â½ÂºÃÃÂ·Â¹ÂµÃ¥",
+"type": "SPR",
+"wav": ""
+}
+],
+"646": [
+{
+"attached": true,
+"file": "ÃÂ®Â·Â¢Ã\nÂ·",
+"type": "STR",
+"wav": ""
+}
+],
+"647": [
+{
+"attached": true,
+"file": "ÃÂ®Â·Â¡Ã\nÂ·",
+"type": "SPR",
+"wav": ""
+}
+],
+"648": [
+{
+"attached": true,
+"file": "ÃÂ®Â¸Â®ÃÃÂ¾ÃÂ¼Ã",
+"type": "SPR",
+"wav": ""
+}
+],
+"649": [
+{
+"attached": true,
+"file": "ÂºÃÂ½ÂºÂ¾ÃÃÃ",
+"type": "STR",
+"wav": ""
+}
+],
+"65": [
+{
+"attached": true,
+"file": "invenom",
+"type": "STR",
+"wav": "effect/thief_invenom"
+}
+],
+"66": [
+{
+"attached": true,
+"file": "cure",
+"type": "STR",
+"wav": "effect/acolyte_cure"
+}
+],
+"666": [
+{
+"attached": true,
+"file": "Â¾Ã®Â½ÂºÃÃ¹ÃÃÃ\nÂ©",
+"type": "SPR",
+"wav": ""
+}
+],
+"668": [
+{
+"attached": true,
+"file": "dragon_h",
+"type": "STR",
+"wav": ""
+}
+],
+"669": [
+{
+"attached": true,
+"file": "wideb",
+"type": "STR",
+"wav": ""
+}
+],
+"67": [
+{
+"attached": true,
+"file": "provoke",
+"type": "STR",
+"wav": "effect/swordman_provoke"
+}
+],
+"670": [
+{
+"attached": true,
+"file": "dfear",
+"type": "STR",
+"wav": ""
+}
+],
+"674": [
+{
+"attached": true,
+"file": "status-curse",
+"type": "SPR",
+"wav": ""
+}
+],
+"677": [
+{
+"attached": true,
+"file": "cwound",
+"type": "STR",
+"wav": ""
+}
+],
+"68": [
+{
+"attached": true,
+"file": "mvp",
+"type": "STR",
+"wav": "effect/st_mvp"
+}
+],
+"69": [
+{
+"attached": false,
+"file": "skidtrap",
+"type": "STR",
+"wav": "effect/hunter_skidtrap"
+}
+],
+"699": [
+{
+"attached": true,
+"file": "flower_leaf",
+"type": "STR",
+"wav": ""
+}
+],
+"7": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "_heal_effect"
+}
+],
+"70": [
+{
+"attached": true,
+"file": "brandish",
+"type": "STR",
+"wav": "effect/knight_brandish_spear"
+}
+],
+"704": [
+{
+"attached": true,
+"file": "mobile_ef02",
+"type": "STR",
+"wav": ""
+}
+],
+"705": [
+{
+"attached": true,
+"file": "mobile_ef01",
+"type": "STR",
+"wav": ""
+}
+],
+"706": [
+{
+"attached": true,
+"file": "mobile_ef03",
+"type": "STR",
+"wav": ""
+}
+],
+"708": [
+{
+"attached": false,
+"file": "storm_min",
+"type": "STR",
+"wav": ""
+}
+],
+"709": [
+{
+"attached": false,
+"file": "pokjuk_jap",
+"type": "STR",
+"wav": ""
+}
+],
+"717": [
+{
+"attached": true,
+"file": "angelus",
+"type": "STR",
+"wav": "effect/ef_angelus"
+}
+],
+"721": [
+{
+"attached": true,
+"file": "ado",
+"type": "STR",
+"wav": ""
+}
+],
+"722": [
+{
+"attached": true,
+"file": "ÃÃÂ±ÃÂ´ÃÂ¼ÃÂºÃªÂ·Â¹ÃÃÃ\nÂ©",
+"type": "STR",
+"wav": ""
+}
+],
+"727": [
+{
+"attached": true,
+"file": "crimson_r",
+"type": "STR",
+"wav": ""
+}
+],
+"728": [
+{
+"attached": true,
+"file": "hell_in",
+"type": "STR",
+"wav": ""
+}
+],
+"731": [
+{
+"attached": true,
+"file": "dragon_h",
+"type": "STR",
+"wav": ""
+}
+],
+"734": [
+{
+"attached": true,
+"file": "chainlight",
+"type": "STR",
+"wav": ""
+}
+],
+"74": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/wizard_icewall"
+}
+],
+"745": [
+{
+"attached": true,
+"file": "aimed",
+"type": "STR",
+"wav": ""
+}
+],
+"746": [
+{
+"attached": true,
+"file": "arrowstorm",
+"type": "STR",
+"wav": ""
+}
+],
+"747": [
+{
+"attached": true,
+"file": "laulamus",
+"type": "STR",
+"wav": ""
+}
+],
+"748": [
+{
+"attached": true,
+"file": "lauagnus",
+"type": "STR",
+"wav": ""
+}
+],
+"749": [
+{
+"attached": true,
+"file": "mil_shield",
+"type": "STR",
+"wav": ""
+}
+],
+"75": [
+{
+"attached": true,
+"file": "gloria",
+"type": "STR",
+"wav": "effect/priest_gloria"
+}
+],
+"750": [
+{
+"attached": true,
+"file": "concentration",
+"type": "STR",
+"wav": ""
+}
+],
+"756": [
+{
+"attached": true,
+"file": "Â¹Ã¶Â¼Â­Ã\nÂ©",
+"type": "STR",
+"wav": ""
+}
+],
+"76": [
+{
+"attached": true,
+"file": "magnificat",
+"type": "STR",
+"wav": "effect/priest_magnificat"
+}
+],
+"77": [
+{
+"attached": true,
+"file": "resurrection",
+"type": "STR",
+"wav": "effect/priest_resurrection"
+}
+],
+"78": [
+{
+"attached": true,
+"file": "recovery",
+"type": "STR",
+"wav": "effect/priest_recovery"
+}
+],
+"79": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/wizard_earthspike"
+}
+],
+"795": [
+{
+"attached": true,
+"file": "powerswing",
+"type": "STR",
+"wav": ""
+}
+],
+"80": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_fireball"
+}
+],
+"813": [
+{
+"attached": true,
+"file": "enervation",
+"type": "STR",
+"wav": ""
+}
+],
+"814": [
+{
+"attached": true,
+"file": "groomy",
+"type": "STR",
+"wav": ""
+}
+],
+"815": [
+{
+"attached": true,
+"file": "ignorance",
+"type": "STR",
+"wav": ""
+}
+],
+"816": [
+{
+"attached": true,
+"file": "laziness",
+"type": "STR",
+"wav": ""
+}
+],
+"817": [
+{
+"attached": true,
+"file": "unlucky",
+"type": "STR",
+"wav": ""
+}
+],
+"818": [
+{
+"attached": true,
+"file": "weakness",
+"type": "STR",
+"wav": ""
+}
+],
+"82": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/ef_bash"
+}
+],
+"83": [
+{
+"attached": false,
+"file": "sanctuary",
+"type": "STR",
+"wav": "effect/priest_sanctuary"
+}
+],
+"84": [
+{
+"attached": true,
+"file": "impositio",
+"type": "STR",
+"wav": "effect/priest_impositio"
+}
+],
+"85": [
+{
+"attached": true,
+"file": "lexaeterna",
+"type": "STR",
+"wav": "effect/priest_lexaeterna"
+}
+],
+"86": [
+{
+"attached": true,
+"file": "aspersio",
+"type": "STR",
+"wav": "effect/priest_aspersio"
+}
+],
+"87": [
+{
+"attached": true,
+"file": "lexdivina",
+"type": "STR",
+"wav": "effect/priest_lexdivina"
+}
+],
+"88": [
+{
+"attached": true,
+"file": "suffragium",
+"type": "STR",
+"wav": "effect/priest_suffragium"
+}
+],
+"89": [
+{
+"attached": false,
+"file": "stormgust",
+"type": "STR",
+"wav": "effect/wizard_stormgust"
+}
+],
+"90": [
+{
+"attached": false,
+"file": "lord",
+"type": "STR",
+"wav": "effect/wizard_fire_ivy"
+}
+],
+"91": [
+{
+"attached": true,
+"file": "benedictio",
+"type": "STR",
+"wav": "effect/priest_benedictio"
+}
+],
+"92": [
+{
+"attached": false,
+"file": "meteor%d",
+"type": "STR",
+"wav": "effect/wizard_meteor"
+}
+],
+"920": [
+{
+"attached": true,
+"file": "firewall_per",
+"type": "STR",
+"wav": ""
+}
+],
+"926": [
+{
+"attached": true,
+"file": "hunter_shockwave_blue",
+"type": "STR",
+"wav": ""
+}
+],
+"93": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/hunter_shockwavetrap"
+}
+],
+"94": [
+{
+"attached": true,
+"file": "ufidel_pang",
+"type": "STR",
+"wav": ""
+}
+],
+"95": [
+{
+"attached": false,
+"file": "quagmire",
+"type": "STR",
+"wav": ""
+}
+],
+"959": [
+{
+"attached": true,
+"file": "poison_mist",
+"type": "STR",
+"wav": ""
+}
+],
+"96": [
+{
+"attached": false,
+"file": "firepillar",
+"type": "STR",
+"wav": "effect/wizard_fire_pillar_a"
+}
+],
+"960": [
+{
+"attached": true,
+"file": "eraser_cutter",
+"type": "STR",
+"wav": ""
+}
+],
+"964": [
+{
+"attached": true,
+"file": "lava_slide",
+"type": "STR",
+"wav": ""
+}
+],
+"965": [
+{
+"attached": true,
+"file": "sonic_claw",
+"type": "STR",
+"wav": ""
+}
+],
+"966": [
+{
+"attached": true,
+"file": "tinder",
+"type": "STR",
+"wav": ""
+}
+],
+"967": [
+{
+"attached": true,
+"file": "mid_frenzy",
+"type": "STR",
+"wav": ""
+}
+],
+"97": [
+{
+"attached": false,
+"file": "firepillarbomb",
+"type": "STR",
+"wav": "effect/wizard_fire_pillar_b"
+}
+],
+"975": [
+{
+"attached": true,
+"file": "vash00",
+"type": "STR",
+"wav": ""
+}
+],
+"98": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/black_adrenalinerush_b"
+}
+],
+"987": [
+{
+"attached": true,
+"file": "rwc2011",
+"type": "STR",
+"wav": ""
+}
+],
+"988": [
+{
+"attached": true,
+"file": "rwc2011_2",
+"type": "STR",
+"wav": ""
+}
+],
+"99": [
+{
+"attached": true,
+"file": "",
+"type": "WAV",
+"wav": "effect/hunter_flasher"
+}
+]
+},
+"skills": {
+"10": {
+"element": "Fire"
+},
+"1001": {
+"element": "Weapon"
+},
+"1006": {
+"element": "Fire"
+},
+"1008": {
+"element": "Water"
+},
+"1009": {
+"element": "Weapon"
+},
+"1014": {
+"element": "Holy"
+},
+"1016": {
+"element": "Weapon"
+},
+"1017": {
+"element": "Earth"
+},
+"1018": {
+"element": "Fire"
+},
+"1019": {
+"element": "Wind"
+},
+"11": {
+"element": "Ghost"
+},
+"110": {
+"effect": 102
+},
+"112": {
+"effect": 103
+},
+"114": {
+"effect": 104
+},
+"116": {
+"element": "Earth"
+},
+"12": {
+"effect": 315,
+"element": "Ghost"
+},
+"121": {
+"element": "Water"
+},
+"122": {
+"element": "Wind"
+},
+"123": {
+"element": "Fire"
+},
+"13": {
+"element": "Ghost"
+},
+"131": {
+"effect": 111
+},
+"136": {
+"effect": 143,
+"element": "Weapon"
+},
+"137": {
+"element": "Weapon"
+},
+"138": {
+"element": "Poison"
+},
+"139": {
+"effect": 126
+},
+"14": {
+"element": "Water"
+},
+"140": {
+"effect": 124,
+"element": "Poison"
+},
+"141": {
+"effect": 129,
+"element": "Weapon"
+},
+"148": {
+"element": "Weapon"
+},
+"149": {
+"element": "Earth"
+},
+"15": {
+"element": "Water"
+},
+"153": {
+"effect": 170,
+"element": "Weapon"
+},
+"155": {
+"effect": 311
+},
+"156": {
+"effect": 152,
+"element": "Holy"
+},
+"157": {
+"effect": 169
+},
+"158": {
+"element": "Weapon"
+},
+"159": {
+"element": "Ghost"
+},
+"16": {
+"effect": 23,
+"element": "Earth"
+},
+"162": {
+"element": "Water"
+},
+"163": {
+"element": "Earth"
+},
+"164": {
+"element": "Fire"
+},
+"165": {
+"element": "Wind"
+},
+"166": {
+"element": "Poison"
+},
+"167": {
+"element": "Holy"
+},
+"168": {
+"element": "Dark"
+},
+"169": {
+"element": "Ghost"
+},
+"17": {
+"element": "Fire"
+},
+"170": {
+"element": "Weapon"
+},
+"171": {
+"element": "Weapon"
+},
+"172": {
+"element": "Weapon"
+},
+"173": {
+"element": "Fire"
+},
+"174": {
+"element": "Weapon"
+},
+"176": {
+"element": "Weapon"
+},
+"177": {
+"element": "Weapon"
+},
+"178": {
+"element": "Weapon"
+},
+"179": {
+"element": "Weapon"
+},
+"18": {
+"element": "Fire",
+"ground": 25,
+"hit": 49
+},
+"180": {
+"element": "Weapon"
+},
+"181": {
+"element": "Dark"
+},
+"182": {
+"element": "Weapon"
+},
+"183": {
+"element": "Random"
+},
+"184": {
+"element": "Water"
+},
+"185": {
+"element": "Earth"
+},
+"186": {
+"element": "Fire"
+},
+"187": {
+"element": "Wind"
+},
+"188": {
+"element": "Poison"
+},
+"189": {
+"element": "Holy"
+},
+"19": {
+"element": "Fire"
+},
+"190": {
+"element": "Dark"
+},
+"191": {
+"element": "Ghost"
+},
+"192": {
+"element": "Weapon"
+},
+"199": {
+"element": "Dark"
+},
+"20": {
+"effect": 29,
+"element": "Wind",
+"hit": 52
+},
+"200": {
+"element": "Dark"
+},
+"2002": {
+"element": "Weapon"
+},
+"2004": {
+"element": "Weapon"
+},
+"2005": {
+"element": "Wind"
+},
+"2006": {
+"element": "Weapon"
+},
+"2008": {
+"element": "Fire"
+},
+"2012": {
+"element": "Weapon"
+},
+"2017": {
+"element": "Weapon"
+},
+"2019": {
+"element": "Holy"
+},
+"202": {
+"element": "Dark"
+},
+"2020": {
+"element": "Weapon"
+},
+"2022": {
+"element": "Weapon"
+},
+"2023": {
+"element": "Weapon"
+},
+"2029": {
+"element": "Weapon"
+},
+"203": {
+"element": "Dark"
+},
+"2030": {
+"element": "Weapon"
+},
+"2031": {
+"element": "Weapon"
+},
+"2034": {
+"element": "Weapon"
+},
+"2036": {
+"element": "Weapon"
+},
+"2037": {
+"element": "Weapon"
+},
+"2038": {
+"element": "Holy"
+},
+"2040": {
+"element": "Holy"
+},
+"2043": {
+"element": "Holy"
+},
+"2044": {
+"element": "Holy"
+},
+"2046": {
+"element": "Holy"
+},
+"2047": {
+"element": "Holy"
+},
+"2048": {
+"element": "Holy"
+},
+"2050": {
+"element": "Holy"
+},
+"2051": {
+"element": "Holy"
+},
+"2054": {
+"element": "Holy"
+},
+"2055": {
+"element": "Weapon"
+},
+"2057": {
+"element": "Holy"
+},
+"206": {
+"element": "Weapon"
+},
+"21": {
+"effect": 30,
+"element": "Wind",
+"hit": 52
+},
+"210": {
+"element": "Weapon"
+},
+"211": {
+"effect": 268
+},
+"212": {
+"element": "Weapon"
+},
+"214": {
+"element": "Weapon"
+},
+"215": {
+"effect": 269
+},
+"216": {
+"effect": 270
+},
+"217": {
+"effect": 271
+},
+"218": {
+"effect": 272
+},
+"219": {
+"element": "Weapon"
+},
+"2202": {
+"element": "Ghost"
+},
+"2203": {
+"element": "Water"
+},
+"2204": {
+"element": "Water"
+},
+"2207": {
+"element": "Earth"
+},
+"2211": {
+"element": "Fire"
+},
+"2212": {
+"element": "Fire"
+},
+"2215": {
+"element": "Wind"
+},
+"2216": {
+"element": "Earth"
+},
+"2218": {
+"element": "Fire"
+},
+"2219": {
+"element": "Water"
+},
+"2220": {
+"element": "Wind"
+},
+"2221": {
+"element": "Earth"
+},
+"2222": {
+"element": "Fire"
+},
+"2223": {
+"element": "Wind"
+},
+"2224": {
+"element": "Water"
+},
+"2225": {
+"element": "Fire"
+},
+"2226": {
+"element": "Wind"
+},
+"2227": {
+"element": "Water"
+},
+"2228": {
+"element": "Earth"
+},
+"2229": {
+"element": "Earth"
+},
+"2233": {
+"element": "Weapon"
+},
+"2236": {
+"element": "Weapon"
+},
+"2242": {
+"element": "Weapon"
+},
+"2249": {
+"element": "Fire"
+},
+"2250": {
+"element": "Water"
+},
+"2251": {
+"element": "Earth"
+},
+"2252": {
+"element": "Wind"
+},
+"2253": {
+"element": "Fire"
+},
+"2254": {
+"element": "Water"
+},
+"2256": {
+"element": "Weapon"
+},
+"2257": {
+"element": "Weapon"
+},
+"2258": {
+"element": "Weapon"
+},
+"2259": {
+"element": "Fire"
+},
+"2260": {
+"element": "Water"
+},
+"2261": {
+"element": "Weapon"
+},
+"2278": {
+"element": "Weapon"
+},
+"2279": {
+"element": "Weapon"
+},
+"2280": {
+"element": "Weapon"
+},
+"2284": {
+"element": "Weapon"
+},
+"2288": {
+"element": "Weapon"
+},
+"229": {
+"element": "Fire"
+},
+"2304": {
+"element": "Weapon"
+},
+"2307": {
+"element": "Weapon"
+},
+"2308": {
+"element": "Weapon"
+},
+"2312": {
+"element": "Weapon"
+},
+"2314": {
+"element": "Weapon"
+},
+"2317": {
+"element": "Weapon"
+},
+"2320": {
+"element": "Weapon"
+},
+"2321": {
+"element": "Holy"
+},
+"2323": {
+"element": "Earth"
+},
+"2324": {
+"element": "Weapon"
+},
+"2326": {
+"element": "Weapon"
+},
+"2327": {
+"element": "Weapon"
+},
+"2328": {
+"element": "Weapon"
+},
+"2329": {
+"element": "Weapon"
+},
+"2330": {
+"element": "Weapon"
+},
+"2332": {
+"element": "Weapon"
+},
+"2336": {
+"element": "Weapon"
+},
+"2337": {
+"element": "Weapon"
+},
+"2342": {
+"element": "Weapon"
+},
+"2343": {
+"element": "Weapon"
+},
+"2344": {
+"element": "Weapon"
+},
+"24": {
+"element": "Holy"
+},
+"2413": {
+"element": "Weapon"
+},
+"2415": {
+"element": "Weapon"
+},
+"2443": {
+"element": "Fire"
+},
+"2444": {
+"element": "Wind"
+},
+"2446": {
+"element": "Earth"
+},
+"2447": {
+"element": "Water"
+},
+"2448": {
+"element": "Poison"
+},
+"2450": {
+"element": "Poison"
+},
+"2452": {
+"element": "Fire"
+},
+"2454": {
+"element": "Wind"
+},
+"2457": {
+"element": "Fire"
+},
+"2458": {
+"element": "Water"
+},
+"2459": {
+"element": "Wind"
+},
+"2460": {
+"element": "Earth"
+},
+"2465": {
+"element": "Fire"
+},
+"2466": {
+"element": "Water"
+},
+"2467": {
+"element": "Wind"
+},
+"2468": {
+"element": "Earth"
+},
+"2476": {
+"element": "Weapon"
+},
+"2477": {
+"element": "Weapon"
+},
+"2481": {
+"element": "Weapon"
+},
+"2484": {
+"element": "Earth"
+},
+"2485": {
+"element": "Fire"
+},
+"25": {
+"ground": 141
+},
+"250": {
+"effect": 246
+},
+"2516": {
+"element": "Weapon"
+},
+"2517": {
+"element": "Weapon"
+},
+"2518": {
+"element": "Weapon"
+},
+"2519": {
+"element": "Weapon"
+},
+"2520": {
+"element": "Weapon"
+},
+"253": {
+"effect": 245,
+"element": "Holy"
+},
+"254": {
+"element": "Holy"
+},
+"255": {
+"effect": 251
+},
+"2553": {
+"element": "Weapon"
+},
+"2554": {
+"element": "Weapon"
+},
+"2557": {
+"element": "Weapon"
+},
+"2559": {
+"element": "Weapon"
+},
+"256": {
+"effect": 248
+},
+"2561": {
+"element": "Weapon"
+},
+"2562": {
+"element": "Weapon"
+},
+"2565": {
+"element": "Weapon"
+},
+"2566": {
+"element": "Weapon"
+},
+"2567": {
+"element": "Weapon"
+},
+"2569": {
+"element": "Weapon"
+},
+"2570": {
+"element": "Weapon"
+},
+"2572": {
+"element": "Weapon"
+},
+"258": {
+"effect": 249
+},
+"263": {
+"element": "Weapon"
+},
+"267": {
+"element": "Weapon"
+},
+"272": {
+"element": "Weapon"
+},
+"273": {
+"element": "Weapon"
+},
+"28": {
+"element": "Holy"
+},
+"280": {
+"element": "Fire"
+},
+"281": {
+"element": "Water"
+},
+"282": {
+"element": "Wind"
+},
+"283": {
+"element": "Earth"
+},
+"285": {
+"element": "Fire"
+},
+"286": {
+"element": "Water"
+},
+"287": {
+"element": "Wind"
+},
+"3004": {
+"element": "Weapon"
+},
+"3005": {
+"element": "Weapon"
+},
+"3006": {
+"element": "Weapon"
+},
+"3007": {
+"element": "Weapon"
+},
+"3009": {
+"element": "Weapon"
+},
+"3015": {
+"element": "Fire"
+},
+"3016": {
+"element": "Water"
+},
+"3017": {
+"element": "Wind"
+},
+"3018": {
+"element": "Earth"
+},
+"316": {
+"element": "Weapon"
+},
+"32": {
+"effect": 40
+},
+"324": {
+"element": "Weapon"
+},
+"33": {
+"effect": 41
+},
+"337": {
+"element": "Weapon"
+},
+"338": {
+"element": "Dark"
+},
+"339": {
+"element": "Dark"
+},
+"340": {
+"element": "Dark"
+},
+"341": {
+"element": "Dark"
+},
+"344": {
+"element": "Weapon"
+},
+"345": {
+"element": "Weapon"
+},
+"346": {
+"element": "Weapon"
+},
+"347": {
+"element": "Undead"
+},
+"348": {
+"element": "Undead"
+},
+"35": {
+"effect": 66
+},
+"361": {
+"effect": 440
+},
+"365": {
+"element": "Weapon"
+},
+"370": {
+"element": "Weapon"
+},
+"371": {
+"element": "Weapon"
+},
+"372": {
+"element": "Weapon"
+},
+"378": {
+"element": "Poison"
+},
+"379": {
+"element": "Weapon"
+},
+"382": {
+"element": "Weapon"
+},
+"384": {
+"effect": 390
+},
+"387": {
+"effect": 391
+},
+"390": {
+"effect": 392
+},
+"394": {
+"element": "Weapon"
+},
+"397": {
+"element": "Weapon"
+},
+"398": {
+"element": "Weapon"
+},
+"399": {
+"element": "Weapon"
+},
+"400": {
+"element": "Ghost"
+},
+"404": {
+"element": "Earth"
+},
+"406": {
+"element": "Weapon"
+},
+"413": {
+"element": "Weapon"
+},
+"415": {
+"element": "Weapon"
+},
+"417": {
+"element": "Weapon"
+},
+"419": {
+"element": "Weapon"
+},
+"42": {
+"effect": 10,
+"element": "Weapon"
+},
+"421": {
+"element": "Weapon"
+},
+"425": {
+"element": "Earth"
+},
+"428": {
+"element": "Weapon"
+},
+"429": {
+"element": "Weapon"
+},
+"430": {
+"element": "Weapon"
+},
+"45": {
+"effect": 153
+},
+"46": {
+"element": "Weapon"
+},
+"467": {
+"element": "Endowed"
+},
+"468": {
+"element": "Endowed"
+},
+"469": {
+"element": "Endowed"
+},
+"47": {
+"element": "Weapon"
+},
+"48": {
+"element": "Weapon"
+},
+"484": {
+"element": "Earth"
+},
+"485": {
+"element": "Weapon"
+},
+"499": {
+"element": "Weapon"
+},
+"5": {
+"element": "Weapon"
+},
+"5001": {
+"element": "Weapon"
+},
+"5003": {
+"element": "Weapon"
+},
+"5004": {
+"element": "Water"
+},
+"5006": {
+"element": "Weapon"
+},
+"501": {
+"element": "Weapon"
+},
+"502": {
+"element": "Weapon"
+},
+"503": {
+"element": "Weapon"
+},
+"507": {
+"element": "Ghost"
+},
+"508": {
+"element": "Weapon"
+},
+"511": {
+"element": "Weapon"
+},
+"512": {
+"element": "Weapon"
+},
+"513": {
+"element": "Weapon"
+},
+"514": {
+"element": "Weapon"
+},
+"515": {
+"element": "Weapon"
+},
+"516": {
+"element": "Weapon"
+},
+"517": {
+"element": "Weapon"
+},
+"518": {
+"element": "Weapon"
+},
+"519": {
+"element": "Weapon"
+},
+"52": {
+"element": "Poison"
+},
+"520": {
+"element": "Weapon"
+},
+"521": {
+"element": "Weapon"
+},
+"523": {
+"element": "Weapon"
+},
+"524": {
+"element": "Weapon"
+},
+"525": {
+"element": "Weapon"
+},
+"527": {
+"element": "Weapon"
+},
+"528": {
+"element": "Weapon"
+},
+"53": {
+"element": "Poison"
+},
+"530": {
+"element": "Weapon"
+},
+"534": {
+"element": "Fire"
+},
+"535": {
+"element": "Fire"
+},
+"536": {
+"element": "Fire"
+},
+"537": {
+"element": "Water"
+},
+"538": {
+"element": "Water"
+},
+"539": {
+"element": "Water"
+},
+"54": {
+"effect": 77,
+"element": "Holy"
+},
+"540": {
+"element": "Wind"
+},
+"541": {
+"element": "Wind"
+},
+"542": {
+"element": "Wind"
+},
+"56": {
+"effect": 148,
+"element": "Weapon"
+},
+"57": {
+"effect": 144,
+"element": "Weapon"
+},
+"58": {
+"effect": 150,
+"element": "Weapon"
+},
+"59": {
+"effect": 151,
+"element": "Weapon"
+},
+"6": {
+"effect": 67
+},
+"60": {
+"effect": 249
+},
+"61": {
+"effect": 131,
+"element": "Weapon"
+},
+"62": {
+"effect": 149,
+"element": "Weapon"
+},
+"654": {
+"element": "Fire"
+},
+"655": {
+"element": "Water"
+},
+"656": {
+"element": "Wind"
+},
+"657": {
+"element": "Poison"
+},
+"658": {
+"element": "Dark"
+},
+"66": {
+"effect": 84
+},
+"660": {
+"element": "Weapon"
+},
+"669": {
+"element": "Fire"
+},
+"67": {
+"effect": 88
+},
+"670": {
+"element": "Dark"
+},
+"673": {
+"element": "Weapon"
+},
+"674": {
+"element": "Weapon"
+},
+"68": {
+"effect": 86,
+"element": "Holy"
+},
+"69": {
+"effect": 91
+},
+"7": {
+"element": "Fire"
+},
+"70": {
+"effect": 83,
+"element": "Holy"
+},
+"706": {
+"element": "Poison"
+},
+"72": {
+"effect": 78
+},
+"73": {
+"effect": 112
+},
+"739": {
+"element": "Poison"
+},
+"74": {
+"effect": 76
+},
+"740": {
+"element": "Fire"
+},
+"742": {
+"element": "Poison"
+},
+"744": {
+"element": "Wind"
+},
+"745": {
+"element": "Fire"
+},
+"75": {
+"effect": 75
+},
+"76": {
+"effect": 87
+},
+"77": {
+"effect": 152,
+"element": "Holy"
+},
+"78": {
+"effect": 85
+},
+"79": {
+"effect": 113,
+"element": "Holy",
+"hit": 152
+},
+"80": {
+"element": "Fire"
+},
+"8019": {
+"element": "Poison"
+},
+"8020": {
+"element": "Poison"
+},
+"8024": {
+"element": "Wind"
+},
+"8025": {
+"element": "Wind"
+},
+"8034": {
+"element": "Holy"
+},
+"8039": {
+"element": "Fire"
+},
+"8041": {
+"element": "Fire"
+},
+"8042": {
+"element": "Fire"
+},
+"81": {
+"element": "Fire"
+},
+"8201": {
+"element": "Weapon"
+},
+"8202": {
+"element": "Fire"
+},
+"8203": {
+"element": "Weapon"
+},
+"8207": {
+"element": "Weapon"
+},
+"8208": {
+"element": "Weapon"
+},
+"8210": {
+"element": "Earth"
+},
+"8212": {
+"element": "Water"
+},
+"8214": {
+"element": "Weapon"
+},
+"8215": {
+"element": "Weapon"
+},
+"8216": {
+"element": "Weapon"
+},
+"8217": {
+"element": "Weapon"
+},
+"8218": {
+"element": "Weapon"
+},
+"8224": {
+"element": "Fire"
+},
+"8225": {
+"element": "Weapon"
+},
+"83": {
+"effect": 92,
+"element": "Fire",
+"hit": 49
+},
+"84": {
+"element": "Wind"
+},
+"8401": {
+"element": "Fire"
+},
+"8403": {
+"element": "Fire"
+},
+"8425": {
+"element": "Fire"
+},
+"8426": {
+"element": "Fire"
+},
+"8427": {
+"element": "Fire"
+},
+"8428": {
+"element": "Fire"
+},
+"8429": {
+"element": "Fire"
+},
+"8430": {
+"element": "Water"
+},
+"8431": {
+"element": "Water"
+},
+"8432": {
+"element": "Water"
+},
+"8433": {
+"element": "Water"
+},
+"8434": {
+"element": "Wind"
+},
+"8435": {
+"element": "Wind"
+},
+"8436": {
+"element": "Wind"
+},
+"8437": {
+"element": "Wind"
+},
+"8438": {
+"element": "Wind"
+},
+"8439": {
+"element": "Earth"
+},
+"8440": {
+"element": "Earth"
+},
+"8441": {
+"element": "Earth"
+},
+"8442": {
+"element": "Earth"
+},
+"85": {
+"effect": 90,
+"element": "Wind",
+"hit": 52
+},
+"86": {
+"element": "Water"
+},
+"87": {
+"element": "Water"
+},
+"88": {
+"element": "Water"
+},
+"89": {
+"effect": 89,
+"element": "Water"
+},
+"90": {
+"element": "Earth"
+},
+"91": {
+"element": "Earth"
+},
+"92": {
+"element": "Earth",
+"ground": 95
+}
+}
+}

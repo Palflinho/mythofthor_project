@@ -288,6 +288,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FOnSkillDamage, int64, SourceID, in
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnSkillEffect, int64, SourceID, int64, TargetID, int32, SkillID, int32, Value);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FOnSkillCast, int64, SourceID, int64, TargetID, int32, SkillID, int32, CastMs, int32, CellX, int32, CellY);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSkillFailed, int32, SkillID, int32, Cause);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSpecialEffect, int64, UnitID, int32, EffectID);
 
 // Delegates de compatibilidade anterior
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerMoveConfirmed, int32, TargetX, int32, TargetY);
@@ -580,6 +581,10 @@ public:
 	/** Falha ao usar a skill (ZC_ACK_TOUSESKILL 0x0110): sem SP, fora de alcance... */
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
 	FOnSkillFailed OnSkillFailed;
+
+	/** ZC_NOTIFY_EFFECT2 (0x01f3) que nao e clima: efeito da EffectTable sobre a unidade (doc/effect_list.txt do rAthena). */
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Skills")
+	FOnSpecialEffect OnSpecialEffect;
 
 	// Compatibilidade
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")

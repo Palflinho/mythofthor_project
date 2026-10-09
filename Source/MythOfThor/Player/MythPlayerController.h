@@ -153,6 +153,14 @@ public:
 	UFUNCTION(Exec)
 	void MythTargetNearest();
 
+	/** Teste: toca data/texture/effect/<File>.str no personagem (sem servidor). */
+	UFUNCTION(Exec)
+	void MythPlayStr(const FString& File);
+
+	/** Teste: toca o efeito da skill (estagio 0 efeito, 1 impacto) no personagem, como se o servidor mandasse. */
+	UFUNCTION(Exec)
+	void MythPlaySkill(int32 SkillID, int32 Stage = 0);
+
 	UMythRoHUDWidget* GetHud() const { return HudWidget; }
 
 	/**

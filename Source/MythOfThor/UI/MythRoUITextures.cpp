@@ -18,6 +18,13 @@ namespace
 		static TMap<FString, TWeakObjectPtr<UTexture2D>> Map;
 		return Map;
 	}
+
+	// Cor media (ponderada pela intensidade) de cada textura carregada: a luz dos efeitos sai dela
+	TMap<FString, FLinearColor>& UITextureAverage()
+	{
+		static TMap<FString, FLinearColor> Map;
+		return Map;
+	}
 }
 
 UTexture2D* FMythRoUITextures::Get(const FString& RelativePath)
@@ -61,6 +68,19 @@ UTexture2D* FMythRoUITextures::Get(const FString& RelativePath)
 		{
 			Pixels[i] = FColor(0, 0, 0, 0);
 		}
+	}
+
+	{
+		FLinearColor Sum(0.f, 0.f, 0.f, 0.f);
+		float Weight = 0.f;
+		for (int32 i = 0; i < W * H; i += 3)
+		{
+			const FLinearColor C(Pixels[i]);
+			const float L = (C.R + C.G + C.B) * C.A;
+			Sum += C * L;
+			Weight += L;
+		}
+		UITextureAverage().Add(Key, Weight > 0.f ? Sum / Weight : FLinearColor::White);
 	}
 
 	UTexture2D* Tex = UTexture2D::CreateTransient(W, H, PF_B8G8R8A8);
@@ -120,4 +140,11 @@ UTexture2D* FMythRoUITextures::GetSpriteFrame(const FString& SprPath, int32 Inde
 	Tex->UpdateResource();
 	UITextureCache().Add(Key, Tex);
 	return Tex;
+}
+
+FLinearColor FMythRoUITextures::AverageColor(const FString& RelativePath)
+{
+	Get(RelativePath);
+	const FLinearColor* C = UITextureAverage().Find(RelativePath.ToLower());
+	return C ? *C : FLinearColor::White;
 }

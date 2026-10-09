@@ -30,6 +30,8 @@
 #include "NavigationSystem.h"
 #include "UnrealClient.h"
 #include "TimerManager.h"
+#include "Sprites/MythSkillEffects.h"
+#include "Sprites/MythStrEffect.h"
 
 AMythPlayerController::AMythPlayerController()
 {
@@ -1051,6 +1053,22 @@ void AMythPlayerController::MythHotkey(int32 Index, int32 SkillID, int32 Level)
 void AMythPlayerController::MythPressF(int32 Number)
 {
 	UseHotkey(Number - 1);
+}
+
+void AMythPlayerController::MythPlayStr(const FString& File)
+{
+	if (APawn* P = GetPawn())
+	{
+		AMythStrEffect::Play(this, File, AMythStrEffect::FeetOf(P), P);
+	}
+}
+
+void AMythPlayerController::MythPlaySkill(int32 SkillID, int32 Stage)
+{
+	if (APawn* P = GetPawn())
+	{
+		FMythSkillEffects::Play(this, SkillID, static_cast<EMythSkillEffectStage>(FMath::Clamp(Stage, 0, 2)), P, P->GetActorLocation());
+	}
 }
 
 void AMythPlayerController::MythTargetNearest()

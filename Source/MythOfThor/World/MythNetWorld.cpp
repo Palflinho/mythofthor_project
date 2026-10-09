@@ -6,6 +6,7 @@
 #include "Gameplay/MythStatsComponent.h"
 #include "Sprites/MythMonster.h"
 #include "Sprites/MythRoSpriteComponent.h"
+#include "Sprites/MythSkillEffects.h"
 #include "World/MythGroundItem.h"
 #include "UI/MythRoClientTables.h"
 #include "UI/MythHUD.h"
@@ -188,6 +189,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnSkillEffect.AddDynamic(this, &AMythNetWorld::HandleSkillEffect);
 	Net->OnSkillCast.AddDynamic(this, &AMythNetWorld::HandleSkillCast);
 	Net->OnSkillFailed.AddDynamic(this, &AMythNetWorld::HandleSkillFailed);
+	Net->OnSpecialEffect.AddDynamic(this, &AMythNetWorld::HandleSpecialEffect);
 
 	// Chegou num mapa novo por ordem do servidor (portal/warp): termina a entrada no proximo quadro, com o
 	// personagem ja criado pelo GameMode, e so entao avisa o servidor (ACTORINIT)
@@ -234,6 +236,7 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnSkillEffect.RemoveAll(this);
 		Net->OnSkillCast.RemoveAll(this);
 		Net->OnSkillFailed.RemoveAll(this);
+		Net->OnSpecialEffect.RemoveAll(this);
 	}
 	Super::EndPlay(EndPlayReason);
 }
@@ -698,6 +701,12 @@ void AMythNetWorld::HandleSkillDamage(int64 SourceID, int64 TargetID, int32 Skil
 	{
 		Hud->AddSkillShout(Source, FMythRoClientTables::SkillName(SkillID));
 	}
+	// Efeito visual: o da skill no alvo e o de impacto (ou o clarao do elemento), com a luz do Lumen
+	if (AActor* Target = ResolveActor(TargetID))
+	{
+		const bool bEffect = FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Effect, Target, Target->GetActorLocation(), false);
+		FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Hit, Target, Target->GetActorLocation(), !bEffect);
+	}
 	// Mesmo tratamento do ataque normal: golpe de quem usou, numeros classicos e reacao do alvo.
 	// Golpes multiplos (ex.: Rajada de Flechas) aparecem como um numero por golpe, como no RO.
 	if (Hits <= 1 || Damage <= 0)
@@ -725,6 +734,11 @@ void AMythNetWorld::HandleSkillEffect(int64 SourceID, int64 TargetID, int32 Skil
 	{
 		Hud->AddSkillShout(Source, FMythRoClientTables::SkillName(SkillID));
 	}
+	// Efeito visual no alvo (Provocar, Angelus, Bencao...) ou no proprio usuario
+	if (AActor* At = Target ? Target : Source)
+	{
+		FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Effect, At, At->GetActorLocation());
+	}
 	// Curas (AL_HEAL 28, curar no aprendiz NV_FIRSTAID 142): numero verde de cura sobre o alvo
 	if ((SkillID == 28 || SkillID == 142) && Target && Value > 0)
 	{
@@ -749,6 +763,14 @@ void AMythNetWorld::HandleSkillCast(int64 SourceID, int64 TargetID, int32 SkillI
 		{
 			Char->Sprite->FaceLocation(Target->GetActorLocation());
 		}
+	}
+}
+
+void AMythNetWorld::HandleSpecialEffect(int64 UnitID, int32 EffectID)
+{
+	if (AActor* Unit = ResolveActor(UnitID))
+	{
+		FMythSkillEffects::PlayEffectId(this, EffectID, Unit, Unit->GetActorLocation());
 	}
 }
 

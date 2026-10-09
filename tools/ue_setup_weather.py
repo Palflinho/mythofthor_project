@@ -219,3 +219,49 @@ def build_item_beam():
 
 
 build_item_beam()
+
+
+def build_str_material(name, additive):
+    """Materiais dos efeitos .str: sem iluminacao, textura 'Tex' x cor do vertice (cor e alfa da camada)."""
+    path = '/Game/Myth/' + name
+    eal.make_directory('/Game/Myth')
+    if eal.does_asset_exist(path):
+        mat = eal.load_asset(path)
+        mel.delete_all_material_expressions(mat)
+    else:
+        mat = tools.create_asset(name, '/Game/Myth', unreal.Material, unreal.MaterialFactoryNew())
+    mat.set_editor_property('blend_mode', unreal.BlendMode.BLEND_ADDITIVE if additive else unreal.BlendMode.BLEND_TRANSLUCENT)
+    mat.set_editor_property('shading_model', unreal.MaterialShadingModel.MSM_UNLIT)
+    mat.set_editor_property('two_sided', True)
+    tex = mel.create_material_expression(mat, unreal.MaterialExpressionTextureSampleParameter2D, -700, 0)
+    tex.set_editor_property('parameter_name', 'Tex')
+    vc = mel.create_material_expression(mat, unreal.MaterialExpressionVertexColor, -700, 300)
+    rgb = mel.create_material_expression(mat, unreal.MaterialExpressionMultiply, -400, 0)
+    mel.connect_material_expressions(tex, 'RGB', rgb, 'A')
+    mel.connect_material_expressions(vc, '', rgb, 'B')
+    alpha = mel.create_material_expression(mat, unreal.MaterialExpressionMultiply, -400, 200)
+    mel.connect_material_expressions(tex, 'A', alpha, 'A')
+    mel.connect_material_expressions(vc, 'A', alpha, 'B')
+    # Brilho: o emissivo precisa subir para aparecer na exposicao da cena com Lumen (o C++ define por efeito)
+    bright = mel.create_material_expression(mat, unreal.MaterialExpressionScalarParameter, -400, 400)
+    bright.set_editor_property('parameter_name', 'Brightness')
+    bright.set_editor_property('default_value', 1.0)
+    lit = mel.create_material_expression(mat, unreal.MaterialExpressionMultiply, -250, -40)
+    mel.connect_material_expressions(rgb, '', lit, 'A')
+    mel.connect_material_expressions(bright, '', lit, 'B')
+    if additive:
+        # aditivo: o preto do BMP nao soma nada; alfa da camada escurece o brilho
+        out = mel.create_material_expression(mat, unreal.MaterialExpressionMultiply, -100, 80)
+        mel.connect_material_expressions(lit, '', out, 'A')
+        mel.connect_material_expressions(alpha, '', out, 'B')
+        mel.connect_material_property(out, '', unreal.MaterialProperty.MP_EMISSIVE_COLOR)
+    else:
+        mel.connect_material_property(lit, '', unreal.MaterialProperty.MP_EMISSIVE_COLOR)
+        mel.connect_material_property(alpha, '', unreal.MaterialProperty.MP_OPACITY)
+    mel.recompile_material(mat)
+    eal.save_loaded_asset(mat)
+    unreal.log('[Weather] %s pronto' % name)
+
+
+build_str_material('M_StrAdditive', True)
+build_str_material('M_StrTranslucent', False)

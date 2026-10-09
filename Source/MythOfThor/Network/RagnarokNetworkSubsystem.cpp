@@ -1874,7 +1874,9 @@ void URagnarokNetworkSubsystem::HandleEffect(const uint8* PacketData, int32 Pack
 	if (!WeatherType.IsEmpty())
 	{
 		OnWeather.Broadcast(WeatherType, true);
+		return;
 	}
+	OnSpecialEffect.Broadcast(static_cast<int64>(*reinterpret_cast<const uint32*>(PacketData + 2)), EffectID);
 }
 
 // ------------------------------------------------------------------------------------------------ atalhos e skills
