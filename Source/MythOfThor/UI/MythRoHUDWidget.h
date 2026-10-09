@@ -233,6 +233,25 @@ private:
 
 	float WindowRefreshTimer = 0.f;
 
+	// Barra de atalhos F1..F9 e arrastar skills/itens para ela (MythRoHotbar.cpp)
+	UPROPERTY() TObjectPtr<UCanvasPanel> HotbarWindow;
+	UPROPERTY() TArray<TObjectPtr<UImage>> HotbarSlots;
+	UPROPERTY() TArray<TObjectPtr<UImage>> HotbarIcons;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> HotbarCounts;
+	UPROPERTY() TObjectPtr<UImage> DragIcon;
+	TArray<int32> SkillRowID;
+	TArray<int32> SkillRowLevel;
+	bool bHotDragging = false;
+	bool bDragIsSkill = false;
+	int32 DragID = 0;
+	int32 DragCount = 0;
+	int32 DragFromHotbar = INDEX_NONE;
+	void RefreshHotbar();
+	bool BeginHotDrag(const FVector2D& ScreenPos);
+	void UpdateHotDrag(const FVector2D& ScreenPos);
+	bool EndHotDrag(const FVector2D& ScreenPos);
+	int32 HotbarSlotAt(const FVector2D& ScreenPos) const;
+
 	// Dialogo de NPC (MythRoNpcDialog.cpp)
 	UPROPERTY() TObjectPtr<UCanvasPanel> NpcWindow;
 	UPROPERTY() TObjectPtr<class UWrapBox> NpcText;

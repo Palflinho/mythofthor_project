@@ -877,6 +877,15 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case RagnarokPackets::HEADER_ZC_ITEM_FALL_ENTRY2:
 				HandleItemFall(PacketData, ActualLen);
 				break;
+			case 0x0b20: // ZC_SHORTCUT_KEY_LIST
+				HandleHotkeys(PacketData, ActualLen);
+				break;
+			case 0x01de: // ZC_NOTIFY_SKILL
+			case 0x09cb: // ZC_USE_SKILL
+			case 0x0b1a: // ZC_USESKILL_ACK
+			case 0x0110: // ZC_ACK_TOUSESKILL
+				HandleSkillResult(PacketData, ActualLen, PacketID);
+				break;
 			case 0x0b41: // ZC_ITEM_PICKUP_ACK (20211103)
 				HandleItemPickupAck(PacketData, ActualLen);
 				break;
@@ -1666,6 +1675,7 @@ void URagnarokNetworkSubsystem::HandleSkillList(const uint8* PacketData, int32 P
 			const uint8* Ptr = PacketData + HEADER_SIZE + (i * SKILL_DATA_SIZE);
 			FRagnarokSkillInfo Info;
 			Info.SkillID = *reinterpret_cast<const uint16*>(Ptr + 0);
+			Info.Inf = *reinterpret_cast<const int32*>(Ptr + 2);
 			Info.Level = *reinterpret_cast<const uint16*>(Ptr + 6);
 			Info.SpCost = *reinterpret_cast<const uint16*>(Ptr + 8);
 			Info.Range = *reinterpret_cast<const uint16*>(Ptr + 10);
@@ -1683,6 +1693,7 @@ void URagnarokNetworkSubsystem::HandleSkillList(const uint8* PacketData, int32 P
 			const uint8* Ptr = PacketData + 2;
 			FRagnarokSkillInfo Info;
 			Info.SkillID = *reinterpret_cast<const uint16*>(Ptr + 0);
+			Info.Inf = *reinterpret_cast<const int32*>(Ptr + 2);
 			Info.Level = *reinterpret_cast<const uint16*>(Ptr + 6);
 			Info.SpCost = *reinterpret_cast<const uint16*>(Ptr + 8);
 			Info.Range = *reinterpret_cast<const uint16*>(Ptr + 10);
@@ -1732,6 +1743,7 @@ void URagnarokNetworkSubsystem::HandleSkillList(const uint8* PacketData, int32 P
 			const uint8* Ptr = PacketData + HEADER_SIZE + (i * SKILL_DATA_SIZE);
 			FRagnarokSkillInfo Info;
 			Info.SkillID = *reinterpret_cast<const uint16*>(Ptr + 0);
+			Info.Inf = *reinterpret_cast<const int32*>(Ptr + 2);
 			Info.Level = *reinterpret_cast<const uint16*>(Ptr + 6);
 			Info.SpCost = *reinterpret_cast<const uint16*>(Ptr + 8);
 			Info.Range = *reinterpret_cast<const uint16*>(Ptr + 10);
@@ -1862,5 +1874,87 @@ void URagnarokNetworkSubsystem::HandleEffect(const uint8* PacketData, int32 Pack
 	if (!WeatherType.IsEmpty())
 	{
 		OnWeather.Broadcast(WeatherType, true);
+	}
+}
+
+// ------------------------------------------------------------------------------------------------ atalhos e skills
+// Offsets de rathena/src/map/packets_struct.hpp para PACKETVER 20211103 (RE): ver docs/PLANO_CLIENTE_FIEL.md.
+
+void URagnarokNetworkSubsystem::HandleHotkeys(const uint8* PacketData, int32 PacketSize)
+{
+	// PACKET_ZC_SHORTCUT_KEY_LIST (0x0b20): rotate +2, tab +3 (int16), 38 x hotkey_data(isSkill 1, id 4, count 2) a partir de +5
+	if (PacketSize < 5 || *reinterpret_cast<const int16*>(PacketData + 3) != 0)
+	{
+		return; // so a aba 0 (F1..F9 da barra principal)
+	}
+	Hotkeys.Reset();
+	for (int32 Off = 5; Off + 7 <= PacketSize; Off += 7)
+	{
+		FRagnarokHotkey H;
+		H.bIsSkill = PacketData[Off] != 0;
+		H.ID = static_cast<int32>(*reinterpret_cast<const uint32*>(PacketData + Off + 1));
+		H.Count = *reinterpret_cast<const int16*>(PacketData + Off + 5);
+		Hotkeys.Add(H);
+	}
+}
+
+bool URagnarokNetworkSubsystem::SetHotkey(int32 Index, bool bIsSkill, int32 ID, int32 Count)
+{
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap || Index < 0 || Index >= 38)
+	{
+		return false;
+	}
+	// PACKET_CZ_SHORTCUT_KEY_CHANGE2 (0x0b21): tab +2, index +4, hotkey_data +6 (isSkill, id, count) = 13 bytes
+	uint8 Pkt[13] = { 0 };
+	*reinterpret_cast<uint16*>(Pkt) = 0x0b21;
+	*reinterpret_cast<uint16*>(Pkt + 2) = 0;
+	*reinterpret_cast<uint16*>(Pkt + 4) = static_cast<uint16>(Index);
+	Pkt[6] = bIsSkill ? 1 : 0;
+	*reinterpret_cast<uint32*>(Pkt + 7) = static_cast<uint32>(ID);
+	*reinterpret_cast<int16*>(Pkt + 11) = static_cast<int16>(Count);
+	SendData(Pkt, sizeof(Pkt));
+	if (!Hotkeys.IsValidIndex(Index))
+	{
+		Hotkeys.SetNum(38);
+	}
+	Hotkeys[Index].bIsSkill = bIsSkill;
+	Hotkeys[Index].ID = ID;
+	Hotkeys[Index].Count = Count;
+	return true;
+}
+
+void URagnarokNetworkSubsystem::HandleSkillResult(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
+{
+	auto U16 = [PacketData](int32 O) { return static_cast<int32>(*reinterpret_cast<const uint16*>(PacketData + O)); };
+	auto I32 = [PacketData](int32 O) { return *reinterpret_cast<const int32*>(PacketData + O); };
+	auto U32 = [PacketData](int32 O) { return static_cast<int64>(*reinterpret_cast<const uint32*>(PacketData + O)); };
+	switch (PacketID)
+	{
+	case 0x01de: // ZC_NOTIFY_SKILL: SKID +2, AID +4, targetID +8, damage +24, level +28, count +30, action +32
+		if (PacketSize >= 33)
+		{
+			OnSkillDamage.Broadcast(U32(4), U32(8), U16(2), I32(24), FMath::Max(1, U16(30)), PacketData[32]);
+		}
+		break;
+	case 0x09cb: // ZC_USE_SKILL: SKID +2, level/valor +4, targetAID +8, srcAID +12, result +16
+		if (PacketSize >= 17 && PacketData[16] != 0)
+		{
+			OnSkillEffect.Broadcast(U32(12), U32(8), U16(2), I32(4));
+		}
+		break;
+	case 0x0b1a: // ZC_USESKILL_ACK: srcId +2, dstId +6, x +10, y +12, skillId +14, element +16, delayTime +20
+		if (PacketSize >= 24)
+		{
+			OnSkillCast.Broadcast(U32(2), U32(6), U16(14), I32(20), U16(10), U16(12));
+		}
+		break;
+	case 0x0110: // ZC_ACK_TOUSESKILL: skillId +2, btype +4, itemId +8, flag +12, cause +13
+		if (PacketSize >= 14 && PacketData[12] == 0)
+		{
+			OnSkillFailed.Broadcast(U16(2), PacketData[13]);
+		}
+		break;
+	default:
+		break;
 	}
 }

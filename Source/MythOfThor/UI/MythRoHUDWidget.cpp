@@ -5,6 +5,7 @@
 #include "Gameplay/MythStatsComponent.h"
 #include "World/MythMapInfo.h"
 #include "Network/RagnarokNetworkSubsystem.h"
+#include "Player/MythPlayerController.h"
 
 #include "Blueprint/WidgetTree.h"
 #include "Components/Button.h"
@@ -298,13 +299,26 @@ void UMythRoHUDWidget::BuildHotbar()
 {
 	// Barra de atalhos (shortitem_bg, 280x34) no baixo-centro, com F1..F9 em cada espaco
 	UCanvasPanel* Win = MakeWindow(FVector2D(0.5f, 1.f), FVector2D(0.5f, 1.f), FVector2D(0.f, -8.f), FVector2D(280.f, 34.f));
+	HotbarWindow = Win;
 	AddImage(Win, FMythRoUITextures::Get(Basic(TEXT("shortitem_bg"))), 0.f, 0.f);
 	for (int32 i = 0; i < 9; ++i)
 	{
+		// Espaco do atalho: area de soltar (recebe o mouse), icone 24x24 e quantidade/nivel no canto
+		UImage* HotSlot = AddColor(Win, FLinearColor::Transparent, 4.f + 29.f * i, 4.f, 28.f, 28.f);
+		HotSlot->SetVisibility(ESlateVisibility::Visible);
+		HotbarSlots.Add(HotSlot);
+		UImage* Icon = AddImage(Win, nullptr, 6.f + 29.f * i, 6.f, 24.f, 24.f);
+		Icon->SetVisibility(ESlateVisibility::Collapsed);
+		HotbarIcons.Add(Icon);
+		UTextBlock* Count = AddText(Win, 20.f + 29.f * i, 21.f, 6, ColText);
+		Count->SetShadowOffset(FVector2D(1.f, 1.f));
+		Count->SetShadowColorAndOpacity(FLinearColor(1.f, 1.f, 1.f, 0.9f));
+		HotbarCounts.Add(Count);
 		UTextBlock* T = AddText(Win, 6.f + 29.f * i, 3.f, 6, ColLabel);
 		T->SetText(FText::FromString(FString::Printf(TEXT("F%d"), i + 1)));
 	}
-	MakeDraggable(Win, 280.f, 34.f);
+	// So a borda esquerda arrasta a barra: o resto recebe os atalhos arrastados
+	MakeDraggable(Win, 4.f, 34.f);
 }
 
 void UMythRoHUDWidget::BuildChat()
@@ -612,6 +626,10 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, co
 	{
 		return FReply::Handled();
 	}
+	if (BeginHotDrag(Screen))
+	{
+		return FReply::Handled().CaptureMouse(TakeWidget()); // arrastando skill/item/atalho
+	}
 	for (int32 i = DragWindows.Num() - 1; i >= 0; --i)
 	{
 		UCanvasPanel* Win = DragWindows[i].Window.Get();
@@ -648,6 +666,11 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, co
 
 FReply UMythRoHUDWidget::NativeOnMouseMove(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
+	if (bHotDragging)
+	{
+		UpdateHotDrag(InMouseEvent.GetScreenSpacePosition());
+		return FReply::Handled();
+	}
 	if (UCanvasPanel* Win = Dragging.Get())
 	{
 		if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(Win->Slot))
@@ -667,6 +690,27 @@ FReply UMythRoHUDWidget::NativeOnMouseMove(const FGeometry& InGeometry, const FP
 
 FReply UMythRoHUDWidget::NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
+	if (bHotDragging)
+	{
+		const FVector2D Screen = InMouseEvent.GetScreenSpacePosition();
+		const int32 From = DragFromHotbar;
+		if (From != INDEX_NONE && HotbarSlotAt(Screen) == From)
+		{
+			// clique simples num atalho (sem arrastar): usa, como no cliente original
+			bHotDragging = false;
+			if (DragIcon)
+			{
+				DragIcon->SetVisibility(ESlateVisibility::Collapsed);
+			}
+			if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetOwningPlayer()))
+			{
+				PC->UseHotkey(From);
+			}
+			return FReply::Handled().ReleaseMouseCapture();
+		}
+		EndHotDrag(Screen);
+		return FReply::Handled().ReleaseMouseCapture();
+	}
 	if (Dragging.IsValid())
 	{
 		Dragging = nullptr;

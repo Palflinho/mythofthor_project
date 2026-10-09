@@ -238,7 +238,24 @@ struct FRagnarokSkillInfo
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Skill") int32 SpCost = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Skill") int32 Range = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Skill") bool bUpgradable = false;
+	/** Tipo de alvo (e_skill_inf do rAthena): 0 passiva, 0x01 inimigo, 0x02 chao, 0x04 em si, 0x10 suporte, 0x20 armadilha. */
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Skill") int32 Inf = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Skill") FString SkillName;
+};
+
+/**
+ * Atalho da barra (F1..F9), guardado no servidor (ZC_SHORTCUT_KEY_LIST / CZ_SHORTCUT_KEY_CHANGE2).
+ */
+USTRUCT(BlueprintType)
+struct FRagnarokHotkey
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Hotkey") bool bIsSkill = false;
+	/** ID do item ou da skill (0 = vazio). */
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Hotkey") int32 ID = 0;
+	/** Quantidade do item ou nivel da skill. */
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Hotkey") int32 Count = 0;
 };
 
 // ============================================================================
@@ -265,6 +282,12 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGroundItemVanish, int64, GID);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnNpcDialog, int64, NpcID, const FString&, Text);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnNpcMenu, int64, NpcID, const FString&, Title, const TArray<FString>&, Options);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWeather, const FString&, WeatherType, bool, bEnabled);
+
+// Skills (Claude): resultado e conjuracao vindos do servidor
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FOnSkillDamage, int64, SourceID, int64, TargetID, int32, SkillID, int32, Damage, int32, Hits, uint8, DamageType);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnSkillEffect, int64, SourceID, int64, TargetID, int32, SkillID, int32, Value);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FOnSkillCast, int64, SourceID, int64, TargetID, int32, SkillID, int32, CastMs, int32, CellX, int32, CellY);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSkillFailed, int32, SkillID, int32, Cause);
 
 // Delegates de compatibilidade anterior
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerMoveConfirmed, int32, TargetX, int32, TargetY);
@@ -447,6 +470,13 @@ public:
 	/** ID do proprio jogador nos pacotes do map-server (AID da conta), para separar "eu" das outras unidades. */
 	int64 GetSelfID() const { return SavedAccountID; }
 
+	/** Atalhos F1.. da barra (aba 0), como o servidor guardou. */
+	const TArray<FRagnarokHotkey>& GetHotkeys() const { return Hotkeys; }
+
+	/** Grava um atalho no servidor (CZ_SHORTCUT_KEY_CHANGE2 0x0b21); ID 0 limpa. */
+	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
+	bool SetHotkey(int32 Index, bool bIsSkill, int32 ID, int32 Count);
+
 	/** Mapa/celula de destino da ultima entrada ou troca de mapa (ZC_ACCEPT_ENTER / ZC_NPCACK_MAPMOVE). */
 	const FString& GetPendingMapName() const { return PendingMapName; }
 	FIntPoint GetPendingMapCell() const { return PendingMapCell; }
@@ -535,6 +565,22 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
 	FOnWeather OnWeather;
 
+	/** Dano de skill (ZC_NOTIFY_SKILL 0x01de). */
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
+	FOnSkillDamage OnSkillDamage;
+
+	/** Skill sem dano: cura, buff (ZC_USE_SKILL 0x09cb). Value = cura/nivel. */
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
+	FOnSkillEffect OnSkillEffect;
+
+	/** Inicio da conjuracao (ZC_USESKILL_ACK 0x0b1a): barra de conjuracao por CastMs. */
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
+	FOnSkillCast OnSkillCast;
+
+	/** Falha ao usar a skill (ZC_ACK_TOUSESKILL 0x0110): sem SP, fora de alcance... */
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
+	FOnSkillFailed OnSkillFailed;
+
 	// Compatibilidade
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
 	FOnPlayerMoveConfirmed OnPlayerMoveConfirmed;
@@ -590,6 +636,9 @@ private:
 	bool bLogPackets = false;
 	/** ID -> tamanho (-1 = dinamico), de Config/packet_lengths_<PACKETVER>.json. */
 	TMap<uint16, int16> PacketLengths;
+	TArray<FRagnarokHotkey> Hotkeys;
+	void HandleHotkeys(const uint8* PacketData, int32 PacketSize);
+	void HandleSkillResult(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	uint16 LastGoodPacketID = 0;
 	int32 LastGoodPacketLen = 0;
 	void HandleUnitVanish(const uint8* PacketData, int32 PacketSize);

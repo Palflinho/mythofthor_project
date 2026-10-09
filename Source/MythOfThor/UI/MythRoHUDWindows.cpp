@@ -7,6 +7,7 @@
 #include "UI/MythRoClientTables.h"
 #include "UI/MythRoUITextures.h"
 #include "Network/RagnarokNetworkSubsystem.h"
+#include "Player/MythPlayerController.h"
 
 #include "Blueprint/WidgetTree.h"
 #include "Components/CanvasPanel.h"
@@ -261,6 +262,7 @@ bool UMythRoHUDWidget::CloseTopWindow()
 
 void UMythRoHUDWidget::RefreshWindows()
 {
+	RefreshHotbar();
 	if (StatusWindow && StatusWindow->IsVisible()) { RefreshStatusWindow(); }
 	if (ItemsWindow && ItemsWindow->IsVisible()) { RefreshItemsWindow(); }
 	if (EquipWindow && EquipWindow->IsVisible()) { RefreshEquipWindow(); }
@@ -413,6 +415,8 @@ void UMythRoHUDWidget::RefreshEquipWindow()
 
 void UMythRoHUDWidget::RefreshSkillsWindow()
 {
+	SkillRowID.Init(0, SkillNames.Num());
+	SkillRowLevel.Init(0, SkillNames.Num());
 	const URagnarokNetworkSubsystem* Net = GetNet();
 	int32 Row = 0;
 	if (Net)
@@ -423,9 +427,11 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 			{
 				break;
 			}
+			SkillRowID[Row] = Skill.SkillID;
+			SkillRowLevel[Row] = Skill.Level;
 			UTexture2D* Icon = FMythRoClientTables::SkillIcon(Skill.SkillID);
 			SkillIcons[Row]->SetBrush(RoWinBrush(Icon, FVector2D(24.f, 24.f) * UIScale));
-			SkillIcons[Row]->SetVisibility(Icon ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
+			SkillIcons[Row]->SetVisibility(Icon ? ESlateVisibility::Visible : ESlateVisibility::Collapsed); // Visible: arrastavel para a barra
 			FString Name = FMythRoClientTables::SkillName(Skill.SkillID);
 			if (Name.IsEmpty())
 			{
@@ -524,6 +530,20 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDoubleClick(const FGeometry& InGeome
 				}
 			}
 			return FReply::Handled();
+		}
+	}
+	if (SkillsWindow && SkillsWindow->IsVisible())
+	{
+		for (int32 r = 0; r < SkillIcons.Num() && r < SkillRowID.Num(); ++r)
+		{
+			if (SkillRowID[r] != 0 && (IsUnder(SkillIcons[r], Screen) || IsUnder(SkillNames[r], Screen)))
+			{
+				if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetOwningPlayer()))
+				{
+					PC->BeginSkill(SkillRowID[r], SkillRowLevel[r]); // duplo clique na skill: usa
+				}
+				return FReply::Handled();
+			}
 		}
 	}
 	if (Net && EquipWindow && EquipWindow->IsVisible())

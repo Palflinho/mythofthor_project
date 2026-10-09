@@ -166,6 +166,14 @@ void AMythPlayerController::SetupInputComponent()
 	InputComponent->BindKey(FInputChord(EKeys::V, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyBasic);
 	InputComponent->BindKey(FInputChord(EKeys::Tab, false, true, false, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyMinimap);
 	InputComponent->BindKey(EKeys::Escape, IE_Pressed, this, &AMythPlayerController::OnHotkeyEscape);
+	// F1..F9: atalhos da barra (itens e skills guardados no servidor)
+	const FKey HotkeyKeys[9] = { EKeys::F1, EKeys::F2, EKeys::F3, EKeys::F4, EKeys::F5, EKeys::F6, EKeys::F7, EKeys::F8, EKeys::F9 };
+	for (int32 i = 0; i < 9; ++i)
+	{
+		FInputKeyBinding Binding(FInputChord(HotkeyKeys[i]), IE_Pressed);
+		Binding.KeyDelegate.GetDelegateForManualSet().BindWeakLambda(this, [this, i]() { UseHotkey(i); });
+		InputComponent->KeyBindings.Add(Binding);
+	}
 }
 
 // ---------------------------------------------------------------- Point & Click
@@ -190,6 +198,10 @@ void AMythPlayerController::MoveToCursor()
 	FHitResult Hit;
 	if (GetHitResultUnderCursor(ECC_Visibility, false, Hit) && Hit.bBlockingHit)
 	{
+		if (PendingSkillID != 0 && HandleSkillTargetClick(Hit))
+		{
+			return; // clique de mira de skill
+		}
 		if (AMythMonster* Monster = Cast<AMythMonster>(Hit.GetActor()))
 		{
 			if (!Monster->IsDead())
@@ -306,6 +318,10 @@ void AMythPlayerController::PlayerTick(float DeltaTime)
 
 	UpdateCombat(DeltaTime);
 	UpdatePickup();
+	if (PendingSkillID != 0 && WasInputKeyJustPressed(EKeys::RightMouseButton))
+	{
+		CancelSkillTargeting(); // botao direito cancela a mira, como no cliente original
+	}
 	UpdateCameraReset();
 	// Enter: com dialogo de NPC aberto avanca/escolhe/fecha; senao abre o chat (como no cliente original).
 	if (HudWidget && WasInputKeyJustPressed(EKeys::Enter) && !HudWidget->IsChatFocused() && !HudWidget->NpcDialogConfirm())
@@ -368,6 +384,11 @@ void AMythPlayerController::OnHotkeyMinimap() { ToggleHudWindow(EMythRoWindow::M
 
 void AMythPlayerController::OnHotkeyEscape()
 {
+	if (PendingSkillID != 0)
+	{
+		CancelSkillTargeting(); // Esc cancela a mira antes de fechar janelas
+		return;
+	}
 	if (HudWidget)
 	{
 		HudWidget->CloseTopWindow();
@@ -908,5 +929,152 @@ void AMythPlayerController::MythHurtMonster(int32 Damage)
 		SetFocusedTarget(Target);
 		UMythCombatText::ShowDamage(this, Target->GetActorLocation() + FVector(0.f, 0.f, 50.f), Damage, ECombatTextType::DamageDealt);
 		Target->ReceiveMythDamage(Damage);
+	}
+}
+
+// ------------------------------------------------------------------------------------------------ skills e atalhos
+
+void AMythPlayerController::UseHotkey(int32 Index)
+{
+	URagnarokNetworkSubsystem* Net = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>();
+	if (!Net || !Net->GetHotkeys().IsValidIndex(Index))
+	{
+		return;
+	}
+	const FRagnarokHotkey& H = Net->GetHotkeys()[Index];
+	if (H.ID == 0)
+	{
+		return;
+	}
+	if (H.bIsSkill)
+	{
+		BeginSkill(H.ID, FMath::Max(1, H.Count));
+		return;
+	}
+	// Item: usa o primeiro do inventario com esse ID (equipamento: veste, como o duplo clique)
+	for (const FRagnarokInventoryItem& Item : Net->GetInventoryItems())
+	{
+		if (Item.ItemID == H.ID && !Item.bIsEquipped && Item.Amount > 0)
+		{
+			if (Item.Type == 4 || Item.Type == 5)
+			{
+				Net->EquipItem(Item.Index, Item.EquipLocation);
+			}
+			else
+			{
+				Net->UseItem(Item.Index);
+			}
+			return;
+		}
+	}
+}
+
+void AMythPlayerController::BeginSkill(int32 SkillID, int32 Level)
+{
+	URagnarokNetworkSubsystem* Net = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>();
+	if (!Net)
+	{
+		return;
+	}
+	int32 Inf = 0;
+	for (const FRagnarokSkillInfo& S : Net->GetSkillList())
+	{
+		if (S.SkillID == SkillID)
+		{
+			Inf = S.Inf;
+			Level = FMath::Clamp(Level, 1, FMath::Max(1, S.Level));
+			break;
+		}
+	}
+	if (Inf == 0)
+	{
+		return; // passiva
+	}
+	if (Inf & 0x04)
+	{
+		Net->UseSkill(SkillID, Level, Net->GetSelfID()); // em si: sem mira
+		return;
+	}
+	// Mira: cursor em cruz ate o proximo clique (botao direito ou Esc cancela)
+	PendingSkillID = SkillID;
+	PendingSkillLevel = Level;
+	PendingSkillInf = Inf;
+	CurrentMouseCursor = EMouseCursor::Crosshairs;
+}
+
+void AMythPlayerController::CancelSkillTargeting()
+{
+	PendingSkillID = 0;
+	CurrentMouseCursor = EMouseCursor::Default;
+}
+
+bool AMythPlayerController::HandleSkillTargetClick(const FHitResult& Hit)
+{
+	URagnarokNetworkSubsystem* Net = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>();
+	if (!Net || PendingSkillID == 0)
+	{
+		return false;
+	}
+	const int32 Skill = PendingSkillID;
+	const int32 Level = PendingSkillLevel;
+	const int32 Inf = PendingSkillInf;
+	CancelSkillTargeting();
+
+	AActor* HitActor = Hit.GetActor();
+	if (AMythMonster* Unit = Cast<AMythMonster>(HitActor); Unit && Unit->IsNetUnit() && (Inf & (0x01 | 0x10)))
+	{
+		Net->UseSkill(Skill, Level, Unit->NetID);
+		return true;
+	}
+	if ((Inf & 0x10) && GetPawn() && (HitActor == GetPawn() || FVector::Dist2D(Hit.ImpactPoint, GetPawn()->GetActorLocation()) < 60.f))
+	{
+		Net->UseSkill(Skill, Level, Net->GetSelfID()); // suporte em si mesmo
+		return true;
+	}
+	if (Inf & 0x02)
+	{
+		const FIntPoint Cell = WorldToCell(Hit.ImpactPoint);
+		Net->UseSkill(Skill, Level, 0, Cell.X, Cell.Y);
+		return true;
+	}
+	return true; // clique sem alvo valido: so cancela a mira
+}
+
+void AMythPlayerController::MythHotkey(int32 Index, int32 SkillID, int32 Level)
+{
+	if (URagnarokNetworkSubsystem* Net = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>())
+	{
+		Net->SetHotkey(Index, true, SkillID, Level);
+	}
+}
+
+void AMythPlayerController::MythPressF(int32 Number)
+{
+	UseHotkey(Number - 1);
+}
+
+void AMythPlayerController::MythTargetNearest()
+{
+	if (PendingSkillID == 0 || !GetPawn())
+	{
+		return;
+	}
+	AMythMonster* Best = nullptr;
+	float BestDist = TNumericLimits<float>::Max();
+	for (TActorIterator<AMythMonster> It(GetWorld()); It; ++It)
+	{
+		const float D = FVector::DistSquared(It->GetActorLocation(), GetPawn()->GetActorLocation());
+		if (It->IsNetUnit() && It->IsAttackable() && !It->IsDead() && D < BestDist)
+		{
+			BestDist = D;
+			Best = *It;
+		}
+	}
+	if (Best)
+	{
+		FHitResult Hit;
+		Hit.HitObjectHandle = FActorInstanceHandle(Best);
+		Hit.ImpactPoint = Best->GetActorLocation();
+		HandleSkillTargetClick(Hit);
 	}
 }

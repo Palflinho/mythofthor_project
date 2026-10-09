@@ -142,7 +142,30 @@ public:
 	UFUNCTION(Exec)
 	void MythPickNearest();
 
+	/** Console (testes): MythHotkey 0 5 1 -> grava a skill 5 nivel 1 no F1; MythPressF 1 -> aperta F1;
+	 *  MythTargetNearest -> com a mira de skill ativa, escolhe o monstro mais proximo. */
+	UFUNCTION(Exec)
+	void MythHotkey(int32 Index, int32 SkillID, int32 Level);
+
+	UFUNCTION(Exec)
+	void MythPressF(int32 Number);
+
+	UFUNCTION(Exec)
+	void MythTargetNearest();
+
 	UMythRoHUDWidget* GetHud() const { return HudWidget; }
+
+	/**
+	 * Usa uma skill como no cliente original: em si (inf 0x04) vai direto; no inimigo (0x01), suporte (0x10) ou chao (0x02)
+	 * entra no modo de mira e o proximo clique escolhe o alvo. O servidor valida SP, alcance e conjuracao.
+	 */
+	void BeginSkill(int32 SkillID, int32 Level);
+
+	/** F1..F9: usa o item ou a skill do atalho (guardado no servidor). */
+	void UseHotkey(int32 Index);
+
+	bool IsTargetingSkill() const { return PendingSkillID != 0; }
+	void CancelSkillTargeting();
 
 	/** Console: MythQuitAfter 40 -> fecha o jogo apos 40 s (usado com -ExecCmds nos testes automaticos). */
 	UFUNCTION(Exec)
@@ -219,6 +242,10 @@ private:
 	void MoveToLocation(const FVector& Destination, bool bForceSend = true);
 	void UpdateCombat(float DeltaTime);
 	void UpdatePickup();
+	int32 PendingSkillID = 0;
+	int32 PendingSkillLevel = 0;
+	int32 PendingSkillInf = 0;
+	bool HandleSkillTargetClick(const FHitResult& Hit);
 	TWeakObjectPtr<class AMythGroundItem> PendingPickup;
 	void SendCellToServer(const FVector& WorldLocation, bool bForce);
 	AMythPlayerCharacter* GetMythCharacter() const;

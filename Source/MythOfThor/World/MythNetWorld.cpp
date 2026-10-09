@@ -7,6 +7,7 @@
 #include "Sprites/MythMonster.h"
 #include "Sprites/MythRoSpriteComponent.h"
 #include "World/MythGroundItem.h"
+#include "UI/MythRoClientTables.h"
 #include "UI/MythHUD.h"
 #include "UI/MythRoHUDWidget.h"
 
@@ -183,6 +184,10 @@ void AMythNetWorld::BeginPlay()
 	Net->OnNpcMenu.AddDynamic(this, &AMythNetWorld::HandleNpcMenu);
 	Net->OnGroundItemAppear.AddDynamic(this, &AMythNetWorld::HandleGroundItemAppear);
 	Net->OnGroundItemVanish.AddDynamic(this, &AMythNetWorld::HandleGroundItemVanish);
+	Net->OnSkillDamage.AddDynamic(this, &AMythNetWorld::HandleSkillDamage);
+	Net->OnSkillEffect.AddDynamic(this, &AMythNetWorld::HandleSkillEffect);
+	Net->OnSkillCast.AddDynamic(this, &AMythNetWorld::HandleSkillCast);
+	Net->OnSkillFailed.AddDynamic(this, &AMythNetWorld::HandleSkillFailed);
 
 	// Chegou num mapa novo por ordem do servidor (portal/warp): termina a entrada no proximo quadro, com o
 	// personagem ja criado pelo GameMode, e so entao avisa o servidor (ACTORINIT)
@@ -225,6 +230,10 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnNpcMenu.RemoveAll(this);
 		Net->OnGroundItemAppear.RemoveAll(this);
 		Net->OnGroundItemVanish.RemoveAll(this);
+		Net->OnSkillDamage.RemoveAll(this);
+		Net->OnSkillEffect.RemoveAll(this);
+		Net->OnSkillCast.RemoveAll(this);
+		Net->OnSkillFailed.RemoveAll(this);
 	}
 	Super::EndPlay(EndPlayReason);
 }
@@ -672,4 +681,90 @@ void AMythNetWorld::HandleGroundItemVanish(int64 ID)
 	{
 		Item->Destroy();
 	}
+}
+
+// ------------------------------------------------------------------------------------------------ skills
+
+AMythHUD* AMythNetWorld::GetGameHud() const
+{
+	const APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	return PC ? Cast<AMythHUD>(PC->GetHUD()) : nullptr;
+}
+
+void AMythNetWorld::HandleSkillDamage(int64 SourceID, int64 TargetID, int32 SkillID, int32 Damage, int32 Hits, uint8 DamageType)
+{
+	AActor* Source = ResolveActor(SourceID);
+	if (AMythHUD* Hud = GetGameHud(); Hud && Source)
+	{
+		Hud->AddSkillShout(Source, FMythRoClientTables::SkillName(SkillID));
+	}
+	// Mesmo tratamento do ataque normal: golpe de quem usou, numeros classicos e reacao do alvo.
+	// Golpes multiplos (ex.: Rajada de Flechas) aparecem como um numero por golpe, como no RO.
+	if (Hits <= 1 || Damage <= 0)
+	{
+		HandleDamage(SourceID, TargetID, Damage, DamageType, 0);
+		return;
+	}
+	const int32 PerHit = Damage / Hits;
+	for (int32 i = 0; i < Hits; ++i)
+	{
+		FTimerHandle Handle;
+		const int32 Amount = (i == Hits - 1) ? Damage - PerHit * (Hits - 1) : PerHit;
+		GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateWeakLambda(this, [this, SourceID, TargetID, Amount, DamageType]()
+		{
+			HandleDamage(SourceID, TargetID, Amount, DamageType, 0);
+		}), 0.01f + 0.15f * i, false);
+	}
+}
+
+void AMythNetWorld::HandleSkillEffect(int64 SourceID, int64 TargetID, int32 SkillID, int32 Value)
+{
+	AActor* Source = ResolveActor(SourceID);
+	AActor* Target = ResolveActor(TargetID);
+	if (AMythHUD* Hud = GetGameHud(); Hud && Source)
+	{
+		Hud->AddSkillShout(Source, FMythRoClientTables::SkillName(SkillID));
+	}
+	// Curas (AL_HEAL 28, curar no aprendiz NV_FIRSTAID 142): numero verde de cura sobre o alvo
+	if ((SkillID == 28 || SkillID == 142) && Target && Value > 0)
+	{
+		UMythCombatText::ShowDamage(this, Target->GetActorLocation() + FVector(0.f, 0.f, 50.f), Value, ECombatTextType::Heal);
+	}
+	if (AMythPlayerCharacter* Char = Cast<AMythPlayerCharacter>(Source); Char && Char->Sprite)
+	{
+		Char->Sprite->PlayAttack(); // gesto de conjurar
+	}
+}
+
+void AMythNetWorld::HandleSkillCast(int64 SourceID, int64 TargetID, int32 SkillID, int32 CastMs, int32 CellX, int32 CellY)
+{
+	AActor* Source = ResolveActor(SourceID);
+	if (AMythHUD* Hud = GetGameHud(); Hud && Source && CastMs > 0)
+	{
+		Hud->AddCastBar(Source, CastMs / 1000.f);
+	}
+	if (AActor* Target = ResolveActor(TargetID); Target && Source)
+	{
+		if (AMythPlayerCharacter* Char = Cast<AMythPlayerCharacter>(Source); Char && Char->Sprite)
+		{
+			Char->Sprite->FaceLocation(Target->GetActorLocation());
+		}
+	}
+}
+
+void AMythNetWorld::HandleSkillFailed(int32 SkillID, int32 Cause)
+{
+	// Motivos do rAthena (e_useskill_fail): os mais comuns com a mensagem do cliente
+	FString Reason;
+	switch (Cause)
+	{
+	case 1: Reason = TEXT("SP insuficiente."); break;
+	case 2: Reason = TEXT("HP insuficiente."); break;
+	case 3: Reason = TEXT("Faltam itens para usar a habilidade."); break;
+	case 4: Reason = TEXT("Ainda nao e possivel usar a habilidade."); break;
+	case 9: Reason = TEXT("Peso acima de 90%."); break;
+	default: Reason = TEXT("Falha ao usar a habilidade."); break;
+	}
+	const FString Name = FMythRoClientTables::SkillName(SkillID);
+	Chat(Name.IsEmpty() ? Reason : FString::Printf(TEXT("%s: %s"), *Name, *Reason), NetErrorColor);
 }

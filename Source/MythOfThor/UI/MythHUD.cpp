@@ -48,6 +48,7 @@ void AMythHUD::DrawHUD()
 	Super::DrawHUD();
 	DrawTargetRing();
 	DrawGroundItemLabels();
+	DrawCastBarsAndShouts();
 
 	if (!Canvas || Entries.IsEmpty())
 	{
@@ -303,6 +304,70 @@ void AMythHUD::DrawGroundItemLabels()
 		Placed.Add(FBox2D(L.Pos, L.Pos + L.Size));
 		FCanvasTextItem Text(L.Pos + FVector2D(3.f, 0.f), FText::FromString(L.Text), Font, L.Color);
 		Text.Scale = FVector2D(TextScale, TextScale);
+		Text.bOutlined = true;
+		Text.OutlineColor = FLinearColor(0.f, 0.f, 0.f, 0.9f);
+		Canvas->DrawItem(Text);
+	}
+}
+
+void AMythHUD::AddCastBar(AActor* Caster, float Seconds)
+{
+	if (!Caster || Seconds <= 0.05f)
+	{
+		return;
+	}
+	CastBars.RemoveAll([Caster](const FCastBar& B) { return B.Actor.Get() == Caster; });
+	CastBars.Add({ Caster, static_cast<float>(GetWorld()->GetTimeSeconds()), Seconds });
+}
+
+void AMythHUD::AddSkillShout(AActor* Caster, const FString& SkillName)
+{
+	if (Caster && !SkillName.IsEmpty())
+	{
+		Shouts.RemoveAll([Caster](const FShout& S) { return S.Actor.Get() == Caster; });
+		Shouts.Add({ Caster, SkillName + TEXT("!!"), static_cast<float>(GetWorld()->GetTimeSeconds()) });
+	}
+}
+
+void AMythHUD::DrawCastBarsAndShouts()
+{
+	if (!Canvas)
+	{
+		return;
+	}
+	const float Now = GetWorld()->GetTimeSeconds();
+	// Barra de conjuracao: moldura escura e preenchimento verde que enche ate o fim do tempo
+	CastBars.RemoveAll([Now](const FCastBar& B) { return !B.Actor.IsValid() || Now - B.Start > B.Duration; });
+	for (const FCastBar& B : CastBars)
+	{
+		const FVector Screen = Project(B.Actor->GetActorLocation() + FVector(0.f, 0.f, 150.f), true);
+		if (Screen.Z <= 0.f)
+		{
+			continue;
+		}
+		const float W = 60.f, H = 7.f;
+		const float Frac = FMath::Clamp((Now - B.Start) / B.Duration, 0.f, 1.f);
+		const FVector2D Pos(Screen.X - W * 0.5f, Screen.Y);
+		FCanvasTileItem Back(Pos - FVector2D(1.f, 1.f), FVector2D(W + 2.f, H + 2.f), FLinearColor(0.f, 0.f, 0.f, 0.75f));
+		Back.BlendMode = SE_BLEND_Translucent;
+		Canvas->DrawItem(Back);
+		FCanvasTileItem Fill(Pos, FVector2D(W * Frac, H), FLinearColor(0.35f, 0.85f, 0.35f, 1.f));
+		Canvas->DrawItem(Fill);
+	}
+	// Grito da skill: texto amarelo com contorno sobre a cabeca, subindo e sumindo em 1,6 s
+	Shouts.RemoveAll([Now](const FShout& S) { return !S.Actor.IsValid() || Now - S.Start > 1.6f; });
+	UFont* Font = GEngine ? GEngine->GetMediumFont() : nullptr;
+	for (const FShout& S : Shouts)
+	{
+		const float T = (Now - S.Start) / 1.6f;
+		const FVector Screen = Project(S.Actor->GetActorLocation() + FVector(0.f, 0.f, 170.f), true);
+		if (Screen.Z <= 0.f)
+		{
+			continue;
+		}
+		FCanvasTextItem Text(FVector2D(Screen.X, Screen.Y - 25.f * T), FText::FromString(S.Text), Font,
+			FLinearColor(1.f, 0.92f, 0.45f, 1.f - FMath::Max(0.f, T - 0.7f) / 0.3f));
+		Text.bCentreX = true;
 		Text.bOutlined = true;
 		Text.OutlineColor = FLinearColor(0.f, 0.f, 0.f, 0.9f);
 		Canvas->DrawItem(Text);

@@ -50,10 +50,21 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|CombatText")
 	float BaseScale = 1.6f;
 
+	/** Barra de conjuracao sobre a unidade (ZC_USESKILL_ACK), como no cliente original. */
+	void AddCastBar(AActor* Caster, float Seconds);
+
+	/** Nome da skill sobre quem a usou, por um instante (o RO mostra o grito da skill). */
+	void AddSkillShout(AActor* Caster, const FString& SkillName);
+
 private:
 	void DrawTargetRing();
 	/** Nome dos itens no chao, na cor da raridade. */
 	void DrawGroundItemLabels();
+	void DrawCastBarsAndShouts();
+	struct FCastBar { TWeakObjectPtr<AActor> Actor; float Start = 0.f; float Duration = 0.f; };
+	struct FShout { TWeakObjectPtr<AActor> Actor; FString Text; float Start = 0.f; };
+	TArray<FCastBar> CastBars;
+	TArray<FShout> Shouts;
 
 	struct FEntry
 	{

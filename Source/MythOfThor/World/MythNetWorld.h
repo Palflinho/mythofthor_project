@@ -66,6 +66,11 @@ private:
 	UFUNCTION() void HandleNpcMenu(int64 NpcID, const FString& Title, const TArray<FString>& Options);
 	UFUNCTION() void HandleGroundItemAppear(int64 ID, int32 ItemID, int32 Amount, int32 CellX, int32 CellY);
 	UFUNCTION() void HandleGroundItemVanish(int64 ID);
+	UFUNCTION() void HandleSkillDamage(int64 SourceID, int64 TargetID, int32 SkillID, int32 Damage, int32 Hits, uint8 DamageType);
+	UFUNCTION() void HandleSkillEffect(int64 SourceID, int64 TargetID, int32 SkillID, int32 Value);
+	UFUNCTION() void HandleSkillCast(int64 SourceID, int64 TargetID, int32 SkillID, int32 CastMs, int32 CellX, int32 CellY);
+	UFUNCTION() void HandleSkillFailed(int32 SkillID, int32 Cause);
+	class AMythHUD* GetGameHud() const;
 
 	UPROPERTY() TMap<int64, TObjectPtr<class AMythGroundItem>> GroundItems;
 };
