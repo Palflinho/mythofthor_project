@@ -17,6 +17,9 @@ struct MYTHOFTHOR_API FMythRoClientTables
 	/** Icone 24x24 do item (texture/유저인터페이스/item/<resource_name>.bmp). */
 	static UTexture2D* ItemIcon(int32 ItemID);
 
+	/** Nome do recurso do item (sprite no chao: data/sprite/아이템/<nome>.spr; icone: item/<nome>.bmp). */
+	static FString ItemResource(int32 ItemID);
+
 	/** Nome exibido da habilidade (ex.: 5 -> "Golpe Fulminante"). */
 	static FString SkillName(int32 SkillID);
 

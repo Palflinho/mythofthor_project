@@ -138,6 +138,10 @@ public:
 	UFUNCTION(Exec)
 	void MythWalk(int32 X, int32 Y);
 
+	/** Console: MythPickNearest -> anda ate o item no chao mais proximo e o pega (testes automaticos). */
+	UFUNCTION(Exec)
+	void MythPickNearest();
+
 	UMythRoHUDWidget* GetHud() const { return HudWidget; }
 
 	/** Console: MythQuitAfter 40 -> fecha o jogo apos 40 s (usado com -ExecCmds nos testes automaticos). */
@@ -214,6 +218,8 @@ private:
 	void MoveToCursor();
 	void MoveToLocation(const FVector& Destination, bool bForceSend = true);
 	void UpdateCombat(float DeltaTime);
+	void UpdatePickup();
+	TWeakObjectPtr<class AMythGroundItem> PendingPickup;
 	void SendCellToServer(const FVector& WorldLocation, bool bForce);
 	AMythPlayerCharacter* GetMythCharacter() const;
 };

@@ -5,6 +5,7 @@
 #include "UI/MythHUD.h"
 #include "World/MythMapInfo.h"
 #include "World/MythNetWorld.h"
+#include "World/MythGroundItem.h"
 #include "World/MythDayNightActor.h"
 #include "World/MythWeatherActor.h"
 #include "EngineUtils.h"
@@ -197,6 +198,15 @@ void AMythPlayerController::MoveToCursor()
 				return;
 			}
 		}
+		if (AMythGroundItem* Item = Cast<AMythGroundItem>(Hit.GetActor()))
+		{
+			// Item no chao: anda ate ele e, perto o bastante, pede ao servidor para pegar (CZ_ITEM_PICKUP)
+			ClearFocusedTarget();
+			PendingPickup = Item;
+			MoveToLocation(Item->GetActorLocation());
+			return;
+		}
+		PendingPickup = nullptr;
 		ClearFocusedTarget(); // clicar no chao cancela o alvo
 		MoveToLocation(Hit.ImpactPoint);
 	}
@@ -295,6 +305,7 @@ void AMythPlayerController::PlayerTick(float DeltaTime)
 	}
 
 	UpdateCombat(DeltaTime);
+	UpdatePickup();
 	UpdateCameraReset();
 	// Enter: com dialogo de NPC aberto avanca/escolhe/fecha; senao abre o chat (como no cliente original).
 	if (HudWidget && WasInputKeyJustPressed(EKeys::Enter) && !HudWidget->IsChatFocused() && !HudWidget->NpcDialogConfirm())
@@ -528,6 +539,25 @@ void AMythPlayerController::ClearFocusedTarget()
 	FocusedTarget = nullptr;
 }
 
+void AMythPlayerController::UpdatePickup()
+{
+	AMythGroundItem* Item = PendingPickup.Get();
+	const APawn* P = GetPawn();
+	if (!Item || !P)
+	{
+		return;
+	}
+	// O rAthena aceita pegar a ate 2 celulas (pc_takeitem); pede ao chegar a ~1,5 celula
+	if (FVector::Dist2D(P->GetActorLocation(), Item->GetActorLocation()) <= 75.f)
+	{
+		if (URagnarokNetworkSubsystem* Net = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>())
+		{
+			Net->PickUpItem(Item->NetID);
+		}
+		PendingPickup = nullptr;
+	}
+}
+
 void AMythPlayerController::UpdateCombat(float DeltaTime)
 {
 	AMythPlayerCharacter* Char = GetMythCharacter();
@@ -737,6 +767,28 @@ void AMythPlayerController::MythTalkNearest()
 	{
 		UE_LOG(LogTemp, Log, TEXT("MythNet: falando com %s"), *Best->MonsterName);
 		SetFocusedTarget(Best);
+	}
+}
+
+void AMythPlayerController::MythPickNearest()
+{
+	const APawn* P = GetPawn();
+	AMythGroundItem* Best = nullptr;
+	float BestDist = TNumericLimits<float>::Max();
+	for (TActorIterator<AMythGroundItem> It(GetWorld()); It && P; ++It)
+	{
+		const float D = FVector::DistSquared(It->GetActorLocation(), P->GetActorLocation());
+		if (D < BestDist)
+		{
+			BestDist = D;
+			Best = *It;
+		}
+	}
+	if (Best)
+	{
+		UE_LOG(LogTemp, Log, TEXT("MythNet: pegando %s"), *Best->GetLabel());
+		PendingPickup = Best;
+		MoveToLocation(Best->GetActorLocation());
 	}
 }
 

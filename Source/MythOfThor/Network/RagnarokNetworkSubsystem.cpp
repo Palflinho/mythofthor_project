@@ -877,6 +877,15 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case RagnarokPackets::HEADER_ZC_ITEM_FALL_ENTRY2:
 				HandleItemFall(PacketData, ActualLen);
 				break;
+			case 0x0b41: // ZC_ITEM_PICKUP_ACK (20211103)
+				HandleItemPickupAck(PacketData, ActualLen);
+				break;
+			case 0x00af: // ZC_ITEM_THROW_ACK: index +2, count +4
+				RemoveInventoryAmount(*reinterpret_cast<const uint16*>(PacketData + 2), *reinterpret_cast<const uint16*>(PacketData + 4));
+				break;
+			case 0x07fa: // ZC_DELETE_ITEM_FROM_BODY: deleteType +2, index +4, count +6
+				RemoveInventoryAmount(*reinterpret_cast<const uint16*>(PacketData + 4), *reinterpret_cast<const int16*>(PacketData + 6));
+				break;
 			case 0x009d: // ZC_ITEM_ENTRY: item que ja estava no chao ao entrar na visao
 				HandleItemEntry(PacketData, ActualLen);
 				break;
@@ -1509,6 +1518,50 @@ void URagnarokNetworkSubsystem::HandleItemFall(const uint8* PacketData, int32 Pa
 	int16 Count = *reinterpret_cast<const int16*>(PacketData + 19);
 
 	OnGroundItemAppear.Broadcast(GID, ItemID, FMath::Max<int32>(1, Count), CellX, CellY);
+}
+
+void URagnarokNetworkSubsystem::HandleItemPickupAck(const uint8* PacketData, int32 PacketSize)
+{
+	// PACKET_ZC_ITEM_PICKUP_ACK (packets_struct.hpp, 0x0b41): Index +2, count +4, nameid (u32) +6, IsIdentified +10,
+	// slot[4] +12, location (u32) +28, type +32, result +33 (0 = ok)
+	if (PacketSize < 34 || PacketData[33] != 0)
+	{
+		return;
+	}
+	const int32 Index = *reinterpret_cast<const uint16*>(PacketData + 2);
+	const int32 Count = *reinterpret_cast<const uint16*>(PacketData + 4);
+	FRagnarokInventoryItem* Existing = InventoryItems.FindByPredicate([Index](const FRagnarokInventoryItem& I) { return I.Index == Index; });
+	if (Existing)
+	{
+		Existing->Amount += Count;
+	}
+	else
+	{
+		FRagnarokInventoryItem Item;
+		Item.Index = Index;
+		Item.Amount = Count;
+		Item.ItemID = static_cast<int32>(*reinterpret_cast<const uint32*>(PacketData + 6));
+		Item.bIdentified = PacketData[10] != 0;
+		Item.EquipLocation = static_cast<int32>(*reinterpret_cast<const uint32*>(PacketData + 28));
+		Item.Type = PacketData[32];
+		InventoryItems.Add(Item);
+	}
+	OnInventory.Broadcast(InventoryItems);
+}
+
+void URagnarokNetworkSubsystem::RemoveInventoryAmount(int32 Index, int32 Count)
+{
+	const int32 Pos = InventoryItems.IndexOfByPredicate([Index](const FRagnarokInventoryItem& I) { return I.Index == Index; });
+	if (Pos == INDEX_NONE)
+	{
+		return;
+	}
+	InventoryItems[Pos].Amount -= Count;
+	if (InventoryItems[Pos].Amount <= 0)
+	{
+		InventoryItems.RemoveAt(Pos);
+	}
+	OnInventory.Broadcast(InventoryItems);
 }
 
 void URagnarokNetworkSubsystem::HandleItemEntry(const uint8* PacketData, int32 PacketSize)

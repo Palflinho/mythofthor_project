@@ -578,6 +578,8 @@ private:
 	void FlushPendingSend();
 	void HandleMapMove(const uint8* PacketData, int32 PacketSize);
 	void HandleItemEntry(const uint8* PacketData, int32 PacketSize);
+	void HandleItemPickupAck(const uint8* PacketData, int32 PacketSize);
+	void RemoveInventoryAmount(int32 Index, int32 Count);
 	FIntPoint PendingMapCell = FIntPoint::ZeroValue;
 	bool bAwaitingMapLoad = false;
 	/** Bytes aguardando o socket conectar (connect nao-bloqueante) ou sobra de envio parcial. */

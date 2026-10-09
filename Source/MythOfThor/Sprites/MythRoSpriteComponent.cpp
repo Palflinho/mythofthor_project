@@ -434,7 +434,14 @@ int32 UMythRoSpriteComponent::GetActionIndex() const
 	case EMythSpriteState::Hit:    Group = bMob ? MobGroupHurt : GroupHurt; break;
 	case EMythSpriteState::Dead:   Group = bMob ? MobGroupDead : GroupDead; break;
 	}
-	return Group * 8 + static_cast<int32>(Direction);
+	const int32 Index = Group * 8 + static_cast<int32>(Direction);
+	// Sprites com poucas acoes (item no chao: 1; varios NPCs: so as 8 de parado) reaproveitam as que existem
+	const int32 Num = Body.Act.Actions.Num();
+	if (Num > 0 && Index >= Num)
+	{
+		return Num >= 8 ? static_cast<int32>(Direction) % Num : 0;
+	}
+	return Index;
 }
 
 int32 UMythRoSpriteComponent::GetFrameIndex(const FRoActAction& Action, bool& bOutFinished) const

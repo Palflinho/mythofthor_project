@@ -6,6 +6,7 @@
 #include "Gameplay/MythStatsComponent.h"
 #include "Sprites/MythMonster.h"
 #include "Sprites/MythRoSpriteComponent.h"
+#include "World/MythGroundItem.h"
 #include "UI/MythHUD.h"
 #include "UI/MythRoHUDWidget.h"
 
@@ -180,6 +181,8 @@ void AMythNetWorld::BeginPlay()
 	Net->OnNetworkDisconnected.AddDynamic(this, &AMythNetWorld::HandleDisconnected);
 	Net->OnNpcDialog.AddDynamic(this, &AMythNetWorld::HandleNpcDialog);
 	Net->OnNpcMenu.AddDynamic(this, &AMythNetWorld::HandleNpcMenu);
+	Net->OnGroundItemAppear.AddDynamic(this, &AMythNetWorld::HandleGroundItemAppear);
+	Net->OnGroundItemVanish.AddDynamic(this, &AMythNetWorld::HandleGroundItemVanish);
 
 	// Chegou num mapa novo por ordem do servidor (portal/warp): termina a entrada no proximo quadro, com o
 	// personagem ja criado pelo GameMode, e so entao avisa o servidor (ACTORINIT)
@@ -220,6 +223,8 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnNetworkDisconnected.RemoveAll(this);
 		Net->OnNpcDialog.RemoveAll(this);
 		Net->OnNpcMenu.RemoveAll(this);
+		Net->OnGroundItemAppear.RemoveAll(this);
+		Net->OnGroundItemVanish.RemoveAll(this);
 	}
 	Super::EndPlay(EndPlayReason);
 }
@@ -331,6 +336,14 @@ void AMythNetWorld::HandleMapEnter(const FString& MapName, int32 CellX, int32 Ce
 		}
 	}
 	Units.Reset();
+	for (TPair<int64, TObjectPtr<AMythGroundItem>>& I : GroundItems)
+	{
+		if (IsValid(I.Value))
+		{
+			I.Value->Destroy();
+		}
+	}
+	GroundItems.Reset();
 
 	const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld());
 	if (Info && !Info->MapName.Equals(Map, ESearchCase::IgnoreCase))
@@ -625,5 +638,38 @@ void AMythNetWorld::HandleNpcMenu(int64 NpcID, const FString& Title, const TArra
 	if (UMythRoHUDWidget* Hud = GetHud())
 	{
 		Hud->NpcMenu(NpcID, Options);
+	}
+}
+
+// ------------------------------------------------------------------------------------------------ itens no chao
+
+void AMythNetWorld::HandleGroundItemAppear(int64 ID, int32 ItemID, int32 Amount, int32 CellX, int32 CellY)
+{
+	if (AMythGroundItem* Existing = GroundItems.FindRef(ID))
+	{
+		if (IsValid(Existing))
+		{
+			return;
+		}
+	}
+	const FVector Ground = CellToGround(CellX, CellY);
+	const FTransform Xf(FRotator::ZeroRotator, Ground);
+	AMythGroundItem* Item = GetWorld()->SpawnActorDeferred<AMythGroundItem>(AMythGroundItem::StaticClass(), Xf, nullptr, nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+	if (!Item)
+	{
+		return;
+	}
+	// Item novo perto de quem acabou de matar algo: toca o pulinho de queda (o ZC_ITEM_ENTRY e item ja parado)
+	Item->Setup(ID, ItemID, Amount, bInMap);
+	Item->FinishSpawning(Xf);
+	GroundItems.Add(ID, Item);
+}
+
+void AMythNetWorld::HandleGroundItemVanish(int64 ID)
+{
+	TObjectPtr<AMythGroundItem> Item;
+	if (GroundItems.RemoveAndCopyValue(ID, Item) && IsValid(Item))
+	{
+		Item->Destroy();
 	}
 }

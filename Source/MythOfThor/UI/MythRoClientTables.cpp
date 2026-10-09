@@ -88,3 +88,9 @@ UTexture2D* FMythRoClientTables::SkillIcon(int32 SkillID)
 	const FRoTableEntry* E = RoSkills().Find(SkillID);
 	return E && !E->Resource.IsEmpty() ? FMythRoUITextures::Get(FString::Printf(TEXT("item/%s.bmp"), *E->Resource.ToLower())) : nullptr;
 }
+
+FString FMythRoClientTables::ItemResource(int32 ItemID)
+{
+	const FRoTableEntry* E = RoItems().Find(ItemID);
+	return E ? E->Resource : FString();
+}
