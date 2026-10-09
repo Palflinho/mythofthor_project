@@ -926,6 +926,20 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case RagnarokPackets::HEADER_ZC_NOTIFY_EFFECT2:
 				HandleEffect(PacketData, ActualLen);
 				break;
+			case RagnarokPackets::HEADER_ZC_MSG_STATE_CHANGE3:
+			case RagnarokPackets::HEADER_ZC_MSG_STATE_CHANGE:
+			case RagnarokPackets::HEADER_ZC_EFST_SET_ENTER:
+				HandleStateChange(PacketData, ActualLen, PacketID);
+				break;
+			case RagnarokPackets::HEADER_ZC_SKILL_ENTRY5:
+				HandleSkillUnitAppear(PacketData, ActualLen);
+				break;
+			case RagnarokPackets::HEADER_ZC_SKILL_DISAPPEAR:
+				HandleSkillUnitDisappear(PacketData, ActualLen);
+				break;
+			case RagnarokPackets::HEADER_ZC_NOTIFY_EFFECT:
+				HandleNotifyEffect(PacketData, ActualLen);
+				break;
 			default:
 				// Pacote conhecido mas sem tratamento visual imediato (ex.: slots, ticks, ping)
 				break;
@@ -1960,4 +1974,124 @@ void URagnarokNetworkSubsystem::HandleSkillResult(const uint8* PacketData, int32
 	default:
 		break;
 	}
+}
+
+void URagnarokNetworkSubsystem::HandleStateChange(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
+{
+	int64 UnitID = 0;
+	int32 EfstID = 0;
+	bool bActive = false;
+	int32 TotalMs = 0;
+	int32 RemainMs = 0;
+
+	if (PacketID == RagnarokPackets::HEADER_ZC_MSG_STATE_CHANGE3) // 0x0983 (29 bytes)
+	{
+		if (PacketSize < 29)
+		{
+			return;
+		}
+		EfstID = *reinterpret_cast<const uint16*>(PacketData + 2);
+		UnitID = static_cast<int64>(*reinterpret_cast<const uint32*>(PacketData + 4));
+		uint8 Flag = PacketData[8];
+		bActive = (Flag != 0);
+		TotalMs = static_cast<int32>(*reinterpret_cast<const uint32*>(PacketData + 9));
+		RemainMs = static_cast<int32>(*reinterpret_cast<const uint32*>(PacketData + 13));
+	}
+	else if (PacketID == RagnarokPackets::HEADER_ZC_MSG_STATE_CHANGE) // 0x0196 (9 bytes)
+	{
+		if (PacketSize < 9)
+		{
+			return;
+		}
+		EfstID = *reinterpret_cast<const uint16*>(PacketData + 2);
+		UnitID = static_cast<int64>(*reinterpret_cast<const uint32*>(PacketData + 4));
+		uint8 Flag = PacketData[8];
+		bActive = (Flag != 0);
+		TotalMs = 0;
+		RemainMs = 0;
+	}
+	else if (PacketID == RagnarokPackets::HEADER_ZC_EFST_SET_ENTER) // 0x0984 (28 bytes)
+	{
+		if (PacketSize < 28)
+		{
+			return;
+		}
+		UnitID = static_cast<int64>(*reinterpret_cast<const uint32*>(PacketData + 2));
+		EfstID = *reinterpret_cast<const uint16*>(PacketData + 6);
+		TotalMs = static_cast<int32>(*reinterpret_cast<const uint32*>(PacketData + 8));
+		RemainMs = static_cast<int32>(*reinterpret_cast<const uint32*>(PacketData + 12));
+		bActive = true;
+	}
+	else
+	{
+		return;
+	}
+
+	if (bLogPackets)
+	{
+		UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] [OnStatusChange] UnitID=%lld EfstID=%d Active=%d TotalMs=%d RemainMs=%d"),
+			UnitID, EfstID, bActive ? 1 : 0, TotalMs, RemainMs);
+	}
+
+	OnStatusChange.Broadcast(UnitID, EfstID, bActive, TotalMs, RemainMs);
+}
+
+void URagnarokNetworkSubsystem::HandleSkillUnitAppear(const uint8* PacketData, int32 PacketSize)
+{
+	// 0x09ca ZC_SKILL_ENTRY5 (23 bytes): [id 0x09ca][len 23][unit_id 4][src_id 8][x 12][y 14][unit_type 16][range 20][visible 21][skill_lv 22]
+	if (PacketSize < 23)
+	{
+		return;
+	}
+
+	int64 UnitID = static_cast<int64>(*reinterpret_cast<const uint32*>(PacketData + 4));
+	int64 OwnerID = static_cast<int64>(*reinterpret_cast<const uint32*>(PacketData + 8));
+	int32 CellX = static_cast<int32>(*reinterpret_cast<const int16*>(PacketData + 12));
+	int32 CellY = static_cast<int32>(*reinterpret_cast<const int16*>(PacketData + 14));
+	int32 UnitType = static_cast<int32>(*reinterpret_cast<const uint32*>(PacketData + 16));
+
+	if (bLogPackets)
+	{
+		UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] [OnSkillUnitAppear] UnitID=%lld OwnerID=%lld UnitType=%d Cell=(%d,%d)"),
+			UnitID, OwnerID, UnitType, CellX, CellY);
+	}
+
+	OnSkillUnitAppear.Broadcast(UnitID, OwnerID, UnitType, CellX, CellY);
+}
+
+void URagnarokNetworkSubsystem::HandleSkillUnitDisappear(const uint8* PacketData, int32 PacketSize)
+{
+	// 0x0120 ZC_SKILL_DISAPPEAR (6 bytes): [id 0x0120][unit_id 2]
+	if (PacketSize < 6)
+	{
+		return;
+	}
+
+	int64 UnitID = static_cast<int64>(*reinterpret_cast<const uint32*>(PacketData + 2));
+
+	if (bLogPackets)
+	{
+		UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] [OnSkillUnitDisappear] UnitID=%lld"), UnitID);
+	}
+
+	OnSkillUnitDisappear.Broadcast(UnitID);
+}
+
+void URagnarokNetworkSubsystem::HandleNotifyEffect(const uint8* PacketData, int32 PacketSize)
+{
+	// 0x019b ZC_NOTIFY_EFFECT (10 bytes): [id 0x019b][aid 2][effect_id 6]
+	if (PacketSize < 10)
+	{
+		return;
+	}
+
+	int64 UnitID = static_cast<int64>(*reinterpret_cast<const uint32*>(PacketData + 2));
+	int32 Type = *reinterpret_cast<const int32*>(PacketData + 6);
+
+	if (bLogPackets)
+	{
+		UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] [OnNotifyEffect] UnitID=%lld Type=%d"), UnitID, Type);
+	}
+
+	OnNotifyEffect.Broadcast(UnitID, Type);
 }

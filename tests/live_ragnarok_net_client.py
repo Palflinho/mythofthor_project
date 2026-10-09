@@ -291,6 +291,151 @@ def run_test():
         except (socket.timeout, BlockingIOError):
             break
 
+    # Desativa auto-battle
+    time.sleep(0.1)
+    send_chat_message(s_map, char_name, "@autobattle off")
+
+    # -------------------------------------------------------------------------
+    # 8. EFEITOS GERAIS DO SERVIDOR (ZC_NOTIFY_EFFECT 0x019b)
+    # -------------------------------------------------------------------------
+    print("\n=== [8] Teste de Efeito Geral (ZC_NOTIFY_EFFECT 0x019b) ===")
+    send_chat_message(s_map, char_name, "@blvl -5")
+    time.sleep(0.1)
+    send_chat_message(s_map, char_name, "@blvl 1")
+    print("Comando '@blvl 1' enviado para disparar efeito de level up")
+
+    got_notify_effect = False
+    start_wait = time.time()
+    while time.time() - start_wait < 3.0 and not got_notify_effect:
+        try:
+            chunk = s_map.recv(4096)
+            if not chunk:
+                break
+            if b'\x9b\x01' in chunk: # 0x019b (ZC_NOTIFY_EFFECT)
+                idx = chunk.find(b'\x9b\x01')
+                if idx + 10 <= len(chunk):
+                    eff_aid, = struct.unpack_from("<I", chunk, idx + 2)
+                    eff_type, = struct.unpack_from("<i", chunk, idx + 6)
+                    print(f">>> ZC_NOTIFY_EFFECT (0x019b) recebido! AID={eff_aid}, EffectType={eff_type} (0=BaseLevelUp)")
+                    got_notify_effect = True
+                    break
+        except (socket.timeout, BlockingIOError):
+            break
+
+    # -------------------------------------------------------------------------
+    # 9. BUFFS / STATUS CHANGE (ZC_MSG_STATE_CHANGE3 0x0983 & 0x0196)
+    # -------------------------------------------------------------------------
+    print("\n=== [9] Teste de Buffs / Status Change (ZC_MSG_STATE_CHANGE3 0x0983 & 0x0196) ===")
+    send_chat_message(s_map, char_name, "@job 4") # Noviço
+    time.sleep(0.1)
+    send_chat_message(s_map, char_name, "@allskill")
+    time.sleep(0.1)
+
+    # Usa Bênção (skill 34, lv 10) no próprio personagem (account_id)
+    # CZ_USE_SKILL 0x089b (10 bytes: [0x089b][lv 10][skill 34][target_id])
+    cz_use_bless = struct.pack("<HHHI", 0x089b, 10, 34, account_id)
+    s_map.sendall(cz_use_bless)
+    print("Enviado CZ_USE_SKILL para Bênção (AL_BLESSING nv 10)")
+
+    got_state_change3 = False
+    start_wait = time.time()
+    while time.time() - start_wait < 3.0 and not got_state_change3:
+        try:
+            chunk = s_map.recv(4096)
+            if not chunk:
+                break
+            if b'\x83\x09' in chunk: # 0x0983 (ZC_MSG_STATE_CHANGE3)
+                idx = chunk.find(b'\x83\x09')
+                if idx + 29 <= len(chunk):
+                    efst_id, = struct.unpack_from("<H", chunk, idx + 2)
+                    st_aid, = struct.unpack_from("<I", chunk, idx + 4)
+                    st_flag = chunk[idx + 8]
+                    total_ms, = struct.unpack_from("<I", chunk, idx + 9)
+                    remain_ms, = struct.unpack_from("<I", chunk, idx + 13)
+                    print(f">>> ZC_MSG_STATE_CHANGE3 (0x0983) recebido! EfstID={efst_id}, AID={st_aid}, Flag={st_flag}, TotalMs={total_ms}, RemainMs={remain_ms}")
+                    got_state_change3 = True
+                    break
+        except (socket.timeout, BlockingIOError):
+            break
+
+    # Aplica um status curto de 1 segundo (1000ms) para observar a desativação natural (0x0196)
+    send_chat_message(s_map, char_name, "@sc_start 10 1000 1")
+    got_state_change_off = False
+    start_wait = time.time()
+    while time.time() - start_wait < 4.0 and not got_state_change_off:
+        try:
+            chunk = s_map.recv(4096)
+            if not chunk:
+                break
+            if b'\x96\x01' in chunk: # 0x0196 (ZC_MSG_STATE_CHANGE)
+                idx = chunk.find(b'\x96\x01')
+                if idx + 9 <= len(chunk):
+                    efst_id, = struct.unpack_from("<H", chunk, idx + 2)
+                    st_aid, = struct.unpack_from("<I", chunk, idx + 4)
+                    st_flag = chunk[idx + 8]
+                    print(f">>> ZC_MSG_STATE_CHANGE (0x0196) recebido! EfstID={efst_id}, AID={st_aid}, Flag={st_flag} (0=Desativado)")
+                    got_state_change_off = True
+                    break
+        except (socket.timeout, BlockingIOError):
+            break
+
+    # -------------------------------------------------------------------------
+    # 10. SKILLS DE CHÃO (ZC_SKILL_ENTRY5 0x09ca & ZC_SKILL_DISAPPEAR 0x0120)
+    # -------------------------------------------------------------------------
+    print("\n=== [10] Teste de Skills de Chão (ZC_SKILL_ENTRY5 0x09ca & ZC_SKILL_DISAPPEAR 0x0120) ===")
+    send_chat_message(s_map, char_name, "@job 2") # Mago
+    time.sleep(0.1)
+    send_chat_message(s_map, char_name, "@allskill")
+    time.sleep(0.1)
+
+    # Conjura Parede de Fogo (WZ_FIREWALL, id 18, lv 1) na posição à frente
+    # CZ_USE_SKILL2 0x0959 (10 bytes: [0x0959][lv 1][skill 18][x][y])
+    fw_x, fw_y = cur_x + 1, cur_y + 1
+    cz_use_pos = struct.pack("<HHHHH", 0x0959, 1, 18, fw_x, fw_y)
+    s_map.sendall(cz_use_pos)
+    print(f"Enviado CZ_USE_SKILL2 para Parede de Fogo (WZ_FIREWALL nv 1) em ({fw_x}, {fw_y})")
+
+    got_skill_entry = False
+    fw_unit_id = 0
+    start_wait = time.time()
+    while time.time() - start_wait < 3.0 and not got_skill_entry:
+        try:
+            chunk = s_map.recv(4096)
+            if not chunk:
+                break
+            if b'\xca\x09' in chunk: # 0x09ca (ZC_SKILL_ENTRY5)
+                idx = chunk.find(b'\xca\x09')
+                if idx + 23 <= len(chunk):
+                    p_len, = struct.unpack_from("<H", chunk, idx + 2)
+                    fw_unit_id, = struct.unpack_from("<I", chunk, idx + 4)
+                    fw_owner, = struct.unpack_from("<I", chunk, idx + 8)
+                    sx, = struct.unpack_from("<h", chunk, idx + 12)
+                    sy, = struct.unpack_from("<h", chunk, idx + 14)
+                    u_type, = struct.unpack_from("<I", chunk, idx + 16)
+                    print(f">>> ZC_SKILL_ENTRY5 (0x09ca) recebido! UnitID={fw_unit_id}, Owner={fw_owner}, Pos=({sx},{sy}), UnitType={u_type}")
+                    got_skill_entry = True
+                    break
+        except (socket.timeout, BlockingIOError):
+            break
+
+    # Aguarda ou força sumiço da unidade de chão para verificar 0x0120
+    got_skill_disappear = False
+    start_wait = time.time()
+    while time.time() - start_wait < 6.0 and not got_skill_disappear:
+        try:
+            chunk = s_map.recv(4096)
+            if not chunk:
+                break
+            if b'\x20\x01' in chunk: # 0x0120 (ZC_SKILL_DISAPPEAR)
+                idx = chunk.find(b'\x20\x01')
+                if idx + 6 <= len(chunk):
+                    dis_id, = struct.unpack_from("<I", chunk, idx + 2)
+                    print(f">>> ZC_SKILL_DISAPPEAR (0x0120) recebido! UnitID={dis_id}")
+                    got_skill_disappear = True
+                    break
+        except (socket.timeout, BlockingIOError):
+            break
+
     s_map.close()
 
     print("\n==================================================================")

@@ -294,6 +294,16 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FOnSkillCast, int64, SourceID, int6
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSkillFailed, int32, SkillID, int32, Cause);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSpecialEffect, int64, UnitID, int32, EffectID);
 
+// Buffs / Estados (Tarefa A1)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FOnStatusChange, int64, UnitID, int32, EfstID, bool, bActive, int32, TotalMs, int32, RemainMs);
+
+// Skills de chão (Tarefa A2)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FOnSkillUnitAppear, int64, UnitID, int64, OwnerID, int32, UnitType, int32, X, int32, Y);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSkillUnitDisappear, int64, UnitID);
+
+// Efeitos gerais do servidor (Tarefa A3)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnNotifyEffect, int64, UnitID, int32, Type);
+
 // Delegates de compatibilidade anterior
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerMoveConfirmed, int32, TargetX, int32, TargetY);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnDamageReceived, int64, TargetID, int32, Damage, bool, bIsCritical, bool, bIsMiss);
@@ -594,6 +604,22 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Skills")
 	FOnSpecialEffect OnSpecialEffect;
 
+	/** Buffs/estados: ativacao com duracao e desativacao (ZC_MSG_STATE_CHANGE3 0x0983, ZC_MSG_STATE_CHANGE 0x0196, ZC_EFST_SET_ENTER 0x0984). */
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Status")
+	FOnStatusChange OnStatusChange;
+
+	/** Unidade de skill no chão que surge (ZC_SKILL_ENTRY5 0x09ca: Firewall, Pneuma, etc.). */
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Skills")
+	FOnSkillUnitAppear OnSkillUnitAppear;
+
+	/** Unidade de skill no chão removida (ZC_SKILL_DISAPPEAR 0x0120). */
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Skills")
+	FOnSkillUnitDisappear OnSkillUnitDisappear;
+
+	/** Efeitos gerais da unidade: subir de nível, refino (ZC_NOTIFY_EFFECT 0x019b). */
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Effects")
+	FOnNotifyEffect OnNotifyEffect;
+
 	// Compatibilidade
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
 	FOnPlayerMoveConfirmed OnPlayerMoveConfirmed;
@@ -670,4 +696,8 @@ private:
 	void HandleSkillList(const uint8* PacketData, int32 PacketSize);
 	void HandleInventoryList(const uint8* PacketData, int32 PacketSize, bool bIsEquip);
 	void HandleEffect(const uint8* PacketData, int32 PacketSize);
+	void HandleStateChange(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	void HandleSkillUnitAppear(const uint8* PacketData, int32 PacketSize);
+	void HandleSkillUnitDisappear(const uint8* PacketData, int32 PacketSize);
+	void HandleNotifyEffect(const uint8* PacketData, int32 PacketSize);
 };

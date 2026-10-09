@@ -98,6 +98,16 @@ namespace RagnarokPackets
 
     // Clima & Efeitos Especiais
     static constexpr uint16 HEADER_ZC_NOTIFY_EFFECT2    = 0x01f3; // 10 bytes: [uint16 opcode][uint32 GID][int32 effect_id]
+    static constexpr uint16 HEADER_ZC_NOTIFY_EFFECT     = 0x019b; // 10 bytes: [uint16 opcode][uint32 GID][int32 effect_id]
+
+    // Buffs e Estados (Status Change)
+    static constexpr uint16 HEADER_ZC_MSG_STATE_CHANGE3 = 0x0983; // 29 bytes: ativa estado com duracao total/restante
+    static constexpr uint16 HEADER_ZC_MSG_STATE_CHANGE  = 0x0196; // 9 bytes: desativa estado (flag 0)
+    static constexpr uint16 HEADER_ZC_EFST_SET_ENTER    = 0x0984; // 28 bytes: lista de estados ao entrar no mapa
+
+    // Skills de Chão (Unidades de Habilidade)
+    static constexpr uint16 HEADER_ZC_SKILL_ENTRY5      = 0x09ca; // 23 bytes: unidade de skill no chão (Firewall, Pneuma...)
+    static constexpr uint16 HEADER_ZC_SKILL_DISAPPEAR   = 0x0120; // 6 bytes: remoção de unidade de skill
 
     namespace WeatherEffects
     {
@@ -237,6 +247,7 @@ namespace RagnarokPackets
             case 0x011b: return 20;
             case 0x011d: return 2;
             case 0x011f: return 16;
+            case 0x0120: return 6;
             case 0x0126: return 8;
             case 0x0127: return 8;
             case 0x0128: return 8;
@@ -304,6 +315,7 @@ namespace RagnarokPackets
             case 0x0198: return 8;
             case 0x0199: return 4;
             case 0x019a: return 14;
+            case 0x019b: return 10;
             case 0x019c: return -1;
             case 0x019d: return 6;
             case 0x019f: return 6;
@@ -922,6 +934,7 @@ namespace RagnarokPackets
             case 0x097f: return -1;
             case 0x0980: return 7;
             case 0x0983: return 29;
+            case 0x0984: return 28;
             case 0x098d: return -1;
             case 0x0998: return 8;
             case 0x099a: return 8;
