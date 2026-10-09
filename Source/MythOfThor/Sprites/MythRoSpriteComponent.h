@@ -144,6 +144,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
 	float BlobShadowScale = 1.f;
 
+	/**
+	 * Com o sol alto a sombra projetada vira uma tira fina ("papel"). Quando o comprimento dela no chao fica abaixo
+	 * deste valor (cm, ~ tamanho do blob), ela encolhe ate sumir e fica so o blob; com o sol baixando ela volta a
+	 * crescer suavemente (some por completo em ShadowFadeLength e esta inteira em 2x).
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
+	float ShadowFadeLength = 45.f;
+
 	/** Toca os sons pedidos pelos eventos dos quadros do .act (passos, golpes, dano, morte). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
 	bool bPlayActSounds = true;

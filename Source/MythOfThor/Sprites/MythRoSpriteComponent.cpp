@@ -228,6 +228,22 @@ void UMythRoSpriteComponent::UpdateShadowTransform(const FVector& Feet)
 	}
 	// Plano em pe, de frente para a luz (so o yaw da luz importa): a silhueta inteira vira sombra no chao.
 	FVector LightDir = DayNight.IsValid() ? DayNight->GetLightDirection() : FVector(0.3f, 0.2f, -1.f);
+
+	// Comprimento da sombra no chao = altura do sprite / tan(elevacao da luz). Perto do meio-dia ela fica do
+	// tamanho do blob: a copia em pe e achatada ate sumir (fica so o blob) e cresce de novo quando o sol baixa.
+	const float Horizontal = FVector2D(LightDir.X, LightDir.Y).Size();
+	const float Down = FMath::Max(-LightDir.Z, KINDA_SMALL_NUMBER);
+	const FBox& Frame = GetFrameLocalBounds();
+	const float Height = Frame.IsValid ? FMath::Max(Frame.GetSize().Z, 40.f) : 90.f;
+	const float ShadowLength = Height * Horizontal / Down;
+	const float Fade = ShadowFadeLength > 0.f ? FMath::Clamp((ShadowLength - ShadowFadeLength) / ShadowFadeLength, 0.f, 1.f) : 1.f;
+	const bool bShowCast = bCastSpriteShadow && Fade > 0.02f;
+	if (ShadowMesh->CastShadow != bShowCast)
+	{
+		ShadowMesh->SetCastShadow(bShowCast);
+	}
+	ShadowMesh->SetWorldScale3D(FVector(1.f, 1.f, FMath::Max(Fade, 0.02f)));
+
 	LightDir.Z = 0.f;
 	if (!LightDir.Normalize())
 	{
