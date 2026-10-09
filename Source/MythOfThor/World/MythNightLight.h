@@ -24,7 +24,7 @@ public:
 
 	/** Intensidade em plena noite (candelas). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NightLight")
-	float NightIntensity = 40.f;
+	float NightIntensity = 110.f;
 
 	/** Fator de noite a partir do qual a luz comeca a acender (0 = dia, 1 = noite). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NightLight")

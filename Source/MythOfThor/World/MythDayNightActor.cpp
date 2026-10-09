@@ -28,6 +28,7 @@ AMythDayNightActor::AMythDayNightActor()
 	Sun = CreateDefaultSubobject<UDirectionalLightComponent>(TEXT("Sun"));
 	Sun->SetupAttachment(Root);
 	Sun->SetMobility(EComponentMobility::Movable);
+	Sun->SetLightSourceAngle(1.5f); // penumbra: borda das sombras mais macia
 	Sun->SetAtmosphereSunLight(true);
 	Sun->SetAtmosphereSunLightIndex(0);
 
@@ -113,6 +114,14 @@ void AMythDayNightActor::UpdateLighting()
 	Sun->SetIntensity(SunIntensityLux * Daylight);
 
 	Moon->SetIntensity(MoonIntensityLux * Smooth(0.f, 0.3f, -S));
+
+	// So uma direcional "dominante" por vez: a outra fica desligada quando nao contribui
+	// (evita o aviso de luzes direcionais competindo pelo sombreamento e pela neblina).
+	const bool bSunUp = Daylight > 0.001f;
+	Sun->SetVisibility(bSunUp);
+	Moon->SetVisibility(!bSunUp || S < 0.f);
+	Sun->SetCastShadows(bSunUp);
+	Moon->SetCastShadows(!bSunUp);
 
 	SkyLight->SetIntensity(FMath::Lerp(NightSkyLightIntensity, DaySkyLightIntensity, Daylight));
 	SkyLight->SetLightColor(FMath::Lerp(FLinearColor(0.45f, 0.55f, 1.f), FLinearColor::White, Daylight));

@@ -8,7 +8,7 @@
 class UInputMappingContext;
 class UInputAction;
 class AMythPlayerCharacter;
-class UMythClassicHUDWidget;
+class UMythRoHUDWidget;
 class AMythMonster;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMythAttackPerformed, AMythMonster*, Target);
@@ -111,7 +111,7 @@ private:
 	double LastAttackTime = -1000.0;
 	float ChaseRepathTimer = 0.f;
 
-	UPROPERTY() TObjectPtr<UMythClassicHUDWidget> HudWidget;
+	UPROPERTY() TObjectPtr<UMythRoHUDWidget> HudWidget;
 
 	UPROPERTY() TObjectPtr<UInputMappingContext> MappingContext;
 	UPROPERTY() TObjectPtr<UInputAction> MoveAction;

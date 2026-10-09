@@ -463,6 +463,51 @@ def add_lighting():
     ppv.set_editor_property('settings', s)
 
 
+def read_gat_size(obj_path, map_name):
+    """Largura x altura em celulas, do cabecalho do <mapa>.gat ao lado do .obj (None se nao houver)."""
+    path = os.path.join(os.path.dirname(obj_path), '%s.gat' % map_name)
+    if not os.path.exists(path):
+        return None
+    import struct
+    with open(path, 'rb') as f:
+        head = f.read(14)
+    if head[:4] != b'GRAT':
+        return None
+    return struct.unpack_from('<II', head, 6)
+
+
+def add_gat_collision(obj_path, dest, name, scale, center):
+    """
+    Cria a colisao do mapa a partir do <mapa>_gat_floor.obj / _gat_walls.obj (gerados do .gat):
+      piso: invisivel, bloqueia tudo (recebe o clique e gera a navegacao);
+      paredes: invisiveis, bloqueiam so o Pawn (o clique passa por elas) e nao mexem na navegacao.
+    """
+    base = os.path.splitext(obj_path)[0]
+    floor_obj, walls_obj = base + '_gat_floor.obj', base + '_gat_walls.obj'
+    if not os.path.exists(floor_obj):
+        warn('sem colisao do GAT (%s nao existe): rode o compile_map_to_obj.py de novo' % os.path.basename(floor_obj))
+        return False
+    for kind, path in (('floor', floor_obj), ('walls', walls_obj)):
+        if not os.path.exists(path):
+            continue
+        verts, uvs, tris, _, _ = parse_obj(path)
+        if not tris:
+            continue
+        mesh = build_mesh(dest, '%s_gat_%s' % (name, kind), verts, uvs, tris, {}, scale, center)
+        actor = spawn(unreal.StaticMeshActor, (0, 0, 0), label='GAT_%s' % kind)
+        comp = actor.static_mesh_component
+        comp.set_static_mesh(mesh)
+        comp.set_visibility(False)  # so colisao: nao aparece nem projeta sombra
+        comp.set_cast_shadow(False)
+        if kind == 'walls':
+            comp.set_collision_profile_name('Custom')
+            comp.set_collision_response_to_all_channels(unreal.CollisionResponseType.ECR_IGNORE)
+            comp.set_collision_response_to_channel(unreal.CollisionChannel.ECC_PAWN, unreal.CollisionResponseType.ECR_BLOCK)
+            comp.set_editor_property('can_ever_affect_navigation', False)
+        log('colisao do GAT (%s): %d triangulos' % (kind, len(tris)))
+    return True
+
+
 def add_night_lights(obj_path, cx, cy, scale):
     """Cria uma AMythNightLight por luz do <mapa>_lights.json (gerado pelo compile_map_to_obj.py)."""
     path = os.path.splitext(obj_path)[0] + '_lights.json'
@@ -541,6 +586,17 @@ def run():
     origin, extent = mesh_actor.get_actor_bounds(False)
     log('limites da malha: centro %s, extensao %s' % (origin, extent))
 
+    # Caminhabilidade vem do .gat (a mesma grade do servidor): a malha visual nao colide nem afeta a navegacao
+    if add_gat_collision(obj_path, dest, name, scale, (cx, cy)):
+        comp = mesh_actor.static_mesh_component
+        # Perfil proprio (persiste no nivel): so bloqueia o canal Camera, usado pelo teste de sombra dos sprites
+        # (predio entre o sprite e o sol). Clique (Visibility) e movimento (Pawn) ignoram a malha visual.
+        comp.set_collision_profile_name('Custom')
+        comp.set_collision_enabled(unreal.CollisionEnabled.QUERY_ONLY)
+        comp.set_collision_response_to_all_channels(unreal.CollisionResponseType.ECR_IGNORE)
+        comp.set_collision_response_to_channel(unreal.CollisionChannel.ECC_CAMERA, unreal.CollisionResponseType.ECR_BLOCK)
+        comp.set_editor_property('can_ever_affect_navigation', False)
+
     if args['lighting']:
         add_lighting()
     add_navigation(origin, extent)
@@ -562,6 +618,10 @@ def run():
     try_set(info, 'map_name', args['map_name'])
     try_set(info, 'cell_size_uu', cell_size)
     try_set(info, 'cell_origin_uu', unreal.Vector2D(origin_x, origin_y))
+    gat_size = read_gat_size(obj_path, args['map_name'])
+    if gat_size:
+        try_set(info, 'map_size_cells', unreal.IntPoint(*gat_size))
+        log('mapa com %dx%d celulas (.gat)' % gat_size)
     if bgm:
         try_set(info, 'bgm', bgm)
 

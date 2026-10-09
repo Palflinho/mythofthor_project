@@ -12,7 +12,7 @@ AMythNightLight::AMythNightLight()
 	RootComponent = Light;
 	Light->SetMobility(EComponentMobility::Movable);
 	Light->SetLightColor(FLinearColor(1.f, 0.72f, 0.42f)); // luz de lampiao, quente
-	Light->SetAttenuationRadius(650.f);
+	Light->SetAttenuationRadius(1000.f);
 	Light->SetSourceRadius(8.f);
 	Light->SetCastShadows(false); // dezenas de luzes: sombras so do sol/lua
 	Light->SetIntensityUnits(ELightUnits::Candelas);

@@ -3,9 +3,7 @@
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundBase.h"
-#include "Sound/SoundSubmix.h"
 #include "Sound/SoundWaveProcedural.h"
-#include "SubmixEffects/SubmixEffectFilter.h"
 
 namespace
 {
@@ -14,27 +12,22 @@ namespace
 
 UMythNightAudioComponent::UMythNightAudioComponent()
 {
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true; // transicao suave do filtro noturno
 }
 
 void UMythNightAudioComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Submix e efeito criados em runtime; a cadeia precisa estar pronta antes do primeiro som usa-lo.
-	BgmSubmix = NewObject<USoundSubmix>(this, TEXT("MythBgmSubmix"));
-	FilterPreset = NewObject<USubmixEffectFilterPreset>(this, TEXT("MythBgmLowPass"));
-
-	FSubmixEffectFilterSettings Settings;
-	Settings.FilterType = ESubmixFilterType::LowPass;
-	Settings.FilterAlgorithm = ESubmixFilterAlgorithm::StateVariable; // 12 dB/oitava
-	Settings.FilterFrequency = DayCutoffHz;
-	Settings.FilterQ = 0.7f;
-	FilterPreset->SetSettings(Settings);
-	BgmSubmix->SubmixEffectChain.Add(FilterPreset);
-
 	StartAmbience();
 	ApplyNightFactor();
+
+	if (PendingBgm)
+	{
+		USoundBase* Sound = PendingBgm;
+		PendingBgm = nullptr;
+		PlayBGM(Sound, PendingBgmVolume);
+	}
 }
 
 void UMythNightAudioComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -49,23 +42,31 @@ void UMythNightAudioComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 void UMythNightAudioComponent::PlayBGM(USoundBase* Sound, float Volume)
 {
-	if (!Sound || !BgmSubmix)
+	if (!Sound)
 	{
+		return;
+	}
+	if (!HasBegunPlay())
+	{
+		// Chamado antes do BeginPlay (o GameMode cria o ator de dia/noite e ja pede a musica): adia.
+		PendingBgm = Sound;
+		PendingBgmVolume = Volume;
 		return;
 	}
 	StopBGM();
 
-	// Roteia o som pelo submix so em memoria; o asset original nao e salvo/alterado em disco.
-	RoutedSound = Sound;
-	RoutedSoundOriginalSubmix = Sound->SoundSubmixObject;
-	Sound->SoundSubmixObject = BgmSubmix;
-
+	// O passa-baixa noturno e o do proprio componente de audio: um submix criado em runtime nao e registrado
+	// no dispositivo de audio e silenciava a musica. O asset original nunca e alterado.
 	BgmBaseVolume = Volume;
 	BgmComponent = UGameplayStatics::CreateSound2D(this, Sound, 1.f, 1.f, 0.f, nullptr, /*bPersistAcrossLevelTransition=*/true, /*bAutoDestroy=*/false);
 	if (BgmComponent)
 	{
-		BgmComponent->Play();
+		BgmComponent->SetLowPassFilterEnabled(true);
+		BgmComponent->SetLowPassFilterFrequency(DayCutoffHz);
+		BgmComponent->FadeIn(BgmFadeInSeconds, 1.f);
+		UE_LOG(LogTemp, Log, TEXT("MythNightAudio: BGM %s tocando (fade-in %.1f s)"), *Sound->GetName(), BgmFadeInSeconds);
 	}
+	LastAppliedCutoff = -1.f;
 	ApplyNightFactor();
 }
 
@@ -76,18 +77,22 @@ void UMythNightAudioComponent::StopBGM()
 		BgmComponent->Stop();
 		BgmComponent = nullptr;
 	}
-	if (RoutedSound)
-	{
-		RoutedSound->SoundSubmixObject = RoutedSoundOriginalSubmix;
-		RoutedSound = nullptr;
-		RoutedSoundOriginalSubmix = nullptr;
-	}
 }
 
 void UMythNightAudioComponent::SetNightFactor(float InNightFactor)
 {
-	NightFactor = FMath::Clamp(InNightFactor, 0.f, 1.f);
-	ApplyNightFactor();
+	TargetNightFactor = FMath::Clamp(InNightFactor, 0.f, 1.f);
+}
+
+void UMythNightAudioComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	if (!FMath::IsNearlyEqual(NightFactor, TargetNightFactor, 0.001f))
+	{
+		const float Step = DeltaTime / FMath::Max(NightTransitionSeconds, 0.01f);
+		NightFactor = FMath::Clamp(TargetNightFactor, NightFactor - Step, NightFactor + Step);
+		ApplyNightFactor();
+	}
 }
 
 void UMythNightAudioComponent::ApplyNightFactor()
@@ -97,10 +102,13 @@ void UMythNightAudioComponent::ApplyNightFactor()
 	const float Night = FMath::Max(NightCutoffHz, 20.f);
 	const float Cutoff = Day * FMath::Pow(Night / Day, NightFactor);
 
-	if (FilterPreset && (LastAppliedCutoff < 0.f || FMath::Abs(Cutoff - LastAppliedCutoff) > LastAppliedCutoff * 0.01f))
+	if (LastAppliedCutoff < 0.f || FMath::Abs(Cutoff - LastAppliedCutoff) > LastAppliedCutoff * 0.01f)
 	{
 		LastAppliedCutoff = Cutoff;
-		FilterPreset->SetFilterCutoffFrequency(Cutoff);
+		if (BgmComponent)
+		{
+			BgmComponent->SetLowPassFilterFrequency(Cutoff);
+		}
 	}
 
 	if (BgmComponent)

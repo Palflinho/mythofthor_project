@@ -9,8 +9,9 @@
 #include "Sprites/MythMonster.h"
 #include "Sprites/MythPoring.h"
 #include "Sprites/MythRoSpriteComponent.h"
+#include "Sprites/MythRoSound.h"
 #include "Components/CapsuleComponent.h"
-#include "UI/MythClassicHUDWidget.h"
+#include "UI/MythRoHUDWidget.h"
 #include "Gameplay/MythStatsComponent.h"
 #include "Gameplay/AutoBattleComponent.h"
 #include "Blueprint/UserWidget.h"
@@ -35,7 +36,7 @@ void AMythPlayerController::BeginPlay()
 	Super::BeginPlay();
 	if (IsLocalController())
 	{
-		HudWidget = CreateWidget<UMythClassicHUDWidget>(this, UMythClassicHUDWidget::StaticClass());
+		HudWidget = CreateWidget<UMythRoHUDWidget>(this, UMythRoHUDWidget::StaticClass());
 		if (HudWidget)
 		{
 			HudWidget->AddToViewport(0);
@@ -257,6 +258,11 @@ void AMythPlayerController::PlayerTick(float DeltaTime)
 
 	UpdateCombat(DeltaTime);
 	UpdateCameraReset();
+	// Enter abre o chat, como no cliente original (com o campo focado, o proprio Enter envia).
+	if (HudWidget && WasInputKeyJustPressed(EKeys::Enter) && !HudWidget->IsChatFocused())
+	{
+		HudWidget->FocusChat();
+	}
 
 	if (bWasdActive)
 	{
@@ -481,6 +487,8 @@ void AMythPlayerController::UpdateCombat(float DeltaTime)
 			const bool bCrit = (FMath::RandRange(1, 100) <= 15);
 			const int32 Damage = bCrit ? BaseDmg * 2 : BaseDmg;
 			UMythCombatText::ShowDamage(this, Target->GetActorLocation() + FVector(0.f, 0.f, 50.f), Damage, bCrit ? ECombatTextType::Critical : ECombatTextType::DamageDealt);
+			// Som de golpe do cliente original para ataque desarmado (_hit_fist1..4.wav, sorteado).
+			UMythRoSound::PlayWavAtLocation(this, FString::Printf(TEXT("_hit_fist%d.wav"), FMath::RandRange(1, 4)), Target->GetActorLocation());
 
 			// 3. Aplica o dano ao monstro (HP, animacao Hit e morte). Dano ainda sorteado no cliente;
 			// quando o servidor enviar o dano real, ele deve chamar este mesmo ReceiveMythDamage.

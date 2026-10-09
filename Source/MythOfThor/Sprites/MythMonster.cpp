@@ -13,7 +13,7 @@
 AMythMonster::AMythMonster()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	GetCapsuleComponent()->InitCapsuleSize(30.f, 40.f);
+	GetCapsuleComponent()->InitCapsuleSize(20.f, 40.f); // raio pequeno: cabe nas faixas de 1 celula do .gat
 
 	Sprite = CreateDefaultSubobject<UMythRoSpriteComponent>(TEXT("Sprite"));
 	Sprite->SetupAttachment(RootComponent);
@@ -31,7 +31,8 @@ AMythMonster::AMythMonster()
 
 void AMythMonster::PlaySfx(USoundBase* Sound) const
 {
-	if (Sound)
+	// Com os eventos do .act ligados, o proprio sprite toca os sons originais (andar, ataque, dano, morte).
+	if (Sound && !(Sprite && Sprite->bPlayActSounds))
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, Sound, GetActorLocation());
 	}

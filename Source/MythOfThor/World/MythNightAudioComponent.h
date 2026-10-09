@@ -5,16 +5,13 @@
 #include "MythNightAudioComponent.generated.h"
 
 class USoundBase;
-class USoundSubmix;
-class USoundSubmixBase;
 class USoundWaveProcedural;
 class UAudioComponent;
-class USubmixEffectFilterPreset;
 
 /**
  * Audio dinamico dia/noite (diretrizes, secao 6), sem alterar os arquivos originais:
- *  - cria em runtime um Submix "BGM" com um filtro passa-baixa (SubmixEffectFilter) e roteia a BGM por ele;
- *    a noite o corte desce (padrao 20 kHz -> 2.2 kHz) e o volume cai ~15%;
+ *  - toca a BGM com o filtro passa-baixa do proprio componente de audio: a noite o corte desce
+ *    (padrao 20 kHz -> 2.2 kHz) e o volume cai ~15%;
  *  - mistura uma ambiencia noturna (vento + grilos), sintetizada proceduralmente se nao houver asset.
  * O ator AMythDayNightActor chama SetNightFactor() todo frame (0 = dia, 1 = noite).
  */
@@ -52,6 +49,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Audio")
 	float AmbienceVolume = 0.35f;
 
+	/** Segundos para o filtro/volume noturno acompanharem uma mudanca de horario (suaviza saltos como MythSetHour). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Audio")
+	float NightTransitionSeconds = 4.f;
+
+	/** Fade-in da BGM ao entrar no mapa. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Audio")
+	float BgmFadeInSeconds = 2.5f;
+
 	/** Se definido, substitui o vento/grilos procedurais (use um loop). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Audio")
 	TObjectPtr<USoundBase> NightAmbienceOverride;
@@ -59,17 +64,18 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
-	UPROPERTY() TObjectPtr<USoundSubmix> BgmSubmix;
-	UPROPERTY() TObjectPtr<USubmixEffectFilterPreset> FilterPreset;
+	/** BGM pedida antes do BeginPlay (o GameMode cria o ator de dia/noite e ja pede a musica): toca no BeginPlay. */
+	UPROPERTY() TObjectPtr<USoundBase> PendingBgm;
+	float PendingBgmVolume = 1.f;
+	/** Fator de noite pedido; NightFactor caminha ate ele em NightTransitionSeconds. */
+	float TargetNightFactor = 0.f;
 	UPROPERTY() TObjectPtr<UAudioComponent> BgmComponent;
 	UPROPERTY() TObjectPtr<UAudioComponent> AmbienceComponent;
 	UPROPERTY() TObjectPtr<USoundWaveProcedural> ProceduralAmbience;
 
-	// Som cujo SoundSubmixObject trocamos em memoria; restaurado no EndPlay (o asset em disco nunca muda).
-	UPROPERTY() TObjectPtr<USoundBase> RoutedSound;
-	UPROPERTY() TObjectPtr<USoundSubmixBase> RoutedSoundOriginalSubmix;
 
 	float NightFactor = 0.f;
 	float LastAppliedCutoff = -1.f;

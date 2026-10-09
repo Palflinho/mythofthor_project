@@ -17,13 +17,17 @@ AMythPlayerCharacter::AMythPlayerCharacter()
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 
-	GetCapsuleComponent()->InitCapsuleSize(35.f, 90.f);
+	// Raio pequeno: no RO o personagem e um ponto numa celula de 50 cm; uma capsula larga nao passa nas faixas de 1 celula do .gat.
+	GetCapsuleComponent()->InitCapsuleSize(20.f, 90.f);
 
 	UCharacterMovementComponent* Move = GetCharacterMovement();
 	Move->bOrientRotationToMovement = false; // o sprite 2D usa URagnarokDirectionHelper, nao a rotacao do corpo
 	Move->MaxWalkSpeed = 400.f;
-	Move->bConstrainToPlane = true;
-	Move->bSnapToPlaneAtStart = true;
+	// Bases e degraus de pedra dos predios do RO passam de 45 cm; no original quem decide o caminhavel e o .gat.
+	Move->MaxStepHeight = 60.f;
+	// Sem trava de plano (herdada do template TopDown): o personagem precisa subir calcadas e degraus.
+	Move->bConstrainToPlane = false;
+	Move->bSnapToPlaneAtStart = false;
 
 	Sprite = CreateDefaultSubobject<UMythRoSpriteComponent>(TEXT("Sprite"));
 	Sprite->SetupAttachment(RootComponent);

@@ -31,7 +31,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map")
 	FVector2D CellOriginUU = FVector2D::ZeroVector;
 
-	/** Musica de fundo do mapa; passa pelo submix com filtro dia/noite. */
+	/** Tamanho do mapa em celulas (largura x altura do .gat); usado pelo minimapa. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map")
+	FIntPoint MapSizeCells = FIntPoint::ZeroValue;
+
+	/** Musica de fundo do mapa; o filtro passa-baixa noturno e aplicado pelo UMythNightAudioComponent. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map|Audio")
 	TObjectPtr<USoundBase> Bgm;
 

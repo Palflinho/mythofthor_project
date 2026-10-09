@@ -16,6 +16,7 @@ public class MythOfThor : ModuleRules
 			"AIModule",
 			"Paper2D",
 			"ProceduralMeshComponent",
+			"ImageWrapper",
 			"UMG",
 			"Synthesis",
 			"MeshDescription",

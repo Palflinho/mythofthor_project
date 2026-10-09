@@ -81,9 +81,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
 	float UnitsPerPixel = 2.f;
 
-	/** Quanto (cm) o sprite e puxado em direcao a camera para nao ser cortado por paredes/chao. */
+	/** Quanto (cm) o sprite e puxado em direcao a camera, pela linha de visao, para nao ser cortado por paredes/chao. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
-	float CameraDepthOffset = 20.f;
+	float CameraDepthOffset = 70.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
 	float WalkSpeedThreshold = 10.f;
@@ -100,9 +100,31 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
 	float FeetHeightSmoothing = 18.f;
 
-	/** Sprite iluminado pela cena (Lumen, noite, luzes de poste). Falso = sem iluminacao, como o cliente original. */
+	/**
+	 * Verdadeiro = material iluminado pela engine (recebe tambem a sombra da propria copia de sombra, a "autossombra").
+	 * Falso (padrao) = como o cliente original: sprite sem iluminacao, tingido por uma luz calculada (TintLighting).
+	 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
-	bool bLitByScene = true;
+	bool bLitByScene = false;
+
+	/**
+	 * Luz calculada do sprite (sem autossombra): dia/noite, calor dos postes proximos e escurecimento quando
+	 * um predio fica entre o sprite e o sol.
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite|Light")
+	bool bTintLighting = true;
+
+	/** Cor do sprite em plena noite (sem postes por perto). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite|Light")
+	FLinearColor NightTint = FLinearColor(0.42f, 0.47f, 0.68f);
+
+	/** Multiplicador quando um predio tapa o sol (sombra "neles"). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite|Light")
+	float ShadowedTint = 0.6f;
+
+	/** Quanto a luz quente dos postes clareia o sprite a noite. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite|Light")
+	float LampTintStrength = 0.75f;
 
 	/**
 	 * Sombra com o formato do sprite: uma copia invisivel virada para o sol/lua que so projeta sombra,
@@ -110,6 +132,17 @@ public:
 	 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
 	bool bCastSpriteShadow = true;
+
+	/** Sombra redonda classica do RO (data/sprite/shadow.spr) sob os pes, somada a sombra dinamica. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
+	bool bBlobShadow = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
+	float BlobShadowScale = 1.f;
+
+	/** Toca os sons pedidos pelos eventos dos quadros do .act (passos, golpes, dano, morte). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
+	bool bPlayActSounds = true;
 
 	/** Limites do quadro atual no espaco local do componente (para a area de clique). */
 	const FBox& GetFrameLocalBounds() const { return FrameLocalBounds; }
@@ -153,8 +186,22 @@ private:
 
 	/** Copia do sprite que so projeta sombra (nao aparece na imagem). */
 	UPROPERTY() TObjectPtr<UProceduralMeshComponent> ShadowMesh;
+	/** Sombra redonda (shadow.spr) deitada no chao. */
+	UPROPERTY() TObjectPtr<UProceduralMeshComponent> BlobMesh;
+	UPROPERTY() FMythRoSpriteSource BlobSource;
+	void CreateBlobShadow();
+	/** Ultimo (acao, quadro) cujo evento de som ja tocou. */
+	FIntPoint LastSoundFrame = FIntPoint(-1, -1);
+	void PlayFrameEvent(const FRoActFrame& Frame, int32 ActionIndex, int32 FrameIndex);
 	TWeakObjectPtr<class AMythDayNightActor> DayNight;
 	void UpdateShadowTransform(const FVector& Feet);
+
+	/** Luz calculada atual (suavizada) aplicada na cor dos vertices quando bTintLighting. */
+	FLinearColor CurrentTint = FLinearColor::White;
+	float SunVisibility = 1.f;
+	float SunTraceTimer = 0.f;
+	TArray<TWeakObjectPtr<class AMythNightLight>> NearbyLamps;
+	void UpdateTint(const FVector& Feet, float DeltaTime);
 
 	EMythSpriteState State = EMythSpriteState::Idle;
 	ERagnarokDirection Direction = ERagnarokDirection::South;

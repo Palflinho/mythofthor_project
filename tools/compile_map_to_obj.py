@@ -706,6 +706,16 @@ def compile_map(map_dir: str, output_obj: str = None, map_name: str = None):
     with open(lights_path, 'w', encoding='utf-8') as lf:
         json.dump({'coords': 'obj', 'lights': night_lights}, lf, ensure_ascii=False, indent=1)
 
+    # Caminhabilidade do .gat: a mesma grade do servidor vira o piso/paredes de colisao no cliente
+    gat_path = os.path.join(map_dir, f"{map_name}.gat")
+    if not os.path.exists(gat_path) and rsw.get('gat_file'):
+        gat_path = resolve_asset_path(map_dir, rsw['gat_file'])
+    if gat_path and os.path.exists(gat_path):
+        floors, walls = write_gat_collision(read_gat(gat_path), scale / 2.0, os.path.splitext(output_obj)[0])
+        print(f"Colisao do GAT: {floors} celulas caminhaveis, {walls} trechos de parede")
+    else:
+        print("AVISO: .gat nao encontrado; o mapa fica sem colisao de caminhabilidade")
+
     print(f"Instâncias de modelos 3D compiladas: {placed_count}")
     print(f"Luzes noturnas (postes): {len(night_lights)}")
     print(f"Arquivo final gerado com sucesso:")
@@ -713,6 +723,67 @@ def compile_map(map_dir: str, output_obj: str = None, map_name: str = None):
     print(f"  -> {output_mtl}")
     print(f"  -> {lights_path}")
     return output_obj
+
+
+# ----------------------------------------------------------------------------- GAT (caminhabilidade)
+# Tipos de celula como no rAthena (map_gat2cell): 1 = parede e 5 = vao (atiravel) nao sao caminhaveis.
+GAT_BLOCKED_TYPES = (1, 5)
+GAT_WALL_HEIGHT = 40.0  # unidades do OBJ (x10 = 4 m na Unreal)
+
+
+def read_gat(gat_path: str):
+    """Le o .gat: grade de celulas (2 por ladrilho do .gnd) com 4 alturas e o tipo."""
+    with open(gat_path, 'rb') as f:
+        data = f.read()
+    if data[:4] != b'GRAT':
+        raise ValueError(f"Arquivo GAT invalido: {data[:4]}")
+    width, height = struct.unpack_from('<II', data, 6)
+    cells = [struct.unpack_from('<4fI', data, 14 + i * 20) for i in range(width * height)]
+    return {'width': width, 'height': height, 'cells': cells}
+
+
+def write_gat_collision(gat: dict, cell_size: float, out_base: str):
+    """
+    Gera as malhas de colisao do mapa a partir do .gat (o mesmo que o servidor usa):
+      <base>_gat_floor.obj: o piso das celulas caminhaveis (recebe o clique e define a navegacao);
+      <base>_gat_walls.obj: paredes verticais nas bordas entre caminhavel e bloqueado (impedem o WASD de atravessar).
+    Coordenadas do OBJ iguais as do mapa visual: x = cx * tamanho, y = cy * tamanho, z = -altura.
+    """
+    w, h, cells = gat['width'], gat['height'], gat['cells']
+
+    def walkable(x, y):
+        return 0 <= x < w and 0 <= y < h and cells[y * w + x][4] not in GAT_BLOCKED_TYPES
+
+    def corner(x, y, i):
+        # cantos do .gat: 0 = (x, y), 1 = (x+1, y), 2 = (x, y+1), 3 = (x+1, y+1)
+        c = cells[y * w + x]
+        dx, dy = (0, 1, 0, 1)[i], (0, 0, 1, 1)[i]
+        return ((x + dx) * cell_size, (y + dy) * cell_size, -c[i])
+
+    floor_quads, wall_quads = [], []
+    for y in range(h):
+        for x in range(w):
+            if not walkable(x, y):
+                continue
+            p0, p1, p2, p3 = (corner(x, y, i) for i in range(4))
+            floor_quads.append((p0, p1, p3, p2))
+            # borda -> (canto A, canto B) de cada vizinho
+            for (nx, ny), (a, b) in (((x, y - 1), (p0, p1)), ((x + 1, y), (p1, p3)), ((x, y + 1), (p3, p2)), ((x - 1, y), (p2, p0))):
+                if not walkable(nx, ny):
+                    top_a = (a[0], a[1], a[2] + GAT_WALL_HEIGHT)
+                    top_b = (b[0], b[1], b[2] + GAT_WALL_HEIGHT)
+                    wall_quads.append((a, b, top_b, top_a))
+
+    for suffix, quads in (('_gat_floor.obj', floor_quads), ('_gat_walls.obj', wall_quads)):
+        with open(out_base + suffix, 'w', encoding='utf-8') as f:
+            f.write('# Myth of Thor - colisao gerada do .gat\no GAT\nusemtl GAT\n')
+            for q in quads:
+                for p in q:
+                    f.write(f"v {p[0]:.2f} {p[1]:.2f} {p[2]:.2f}\n")
+            for i in range(len(quads)):
+                b = i * 4 + 1
+                f.write(f"f {b} {b + 1} {b + 2} {b + 3}\n")
+    return len(floor_quads), len(wall_quads)
 
 
 # Modelos que viram luzes noturnas (nome do arquivo .rsm, sem pasta): poste comum e poste com estandarte

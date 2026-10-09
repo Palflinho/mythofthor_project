@@ -46,13 +46,13 @@ public:
 	float SunIntensityLux = 10.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight|Light")
-	float MoonIntensityLux = 0.35f;
+	float MoonIntensityLux = 1.6f; // luar claro o bastante para enxergar a cidade (o RO a noite e azulado, nao preto)
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight|Light")
 	float DaySkyLightIntensity = 1.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight|Light")
-	float NightSkyLightIntensity = 0.12f;
+	float NightSkyLightIntensity = 0.4f;
 
 	/** Esconde (so em runtime) as luzes/atmosfera ja existentes no nivel. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight")

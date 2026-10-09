@@ -12,7 +12,7 @@ AMythPoring::AMythPoring()
 	MaxHP = 50;
 	HP = 50;
 
-	GetCapsuleComponent()->InitCapsuleSize(40.f, 40.f);
+	GetCapsuleComponent()->InitCapsuleSize(20.f, 40.f);
 	// Sprite de monstro do cliente original (data/sprite/몬스터/poring.spr/.act); a origem do .act sao os pes.
 	Sprite->MonsterSpriteName = TEXT("poring");
 	Sprite->SetRelativeLocation(FVector(0.f, 0.f, -40.f));

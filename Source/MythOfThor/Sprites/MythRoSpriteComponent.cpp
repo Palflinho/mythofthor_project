@@ -1,6 +1,10 @@
 #include "Sprites/MythRoSpriteComponent.h"
 
 #include "World/MythDayNightActor.h"
+#include "World/MythNightLight.h"
+#include "Sprites/MythRoSound.h"
+#include "Components/PointLightComponent.h"
+#include "EngineUtils.h"
 #include "Camera/PlayerCameraManager.h"
 #include "Engine/Texture2D.h"
 #include "GameFramework/Actor.h"
@@ -77,7 +81,124 @@ void UMythRoSpriteComponent::BeginPlay()
 		ShadowMesh->bCastDynamicShadow = true;
 		ShadowMesh->RegisterComponent();
 	}
+	if (bBlobShadow)
+	{
+		CreateBlobShadow();
+	}
 	DayNight = AMythDayNightActor::Find(this);
+	if (const UWorld* World = GetWorld())
+	{
+		for (TActorIterator<AMythNightLight> It(World); It; ++It)
+		{
+			NearbyLamps.Add(*It);
+		}
+	}
+}
+
+void UMythRoSpriteComponent::UpdateTint(const FVector& Feet, float DeltaTime)
+{
+	if (!bTintLighting || bLitByScene)
+	{
+		CurrentTint = FLinearColor::White;
+		return;
+	}
+	if (!DayNight.IsValid())
+	{
+		DayNight = AMythDayNightActor::Find(this);
+	}
+	const float Night = DayNight.IsValid() ? DayNight->GetNightFactor() : 0.f;
+
+	// Sombra "neles": a cada 0,2 s, um raio dos pes em direcao ao sol (canal Camera = so a malha visual do mapa).
+	SunTraceTimer -= DeltaTime;
+	if (SunTraceTimer <= 0.f && DayNight.IsValid() && GetWorld())
+	{
+		SunTraceTimer = 0.2f;
+		const FVector Start = Feet + FVector(0.f, 0.f, 60.f);
+		const FVector End = Start - DayNight->GetLightDirection() * 5000.f;
+		FCollisionQueryParams Params(SCENE_QUERY_STAT(MythSpriteSunTrace), false, GetOwner());
+		FHitResult Hit;
+		const bool bBlocked = GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Camera, Params);
+		SunVisibility = bBlocked ? 0.f : 1.f;
+	}
+
+	// Dia: branco (ou escurecido sob um predio); noite: azulado. Postes somam luz quente pela distancia.
+	const float DayShade = FMath::Lerp(ShadowedTint, 1.f, SunVisibility);
+	FLinearColor Target = FMath::Lerp(FLinearColor::White * DayShade, NightTint, Night);
+	for (const TWeakObjectPtr<AMythNightLight>& Lamp : NearbyLamps)
+	{
+		if (!Lamp.IsValid() || !Lamp->Light)
+		{
+			continue;
+		}
+		const float Radius = Lamp->Light->AttenuationRadius;
+		const float Dist = FVector::Dist(Lamp->GetActorLocation(), Feet);
+		if (Dist >= Radius || Lamp->NightIntensity <= 0.f)
+		{
+			continue;
+		}
+		const float Falloff = FMath::Square(1.f - Dist / Radius);
+		const float On = Lamp->Light->Intensity / Lamp->NightIntensity;
+		Target += Lamp->Light->GetLightColor() * (Falloff * On * LampTintStrength);
+	}
+	Target.R = FMath::Clamp(Target.R, 0.f, 1.15f);
+	Target.G = FMath::Clamp(Target.G, 0.f, 1.15f);
+	Target.B = FMath::Clamp(Target.B, 0.f, 1.15f);
+	Target.A = 1.f;
+	// Transicao suave (entrar/sair da sombra de um predio, acender dos postes)
+	const float Alpha = FMath::Clamp(DeltaTime * 5.f, 0.f, 1.f);
+	CurrentTint = FMath::Lerp(CurrentTint, Target, Alpha);
+}
+
+void UMythRoSpriteComponent::CreateBlobShadow()
+{
+	const FString Base = FPaths::Combine(GetAssetsRoot(), TEXT("data"), TEXT("sprite"), TEXT("shadow"));
+	if (!GetOwner() || !LoadSource(BlobSource, Base + TEXT(".spr"), Base + TEXT(".act"), FString()) || BlobSource.Spr.Indexed.Num() == 0)
+	{
+		return;
+	}
+	// A sombra do RO e uma elipse semitransparente: material translucido, alpha pela cor do vertice.
+	if (UMaterialInterface* Translucent = LoadObject<UMaterialInterface>(nullptr, TEXT("/Paper2D/TranslucentUnlitSpriteMaterial.TranslucentUnlitSpriteMaterial")))
+	{
+		BlobSource.Material = UMaterialInstanceDynamic::Create(Translucent, this);
+		BlobSource.Material->SetTextureParameterValue(TEXT("SpriteTexture"), BlobSource.Atlas);
+	}
+	BlobMesh = NewObject<UProceduralMeshComponent>(GetOwner(), TEXT("RoSpriteBlobShadow"));
+	BlobMesh->SetupAttachment(GetAttachParent());
+	BlobMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	BlobMesh->SetCastShadow(false);
+	BlobMesh->RegisterComponent();
+
+	const FRoSprImage& Img = BlobSource.Spr.Indexed[0];
+	const FBox2f UV = BlobSource.IndexedUV[0];
+	const float HalfW = Img.Width * UnitsPerPixel * BlobShadowScale * 0.5f;
+	const float HalfH = Img.Height * UnitsPerPixel * BlobShadowScale * 0.5f;
+	const TArray<FVector> Verts = { {-HalfH, -HalfW, 0.f}, {-HalfH, HalfW, 0.f}, {HalfH, HalfW, 0.f}, {HalfH, -HalfW, 0.f} };
+	const TArray<FVector2D> Tex = { {UV.Min.X, UV.Min.Y}, {UV.Max.X, UV.Min.Y}, {UV.Max.X, UV.Max.Y}, {UV.Min.X, UV.Max.Y} };
+	const TArray<FColor> Colors = { FColor(255, 255, 255, 120), FColor(255, 255, 255, 120), FColor(255, 255, 255, 120), FColor(255, 255, 255, 120) };
+	const TArray<FVector> Normals = { FVector::UpVector, FVector::UpVector, FVector::UpVector, FVector::UpVector };
+	const TArray<int32> Tris = { 0, 1, 2, 0, 2, 3, 0, 2, 1, 0, 3, 2 };
+	BlobMesh->CreateMeshSection(0, Verts, Tris, Normals, Tex, Colors, TArray<FProcMeshTangent>(), false);
+	BlobMesh->SetMaterial(0, BlobSource.Material);
+}
+
+void UMythRoSpriteComponent::PlayFrameEvent(const FRoActFrame& Frame, int32 ActionIndex, int32 FrameIndex)
+{
+	const FIntPoint Key(ActionIndex, FrameIndex);
+	if (Key == LastSoundFrame)
+	{
+		return;
+	}
+	LastSoundFrame = Key;
+	if (!bPlayActSounds || !Body.Act.Events.IsValidIndex(Frame.EventId))
+	{
+		return;
+	}
+	// Eventos do .act: nomes de .wav tocam o som; "atk" so marca o instante do golpe (sem som proprio).
+	const FString& Event = Body.Act.Events[Frame.EventId];
+	if (Event.EndsWith(TEXT(".wav"), ESearchCase::IgnoreCase) && GetOwner())
+	{
+		UMythRoSound::PlayWavAtLocation(this, Event, GetOwner()->GetActorLocation());
+	}
 }
 
 void UMythRoSpriteComponent::OnComponentDestroyed(bool bDestroyingHierarchy)
@@ -86,6 +207,11 @@ void UMythRoSpriteComponent::OnComponentDestroyed(bool bDestroyingHierarchy)
 	{
 		ShadowMesh->DestroyComponent();
 		ShadowMesh = nullptr;
+	}
+	if (BlobMesh)
+	{
+		BlobMesh->DestroyComponent();
+		BlobMesh = nullptr;
 	}
 	Super::OnComponentDestroyed(bDestroyingHierarchy);
 }
@@ -393,7 +519,9 @@ ERagnarokDirection UMythRoSpriteComponent::ComputeDirection(const FVector& Veloc
 
 void UMythRoSpriteComponent::UpdateBillboard(const FRotator& CamRot)
 {
-	// Paralelo a tela (yaw e pitch da camera), pes fixos no ponto de apoio; levemente puxado para a camera.
+	// Paralelo a tela (yaw e pitch da camera), como no cliente original, com os pes no ponto de apoio.
+	// Para nao ser cortado por paredes/chao, o sprite e puxado AO LONGO DA LINHA DE VISAO da camera:
+	// isso nao muda tamanho nem posicao na tela, so a profundidade.
 	const FRotationMatrix CamMatrix(CamRot);
 	const FVector CamRight = CamMatrix.GetUnitAxis(EAxis::Y);
 	const FVector CamUp = CamMatrix.GetUnitAxis(EAxis::Z);
@@ -414,8 +542,24 @@ void UMythRoSpriteComponent::UpdateBillboard(const FRotator& CamRot)
 			SmoothedFeetZ = FMath::FInterpTo(SmoothedFeetZ, Feet.Z, Dt, FeetHeightSmoothing);
 		}
 		Feet.Z = SmoothedFeetZ;
+		// Puxado para a camera pela linha de visao; a escala compensa a perspectiva (mesmo tamanho na tela).
+		float Scale = 1.f;
+		if (const APlayerController* PC = GetWorld() ? GetWorld()->GetFirstPlayerController() : nullptr)
+		{
+			if (PC->PlayerCameraManager)
+			{
+				const float Dist = FVector::Dist(PC->PlayerCameraManager->GetCameraLocation(), Feet);
+				Scale = Dist > CameraDepthOffset + 1.f ? (Dist - CameraDepthOffset) / Dist : 1.f;
+			}
+		}
 		SetWorldLocation(Feet - CamForward * CameraDepthOffset);
+		SetWorldScale3D(FVector(Scale));
 		UpdateShadowTransform(Feet);
+		UpdateTint(Feet, Dt);
+		if (BlobMesh)
+		{
+			BlobMesh->SetWorldLocationAndRotation(Feet + FVector(0.f, 0.f, 5.f), FRotator::ZeroRotator); // acima das ondulacoes do chao
+		}
 	}
 }
 
@@ -430,6 +574,8 @@ void UMythRoSpriteComponent::RebuildMesh(const FRotator& CamRot)
 	const FRoActAction& BodyAction = Body.Act.Actions[ActionIndex];
 	const int32 FrameIndex = GetFrameIndex(BodyAction, bFinished);
 	const FRoActFrame& BodyFrame = BodyAction.Frames[FrameIndex];
+
+	PlayFrameEvent(BodyFrame, ActionIndex, FrameIndex);
 
 	int32 Section = 0;
 	FrameLocalBounds = FBox(ForceInit);
@@ -460,7 +606,7 @@ void UMythRoSpriteComponent::RebuildMesh(const FRotator& CamRot)
 
 void UMythRoSpriteComponent::AddLayerQuads(const FMythRoSpriteSource& Source, const FRoActFrame& Frame, const FIntPoint& Offset, float DepthBase, int32& Section)
 {
-	// No espaco local (ver UpdateBillboard): X = direita da tela, Z = cima da tela, Y = Z x X = -Forward (para a camera).
+	// No espaco local (ver UpdateBillboard): X = direita da tela, Z = cima da tela, Y = Z x X = -Forward da camera.
 	const float S = UnitsPerPixel;
 	for (int32 LayerIndex = 0; LayerIndex < Frame.Layers.Num(); ++LayerIndex)
 	{
@@ -498,8 +644,13 @@ void UMythRoSpriteComponent::AddLayerQuads(const FMythRoSpriteSource& Source, co
 			Verts.Add(FVector(Px * S, Depth, -Py * S));
 			FrameLocalBounds += Verts.Last();
 			Tex.Add(CornerUV[k]);
-			Colors.Add(L.Color);
-			Normals.Add(FVector(0.f, 1.f, 0.f));
+			// Cor da camada (.act) x luz calculada (dia/noite, postes, sombra de predio); o alpha fica o da camada.
+			FColor Tinted = (FLinearColor(L.Color) * CurrentTint).ToFColor(false);
+			Tinted.A = L.Color.A;
+			Colors.Add(Tinted);
+			// Normal inclinada para cima e para a camera: o sprite iluminado recebe sol/ceu como o chao
+			// e nao escurece quando o sol esta atras dele.
+			Normals.Add(FVector(0.f, 0.45f, 0.89f));
 		}
 
 		UMaterialInterface* Mat = Source.Material;
