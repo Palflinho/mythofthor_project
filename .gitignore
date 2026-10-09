@@ -16,6 +16,7 @@ Content/Maps/
 .vscode/
 .vs/
 *.sln
+*.slnx
 *.xcodeproj
 *.xcworkspace
 

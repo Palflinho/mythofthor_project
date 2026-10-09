@@ -1,0 +1,18 @@
+# Exemplo de credenciais de teste para o ambiente local rAthena (Myth of Thor)
+# Utilizado por testes headless (Python) e conexão direta da Unreal Engine 5.
+#
+# Para aplicar no banco de dados local:
+#   wsl docker exec -i mythofthor-db mariadb -u ragnarok -pragnarok ragnarok < server/init_test_account.sql
+
+ACCOUNT_ID=2000000
+USERNAME=mythtest
+PASSWORD=mythtest123
+SEX=M
+EMAIL=mythtest@mythofthor.local
+GROUP_ID=99 # GM Nivel 99 (Comandos @monster, @warp, etc)
+
+CHAR_ID=150000
+CHAR_NAME=ThorTester
+START_MAP=prontera
+START_X=156
+START_Y=180

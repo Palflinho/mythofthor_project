@@ -1,0 +1,140 @@
+//===== Myth of Thor Script =================================
+//= Sistema de Auto-Battle Fiel do Servidor
+//===== Descrição: ===========================================
+//= Gerencia o sistema de Auto-Battle no servidor rAthena:
+//= 1. Limite diário de 3 horas de vigor (10.800s, reset às 00:00).
+//= 2. Trava de sobrepeso (>= 90% bloqueia ativação e desliga o bot).
+//= 3. Penalidade agravada de 5% de Base EXP ao morrer no Auto-Battle.
+//= 4. Estado caído (Downed) por 2 minutos aguardando ressurreição.
+//= 5. Respawn automático no Ponto de Retorno com bot desligado.
+//============================================================
+
+-	script	MythAutoBattle	-1,{
+OnInit:
+	.DailyStaminaMax = 10800; // 3 Horas = 10.800 segundos
+	.OverweightThreshold = 90; // 90% de peso maximo
+	.DownedWaitTimeMs = 120000; // 2 minutos em milissegundos
+	bindatcmd("autobattle", strnpcinfo(0) + "::OnCommand", 0, 99);
+	debugmes "[Myth of Thor] Sistema de Auto-Battle inicializado com sucesso.";
+	end;
+
+OnCommand:
+	.@subcmd$ = strtolower(.@atcmd_parameters$[0]);
+
+	// Atualiza o vigor diario se o dia mudou (reset diario as 00:00)
+	.@today = gettime(DT_YYYYMMDD);
+	if (#AutoBattle_Date != .@today) {
+		#AutoBattle_Date = .@today;
+		#AutoBattle_Stamina = .DailyStaminaMax;
+	}
+
+	if (.@subcmd$ == "status" || .@subcmd$ == "") {
+		dispbottom "================ [ AUTO-BATTLE ] ================";
+		dispbottom " Status: " + (@autobattle_active ? "^00FF00ATIVADO^000000" : "^FF0000DESATIVADO^000000");
+		dispbottom " Vigor Restante: " + (#AutoBattle_Stamina / 3600) + "h " + ((#AutoBattle_Stamina % 3600) / 60) + "m " + (#AutoBattle_Stamina % 60) + "s / 3h 00m 00s";
+		dispbottom " Peso Atual: " + (Weight * 100 / MaxWeight) + "% (Limite: 90%)";
+		dispbottom " Uso: @autobattle <on|off|status>";
+		dispbottom "=================================================";
+		end;
+	}
+
+	if (.@subcmd$ == "off") {
+		if (!@autobattle_active) {
+			dispbottom "[Auto-Battle] O sistema já está desativado.";
+			end;
+		}
+		@autobattle_active = 0;
+		dispbottom "[Auto-Battle] Desativado com sucesso. Vigor restante: " + (#AutoBattle_Stamina / 3600) + "h " + ((#AutoBattle_Stamina % 3600) / 60) + "m " + (#AutoBattle_Stamina % 60) + "s.";
+		end;
+	}
+
+	if (.@subcmd$ == "on") {
+		if (@autobattle_active) {
+			dispbottom "[Auto-Battle] O sistema já está ativo!";
+			end;
+		}
+		if (Hp <= 0) {
+			dispbottom "[Auto-Battle] Não é possível ativar enquanto estiver caído/morto.";
+			end;
+		}
+		if ((Weight * 100 / MaxWeight) >= .OverweightThreshold) {
+			dispbottom "[Auto-Battle] ATENÇÃO: Capacidade de peso atingiu " + (Weight * 100 / MaxWeight) + "% (>= 90%). Auto-Battle bloqueado!";
+			end;
+		}
+		if (#AutoBattle_Stamina <= 0) {
+			dispbottom "[Auto-Battle] Vigor diário de 3 horas totalmente esgotado. Retorne amanhã às 00:00!";
+			end;
+		}
+
+		@autobattle_active = 1;
+		dispbottom "[Auto-Battle] ATIVADO! Vigor restante: " + (#AutoBattle_Stamina / 3600) + "h " + ((#AutoBattle_Stamina % 3600) / 60) + "m " + (#AutoBattle_Stamina % 60) + "s.";
+
+		// Loop de monitoramento de vigor e regras do servidor
+		while (@autobattle_active && isloggedin(getcharid(3))) {
+			sleep2 1000;
+
+			if (!@autobattle_active) end;
+
+			// Trava de sobrepeso em tempo real
+			if ((Weight * 100 / MaxWeight) >= .OverweightThreshold) {
+				@autobattle_active = 0;
+				dispbottom "[Auto-Battle] Desativado automaticamente: inventário atingiu 90% da capacidade de peso!";
+				end;
+			}
+
+			// Consumo de vigor
+			if (#AutoBattle_Stamina > 0) {
+				#AutoBattle_Stamina--;
+			} else {
+				@autobattle_active = 0;
+				dispbottom "[Auto-Battle] Vigor diário de 3 horas esgotado! Auto-Battle desligado.";
+				end;
+			}
+		}
+		end;
+	}
+
+	dispbottom "[Auto-Battle] Comando inválido. Use @autobattle <on|off|status>.";
+	end;
+
+OnPCDieEvent:
+	// Evento engatilhado automaticamente pelo rAthena na morte do jogador
+	if (@autobattle_active) {
+		@autobattle_active = 0;
+
+		// 1. Penalidade agravada de 5% de Base EXP (1% padrao + 4% adicional)
+		.@req_exp = NextBaseExp;
+		if (.@req_exp > 0) {
+			.@extra_penalty = (.@req_exp * 4) / 100;
+			if (BaseExp > .@extra_penalty) {
+				BaseExp = BaseExp - .@extra_penalty;
+			} else {
+				BaseExp = 0;
+			}
+		}
+
+		dispbottom "=================================================";
+		dispbottom "[Auto-Battle] VOCÊ MORREU COM O AUTO-BATTLE ATIVO!";
+		dispbottom "[Auto-Battle] Penalidade agravada de 5% de Base EXP aplicada.";
+		dispbottom "[Auto-Battle] Auto-Battle DESATIVADO imediatamente.";
+		dispbottom "[Auto-Battle] Você permanecerá caído por 2 minutos aguardando ressurreição.";
+		dispbottom "=================================================";
+
+		// 2. Aguarda 2 minutos (120 segundos) em estado caído
+		sleep2 .DownedWaitTimeMs;
+
+		// 3. Se ainda estiver morto após 2 minutos, teleporta para o Ponto de Retorno
+		if (Hp <= 0 && isloggedin(getcharid(3))) {
+			dispbottom "[Auto-Battle] Tempo de 2 minutos expirado. Retornando a Prontera...";
+			percentheal 100, 100;
+			warp "SavePoint", 0, 0;
+			@autobattle_active = 0;
+			dispbottom "[Auto-Battle] Retornado ao ponto de retorno com Auto-Battle pausado.";
+		}
+	}
+	end;
+
+OnPCLogoffEvent:
+	@autobattle_active = 0;
+	end;
+}

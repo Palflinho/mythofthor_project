@@ -1,15 +1,34 @@
-version: "3.7"
+# Servidor rAthena (Pre-Renewal, PACKETVER 20211103) para desenvolvimento local.
+# Baseado em rathena/tools/docker/docker-compose.yml.
+#
+# O codigo do rAthena fica fora deste repositorio (no filesystem do WSL, para compilar rapido).
+# Padrao: ~/mythofthor-server/rathena — sobrescreva com a variavel RATHENA_DIR.
+# Uso (dentro do WSL): veja server/README.md
+
+x-rathena: &rathena
+  image: "rathena:local"
+  build:
+    context: "${RATHENA_DIR:-${HOME}/mythofthor-server/rathena}/tools/docker"
+    dockerfile: Dockerfile
+  volumes:
+    - "${RATHENA_DIR:-${HOME}/mythofthor-server/rathena}:/rathena"
+    - "${RATHENA_DIR:-${HOME}/mythofthor-server/rathena}/tools/docker/asset/inter_conf.txt:/rathena/conf/import/inter_conf.txt" # conexao com o db
+    - "${RATHENA_DIR:-${HOME}/mythofthor-server/rathena}/tools/docker/asset/char_conf.txt:/rathena/conf/import/char_conf.txt"   # login <-> char
+    - "${RATHENA_DIR:-${HOME}/mythofthor-server/rathena}/tools/docker/asset/map_conf.txt:/rathena/conf/import/map_conf.txt"     # char <-> map
+  init: true
+  tty: true
+  stdin_open: true
 
 services:
   db:
     image: "mariadb:noble"
     container_name: "mythofthor-db"
-    restart: always
+    restart: unless-stopped
     ports:
-      - "3311:3306" # Mapeado para 3311 para evitar colisão na máquina host
+      - "3311:3306" # Mapeado para 3311 para evitar colisao na maquina host
     volumes:
       - "rathenadb:/var/lib/mysql"
-      - "./sql-files/:/docker-entrypoint-initdb.d"
+      - "${RATHENA_DIR:-${HOME}/mythofthor-server/rathena}/sql-files/:/docker-entrypoint-initdb.d"
     environment:
       MYSQL_ROOT_PASSWORD: ragnarok
       MYSQL_DATABASE: ragnarok
@@ -17,43 +36,40 @@ services:
       MYSQL_PASSWORD: ragnarok
 
   builder:
-    image: "rathena:local"
+    <<: *rathena
     container_name: "mythofthor-builder"
-    volumes:
-      - "./rathena:/rathena"
+    command: "/rathena/tools/docker/builder.sh"
+    profiles: ["build"] # so roda com: docker compose --profile build run --rm builder
     environment:
-      BUILDER_CONFIGURE: "--enable-packetver=20211103"
+      BUILDER_CONFIGURE: "--enable-packetver=20211103 --enable-prere=yes"
 
   login:
-    image: "rathena:local"
+    <<: *rathena
     container_name: "mythofthor-login"
-    restart: always
+    command: sh -c "/bin/wait-for db:3306 -- /rathena/login-server"
+    restart: unless-stopped
     ports:
       - "6900:6900"
-    volumes:
-      - "./rathena:/rathena"
     depends_on:
       - db
 
   char:
-    image: "rathena:local"
+    <<: *rathena
     container_name: "mythofthor-char"
-    restart: always
+    command: sh -c "/bin/wait-for db:3306 -- /rathena/char-server"
+    restart: unless-stopped
     ports:
       - "6121:6121"
-    volumes:
-      - "./rathena:/rathena"
     depends_on:
       - login
 
   map:
-    image: "rathena:local"
+    <<: *rathena
     container_name: "mythofthor-map"
-    restart: always
+    command: sh -c "/bin/wait-for db:3306 -- /rathena/map-server"
+    restart: unless-stopped
     ports:
       - "5121:5121"
-    volumes:
-      - "./rathena:/rathena"
     depends_on:
       - char
 

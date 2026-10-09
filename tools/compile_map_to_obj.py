@@ -10,9 +10,20 @@ importação na Unreal Engine 5.
 import os
 import sys
 import glob
+import json
 import math
 import struct
 from typing import Dict, List, Tuple
+
+# Pastas raiz dos assets extraidos do RO (sobrescreva com a variavel de ambiente MYTH_ASSETS)
+CANDIDATE_ROOTS = [
+    os.environ.get('MYTH_ASSETS', ''),
+    r'E:\Dev\Ragnarok_Assets\grf\data',
+    r'E:\Dev\Ragnarok_Assets',
+    r'D:\Ragnarok_Assets',
+]
+ASSETS_ROOT = next((p for p in CANDIDATE_ROOTS if p and os.path.exists(p)), 'D:/Ragnarok_Assets')
+
 
 def resolve_asset_path(base_dir: str, rel_path: str) -> str:
     """
@@ -205,66 +216,107 @@ def read_rsm(rsm_path: str):
             p_name = f.read(40).split(b'\x00')[0].decode('cp949', errors='ignore')
             node_tex_count = struct.unpack('I', f.read(4))[0]
             tex_indices = list(struct.unpack(f'{node_tex_count}I', f.read(4 * node_tex_count)))
+            # Ordem do formato (igual ao roBrowser/BrowEdit): mat3, offset (pivo local), pos (relativa ao pai),
+            # rotacao eixo-angulo e escala.
             mat3 = struct.unpack('9f', f.read(36))
-            offset_ = struct.unpack('3f', f.read(12))
             offset = struct.unpack('3f', f.read(12))
-            rot_axis_angle = struct.unpack('4f', f.read(16))
+            pos = struct.unpack('3f', f.read(12))
+            rot_angle = struct.unpack('f', f.read(4))[0]
+            rot_axis = struct.unpack('3f', f.read(12))
             scale = struct.unpack('3f', f.read(12))
-            
+
             vert_count = struct.unpack('I', f.read(4))[0]
-            verts = []
-            for _ in range(vert_count):
-                v = struct.unpack('3f', f.read(12))
-                verts.append(v)
-                for c in range(3):
-                    min_v[c] = min(min_v[c], v[c])
-                    max_v[c] = max(max_v[c], v[c])
-                    
+            verts = [struct.unpack('3f', f.read(12)) for _ in range(vert_count)]
+
+            has_color = ver_major > 1 or (ver_major == 1 and ver_minor >= 2)
             texcoord_count = struct.unpack('I', f.read(4))[0]
             texcoords = []
             for _ in range(texcoord_count):
-                # uint32 color + 2 floats (u, v)
-                f.read(4) # color/padding
-                uv = struct.unpack('2f', f.read(8))
-                texcoords.append(uv)
-                
+                if has_color:
+                    f.read(4)  # cor (uint32), so a partir da 1.2
+                texcoords.append(struct.unpack('2f', f.read(8)))
+
             face_count = struct.unpack('I', f.read(4))[0]
             faces = []
             for _ in range(face_count):
                 v_idx = struct.unpack('3H', f.read(6))
                 t_idx = struct.unpack('3H', f.read(6))
                 tex_idx = struct.unpack('H', f.read(2))[0]
-                f.read(2) # padding
-                two_sided, smooth_group = struct.unpack('2I', f.read(8))
+                f.read(2)  # padding
+                f.read(4)  # two_sided
+                if has_color:
+                    f.read(4)  # smooth_group, so a partir da 1.2
                 faces.append({
                     'vert_indices': v_idx,
                     'tex_indices': t_idx,
                     'texture_index': tex_idx
                 })
-                
-            # Keyframes (ignora para malha estática)
+
+            # Keyframes: a malha e estatica, mas o primeiro quaternion de rotacao substitui o eixo-angulo
             if ver_major > 1 or (ver_major == 1 and ver_minor >= 5):
                 loc_kf = struct.unpack('I', f.read(4))[0]
                 f.seek(loc_kf * (4 + 12), os.SEEK_CUR)
             rot_kf = struct.unpack('I', f.read(4))[0]
-            f.seek(rot_kf * (4 + 16), os.SEEK_CUR)
-            
+            rot_quat = None
+            rot_keys = []
+            for k in range(rot_kf):
+                frame, qx, qy, qz, qw = struct.unpack('I4f', f.read(20))
+                rot_keys.append((frame, (qx, qy, qz, qw)))
+                if k == 0:
+                    rot_quat = (qx, qy, qz, qw)
+
             nodes.append({
                 'name': n_name,
                 'parent_name': p_name,
                 'texture_indices': tex_indices,
                 'mat3': mat3,
                 'offset': offset,
+                'pos': pos,
+                'rot_angle': rot_angle,
+                'rot_axis': rot_axis,
+                'rot_quat': rot_quat,
+                'rot_keys': rot_keys,
                 'scale': scale,
                 'vertices': verts,
                 'texcoords': texcoords,
                 'faces': faces
             })
             
+        # Matriz final de cada no (espaco do modelo, eixos do RO: Y para baixo), percorrendo a hierarquia
+        is_only = len(nodes) == 1
+        by_name = {n['name']: n for n in nodes}
+        root = by_name.get(main_node) or next((n for n in nodes if not n['parent_name'] or n['parent_name'] not in by_name), nodes[0] if nodes else None)
+
+        def place(node, parent_matrix, depth=0):
+            m = mat4_mul(parent_matrix, mat4_translation(node['pos']))
+            if node['rot_quat'] is not None:
+                m = mat4_mul(m, mat4_from_quat(node['rot_quat']))
+            else:
+                m = mat4_mul(m, mat4_axis_angle(node['rot_axis'], node['rot_angle']))
+            m = mat4_mul(m, mat4_scaling(node['scale']))
+            node['world'] = m  # repassado aos filhos (sem offset/mat3, que sao so desta malha)
+            mesh = m if is_only else mat4_mul(m, mat4_translation(node['offset']))
+            node['mesh_matrix'] = mat4_mul(mesh, mat3_to_mat4(node['mat3']))
+            for v in node['vertices']:
+                p = mat4_apply(node['mesh_matrix'], v)
+                for c in range(3):
+                    min_v[c] = min(min_v[c], p[c])
+                    max_v[c] = max(max_v[c], p[c])
+            if depth < 64:
+                for child in nodes:
+                    if child is not node and child['parent_name'] == node['name'] and child['name'] != node['name']:
+                        place(child, m, depth + 1)
+
+        if root is not None:
+            place(root, mat4_identity())
+        for n in nodes:  # nos orfaos (pai inexistente) ficam na origem do modelo
+            if 'mesh_matrix' not in n:
+                place(n, mat4_identity())
+
         box_center = [(min_v[i] + max_v[i]) / 2.0 if min_v[i] != float('inf') else 0.0 for i in range(3)]
         box_max = [max_v[i] if max_v[i] != float('-inf') else 0.0 for i in range(3)]
         box_min = [min_v[i] if min_v[i] != float('inf') else 0.0 for i in range(3)]
-        
+
         return {
             'textures': textures,
             'nodes': nodes,
@@ -274,14 +326,119 @@ def read_rsm(rsm_path: str):
         }
 
 
-def compile_map(map_dir: str, output_obj: str = None):
+# ----------------------------------------------------------------------------- matrizes 4x4 (linha-maior, vetor-coluna: p' = M * p)
+def mat4_identity():
+    return [[1.0 if r == c else 0.0 for c in range(4)] for r in range(4)]
+
+
+def mat4_mul(a, b):
+    return [[sum(a[r][k] * b[k][c] for k in range(4)) for c in range(4)] for r in range(4)]
+
+
+def mat4_translation(t):
+    m = mat4_identity()
+    m[0][3], m[1][3], m[2][3] = t[0], t[1], t[2]
+    return m
+
+
+def mat4_scaling(s):
+    m = mat4_identity()
+    m[0][0], m[1][1], m[2][2] = s[0], s[1], s[2]
+    return m
+
+
+def mat4_axis_angle(axis, angle):
+    x, y, z = axis
+    length = math.sqrt(x * x + y * y + z * z)
+    if length < 1e-6 or abs(angle) < 1e-9:
+        return mat4_identity()
+    x, y, z = x / length, y / length, z / length
+    c, s = math.cos(angle), math.sin(angle)
+    t = 1.0 - c
+    return [
+        [x * x * t + c,     x * y * t - z * s, x * z * t + y * s, 0.0],
+        [y * x * t + z * s, y * y * t + c,     y * z * t - x * s, 0.0],
+        [z * x * t - y * s, z * y * t + x * s, z * z * t + c,     0.0],
+        [0.0, 0.0, 0.0, 1.0],
+    ]
+
+
+def mat4_rot_x(rad):
+    c, s = math.cos(rad), math.sin(rad)
+    return [[1, 0, 0, 0], [0, c, -s, 0], [0, s, c, 0], [0, 0, 0, 1]]
+
+
+def mat4_rot_y(rad):
+    c, s = math.cos(rad), math.sin(rad)
+    return [[c, 0, s, 0], [0, 1, 0, 0], [-s, 0, c, 0], [0, 0, 0, 1]]
+
+
+def mat4_rot_z(rad):
+    c, s = math.cos(rad), math.sin(rad)
+    return [[c, -s, 0, 0], [s, c, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]
+
+
+def mat4_from_quat(q):
+    x, y, z, w = q
+    n = math.sqrt(x * x + y * y + z * z + w * w) or 1.0
+    x, y, z, w = x / n, y / n, z / n, w / n
+    return [
+        [1 - 2 * (y * y + z * z), 2 * (x * y - z * w),     2 * (x * z + y * w),     0.0],
+        [2 * (x * y + z * w),     1 - 2 * (x * x + z * z), 2 * (y * z - x * w),     0.0],
+        [2 * (x * z - y * w),     2 * (y * z + x * w),     1 - 2 * (x * x + y * y), 0.0],
+        [0.0, 0.0, 0.0, 1.0],
+    ]
+
+
+def mat3_to_mat4(m3):
+    # Os 9 floats estao em ordem de coluna (como o gl-matrix do roBrowser): coluna c = m3[3c:3c+3]
+    m = mat4_identity()
+    for r in range(3):
+        for c in range(3):
+            m[r][c] = m3[c * 3 + r]
+    return m
+
+
+def mat4_apply(m, v):
+    x, y, z = v
+    return (m[0][0] * x + m[0][1] * y + m[0][2] * z + m[0][3],
+            m[1][0] * x + m[1][1] * y + m[1][2] * z + m[1][3],
+            m[2][0] * x + m[2][1] * y + m[2][2] * z + m[2][3])
+
+
+def compile_map(map_dir: str, output_obj: str = None, map_name: str = None):
     """Compila o mapa completo para OBJ"""
     map_dir = os.path.abspath(map_dir)
-    rsw_files = glob.glob(os.path.join(map_dir, "*.rsw")) or glob.glob(os.path.join(map_dir, "data", "*.rsw")) or glob.glob(os.path.join(map_dir, "**", "*.rsw"), recursive=True)
-    if not rsw_files:
-        raise FileNotFoundError(f"Nenhum arquivo .rsw encontrado em {map_dir}")
-        
-    rsw_path = rsw_files[0]
+    
+    if map_name:
+        rsw_path = ""
+        candidate_dirs = [map_dir, ASSETS_ROOT] + CANDIDATE_ROOTS
+        # 1. Busca direta O(1)
+        for cd in candidate_dirs:
+            if not cd or not os.path.exists(cd):
+                continue
+            direct = os.path.join(cd, f"{map_name}.rsw")
+            if os.path.exists(direct):
+                rsw_path = direct
+                break
+        # 2. Busca com wildcard raso ou recursivo se não achou direto
+        if not rsw_path:
+            for cd in candidate_dirs:
+                if not cd or not os.path.exists(cd):
+                    continue
+                found = glob.glob(os.path.join(cd, f"{map_name}.rsw")) or glob.glob(os.path.join(cd, f"**/{map_name}.rsw"), recursive=True)
+                if found:
+                    rsw_path = found[0]
+                    break
+        if not rsw_path:
+            raise FileNotFoundError(f"Arquivo {map_name}.rsw não encontrado em nenhum dos diretórios: {candidate_dirs}")
+    else:
+        rsw_files = glob.glob(os.path.join(map_dir, "*.rsw")) or glob.glob(os.path.join(map_dir, "data", "*.rsw")) or glob.glob(os.path.join(map_dir, "**", "*.rsw"), recursive=True)
+        if not rsw_files:
+            raise FileNotFoundError(f"Nenhum arquivo .rsw encontrado em {map_dir}")
+        rsw_path = rsw_files[0]
+
+
     map_dir = os.path.dirname(rsw_path)
     map_name = os.path.splitext(os.path.basename(rsw_path))[0]
     
@@ -323,11 +480,14 @@ def compile_map(map_dir: str, output_obj: str = None):
         get_material_name(t)
 
     # 2. Carrega RSMs em cache
-    models_search_dirs = [
-        os.path.join(map_dir, 'model'),
-        r"D:\Ragnarok_Assets\shared\data\model",
-        r"D:\Ragnarok_Assets\Prontera\Prontera_Cidade\model"
-    ]
+    models_search_dirs = [os.path.join(map_dir, 'model')]
+    for cr in [map_dir, ASSETS_ROOT] + CANDIDATE_ROOTS:
+        if cr and os.path.exists(cr):
+            for sub in ['model', os.path.join('shared', 'data', 'model'), os.path.join('Prontera', 'Prontera_Cidade', 'model')]:
+                p = os.path.join(cr, sub)
+                if p not in models_search_dirs and os.path.exists(p):
+                    models_search_dirs.append(p)
+
     rsm_cache: Dict[str, dict] = {}
     
     unique_models = set(m['filename'] for m in rsw['models'])
@@ -352,22 +512,37 @@ def compile_map(map_dir: str, output_obj: str = None):
     print(f"Modelos carregados com sucesso: {len(rsm_cache)}/{len(unique_models)}")
     
     # 3. Escreve arquivo MTL resolvendo caminhos de texturas existentes
-    tex_search_dirs = [
-        os.path.join(map_dir, 'texture'),
-        r"D:\Ragnarok_Assets\shared\data\texture",
-        r"D:\Ragnarok_Assets\Prontera\Prontera_Cidade\texture"
-    ]
+    tex_search_dirs = [os.path.join(map_dir, 'texture')]
+    for cr in [map_dir, ASSETS_ROOT] + CANDIDATE_ROOTS:
+        if cr and os.path.exists(cr):
+            for sub in ['texture', os.path.join('shared', 'data', 'texture'), os.path.join('Prontera', 'Prontera_Cidade', 'texture')]:
+                p = os.path.join(cr, sub)
+                if p not in tex_search_dirs and os.path.exists(p):
+                    tex_search_dirs.append(p)
+
+    def safe_relpath(path: str, start: str) -> str:
+        try:
+            return os.path.relpath(path, start).replace('\\', '/')
+        except ValueError:
+            p_clean = path.replace('\\', '/')
+            lower = p_clean.lower()
+            if '/texture/' in lower:
+                idx = lower.find('/texture/')
+                return p_clean[idx + 1:]
+            return p_clean
+
     tex_index = {}
     for td in tex_search_dirs:
         if os.path.exists(td):
             for root, _, files in os.walk(td):
                 for f in files:
-                    tex_index.setdefault(f.lower(), os.path.relpath(os.path.join(root, f), map_dir).replace('\\', '/'))
+                    tex_index.setdefault(f.lower(), safe_relpath(os.path.join(root, f), map_dir))
                     try:
                         korean = f.encode('latin1').decode('cp949', errors='ignore').lower()
-                        tex_index.setdefault(korean, os.path.relpath(os.path.join(root, f), map_dir).replace('\\', '/'))
+                        tex_index.setdefault(korean, safe_relpath(os.path.join(root, f), map_dir))
                     except Exception:
                         pass
+
 
     print(f"Escrevendo materiais em {output_mtl}...")
     with open(output_mtl, 'w', encoding='utf-8') as mtl:
@@ -416,12 +591,13 @@ def compile_map(map_dir: str, output_obj: str = None):
                     for p in (p0, p1, p2, p3):
                         obj.write(f"v {p[0]:.2f} {p[1]:.2f} {p[2]:.2f}\n")
                         
+                    # O .gnd guarda u1 u2 u3 u4 v1 v2 v3 v4 (nao intercalado); cantos 0..3 = (x,y) (x+1,y) (x,y+1) (x+1,y+1)
                     uv = f_info['texcoords']
                     uvs = [
-                        (uv[0], 1.0 - uv[1]),
-                        (uv[2], 1.0 - uv[3]),
-                        (uv[6], 1.0 - uv[7]),
-                        (uv[4], 1.0 - uv[5])
+                        (uv[0], 1.0 - uv[4]),  # p0 (x,   y)
+                        (uv[1], 1.0 - uv[5]),  # p1 (x+1, y)
+                        (uv[3], 1.0 - uv[7]),  # p2 (x+1, y+1)
+                        (uv[2], 1.0 - uv[6])   # p3 (x,   y+1)
                     ]
                     for u, v in uvs:
                         obj.write(f"vt {u:.4f} {v:.4f}\n")
@@ -444,6 +620,7 @@ def compile_map(map_dir: str, output_obj: str = None):
         obj.write("\no Buildings_And_Objects\n")
         
         placed_count = 0
+        night_lights = []
         for inst in rsw['models']:
             m_fn = inst['filename']
             if m_fn not in rsm_cache:
@@ -454,23 +631,24 @@ def compile_map(map_dir: str, output_obj: str = None):
             inst_rot = inst['rotation'] # (deg_x, deg_y, deg_z)
             inst_scale = inst['scale']
             
-            # Centro da instância no espaço de mundo do GND
-            # No GND: X vai de 0 a width*scale, Y vai de 0 a height*scale, Z é altitude
-            # No RSW: X é Leste-Oeste, Z é Norte-Sul, Y é altitude
-            world_x = inst_pos[0] + center_x
-            world_y = inst_pos[2] + center_y
-            world_z = -inst_pos[1]
-            
-            # Rotações em radianos
-            # Rot Z, Rot X, Rot Y
-            rz = math.radians(inst_rot[2])
-            rx = math.radians(inst_rot[0])
-            ry = math.radians(inst_rot[1])
-            
-            cos_z, sin_z = math.cos(rz), math.sin(rz)
-            cos_x, sin_x = math.cos(rx), math.sin(rx)
-            cos_y, sin_y = math.cos(ry), math.sin(ry)
-            
+            # Matriz da instancia no espaco do RO (X leste, Y para baixo, Z norte), como no roBrowser:
+            # T(pos + centro do mapa) * Rz * Rx * Ry * S * T(-centro da caixa, -base da caixa, -centro da caixa)
+            box_c, box_max = rsm['box_center'], rsm['box_max']
+            inst_m = mat4_translation((inst_pos[0] + center_x, inst_pos[1], inst_pos[2] + center_y))
+            inst_m = mat4_mul(inst_m, mat4_rot_z(math.radians(inst_rot[2])))
+            inst_m = mat4_mul(inst_m, mat4_rot_x(math.radians(inst_rot[0])))
+            inst_m = mat4_mul(inst_m, mat4_rot_y(math.radians(inst_rot[1])))
+            inst_m = mat4_mul(inst_m, mat4_scaling(inst_scale))
+            inst_m = mat4_mul(inst_m, mat4_translation((-box_c[0], -box_max[1], -box_c[2])))
+
+            # Postes: uma luz noturna na lanterna (perto do topo do modelo), em coordenadas do OBJ
+            lamp_kind = night_light_kind(m_fn)
+            if lamp_kind:
+                box_min = rsm['box_min']
+                top_y = box_min[1] + (box_max[1] - box_min[1]) * 0.12  # Y para baixo: min = topo
+                lx, ly, lz = mat4_apply(inst_m, (box_c[0], top_y, box_c[2]))
+                night_lights.append({'kind': lamp_kind, 'model': m_fn, 'x': round(lx, 2), 'y': round(lz, 2), 'z': round(-ly, 2)})
+
             # Processa cada nó do modelo
             for node in rsm['nodes']:
                 node_verts = node['vertices']
@@ -484,43 +662,11 @@ def compile_map(map_dir: str, output_obj: str = None):
                 local_v_start = v_offset
                 local_vt_start = vt_offset
                 
-                # Transformação e escrita dos vértices
+                # Transformacao e escrita dos vertices: instancia * no, depois RO (X, Y-baixo, Z) -> OBJ (X, Z, -Y)
+                full = mat4_mul(inst_m, node['mesh_matrix'])
                 for v in node_verts:
-                    # 1. Bounding box centering (alinha base com o chão)
-                    vx = v[0] - rsm['box_center'][0]
-                    vy = v[1] - rsm['box_max'][1]
-                    vz = v[2] - rsm['box_center'][2]
-                    
-                    # 2. Offset local do nó
-                    vx += node['offset'][0]
-                    vy += node['offset'][1]
-                    vz += node['offset'][2]
-                    
-                    # 3. Escala do nó e da instância
-                    vx *= (node['scale'][0] * inst_scale[0])
-                    vy *= (node['scale'][1] * inst_scale[1])
-                    vz *= (node['scale'][2] * inst_scale[2])
-                    
-                    # 4. Rotação (Z, depois X, depois Y)
-                    # Rot Z (no plano XY)
-                    x1 = vx * cos_z - vy * sin_z
-                    y1 = vx * sin_z + vy * cos_z
-                    z1 = vz
-                    # Rot X (no plano YZ)
-                    x2 = x1
-                    y2 = y1 * cos_x - z1 * sin_x
-                    z2 = y1 * sin_x + z1 * cos_x
-                    # Rot Y (no plano XZ)
-                    x3 = x2 * cos_y + z2 * sin_y
-                    y3 = y2
-                    z3 = -x2 * sin_y + z2 * cos_y
-                    
-                    # 5. Translação para o mundo (X mund, Y mund, Z altitude)
-                    final_x = x3 + world_x
-                    final_y = z3 + world_y
-                    final_z = -y3 + world_z
-                    
-                    obj.write(f"v {final_x:.2f} {final_y:.2f} {final_z:.2f}\n")
+                    rx, ry, rz = mat4_apply(full, v)
+                    obj.write(f"v {rx:.2f} {rz:.2f} {-ry:.2f}\n")
                     v_offset += 1
                     
                 # Escrita das coordenadas UV
@@ -531,8 +677,12 @@ def compile_map(map_dir: str, output_obj: str = None):
                 # Agrupa e escreve as faces por material
                 faces_by_mat: Dict[str, List[Tuple[List[int], List[int]]]] = {}
                 for face in node_faces:
+                    # O indice da face aponta para a lista de texturas DO NO, que por sua vez indexa as do modelo
                     t_idx = face['texture_index']
-                    if t_idx < len(node_textures):
+                    node_tex = node['texture_indices']
+                    if t_idx < len(node_tex) and node_tex[t_idx] < len(node_textures):
+                        mat_name = get_material_name(node_textures[node_tex[t_idx]])
+                    elif t_idx < len(node_textures):
                         mat_name = get_material_name(node_textures[t_idx])
                     else:
                         mat_name = list(materials.values())[0]
@@ -551,16 +701,92 @@ def compile_map(map_dir: str, output_obj: str = None):
 
             placed_count += 1
             
+    # O RSW de Prontera nao tem luzes: as noturnas saem dos modelos de poste (lido pelo ue_import_map.py)
+    lights_path = os.path.splitext(output_obj)[0] + '_lights.json'
+    with open(lights_path, 'w', encoding='utf-8') as lf:
+        json.dump({'coords': 'obj', 'lights': night_lights}, lf, ensure_ascii=False, indent=1)
+
     print(f"Instâncias de modelos 3D compiladas: {placed_count}")
+    print(f"Luzes noturnas (postes): {len(night_lights)}")
     print(f"Arquivo final gerado com sucesso:")
     print(f"  -> {output_obj}")
     print(f"  -> {output_mtl}")
+    print(f"  -> {lights_path}")
     return output_obj
 
 
+# Modelos que viram luzes noturnas (nome do arquivo .rsm, sem pasta): poste comum e poste com estandarte
+NIGHT_LIGHT_MODELS = {
+    '가로등01.rsm': 'lamp',          # 가로등01
+    '휘장가로등.rsm': 'lamp',  # 휘장가로등
+}
+
+
+def night_light_kind(model_filename: str):
+    base = model_filename.replace('/', '\\').split('\\')[-1]
+    return NIGHT_LIGHT_MODELS.get(base)
+
+
+PHASE1_MAPS = [
+    'prontera',
+    'new_1-1',
+    'new_1-2',
+    'new_1-3',
+    'new_1-4',
+    'prt_fild08',
+    'prt_sewb1',
+    'prt_sewb2',
+    'prt_sewb3',
+    'prt_sewb4'
+]
+
+REGIONAL_FLAGSHIP_MAPS = [
+    'prontera',
+    'izlude',
+    'geffen',
+    'payon',
+    'morocc',
+    'alberta',
+    'aldebaran',
+    'glast_01',
+    'xmas'
+]
+
+
 if __name__ == '__main__':
-    if len(sys.argv) > 1 and sys.argv[1] == '--all':
-        root_dir = sys.argv[2] if len(sys.argv) > 2 else 'D:/Ragnarok_Assets'
+    import argparse
+    parser = argparse.ArgumentParser(description="Myth of Thor - Compilador de Mapas RO (GND+RSW+RSM -> OBJ)")
+    parser.add_argument("target", nargs="?", default=ASSETS_ROOT, help="Diretório ou arquivo alvo")
+    parser.add_argument("--map", nargs="+", help="Nomes específicos de mapas a compilar (ex: prontera izlude geffen)")
+    parser.add_argument("--phase1", action="store_true", help="Compila os 10 mapas da Fase 1 (Prontera, Treinamento, Campo Sul, Esgotos 1-4)")
+    parser.add_argument("--regions", action="store_true", help="Compila os 9 mapas capitais das regiões 1 a 9")
+    parser.add_argument("--all", action="store_true", help="Compila todos os mapas encontrados no diretório")
+    args = parser.parse_args()
+
+    base_dir = args.target if (args.target and os.path.isdir(args.target)) else ASSETS_ROOT
+
+    if args.phase1:
+        print("=== Compilando Mapas da Fase 1 (Prontera, Treinamento, Campo Sul, Esgotos 1-4) ===")
+        for m in PHASE1_MAPS:
+            try:
+                compile_map(base_dir, map_name=m)
+            except Exception as e:
+                print(f"Erro ao compilar mapa {m}: {e}")
+    elif args.regions:
+        print("=== Compilando Mapas Capitais das Regiões 1 a 9 ===")
+        for m in REGIONAL_FLAGSHIP_MAPS:
+            try:
+                compile_map(base_dir, map_name=m)
+            except Exception as e:
+                print(f"Erro ao compilar mapa {m}: {e}")
+    elif args.map:
+        for m in args.map:
+            try:
+                compile_map(base_dir, map_name=m)
+            except Exception as e:
+                print(f"Erro ao compilar mapa {m}: {e}")
+    elif args.all:
+        root_dir = args.target
         print(f"Buscando todos os mapas em {root_dir}...")
         for r, d, f in os.walk(root_dir):
             if any(file.endswith('.rsw') for file in f) and any(file.endswith('.gnd') for file in f):
@@ -569,5 +795,8 @@ if __name__ == '__main__':
                 except Exception as e:
                     print(f"Erro ao compilar {r}: {e}")
     else:
-        target_dir = sys.argv[1] if len(sys.argv) > 1 else 'D:/Ragnarok_Assets/Prontera/Prontera_Cidade'
-        compile_map(target_dir)
+        if os.path.isdir(args.target) and any(f.endswith('.rsw') for f in os.listdir(args.target)):
+            compile_map(args.target)
+        else:
+            compile_map(base_dir, map_name='prontera')
+

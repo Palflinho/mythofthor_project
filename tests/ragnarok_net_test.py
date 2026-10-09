@@ -99,16 +99,18 @@ def test_packet_serialization(reporter: TestReporter):
     except Exception as e:
         reporter.record_fail("Pacote CA_LOGIN", str(e))
 
-    # 1.2 Teste CZ_REQUEST_MOVE
+    # 1.2 Teste CZ_REQUEST_MOVE (Packing canônico WBUFPOS / RBUFPOS do rAthena)
     try:
         x, y = 156, 180
-        packed_coords = ((x & 0x3FF) << 14) | ((y & 0x3FF) << 4)
-        move_packet = struct.pack("<HI", PACKET_CZ_REQUEST_MOVE, packed_coords)[:5]
+        b0 = (x >> 2) & 0xFF
+        b1 = ((x << 6) & 0xC0) | ((y >> 4) & 0x3F)
+        b2 = (y << 4) & 0xF0
+        move_packet = struct.pack("<H", PACKET_CZ_REQUEST_MOVE) + bytes([b0, b1, b2])
 
         if len(move_packet) == 5:
-            unpacked_val = struct.unpack("<I", move_packet[2:] + b"\x00")[0]
-            unpacked_x = (unpacked_val >> 14) & 0x3FF
-            unpacked_y = (unpacked_val >> 4) & 0x3FF
+            p = move_packet[2:]
+            unpacked_x = (p[0] << 2) | (p[1] >> 6)
+            unpacked_y = ((p[1] & 0x3F) << 4) | (p[2] >> 4)
 
             if (unpacked_x, unpacked_y) == (x, y):
                 reporter.record_pass("Pacote CZ_REQUEST_MOVE (Coordenadas de Prontera)", f"X={unpacked_x}, Y={unpacked_y}")
@@ -297,6 +299,154 @@ def test_services_connectivity(host: str, reporter: TestReporter):
             reporter.record_skip(f"Porta {port} [{name}]", f"Serviço offline no momento em {host}:{port}")
 
 
+def test_live_server_flow(host: str, reporter: TestReporter):
+    print(f"\n{BOLD}[4] Teste End-to-End no Servidor Real ({host}) - Login -> Char -> Map{RESET}")
+
+    if not (test_port(host, LOGIN_PORT) and test_port(host, CHAR_PORT) and test_port(host, MAP_PORT)):
+        reporter.record_skip("Fluxo End-to-End", "Um ou mais servidores offline")
+        return
+
+    import time
+    username = "mythtest"
+    password = "mythtest123"
+
+    try:
+        # 4.1 Login Server (6900)
+        s_login = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s_login.settimeout(4.0)
+        s_login.connect((host, LOGIN_PORT))
+
+        ca_login = struct.pack("<HI24s24sB", 0x0064, 20211103, username.encode('ascii').ljust(24, b'\x00'), password.encode('ascii').ljust(24, b'\x00'), 0)
+        s_login.sendall(ca_login)
+
+        resp = s_login.recv(1024)
+        if len(resp) < 2:
+            reporter.record_fail("Login Server (0x0064)", "Resposta vazia")
+            s_login.close()
+            return
+
+        cmd, = struct.unpack_from("<H", resp, 0)
+        if cmd == 0x083e:
+            err, = struct.unpack_from("<I", resp, 2)
+            reporter.record_fail("Login Server (0x0064)", f"Login recusado: código {err}")
+            s_login.close()
+            return
+        elif cmd == 0x0081:
+            reporter.record_skip("Login Server (0x0064)", "Usuário já conectado na sessão anterior (aguardando timeout)")
+            s_login.close()
+            return
+        elif cmd != 0x0ac4:
+            reporter.record_fail("Login Server (0x0064)", f"Packet inesperado: 0x{cmd:04x}")
+            s_login.close()
+            return
+
+        packet_type, packet_len, login_id1, account_id, login_id2, last_ip = struct.unpack_from("<HHIIII", resp, 0)
+        sex = resp[46]
+        char_ip_raw, char_port, char_name = struct.unpack_from("<IH20s", resp, 64)
+        s_login.close()
+        reporter.record_pass("Login-Server Autenticação (0x0ac4)", f"AID={account_id}, LoginID1={login_id1}")
+
+        # 4.2 Char Server (6121)
+        s_char = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s_char.settimeout(4.0)
+        s_char.connect((host, char_port if char_port != 0 else CHAR_PORT))
+
+        ch_enter = struct.pack("<HIIIHB", 0x0065, account_id, login_id1, login_id2, 0, sex)
+        s_char.sendall(ch_enter)
+
+        ack_aid = s_char.recv(4)
+        char_data = s_char.recv(4096)
+        ch_select = struct.pack("<HB", 0x0066, 0)
+        s_char.sendall(ch_select)
+
+        zone_data = s_char.recv(1024)
+        z_cmd, z_cid = struct.unpack_from("<HI", zone_data, 0)
+        z_map = zone_data[6:22].decode('ascii', errors='ignore').strip(chr(0))
+        z_ip_raw, z_port = struct.unpack_from("<IH", zone_data, 22)
+        s_char.close()
+        reporter.record_pass("Char-Server Seleção (0x0066 -> 0x0ac5)", f"CID={z_cid}, Mapa='{z_map}'")
+
+        # 4.3 Map Server (5121)
+        s_map = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s_map.settimeout(4.0)
+        s_map.connect((host, z_port if z_port != 0 else MAP_PORT))
+
+        client_tick = int(time.time() * 1000) & 0xFFFFFFFF
+        cz_enter = struct.pack("<HIIIIB", 0x0888, account_id, z_cid, login_id1, client_tick, sex)
+        s_map.sendall(cz_enter)
+
+        # Aguarda ZC_ACCEPT_ENTER (0x02eb) do Map Server
+        initial_buf = b""
+        got_accept = False
+        t_wait = time.time()
+        while time.time() - t_wait < 4.0 and not got_accept:
+            chunk = s_map.recv(4096)
+            if not chunk:
+                break
+            initial_buf += chunk
+            if b'\xeb\x02' in initial_buf:
+                got_accept = True
+                break
+
+        if not got_accept:
+            reporter.record_fail("Map-Server Entrada", "Timeout aguardando ZC_ACCEPT_ENTER (0x02eb)")
+            s_map.close()
+            return
+
+        # Envia CZ_NOTIFY_ACTORINIT (0x007d)
+        cz_load = struct.pack("<H", 0x007d)
+        s_map.sendall(cz_load)
+
+        time.sleep(0.3)
+        # Drain any pending world packets first
+        world_data = b""
+        s_map.settimeout(1.0)
+        try:
+            while True:
+                chunk = s_map.recv(4096)
+                if not chunk:
+                    break
+                world_data += chunk
+                if len(chunk) < 4096:
+                    break
+        except (socket.timeout, BlockingIOError):
+            pass
+
+        # 4.4 Test Move in Map Server (WBUFPOS / RBUFPOS)
+        target_x, target_y = 158, 182
+        b0 = (target_x >> 2) & 0xFF
+        b1 = ((target_x << 6) & 0xC0) | ((target_y >> 4) & 0x3F)
+        b2 = (target_y << 4) & 0xF0
+        cz_move = struct.pack("<H", PACKET_CZ_REQUEST_MOVE) + bytes([b0, b1, b2])
+        s_map.sendall(cz_move)
+
+        move_resp = b""
+        got_move = False
+        t_start = time.time()
+        while time.time() - t_start < 4.0 and not got_move:
+            try:
+                chunk = s_map.recv(4096)
+                if not chunk:
+                    break
+                move_resp += chunk
+                if b'\x87\x00' in move_resp:
+                    got_move = True
+                    break
+            except (socket.timeout, BlockingIOError):
+                break
+
+        s_map.close()
+
+        reporter.record_pass("Map-Server Entrada e Pacotes do Mundo", f"Recebidos {len(world_data)} bytes iniciais")
+        if got_move:
+            reporter.record_pass("Map-Server Movimentação (0x035F -> ZC_NOTIFY_PLAYERMOVE)", f"Recebido 0x0087 com confirmação de rota para ({target_x}, {target_y})")
+        else:
+            reporter.record_fail("Map-Server Movimentação (0x035F)", f"0x0087 não retornado pelo servidor ({len(move_resp)} bytes recebidos)")
+
+    except Exception as e:
+        reporter.record_fail("Fluxo End-to-End Real", str(e))
+
+
 def main():
     parser = argparse.ArgumentParser(description="Myth of Thor Automated Test Suite")
     parser.add_argument("--host", default=DEFAULT_HOST, help="IP do servidor rAthena")
@@ -310,6 +460,7 @@ def main():
     test_packet_serialization(reporter)
     test_autobattle_logic(reporter)
     test_services_connectivity(args.host, reporter)
+    test_live_server_flow(args.host, reporter)
 
     success = reporter.summary()
     sys.exit(0 if success else 1)
@@ -317,3 +468,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
