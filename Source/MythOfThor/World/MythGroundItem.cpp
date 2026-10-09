@@ -97,7 +97,7 @@ void AMythGroundItem::BeginPlay()
 		{
 			UMaterialInstanceDynamic* M = UMaterialInstanceDynamic::Create(Base, this);
 			M->SetVectorParameterValue(TEXT("Color"), Color);
-			M->SetScalarParameterValue(TEXT("Strength"), Rarity >= 4 ? 4.f : 2.5f);
+			M->SetScalarParameterValue(TEXT("Strength"), Rarity >= 4 ? 9.f : 6.f);
 			Beam->SetMaterial(0, M);
 			Beam->SetVisibility(true);
 		}

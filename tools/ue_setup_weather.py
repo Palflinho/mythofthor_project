@@ -180,8 +180,21 @@ def build_item_beam():
     mel.connect_material_expressions(uo, '', usq, 'B')
 
     # vertical: 1 - V (V = 0 no topo do plano, 1 na base -> invertido abaixo conforme a orientacao do plano)
-    vo = mel.create_material_expression(mat, unreal.MaterialExpressionOneMinus, -700, 120)
-    mel.connect_material_expressions(v, '', vo, '')
+    # vertical: V vai de 0 (topo do feixe) a 1 (base, no item). Forte embaixo e sumindo suave ate o topo (V^2),
+    # com o pe tambem suavizado: saturate((1 - V) * 8). Sem cortes secos nas pontas.
+    vsq = mel.create_material_expression(mat, unreal.MaterialExpressionMultiply, -700, 120)
+    mel.connect_material_expressions(v, '', vsq, 'A')
+    mel.connect_material_expressions(v, '', vsq, 'B')
+    vinv = mel.create_material_expression(mat, unreal.MaterialExpressionOneMinus, -700, 200)
+    mel.connect_material_expressions(v, '', vinv, '')
+    vfoot = mel.create_material_expression(mat, unreal.MaterialExpressionMultiply, -580, 200)
+    mel.connect_material_expressions(vinv, '', vfoot, 'A')
+    mel.connect_material_expressions(const(mat, 8.0, -700, 260), '', vfoot, 'B')
+    vfs = mel.create_material_expression(mat, unreal.MaterialExpressionSaturate, -470, 200)
+    mel.connect_material_expressions(vfoot, '', vfs, '')
+    vo = mel.create_material_expression(mat, unreal.MaterialExpressionMultiply, -360, 150)
+    mel.connect_material_expressions(vsq, '', vo, 'A')
+    mel.connect_material_expressions(vfs, '', vo, 'B')
 
     fade = mel.create_material_expression(mat, unreal.MaterialExpressionMultiply, -150, 20)
     mel.connect_material_expressions(usq, '', fade, 'A')
