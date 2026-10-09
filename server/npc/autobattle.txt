@@ -44,6 +44,8 @@ OnCommand:
 			end;
 		}
 		@autobattle_active = 0;
+		@autobattle_target = 0;
+		unitstopattack(getcharid(3));
 		dispbottom "[Auto-Battle] Desativado com sucesso. Vigor restante: " + (#AutoBattle_Stamina / 3600) + "h " + ((#AutoBattle_Stamina % 3600) / 60) + "m " + (#AutoBattle_Stamina % 60) + "s.";
 		end;
 	}
@@ -67,9 +69,10 @@ OnCommand:
 		}
 
 		@autobattle_active = 1;
+		@autobattle_target = 0;
 		dispbottom "[Auto-Battle] ATIVADO! Vigor restante: " + (#AutoBattle_Stamina / 3600) + "h " + ((#AutoBattle_Stamina % 3600) / 60) + "m " + (#AutoBattle_Stamina % 60) + "s.";
 
-		// Loop de monitoramento de vigor e regras do servidor
+		// Loop de monitoramento de vigor, regras e caça ativa do servidor
 		while (@autobattle_active && isloggedin(getcharid(3))) {
 			sleep2 1000;
 
@@ -78,6 +81,8 @@ OnCommand:
 			// Trava de sobrepeso em tempo real
 			if ((Weight * 100 / MaxWeight) >= .OverweightThreshold) {
 				@autobattle_active = 0;
+				@autobattle_target = 0;
+				unitstopattack(getcharid(3));
 				dispbottom "[Auto-Battle] Desativado automaticamente: inventário atingiu 90% da capacidade de peso!";
 				end;
 			}
@@ -87,8 +92,50 @@ OnCommand:
 				#AutoBattle_Stamina--;
 			} else {
 				@autobattle_active = 0;
+				@autobattle_target = 0;
+				unitstopattack(getcharid(3));
 				dispbottom "[Auto-Battle] Vigor diário de 3 horas esgotado! Auto-Battle desligado.";
 				end;
+			}
+
+			// IA de Caça Ativa (Auto-Hunt)
+			// Se o alvo atual ainda existe e está vivo, continua o combate
+			if (@autobattle_target > 0 && unitexists(@autobattle_target) && getunitdata(@autobattle_target, UMOB_HP) > 0) {
+				// Alvo ainda vivo, o player segue atacando
+			} else {
+				@autobattle_target = 0;
+
+				// Obtém mapa e coordenadas atuais do jogador
+				getmapxy(.@map$, .@px, .@py, BL_PC);
+
+				// Busca monstros vivos num raio de 14 células
+				.@range = 14;
+				.@x1 = max(0, .@px - .@range);
+				.@y1 = max(0, .@py - .@range);
+				.@x2 = .@px + .@range;
+				.@y2 = .@py + .@range;
+				.@count = getareaunits(BL_MOB, .@map$, .@x1, .@y1, .@x2, .@y2, .@mobs[0]);
+
+				.@closest_id = 0;
+				.@closest_dist = 9999;
+
+				for (.@i = 0; .@i < .@count; .@i++) {
+					.@mid = .@mobs[.@i];
+					if (unitexists(.@mid) && getunitdata(.@mid, UMOB_HP) > 0) {
+						.@mx = getunitdata(.@mid, UMOB_X);
+						.@my = getunitdata(.@mid, UMOB_Y);
+						.@dist = distance(.@px, .@py, .@mx, .@my);
+						if (.@dist < .@closest_dist) {
+							.@closest_dist = .@dist;
+							.@closest_id = .@mid;
+						}
+					}
+				}
+
+				if (.@closest_id > 0) {
+					@autobattle_target = .@closest_id;
+					unitattack(getcharid(3), .@closest_id, 1);
+				}
 			}
 		}
 		end;

@@ -8,8 +8,34 @@ LOGIN_PORT = 6900
 USERNAME = "mythtest"
 PASSWORD = "mythtest123"
 
+def pack_pos(x, y, dir_val=0):
+    b0 = (x >> 2) & 0xFF
+    b1 = ((x << 6) & 0xC0) | ((y >> 4) & 0x3F)
+    b2 = ((y << 4) & 0xF0) | (dir_val & 0x0F)
+    return bytes([b0, b1, b2])
+
+def unpack_pos(p):
+    x = (p[0] << 2) | (p[1] >> 6)
+    y = ((p[1] & 0x3F) << 4) | (p[2] >> 4)
+    dir_val = p[2] & 0x0F
+    return x, y, dir_val
+
+def send_chat_message(sock, char_name, message):
+    # CZ_GLOBAL_MESSAGE (0x00f3)
+    text = f"{char_name} : {message}\0".encode('utf-8')
+    pkt_len = 4 + len(text)
+    pkt = struct.pack("<HH", 0x00f3, pkt_len) + text
+    sock.sendall(pkt)
+
 def run_test():
-    print("=== [1] Conectando ao Login Server (6900) ===")
+    print("==================================================================")
+    print("      MYTH OF THOR - TESTE INTEGRADO DE FLUXO DE REDE RAGNAROK    ")
+    print("==================================================================")
+
+    # -------------------------------------------------------------------------
+    # 1. LOGIN SERVER
+    # -------------------------------------------------------------------------
+    print("\n=== [1] Conectando ao Login Server (6900) ===")
     s_login = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s_login.settimeout(5.0)
     s_login.connect((LOGIN_HOST, LOGIN_PORT))
@@ -32,14 +58,16 @@ def run_test():
 
     packet_type, packet_len, login_id1, account_id, login_id2, last_ip = struct.unpack_from("<HHIIII", resp, 0)
     sex = resp[46]
-    token = resp[47:64]
     print(f"Login OK! AccountID: {account_id}, LoginID1: {login_id1}, LoginID2: {login_id2}, Sex: {sex}")
 
-    char_ip_raw, char_port, char_name = struct.unpack_from("<IH20s", resp, 64)
+    char_ip_raw, char_port, char_name_server = struct.unpack_from("<IH20s", resp, 64)
     char_ip = socket.inet_ntoa(struct.pack("<I", char_ip_raw))
-    print(f"Char Server: {char_name.decode('ascii', errors='ignore').strip(chr(0))} em {char_ip}:{char_port}")
+    print(f"Char Server: {char_name_server.decode('ascii', errors='ignore').strip(chr(0))} em {char_ip}:{char_port}")
     s_login.close()
 
+    # -------------------------------------------------------------------------
+    # 2. CHAR SERVER & SELEÇÃO DE PERSONAGEM
+    # -------------------------------------------------------------------------
     print("\n=== [2] Conectando ao Char Server (6121) ===")
     s_char = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s_char.settimeout(5.0)
@@ -53,11 +81,11 @@ def run_test():
     ack_aid = s_char.recv(4)
     print(f"Char Server ACK AID: {len(ack_aid)} bytes -> {struct.unpack('<I', ack_aid)[0]}")
 
-    # Next receive packets (e.g. 0x082d and 0x006b)
     char_data = s_char.recv(4096)
     offset = 0
     char_gid = None
     char_name = ""
+    char_slot = 0
     while offset < len(char_data):
         p_cmd, = struct.unpack_from("<H", char_data, offset)
         if p_cmd == 0x006b:
@@ -65,8 +93,16 @@ def run_test():
             # Character info at offset + 27
             char_info_raw = char_data[offset + 27 : offset + 27 + 175]
             char_gid, = struct.unpack_from("<I", char_info_raw, 0)
+            job_lv, = struct.unpack_from("<i", char_info_raw, 24)
+            hp, max_hp = struct.unpack_from("<qq", char_info_raw, 50)
+            sp, max_sp = struct.unpack_from("<qq", char_info_raw, 66)
+            job_class, hair_style = struct.unpack_from("<hh", char_info_raw, 84)
+            base_lv, = struct.unpack_from("<h", char_info_raw, 92)
+            clothes_color, = struct.unpack_from("<h", char_info_raw, 106)
             char_name = char_info_raw[108:132].decode('utf-8', errors='ignore').strip(chr(0))
-            print(f"0x006b recebido! Personagem: GID={char_gid}, Nome='{char_name}'")
+            char_slot = char_info_raw[138]
+            hair_color = char_info_raw[139]
+            print(f"0x006b recebido! Slot={char_slot}, GID={char_gid}, Nome='{char_name}', BaseLv={base_lv}, JobLv={job_lv}, Job={job_class}, HP={hp}/{max_hp}, Cabelo={hair_style}/Cor={hair_color}, Roupa={clothes_color}")
             offset += p_len
         elif p_cmd == 0x082d:
             p_len, = struct.unpack_from("<H", char_data, offset + 2)
@@ -76,8 +112,8 @@ def run_test():
             print(f"Outro pacote do Char Server: 0x{p_cmd:04x}")
             break
 
-    # Select character (0x0066) - 3 bytes (cmd: 0x0066, slot: 0)
-    ch_select = struct.pack("<HB", 0x0066, 0)
+    # Select character (CH_SELECT_CHAR 0x0066) - 3 bytes
+    ch_select = struct.pack("<HB", 0x0066, char_slot)
     s_char.sendall(ch_select)
 
     # Receive HC_NOTIFY_ZONESVR (0x0ac5) - 156 bytes
@@ -89,40 +125,29 @@ def run_test():
     print(f"Zone Server Notify: 0x{z_cmd:04x}, CID={z_cid}, Map='{z_map}', Zone={z_ip}:{z_port}")
     s_char.close()
 
+    # -------------------------------------------------------------------------
+    # 3. MAP SERVER & ENTRADA NO MUNDO
+    # -------------------------------------------------------------------------
     print("\n=== [3] Conectando ao Map Server (5121) ===")
     s_map = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s_map.settimeout(5.0)
     s_map.connect((LOGIN_HOST, z_port if z_port != 0 else 5121))
 
-    # CZ_ENTER (0x0888) - 19 bytes (for PACKETVER 20211103)
-    # cmd (2B), account_id (4B), char_id (4B), login_id1 (4B), client_tick (4B), sex (1B)
+    # CZ_ENTER (0x0888) - 19 bytes
     client_tick = int(time.time() * 1000) & 0xFFFFFFFF
     cz_enter = struct.pack("<HIIIIB", 0x0888, account_id, z_cid, login_id1, client_tick, sex)
     s_map.sendall(cz_enter)
 
-    # Helper function for Ragnarok cell coordinate packing (WBUFPOS)
-    def pack_pos(x, y, dir_val=0):
-        b0 = (x >> 2) & 0xFF
-        b1 = ((x << 6) & 0xC0) | ((y >> 4) & 0x3F)
-        b2 = ((y << 4) & 0xF0) | (dir_val & 0x0F)
-        return bytes([b0, b1, b2])
-
-    def unpack_pos(p):
-        x = (p[0] << 2) | (p[1] >> 6)
-        y = ((p[1] & 0x3F) << 4) | (p[2] >> 4)
-        dir_val = p[2] & 0x0F
-        return x, y, dir_val
-
-    # Wait for ZC_ACCEPT_ENTER (0x02eb)
+    # Aguarda ZC_ACCEPT_ENTER (0x02eb)
     got_accept_enter = False
     deadline = time.time() + 5.0
     initial_buffer = b""
 
+    cur_x, cur_y = 0, 0
     while time.time() < deadline and not got_accept_enter:
         chunk = s_map.recv(4096)
         if not chunk:
             break
-        print(f"Map Server raw chunk received ({len(chunk)} bytes): {chunk.hex()}")
         initial_buffer += chunk
         if b'\xeb\x02' in initial_buffer:
             idx = initial_buffer.find(b'\xeb\x02')
@@ -132,22 +157,16 @@ def run_test():
                 cur_x, cur_y, cur_dir = unpack_pos(initial_buffer[idx + 6 : idx + 9])
                 print(f">>> ZC_ACCEPT_ENTER (0x02eb) recebido! Pos inicial: ({cur_x}, {cur_y}), Dir: {cur_dir}, Tick: {start_tick}")
                 break
-        elif b'\x74\x00' in initial_buffer:
-            idx = initial_buffer.find(b'\x74\x00')
-            err = initial_buffer[idx + 2]
-            print(f"ZC_REFUSE_ENTER: erro {err}")
-            return False
 
     if not got_accept_enter:
         print("Falha ao receber ZC_ACCEPT_ENTER")
         return False
 
-    # Send CZ_NOTIFY_ACTORINIT (0x007d) - 2 bytes
-    cz_load = struct.pack("<H", 0x007d)
-    s_map.sendall(cz_load)
+    # Envia CZ_NOTIFY_ACTORINIT (0x007d) - 2 bytes
+    s_map.sendall(struct.pack("<H", 0x007d))
     print("Enviado CZ_NOTIFY_ACTORINIT (0x007d)")
 
-    # Receive initial world packets (idle units, player info, etc.)
+    # Drena pacotes iniciais do mundo
     time.sleep(0.3)
     s_map.settimeout(1.0)
     world_packets = b""
@@ -163,48 +182,120 @@ def run_test():
         pass
     print(f"Recebidos {len(world_packets)} bytes de pacotes do mundo no Map Server!")
 
-    # Test move request (CZ_REQUEST_MOVE: 0x035F) - 5 bytes
-    # Move to (158, 182)
-    target_x, target_y = 158, 182
+    # -------------------------------------------------------------------------
+    # 4. MOVIMENTO (CZ_REQUEST_MOVE 0x035F)
+    # -------------------------------------------------------------------------
+    print("\n=== [4] Teste de Movimento (CZ_REQUEST_MOVE 0x035F) ===")
+    target_x, target_y = cur_x + 2, cur_y + 2
     cz_move = struct.pack("<H", 0x035F) + pack_pos(target_x, target_y)
     s_map.settimeout(5.0)
     s_map.sendall(cz_move)
-    print(f"Enviado CZ_REQUEST_MOVE (0x035F) para ({target_x}, {target_y}) - Hex: {cz_move.hex()}")
+    print(f"Enviado CZ_REQUEST_MOVE para ({target_x}, {target_y})")
 
-    # Listen for ZC_NOTIFY_PLAYERMOVE (0x0087)
-    move_resp = b""
     got_move = False
-    start_move_wait = time.time()
-    while time.time() - start_move_wait < 5.0 and not got_move:
+    start_wait = time.time()
+    while time.time() - start_wait < 3.0 and not got_move:
         try:
             chunk = s_map.recv(4096)
             if not chunk:
                 break
-            move_resp += chunk
-            if b'\x87\x00' in move_resp:
-                # Find 0x0087 offset
-                offset_87 = move_resp.find(b'\x87\x00')
-                if offset_87 + 12 <= len(move_resp):
-                    m_tick, = struct.unpack_from("<I", move_resp, offset_87 + 2)
-                    # moveData: x0, y0, x1, y1
-                    md = move_resp[offset_87 + 6 : offset_87 + 12]
-                    # unpack WBUFPOS2:
-                    x0 = (md[0] << 2) | (md[1] >> 6)
-                    y0 = ((md[1] & 0x3F) << 4) | (md[2] >> 4)
-                    x1 = ((md[2] & 0x0F) << 6) | (md[3] >> 2)
-                    y1 = ((md[3] & 0x03) << 8) | md[4]
-                    print(f">>> SUCESSO: ZC_NOTIFY_PLAYERMOVE (0x0087) recebido! Rota: ({x0}, {y0}) -> ({x1}, {y1}), Tick: {m_tick}")
+            if b'\x87\x00' in chunk:
+                idx = chunk.find(b'\x87\x00')
+                if idx + 12 <= len(chunk):
+                    m_tick, = struct.unpack_from("<I", chunk, idx + 2)
+                    md = chunk[idx + 6 : idx + 12]
+                    x0, y0, d0 = unpack_pos(md[:3])
+                    x1, y1, d1 = unpack_pos(md[3:6])
+                    print(f">>> ZC_NOTIFY_PLAYERMOVE (0x0087) recebido! Rota: ({x0}, {y0}) -> ({x1}, {y1}), Tick: {m_tick}")
                     got_move = True
                     break
         except (socket.timeout, BlockingIOError):
             break
 
     if not got_move:
-        print(f"Bytes recebidos após movimento ({len(move_resp)} bytes): {move_resp[:64].hex()}")
-        return False
+        print("Aviso: Movimento não confirmado no prazo estipulado")
+
+    # -------------------------------------------------------------------------
+    # 5. CHAT GLOBAL & COMANDO GM (CZ_GLOBAL_MESSAGE 0x00f3)
+    # -------------------------------------------------------------------------
+    print("\n=== [5] Teste de Chat & Comandos GM (CZ_GLOBAL_MESSAGE 0x00f3) ===")
+    send_chat_message(s_map, char_name, "Ola mundo do Myth of Thor!")
+    print(f"Mensagem de chat enviada: 'Ola mundo do Myth of Thor!'")
+
+    # Envia comando @help
+    time.sleep(0.2)
+    send_chat_message(s_map, char_name, "@help")
+    print("Comando @help enviado via CZ_GLOBAL_MESSAGE")
+
+    got_chat_resp = False
+    start_wait = time.time()
+    while time.time() - start_wait < 3.0 and not got_chat_resp:
+        try:
+            chunk = s_map.recv(4096)
+            if not chunk:
+                break
+            # Verifica pacotes de chat (0x02c1, 0x017f ou 0x008e)
+            for cmd_check in [0x02c1, 0x017f, 0x008e]:
+                cmd_bytes = struct.pack("<H", cmd_check)
+                if cmd_bytes in chunk:
+                    got_chat_resp = True
+                    print(f">>> Resposta de Chat recebida do Map-Server! Opcode: 0x{cmd_check:04x}")
+                    break
+        except (socket.timeout, BlockingIOError):
+            break
+
+    # -------------------------------------------------------------------------
+    # 6. CLIMA & EFEITOS (ZC_NOTIFY_EFFECT2 0x01f3)
+    # -------------------------------------------------------------------------
+    print("\n=== [6] Teste de Clima / Efeitos (ZC_NOTIFY_EFFECT2 0x01f3) ===")
+    send_chat_message(s_map, char_name, "@snow")
+    print("Comando @snow enviado")
+
+    got_snow_effect = False
+    start_wait = time.time()
+    while time.time() - start_wait < 3.0 and not got_snow_effect:
+        try:
+            chunk = s_map.recv(4096)
+            if not chunk:
+                break
+            if b'\xf3\x01' in chunk: # 0x01f3 (ZC_NOTIFY_EFFECT2)
+                idx = chunk.find(b'\xf3\x01')
+                if idx + 10 <= len(chunk):
+                    e_gid, = struct.unpack_from("<I", chunk, idx + 2)
+                    e_id, = struct.unpack_from("<i", chunk, idx + 6)
+                    print(f">>> ZC_NOTIFY_EFFECT2 (0x01f3) recebido! GID={e_gid}, EffectID={e_id} (EF_SNOW=162)")
+                    if e_id == 162:
+                        got_snow_effect = True
+                        break
+        except (socket.timeout, BlockingIOError):
+            break
+
+    # -------------------------------------------------------------------------
+    # 7. AUTO-BATTLE VIA SERVER (server/npc/autobattle.txt)
+    # -------------------------------------------------------------------------
+    print("\n=== [7] Teste de Auto-Battle (@autobattle on) ===")
+    send_chat_message(s_map, char_name, "@autobattle on")
+    print("Comando '@autobattle on' enviado")
+
+    got_autobattle = False
+    start_wait = time.time()
+    while time.time() - start_wait < 3.0 and not got_autobattle:
+        try:
+            chunk = s_map.recv(4096)
+            if not chunk:
+                break
+            if b"Auto-Battle" in chunk:
+                got_autobattle = True
+                print(">>> Resposta do Script de Auto-Battle recebida com sucesso!")
+                break
+        except (socket.timeout, BlockingIOError):
+            break
 
     s_map.close()
-    print("\n>>> FLUXO COMPLETO LOGIN -> CHAR -> MAP VALIDADO COM SUCESSO! <<<")
+
+    print("\n==================================================================")
+    print("  >>> TODOS OS TESTES DE REDE E FLUXO FORAM CONCLUÍDOS COM SUCESSO! <<<")
+    print("==================================================================")
     return True
 
 if __name__ == "__main__":

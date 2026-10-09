@@ -49,12 +49,15 @@ namespace RagnarokPackets
     static constexpr uint16 HEADER_ZC_DISP_MESSAGE      = 0x02c1; // Dinâmico (-1), mensagens de cor/GM/sistema
     static constexpr uint16 HEADER_ZC_DISP_MESSAGE2     = 0x017f; // Dinâmico (-1)
     static constexpr uint16 HEADER_ZC_WHISPER           = 0x008a; // Dinâmico (-1)
+    static constexpr uint16 HEADER_ZC_WHISPER2          = 0x09de; // Dinâmico (-1)
 
     // Status
     static constexpr uint16 HEADER_CZ_STATUS_CHANGE     = 0x00bb; // 5 bytes (uint16 type, uint16 status_id, uint8 amount)
     static constexpr uint16 HEADER_ZC_STATUS            = 0x00bd; // 44 bytes
-    static constexpr uint16 HEADER_ZC_STATUS_VALUES     = 0x00be; // Dinâmico (-1)
+    static constexpr uint16 HEADER_ZC_STATUS_VALUES     = 0x00be; // 5 bytes
     static constexpr uint16 HEADER_ZC_STATUS_CHANGE_ACK = 0x00bc; // 6 bytes
+    static constexpr uint16 HEADER_ZC_COUPLESTATUS      = 0x0141; // 14 bytes
+    static constexpr uint16 HEADER_ZC_LONGLONGPAR_CHANGE= 0x0acb; // 12 bytes
 
     // Personagens
     static constexpr uint16 HEADER_CH_MAKE_CHAR         = 0x0a39; // 36 bytes (PACKETVER >= 20151001)
@@ -81,6 +84,9 @@ namespace RagnarokPackets
 
     // Habilidades
     static constexpr uint16 HEADER_ZC_SKILL_INFO_LIST   = 0x010f; // Dinâmico (-1)
+    static constexpr uint16 HEADER_ZC_SKILLINFO_LIST_RE = 0x0b32; // Dinâmico (-1) (PACKETVER >= 20190807)
+    static constexpr uint16 HEADER_ZC_ADD_SKILL         = 0x0b31; // 17 bytes (PACKETVER >= 20190807)
+    static constexpr uint16 HEADER_ZC_SKILLINFO_UPDATE2 = 0x0b33; // 17 bytes (PACKETVER >= 20190807)
     static constexpr uint16 HEADER_CZ_USE_SKILL         = 0x0438; // 10 bytes
 
     // Itens no Chão
@@ -174,7 +180,7 @@ namespace RagnarokPackets
             case 0x00bb: return 5;
             case 0x00bc: return 6;
             case 0x00bd: return 44;
-            case 0x00be: return -1;
+            case 0x00be: return 5;
             case 0x00bf: return 3;
             case 0x00c1: return 2;
             case 0x00c3: return 8;
@@ -242,6 +248,7 @@ namespace RagnarokPackets
             case 0x0138: return 3;
             case 0x013f: return 26;
             case 0x0140: return 22;
+            case 0x0141: return 14;
             case 0x0143: return 10;
             case 0x0145: return 19;
             case 0x0146: return 6;
@@ -916,6 +923,7 @@ namespace RagnarokPackets
             case 0x0983: return 29;
             case 0x098d: return -1;
             case 0x0998: return 8;
+            case 0x099a: return 8;
             case 0x099b: return 8;
             case 0x099f: return 22;
             case 0x09a7: return 10;
@@ -941,6 +949,7 @@ namespace RagnarokPackets
             case 0x09db: return -1;
             case 0x09dc: return -1;
             case 0x09dd: return -1;
+            case 0x09de: return -1;
             case 0x09e6: return 22;
             case 0x09e7: return 3;
             case 0x09e8: return 11;
@@ -995,6 +1004,7 @@ namespace RagnarokPackets
             case 0x0a2f: return 7;
             case 0x0a32: return 2;
             case 0x0a35: return 4;
+            case 0x0a39: return 36;
             case 0x0a3d: return 20;
             case 0x0a44: return -1;
             case 0x0a46: return 14;
@@ -1036,9 +1046,10 @@ namespace RagnarokPackets
             case 0x0ac1: return 26;
             case 0x0ac4: return -1;
             case 0x0ac5: return 156;
+            case 0x0acb: return 12;
             case 0x0acc: return 18;
             case 0x0ace: return 4;
-            case 0x0add: return 22;
+            case 0x0add: return 24;
             case 0x0ade: return 6;
             case 0x0ae6: return 10;
             case 0x0ae8: return 2;
@@ -1062,6 +1073,9 @@ namespace RagnarokPackets
             case 0x0b24: return 6;
             case 0x0b28: return 3;
             case 0x0b2c: return 3;
+            case 0x0b31: return 17;
+            case 0x0b32: return -1;
+            case 0x0b33: return 17;
             case 0x0b35: return 3;
             case 0x0b39: return -1;
             case 0x0b46: return 10;

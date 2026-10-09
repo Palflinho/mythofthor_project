@@ -185,10 +185,17 @@ class GrfArchive:
         if not entry:
             return None
 
-        data = self.extract_entry(entry)
         # Garante caminhos corretos e portáveis no Windows e Linux/WSL
         clean_name = entry.name.replace('/', '\\')
         parts = [p for p in clean_name.split('\\') if p]
+        if not parts:
+            return None
+
+        base_name = parts[-1]
+        # Pula entradas de diretório no GRF (tamanho 0 ou sem extensão)
+        # para evitar criar arquivos vazios que bloqueiam a criação de subpastas reais
+        if entry.rsize == 0 or '.' not in base_name:
+            return None
 
         # Se output_base_dir já termina com 'data', evita criar subpasta 'data/data/...'
         norm_base = os.path.normpath(output_base_dir)
@@ -196,7 +203,21 @@ class GrfArchive:
             parts = parts[1:]
 
         out_path = os.path.join(output_base_dir, *parts)
-        os.makedirs(os.path.dirname(out_path), exist_ok=True)
+        parent_dir = os.path.dirname(out_path)
+
+        # Se houver algum arquivo vazio antigo bloqueando a criação do diretório, remove-o
+        cur = output_base_dir
+        for p in parts[:-1]:
+            cur = os.path.join(cur, p)
+            if os.path.isfile(cur):
+                try:
+                    os.remove(cur)
+                except OSError:
+                    pass
+
+        os.makedirs(parent_dir, exist_ok=True)
+
+        data = self.extract_entry(entry)
 
         with open(out_path, 'wb') as f:
             f.write(data)
@@ -208,6 +229,10 @@ class GrfArchive:
         pat = pattern.replace('/', '\\').lower()
         matched = []
         for key, entry in self.entries.items():
+            # Pula entradas de diretório (tamanho 0 ou sem extensão)
+            base = entry.name.split('\\')[-1]
+            if entry.rsize == 0 or '.' not in base:
+                continue
             if fnmatch.fnmatch(key, pat) or fnmatch.fnmatch(entry.name.lower(), pat):
                 matched.append(entry)
         return matched
@@ -352,12 +377,13 @@ def main():
             print(f"  Progresso: [{i:,}/{total:,}] ({(i/total)*100:.1f}%)")
         try:
             out_file = archive.extract_file(entry.name, args.out)
-            manifest[entry.name] = {
-                "path": out_file,
-                "rsize": entry.rsize,
-                "crc32": entry.crc32,
-                "flags": entry.flags
-            }
+            if out_file:
+                manifest[entry.name] = {
+                    "path": out_file,
+                    "rsize": entry.rsize,
+                    "crc32": entry.crc32,
+                    "flags": entry.flags
+                }
         except Exception as ex:
             print(f"  [ERRO] Falha ao extrair {entry.name}: {ex}")
 

@@ -80,15 +80,24 @@ O `URagnarokNetworkSubsystem` (Antigravity) expõe delegates; os atores/HUD (Cla
 
 | Evento | Dados | Origem no servidor |
 |---|---|---|
-| `OnLoginResult` | sucesso, mensagem | Login-server |
-| `OnCharacterList` | lista de slots (nome, classe, nível, cabelo, cores) | Char-server |
-| `OnMapEnter` | nome do mapa, célula X/Y, direção | Map-server |
-| `OnUnitAppear` | GID, tipo (jogador/monstro/NPC), classe/ID visual, célula, direção, cabeça, chapéus, arma, escudo, capa, cores | Pacotes de entrada de unidade |
-| `OnUnitMove` | GID, célula origem → destino, tick inicial | Pacotes de movimento |
-| `OnUnitVanish` | GID, motivo (saiu da visão, morreu, teleporte) | Pacotes de saída de unidade |
-| `OnDamage` | origem, alvo, dano, tipo (normal/crítico/MISS), delay | Pacotes de ação/ataque |
-| `OnStatusChanged` | parâmetro (HP, SP, EXP, peso...), valor | Pacotes de status |
-| `OnEquipChanged` | GID, slot, ID visual | Pacotes de mudança de visual |
+| `OnLoginResult` | sucesso, mensagem | Login-server (`0x0ac4` / `0x083e`) |
+| `OnCharacterList` | lista de slots (nome, classe, nível, cabelo, cores) | Char-server (`0x006b`) |
+| `OnMapEnter` | nome do mapa, célula X/Y, direção | Map-server (`0x02eb`) |
+| `OnUnitAppear` | GID, tipo (jogador/monstro/NPC), classe/ID visual, célula, direção, cabeça, chapéus, arma, escudo, capa, cores | Pacotes de entrada de unidade (`0x09ff`, `0x09fe`, `0x09fd`) |
+| `OnUnitMove` | GID, célula destino X/Y, tick inicial | Pacotes de movimento (`0x0087`) |
+| `OnUnitVanish` | GID, motivo (saiu da visão, morreu, teleporte) | Pacotes de saída de unidade (`0x0080`) |
+| `OnDamage` | origem, alvo, dano, tipo (normal/crítico/MISS), delay | Pacotes de ação/ataque (`0x08c8`) |
+| `OnStatusChanged` | parâmetro (HP, SP, EXP, peso...), valor | Pacotes de status (`0x00b0`, `0x00b1`, `0x0acb`, `0x00be`) |
+| `OnPlayerStatsChanged` | struct completa de atributos e combate | Status consolidado (`0x00bd`) |
+| `OnEquipChanged` | GID, slot, ID visual | Pacotes de mudança de visual (`0x01d7`) |
+| `OnChatMessage` | remetente, mensagem, cor hexadecimal (#RRGGBB) | Pacotes de chat global, GM e sussurros (`0x008e`, `0x02c1`, `0x017f`, `0x09de`) |
+| `OnInventory` | lista de itens normais e equipáveis (refino, slots, equipado) | Pacotes de inventário (`0x0b09`, `0x0b39`) |
+| `OnSkillList` | lista de habilidades aprendidas (ID, nível, SP, range) | Pacotes de skills (`0x0b32`, `0x0b31`, `0x0b33`) |
+| `OnGroundItemAppear` | GID, ItemID, Amount, célula X, célula Y | Pacote de item no chão (`0x0add` / `0x084b`) |
+| `OnGroundItemVanish` | GID | Pacote de item removido do chão (`0x00a1`) |
+| `OnNpcDialog` | NpcID, texto | Diálogo de NPC (`0x00b4`, `0x00b5`, `0x00b6`) |
+| `OnNpcMenu` | NpcID, título, opções | Menu de opções de NPC (`0x00b7`) |
+| `OnWeather` | tipo ("snow", "rain", "fog", "sakura", "clouds", "leaves", "fireworks"), ligado | Efeitos de mapa/clima do servidor (`0x01f3`) |
 
 Coordenadas sempre em **células do RO**; a conversão para mundo é do cliente (`AMythMapInfo`).
 

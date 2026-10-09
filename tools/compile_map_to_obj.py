@@ -489,6 +489,7 @@ def compile_map(map_dir: str, output_obj: str = None, map_name: str = None):
                     models_search_dirs.append(p)
 
     rsm_cache: Dict[str, dict] = {}
+    model_texture_names = set()  # texturas usadas por modelos (candidatas a janela acesa)
     
     unique_models = set(m['filename'] for m in rsw['models'])
     print(f"Modelos referenciados no mapa: {len(rsw['models'])} ({len(unique_models)} únicos)")
@@ -506,6 +507,7 @@ def compile_map(map_dir: str, output_obj: str = None, map_name: str = None):
                 rsm_cache[m_filename] = rsm_data
                 for t in rsm_data['textures']:
                     get_material_name(t)
+                    model_texture_names.add(os.path.basename(t.replace(chr(92), '/')).replace(' ', '_'))
             except Exception as e:
                 pass
                 
@@ -702,9 +704,11 @@ def compile_map(map_dir: str, output_obj: str = None, map_name: str = None):
             placed_count += 1
             
     # O RSW de Prontera nao tem luzes: as noturnas saem dos modelos de poste (lido pelo ue_import_map.py)
+    window_textures = find_window_textures(map_dir, tex_index, model_texture_names)
     lights_path = os.path.splitext(output_obj)[0] + '_lights.json'
     with open(lights_path, 'w', encoding='utf-8') as lf:
-        json.dump({'coords': 'obj', 'lights': night_lights}, lf, ensure_ascii=False, indent=1)
+        json.dump({'coords': 'obj', 'lights': night_lights, 'window_textures': window_textures}, lf, ensure_ascii=False, indent=1)
+    print(f"Texturas com janelas (brilham a noite): {len(window_textures)}")
 
     # Caminhabilidade do .gat: a mesma grade do servidor vira o piso/paredes de colisao no cliente
     gat_path = os.path.join(map_dir, f"{map_name}.gat")
@@ -785,6 +789,43 @@ def write_gat_collision(gat: dict, cell_size: float, out_base: str):
                 f.write(f"f {b} {b + 1} {b + 2} {b + 3}\n")
     return len(floor_quads), len(wall_quads)
 
+
+
+def find_window_textures(map_dir: str, tex_index: dict, names) -> list:
+    """
+    Texturas de predio com vidro de janela: pixels bem escuros e levemente azulados (o vidro das casas do RO).
+    A Unreal faz esses pixels brilharem com luz quente a noite (parametro WindowGlow do material).
+    """
+    try:
+        from PIL import Image
+    except ImportError:
+        print("AVISO: Pillow ausente; sem deteccao de janelas")
+        return []
+    found = []
+    skip = ('bench', 'wag', 'tomb', 'flo', 'tree', 'leaf', 'grass', 'water')
+    for name in sorted(names):
+        if any(k in name.lower() for k in skip):
+            continue  # objetos de rua, nao predios
+        rel = tex_index.get(name.lower())
+        path = os.path.join(map_dir, rel) if rel else None
+        if not path or not os.path.exists(path):
+            continue
+        try:
+            im = Image.open(path).convert('RGB').resize((64, 64))
+        except Exception:
+            continue
+        px = list(im.getdata())
+        glass = 0
+        for r, g, b in px:
+            if r > 240 and g < 15 and b > 240:
+                continue  # magenta = transparente
+            lum = (0.3 * r + 0.59 * g + 0.11 * b) / 255.0
+            if lum < 0.16 and b + 6 >= r and b + 8 >= g:  # vidro escuro frio/neutro (nao madeira nem folhagem)
+                glass += 1
+        ratio = glass / float(len(px))
+        if 0.015 <= ratio <= 0.30:  # fachada com janelas (nem textura toda escura, nem sem vidro)
+            found.append(name)
+    return found
 
 # Modelos que viram luzes noturnas (nome do arquivo .rsm, sem pasta): poste comum e poste com estandarte
 NIGHT_LIGHT_MODELS = {

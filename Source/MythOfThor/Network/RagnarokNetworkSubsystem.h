@@ -142,6 +142,93 @@ struct FRagnarokUnitVisualInfo
 	FString Name;
 };
 
+/**
+ * Status completos do jogador sincronizados do rAthena.
+ */
+USTRUCT(BlueprintType)
+struct FRagnarokPlayerStats
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Str = 1;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Agi = 1;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Vit = 1;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Int = 1;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Dex = 1;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Luk = 1;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 StatusPoints = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 SkillPoints = 0;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Atk = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Atk2 = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 MatkMin = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 MatkMax = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Def = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Def2 = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Mdef = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Mdef2 = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Hit = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Flee = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Flee2 = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Critical = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Aspd = 0;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 BaseLevel = 1;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 JobLevel = 1;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int64 BaseExp = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int64 NextBaseExp = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int64 JobExp = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int64 NextJobExp = 0;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Weight = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 MaxWeight = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int64 Zeny = 0;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int64 HP = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int64 MaxHP = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int64 SP = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int64 MaxSP = 0;
+};
+
+/**
+ * Item de inventário ou equipamento.
+ */
+USTRUCT(BlueprintType)
+struct FRagnarokInventoryItem
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 Index = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 ItemID = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 Type = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 Amount = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 EquipLocation = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 Refine = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") bool bIdentified = true;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") bool bIsEquipped = false;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 Slot1 = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 Slot2 = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 Slot3 = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 Slot4 = 0;
+};
+
+/**
+ * Informação de habilidade na lista de skills do jogador.
+ */
+USTRUCT(BlueprintType)
+struct FRagnarokSkillInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Skill") int32 SkillID = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Skill") int32 Level = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Skill") int32 SpCost = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Skill") int32 Range = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Skill") bool bUpgradable = false;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Skill") FString SkillName;
+};
+
 // ============================================================================
 // Delegates do Contrato Cliente Fiel (docs/PLANO_CLIENTE_FIEL.md - Seção 3)
 // ============================================================================
@@ -156,7 +243,16 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnUnitMove, int64, GID, int32, Ta
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnUnitVanish, int64, GID, uint8, VanishReason);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FOnDamage, int64, SourceID, int64, TargetID, int32, Damage, uint8, DamageType, int32, DelayMs);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnStatusChanged, int32, ParamType, int32, Value);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerStatsChanged, const FRagnarokPlayerStats&, Stats);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnEquipChanged, int64, GID, uint8, Slot, int32, VisualID);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnChatMessage, const FString&, Sender, const FString&, Text, const FString&, ColorHex);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInventory, const TArray<FRagnarokInventoryItem>&, Items);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSkillList, const TArray<FRagnarokSkillInfo>&, Skills);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FOnGroundItemAppear, int64, GID, int32, ItemID, int32, Amount, int32, CellX, int32, CellY);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGroundItemVanish, int64, GID);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnNpcDialog, int64, NpcID, const FString&, Text);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnNpcMenu, int64, NpcID, const FString&, Title, const TArray<FString>&, Options);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWeather, const FString&, WeatherType, bool, bEnabled);
 
 // Delegates de compatibilidade anterior
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerMoveConfirmed, int32, TargetX, int32, TargetY);
@@ -234,6 +330,97 @@ public:
 	bool SendUseSkillRequest(int32 SkillID, int32 SkillLevel, int64 TargetID);
 
 	/**
+	 * Cria um novo personagem no Char-Server (CH_MAKE_CHAR 0x0a39).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
+	bool CreateCharacter(const FString& Name, uint8 Slot, int32 HairStyle, int32 HairColor, int32 JobClass = 0);
+
+	/**
+	 * Deleta um personagem no Char-Server (CH_DELETE_CHAR 0x0068).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
+	bool DeleteCharacter(int32 CharID, const FString& Key = TEXT(""));
+
+	/**
+	 * Envia mensagem global/chat ou comando @ no Map-Server (CZ_GLOBAL_MESSAGE 0x00f3).
+	 * Formata canonicamente como "<Nome> : <Mensagem>\0".
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
+	bool SendGlobalMessage(const FString& Message);
+
+	/**
+	 * Distribui pontos de atributo (STR, AGI, VIT, INT, DEX, LUK) (CZ_STATUS_CHANGE 0x00bb).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
+	bool SendStatusUp(int32 StatusType, int32 Amount = 1);
+
+	/**
+	 * Usa um item consumível do inventário (CZ_USE_ITEM 0x0439).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
+	bool UseItem(int32 ItemIndex);
+
+	/**
+	 * Equipa um item no personagem (CZ_REQ_WEAR_EQUIP 0x0998).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
+	bool EquipItem(int32 ItemIndex, int32 WearLocation = 0);
+
+	/**
+	 * Desequipa um item do personagem (CZ_REQ_TAKEOFF_EQUIP 0x00ab).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
+	bool UnequipItem(int32 ItemIndex);
+
+	/**
+	 * Pega um item que está no chão pelo seu GID/AID (CZ_ITEM_PICKUP 0x0362).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
+	bool PickUpItem(int64 ItemGID);
+
+	/**
+	 * Usa habilidade em alvo ou chão (CZ_USE_SKILL 0x0438).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
+	bool UseSkill(int32 SkillID, int32 SkillLevel, int64 TargetID = 0, int32 TargetX = 0, int32 TargetY = 0);
+
+	/**
+	 * Inicia diálogo ao clicar em um NPC (CZ_CONTACTNPC 0x0090).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
+	bool ContactNpc(int64 NpcID);
+
+	/**
+	 * Avança para a próxima página de diálogo de um NPC (CZ_REQ_NEXT_SCRIPT 0x00b9).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
+	bool NextNpcDialog(int64 NpcID);
+
+	/**
+	 * Seleciona uma opção de menu do NPC (CZ_CHOOSE_MENU 0x00b8).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
+	bool SelectNpcMenu(int64 NpcID, int32 MenuIndex);
+
+	/**
+	 * Fecha a janela de diálogo com o NPC (CZ_CLOSE_DIALOG 0x0146).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
+	bool CloseNpcDialog(int64 NpcID);
+
+	/**
+	 * Acesso síncrono aos status, inventário e habilidades em cache.
+	 */
+	UFUNCTION(BlueprintPure, Category = "Ragnarok|Network")
+	const FRagnarokPlayerStats& GetPlayerStats() const { return CurrentStats; }
+
+	UFUNCTION(BlueprintPure, Category = "Ragnarok|Network")
+	const TArray<FRagnarokInventoryItem>& GetInventoryItems() const { return InventoryItems; }
+
+	UFUNCTION(BlueprintPure, Category = "Ragnarok|Network")
+	const TArray<FRagnarokSkillInfo>& GetSkillList() const { return SkillList; }
+
+	/**
 	 * Desconecta todos os sockets ativos de forma limpa.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
@@ -279,7 +466,34 @@ public:
 	FOnStatusChanged OnStatusChanged;
 
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
+	FOnPlayerStatsChanged OnPlayerStatsChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
 	FOnEquipChanged OnEquipChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
+	FOnChatMessage OnChatMessage;
+
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
+	FOnInventory OnInventory;
+
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
+	FOnSkillList OnSkillList;
+
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
+	FOnGroundItemAppear OnGroundItemAppear;
+
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
+	FOnGroundItemVanish OnGroundItemVanish;
+
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
+	FOnNpcDialog OnNpcDialog;
+
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
+	FOnNpcMenu OnNpcMenu;
+
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
+	FOnWeather OnWeather;
 
 	// Compatibilidade
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
@@ -302,6 +516,12 @@ private:
 
 	uint32 PendingCharID;
 	FString PendingMapName;
+	FString SelectedCharName;
+	TArray<FRagnarokCharacterSlotInfo> CachedCharacterSlots;
+
+	FRagnarokPlayerStats CurrentStats;
+	TArray<FRagnarokInventoryItem> InventoryItems;
+	TArray<FRagnarokSkillInfo> SkillList;
 
 	bool ConnectToPort(const FString& Host, int32 Port, ERagnarokNetworkState NewState);
 	void SendData(const uint8* Data, int32 Size);
@@ -317,6 +537,17 @@ private:
 	void HandlePlayerMove(const uint8* PacketData, int32 PacketSize);
 	void HandleUnitVanish(const uint8* PacketData, int32 PacketSize);
 	void HandleActionNotify(const uint8* PacketData, int32 PacketSize);
-	void HandleParamChange(const uint8* PacketData, int32 PacketSize, bool bIsLong);
+	void HandleParamChange(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleSpriteChange(const uint8* PacketData, int32 PacketSize);
+	void HandleChatMessage(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	void HandleStatus(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	void HandleItemFall(const uint8* PacketData, int32 PacketSize);
+	void HandleItemDisappear(const uint8* PacketData, int32 PacketSize);
+	void HandleNpcDialog(const uint8* PacketData, int32 PacketSize);
+	void HandleNpcWait(const uint8* PacketData, int32 PacketSize);
+	void HandleNpcClose(const uint8* PacketData, int32 PacketSize);
+	void HandleNpcMenu(const uint8* PacketData, int32 PacketSize);
+	void HandleSkillList(const uint8* PacketData, int32 PacketSize);
+	void HandleInventoryList(const uint8* PacketData, int32 PacketSize, bool bIsEquip);
+	void HandleEffect(const uint8* PacketData, int32 PacketSize);
 };
