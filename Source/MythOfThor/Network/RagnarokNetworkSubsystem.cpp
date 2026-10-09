@@ -3,6 +3,7 @@
 #include "Common/TcpSocketBuilder.h"
 #include "Dom/JsonObject.h"
 #include "Misc/FileHelper.h"
+#include "Misc/CommandLine.h"
 #include "Misc/Paths.h"
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
@@ -33,6 +34,7 @@ void URagnarokNetworkSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 		}
 	}
 	UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] %d tamanhos de pacote carregados de %s"), PacketLengths.Num(), *Path);
+	bLogPackets = FParse::Param(FCommandLine::Get(), TEXT("MythNetLog"));
 }
 
 void URagnarokNetworkSubsystem::Deinitialize()
@@ -255,7 +257,7 @@ bool URagnarokNetworkSubsystem::SendUseSkillRequest(int32 SkillID, int32 SkillLe
 	#pragma pack(push, 1)
 	struct FCZ_UseSkillPacket
 	{
-		uint16 PacketID = 0x0438;
+		uint16 PacketID = RagnarokPackets::HEADER_CZ_USE_SKILL; // 0x089b CZ_USE_SKILL (lv 2, id 4, alvo 6)
 		uint16 SkillLevel = 1;
 		uint16 SkillID = 0;
 		uint32 TargetID = 0;
@@ -460,7 +462,7 @@ bool URagnarokNetworkSubsystem::PickUpItem(int64 ItemGID)
 	#pragma pack(push, 1)
 	struct FCZ_PickUpPacket
 	{
-		uint16 PacketID = RagnarokPackets::HEADER_CZ_ITEM_PICKUP; // 0x0362
+		uint16 PacketID = RagnarokPackets::HEADER_CZ_ITEM_PICKUP; // 0x0933
 		uint32 ItemAID = 0;
 	};
 	#pragma pack(pop)
@@ -488,7 +490,7 @@ bool URagnarokNetworkSubsystem::UseSkill(int32 SkillID, int32 SkillLevel, int64 
 		#pragma pack(push, 1)
 		struct FCZ_UseSkillToPosPacket
 		{
-			uint16 PacketID = 0x0438;
+			uint16 PacketID = 0x0959; // CZ_USE_SKILL_TOGROUND (lv 2, id 4, x 6, y 8) ativo em 20211103
 			uint16 SkillLevel = 1;
 			uint16 SkillID = 0;
 			uint16 X = 0;
@@ -671,6 +673,10 @@ void URagnarokNetworkSubsystem::SendData(const uint8* Data, int32 Size)
 	{
 		return;
 	}
+	if (bLogPackets && Size >= 2)
+	{
+		UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] -> 0x%04x (%d bytes) conexao %d"), *reinterpret_cast<const uint16*>(Data), Size, (int32)CurrentSocket->GetConnectionState());
+	}
 
 	// O connect e nao-bloqueante: ate o TCP fechar o handshake (ou com fila pendente) os bytes vao para a fila,
 	// que o Tick esvazia. Sem isso o CA_LOGIN, enviado logo apos o Connect, se perdia.
@@ -806,6 +812,10 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 
 		const uint8* PacketData = ReceiveBuffer.GetData();
 		const uint32 GenerationBefore = ReceiveGeneration;
+		if (bLogPackets)
+		{
+			UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] <- 0x%04x (%d bytes) estado %d"), PacketID, ActualLen, (int32)CurrentState);
+		}
 
 		switch (PacketID)
 		{
@@ -824,6 +834,9 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 				break;
 			case RagnarokPackets::HEADER_ZC_ACCEPT_ENTER:
 				HandleMapAcceptEnter(PacketData, ActualLen);
+				break;
+			case 0x0091: // ZC_NPCACK_MAPMOVE
+				HandleMapMove(PacketData, ActualLen);
 				break;
 			case RagnarokPackets::HEADER_ZC_IDLE_UNIT:
 			case RagnarokPackets::HEADER_ZC_SPAWN_UNIT:
@@ -1053,11 +1066,43 @@ void URagnarokNetworkSubsystem::HandleMapAcceptEnter(const uint8* PacketData, in
 	uint8 Direction = 0;
 	RagnarokPackets::UnpackCellCoord(PacketData + 6, CellX, CellY, Direction);
 
+	PendingMapCell = FIntPoint(CellX, CellY);
+	bAwaitingMapLoad = true;
 	OnMapEnter.Broadcast(PendingMapName, CellX, CellY, Direction);
+	// Quem carrega o mapa (AMythNetWorld) chama NotifyMapLoaded() -> CZ_NOTIFY_ACTORINIT (0x007d), como o cliente
+	// original faz ao terminar o carregamento; sem ouvinte, avisa ja para nao travar o personagem no servidor.
+	if (!OnMapEnter.IsBound())
+	{
+		NotifyMapLoaded();
+	}
+}
 
-	// Notifica fim do carregamento do mapa para o servidor liberar o ator (CZ_NOTIFY_ACTORINIT 0x007D)
+void URagnarokNetworkSubsystem::NotifyMapLoaded()
+{
+	if (!bAwaitingMapLoad || !CurrentSocket)
+	{
+		return;
+	}
+	bAwaitingMapLoad = false;
 	uint16 LoadAck = RagnarokPackets::HEADER_CZ_NOTIFY_ACTORINIT;
 	SendData(reinterpret_cast<const uint8*>(&LoadAck), sizeof(LoadAck));
+}
+
+void URagnarokNetworkSubsystem::HandleMapMove(const uint8* PacketData, int32 PacketSize)
+{
+	// ZC_NPCACK_MAPMOVE (0x0091): mapName[16] (+2), xPos (+18), yPos (+20) - warp/portal no mesmo map-server
+	char MapBuf[17] = { 0 };
+	FMemory::Memcpy(MapBuf, PacketData + 2, 16);
+	PendingMapName = UTF8_TO_TCHAR(MapBuf);
+	const int32 CellX = *reinterpret_cast<const uint16*>(PacketData + 18);
+	const int32 CellY = *reinterpret_cast<const uint16*>(PacketData + 20);
+	PendingMapCell = FIntPoint(CellX, CellY);
+	bAwaitingMapLoad = true;
+	OnMapEnter.Broadcast(PendingMapName, CellX, CellY, 0);
+	if (!OnMapEnter.IsBound())
+	{
+		NotifyMapLoaded();
+	}
 }
 
 void URagnarokNetworkSubsystem::HandleUnitAppear(const uint8* PacketData, int32 PacketSize, uint16 PacketID)

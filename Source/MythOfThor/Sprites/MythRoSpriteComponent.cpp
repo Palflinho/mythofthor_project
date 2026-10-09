@@ -174,7 +174,8 @@ void UMythRoSpriteComponent::CreateBlobShadow()
 	const float HalfH = Img.Height * UnitsPerPixel * BlobShadowScale * 0.5f;
 	const TArray<FVector> Verts = { {-HalfH, -HalfW, 0.f}, {-HalfH, HalfW, 0.f}, {HalfH, HalfW, 0.f}, {HalfH, -HalfW, 0.f} };
 	const TArray<FVector2D> Tex = { {UV.Min.X, UV.Min.Y}, {UV.Max.X, UV.Min.Y}, {UV.Max.X, UV.Max.Y}, {UV.Min.X, UV.Max.Y} };
-	const TArray<FColor> Colors = { FColor(255, 255, 255, 120), FColor(255, 255, 255, 120), FColor(255, 255, 255, 120), FColor(255, 255, 255, 120) };
+	const uint8 BlobAlpha = 165; // o shadow.act pede 128 sobre o fundo do RO; aqui o chao HD (Lumen) e mais claro
+	const TArray<FColor> Colors = { FColor(255, 255, 255, BlobAlpha), FColor(255, 255, 255, BlobAlpha), FColor(255, 255, 255, BlobAlpha), FColor(255, 255, 255, BlobAlpha) };
 	const TArray<FVector> Normals = { FVector::UpVector, FVector::UpVector, FVector::UpVector, FVector::UpVector };
 	const TArray<int32> Tris = { 0, 1, 2, 0, 2, 3, 0, 2, 1, 0, 3, 2 };
 	BlobMesh->CreateMeshSection(0, Verts, Tris, Normals, Tex, Colors, TArray<FProcMeshTangent>(), false);
@@ -560,22 +561,41 @@ void UMythRoSpriteComponent::UpdateBillboard(const FRotator& CamRot)
 		}
 		Feet.Z = SmoothedFeetZ;
 		// Puxado para a camera pela linha de visao; a escala compensa a perspectiva (mesmo tamanho na tela).
+		// O puxao segue o RAIO camera->pes (nao o eixo da camera): assim o sprite fica exatamente sobre o ponto do
+		// chao na tela, alinhado com a sombra redonda e com a area de clique, tambem nas bordas da tela.
 		float Scale = 1.f;
+		FVector PullDir = CamForward;
 		if (const APlayerController* PC = GetWorld() ? GetWorld()->GetFirstPlayerController() : nullptr)
 		{
 			if (PC->PlayerCameraManager)
 			{
-				const float Dist = FVector::Dist(PC->PlayerCameraManager->GetCameraLocation(), Feet);
+				const FVector ToFeet = Feet - PC->PlayerCameraManager->GetCameraLocation();
+				const float Dist = ToFeet.Size();
 				Scale = Dist > CameraDepthOffset + 1.f ? (Dist - CameraDepthOffset) / Dist : 1.f;
+				PullDir = Dist > KINDA_SMALL_NUMBER ? ToFeet / Dist : CamForward;
 			}
 		}
-		SetWorldLocation(Feet - CamForward * CameraDepthOffset);
+		SetWorldLocation(Feet - PullDir * CameraDepthOffset);
 		SetWorldScale3D(FVector(Scale));
 		UpdateShadowTransform(Feet);
 		UpdateTint(Feet, Dt);
 		if (BlobMesh)
 		{
-			BlobMesh->SetWorldLocationAndRotation(Feet + FVector(0.f, 0.f, 5.f), FRotator::ZeroRotator); // acima das ondulacoes do chao
+			// No cliente original o shadow.spr e desenhado direto na tela. Deitado no chao ele achatava de novo pela
+			// inclinacao da camera e girava com ela: aqui fica alinhado a camera e a profundidade e esticada por
+			// 1/sen(inclinacao), entao na tela a elipse tem exatamente a proporcao do sprite original.
+			const float SinPitch = FMath::Max(FMath::Abs(FMath::Sin(FMath::DegreesToRadians(CamRot.Pitch))), 0.25f);
+			// Apoia no chao DESENHADO (a malha visual so bloqueia o canal Camera); o chao de colisao do GAT pode ficar
+			// alguns cm acima ou abaixo dele, e o blob sumia por baixo da calcada.
+			FVector BlobAt = Feet + FVector(0.f, 0.f, 5.f);
+			FHitResult GroundHit;
+			FCollisionQueryParams BlobParams(TEXT("RoBlobGround"), false, GetOwner());
+			if (GetWorld()->LineTraceSingleByChannel(GroundHit, Feet + FVector(0.f, 0.f, 60.f), Feet - FVector(0.f, 0.f, 60.f), ECC_Camera, BlobParams))
+			{
+				BlobAt.Z = GroundHit.ImpactPoint.Z + 3.f;
+			}
+			BlobMesh->SetWorldLocationAndRotation(BlobAt, FRotator(0.f, CamRot.Yaw, 0.f));
+			BlobMesh->SetWorldScale3D(FVector(1.f / SinPitch, 1.f, 1.f));
 		}
 	}
 }

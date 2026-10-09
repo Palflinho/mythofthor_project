@@ -447,6 +447,16 @@ public:
 	/** ID do proprio jogador nos pacotes do map-server (AID da conta), para separar "eu" das outras unidades. */
 	int64 GetSelfID() const { return SavedAccountID; }
 
+	/** Mapa/celula de destino da ultima entrada ou troca de mapa (ZC_ACCEPT_ENTER / ZC_NPCACK_MAPMOVE). */
+	const FString& GetPendingMapName() const { return PendingMapName; }
+	FIntPoint GetPendingMapCell() const { return PendingMapCell; }
+	/** true entre a ordem de entrar no mapa e o NotifyMapLoaded(). */
+	bool IsAwaitingMapLoad() const { return bAwaitingMapLoad; }
+
+	/** O cliente terminou de carregar o mapa: envia CZ_NOTIFY_ACTORINIT (0x007d) e o servidor manda as unidades. */
+	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
+	void NotifyMapLoaded();
+
 	/** Nome do personagem selecionado. */
 	const FString& GetSelfName() const { return SelectedCharName; }
 
@@ -566,10 +576,15 @@ private:
 	void HandleUnitAppear(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandlePlayerMove(const uint8* PacketData, int32 PacketSize);
 	void FlushPendingSend();
+	void HandleMapMove(const uint8* PacketData, int32 PacketSize);
+	FIntPoint PendingMapCell = FIntPoint::ZeroValue;
+	bool bAwaitingMapLoad = false;
 	/** Bytes aguardando o socket conectar (connect nao-bloqueante) ou sobra de envio parcial. */
 	TArray<uint8> PendingSend;
 	/** Incrementado a cada troca de socket; o laco de framing para se um handler reconectar. */
 	uint32 ReceiveGeneration = 0;
+	/** -MythNetLog: registra cada pacote enviado/recebido (depuracao). */
+	bool bLogPackets = false;
 	/** ID -> tamanho (-1 = dinamico), de Config/packet_lengths_<PACKETVER>.json. */
 	TMap<uint16, int16> PacketLengths;
 	uint16 LastGoodPacketID = 0;

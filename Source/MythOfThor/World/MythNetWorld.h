@@ -50,6 +50,7 @@ private:
 	FVector CellToGround(int32 X, int32 Y, bool* bOutFound = nullptr) const;
 	AActor* ResolveActor(int64 ID) const;
 	void RemoveOfflineMonsters();
+	void FinishMapEnter(const FString& Map, int32 CellX, int32 CellY);
 
 	UFUNCTION() void HandleLoginResult(bool bSuccess, const FString& Message);
 	UFUNCTION() void HandleCharacterList(const TArray<FRagnarokCharacterSlotInfo>& Characters);

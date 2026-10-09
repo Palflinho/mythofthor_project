@@ -19,6 +19,9 @@
 #include "Misc/ConfigCacheIni.h"
 #include "Misc/FileHelper.h"
 #include "Misc/Paths.h"
+#include "Misc/PackageName.h"
+#include "Kismet/GameplayStatics.h"
+#include "TimerManager.h"
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
 
@@ -178,6 +181,23 @@ void AMythNetWorld::BeginPlay()
 	Net->OnNpcDialog.AddDynamic(this, &AMythNetWorld::HandleNpcDialog);
 	Net->OnNpcMenu.AddDynamic(this, &AMythNetWorld::HandleNpcMenu);
 
+	// Chegou num mapa novo por ordem do servidor (portal/warp): termina a entrada no proximo quadro, com o
+	// personagem ja criado pelo GameMode, e so entao avisa o servidor (ACTORINIT)
+	if (Net->GetNetworkState() == ERagnarokNetworkState::ConnectedMap && Net->IsAwaitingMapLoad())
+	{
+		GetWorldTimerManager().SetTimerForNextTick(FTimerDelegate::CreateWeakLambda(this, [this]()
+		{
+			if (const URagnarokNetworkSubsystem* N = GetNet())
+			{
+				FString Map = N->GetPendingMapName();
+				Map.RemoveFromEnd(TEXT(".gat"));
+				bInMap = true;
+				RemoveOfflineMonsters();
+				FinishMapEnter(Map, N->GetPendingMapCell().X, N->GetPendingMapCell().Y);
+			}
+		}));
+		return;
+	}
 	if (FParse::Param(FCommandLine::Get(), TEXT("MythOnline")))
 	{
 		Login();
@@ -280,20 +300,66 @@ void AMythNetWorld::RemoveOfflineMonsters()
 	}
 }
 
+namespace
+{
+	/** Nivel importado de um mapa do servidor: prt_in -> /Game/Maps/PrtIn/Lvl_PrtIn (mesmo nome do ue_import_map.py). */
+	FString NetLevelPath(const FString& Map)
+	{
+		TArray<FString> Parts;
+		Map.ParseIntoArray(Parts, TEXT("_"), true);
+		FString Title;
+		for (const FString& P : Parts)
+		{
+			Title += P.Left(1).ToUpper() + P.Mid(1).ToLower();
+		}
+		return FString::Printf(TEXT("/Game/Maps/%s/Lvl_%s"), *Title, *Title);
+	}
+}
+
 void AMythNetWorld::HandleMapEnter(const FString& MapName, int32 CellX, int32 CellY, uint8 Direction)
 {
 	FString Map = MapName;
 	Map.RemoveFromEnd(TEXT(".gat"));
 	bInMap = true;
 	RemoveOfflineMonsters();
+	// Troca de mapa (ou warp no mesmo mapa): o servidor reenvia tudo o que estiver em volta depois do ACTORINIT
+	for (TPair<int64, TObjectPtr<AMythMonster>>& U : Units)
+	{
+		if (IsValid(U.Value))
+		{
+			U.Value->Destroy();
+		}
+	}
+	Units.Reset();
+
 	const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld());
 	if (Info && !Info->MapName.Equals(Map, ESearchCase::IgnoreCase))
 	{
-		Chat(FString::Printf(TEXT("O servidor colocou voce em '%s', mas o mapa carregado e '%s' (falta importar)."), *Map, *Info->MapName), NetErrorColor);
+		const FString Level = NetLevelPath(Map);
+		if (FPackageName::DoesPackageExist(Level))
+		{
+			// Carrega o mapa novo; o AMythNetWorld de la posiciona o personagem e avisa o servidor (NotifyMapLoaded)
+			Chat(FString::Printf(TEXT("Indo para %s..."), *Map), NetSystemColor);
+			UGameplayStatics::OpenLevel(this, FName(*Level));
+			return;
+		}
+		Chat(FString::Printf(TEXT("O servidor colocou voce em '%s', mas esse mapa ainda nao foi importado (%s)."), *Map, *Level), NetErrorColor);
 	}
+	FinishMapEnter(Map, CellX, CellY);
+}
+
+void AMythNetWorld::FinishMapEnter(const FString& Map, int32 CellX, int32 CellY)
+{
 	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()))
 	{
 		PC->TeleportToCell(CellX, CellY);
+		PC->StopMovement();
+	}
+	LastSelfDestination = FVector(TNumericLimits<float>::Max());
+	if (URagnarokNetworkSubsystem* Net = GetNet())
+	{
+		Net->NotifyMapLoaded(); // CZ_NOTIFY_ACTORINIT: agora o servidor manda NPCs, monstros e jogadores daqui
+		HandleStats(Net->GetPlayerStats());
 	}
 	Chat(FString::Printf(TEXT("Entrou em %s (%d, %d)."), *Map, CellX, CellY), NetSystemColor);
 }

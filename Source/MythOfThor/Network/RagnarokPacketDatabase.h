@@ -30,7 +30,7 @@ namespace RagnarokPackets
     static constexpr uint16 HEADER_ZC_ACCEPT_ENTER      = 0x02eb; // 13 bytes
     static constexpr uint16 HEADER_ZC_REFUSE_ENTER      = 0x0074; // 3 bytes
     static constexpr uint16 HEADER_CZ_NOTIFY_ACTORINIT  = 0x007d; // 2 bytes
-    static constexpr uint16 HEADER_CZ_REQUEST_MOVE      = 0x035f; // 5 bytes
+    static constexpr uint16 HEADER_CZ_REQUEST_MOVE      = 0x0881; // 5 bytes (clif_parse_WalkToXY em 20211103; 0x035f virou ReqClickBuyingStore)
     static constexpr uint16 HEADER_ZC_NOTIFY_PLAYERMOVE = 0x0087; // 12 bytes
     static constexpr uint16 HEADER_CZ_REQUEST_ACT       = 0x088e; // 7 bytes (ou 0x0360)
     static constexpr uint16 HEADER_ZC_NOTIFY_ACT        = 0x08c8; // 34 bytes
@@ -87,13 +87,13 @@ namespace RagnarokPackets
     static constexpr uint16 HEADER_ZC_SKILLINFO_LIST_RE = 0x0b32; // Dinâmico (-1) (PACKETVER >= 20190807)
     static constexpr uint16 HEADER_ZC_ADD_SKILL         = 0x0b31; // 17 bytes (PACKETVER >= 20190807)
     static constexpr uint16 HEADER_ZC_SKILLINFO_UPDATE2 = 0x0b33; // 17 bytes (PACKETVER >= 20190807)
-    static constexpr uint16 HEADER_CZ_USE_SKILL         = 0x0438; // 10 bytes
+    static constexpr uint16 HEADER_CZ_USE_SKILL         = 0x089b; // 10 bytes (clif_parse_UseSkillToId; 0x0438 e DropItem)
     static constexpr uint16 HEADER_CZ_UPGRADE_SKILLLEVEL= 0x0112; // 4 bytes (uint16 type, uint16 skill_id)
 
     // Itens no Chão
     static constexpr uint16 HEADER_ZC_ITEM_FALL_ENTRY   = 0x084b; // 19 bytes
     static constexpr uint16 HEADER_ZC_ITEM_FALL_ENTRY2  = 0x0add; // 19 bytes
-    static constexpr uint16 HEADER_CZ_ITEM_PICKUP       = 0x0362; // 6 bytes
+    static constexpr uint16 HEADER_CZ_ITEM_PICKUP       = 0x0933; // 6 bytes (clif_parse_TakeItem; 0x0362 e DropItem)
     static constexpr uint16 HEADER_ZC_ITEM_DISAPPEAR    = 0x00a1; // 6 bytes
 
     // Clima & Efeitos Especiais

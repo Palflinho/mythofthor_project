@@ -8,6 +8,7 @@
 #include "World/MythDayNightActor.h"
 #include "World/MythWeatherActor.h"
 #include "EngineUtils.h"
+#include "Engine/GameInstance.h"
 #include "Sprites/MythMonster.h"
 #include "Sprites/MythPoring.h"
 #include "Sprites/MythRoSpriteComponent.h"
@@ -205,6 +206,25 @@ void AMythPlayerController::MoveToLocation(const FVector& Destination, bool bFor
 {
 	UWorld* World = GetWorld();
 	const UNavigationSystemV1* Nav = World ? FNavigationSystem::GetCurrent<UNavigationSystemV1>(World) : nullptr;
+
+	// Conectado: como no cliente original, so pede a rota (CZ_REQUEST_MOVE) e anda quando o servidor confirmar
+	// (ZC_NOTIFY_PLAYERMOVE -> AMythNetWorld). O rAthena recusa rotas acima de max_walk_path (17 celulas,
+	// conf/battle/client.conf): cliques longe demais viram um passo de ate 14 celulas na mesma direcao.
+	const URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr;
+	if (Net && Net->GetNetworkState() == ERagnarokNetworkState::ConnectedMap && GetPawn())
+	{
+		FVector Dest = Destination;
+		const FVector From = GetPawn()->GetActorLocation();
+		const float MaxReach = 14.f * 50.f;
+		if (FVector::Dist2D(From, Dest) > MaxReach)
+		{
+			const FVector Dir = (Dest - From).GetSafeNormal2D();
+			Dest = From + Dir * MaxReach;
+		}
+		bHasDirectTarget = false;
+		SendCellToServer(Dest, bForceSend);
+		return;
+	}
 
 	if (Nav && Nav->GetDefaultNavDataInstance())
 	{
@@ -430,7 +450,8 @@ void AMythPlayerController::SendCellToServer(const FVector& WorldLocation, bool 
 		if (URagnarokNetworkSubsystem* Net = GI->GetSubsystem<URagnarokNetworkSubsystem>())
 		{
 			// Retorna false se nao houver sessao; o jogo segue jogavel offline para testes.
-			Net->SendMoveRequest(Cell.X, Cell.Y);
+			const bool bSent = Net->SendMoveRequest(Cell.X, Cell.Y);
+			UE_LOG(LogTemp, Log, TEXT("MythNet: CZ_REQUEST_MOVE (%d, %d) %s"), Cell.X, Cell.Y, bSent ? TEXT("enviado") : TEXT("offline"));
 		}
 	}
 }
@@ -609,27 +630,6 @@ void AMythPlayerController::MythSetHour(float Hour)
 	}
 }
 
-void AMythPlayerController::MythShot(float DelaySeconds, float Hour, const FString& Name)
-{
-	FTimerHandle Handle;
-	GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateWeakLambda(this, [this, Hour, Name]()
-	{
-		auto Shoot = [Name]()
-		{
-			FScreenshotRequest::RequestScreenshot(Name.IsEmpty() ? FString(TEXT("myth")) : Name, /*bShowUI=*/true, /*bAddFilenameSuffix=*/false);
-			UE_LOG(LogTemp, Log, TEXT("MythShot: print '%s' solicitado"), *Name);
-		};
-		if (Hour < 0.f)
-		{
-			Shoot(); // sem troca de horario: print imediato (ex.: numeros de dano em voo)
-			return;
-		}
-		MythSetHour(Hour);
-		FTimerHandle ShotHandle;
-		GetWorldTimerManager().SetTimer(ShotHandle, FTimerDelegate::CreateWeakLambda(this, Shoot), 2.f, false); // luz assenta
-	}), FMath::Max(DelaySeconds, 0.1f), false);
-}
-
 void AMythPlayerController::MythWeather(const FString& Type)
 {
 	AMythWeatherActor* Weather = AMythWeatherActor::FindOrSpawn(GetWorld());
@@ -644,15 +644,58 @@ void AMythPlayerController::MythWeather(const FString& Type)
 	Weather->SetWeather(W);
 }
 
+namespace
+{
+	// Timers dos comandos de teste ficam no GameInstance: sobrevivem a troca de mapa (portal/warp), que recria o
+	// controlador. O comando roda no controlador atual.
+	void MythRunLater(UObject* Context, float Delay, TFunction<void(APlayerController*)> Fn)
+	{
+		UGameInstance* GI = Context ? Context->GetWorld()->GetGameInstance() : nullptr;
+		if (!GI)
+		{
+			return;
+		}
+		FTimerHandle Handle;
+		GI->GetTimerManager().SetTimer(Handle, FTimerDelegate::CreateWeakLambda(GI, [GI, Fn]()
+		{
+			if (APlayerController* PC = GI->GetFirstLocalPlayerController())
+			{
+				Fn(PC);
+			}
+		}), FMath::Max(Delay, 0.1f), false);
+	}
+
+	void MythTakeShot(const FString& Name)
+	{
+		FScreenshotRequest::RequestScreenshot(Name.IsEmpty() ? FString(TEXT("myth")) : Name, /*bShowUI=*/true, /*bAddFilenameSuffix=*/false);
+		UE_LOG(LogTemp, Log, TEXT("MythShot: print '%s' solicitado"), *Name);
+	}
+}
+
+void AMythPlayerController::MythShot(float DelaySeconds, float Hour, const FString& Name)
+{
+	MythRunLater(this, DelaySeconds, [Hour, Name](APlayerController* PC)
+	{
+		if (Hour < 0.f)
+		{
+			MythTakeShot(Name); // sem troca de horario: print imediato (ex.: numeros de dano em voo)
+			return;
+		}
+		PC->ConsoleCommand(FString::Printf(TEXT("MythSetHour %f"), Hour));
+		MythRunLater(PC, 2.f, [Name](APlayerController*) { MythTakeShot(Name); }); // luz assenta
+	});
+}
+
 void AMythPlayerController::MythDelayed(float DelaySeconds, const FString& Command)
 {
 	// '+' vira espaco: o -ExecCmds nao preserva aspas (ex.: MythDelayed 30 MythWeather+Rain)
 	const FString Cmd = Command.Replace(TEXT("+"), TEXT(" "));
-	FTimerHandle Handle;
-	GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateWeakLambda(this, [this, Cmd]()
-	{
-		ConsoleCommand(Cmd);
-	}), FMath::Max(DelaySeconds, 0.1f), false);
+	MythRunLater(this, DelaySeconds, [Cmd](APlayerController* PC) { PC->ConsoleCommand(Cmd); });
+}
+
+void AMythPlayerController::MythQuitAfter(float Seconds)
+{
+	MythRunLater(this, FMath::Max(Seconds, 1.f), [](APlayerController* PC) { PC->ConsoleCommand(TEXT("quit")); });
 }
 
 void AMythPlayerController::MythGoto(int32 X, int32 Y)
@@ -694,6 +737,16 @@ void AMythPlayerController::MythTalkNearest()
 	{
 		UE_LOG(LogTemp, Log, TEXT("MythNet: falando com %s"), *Best->MonsterName);
 		SetFocusedTarget(Best);
+	}
+}
+
+void AMythPlayerController::MythWalk(int32 X, int32 Y)
+{
+	UE_LOG(LogTemp, Log, TEXT("MythWalk: andando ate (%d, %d)"), X, Y);
+	if (const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld()))
+	{
+		const APawn* P = GetPawn();
+		MoveToLocation(Info->CellToWorld(FIntPoint(X, Y), P ? P->GetActorLocation().Z : 0.f), true);
 	}
 }
 
@@ -772,15 +825,6 @@ void AMythPlayerController::MythWindow(const FString& Name)
 	{
 		ToggleHudWindow(static_cast<EMythRoWindow>(Value));
 	}
-}
-
-void AMythPlayerController::MythQuitAfter(float Seconds)
-{
-	FTimerHandle Handle;
-	GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateWeakLambda(this, [this]()
-	{
-		ConsoleCommand(TEXT("quit"));
-	}), FMath::Max(Seconds, 1.f), false);
 }
 
 void AMythPlayerController::MythDayLength(float Seconds)

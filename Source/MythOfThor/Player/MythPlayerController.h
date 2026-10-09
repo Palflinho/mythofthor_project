@@ -134,6 +134,10 @@ public:
 	UFUNCTION(Exec)
 	void MythNpcNext();
 
+	/** Console: MythWalk 133 183 -> anda ate a celula como um clique no chao (CZ_REQUEST_MOVE ao servidor). */
+	UFUNCTION(Exec)
+	void MythWalk(int32 X, int32 Y);
+
 	UMythRoHUDWidget* GetHud() const { return HudWidget; }
 
 	/** Console: MythQuitAfter 40 -> fecha o jogo apos 40 s (usado com -ExecCmds nos testes automaticos). */

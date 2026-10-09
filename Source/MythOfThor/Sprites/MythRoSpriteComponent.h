@@ -142,7 +142,7 @@ public:
 	bool bBlobShadow = true;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
-	float BlobShadowScale = 1.f;
+	float BlobShadowScale = 1.2f;
 
 	/**
 	 * Com o sol alto a sombra projetada vira uma tira fina ("papel"). Quando o comprimento dela no chao fica abaixo
