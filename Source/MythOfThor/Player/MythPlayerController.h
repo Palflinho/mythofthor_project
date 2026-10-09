@@ -161,6 +161,10 @@ public:
 	UFUNCTION(Exec)
 	void MythPlaySkill(int32 SkillID, int32 Stage = 0);
 
+	/** Teste: mostra o icone do estado EfstID por Seconds (0 = sem duracao, -1 = remove), sem servidor. */
+	UFUNCTION(Exec)
+	void MythBuff(int32 EfstID, float Seconds);
+
 	UMythRoHUDWidget* GetHud() const { return HudWidget; }
 
 	/**

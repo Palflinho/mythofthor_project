@@ -1071,6 +1071,15 @@ void AMythPlayerController::MythPlaySkill(int32 SkillID, int32 Stage)
 	}
 }
 
+void AMythPlayerController::MythBuff(int32 EfstID, float Seconds)
+{
+	if (AMythHUD* Hud = Cast<AMythHUD>(GetHUD()))
+	{
+		const int32 Ms = FMath::RoundToInt(FMath::Max(Seconds, 0.f) * 1000.f);
+		Hud->SetStatusIcon(EfstID, Seconds >= 0.f, Ms, Ms);
+	}
+}
+
 void AMythPlayerController::MythTargetNearest()
 {
 	if (PendingSkillID == 0 || !GetPawn())

@@ -56,7 +56,18 @@ public:
 	/** Nome da skill sobre quem a usou, por um instante (o RO mostra o grito da skill). */
 	void AddSkillShout(AActor* Caster, const FString& SkillName);
 
+	/**
+	 * Icone de estado (buff/debuff) na coluna da direita, como no cliente original, com uma barra de duracao ao lado.
+	 * EfstID = "type" dos pacotes de status do rAthena (EFST_*). TotalMs 0 = sem duracao (sem barra).
+	 */
+	void SetStatusIcon(int32 EfstID, bool bActive, int32 TotalMs, int32 RemainMs);
+	void ClearStatusIcons() { StatusIcons.Reset(); }
+
 private:
+	void DrawStatusIcons();
+	struct FStatusIcon { int32 Efst = 0; float End = 0.f; float Total = 0.f; };
+	TArray<FStatusIcon> StatusIcons;
+
 	void DrawTargetRing();
 	/** Nome dos itens no chao, na cor da raridade. */
 	void DrawGroundItemLabels();

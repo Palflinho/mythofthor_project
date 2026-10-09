@@ -1,0 +1,572 @@
+{
+"0": {
+"debuff": false,
+"icon": "프로보크.tga",
+"name": "Provoke"
+},
+"1": {
+"debuff": false,
+"icon": "인듀어.tga",
+"name": "Endure"
+},
+"10": {
+"debuff": false,
+"icon": "블레싱.tga",
+"name": "Blessing"
+},
+"11": {
+"debuff": false,
+"icon": "시그넘크루시스.tga",
+"name": "Signum Crucis"
+},
+"115": {
+"debuff": false,
+"icon": "icon09.tga",
+"name": "True Sight"
+},
+"116": {
+"debuff": false,
+"icon": "icon06.tga",
+"name": "Wind Walk"
+},
+"12": {
+"debuff": false,
+"icon": "민첩성증가.tga",
+"name": "Increase agility"
+},
+"120": {
+"debuff": false,
+"icon": "icon04.tga",
+"name": "Sword Reject"
+},
+"13": {
+"debuff": true,
+"icon": "민첩성감소.tga",
+"name": "Decrease Agility"
+},
+"132": {
+"debuff": false,
+"icon": "금강불괴.tga",
+"name": "Auto Berserk"
+},
+"133": {
+"debuff": false,
+"icon": "i_run.tga",
+"name": "Run"
+},
+"137": {
+"debuff": false,
+"icon": "i_downkick.tga",
+"name": "Prepare Down Kick"
+},
+"139": {
+"debuff": false,
+"icon": "i_turnkick.tga",
+"name": "Ready Turn Kick"
+},
+"14": {
+"debuff": false,
+"icon": "슬로우포이즌.tga",
+"name": "Slow Poison"
+},
+"141": {
+"debuff": false,
+"icon": "i_counter.tga",
+"name": "Prepare Counter Kick"
+},
+"143": {
+"debuff": false,
+"icon": "i_dodge.tga",
+"name": "Dodge"
+},
+"148": {
+"debuff": false,
+"icon": "i_p_tele.tga",
+"name": "%s"
+},
+"15": {
+"debuff": false,
+"icon": "임포시티오마누스.tga",
+"name": "Impositio Manus"
+},
+"156": {
+"debuff": false,
+"icon": "i_kaizel.tga",
+"name": "Kaizel"
+},
+"157": {
+"debuff": false,
+"icon": "i_kaahi.tga",
+"name": "Kaahi"
+},
+"158": {
+"debuff": false,
+"icon": "i_kaupe.tga",
+"name": "Kaupe"
+},
+"16": {
+"debuff": false,
+"icon": "수줍은하루의우울.tga",
+"name": "Suffragium"
+},
+"161": {
+"debuff": false,
+"icon": "i_onehand.tga",
+"name": "One-hand Quicken"
+},
+"169": {
+"debuff": false,
+"icon": "i_suncomfort.tga",
+"name": "Comfort of the Sun"
+},
+"17": {
+"debuff": false,
+"icon": "아스페르시오.tga",
+"name": "Aspersio"
+},
+"170": {
+"debuff": false,
+"icon": "i_mooncomfort.tga",
+"name": "Comfort of the Moon"
+},
+"171": {
+"debuff": false,
+"icon": "i_starcomfort.tga",
+"name": "Comfort of the Stars"
+},
+"18": {
+"debuff": false,
+"icon": "성체강복.tga",
+"name": "%s"
+},
+"188": {
+"debuff": false,
+"icon": "i_오버맥스.tga",
+"name": "Maximum Over Thrust"
+},
+"19": {
+"debuff": false,
+"icon": "기리에엘레이손.tga",
+"name": "Kyrie Eleison"
+},
+"197": {
+"debuff": false,
+"icon": "i_shrink.tga",
+"name": "Shrink"
+},
+"198": {
+"debuff": false,
+"icon": "i_sightblaster.tga",
+"name": "Sight Blaster"
+},
+"2": {
+"debuff": false,
+"icon": "투핸드퀴큰.tga",
+"name": "Two Hand Quicken"
+},
+"20": {
+"debuff": false,
+"icon": "마니피캇.tga",
+"name": "Magnificat"
+},
+"200": {
+"debuff": false,
+"icon": "i_closeconfine.tga",
+"name": "Close Confine"
+},
+"201": {
+"debuff": false,
+"icon": "i_closeconfine.tga",
+"name": "Close Confine"
+},
+"203": {
+"debuff": false,
+"icon": "i_madness.tga",
+"name": "Madness Canceller (Last Stand)"
+},
+"204": {
+"debuff": false,
+"icon": "i_fever.tga",
+"name": "Gatling Fever"
+},
+"207": {
+"debuff": false,
+"icon": "i_bunsin.tga",
+"name": "Illusionary Shadow"
+},
+"208": {
+"debuff": false,
+"icon": "i_nen.tga",
+"name": "Soul"
+},
+"209": {
+"debuff": false,
+"icon": "i_adjustment.tga",
+"name": "Adjustment"
+},
+"21": {
+"debuff": false,
+"icon": "글로리아.tga",
+"name": "Gloria"
+},
+"22": {
+"debuff": true,
+"icon": "렉스에테르나.tga",
+"name": "Lex Aeterna"
+},
+"23": {
+"debuff": false,
+"icon": "아드레날린러쉬.tga",
+"name": "Adrenaline Rush"
+},
+"24": {
+"debuff": false,
+"icon": "웨폰퍼펙션.tga",
+"name": "Weapon Perfection"
+},
+"241": {
+"debuff": false,
+"icon": "str_gogi.tga",
+"name": "%s"
+},
+"242": {
+"debuff": false,
+"icon": "agi_gogi.tga",
+"name": "%s"
+},
+"243": {
+"debuff": false,
+"icon": "vit_gogi.tga",
+"name": "%s"
+},
+"244": {
+"debuff": false,
+"icon": "dex_gogi.tga",
+"name": "%s"
+},
+"245": {
+"debuff": false,
+"icon": "int_gogi.tga",
+"name": "%s"
+},
+"246": {
+"debuff": false,
+"icon": "luk_gogi.tga",
+"name": "%s"
+},
+"25": {
+"debuff": false,
+"icon": "오버트러스트.tga",
+"name": "Over Thrust"
+},
+"26": {
+"debuff": false,
+"icon": "맥시마이즈파워.tga",
+"name": "Maximize Power"
+},
+"27": {
+"debuff": false,
+"icon": "라이딩.tga",
+"name": "Riding Vehicle"
+},
+"272": {
+"debuff": false,
+"icon": "agi_gogi.tga",
+"name": "%s"
+},
+"273": {
+"debuff": false,
+"icon": "vit_gogi.tga",
+"name": "%s"
+},
+"274": {
+"debuff": false,
+"icon": "dex_gogi.tga",
+"name": "%s"
+},
+"275": {
+"debuff": false,
+"icon": "int_gogi.tga",
+"name": "%s"
+},
+"276": {
+"debuff": false,
+"icon": "luk_gogi.tga",
+"name": "%s"
+},
+"28": {
+"debuff": false,
+"icon": "팔콘.tga",
+"name": "Falconry Mastery"
+},
+"286": {
+"debuff": true,
+"icon": "criticalwound.tga",
+"name": "Critical Wounds"
+},
+"29": {
+"debuff": false,
+"icon": "죽은척하기.tga",
+"name": "Trick Dead (Play Dead)"
+},
+"291": {
+"debuff": false,
+"icon": "마법방어포션.tga",
+"name": "Magic Armor Potions"
+},
+"3": {
+"debuff": false,
+"icon": "집중력향상.tga",
+"name": "Attention Concentration"
+},
+"30": {
+"debuff": false,
+"icon": "고성지르기.tga",
+"name": "Loud Exclamation (Crazy Uproar)"
+},
+"31": {
+"debuff": false,
+"icon": "에너지코트.tga",
+"name": "Energy Coat"
+},
+"32": {
+"debuff": true,
+"icon": "갑옷파괴.tga",
+"name": "Armor is damaged"
+},
+"33": {
+"debuff": true,
+"icon": "무기파괴.tga",
+"name": "Weapon is damaged."
+},
+"34": {
+"debuff": true,
+"icon": "환각.tga",
+"name": "Illusion"
+},
+"35": {
+"debuff": true,
+"icon": "무게50이상.tga",
+"name": "Overweight 50%"
+},
+"351": {
+"debuff": true,
+"icon": "frostmisty.tga",
+"name": "Freezing Status"
+},
+"36": {
+"debuff": true,
+"icon": "무게90이상.tga",
+"name": "Overweight 90%"
+},
+"37": {
+"debuff": false,
+"icon": "공속물약.tga",
+"name": "Concentration Potion"
+},
+"38": {
+"debuff": false,
+"icon": "공속물약.tga",
+"name": "Awakening Potion"
+},
+"39": {
+"debuff": false,
+"icon": "공속물약.tga",
+"name": "Berserk Potion"
+},
+"4": {
+"debuff": false,
+"icon": "하이딩.tga",
+"name": "Hiding"
+},
+"5": {
+"debuff": false,
+"icon": "클로킹.tga",
+"name": "Cloaking"
+},
+"50": {
+"debuff": true,
+"icon": "스트립웨폰.tga",
+"name": "Weapon Off Status"
+},
+"51": {
+"debuff": true,
+"icon": "스트립쉴드.tga",
+"name": "Shield Off Status"
+},
+"52": {
+"debuff": true,
+"icon": "스트립아머.tga",
+"name": "Armor Off Status"
+},
+"53": {
+"debuff": true,
+"icon": "스트립헬름.tga",
+"name": "Headgear Off Status"
+},
+"54": {
+"debuff": false,
+"icon": "케미컬프로텍션[웨폰].tga",
+"name": "Chemical Protection (Weapon)"
+},
+"55": {
+"debuff": false,
+"icon": "케미컬프로텍션[쉴드].tga",
+"name": "Chemical Protection (Shield)"
+},
+"56": {
+"debuff": false,
+"icon": "케미컬프로텍션[아머].tga",
+"name": "Chemical Protection (Armor)"
+},
+"57": {
+"debuff": false,
+"icon": "케미컬프로텍션[헬름].tga",
+"name": "Chemical Protection Helm (Biochemical Helm)"
+},
+"58": {
+"debuff": false,
+"icon": "오토가드.tga",
+"name": "Auto Guard"
+},
+"583": {
+"debuff": false,
+"icon": "all_odins_power.tga",
+"name": "Odin's Power"
+},
+"59": {
+"debuff": false,
+"icon": "리플렉트쉴드.tga",
+"name": "Reflect Shield"
+},
+"6": {
+"debuff": false,
+"icon": "인찬트포이즌.tga",
+"name": "Enchant Poison"
+},
+"61": {
+"debuff": false,
+"icon": "신의뜻.tga",
+"name": "Providence"
+},
+"62": {
+"debuff": false,
+"icon": "디펜더.tga",
+"name": "Defender (Defending Aura)"
+},
+"622": {
+"debuff": false,
+"icon": "앉기.tga",
+"name": "Sit"
+},
+"65": {
+"debuff": false,
+"icon": "오토스펠.tga",
+"name": "Auto Spell"
+},
+"659": {
+"debuff": false,
+"icon": "gensou.tga",
+"name": "Oboro Gensou"
+},
+"660": {
+"debuff": true,
+"icon": "akaitsuki.tga",
+"name": "Ominous Crimson Moonlight"
+},
+"675": {
+"debuff": false,
+"icon": "flower_leaf.tga",
+"name": "Flower Leaf"
+},
+"676": {
+"debuff": false,
+"icon": "all_ray_of_protection.tga",
+"name": "Ray Of Protection"
+},
+"677": {
+"debuff": false,
+"icon": "glastheim_atk.tga",
+"name": "Glastheim Atk"
+},
+"678": {
+"debuff": false,
+"icon": "glastheim_def.tga",
+"name": "Glastheim Def"
+},
+"679": {
+"debuff": false,
+"icon": "glastheim_heal.tga",
+"name": "Glastheim Heal"
+},
+"68": {
+"debuff": false,
+"icon": "스피어퀴큰.tga",
+"name": "Spear Quicken"
+},
+"69": {
+"debuff": false,
+"icon": "바드노래.tga",
+"name": "Bdplaying"
+},
+"695": {
+"debuff": false,
+"icon": "arrown.tga",
+"name": "Client Only Equip Arrow"
+},
+"7": {
+"debuff": false,
+"icon": "포이즌리액트.tga",
+"name": "Poison React"
+},
+"715": {
+"debuff": false,
+"icon": "frigg_song.tga",
+"name": "Frigg Song"
+},
+"720": {
+"debuff": false,
+"icon": "full_throttle.tga",
+"name": "Full Throttle"
+},
+"730": {
+"debuff": false,
+"icon": "darkcrow.tga",
+"name": "Darkcrow"
+},
+"8": {
+"debuff": true,
+"icon": "콰그마이어.tga",
+"name": "Quagmire"
+},
+"87": {
+"debuff": false,
+"icon": "steelbody.tga",
+"name": "Steel Body"
+},
+"9": {
+"debuff": false,
+"icon": "안젤루스.tga",
+"name": "Angelus"
+},
+"90": {
+"debuff": false,
+"icon": "프레임런쳐.tga",
+"name": "Flame Launcher"
+},
+"91": {
+"debuff": false,
+"icon": "프로스트웨폰.tga",
+"name": "Frost Weapon (Endow Tsunami)"
+},
+"92": {
+"debuff": false,
+"icon": "라이트닝로더.tga",
+"name": "Lightning Loader"
+},
+"93": {
+"debuff": false,
+"icon": "사이즈믹웨폰.tga",
+"name": "Seismic Weapon"
+}
+}

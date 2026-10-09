@@ -13,6 +13,11 @@
 #include "Camera/PlayerCameraManager.h"
 #include "CanvasItem.h"
 #include "Engine/Texture2D.h"
+#include "Dom/JsonObject.h"
+#include "Misc/FileHelper.h"
+#include "Misc/Paths.h"
+#include "Serialization/JsonReader.h"
+#include "Serialization/JsonSerializer.h"
 
 namespace
 {
@@ -49,6 +54,7 @@ void AMythHUD::DrawHUD()
 	DrawTargetRing();
 	DrawGroundItemLabels();
 	DrawCastBarsAndShouts();
+	DrawStatusIcons();
 
 	if (!Canvas || Entries.IsEmpty())
 	{
@@ -371,5 +377,144 @@ void AMythHUD::DrawCastBarsAndShouts()
 		Text.bOutlined = true;
 		Text.OutlineColor = FLinearColor(0.f, 0.f, 0.f, 0.9f);
 		Canvas->DrawItem(Text);
+	}
+}
+
+// ------------------------------------------------------------------------------------------------ buffs
+
+namespace
+{
+	struct FStatusIconInfo
+	{
+		FString Icon;
+		FString Name;
+		bool bDebuff = false;
+	};
+
+	/** Config/status_icons.json (tools/gen_status_icons.py): EFST -> icone em data/texture/effect e nome. */
+	const TMap<int32, FStatusIconInfo>& StatusIconTable()
+	{
+		static TMap<int32, FStatusIconInfo> Table;
+		static bool bLoaded = false;
+		if (bLoaded)
+		{
+			return Table;
+		}
+		bLoaded = true;
+		FString Text;
+		TSharedPtr<FJsonObject> Root;
+		if (FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("status_icons.json")))
+			&& FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) && Root.IsValid())
+		{
+			for (const auto& Pair : Root->Values)
+			{
+				const TSharedPtr<FJsonObject> O = Pair.Value->AsObject();
+				FStatusIconInfo& I = Table.Add(FCString::Atoi(*Pair.Key));
+				I.Icon = O->GetStringField(TEXT("icon"));
+				I.Name = O->GetStringField(TEXT("name"));
+				I.bDebuff = O->GetBoolField(TEXT("debuff"));
+			}
+		}
+		return Table;
+	}
+
+	FString FormatRemaining(float Seconds)
+	{
+		const int32 Sec = FMath::CeilToInt(Seconds);
+		if (Sec >= 3600) { return FString::Printf(TEXT("%dh"), Sec / 3600); }
+		if (Sec >= 60) { return FString::Printf(TEXT("%dm"), Sec / 60); }
+		return FString::Printf(TEXT("%ds"), Sec);
+	}
+}
+
+void AMythHUD::SetStatusIcon(int32 EfstID, bool bActive, int32 TotalMs, int32 RemainMs)
+{
+	StatusIcons.RemoveAll([EfstID](const FStatusIcon& I) { return I.Efst == EfstID; });
+	if (!bActive || !StatusIconTable().Contains(EfstID))
+	{
+		return; // estados sem icone no cliente (internos do servidor) nao aparecem, como no RO
+	}
+	FStatusIcon& I = StatusIcons.AddDefaulted_GetRef();
+	I.Efst = EfstID;
+	const float Now = GetWorld() ? GetWorld()->GetTimeSeconds() : 0.f;
+	I.Total = FMath::Max(TotalMs, RemainMs) / 1000.f;
+	I.End = RemainMs > 0 ? Now + RemainMs / 1000.f : 0.f;
+}
+
+void AMythHUD::DrawStatusIcons()
+{
+	if (!Canvas || StatusIcons.IsEmpty())
+	{
+		return;
+	}
+	const float Now = GetWorld()->GetTimeSeconds();
+	StatusIcons.RemoveAll([Now](const FStatusIcon& I) { return I.End > 0.f && Now >= I.End; });
+
+	// Coluna da direita abaixo do minimapa, como no cliente original; a escala acompanha a altura da tela (base 900)
+	const float Sc = FMath::Max(Canvas->ClipY / 900.f, 0.6f);
+	const float IconSize = 28.f * Sc, Gap = 4.f * Sc, BarW = 44.f * Sc, BarH = 5.f * Sc;
+	const float Right = Canvas->ClipX - 10.f * Sc;
+	float Y = 200.f * Sc;
+	float MouseX = -1.f, MouseY = -1.f;
+	if (PlayerOwner)
+	{
+		PlayerOwner->GetMousePosition(MouseX, MouseY);
+	}
+	UFont* Font = GEngine ? GEngine->GetSmallFont() : nullptr;
+	const FStatusIconInfo* Hovered = nullptr;
+	float HoverY = 0.f;
+	auto DrawLabel = [this, Font, Sc](const FString& Text, float RightX, float TopY, const FLinearColor& Color)
+	{
+		float W = 0.f, H = 0.f;
+		Canvas->StrLen(Font, Text, W, H);
+		FCanvasTextItem Item(FVector2D(RightX - W * Sc, TopY), FText::FromString(Text), Font, Color);
+		Item.Scale = FVector2D(Sc, Sc);
+		Item.bOutlined = true;
+		Item.OutlineColor = FLinearColor(0.f, 0.f, 0.f, 0.9f);
+		Canvas->DrawItem(Item);
+	};
+	for (const FStatusIcon& I : StatusIcons)
+	{
+		const FStatusIconInfo* Info = StatusIconTable().Find(I.Efst);
+		UTexture2D* Tex = Info ? FMythRoUITextures::Get(TEXT("../effect/") + Info->Icon) : nullptr;
+		const FVector2D IconPos(Right - IconSize, Y);
+		if (Tex && Tex->GetResource())
+		{
+			FCanvasTileItem Tile(IconPos, Tex->GetResource(), FVector2D(IconSize, IconSize), FLinearColor::White);
+			Tile.BlendMode = SE_BLEND_Translucent;
+			Canvas->DrawItem(Tile);
+		}
+		// Barra de duracao ao lado do icone: esvazia da esquerda para a direita e fica laranja no fim
+		if (I.End > 0.f && I.Total > 0.f)
+		{
+			const float Remain = FMath::Max(I.End - Now, 0.f);
+			const float Frac = FMath::Clamp(Remain / I.Total, 0.f, 1.f);
+			const FVector2D BarPos(IconPos.X - Gap - BarW, Y + IconSize - BarH - 2.f * Sc);
+			FCanvasTileItem Back(BarPos - FVector2D(1.f, 1.f), FVector2D(BarW + 2.f, BarH + 2.f), FLinearColor(0.f, 0.f, 0.f, 0.7f));
+			Back.BlendMode = SE_BLEND_Translucent;
+			Canvas->DrawItem(Back);
+			const FLinearColor Full = Info && Info->bDebuff ? FLinearColor(0.95f, 0.3f, 0.3f) : FLinearColor(0.4f, 0.85f, 0.45f);
+			const FLinearColor Ending(1.f, 0.6f, 0.2f);
+			FCanvasTileItem Fill(BarPos + FVector2D(BarW * (1.f - Frac), 0.f), FVector2D(BarW * Frac, BarH),
+				Frac < 0.2f ? FMath::Lerp(Ending, Full, Frac / 0.2f) : Full);
+			Canvas->DrawItem(Fill);
+			DrawLabel(FormatRemaining(Remain), BarPos.X + BarW, BarPos.Y - 13.f * Sc, FLinearColor(1.f, 0.85f, 0.6f));
+		}
+		if (Info && MouseX >= IconPos.X && MouseX <= IconPos.X + IconSize && MouseY >= Y && MouseY <= Y + IconSize)
+		{
+			Hovered = Info;
+			HoverY = Y;
+		}
+		Y += IconSize + Gap;
+		if (Y > Canvas->ClipY - 200.f * Sc)
+		{
+			break; // muitos estados: o resto nao cabe na coluna
+		}
+	}
+	// Nome do estado ao passar o mouse (o cliente original mostra a descricao)
+	if (Hovered)
+	{
+		DrawLabel(Hovered->Name, Right - IconSize - Gap - BarW - 8.f * Sc, HoverY + IconSize * 0.5f - 7.f * Sc,
+			Hovered->bDebuff ? FLinearColor(1.f, 0.45f, 0.45f) : FLinearColor(0.65f, 0.9f, 0.65f));
 	}
 }
