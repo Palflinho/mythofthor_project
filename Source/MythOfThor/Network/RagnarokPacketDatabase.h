@@ -32,7 +32,6 @@ namespace RagnarokPackets
     static constexpr uint16 HEADER_CZ_NOTIFY_ACTORINIT  = 0x007d; // 2 bytes
     static constexpr uint16 HEADER_CZ_REQUEST_MOVE      = 0x035f; // 5 bytes
     static constexpr uint16 HEADER_ZC_NOTIFY_PLAYERMOVE = 0x0087; // 12 bytes
-    static constexpr uint16 HEADER_ZC_NOTIFY_MOVE       = 0x0086; // 16 bytes: gid, moveData[6], moveStartTime (outras unidades)
     static constexpr uint16 HEADER_CZ_REQUEST_ACT       = 0x088e; // 7 bytes (ou 0x0360)
     static constexpr uint16 HEADER_ZC_NOTIFY_ACT        = 0x08c8; // 34 bytes
     static constexpr uint16 HEADER_ZC_NOTIFY_VANISH     = 0x0080; // 7 bytes

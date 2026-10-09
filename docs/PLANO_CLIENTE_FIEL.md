@@ -127,3 +127,16 @@ As janelas clássicas da HUD (Alt+A/E/Q/S, `UI/MythRoHUDWindows.cpp`) já contam
 | `bIsEquipped` + `EquipLocation` = posição vestida (`wearState`) | Janela de equipamento usa a máscara `EQP_*` para escolher o encaixe | `0x0b39` (`EQUIPITEM_INFO.wearState`) | **Concluído ✅** (`WearState` preenchido e `EquipLocation` reflete o slot equipado) |
 
 Todos os pacotes foram validados contra o rAthena (`clif_packetdb.hpp`, `packets_struct.hpp`), compilados no UBT e testados via suite live.
+
+### Correções feitas pelo Claude na rede (09/10/2026) — conferidas no fonte do rAthena
+
+Ao ligar o cliente ao servidor, estes pontos do `URagnarokNetworkSubsystem` foram corrigidos (revise ao continuar a rede):
+
+- **Envio antes da conexão**: o connect é não-bloqueante e o `CA_LOGIN` saía antes do handshake TCP (perdido). Agora `SendData` enfileira em `PendingSend` até `SCS_Connected` (`FlushPendingSend` no Tick).
+- **Crash ao trocar de servidor**: `HandleLoginAccept` reconecta (limpa o buffer) e o laço fazia `RemoveAt` num buffer vazio. Agora há `ReceiveGeneration`.
+- **Tamanhos de pacote**: a tabela fixa estava incompleta (0x0091, 0x09a0, 0x0b08, 0x0b32 dessincronizavam). `tools/gen_packet_lengths.py` gera `Config/packet_lengths_20211103.json` compilando o `clif_packetdb.hpp` e `sizeof(PACKET_*)`/`sizeof(packet_*)` com `-DPACKETVER=20211103 -DPRERE`; o subsistema carrega o JSON no `Initialize` (a tabela fixa vira reserva).
+- **Unidades (0x09fd/0x09fe/0x09ff)**: ID da unidade é o `AID` (+5), não o `GID` (+9, char_id = 0 em monstros); `PosDir` em +63 (idle/spawn); no walking os campos depois de `accessory` deslocam 4 bytes (`moveStartTime`) e `MoveData` fica em +67; acessórios = baixo (+35), topo, meio; HP/MaxHP lidos.
+- **Movimento de terceiros**: o rAthena não usa 0x0086 (comentado em `packets.hpp`); cada passo chega como 0x09fd.
+- **Próprio jogador**: no map-server é o `AID` (`GetSelfID()`), não o `CharID`.
+- **ZC_NOTIFY_ACT (0x08c8)**: `type` em +29 (não +31).
+- **ZC_NOTIFY_PLAYERCHAT (0x008e)**: texto em +4 (não +8), conforme `clif_displaymessage`.

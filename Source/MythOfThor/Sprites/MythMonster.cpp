@@ -118,6 +118,15 @@ bool AMythMonster::ReceiveMythDamage(int32 Amount)
 	return false;
 }
 
+void AMythMonster::NetHit()
+{
+	if (!bIsDead)
+	{
+		Sprite->PlayHit();
+		PlaySfx(SfxHit);
+	}
+}
+
 void AMythMonster::Kill()
 {
 	if (bIsDead)

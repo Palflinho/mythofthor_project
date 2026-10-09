@@ -4,6 +4,7 @@
 #include "Gameplay/AutoBattleComponent.h"
 #include "Gameplay/MythStatsComponent.h"
 #include "World/MythMapInfo.h"
+#include "Network/RagnarokNetworkSubsystem.h"
 
 #include "Blueprint/WidgetTree.h"
 #include "Components/Button.h"
@@ -537,6 +538,16 @@ void UMythRoHUDWidget::OnChatCommitted(const FText& Text, ETextCommit::Type Comm
 	if (Msg.IsEmpty())
 	{
 		return;
+	}
+	// Conectado: tudo vai para o servidor (inclusive os comandos @ de GM, que o rAthena interpreta no chat).
+	// O proprio servidor devolve a fala (ZC_NOTIFY_PLAYERCHAT), que chega pelo OnChatMessage.
+	if (URagnarokNetworkSubsystem* Net = GetNet())
+	{
+		if (Net->GetNetworkState() == ERagnarokNetworkState::ConnectedMap)
+		{
+			Net->SendGlobalMessage(Msg);
+			return;
+		}
 	}
 	if (Msg.StartsWith(TEXT("@")))
 	{

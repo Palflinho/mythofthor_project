@@ -565,7 +565,15 @@ private:
 	void HandleMapAcceptEnter(const uint8* PacketData, int32 PacketSize);
 	void HandleUnitAppear(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandlePlayerMove(const uint8* PacketData, int32 PacketSize);
-	void HandleUnitMove(const uint8* PacketData, int32 PacketSize);
+	void FlushPendingSend();
+	/** Bytes aguardando o socket conectar (connect nao-bloqueante) ou sobra de envio parcial. */
+	TArray<uint8> PendingSend;
+	/** Incrementado a cada troca de socket; o laco de framing para se um handler reconectar. */
+	uint32 ReceiveGeneration = 0;
+	/** ID -> tamanho (-1 = dinamico), de Config/packet_lengths_<PACKETVER>.json. */
+	TMap<uint16, int16> PacketLengths;
+	uint16 LastGoodPacketID = 0;
+	int32 LastGoodPacketLen = 0;
 	void HandleUnitVanish(const uint8* PacketData, int32 PacketSize);
 	void HandleActionNotify(const uint8* PacketData, int32 PacketSize);
 	void HandleParamChange(const uint8* PacketData, int32 PacketSize, uint16 PacketID);

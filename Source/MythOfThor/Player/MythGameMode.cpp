@@ -5,6 +5,7 @@
 #include "UI/MythHUD.h"
 #include "World/MythDayNightActor.h"
 #include "World/MythWeatherActor.h"
+#include "World/MythNetWorld.h"
 #include "World/MythMapInfo.h"
 #include "World/MythNightAudioComponent.h"
 #include "EngineUtils.h"
@@ -34,6 +35,7 @@ void AMythGameMode::BeginPlay()
 
 	// Clima HD-2D (comeca limpo; muda pelo console MythWeather ou, com a rede, pelo servidor)
 	AMythWeatherActor::FindOrSpawn(GetWorld());
+	AMythNetWorld::FindOrSpawn(GetWorld()); // ponte com o rAthena (so age quando conectado)
 
 	// O Python do editor nao consegue criar o RecastNavMesh; cria aqui (se faltar) e gera a navegacao
 	// dentro dos NavMeshBoundsVolume do nivel para o Point & Click achar caminho.

@@ -242,7 +242,8 @@ void UMythRoSpriteComponent::ReloadSprites()
 	const FString Root = GetAssetsRoot();
 	if (IsMonster())
 	{
-		const FString Base = FPaths::Combine(Root, TEXT("data"), TEXT("sprite"), MonsterDir, MonsterSpriteName);
+		const FString Folder = MonsterSpriteFolder.IsEmpty() ? FString(MonsterDir) : MonsterSpriteFolder;
+		const FString Base = FPaths::Combine(Root, TEXT("data"), TEXT("sprite"), Folder, MonsterSpriteName);
 		Head = FMythRoSpriteSource();
 		if (!LoadSource(Body, Base + TEXT(".spr"), Base + TEXT(".act"), FString()))
 		{

@@ -4,6 +4,7 @@
 #include "Network/RagnarokNetworkSubsystem.h"
 #include "UI/MythHUD.h"
 #include "World/MythMapInfo.h"
+#include "World/MythNetWorld.h"
 #include "World/MythDayNightActor.h"
 #include "World/MythWeatherActor.h"
 #include "EngineUtils.h"
@@ -478,6 +479,25 @@ void AMythPlayerController::SetFocusedTarget(AMythMonster* NewTarget)
 	{
 		return; // re-clicar no mesmo alvo nao reinicia a recarga do ataque
 	}
+	if (NewTarget && NewTarget->IsNetUnit())
+	{
+		// Com servidor: NPC abre a conversa (CZ_CONTACTNPC); monstro recebe o ataque continuo (CZ_REQUEST_ACT tipo 7).
+		// O rAthena faz o personagem andar ate o alvo e bater; o dano volta pelo ZC_NOTIFY_ACT.
+		if (URagnarokNetworkSubsystem* Net = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>())
+		{
+			if (NewTarget->IsNpc())
+			{
+				Net->ContactNpc(NewTarget->NetID);
+				return;
+			}
+			if (!NewTarget->IsAttackable())
+			{
+				return;
+			}
+			UE_LOG(LogTemp, Log, TEXT("MythNet: atacando %s (%lld)"), *NewTarget->MonsterName, NewTarget->NetID);
+			Net->SendActionRequest(NewTarget->NetID, 7);
+		}
+	}
 	FocusedTarget = NewTarget;
 	ChaseRepathTimer = 0.f;
 }
@@ -499,6 +519,10 @@ void AMythPlayerController::UpdateCombat(float DeltaTime)
 	{
 		ClearFocusedTarget();
 		return;
+	}
+	if (Target->IsNetUnit())
+	{
+		return; // alvo do servidor: aproximacao, golpes e dano sao do rAthena
 	}
 
 	const UMythStatsComponent* Stats = Char->Stats;
@@ -633,11 +657,55 @@ void AMythPlayerController::MythDelayed(float DelaySeconds, const FString& Comma
 
 void AMythPlayerController::MythGoto(int32 X, int32 Y)
 {
+	TeleportToCell(X, Y);
+}
+
+void AMythPlayerController::MythLogin(const FString& User, const FString& Password)
+{
+	if (AMythNetWorld* NetWorld = AMythNetWorld::FindOrSpawn(GetWorld()))
+	{
+		NetWorld->Login(User, Password);
+	}
+}
+
+void AMythPlayerController::MythSay(const FString& Text)
+{
+	if (URagnarokNetworkSubsystem* Net = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>())
+	{
+		Net->SendGlobalMessage(Text.Replace(TEXT("+"), TEXT(" ")));
+	}
+}
+
+void AMythPlayerController::MythAttackNearest()
+{
+	const APawn* P = GetPawn();
+	AMythMonster* Best = nullptr;
+	float BestDist = TNumericLimits<float>::Max();
+	for (TActorIterator<AMythMonster> It(GetWorld()); It && P; ++It)
+	{
+		if (It->IsNetUnit() && It->IsAttackable() && !It->IsDead())
+		{
+			const float D = FVector::DistSquared(It->GetActorLocation(), P->GetActorLocation());
+			if (D < BestDist)
+			{
+				BestDist = D;
+				Best = *It;
+			}
+		}
+	}
+	if (Best)
+	{
+		SetFocusedTarget(Best);
+	}
+}
+
+bool AMythPlayerController::TeleportToCell(int32 X, int32 Y)
+{
 	APawn* P = GetPawn();
 	const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld());
 	if (!P || !Info)
 	{
-		return;
+		return false;
 	}
 	// Celula andavel mais proxima: o chao do GAT so existe nas celulas livres (trace de visibilidade nao ve a malha visual)
 	for (int32 R = 0; R <= 12; ++R)
@@ -658,12 +726,13 @@ void AMythPlayerController::MythGoto(int32 X, int32 Y)
 					P->SetActorLocation(Hit.ImpactPoint + FVector(0.f, 0.f, 120.f), false, nullptr, ETeleportType::TeleportPhysics);
 					StopMovement();
 					bHasDirectTarget = false;
-					return;
+					return true;
 				}
 			}
 		}
 	}
 	UE_LOG(LogTemp, Warning, TEXT("MythGoto: nenhuma celula andavel perto de (%d,%d)"), X, Y);
+	return false;
 }
 
 void AMythPlayerController::MythWindow(const FString& Name)

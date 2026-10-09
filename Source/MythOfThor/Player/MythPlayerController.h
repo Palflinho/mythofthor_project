@@ -112,6 +112,23 @@ public:
 	UFUNCTION(Exec)
 	void MythWindow(const FString& Name);
 
+	/** Console: MythLogin [usuario senha] -> conecta no rAthena (sem argumentos usa [Myth] NetUser/NetPassword). */
+	UFUNCTION(Exec)
+	void MythLogin(const FString& User = TEXT(""), const FString& Password = TEXT(""));
+
+	/** Leva o personagem a celula (ou a andavel mais proxima). Usado pela entrada no mapa do servidor e pelo MythGoto. */
+	bool TeleportToCell(int32 X, int32 Y);
+
+	/** Console: MythSay @spawn poring 3 -> fala no chat do servidor (comandos @ inclusos). Com MythDelayed use + no lugar dos espacos. */
+	UFUNCTION(Exec)
+	void MythSay(const FString& Text);
+
+	/** Console: MythAttackNearest -> ataca o monstro do servidor mais proximo (testes automaticos). */
+	UFUNCTION(Exec)
+	void MythAttackNearest();
+
+	UMythRoHUDWidget* GetHud() const { return HudWidget; }
+
 	/** Console: MythQuitAfter 40 -> fecha o jogo apos 40 s (usado com -ExecCmds nos testes automaticos). */
 	UFUNCTION(Exec)
 	void MythQuitAfter(float Seconds);

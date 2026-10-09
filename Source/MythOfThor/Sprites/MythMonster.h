@@ -85,6 +85,21 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Targeting")
 	void Kill();
 
+	/** ID da unidade no rAthena (AID do pacote de entrada). 0 = monstro local de teste, sem servidor. */
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Network")
+	int64 NetID = 0;
+
+	/** Tipo da unidade no pacote (0 jogador, 5 monstro, 6 NPC, 7 pet...). */
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Network")
+	uint8 NetObjectType = 5;
+
+	bool IsNetUnit() const { return NetID != 0; }
+	bool IsNpc() const { return IsNetUnit() && (NetObjectType == 6 || NetObjectType == 0xC); }
+	bool IsAttackable() const { return !IsNetUnit() || NetObjectType == 5; }
+
+	/** Golpe confirmado pelo servidor: so a animacao e o som (HP e morte tambem vem do servidor). */
+	void NetHit();
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;

@@ -62,6 +62,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
 	FString MonsterSpriteName;
 
+	/** Pasta do sprite "de unidade" dentro de data/sprite: vazio = 몬스터 (monstros); "npc" para NPCs. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
+	FString MonsterSpriteFolder;
+
 	/** Classe no nome do arquivo do corpo (ex.: 초보자 = Aprendiz). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
 	FString JobSpriteName = TEXT("초보자");

@@ -1,6 +1,11 @@
 #include "RagnarokNetworkSubsystem.h"
 #include "RagnarokPacketDatabase.h"
 #include "Common/TcpSocketBuilder.h"
+#include "Dom/JsonObject.h"
+#include "Misc/FileHelper.h"
+#include "Misc/Paths.h"
+#include "Serialization/JsonReader.h"
+#include "Serialization/JsonSerializer.h"
 #include "IPAddress.h"
 
 void URagnarokNetworkSubsystem::Initialize(FSubsystemCollectionBase& Collection)
@@ -14,6 +19,20 @@ void URagnarokNetworkSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	SavedSex = 0;
 	SavedCharPort = CHAR_SERVER_PORT;
 	PendingCharID = 0;
+
+	// Tamanhos de pacote gerados do proprio rAthena (tools/gen_packet_lengths.py). A tabela fixa do
+	// RagnarokPacketDatabase.h fica so como reserva para IDs que nao estiverem no arquivo.
+	FString Text;
+	TSharedPtr<FJsonObject> Root;
+	const FString Path = FPaths::Combine(FPaths::ProjectConfigDir(), FString::Printf(TEXT("packet_lengths_%u.json"), CLIENT_PACKETVER));
+	if (FFileHelper::LoadFileToString(Text, *Path) && FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) && Root.IsValid())
+	{
+		for (const TPair<FString, TSharedPtr<FJsonValue>>& P : Root->Values)
+		{
+			PacketLengths.Add(static_cast<uint16>(FCString::Strtoi(*P.Key, nullptr, 16)), static_cast<int16>(P.Value->AsNumber()));
+		}
+	}
+	UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] %d tamanhos de pacote carregados de %s"), PacketLengths.Num(), *Path);
 }
 
 void URagnarokNetworkSubsystem::Deinitialize()
@@ -26,6 +45,7 @@ void URagnarokNetworkSubsystem::Tick(float DeltaTime)
 {
 	if (CurrentSocket && CurrentState != ERagnarokNetworkState::Disconnected)
 	{
+		FlushPendingSend();
 		ProcessIncomingData();
 	}
 }
@@ -39,7 +59,9 @@ bool URagnarokNetworkSubsystem::ConnectToPort(const FString& Host, int32 Port, E
 		CurrentSocket = nullptr;
 	}
 
+	PendingSend.Empty();
 	ReceiveBuffer.Empty();
+	++ReceiveGeneration;
 
 	ISocketSubsystem* const SocketSubsystem = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM);
 	if (!SocketSubsystem)
@@ -650,8 +672,47 @@ void URagnarokNetworkSubsystem::SendData(const uint8* Data, int32 Size)
 		return;
 	}
 
+	// O connect e nao-bloqueante: ate o TCP fechar o handshake (ou com fila pendente) os bytes vao para a fila,
+	// que o Tick esvazia. Sem isso o CA_LOGIN, enviado logo apos o Connect, se perdia.
+	if (CurrentSocket->GetConnectionState() != SCS_Connected || PendingSend.Num() > 0)
+	{
+		PendingSend.Append(Data, Size);
+		return;
+	}
 	int32 BytesSent = 0;
-	CurrentSocket->Send(Data, Size, BytesSent);
+	if (!CurrentSocket->Send(Data, Size, BytesSent))
+	{
+		BytesSent = 0;
+	}
+	if (BytesSent < Size)
+	{
+		PendingSend.Append(Data + BytesSent, Size - BytesSent);
+	}
+}
+
+void URagnarokNetworkSubsystem::FlushPendingSend()
+{
+	if (!CurrentSocket || PendingSend.IsEmpty())
+	{
+		return;
+	}
+	const ESocketConnectionState State = CurrentSocket->GetConnectionState();
+	if (State == SCS_ConnectionError)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[RagnarokNetwork] Falha de conexao (estado %d)"), (int32)CurrentState);
+		PendingSend.Empty();
+		Disconnect();
+		return;
+	}
+	if (State != SCS_Connected)
+	{
+		return;
+	}
+	int32 BytesSent = 0;
+	if (CurrentSocket->Send(PendingSend.GetData(), PendingSend.Num(), BytesSent) && BytesSent > 0)
+	{
+		PendingSend.RemoveAt(0, BytesSent);
+	}
 }
 
 void URagnarokNetworkSubsystem::Disconnect()
@@ -706,12 +767,17 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 		}
 
 		uint16 PacketID = *reinterpret_cast<const uint16*>(ReceiveBuffer.GetData());
-		int16 ExpectedLen = RagnarokPackets::GetPacketLength(PacketID);
+		const int16* FromTable = PacketLengths.Find(PacketID);
+		int16 ExpectedLen = FromTable ? *FromTable : RagnarokPackets::GetPacketLength(PacketID);
 
 		if (ExpectedLen == 0)
 		{
 			// Pacote não reconhecido ou dessincronizado no fluxo TCP
-			UE_LOG(LogTemp, Warning, TEXT("[RagnarokNetwork] Pacote desconhecido 0x%04x recebido no estado %d. Descartando 1 byte."), PacketID, (int32)CurrentState);
+			if (LastGoodPacketID != 0)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("[RagnarokNetwork] Pacote desconhecido 0x%04x no estado %d (ultimo valido: 0x%04x com %d bytes). Descartando 1 byte."), PacketID, (int32)CurrentState, LastGoodPacketID, LastGoodPacketLen);
+				LastGoodPacketID = 0;
+			}
 			ReceiveBuffer.RemoveAt(0, 1);
 			continue;
 		}
@@ -739,6 +805,7 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 		}
 
 		const uint8* PacketData = ReceiveBuffer.GetData();
+		const uint32 GenerationBefore = ReceiveGeneration;
 
 		switch (PacketID)
 		{
@@ -765,9 +832,6 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 				break;
 			case RagnarokPackets::HEADER_ZC_NOTIFY_PLAYERMOVE:
 				HandlePlayerMove(PacketData, ActualLen);
-				break;
-			case RagnarokPackets::HEADER_ZC_NOTIFY_MOVE:
-				HandleUnitMove(PacketData, ActualLen);
 				break;
 			case RagnarokPackets::HEADER_ZC_NOTIFY_VANISH:
 				HandleUnitVanish(PacketData, ActualLen);
@@ -839,6 +903,12 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 				break;
 		}
 
+		LastGoodPacketID = PacketID;
+		LastGoodPacketLen = ActualLen;
+		if (ReceiveGeneration != GenerationBefore)
+		{
+			break; // o handler trocou de servidor (ConnectToPort limpou o buffer): o resto e do socket antigo
+		}
 		ReceiveBuffer.RemoveAt(0, ActualLen);
 	}
 }
@@ -1066,15 +1136,6 @@ void URagnarokNetworkSubsystem::HandlePlayerMove(const uint8* PacketData, int32 
 	OnPlayerMoveConfirmed.Broadcast(ToX, ToY);
 }
 
-void URagnarokNetworkSubsystem::HandleUnitMove(const uint8* PacketData, int32 PacketSize)
-{
-	// ZC_NOTIFY_MOVE (0x0086): gid(2), moveData[6](6), moveStartTime(12) - outra unidade comecou a andar
-	const uint32 GID = *reinterpret_cast<const uint32*>(PacketData + 2);
-	int32 FromX = 0, FromY = 0, ToX = 0, ToY = 0;
-	RagnarokPackets::UnpackMovePath(PacketData + 6, FromX, FromY, ToX, ToY);
-	OnUnitMove.Broadcast(GID, ToX, ToY, static_cast<int32>(FPlatformTime::Cycles()));
-}
-
 void URagnarokNetworkSubsystem::HandleUnitVanish(const uint8* PacketData, int32 PacketSize)
 {
 	uint32 GID = *reinterpret_cast<const uint32*>(PacketData + 2);
@@ -1190,11 +1251,11 @@ void URagnarokNetworkSubsystem::HandleChatMessage(const uint8* PacketData, int32
 
 	if (PacketID == RagnarokPackets::HEADER_ZC_NOTIFY_CHAT) // 0x008e
 	{
-		if (PacketSize > 8)
+		if (PacketSize > 4) // clif.cpp: WFIFOW(fd,0)=0x8e; WFIFOW(fd,2)=len; texto em WFIFOCP(fd,4)
 		{
-			int32 StrLen = PacketSize - 8;
+			int32 StrLen = PacketSize - 4;
 			TArray<uint8> CleanBuf;
-			CleanBuf.Append(PacketData + 8, StrLen);
+			CleanBuf.Append(PacketData + 4, StrLen);
 			CleanBuf.Add(0);
 			FString FullMsg = UTF8_TO_TCHAR(reinterpret_cast<const char*>(CleanBuf.GetData()));
 
