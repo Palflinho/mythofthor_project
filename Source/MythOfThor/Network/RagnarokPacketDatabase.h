@@ -81,6 +81,8 @@ namespace RagnarokPackets
     static constexpr uint16 HEADER_CZ_USE_ITEM          = 0x0439; // 8 bytes
     static constexpr uint16 HEADER_CZ_REQ_WEAR_EQUIP    = 0x0998; // 8 bytes
     static constexpr uint16 HEADER_CZ_REQ_TAKEOFF_EQUIP = 0x00ab; // 4 bytes
+    static constexpr uint16 HEADER_ZC_REQ_WEAR_EQUIP_ACK    = 0x0999; // 11 bytes (PACKETVER >= 20121107)
+    static constexpr uint16 HEADER_ZC_REQ_TAKEOFF_EQUIP_ACK = 0x099a; // 9 bytes (PACKETVER >= 20130000)
 
     // Habilidades
     static constexpr uint16 HEADER_ZC_SKILL_INFO_LIST   = 0x010f; // Dinâmico (-1)
@@ -937,7 +939,8 @@ namespace RagnarokPackets
             case 0x0984: return 28;
             case 0x098d: return -1;
             case 0x0998: return 8;
-            case 0x099a: return 8;
+            case 0x0999: return 11;
+            case 0x099a: return 9;
             case 0x099b: return 8;
             case 0x099f: return 22;
             case 0x09a7: return 10;

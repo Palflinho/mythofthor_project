@@ -220,6 +220,7 @@ struct FRagnarokInventoryItem
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 Amount = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 EquipLocation = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 WearState = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 Location = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 Refine = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") bool bIdentified = true;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") bool bIsEquipped = false;
@@ -303,6 +304,9 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSkillUnitDisappear, int64, UnitID
 
 // Efeitos gerais do servidor (Tarefa A3)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnNotifyEffect, int64, UnitID, int32, Type);
+
+// Equipar / Desequipar (Tarefa A4)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnEquipResult, int32, Index, int32, WearLocation, bool, bSuccess);
 
 // Delegates de compatibilidade anterior
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerMoveConfirmed, int32, TargetX, int32, TargetY);
@@ -620,6 +624,10 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Effects")
 	FOnNotifyEffect OnNotifyEffect;
 
+	/** Resultado de equipar ou desequipar item (ZC_REQ_WEAR_EQUIP_ACK 0x0999, ZC_REQ_TAKEOFF_EQUIP_ACK 0x099a). */
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Inventory")
+	FOnEquipResult OnEquipResult;
+
 	// Compatibilidade
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
 	FOnPlayerMoveConfirmed OnPlayerMoveConfirmed;
@@ -700,4 +708,5 @@ private:
 	void HandleSkillUnitAppear(const uint8* PacketData, int32 PacketSize);
 	void HandleSkillUnitDisappear(const uint8* PacketData, int32 PacketSize);
 	void HandleNotifyEffect(const uint8* PacketData, int32 PacketSize);
+	void HandleEquipAck(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 };

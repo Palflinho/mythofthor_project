@@ -436,7 +436,149 @@ def run_test():
         except (socket.timeout, BlockingIOError):
             break
 
+    # -------------------------------------------------------------------------
+    # 11. EQUIPAR E DESEQUIPAR (0x0998, 0x00ab, 0x0999, 0x099a)
+    # -------------------------------------------------------------------------
+    print("\n=== [11] Teste de Equipar e Desequipar (CZ_REQ_WEAR_EQUIP / CZ_REQ_TAKEOFF_EQUIP) ===")
+    send_chat_message(s_map, char_name, "@item 2301 1") # Cotton Shirt
+    time.sleep(0.1)
+    send_chat_message(s_map, char_name, "@item 1201 1") # Knife
+    time.sleep(0.1)
+
+    shirt_idx = None
+    shirt_loc = 16 # EQP_ARMOR
+    knife_idx = None
+    knife_loc = 2  # EQP_HAND_R
+
+    start_wait = time.time()
+    while time.time() - start_wait < 3.0 and (shirt_idx is None or knife_idx is None):
+        try:
+            chunk = s_map.recv(4096)
+            if not chunk:
+                break
+            idx = 0
+            while idx < len(chunk):
+                if chunk[idx:idx+2] == b'\x41\x0b': # 0x0b41 ZC_ITEM_PICKUP_ACK (34 bytes min)
+                    if idx + 34 <= len(chunk):
+                        p_idx, = struct.unpack_from("<H", chunk, idx + 2)
+                        p_nameid, = struct.unpack_from("<I", chunk, idx + 6)
+                        p_loc, = struct.unpack_from("<I", chunk, idx + 28)
+                        if p_nameid == 2301:
+                            shirt_idx = p_idx
+                            shirt_loc = p_loc
+                            print(f">>> Item 2301 (Cotton Shirt) adicionado: Index={shirt_idx}, Location=0x{shirt_loc:x}")
+                        elif p_nameid == 1201:
+                            knife_idx = p_idx
+                            knife_loc = p_loc
+                            print(f">>> Item 1201 (Knife) adicionado: Index={knife_idx}, Location=0x{knife_loc:x}")
+                    idx += 34
+                else:
+                    idx += 1
+        except (socket.timeout, BlockingIOError):
+            break
+
+    if shirt_idx is None:
+        shirt_idx = 2
+    if knife_idx is None:
+        knife_idx = 3
+
+    # [11.1] Equipa Cotton Shirt (CZ_REQ_WEAR_EQUIP 0x0998: [0x0998][idx:2B][wearLoc:4B])
+    pkt_wear_shirt = struct.pack("<HHI", 0x0998, shirt_idx, shirt_loc)
+    s_map.sendall(pkt_wear_shirt)
+    print(f"Enviado CZ_REQ_WEAR_EQUIP para Cotton Shirt Index={shirt_idx} Loc=0x{shirt_loc:x}")
+
+    got_wear_shirt = False
+    start_wait = time.time()
+    while time.time() - start_wait < 3.0 and not got_wear_shirt:
+        try:
+            chunk = s_map.recv(4096)
+            if not chunk:
+                break
+            if b'\x99\x09' in chunk: # 0x0999 (ZC_REQ_WEAR_EQUIP_ACK: 11 bytes)
+                pos = chunk.find(b'\x99\x09')
+                if pos + 11 <= len(chunk):
+                    p_type, ack_idx, ack_loc, ack_spr, ack_res = struct.unpack_from("<HHIHB", chunk, pos)
+                    print(f">>> ZC_REQ_WEAR_EQUIP_ACK (0x0999) recebido! Index={ack_idx}, Loc=0x{ack_loc:x}, Sprite={ack_spr}, Result={ack_res} (0=OK)")
+                    if ack_idx == shirt_idx and ack_res == 0:
+                        got_wear_shirt = True
+                        break
+        except (socket.timeout, BlockingIOError):
+            break
+
+    # [11.2] Equipa Knife
+    pkt_wear_knife = struct.pack("<HHI", 0x0998, knife_idx, knife_loc)
+    s_map.sendall(pkt_wear_knife)
+    print(f"Enviado CZ_REQ_WEAR_EQUIP para Knife Index={knife_idx} Loc=0x{knife_loc:x}")
+
+    got_wear_knife = False
+    start_wait = time.time()
+    while time.time() - start_wait < 3.0 and not got_wear_knife:
+        try:
+            chunk = s_map.recv(4096)
+            if not chunk:
+                break
+            if b'\x99\x09' in chunk: # 0x0999
+                pos = chunk.find(b'\x99\x09')
+                if pos + 11 <= len(chunk):
+                    p_type, ack_idx, ack_loc, ack_spr, ack_res = struct.unpack_from("<HHIHB", chunk, pos)
+                    print(f">>> ZC_REQ_WEAR_EQUIP_ACK (0x0999) recebido! Index={ack_idx}, Loc=0x{ack_loc:x}, Sprite={ack_spr}, Result={ack_res} (0=OK)")
+                    if ack_idx == knife_idx and ack_res == 0:
+                        got_wear_knife = True
+                        break
+        except (socket.timeout, BlockingIOError):
+            break
+
+    # [11.3] Desequipa Cotton Shirt (CZ_REQ_TAKEOFF_EQUIP 0x00ab: [0x00ab][idx:2B])
+    pkt_takeoff_shirt = struct.pack("<HH", 0x00ab, shirt_idx)
+    s_map.sendall(pkt_takeoff_shirt)
+    print(f"Enviado CZ_REQ_TAKEOFF_EQUIP para Cotton Shirt Index={shirt_idx}")
+
+    got_takeoff_shirt = False
+    start_wait = time.time()
+    while time.time() - start_wait < 3.0 and not got_takeoff_shirt:
+        try:
+            chunk = s_map.recv(4096)
+            if not chunk:
+                break
+            if b'\x9a\x09' in chunk: # 0x099a (ZC_REQ_TAKEOFF_EQUIP_ACK: 9 bytes)
+                pos = chunk.find(b'\x9a\x09')
+                if pos + 9 <= len(chunk):
+                    p_type, ack_idx, ack_loc, ack_flag = struct.unpack_from("<HHIB", chunk, pos)
+                    print(f">>> ZC_REQ_TAKEOFF_EQUIP_ACK (0x099a) recebido! Index={ack_idx}, Loc=0x{ack_loc:x}, Flag={ack_flag} (0=OK)")
+                    if ack_idx == shirt_idx and ack_flag == 0:
+                        got_takeoff_shirt = True
+                        break
+        except (socket.timeout, BlockingIOError):
+            break
+
+    # [11.4] Desequipa Knife
+    pkt_takeoff_knife = struct.pack("<HH", 0x00ab, knife_idx)
+    s_map.sendall(pkt_takeoff_knife)
+    print(f"Enviado CZ_REQ_TAKEOFF_EQUIP para Knife Index={knife_idx}")
+
+    got_takeoff_knife = False
+    start_wait = time.time()
+    while time.time() - start_wait < 3.0 and not got_takeoff_knife:
+        try:
+            chunk = s_map.recv(4096)
+            if not chunk:
+                break
+            if b'\x9a\x09' in chunk: # 0x099a
+                pos = chunk.find(b'\x9a\x09')
+                if pos + 9 <= len(chunk):
+                    p_type, ack_idx, ack_loc, ack_flag = struct.unpack_from("<HHIB", chunk, pos)
+                    print(f">>> ZC_REQ_TAKEOFF_EQUIP_ACK (0x099a) recebido! Index={ack_idx}, Loc=0x{ack_loc:x}, Flag={ack_flag} (0=OK)")
+                    if ack_idx == knife_idx and ack_flag == 0:
+                        got_takeoff_knife = True
+                        break
+        except (socket.timeout, BlockingIOError):
+            break
+
     s_map.close()
+
+    if not (got_wear_shirt and got_wear_knife and got_takeoff_shirt and got_takeoff_knife):
+        print("\nFalha na confirmação de algum dos pacotes de equipar/desequipar!")
+        return False
 
     print("\n==================================================================")
     print("  >>> TODOS OS TESTES DE REDE E FLUXO FORAM CONCLUÍDOS COM SUCESSO! <<<")

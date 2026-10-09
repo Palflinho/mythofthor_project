@@ -415,6 +415,24 @@ bool URagnarokNetworkSubsystem::EquipItem(int32 ItemIndex, int32 WearLocation)
 		return false;
 	}
 
+	if (WearLocation == 0)
+	{
+		for (const FRagnarokInventoryItem& Item : InventoryItems)
+		{
+			if (Item.Index == ItemIndex)
+			{
+				WearLocation = (Item.Location != 0) ? Item.Location : Item.EquipLocation;
+				break;
+			}
+		}
+	}
+
+	if (WearLocation == 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[RagnarokNetwork] EquipItem: could not determine WearLocation for ItemIndex %d"), ItemIndex);
+		return false;
+	}
+
 	#pragma pack(push, 1)
 	struct FCZ_WearEquipPacket
 	{
@@ -939,6 +957,10 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 				break;
 			case RagnarokPackets::HEADER_ZC_NOTIFY_EFFECT:
 				HandleNotifyEffect(PacketData, ActualLen);
+				break;
+			case RagnarokPackets::HEADER_ZC_REQ_WEAR_EQUIP_ACK:
+			case RagnarokPackets::HEADER_ZC_REQ_TAKEOFF_EQUIP_ACK:
+				HandleEquipAck(PacketData, ActualLen, PacketID);
 				break;
 			default:
 				// Pacote conhecido mas sem tratamento visual imediato (ex.: slots, ticks, ping)
@@ -1567,6 +1589,9 @@ void URagnarokNetworkSubsystem::HandleItemPickupAck(const uint8* PacketData, int
 		Item.ItemID = static_cast<int32>(*reinterpret_cast<const uint32*>(PacketData + 6));
 		Item.bIdentified = PacketData[10] != 0;
 		Item.EquipLocation = static_cast<int32>(*reinterpret_cast<const uint32*>(PacketData + 28));
+		Item.Location = Item.EquipLocation;
+		Item.WearState = 0;
+		Item.bIsEquipped = false;
 		Item.Type = PacketData[32];
 		InventoryItems.Add(Item);
 	}
@@ -1796,6 +1821,7 @@ void URagnarokNetworkSubsystem::HandleInventoryList(const uint8* PacketData, int
 			Item.Type = Ptr[6];
 			uint32 Location = *reinterpret_cast<const uint32*>(Ptr + 7);
 			uint32 WearState = *reinterpret_cast<const uint32*>(Ptr + 11);
+			Item.Location = Location;
 			Item.WearState = WearState;
 			Item.bIsEquipped = (WearState != 0);
 			Item.EquipLocation = (WearState != 0) ? WearState : Location;
@@ -2095,3 +2121,107 @@ void URagnarokNetworkSubsystem::HandleNotifyEffect(const uint8* PacketData, int3
 
 	OnNotifyEffect.Broadcast(UnitID, Type);
 }
+
+void URagnarokNetworkSubsystem::HandleEquipAck(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
+{
+	if (PacketID == RagnarokPackets::HEADER_ZC_REQ_WEAR_EQUIP_ACK) // 0x0999 (11 bytes)
+	{
+		if (PacketSize < 11)
+		{
+			return;
+		}
+
+		#pragma pack(push, 1)
+		struct FZC_WearEquipAckPacket
+		{
+			int16 PacketType;
+			uint16 Index;
+			uint32 WearLocation;
+			uint16 ItemSpriteNumber;
+			uint8 Result;
+		};
+		#pragma pack(pop)
+
+		const FZC_WearEquipAckPacket* Ack = reinterpret_cast<const FZC_WearEquipAckPacket*>(PacketData);
+		// rAthena clif_equipitemack: ITEM_EQUIP_ACK_OK = 0 em PACKETVER >= 20121107
+		const bool bSuccess = (Ack->Result == 0);
+
+		if (bLogPackets)
+		{
+			UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] [OnEquipResult] (Wear) Index=%d WearLocation=%u Sprite=%u Result=%d Success=%s"),
+				Ack->Index, Ack->WearLocation, Ack->ItemSpriteNumber, Ack->Result, bSuccess ? TEXT("true") : TEXT("false"));
+		}
+
+		if (bSuccess)
+		{
+			FRagnarokInventoryItem* Item = InventoryItems.FindByPredicate([Ack](const FRagnarokInventoryItem& I)
+			{
+				return I.Index == Ack->Index;
+			});
+
+			if (Item)
+			{
+				Item->bIsEquipped = true;
+				Item->WearState = Ack->WearLocation;
+				Item->EquipLocation = Ack->WearLocation;
+			}
+
+			OnEquipResult.Broadcast(Ack->Index, Ack->WearLocation, true);
+			OnInventory.Broadcast(InventoryItems);
+		}
+		else
+		{
+			OnEquipResult.Broadcast(Ack->Index, Ack->WearLocation, false);
+		}
+	}
+	else if (PacketID == RagnarokPackets::HEADER_ZC_REQ_TAKEOFF_EQUIP_ACK) // 0x099a (9 bytes)
+	{
+		if (PacketSize < 9)
+		{
+			return;
+		}
+
+		#pragma pack(push, 1)
+		struct FZC_TakeOffEquipAckPacket
+		{
+			uint16 PacketType;
+			uint16 Index;
+			uint32 WearLocation;
+			uint8 Flag;
+		};
+		#pragma pack(pop)
+
+		const FZC_TakeOffEquipAckPacket* Ack = reinterpret_cast<const FZC_TakeOffEquipAckPacket*>(PacketData);
+		// rAthena clif_unequipitemack: success = !success em PACKETVER >= 20110824, logo Flag == 0 significa sucesso
+		const bool bSuccess = (Ack->Flag == 0);
+
+		if (bLogPackets)
+		{
+			UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] [OnEquipResult] (TakeOff) Index=%d WearLocation=%u Flag=%d Success=%s"),
+				Ack->Index, Ack->WearLocation, Ack->Flag, bSuccess ? TEXT("true") : TEXT("false"));
+		}
+
+		if (bSuccess)
+		{
+			FRagnarokInventoryItem* Item = InventoryItems.FindByPredicate([Ack](const FRagnarokInventoryItem& I)
+			{
+				return I.Index == Ack->Index;
+			});
+
+			if (Item)
+			{
+				Item->bIsEquipped = false;
+				Item->WearState = 0;
+				Item->EquipLocation = (Item->Location != 0) ? Item->Location : Ack->WearLocation;
+			}
+
+			OnEquipResult.Broadcast(Ack->Index, 0, true);
+			OnInventory.Broadcast(InventoryItems);
+		}
+		else
+		{
+			OnEquipResult.Broadcast(Ack->Index, Ack->WearLocation, false);
+		}
+	}
+}
+
