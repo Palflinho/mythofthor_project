@@ -1,0 +1,99 @@
+//===== rAthena Script =======================================
+//= Myth of Thor - Template de Nova Quest de Habilidade
+//===== Por: ==================================================
+//= [Seu Nome / Designer]
+//===== Descrição: ============================================
+//= Modelo para criar novas quests de habilidades por classe.
+//= Copie este arquivo, preencha os parâmetros abaixo e
+//= registre o novo arquivo no arquivo `skill_quests.conf`.
+//============================================================
+
+// COORDENADAS E VISUAL DO NPC:
+// Formato: mapa,x,y,direcao(0-7)    script    NomeVisivel#IDUnico    ID_Sprite,{
+prontera,155,190,4	script	Instrutor de Habilidades#template	4_M_MOC_SOLDIER,{
+
+	// ========================================================
+	// 1. CONFIGURAÇÃO DA QUEST
+	// ========================================================
+	.@npc_name$          = "[Instrutor de Habilidades]";
+	.@quest_var$         = "MYTH_SKILLQUEST_MINHA_SKILL"; // Variável única permanente do personagem
+	.@req_class          = Job_Swordman;                  // Classe base exigida (Job_Mage, Job_Archer, etc.)
+	.@req_job_lvl        = 30;                            // Nível de classe mínimo
+	.@reward_skill_id    = 144;                           // ID numérico da habilidade a ser concedida
+	.@reward_skill_name$ = "Auto-Berserk";                // Nome textual da habilidade
+	.@reward_skill_lv    = 1;                             // Nível da habilidade que será concedido
+
+	// Requisitos de Itens (se não quiser itens, deixe .@item_count = 0)
+	.@item_id            = 909;                           // ID do item (ex: 909 = Jellopy)
+	.@item_count         = 10;                            // Quantidade exigida
+
+	// ========================================================
+	// 2. FLUXO DA QUEST
+	// ========================================================
+	mes .@npc_name$;
+	mes "Olá! Posso lhe ensinar técnicas avançadas de sua classe.";
+	next;
+
+	// Já concluiu a quest ou já possui a habilidade?
+	if (getd(.@quest_var$) == 1 || getskilllv(.@reward_skill_id) >= .@reward_skill_lv) {
+		mes .@npc_name$;
+		mes "Você já aprendeu tudo o que eu tinha a ensinar.";
+		mes "Continue sua jornada!";
+		close;
+	}
+
+	// Classe correta?
+	if (BaseClass != .@req_class) {
+		mes .@npc_name$;
+		mes "Desculpe, esta habilidade só pode ser aprendida por outra classe.";
+		close;
+	}
+
+	// Nível de classe suficiente?
+	if (JobLevel < .@req_job_lvl) {
+		mes .@npc_name$;
+		mes "Você ainda não possui experiência suficiente.";
+		mes "Volte quando atingir Nível de Classe " + .@req_job_lvl + ".";
+		close;
+	}
+
+	// Explicação da missão
+	mes .@npc_name$;
+	mes "Para provar seu valor, traga-me:";
+	if (.@item_count > 0) {
+		mes "^0000FF- " + .@item_count + "x " + getitemname(.@item_id) + "^000000";
+	}
+	next;
+
+	if (select("Entregar os materiais.:Voltar mais tarde.") == 2) {
+		mes .@npc_name$;
+		mes "Estarei aqui quando estiver pronto.";
+		close;
+	}
+
+	// Validação dos itens
+	if (.@item_count > 0 && countitem(.@item_id) < .@item_count) {
+		mes .@npc_name$;
+		mes "Você ainda não trouxe todos os itens necessários.";
+		close;
+	}
+
+	// Consome os itens
+	if (.@item_count > 0) {
+		delitem .@item_id, .@item_count;
+	}
+
+	// Concede a habilidade permanentemente
+	// NOTA: SKILL_PERM_GRANT (flag 3) concede a skill sem checar pré-requisitos da árvore
+	skill .@reward_skill_id, .@reward_skill_lv, SKILL_PERM_GRANT;
+
+	// Salva na ficha do personagem
+	setd .@quest_var$, 1;
+
+	// Efeito visual clássico (Level Up ou brilho)
+	specialeffect2 EF_LEVELUP;
+
+	mes .@npc_name$;
+	mes "Parabéns! Você aprendeu ^009900" + .@reward_skill_name$ + "^000000!";
+	close;
+}

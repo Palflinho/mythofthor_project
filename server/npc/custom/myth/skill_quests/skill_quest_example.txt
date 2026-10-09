@@ -1,0 +1,88 @@
+//===== rAthena Script =======================================
+//= Myth of Thor - Exemplo de Quest de Habilidade
+//===== Por: ==================================================
+//= Antigravity
+//===== Descrição: ============================================
+//= NPC de exemplo e modelo para criação de novas quests de
+//= habilidades extras/customizadas por classe.
+//= Utiliza SKILL_PERM_GRANT (flag 3) para concessão permanente
+//= sem necessidade de pré-requisitos na árvore de habilidades.
+//============================================================
+
+prontera,150,190,4	script	Mestre de Treinamento#myth	4_M_MOC_SOLDIER,{
+	.@npc_name$ = "[Mestre de Treinamento]";
+	.@quest_var$ = "MYTH_SKILLQUEST_EXAMPLE";
+	.@req_class = Job_Swordman; // Requer classe Espadachim (ou evoluções)
+	.@req_job_lvl = 30;         // Requer Job Lv mínimo
+	.@req_item_id = 909;        // Jellopy (exemplo)
+	.@req_item_count = 10;
+	.@reward_skill_id = 144;    // SM_AUTOBERSERK (Auto-Berserk como exemplo)
+	.@reward_skill_name$ = "Auto-Berserk";
+	.@reward_skill_lv = 1;
+
+	mes .@npc_name$;
+	mes "Saudações, guerreiro de Midgard!";
+	mes "Eu sou encarregado de instruir guerreiros dedicados nas artes secretas de combate.";
+	next;
+
+	// Verifica se a habilidade já foi adquirida
+	if (getd(.@quest_var$) == 1 || getskilllv(.@reward_skill_id) >= .@reward_skill_lv) {
+		mes .@npc_name$;
+		mes "Vejo que você já domina os ensinamentos que lhe transmiti.";
+		mes "Continue treinando com bravura e honra!";
+		close;
+	}
+
+	// Verifica compatibilidade de classe
+	if (BaseClass != .@req_class) {
+		mes .@npc_name$;
+		mes "Infelizmente esta técnica foi desenvolvida exclusivamente para a linhagem dos Espadachins.";
+		mes "Procure o instrutor adequado para a sua vocação.";
+		close;
+	}
+
+	// Verifica nível de classe mínimo
+	if (JobLevel < .@req_job_lvl) {
+		mes .@npc_name$;
+		mes "Você ainda é inexperiente. Volte quando atingir pelo menos o Nível de Classe " + .@req_job_lvl + ".";
+		close;
+	}
+
+	// Diálogo da Quest
+	mes .@npc_name$;
+	mes "Para provar sua determinação, traga-me:";
+	mes "^0000FF- " + .@req_item_count + "x " + getitemname(.@req_item_id) + "^000000";
+	next;
+
+	if (select("Entregar os itens.:Ainda não estou pronto.") == 2) {
+		mes .@npc_name$;
+		mes "Compreendo. Retorne quando tiver reunido o material necessário.";
+		close;
+	}
+
+	// Verifica se possui os itens requisitados
+	if (countitem(.@req_item_id) < .@req_item_count) {
+		mes .@npc_name$;
+		mes "Você ainda não possui os itens necessários.";
+		mes "Preciso de " + .@req_item_count + "x " + getitemname(.@req_item_id) + ".";
+		close;
+	}
+
+	// Consome os itens
+	delitem .@req_item_id, .@req_item_count;
+
+	// Concede a habilidade de forma permanente (SKILL_PERM_GRANT = 3)
+	skill .@reward_skill_id, .@reward_skill_lv, SKILL_PERM_GRANT;
+
+	// Registra a conclusão da quest no personagem
+	setd .@quest_var$, 1;
+
+	// Efeito visual clássico de evolução
+	specialeffect2 EF_LEVELUP;
+
+	mes .@npc_name$;
+	mes "Excelente trabalho! Você demonstrou foco e coragem.";
+	mes "Acabo de lhe ensinar a habilidade ^009900" + .@reward_skill_name$ + "^000000!";
+	mes "Use seus novos poderes com sabedoria.";
+	close;
+}
