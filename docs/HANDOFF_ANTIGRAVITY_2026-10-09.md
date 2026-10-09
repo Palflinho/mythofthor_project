@@ -108,3 +108,27 @@ e talvez adaptar algumas habilidades de 3ª classe para as classes atuais.
 - `GetSelfSex()` e `GetSelectedSlot()`.
 - `HandleSpriteChange`: com LOOK_BASE do próprio personagem, atualiza `JobClass`/`JobName` e dispara `OnPlayerStatsChanged`.
 - `GetJobNameFromClass` reescrito com os IDs do `e_job` (estava deslocado a partir do 13).
+
+## Tarefa A4 — equipar e desequipar (rede)
+
+O desenho dos equipamentos no personagem já está pronto (Claude):
+- os acessórios, a arma e o escudo vêm de `ZC_SPRITE_CHANGE`;
+- no login, o visual vem do slot do personagem.
+
+Falta o lado do inventário, para a janela de equipamentos e para equipar com duplo clique:
+
+- conferir/terminar `EquipItem` (`CZ_REQ_WEAR_EQUIP` 0x0998) e `UnequipItem` (0x00ab) contra o rAthena;
+- tratar as respostas `ZC_REQ_WEAR_EQUIP_ACK` e `ZC_REQ_TAKEOFF_EQUIP_ACK`. Confirme IDs e structs em
+  `packets.hpp` para a 20211103; o resultado vem com a posição (`wearLocation`) e o flag;
+- no `ZC_EQUIPMENT_ITEMLIST`, guardar para cada item a posição em que está equipado (`WearState`) e a posição
+  em que pode ser equipado (`location`), e atualizar ao equipar ou desequipar.
+
+Evento:
+
+```cpp
+// Index: indice do item no inventario. WearLocation: bits EQP_* onde ficou (0 = desequipado). bSuccess: resultado.
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnEquipResult, int32, Index, int32, WearLocation, bool, bSuccess);
+```
+
+**Pronto quando:** com `@item 2301` (Roupas de Algodão) e `@item 1201` (Faca), equipar e desequipar logam o
+evento, e o inventário reflete o estado.
