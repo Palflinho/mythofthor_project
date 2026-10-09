@@ -248,7 +248,7 @@ def make_asset(name, folder, cls, factory):
 
 def add_window_glow(mat, tex):
     """
-    Janelas acesas a noite: emissivo = mascara do vidro (pixel escuro e frio) x WindowGlow (1 so nas texturas de
+    Janelas acesas a noite: emissivo = mascara do vidro (pixel azulado) x WindowGlow (1 so nas texturas de
     fachada listadas pelo compile_map_to_obj.py) x NightGlow (Custom Primitive Data 0 da malha do mapa, atualizado pelo AMythDayNightActor) x cor quente. Com o Lumen a luz chega na rua.
     """
     def k(v, x, y):
@@ -272,11 +272,12 @@ def add_window_glow(mat, tex):
     lum_w = mel.create_material_expression(mat, unreal.MaterialExpressionConstant3Vector, -700, 620)
     lum_w.set_editor_property('constant', unreal.LinearColor(0.3, 0.59, 0.11, 1.0))
     lum = bin_op(unreal.MaterialExpressionDotProduct, tex, lum_w, -560, 600, 'RGB', '')
-    dark = bin_op(unreal.MaterialExpressionMultiply, bin_op(unreal.MaterialExpressionSubtract, k(0.16, -560, 680), lum, -460, 640), k(25.0, -460, 700), -360, 640)
-    cool_r = bin_op(unreal.MaterialExpressionMultiply, bin_op(unreal.MaterialExpressionSubtract, bin_op(unreal.MaterialExpressionAdd, b, k(0.025, -560, 520), -500, 500), r, -420, 480), k(20.0, -420, 560), -330, 480)
-    cool_g = bin_op(unreal.MaterialExpressionMultiply, bin_op(unreal.MaterialExpressionSubtract, bin_op(unreal.MaterialExpressionAdd, b, k(0.03, -560, 580), -500, 560), g, -420, 540), k(20.0, -420, 620), -330, 540)
+    # vidro do RO = azul acima do vermelho (azul-acinzentado ou verde-agua); tijolo, pedra e madeira puxam para o vermelho
+    lit_px = bin_op(unreal.MaterialExpressionMultiply, bin_op(unreal.MaterialExpressionSubtract, lum, k(0.03, -560, 680), -460, 640), k(20.0, -460, 700), -360, 640)
+    cool_r = bin_op(unreal.MaterialExpressionMultiply, bin_op(unreal.MaterialExpressionSubtract, bin_op(unreal.MaterialExpressionSubtract, b, k(0.02, -560, 520), -500, 500), r, -420, 480), k(15.0, -420, 560), -330, 480)
+    cool_g = bin_op(unreal.MaterialExpressionMultiply, bin_op(unreal.MaterialExpressionSubtract, bin_op(unreal.MaterialExpressionAdd, b, k(0.04, -560, 580), -500, 560), g, -420, 540), k(15.0, -420, 620), -330, 540)
     sats = []
-    for i, node in enumerate((dark, cool_r, cool_g)):
+    for i, node in enumerate((lit_px, cool_r, cool_g)):
         st = mel.create_material_expression(mat, unreal.MaterialExpressionSaturate, -250, 480 + 60 * i)
         mel.connect_material_expressions(node, '', st, '')
         sats.append(st)
@@ -291,7 +292,7 @@ def add_window_glow(mat, tex):
     night.set_editor_property('use_custom_primitive_data', True)
     night.set_editor_property('primitive_data_index', 0)
     warm = mel.create_material_expression(mat, unreal.MaterialExpressionConstant3Vector, -250, 820)
-    warm.set_editor_property('constant', unreal.LinearColor(4.0, 2.4, 1.0, 1.0))
+    warm.set_editor_property('constant', unreal.LinearColor(6.0, 3.6, 1.5, 1.0))
 
     gate = bin_op(unreal.MaterialExpressionMultiply, window, night, -100, 720)
     lit = bin_op(unreal.MaterialExpressionMultiply, glass, gate, 0, 600)

@@ -15,6 +15,20 @@ class UTexture2D;
 class UVerticalBox;
 class UMythStatsComponent;
 class UAutoBattleComponent;
+class URagnarokNetworkSubsystem;
+class UWidget;
+
+/** Janelas classicas abertas pelos atalhos Alt (como no cliente original). */
+UENUM(BlueprintType)
+enum class EMythRoWindow : uint8
+{
+	Status,   // Alt+A: atributos
+	Items,    // Alt+E: inventario
+	Equip,    // Alt+Q: equipamento
+	Skills,   // Alt+S: habilidades
+	Basic,    // Alt+V: informacoes basicas
+	Minimap   // Ctrl+Tab: minimapa
+};
 
 /** Barra de medidor classica (gze*_left/mid/right sobre gze_bg): o meio estica conforme a fracao. */
 USTRUCT()
@@ -63,6 +77,14 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Myth|HUD")
 	bool IsChatFocused() const;
 
+	/** Abre/fecha uma janela classica (atalhos Alt do cliente original). */
+	UFUNCTION(BlueprintCallable, Category = "Myth|HUD")
+	void ToggleWindow(EMythRoWindow Window);
+
+	/** Esc: fecha a janela classica aberta mais recente. Devolve false se nao havia nenhuma. */
+	UFUNCTION(BlueprintCallable, Category = "Myth|HUD")
+	bool CloseTopWindow();
+
 protected:
 	virtual void NativeOnInitialized() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
@@ -70,6 +92,7 @@ protected:
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 	virtual FReply NativeOnMouseMove(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 	virtual FReply NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+	virtual FReply NativeOnMouseButtonDoubleClick(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 
 private:
 	/** Janelas arrastaveis e a altura (px originais) da faixa que serve de "alca" (barra de titulo). */
@@ -154,4 +177,58 @@ private:
 	UFUNCTION() void OnMapClicked();
 	UFUNCTION() void OnOptionClicked();
 	void RefreshAutoAll();
+
+	// ---------------------------------------------------------------- janelas classicas (MythRoHUDWindows.cpp)
+	// Tudo o que aparece nelas vem do servidor (URagnarokNetworkSubsystem); o cliente so desenha e envia pedidos.
+	UPROPERTY() TObjectPtr<UCanvasPanel> BasicWindow;
+	UPROPERTY() TObjectPtr<UCanvasPanel> StatusWindow;
+	UPROPERTY() TObjectPtr<UCanvasPanel> ItemsWindow;
+	UPROPERTY() TObjectPtr<UCanvasPanel> EquipWindow;
+	UPROPERTY() TObjectPtr<UCanvasPanel> SkillsWindow;
+	TArray<TWeakObjectPtr<UCanvasPanel>> OpenOrder;
+
+	// Botoes de fechar (sys_close) de cada janela
+	TMap<TWeakObjectPtr<UImage>, TWeakObjectPtr<UCanvasPanel>> CloseButtons;
+
+	// Atributos: valores de Str..Luk, setas de aumentar e os derivados (Atk, Matk, Hit, Crit, Def, Mdef, Flee, Aspd, pontos)
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> StatTexts;
+	UPROPERTY() TArray<TObjectPtr<UImage>> StatUpArrows;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> DerivedTexts;
+
+	// Itens: abas item/equip/etc, celulas 32x32 com icone e quantidade, linha de informacao
+	UPROPERTY() TObjectPtr<UImage> ItemTabImage;
+	UPROPERTY() TArray<TObjectPtr<UImage>> ItemCells;
+	UPROPERTY() TArray<TObjectPtr<UImage>> ItemIcons;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> ItemAmounts;
+	UPROPERTY() TObjectPtr<UTextBlock> ItemInfoText;
+	UPROPERTY() TObjectPtr<UTextBlock> ItemCountText;
+	TArray<int32> ItemCellIndex; // indice do inventario (servidor) em cada celula, -1 se vazia
+	int32 ItemTab = 0;
+
+	// Equipamento: icone + nome em cada um dos 10 encaixes
+	UPROPERTY() TArray<TObjectPtr<UImage>> EquipIcons;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EquipNames;
+	TArray<int32> EquipCellIndex;
+
+	// Habilidades: linhas com icone, nome e nivel
+	UPROPERTY() TArray<TObjectPtr<UImage>> SkillIcons;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> SkillNames;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> SkillLevels;
+	UPROPERTY() TObjectPtr<UTextBlock> SkillPointsText;
+
+	float WindowRefreshTimer = 0.f;
+
+	URagnarokNetworkSubsystem* GetNet() const;
+	UCanvasPanel* MakeRoPanel(const FString& Title, const FVector2D& Size, const FVector2D& Offset);
+	void BuildStatusWindow();
+	void BuildItemsWindow();
+	void BuildEquipWindow();
+	void BuildSkillsWindow();
+	void RefreshWindows();
+	void RefreshStatusWindow();
+	void RefreshItemsWindow();
+	void RefreshEquipWindow();
+	void RefreshSkillsWindow();
+	bool HandleWindowClick(const FVector2D& ScreenPos);
+	static bool IsUnder(const UWidget* Widget, const FVector2D& ScreenPos);
 };

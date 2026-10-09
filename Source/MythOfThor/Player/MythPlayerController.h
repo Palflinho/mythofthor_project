@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "InputActionValue.h"
+#include "UI/MythRoHUDWidget.h"
 #include "MythPlayerController.generated.h"
 
 class UInputMappingContext;
@@ -103,6 +104,14 @@ public:
 	UFUNCTION(Exec)
 	void MythDelayed(float DelaySeconds, const FString& Command);
 
+	/** Console (depuracao offline): MythGoto 120 200 -> leva o personagem a celula. Com servidor, o movimento vem do rAthena. */
+	UFUNCTION(Exec)
+	void MythGoto(int32 X, int32 Y);
+
+	/** Console: MythWindow Status | Items | Equip | Skills | Basic | Minimap -> abre/fecha a janela (testes automaticos). */
+	UFUNCTION(Exec)
+	void MythWindow(const FString& Name);
+
 	/** Console: MythQuitAfter 40 -> fecha o jogo apos 40 s (usado com -ExecCmds nos testes automaticos). */
 	UFUNCTION(Exec)
 	void MythQuitAfter(float Seconds);
@@ -159,6 +168,15 @@ private:
 	void OnRotateMouse(const FInputActionValue& Value);
 	void OnPitchMouse(const FInputActionValue& Value);
 	bool IsShiftDown() const;
+	bool IsAltDown() const;
+	void ToggleHudWindow(EMythRoWindow Window);
+	void OnHotkeyStatus();
+	void OnHotkeyItems();
+	void OnHotkeyEquip();
+	void OnHotkeySkills();
+	void OnHotkeyBasic();
+	void OnHotkeyMinimap();
+	void OnHotkeyEscape();
 	void UpdateCameraReset();
 	double LastRightClickTime = -1.0;
 	void OnRotateKey(const FInputActionValue& Value);

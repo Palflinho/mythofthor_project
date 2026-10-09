@@ -112,3 +112,18 @@ C1 (câmera/billboard) — independente, começa já
 C3 (HUD) — depende de A1 para as texturas da interface
 A5 (recompilar mapas) — depende de A1
 ```
+
+---
+
+## 5. Pedidos abertos para a rede (Claude → Antigravity)
+
+As janelas clássicas da HUD (Alt+A/E/Q/S, `UI/MythRoHUDWindows.cpp`) já leem `GetPlayerStats()`, `GetInventoryItems()` e `GetSkillList()` e enviam `SendStatusUp`, `UseItem`, `EquipItem` e `UnequipItem`. Faltam no `URagnarokNetworkSubsystem`:
+
+| Pedido | Uso no cliente | Origem no servidor |
+|---|---|---|
+| `SendSkillUp(SkillID)` | Botão de subir habilidade na janela de skills | `CZ_UPGRADE_SKILLLEVEL` (`0x0112`) |
+| Custos de atributo em `FRagnarokPlayerStats` (`StrNeed` ... `LukNeed`) | Número ao lado da seta de cada atributo; esconder a seta quando os pontos não bastam | `ZC_STATUS` (`0x00bd`) já traz `need_str` ... `need_luk` |
+| `JobName`/`Class` no `FRagnarokPlayerStats` ou evento próprio | Título da janela de skills e da janela básica | Classe do personagem selecionado (`0x006b`) |
+| `bIsEquipped` + `EquipLocation` = posição vestida (`wearState`) | Janela de equipamento usa a máscara `EQP_*` para escolher o encaixe | `0x0b39` (`wearState`) |
+
+Confirmar os IDs/tamanhos na tabela do próprio rAthena (`clif_packetdb.hpp`) antes de implementar.

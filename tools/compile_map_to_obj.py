@@ -793,7 +793,7 @@ def write_gat_collision(gat: dict, cell_size: float, out_base: str):
 
 def find_window_textures(map_dir: str, tex_index: dict, names) -> list:
     """
-    Texturas de predio com vidro de janela: pixels bem escuros e levemente azulados (o vidro das casas do RO).
+    Texturas de predio com vidro de janela: pixels azulados (azul > vermelho), o vidro das casas do RO.
     A Unreal faz esses pixels brilharem com luz quente a noite (parametro WindowGlow do material).
     """
     try:
@@ -820,10 +820,11 @@ def find_window_textures(map_dir: str, tex_index: dict, names) -> list:
             if r > 240 and g < 15 and b > 240:
                 continue  # magenta = transparente
             lum = (0.3 * r + 0.59 * g + 0.11 * b) / 255.0
-            if lum < 0.16 and b + 6 >= r and b + 8 >= g:  # vidro escuro frio/neutro (nao madeira nem folhagem)
+            # vidro do RO: azul-acinzentado ou verde-agua (azul acima do vermelho); tijolo, pedra e madeira puxam para o vermelho
+            if 0.12 < lum < 0.85 and b >= r + 10 and b + 10 >= g:
                 glass += 1
         ratio = glass / float(len(px))
-        if 0.015 <= ratio <= 0.30:  # fachada com janelas (nem textura toda escura, nem sem vidro)
+        if 0.004 <= ratio <= 0.20:  # fachada com janelas (nem textura toda escura, nem sem vidro)
             found.append(name)
     return found
 

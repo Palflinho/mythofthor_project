@@ -224,6 +224,10 @@ void UMythRoHUDWidget::BuildLayout()
 	BuildHotbar();
 	BuildChat();
 	BuildAutoBattle();
+	BuildStatusWindow();
+	BuildItemsWindow();
+	BuildEquipWindow();
+	BuildSkillsWindow();
 	AddChatLine(TEXT("Bem-vindo a Rune-Midgard."), ColSystem);
 }
 
@@ -231,6 +235,7 @@ void UMythRoHUDWidget::BuildBasicInfo()
 {
 	// Janela "Informacoes basicas" (basewin_bg, 280x120) no topo-esquerda
 	UCanvasPanel* Win = MakeWindow(FVector2D(0.f, 0.f), FVector2D(0.f, 0.f), FVector2D(8.f, 8.f), FVector2D(280.f, 120.f));
+	BasicWindow = Win;
 	AddImage(Win, FMythRoUITextures::Get(Basic(TEXT("basewin_bg"))), 0.f, 0.f);
 
 	NameText = AddText(Win, 8.f, 1.f, 8, ColTitle, true);      // nome na barra de titulo
@@ -545,10 +550,10 @@ void UMythRoHUDWidget::OnChatCommitted(const FText& Text, ETextCommit::Type Comm
 
 // ------------------------------------------------------------------------------------------------ botoes
 
-void UMythRoHUDWidget::OnStatusClicked() { AddChatLine(TEXT("Janela de Atributos: em construcao."), ColSystem); }
-void UMythRoHUDWidget::OnItemsClicked()  { AddChatLine(TEXT("Janela de Itens: em construcao."), ColSystem); }
-void UMythRoHUDWidget::OnEquipClicked()  { AddChatLine(TEXT("Janela de Equipamento: em construcao."), ColSystem); }
-void UMythRoHUDWidget::OnSkillClicked()  { AddChatLine(TEXT("Janela de Habilidades: em construcao."), ColSystem); }
+void UMythRoHUDWidget::OnStatusClicked() { ToggleWindow(EMythRoWindow::Status); }
+void UMythRoHUDWidget::OnItemsClicked()  { ToggleWindow(EMythRoWindow::Items); }
+void UMythRoHUDWidget::OnEquipClicked()  { ToggleWindow(EMythRoWindow::Equip); }
+void UMythRoHUDWidget::OnSkillClicked()  { ToggleWindow(EMythRoWindow::Skills); }
 void UMythRoHUDWidget::OnOptionClicked() { AddChatLine(TEXT("Configuracoes: em construcao."), ColSystem); }
 
 void UMythRoHUDWidget::OnMapClicked()
@@ -587,6 +592,10 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, co
 		return Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 	}
 	const FVector2D Screen = InMouseEvent.GetScreenSpacePosition();
+	if (HandleWindowClick(Screen))
+	{
+		return FReply::Handled();
+	}
 	for (int32 i = DragWindows.Num() - 1; i >= 0; --i)
 	{
 		UCanvasPanel* Win = DragWindows[i].Window.Get();
@@ -656,6 +665,12 @@ void UMythRoHUDWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
 	UpdateMinimap();
+	WindowRefreshTimer -= InDeltaTime;
+	if (WindowRefreshTimer <= 0.f)
+	{
+		WindowRefreshTimer = 0.25f;
+		RefreshWindows();
+	}
 }
 
 void UMythRoHUDWidget::UpdateMinimap()

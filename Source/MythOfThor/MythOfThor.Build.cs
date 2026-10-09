@@ -25,7 +25,8 @@ public class MythOfThor : ModuleRules
 			"SlateCore",
 			"NavigationSystem",
 			"Sockets",
-			"Networking"
+			"Networking",
+			"Json"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { });

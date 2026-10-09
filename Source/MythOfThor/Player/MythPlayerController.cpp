@@ -153,6 +153,16 @@ void AMythPlayerController::SetupInputComponent()
 		EIC->BindAction(ZoomAction, ETriggerEvent::Triggered, this, &AMythPlayerController::OnZoom);
 		EIC->BindAction(ToggleCameraAction, ETriggerEvent::Started, this, &AMythPlayerController::OnToggleCamera);
 	}
+
+	// Atalhos de janela do cliente original (Alt+A atributos, Alt+E itens, Alt+Q equipamento, Alt+S habilidades,
+	// Alt+V informacoes basicas, Ctrl+Tab minimapa, Esc fecha a ultima janela aberta)
+	InputComponent->BindKey(FInputChord(EKeys::A, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyStatus);
+	InputComponent->BindKey(FInputChord(EKeys::E, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyItems);
+	InputComponent->BindKey(FInputChord(EKeys::Q, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyEquip);
+	InputComponent->BindKey(FInputChord(EKeys::S, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeySkills);
+	InputComponent->BindKey(FInputChord(EKeys::V, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyBasic);
+	InputComponent->BindKey(FInputChord(EKeys::Tab, false, true, false, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyMinimap);
+	InputComponent->BindKey(EKeys::Escape, IE_Pressed, this, &AMythPlayerController::OnHotkeyEscape);
 }
 
 // ---------------------------------------------------------------- Point & Click
@@ -224,6 +234,10 @@ void AMythPlayerController::OnMoveStarted(const FInputActionValue&)
 
 void AMythPlayerController::OnMove(const FInputActionValue& Value)
 {
+	if (IsAltDown())
+	{
+		return; // Alt+A/S e atalho de janela, nao movimento
+	}
 	AMythPlayerCharacter* Char = GetMythCharacter();
 	if (!Char)
 	{
@@ -300,6 +314,34 @@ bool AMythPlayerController::IsShiftDown() const
 	return IsInputKeyDown(EKeys::LeftShift) || IsInputKeyDown(EKeys::RightShift);
 }
 
+bool AMythPlayerController::IsAltDown() const
+{
+	return IsInputKeyDown(EKeys::LeftAlt) || IsInputKeyDown(EKeys::RightAlt);
+}
+
+void AMythPlayerController::ToggleHudWindow(EMythRoWindow Window)
+{
+	if (HudWidget)
+	{
+		HudWidget->ToggleWindow(Window);
+	}
+}
+
+void AMythPlayerController::OnHotkeyStatus() { ToggleHudWindow(EMythRoWindow::Status); }
+void AMythPlayerController::OnHotkeyItems() { ToggleHudWindow(EMythRoWindow::Items); }
+void AMythPlayerController::OnHotkeyEquip() { ToggleHudWindow(EMythRoWindow::Equip); }
+void AMythPlayerController::OnHotkeySkills() { ToggleHudWindow(EMythRoWindow::Skills); }
+void AMythPlayerController::OnHotkeyBasic() { ToggleHudWindow(EMythRoWindow::Basic); }
+void AMythPlayerController::OnHotkeyMinimap() { ToggleHudWindow(EMythRoWindow::Minimap); }
+
+void AMythPlayerController::OnHotkeyEscape()
+{
+	if (HudWidget)
+	{
+		HudWidget->CloseTopWindow();
+	}
+}
+
 void AMythPlayerController::OnRotateMouse(const FInputActionValue& Value)
 {
 	// Botao direito + arrastar gira; com Shift, o arrasto inclina (OnPitchMouse), como no cliente original.
@@ -345,6 +387,10 @@ void AMythPlayerController::UpdateCameraReset()
 
 void AMythPlayerController::OnRotateKey(const FInputActionValue& Value)
 {
+	if (IsAltDown())
+	{
+		return; // Alt+Q/E abrem janelas
+	}
 	if (AMythPlayerCharacter* Char = GetMythCharacter())
 	{
 		Char->RotateCamera(Value.Get<float>() * KeyRotateSpeed * GetWorld()->GetDeltaSeconds());
@@ -583,6 +629,51 @@ void AMythPlayerController::MythDelayed(float DelaySeconds, const FString& Comma
 	{
 		ConsoleCommand(Cmd);
 	}), FMath::Max(DelaySeconds, 0.1f), false);
+}
+
+void AMythPlayerController::MythGoto(int32 X, int32 Y)
+{
+	APawn* P = GetPawn();
+	const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld());
+	if (!P || !Info)
+	{
+		return;
+	}
+	// Celula andavel mais proxima: o chao do GAT so existe nas celulas livres (trace de visibilidade nao ve a malha visual)
+	for (int32 R = 0; R <= 12; ++R)
+	{
+		for (int32 DY = -R; DY <= R; ++DY)
+		{
+			for (int32 DX = -R; DX <= R; ++DX)
+			{
+				if (FMath::Max(FMath::Abs(DX), FMath::Abs(DY)) != R)
+				{
+					continue;
+				}
+				const FVector Top = Info->CellToWorld(FIntPoint(X + DX, Y + DY), 20000.f);
+				FHitResult Hit;
+				FCollisionQueryParams Params(TEXT("MythGoto"), false, P);
+				if (GetWorld()->LineTraceSingleByChannel(Hit, Top, Top - FVector(0.f, 0.f, 40000.f), ECC_Visibility, Params))
+				{
+					P->SetActorLocation(Hit.ImpactPoint + FVector(0.f, 0.f, 120.f), false, nullptr, ETeleportType::TeleportPhysics);
+					StopMovement();
+					bHasDirectTarget = false;
+					return;
+				}
+			}
+		}
+	}
+	UE_LOG(LogTemp, Warning, TEXT("MythGoto: nenhuma celula andavel perto de (%d,%d)"), X, Y);
+}
+
+void AMythPlayerController::MythWindow(const FString& Name)
+{
+	const UEnum* Enum = StaticEnum<EMythRoWindow>();
+	const int64 Value = Enum ? Enum->GetValueByNameString(Name) : INDEX_NONE;
+	if (Value != INDEX_NONE)
+	{
+		ToggleHudWindow(static_cast<EMythRoWindow>(Value));
+	}
 }
 
 void AMythPlayerController::MythQuitAfter(float Seconds)
