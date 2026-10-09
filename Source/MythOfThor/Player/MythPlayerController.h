@@ -165,6 +165,10 @@ public:
 	UFUNCTION(Exec)
 	void MythBuff(int32 EfstID, float Seconds);
 
+	/** Teste: muda o visual do personagem como um ZC_SPRITE_CHANGE (Look do rAthena: 0 classe, 2 arma, 3/4/5 acessorio, 8 escudo). */
+	UFUNCTION(Exec)
+	void MythLook(int32 Look, int32 Value);
+
 	UMythRoHUDWidget* GetHud() const { return HudWidget; }
 
 	/**

@@ -498,6 +498,12 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 			S->MonsterSpriteName.Empty();
 			S->bMale = Info.Sex != 0;
 			S->JobSpriteName = NetJobSprite(Info.JobClass, S->bMale);
+			S->JobClass = Info.JobClass;
+			S->HeadTop = Info.HeadTop;
+			S->HeadMid = Info.HeadMid;
+			S->HeadBottom = Info.HeadBottom;
+			S->Weapon = Info.Weapon & 0xFFFF;
+			S->Shield = Info.Shield & 0xFFFF;
 			S->HairStyle = FMath::Max(Info.Head, 1);
 			S->HairColor = Info.HeadPalette;
 		}
@@ -800,12 +806,19 @@ void AMythNetWorld::ApplySelfAppearance()
 	S->JobSpriteName = NetJobSprite(Net->GetPlayerStats().JobClass, S->bMale);
 	S->HairStyle = FMath::Max(Slot.HairStyle, 1);
 	S->HairColor = Slot.HairColor;
+	S->JobClass = Net->GetPlayerStats().JobClass;
+	S->HeadTop = Slot.HeadTop;
+	S->HeadMid = Slot.HeadMid;
+	S->HeadBottom = Slot.HeadBottom;
+	S->Weapon = Slot.Weapon;
+	S->Shield = Slot.Shield;
 	S->ReloadSprites();
 }
 
 void AMythNetWorld::HandleEquipChanged(int64 UnitID, uint8 Look, int32 Value)
 {
-	// ZC_SPRITE_CHANGE: Look e o enum _look do rAthena (0 classe, 1 cabelo, 6 cor do cabelo)
+	// ZC_SPRITE_CHANGE: Look e o enum _look do rAthena (map.hpp): 0 classe, 1 cabelo, 2 arma, 3 acessorio de baixo,
+	// 4 de cima, 5 do meio, 6 cor do cabelo, 8 escudo
 	AActor* Unit = ResolveActor(UnitID);
 	UMythRoSpriteComponent* S = Unit ? Unit->FindComponentByClass<UMythRoSpriteComponent>() : nullptr;
 	if (!S || !S->MonsterSpriteName.IsEmpty())
@@ -820,10 +833,16 @@ void AMythNetWorld::HandleEquipChanged(int64 UnitID, uint8 Look, int32 Value)
 			S->bMale = Net->GetSelfSex() != 0; // volta ao sexo da conta antes de checar classes de um sexo so
 		}
 		S->JobSpriteName = NetJobSprite(Value, S->bMale);
+		S->JobClass = Value;
 		break;
 	case 1: S->HairStyle = FMath::Max(Value, 1); break;
+	case 2: S->Weapon = Value; break;
+	case 3: S->HeadBottom = Value; break;
+	case 4: S->HeadTop = Value; break;
+	case 5: S->HeadMid = Value; break;
 	case 6: S->HairColor = Value; break;
-	default: return; // equipamentos visuais: ainda nao desenhados
+	case 8: S->Shield = Value; break;
+	default: return; // cor da roupa, sapatos, capa: ainda nao desenhados
 	}
 	S->ReloadSprites();
 }

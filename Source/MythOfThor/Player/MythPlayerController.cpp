@@ -1080,6 +1080,28 @@ void AMythPlayerController::MythBuff(int32 EfstID, float Seconds)
 	}
 }
 
+void AMythPlayerController::MythLook(int32 Look, int32 Value)
+{
+	UMythRoSpriteComponent* S = GetPawn() ? GetPawn()->FindComponentByClass<UMythRoSpriteComponent>() : nullptr;
+	if (!S)
+	{
+		return;
+	}
+	switch (Look)
+	{
+	case 0: S->JobClass = Value; break;
+	case 2: S->Weapon = Value; break;
+	case 3: S->HeadBottom = Value; break;
+	case 4: S->HeadTop = Value; break;
+	case 5: S->HeadMid = Value; break;
+	case 8: S->Shield = Value; break;
+	default: return;
+	}
+	UE_LOG(LogTemp, Log, TEXT("MythLook %d = %d"), Look, Value);
+	S->ReloadSprites();
+	UE_LOG(LogTemp, Log, TEXT("MythLook recarregado"));
+}
+
 void AMythPlayerController::MythTargetNearest()
 {
 	if (PendingSkillID == 0 || !GetPawn())

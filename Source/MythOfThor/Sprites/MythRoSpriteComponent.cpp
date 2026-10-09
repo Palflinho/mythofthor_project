@@ -14,6 +14,9 @@
 #include "Misc/ConfigCacheIni.h"
 #include "Misc/FileHelper.h"
 #include "Misc/Paths.h"
+#include "Dom/JsonObject.h"
+#include "Serialization/JsonReader.h"
+#include "Serialization/JsonSerializer.h"
 
 namespace
 {
@@ -25,6 +28,52 @@ namespace
 	const TCHAR* MaleTag = TEXT("남");                // 남
 	const TCHAR* FemaleTag = TEXT("여");              // 여
 	const TCHAR* MonsterDir = TEXT("몬스터"); // 몬스터
+	const TCHAR* AccessoryDir = TEXT("악세사리"); // 악세사리
+	const TCHAR* ShieldDir = TEXT("방패");             // 방패
+
+	/** Config/equip_sprites.json (tools/gen_equip_sprites.py): nomes dos sprites de equipamento do cliente. */
+	struct FEquipTables
+	{
+		TMap<int32, FString> Hats;
+		TMap<int32, FString> Weapons;
+		TMap<int32, FString> Shields;
+		TMap<int32, FString> WeaponJobs;
+	};
+
+	const FEquipTables& EquipTables()
+	{
+		static FEquipTables T;
+		static bool bLoaded = false;
+		if (bLoaded)
+		{
+			return T;
+		}
+		bLoaded = true;
+		FString Text;
+		TSharedPtr<FJsonObject> Root;
+		if (!FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("equip_sprites.json")))
+			|| !FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) || !Root.IsValid())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("MythRoSprite: Config/equip_sprites.json ausente (tools/gen_equip_sprites.py)"));
+			return T;
+		}
+		auto Fill = [&Root](const TCHAR* Key, TMap<int32, FString>& Out)
+		{
+			const TSharedPtr<FJsonObject>* Obj = nullptr;
+			if (Root->TryGetObjectField(Key, Obj))
+			{
+				for (const auto& Pair : (*Obj)->Values)
+				{
+					Out.Add(FCString::Atoi(*Pair.Key), Pair.Value->AsString());
+				}
+			}
+		};
+		Fill(TEXT("hats"), T.Hats);
+		Fill(TEXT("weapons"), T.Weapons);
+		Fill(TEXT("shields"), T.Shields);
+		Fill(TEXT("weapon_jobs"), T.WeaponJobs);
+		return T;
+	}
 
 	// Grupos de acao do .act (acao = grupo * 8 + direcao), iguais ao cliente original.
 	// Jogador: 0 parado, 1 andando, 2 sentado, 3 pegando, 4 em guarda, 5 ataque, 6 dano, 7 congelado, 8 morto...
@@ -282,10 +331,74 @@ void UMythRoSpriteComponent::ReloadSprites()
 
 	const bool bBody = LoadSource(Body, BodyBase + TEXT(".spr"), BodyBase + TEXT(".act"), FString());
 	const bool bHead = LoadSource(Head, HeadBase + TEXT(".spr"), HeadBase + TEXT(".act"), Palette);
+	LoadEquipment(Root, Sex);
 	if (!bBody || !bHead)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("MythRoSprite: falha ao carregar sprites (raiz '%s'). Corpo=%d Cabeca=%d. Configure [Myth] AssetsRoot no DefaultGame.ini."),
 			*Root, bBody, bHead);
+	}
+}
+
+void UMythRoSpriteComponent::LoadEquipment(const FString& Root, const FString& Sex)
+{
+	// Caminhos do cliente original (iguais ao roBrowser DB.getHatPath/getWeaponPath/getShieldPath)
+	const FEquipTables& T = EquipTables();
+	const FString SpriteRoot = FPaths::Combine(Root, TEXT("data"), TEXT("sprite"));
+	auto Load = [this](FMythRoSpriteSource& Source, const FString& Base)
+	{
+		Source = FMythRoSpriteSource();
+		if (!Base.IsEmpty() && FPaths::FileExists(Base + TEXT(".spr")))
+		{
+			LoadSource(Source, Base + TEXT(".spr"), Base + TEXT(".act"), FString());
+		}
+		else if (!Base.IsEmpty())
+		{
+			UE_LOG(LogTemp, Verbose, TEXT("MythRoSprite: equipamento sem sprite: %s"), *Base);
+		}
+	};
+	auto HatBase = [&](int32 View)
+	{
+		const FString* Name = View > 0 ? T.Hats.Find(View) : nullptr;
+		return Name ? FPaths::Combine(SpriteRoot, AccessoryDir, Sex, Sex + *Name) : FString();
+	};
+	// O RO nao desenha duas vezes o mesmo acessorio que ocupa mais de um lugar (ex.: topo+meio)
+	Load(HatBottom, HatBase(HeadBottom));
+	Load(HatMid, HeadMid != HeadTop && HeadMid != HeadBottom ? HatBase(HeadMid) : FString());
+	Load(HatTop, HeadTop != HeadBottom ? HatBase(HeadTop) : FString());
+
+	const FString* JobFolder = T.WeaponJobs.Find(JobClass);
+	const FString Job = JobFolder ? *JobFolder : FString(TEXT("초보자"));
+	auto WeaponBase = [&](int32 View)
+	{
+		if (View <= 0)
+		{
+			return FString();
+		}
+		const FString* Name = T.Weapons.Find(View);
+		return FPaths::Combine(SpriteRoot, HumanDir, Job, FString::Printf(TEXT("%s_%s%s"), *Job, *Sex, Name ? **Name : *FString::Printf(TEXT("_%d"), View)));
+	};
+	Load(WeaponSource, WeaponBase(Weapon));
+	// Escudo: ids fora de 2100-2200 acima de 500 sao a arma da mao esquerda (Mercenario com duas armas)
+	if (Shield > 500 && (Shield < 2100 || Shield > 2200))
+	{
+		Load(ShieldSource, WeaponBase(Shield));
+	}
+	else if (Shield > 0)
+	{
+		// Escudos com nome: <classe>_<sexo>_<nome> (가드, 버클러...); os demais: <classe>_<sexo>_<id>_방패
+		const FString* Name = T.Shields.Find(Shield);
+		const FString Dir = FPaths::Combine(SpriteRoot, ShieldDir, Job);
+		FString Base = Name ? FPaths::Combine(Dir, FString::Printf(TEXT("%s_%s_%s"), *Job, *Sex, **Name))
+			: FPaths::Combine(Dir, FString::Printf(TEXT("%s_%s_%d_%s"), *Job, *Sex, Shield, ShieldDir));
+		if (!FPaths::FileExists(Base + TEXT(".spr")) && T.Shields.Contains(1))
+		{
+			Base = FPaths::Combine(Dir, FString::Printf(TEXT("%s_%s_%s"), *Job, *Sex, *T.Shields[1])); // sem sprite: guarda, como o cliente
+		}
+		Load(ShieldSource, Base);
+	}
+	else
+	{
+		ShieldSource = FMythRoSpriteSource();
 	}
 }
 
@@ -627,18 +740,16 @@ void UMythRoSpriteComponent::RebuildMesh(const FRotator& CamRot)
 	FrameLocalBounds = FBox(ForceInit);
 	AddLayerQuads(Body, BodyFrame, FIntPoint::ZeroValue, 0.f, Section);
 
-	if (Head.IsValid() && Head.Act.Actions.IsValidIndex(ActionIndex) && Head.Act.Actions[ActionIndex].Frames.Num() > 0)
-	{
-		const FRoActAction& HeadAction = Head.Act.Actions[ActionIndex];
-		const FRoActFrame& HeadFrame = HeadAction.Frames[FrameIndex % HeadAction.Frames.Num()];
-		// A cabeca encaixa no corpo pela diferenca entre as ancoras dos dois quadros.
-		FIntPoint Offset = FIntPoint::ZeroValue;
-		if (BodyFrame.Anchors.Num() > 0 && HeadFrame.Anchors.Num() > 0)
-		{
-			Offset = BodyFrame.Anchors[0] - HeadFrame.Anchors[0];
-		}
-		AddLayerQuads(Head, HeadFrame, Offset, 2.f, Section);
-	}
+	AddHeadLayer(Head, BodyFrame, ActionIndex, FrameIndex, 2.f, Section);
+	// Acessorios na ordem do cliente: embaixo, meio, topo; depois arma e escudo.
+	// De costas (oeste a nordeste) o escudo fica atras do corpo, como no cliente original.
+	AddHeadLayer(HatBottom, BodyFrame, ActionIndex, FrameIndex, 3.f, Section);
+	AddHeadLayer(HatMid, BodyFrame, ActionIndex, FrameIndex, 4.f, Section);
+	AddHeadLayer(HatTop, BodyFrame, ActionIndex, FrameIndex, 5.f, Section);
+	AddBodyLayer(WeaponSource, ActionIndex, FrameIndex, 6.5f, Section);
+	const int32 Dir = ActionIndex % 8;
+	const bool bShieldBehind = Dir > 1 && Dir < 6;
+	AddBodyLayer(ShieldSource, ActionIndex, FrameIndex, bShieldBehind ? -3.f : 8.f, Section);
 
 	for (int32 i = Section; i < SectionsCreated; ++i)
 	{
@@ -648,6 +759,33 @@ void UMythRoSpriteComponent::RebuildMesh(const FRotator& CamRot)
 			ShadowMesh->SetMeshSectionVisible(i, false);
 		}
 	}
+}
+
+void UMythRoSpriteComponent::AddHeadLayer(const FMythRoSpriteSource& Source, const FRoActFrame& BodyFrame, int32 ActionIndex, int32 FrameIndex, float DepthBase, int32& Section)
+{
+	if (!Source.IsValid() || !Source.Act.Actions.IsValidIndex(ActionIndex) || Source.Act.Actions[ActionIndex].Frames.Num() == 0)
+	{
+		return;
+	}
+	const FRoActAction& Action = Source.Act.Actions[ActionIndex];
+	const FRoActFrame& Frame = Action.Frames[FrameIndex % Action.Frames.Num()];
+	// Encaixa no corpo pela diferenca entre as ancoras dos dois quadros (cabelo e acessorios).
+	FIntPoint Offset = FIntPoint::ZeroValue;
+	if (BodyFrame.Anchors.Num() > 0 && Frame.Anchors.Num() > 0)
+	{
+		Offset = BodyFrame.Anchors[0] - Frame.Anchors[0];
+	}
+	AddLayerQuads(Source, Frame, Offset, DepthBase, Section);
+}
+
+void UMythRoSpriteComponent::AddBodyLayer(const FMythRoSpriteSource& Source, int32 ActionIndex, int32 FrameIndex, float DepthBase, int32& Section)
+{
+	if (!Source.IsValid() || !Source.Act.Actions.IsValidIndex(ActionIndex) || Source.Act.Actions[ActionIndex].Frames.Num() == 0)
+	{
+		return;
+	}
+	const FRoActAction& Action = Source.Act.Actions[ActionIndex];
+	AddLayerQuads(Source, Action.Frames[FrameIndex % Action.Frames.Num()], FIntPoint::ZeroValue, DepthBase, Section);
 }
 
 void UMythRoSpriteComponent::AddLayerQuads(const FMythRoSpriteSource& Source, const FRoActFrame& Frame, const FIntPoint& Offset, float DepthBase, int32& Section)

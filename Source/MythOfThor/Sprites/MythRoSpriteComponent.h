@@ -81,6 +81,27 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
 	int32 HairColor = 0;
 
+	/** Classe (id do rAthena): escolhe a pasta das armas/escudos (transclasse usa a da classe base). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite|Equip")
+	int32 JobClass = 0;
+
+	/** View ids dos acessorios (LOOK_HEAD_TOP/MID/BOTTOM); 0 = nada. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite|Equip")
+	int32 HeadTop = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite|Equip")
+	int32 HeadMid = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite|Equip")
+	int32 HeadBottom = 0;
+
+	/** View id da arma (LOOK_WEAPON) e do escudo (LOOK_SHIELD); 0 = nada. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite|Equip")
+	int32 Weapon = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite|Equip")
+	int32 Shield = 0;
+
 	/** Centimetros por pixel do sprite (mesma escala dos flipbooks: 1 px = 2 cm). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
 	float UnitsPerPixel = 2.f;
@@ -167,7 +188,7 @@ public:
 	/** Limites do quadro atual no espaco local do componente (para a area de clique). */
 	const FBox& GetFrameLocalBounds() const { return FrameLocalBounds; }
 
-	/** Recarrega corpo e cabeca (chame apos mudar sexo/penteado/cor). */
+	/** Recarrega corpo, cabeca e equipamentos (chame apos mudar classe/sexo/penteado/cor/equipamento). */
 	UFUNCTION(BlueprintCallable, Category = "RO Sprite")
 	void ReloadSprites();
 
@@ -203,6 +224,17 @@ protected:
 private:
 	UPROPERTY() FMythRoSpriteSource Body;
 	UPROPERTY() FMythRoSpriteSource Head;
+	/** Equipamentos visiveis: acessorios (embaixo, meio, topo), arma e escudo. */
+	UPROPERTY() FMythRoSpriteSource HatBottom;
+	UPROPERTY() FMythRoSpriteSource HatMid;
+	UPROPERTY() FMythRoSpriteSource HatTop;
+	UPROPERTY() FMythRoSpriteSource WeaponSource;
+	UPROPERTY() FMythRoSpriteSource ShieldSource;
+	void LoadEquipment(const FString& Root, const FString& Sex);
+	/** Camada que acompanha a cabeca (cabelo e acessorios): encaixa pela ancora do corpo. */
+	void AddHeadLayer(const FMythRoSpriteSource& Source, const FRoActFrame& BodyFrame, int32 ActionIndex, int32 FrameIndex, float DepthBase, int32& Section);
+	/** Camada que acompanha o corpo (arma, escudo): mesmo quadro e origem do corpo. */
+	void AddBodyLayer(const FMythRoSpriteSource& Source, int32 ActionIndex, int32 FrameIndex, float DepthBase, int32& Section);
 
 	/** Copia do sprite que so projeta sombra (nao aparece na imagem). */
 	UPROPERTY() TObjectPtr<UProceduralMeshComponent> ShadowMesh;
