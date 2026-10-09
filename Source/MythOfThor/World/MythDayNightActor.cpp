@@ -144,12 +144,12 @@ void AMythDayNightActor::UpdateLighting()
 	{
 		FPostProcessSettings& PP = Grading->Settings;
 		PP.AutoExposureBias = FMath::Lerp(0.f, NightExposureBias, NewNight) - 0.6f * WeatherDim;
-		PP.ColorGain = FVector4(FMath::Lerp(FVector(1.f), FVector(0.80f, 0.88f, 1.10f), NewNight), 1.f);
-		PP.ColorSaturation = FVector4(1.f, 1.f, 1.f, FMath::Lerp(1.f, 0.78f, NewNight) * (1.f - 0.25f * WeatherDim));
+		PP.ColorGain = FVector4(FMath::Lerp(FVector(1.f), NightColorGain, NewNight), 1.f);
+		PP.ColorSaturation = FVector4(1.f, 1.f, 1.f, FMath::Lerp(1.f, NightSaturation, NewNight) * (1.f - 0.25f * WeatherDim));
 	}
 
 	SkyLight->SetIntensity(FMath::Lerp(NightSkyLightIntensity, DaySkyLightIntensity, Daylight) * (1.f - 0.35f * WeatherDim));
-	SkyLight->SetLightColor(FMath::Lerp(FLinearColor(0.45f, 0.55f, 1.f), FLinearColor::White, Daylight));
+	SkyLight->SetLightColor(FMath::Lerp(NightSkyColor, FLinearColor::White, Daylight));
 
 	if (!FMath::IsNearlyEqual(NewNight, NightFactor, 0.002f))
 	{

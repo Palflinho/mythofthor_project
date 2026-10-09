@@ -1,4 +1,5 @@
 #include "Player/MythPlayerCharacter.h"
+#include "World/MythMapInfo.h"
 
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -55,6 +56,13 @@ AMythPlayerCharacter::AMythPlayerCharacter()
 void AMythPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	// Mapa interno: camera mais perto e travada no angulo classico (girar/afastar mostraria as outras salas)
+	if (const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld()); Info && Info->IsIndoor())
+	{
+		bCameraLockedByMap = true;
+		DefaultArmLength = Info->IndoorArmLength;
+		CameraMode = EMythCameraMode::FixedIsometric;
+	}
 	ResetCamera();
 }
 
@@ -90,6 +98,10 @@ void AMythPlayerCharacter::PitchCamera(float DeltaPitch)
 
 void AMythPlayerCharacter::ToggleCameraMode()
 {
+	if (bCameraLockedByMap)
+	{
+		return;
+	}
 	SetCameraMode(CameraMode == EMythCameraMode::FixedIsometric ? EMythCameraMode::Free360 : EMythCameraMode::FixedIsometric);
 }
 

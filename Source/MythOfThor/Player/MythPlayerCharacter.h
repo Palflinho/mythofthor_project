@@ -109,6 +109,7 @@ private:
 	EMythCameraMode CameraMode = EMythCameraMode::Free360;
 	float CameraYaw = -90.f;
 	float CurrentPitch = -50.f;
+	bool bCameraLockedByMap = false;
 
 	void ApplyCamera();
 };

@@ -582,11 +582,23 @@ def add_night_lights(obj_path, cx, cy, scale):
     import json
     with open(path, encoding='utf-8') as f:
         lights = json.load(f).get('lights', [])
+    rsw_count = 0
     for i, light in enumerate(lights):
         # Mesma conversao dos vertices em build_mesh: X = (x-cx)*S ; Y = -(y-cy)*S ; Z = z*S
         loc = ((light['x'] - cx) * scale, -(light['y'] - cy) * scale, light['z'] * scale)
-        spawn(unreal.MythNightLight, loc, (0, 0, 0), 'NightLight_%03d' % i)
-    log('%d luzes noturnas colocadas' % len(lights))
+        actor = spawn(unreal.MythNightLight, loc, (0, 0, 0), 'NightLight_%03d' % i)
+        if actor and light.get('kind') == 'rsw':
+            # Luz do .rsw (lamparinas, velas, lareiras): cor do RO normalizada (vem escura, ~0.5) e alcance do mapa
+            r, g, b = light.get('color', [1.0, 0.8, 0.6])
+            peak = max(r, g, b, 0.01)
+            comp = actor.get_editor_property('light')
+            # argumentos nomeados: o unreal.Color posicional e (B, G, R, A) e deixava as lamparinas azuis
+            comp.set_editor_property('light_color', unreal.Color(r=int(255 * r / peak), g=int(255 * g / peak), b=int(255 * b / peak), a=255))
+            comp.set_editor_property('attenuation_radius', max(light.get('range', 70.0), 20.0) * scale * 1.3)
+            actor.set_editor_property('night_intensity', 40.0)
+            actor.set_editor_property('flicker_amount', 0.05)
+            rsw_count += 1
+    log('%d luzes noturnas colocadas (%d do .rsw)' % (len(lights), rsw_count))
 
 
 def add_navigation(center, extent):

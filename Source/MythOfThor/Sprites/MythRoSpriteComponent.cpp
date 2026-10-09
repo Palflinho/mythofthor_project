@@ -238,7 +238,8 @@ void UMythRoSpriteComponent::UpdateShadowTransform(const FVector& Feet)
 	const float Height = Frame.IsValid ? FMath::Max(Frame.GetSize().Z, 40.f) : 90.f;
 	const float ShadowLength = Height * Horizontal / Down;
 	const float Fade = ShadowFadeLength > 0.f ? FMath::Clamp((ShadowLength - ShadowFadeLength) / ShadowFadeLength, 0.f, 1.f) : 1.f;
-	const bool bShowCast = bCastSpriteShadow && Fade > 0.02f;
+	// Sprites baixos (Poring, Fabre...) projetam uma mancha estranha: ficam so com a sombra redonda, como no RO
+	const bool bShowCast = bCastSpriteShadow && Fade > 0.02f && Height >= MinCastShadowHeight;
 	if (ShadowMesh->CastShadow != bShowCast)
 	{
 		ShadowMesh->SetCastShadow(bShowCast);
@@ -251,7 +252,8 @@ void UMythRoSpriteComponent::UpdateShadowTransform(const FVector& Feet)
 		LightDir = FVector::ForwardVector; // luz a pino: qualquer orientacao serve
 	}
 	const FVector Right = FVector::CrossProduct(FVector::UpVector, LightDir).GetSafeNormal();
-	ShadowMesh->SetWorldLocationAndRotation(Feet, FRotationMatrix::MakeFromXZ(Right, FVector::UpVector).Rotator());
+	// A base fica um pouco abaixo do chao: a sombra nasce embaixo do centro da elipse, que esconde a emenda
+	ShadowMesh->SetWorldLocationAndRotation(Feet - FVector(0.f, 0.f, CastShadowSink), FRotationMatrix::MakeFromXZ(Right, FVector::UpVector).Rotator());
 }
 
 void UMythRoSpriteComponent::ReloadSprites()

@@ -35,6 +35,22 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map")
 	FIntPoint MapSizeCells = FIntPoint::ZeroValue;
 
+	/**
+	 * Mapa interno (casas, lojas): varias salas lado a lado no mesmo mapa. Camera mais perto e fixa (nao mostra as
+	 * outras salas), fundo preto em vez de ceu e iluminacao de dia fixa, como no cliente original.
+	 * Automatico pelo nome do RO (prt_in, geffen_in, payon_in01...); IndoorOverride forca ligado/desligado.
+	 */
+	UFUNCTION(BlueprintPure, Category = "Map")
+	bool IsIndoor() const;
+
+	/** 0 = automatico pelo nome; 1 = interno; -1 = externo. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map")
+	int32 IndoorOverride = 0;
+
+	/** Distancia da camera nos mapas internos (cm; o padrao externo e 1200). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map")
+	float IndoorArmLength = 720.f;
+
 	/** Musica de fundo do mapa; o filtro passa-baixa noturno e aplicado pelo UMythNightAudioComponent. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map|Audio")
 	TObjectPtr<USoundBase> Bgm;

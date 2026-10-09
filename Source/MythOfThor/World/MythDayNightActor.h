@@ -59,6 +59,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight|Light")
 	float NightExposureBias = -2.f;
 
+	/** Tom da noite (ganho de cor RGB): frio na rua; os mapas internos usam um tom quente de lamparina. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight")
+	FVector NightColorGain = FVector(0.80f, 0.88f, 1.10f);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight")
+	float NightSaturation = 0.78f;
+
+	/** Cor da luz ambiente (ceu) a noite: azulada na rua; neutra e quente nos interiores. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight")
+	FLinearColor NightSkyColor = FLinearColor(0.45f, 0.55f, 1.f);
+
 	/** Esconde (so em runtime) as luzes/atmosfera ja existentes no nivel. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight")
 	bool bReplaceLevelLights = true;

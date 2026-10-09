@@ -147,6 +147,7 @@ def read_rsw(rsw_path: str):
             
         object_count = struct.unpack('I', f.read(4))[0]
         models = []
+        lights = []
         
         for _ in range(object_count):
             obj_type = struct.unpack('I', f.read(4))[0]
@@ -168,8 +169,12 @@ def read_rsw(rsw_path: str):
                     'rotation': rot,
                     'scale': scale
                 })
-            elif obj_type == 2: # LIGHT
-                f.seek(80 + 12 + 12 + 4, os.SEEK_CUR)
+            elif obj_type == 2: # LIGHT: nome, posicao, cor RGB (0..1) e alcance - usadas pelo RO para o lightmap
+                lname = f.read(80).split(b'\x00')[0].decode('cp949', errors='ignore')
+                lpos = struct.unpack('3f', f.read(12))
+                lcolor = struct.unpack('3f', f.read(12))
+                lrange = struct.unpack('f', f.read(4))[0]
+                lights.append({'name': lname, 'position': lpos, 'color': lcolor, 'range': lrange})
             elif obj_type == 3: # SOUND
                 f.seek(80 + 80 + 12 + 4 + 4 + 4 + 4, os.SEEK_CUR)
                 if version >= 2.0:
@@ -180,7 +185,8 @@ def read_rsw(rsw_path: str):
         return {
             'gnd_file': gnd_file,
             'gat_file': gat_file,
-            'models': models
+            'models': models,
+            'lights': lights
         }
 
 
@@ -613,6 +619,40 @@ def compile_map(map_dir: str, output_obj: str = None, map_name: str = None):
                     v_offset += 4
                     vt_offset += 4
 
+                # Paredes do terreno (paredes internas das casas, degraus, penhascos): faces "frente" (entre y e y+1)
+                # e "direita" (entre x e x+1) de cada celula, ligando a altura desta com a da vizinha.
+                # Cantos e UV na mesma ordem do leitor de .gnd do roBrowser.
+                walls = []
+                if tile['faces'][1] != -1 and y + 1 < height:
+                    hb = tiles[(y + 1) * width + x]['heights']
+                    walls.append((tile['faces'][1], [
+                        ((x + 0) * scale, (y + 1) * scale, -h[2], 0),
+                        ((x + 1) * scale, (y + 1) * scale, -h[3], 1),
+                        ((x + 1) * scale, (y + 1) * scale, -hb[1], 3),
+                        ((x + 0) * scale, (y + 1) * scale, -hb[0], 2)]))
+                if tile['faces'][2] != -1 and x + 1 < width:
+                    hb = tiles[y * width + x + 1]['heights']
+                    walls.append((tile['faces'][2], [
+                        ((x + 1) * scale, (y + 0) * scale, -h[1], 1),
+                        ((x + 1) * scale, (y + 1) * scale, -h[3], 0),
+                        ((x + 1) * scale, (y + 1) * scale, -hb[2], 2),
+                        ((x + 1) * scale, (y + 0) * scale, -hb[0], 3)]))
+                for face_idx, corners in walls:
+                    if abs(corners[0][2] - corners[3][2]) < 0.01 and abs(corners[1][2] - corners[2][2]) < 0.01:
+                        continue  # sem desnivel: parede de altura zero
+                    f_info = faces[face_idx]
+                    mat_name = get_material_name(gnd_textures[f_info['texture_index']])
+                    uv = f_info['texcoords']
+                    for px, py, pz, ci in corners:
+                        obj.write(f"v {px:.2f} {py:.2f} {pz:.2f}\n")
+                        obj.write(f"vt {uv[ci]:.4f} {1.0 - uv[4 + ci]:.4f}\n")
+                    gnd_faces_by_mat.setdefault(mat_name, []).append((
+                        [v_offset, v_offset + 1, v_offset + 2, v_offset + 3],
+                        [vt_offset, vt_offset + 1, vt_offset + 2, vt_offset + 3]
+                    ))
+                    v_offset += 4
+                    vt_offset += 4
+
         for mat_name, f_list in gnd_faces_by_mat.items():
             obj.write(f"usemtl {mat_name}\n")
             for v_idx, vt_idx in f_list:
@@ -703,7 +743,14 @@ def compile_map(map_dir: str, output_obj: str = None, map_name: str = None):
 
             placed_count += 1
             
-    # O RSW de Prontera nao tem luzes: as noturnas saem dos modelos de poste (lido pelo ue_import_map.py)
+    # Luzes do proprio .rsw (o RO as usava para assar o lightmap; mapas internos tem dezenas): viram luzes reais
+    # do Lumen. Mesma conversao das instancias: RO (X, Y para baixo, Z) + centro -> OBJ (x, z, -y).
+    # O RSW de Prontera nao tem luzes: la as noturnas saem dos modelos de poste.
+    for L in rsw.get('lights', []):
+        p = L['position']
+        lx, ly, lz = p[0] + center_x, p[1], p[2] + center_y
+        night_lights.append({'kind': 'rsw', 'name': L['name'], 'x': round(lx, 2), 'y': round(lz, 2), 'z': round(-ly, 2),
+                             'color': [round(c, 3) for c in L['color']], 'range': round(L['range'], 2)})
     window_textures = find_window_textures(map_dir, tex_index, model_texture_names)
     lights_path = os.path.splitext(output_obj)[0] + '_lights.json'
     with open(lights_path, 'w', encoding='utf-8') as lf:

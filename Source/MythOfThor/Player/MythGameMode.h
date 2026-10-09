@@ -17,6 +17,10 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Myth")
 	TObjectPtr<class AMythDayNightActor> DayNight;
 
+	/** Multiplicador das luzes do mapa (.rsw) nos interiores, que sao sempre noite. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth")
+	float IndoorLightBoost = 5.f;
+
 protected:
 	virtual void BeginPlay() override;
 };

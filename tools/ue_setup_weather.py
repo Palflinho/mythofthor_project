@@ -121,3 +121,24 @@ def build_snow():
 eal.make_directory(FOLDER)
 build_rain()
 build_snow()
+
+
+def build_indoor_void():
+    """Piso preto sem iluminacao sob os mapas internos (o vazio entre as salas fica preto, como no RO)."""
+    path = '/Game/Myth/M_IndoorVoid'
+    eal.make_directory('/Game/Myth')
+    if eal.does_asset_exist(path):
+        mat = eal.load_asset(path)
+        mel.delete_all_material_expressions(mat)
+    else:
+        mat = tools.create_asset('M_IndoorVoid', '/Game/Myth', unreal.Material, unreal.MaterialFactoryNew())
+    mat.set_editor_property('shading_model', unreal.MaterialShadingModel.MSM_UNLIT)
+    black = mel.create_material_expression(mat, unreal.MaterialExpressionConstant3Vector, -300, 0)
+    black.set_editor_property('constant', unreal.LinearColor(0.0, 0.0, 0.0, 1.0))
+    mel.connect_material_property(black, '', unreal.MaterialProperty.MP_EMISSIVE_COLOR)
+    mel.recompile_material(mat)
+    eal.save_loaded_asset(mat)
+    unreal.log('[Weather] M_IndoorVoid pronto')
+
+
+build_indoor_void()

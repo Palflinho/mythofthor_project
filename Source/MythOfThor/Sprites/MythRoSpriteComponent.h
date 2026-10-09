@@ -152,6 +152,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
 	float ShadowFadeLength = 45.f;
 
+	/** Sprites mais baixos que isto (cm) nao projetam a sombra do Lumen, so a redonda (o Poring virava uma mancha). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
+	float MinCastShadowHeight = 70.f;
+
+	/** Quanto a base da sombra projetada afunda no chao (cm): ela comeca sob a elipse, sem corte seco nos pes. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
+	float CastShadowSink = 12.f;
+
 	/** Toca os sons pedidos pelos eventos dos quadros do .act (passos, golpes, dano, morte). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
 	bool bPlayActSounds = true;

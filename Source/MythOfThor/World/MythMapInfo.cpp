@@ -28,3 +28,20 @@ AMythMapInfo* AMythMapInfo::Find(const UWorld* World)
 	}
 	return nullptr;
 }
+
+bool AMythMapInfo::IsIndoor() const
+{
+	if (IndoorOverride != 0)
+	{
+		return IndoorOverride > 0;
+	}
+	// Convencao do RO: <cidade>_in ou <cidade>_in01, _in02...
+	const FString Name = MapName.ToLower();
+	const int32 Idx = Name.Find(TEXT("_in"), ESearchCase::CaseSensitive, ESearchDir::FromEnd);
+	if (Idx == INDEX_NONE)
+	{
+		return false;
+	}
+	const FString Rest = Name.Mid(Idx + 3);
+	return Rest.IsEmpty() || Rest.IsNumeric();
+}
