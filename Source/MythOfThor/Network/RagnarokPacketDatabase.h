@@ -43,6 +43,67 @@ namespace RagnarokPackets
     static constexpr uint16 HEADER_ZC_UNIT_WALKING      = 0x09fd; // 114 bytes
     static constexpr uint16 HEADER_ZC_EXTEND_BODYITEM_SIZE = 0x0b18; // 4 bytes
 
+    // Chat & Mensagens
+    static constexpr uint16 HEADER_CZ_GLOBAL_MESSAGE    = 0x00f3; // Dinâmico (-1), formato "<Nome> : <Msg>"
+    static constexpr uint16 HEADER_ZC_NOTIFY_CHAT       = 0x008e; // Dinâmico (-1)
+    static constexpr uint16 HEADER_ZC_DISP_MESSAGE      = 0x02c1; // Dinâmico (-1), mensagens de cor/GM/sistema
+    static constexpr uint16 HEADER_ZC_DISP_MESSAGE2     = 0x017f; // Dinâmico (-1)
+    static constexpr uint16 HEADER_ZC_WHISPER           = 0x008a; // Dinâmico (-1)
+
+    // Status
+    static constexpr uint16 HEADER_CZ_STATUS_CHANGE     = 0x00bb; // 5 bytes (uint16 type, uint16 status_id, uint8 amount)
+    static constexpr uint16 HEADER_ZC_STATUS            = 0x00bd; // 44 bytes
+    static constexpr uint16 HEADER_ZC_STATUS_VALUES     = 0x00be; // Dinâmico (-1)
+    static constexpr uint16 HEADER_ZC_STATUS_CHANGE_ACK = 0x00bc; // 6 bytes
+
+    // Personagens
+    static constexpr uint16 HEADER_CH_MAKE_CHAR         = 0x0a39; // 36 bytes (PACKETVER >= 20151001)
+    static constexpr uint16 HEADER_CH_DELETE_CHAR       = 0x0068; // 46 bytes
+
+    // NPCs e Diálogos
+    static constexpr uint16 HEADER_CZ_CONTACTNPC        = 0x0090; // 7 bytes (uint16 type, uint32 AID, uint8 type)
+    static constexpr uint16 HEADER_ZC_SAY_DIALOG        = 0x00b4; // Dinâmico (-1)
+    static constexpr uint16 HEADER_ZC_WAIT_DIALOG       = 0x00b5; // 6 bytes (uint16 type, uint32 NpcID)
+    static constexpr uint16 HEADER_ZC_CLOSE_DIALOG      = 0x00b6; // 6 bytes (uint16 type, uint32 NpcID)
+    static constexpr uint16 HEADER_ZC_MENU_LIST         = 0x00b7; // Dinâmico (-1)
+    static constexpr uint16 HEADER_CZ_CHOOSE_MENU       = 0x00b8; // 7 bytes (uint16 type, uint32 NpcID, uint8 select)
+    static constexpr uint16 HEADER_CZ_REQ_NEXT_SCRIPT   = 0x00b9; // 6 bytes (uint16 type, uint32 NpcID)
+    static constexpr uint16 HEADER_CZ_CLOSE_DIALOG      = 0x0146; // 6 bytes (uint16 type, uint32 NpcID)
+
+    // Inventário e Equipamento
+    static constexpr uint16 HEADER_ZC_NORMAL_ITEMLIST   = 0x0b09; // Dinâmico (-1)
+    static constexpr uint16 HEADER_ZC_NORMAL_ITEMLIST_OLD = 0x02e8; // Dinâmico (-1)
+    static constexpr uint16 HEADER_ZC_EQUIPMENT_ITEMLIST= 0x0b39; // Dinâmico (-1)
+    static constexpr uint16 HEADER_ZC_EQUIPMENT_ITEMLIST_OLD = 0x02d0; // Dinâmico (-1)
+    static constexpr uint16 HEADER_CZ_USE_ITEM          = 0x0439; // 8 bytes
+    static constexpr uint16 HEADER_CZ_REQ_WEAR_EQUIP    = 0x0998; // 8 bytes
+    static constexpr uint16 HEADER_CZ_REQ_TAKEOFF_EQUIP = 0x00ab; // 4 bytes
+
+    // Habilidades
+    static constexpr uint16 HEADER_ZC_SKILL_INFO_LIST   = 0x010f; // Dinâmico (-1)
+    static constexpr uint16 HEADER_CZ_USE_SKILL         = 0x0438; // 10 bytes
+
+    // Itens no Chão
+    static constexpr uint16 HEADER_ZC_ITEM_FALL_ENTRY   = 0x084b; // 19 bytes
+    static constexpr uint16 HEADER_ZC_ITEM_FALL_ENTRY2  = 0x0add; // 19 bytes
+    static constexpr uint16 HEADER_CZ_ITEM_PICKUP       = 0x0362; // 6 bytes
+    static constexpr uint16 HEADER_ZC_ITEM_DISAPPEAR    = 0x00a1; // 6 bytes
+
+    // Clima & Efeitos Especiais
+    static constexpr uint16 HEADER_ZC_NOTIFY_EFFECT2    = 0x01f3; // 10 bytes: [uint16 opcode][uint32 GID][int32 effect_id]
+
+    namespace WeatherEffects
+    {
+        static constexpr int32 EF_RAIN      = 161;
+        static constexpr int32 EF_SNOW      = 162;
+        static constexpr int32 EF_SAKURA    = 163;
+        static constexpr int32 EF_CLOUDS    = 233; // EF_CLOUD3
+        static constexpr int32 EF_FIREWORKS = 297; // EF_POKJUK
+        static constexpr int32 EF_LEAVES    = 333; // EF_MAPLE
+        static constexpr int32 EF_FOG       = 515; // EF_CLOUD4
+        static constexpr int32 EF_CLOUDS2   = 516; // EF_CLOUD5
+    }
+
     /**
      * Retorna o comprimento do pacote de acordo com a tabela de packetdb do rAthena.
      */
@@ -95,6 +156,7 @@ namespace RagnarokPackets
             case 0x009b: return 34;
             case 0x009e: return 17;
             case 0x009f: return 20;
+            case 0x00a1: return 6;
             case 0x00a2: return 14;
             case 0x00a7: return 9;
             case 0x00ab: return 4;
@@ -102,10 +164,17 @@ namespace RagnarokPackets
             case 0x00b0: return 8;
             case 0x00b1: return 8;
             case 0x00b2: return 3;
+            case 0x00b4: return -1;
+            case 0x00b5: return 6;
+            case 0x00b6: return 6;
+            case 0x00b7: return -1;
             case 0x00b8: return 7;
             case 0x00b9: return 6;
             case 0x00ba: return 2;
             case 0x00bb: return 5;
+            case 0x00bc: return 6;
+            case 0x00bd: return 44;
+            case 0x00be: return -1;
             case 0x00bf: return 3;
             case 0x00c1: return 2;
             case 0x00c3: return 8;
@@ -150,6 +219,7 @@ namespace RagnarokPackets
             case 0x0104: return 79;
             case 0x0108: return -1;
             case 0x0109: return -1;
+            case 0x010f: return -1;
             case 0x0112: return 4;
             case 0x0113: return 25;
             case 0x0114: return 31;
@@ -210,6 +280,7 @@ namespace RagnarokPackets
             case 0x017b: return -1;
             case 0x017c: return 6;
             case 0x017e: return -1;
+            case 0x017f: return -1;
             case 0x0180: return 6;
             case 0x0182: return 106;
             case 0x0183: return 10;
@@ -462,6 +533,7 @@ namespace RagnarokPackets
             case 0x02cd: return 71;
             case 0x02ce: return 10;
             case 0x02cf: return 6;
+            case 0x02d0: return -1;
             case 0x02d5: return 2;
             case 0x02d6: return 6;
             case 0x02d8: return 10;
@@ -478,6 +550,7 @@ namespace RagnarokPackets
             case 0x02e5: return 9;
             case 0x02e6: return 6;
             case 0x02e7: return -1;
+            case 0x02e8: return -1;
             case 0x02eb: return 13;
             case 0x02ec: return 67;
             case 0x02ed: return 59;

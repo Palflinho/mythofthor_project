@@ -37,7 +37,7 @@ public:
 	void AddDamageNumber(const FVector& WorldLocation, int32 Amount, ECombatTextType Type);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|CombatText")
-	float Lifetime = 1.1f;
+	float Lifetime = 1.5f;
 
 	/** Pixels que o texto sobe durante a vida. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|CombatText")
@@ -45,10 +45,10 @@ public:
 
 	/** Altura do salto inicial do dano causado, em pixels. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|CombatText")
-	float HopPixels = 28.f;
+	float HopPixels = 45.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|CombatText")
-	float BaseScale = 1.3f;
+	float BaseScale = 1.6f;
 
 private:
 	void DrawTargetRing();

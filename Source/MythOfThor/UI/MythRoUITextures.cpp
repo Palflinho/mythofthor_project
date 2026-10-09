@@ -1,6 +1,7 @@
 #include "UI/MythRoUITextures.h"
 
 #include "Sprites/MythRoSpriteComponent.h"
+#include "Sprites/RoSpriteFormats.h"
 #include "Engine/Texture2D.h"
 #include "IImageWrapper.h"
 #include "IImageWrapperModule.h"
@@ -12,7 +13,7 @@ namespace
 {
 	const TCHAR* UIDir = TEXT("유저인터페이스"); // 유저인터페이스
 
-	TMap<FString, TWeakObjectPtr<UTexture2D>>& Cache()
+	TMap<FString, TWeakObjectPtr<UTexture2D>>& UITextureCache()
 	{
 		static TMap<FString, TWeakObjectPtr<UTexture2D>> Map;
 		return Map;
@@ -22,7 +23,7 @@ namespace
 UTexture2D* FMythRoUITextures::Get(const FString& RelativePath)
 {
 	const FString Key = RelativePath.ToLower();
-	if (const TWeakObjectPtr<UTexture2D>* Found = Cache().Find(Key))
+	if (const TWeakObjectPtr<UTexture2D>* Found = UITextureCache().Find(Key))
 	{
 		if (Found->IsValid())
 		{
@@ -35,7 +36,7 @@ UTexture2D* FMythRoUITextures::Get(const FString& RelativePath)
 	if (!FFileHelper::LoadFileToArray(Bytes, *Path))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("MythRoUI: textura nao encontrada: %s"), *Path);
-		Cache().Add(Key, nullptr);
+		UITextureCache().Add(Key, nullptr);
 		return nullptr;
 	}
 
@@ -46,7 +47,7 @@ UTexture2D* FMythRoUITextures::Get(const FString& RelativePath)
 	if (!Wrapper.IsValid() || !Wrapper->SetCompressed(Bytes.GetData(), Bytes.Num()) || !Wrapper->GetRaw(ERGBFormat::BGRA, 8, Raw))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("MythRoUI: imagem invalida: %s"), *Path);
-		Cache().Add(Key, nullptr);
+		UITextureCache().Add(Key, nullptr);
 		return nullptr;
 	}
 
@@ -76,6 +77,47 @@ UTexture2D* FMythRoUITextures::Get(const FString& RelativePath)
 	FMemory::Memcpy(Mip.BulkData.Lock(LOCK_READ_WRITE), Pixels, W * H * sizeof(FColor));
 	Mip.BulkData.Unlock();
 	Tex->UpdateResource();
-	Cache().Add(Key, Tex);
+	UITextureCache().Add(Key, Tex);
+	return Tex;
+}
+
+UTexture2D* FMythRoUITextures::GetSpriteFrame(const FString& SprPath, int32 Index)
+{
+	const FString Key = FString::Printf(TEXT("spr:%s#%d"), *SprPath.ToLower(), Index);
+	if (const TWeakObjectPtr<UTexture2D>* Found = UITextureCache().Find(Key))
+	{
+		return Found->Get();
+	}
+	UITextureCache().Add(Key, nullptr); // falhas nao sao re-tentadas a cada quadro
+
+	TArray<uint8> Bytes;
+	const FString Path = FPaths::Combine(UMythRoSpriteComponent::GetAssetsRoot(), TEXT("data"), TEXT("sprite"), SprPath + TEXT(".spr"));
+	FRoSpr Spr;
+	if (!FFileHelper::LoadFileToArray(Bytes, *Path) || !Spr.Load(Bytes))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("MythRoUI: sprite nao encontrado: %s"), *Path);
+		return nullptr;
+	}
+	const bool bRgba = Index >= Spr.Indexed.Num();
+	const FRoSprImage* Img = Spr.Find(bRgba ? Index - Spr.Indexed.Num() : Index, bRgba ? 1 : 0);
+	if (!Img || Img->Width <= 0 || Img->Height <= 0)
+	{
+		return nullptr;
+	}
+	UTexture2D* Tex = UTexture2D::CreateTransient(Img->Width, Img->Height, PF_B8G8R8A8);
+	if (!Tex)
+	{
+		return nullptr;
+	}
+	Tex->Filter = TF_Nearest;
+	Tex->SRGB = true;
+	Tex->NeverStream = true;
+	Tex->LODGroup = TEXTUREGROUP_UI;
+	Tex->AddToRoot();
+	FTexture2DMipMap& Mip = Tex->GetPlatformData()->Mips[0];
+	FMemory::Memcpy(Mip.BulkData.Lock(LOCK_READ_WRITE), Img->Pixels.GetData(), Img->Pixels.Num() * sizeof(FColor));
+	Mip.BulkData.Unlock();
+	Tex->UpdateResource();
+	UITextureCache().Add(Key, Tex);
 	return Tex;
 }

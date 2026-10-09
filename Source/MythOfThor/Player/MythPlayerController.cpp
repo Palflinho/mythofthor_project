@@ -24,6 +24,8 @@
 #include "InputMappingContext.h"
 #include "InputModifiers.h"
 #include "NavigationSystem.h"
+#include "UnrealClient.h"
+#include "TimerManager.h"
 
 AMythPlayerController::AMythPlayerController()
 {
@@ -534,6 +536,45 @@ void AMythPlayerController::MythSetHour(float Hour)
 	{
 		It->SetTimeOfDay(Hour);
 	}
+}
+
+void AMythPlayerController::MythShot(float DelaySeconds, float Hour, const FString& Name)
+{
+	FTimerHandle Handle;
+	GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateWeakLambda(this, [this, Hour, Name]()
+	{
+		auto Shoot = [Name]()
+		{
+			FScreenshotRequest::RequestScreenshot(Name.IsEmpty() ? FString(TEXT("myth")) : Name, /*bShowUI=*/true, /*bAddFilenameSuffix=*/false);
+			UE_LOG(LogTemp, Log, TEXT("MythShot: print '%s' solicitado"), *Name);
+		};
+		if (Hour < 0.f)
+		{
+			Shoot(); // sem troca de horario: print imediato (ex.: numeros de dano em voo)
+			return;
+		}
+		MythSetHour(Hour);
+		FTimerHandle ShotHandle;
+		GetWorldTimerManager().SetTimer(ShotHandle, FTimerDelegate::CreateWeakLambda(this, Shoot), 2.f, false); // luz assenta
+	}), FMath::Max(DelaySeconds, 0.1f), false);
+}
+
+void AMythPlayerController::MythDelayed(float DelaySeconds, const FString& Command)
+{
+	FTimerHandle Handle;
+	GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateWeakLambda(this, [this, Command]()
+	{
+		ConsoleCommand(Command);
+	}), FMath::Max(DelaySeconds, 0.1f), false);
+}
+
+void AMythPlayerController::MythQuitAfter(float Seconds)
+{
+	FTimerHandle Handle;
+	GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateWeakLambda(this, [this]()
+	{
+		ConsoleCommand(TEXT("quit"));
+	}), FMath::Max(Seconds, 1.f), false);
 }
 
 void AMythPlayerController::MythDayLength(float Seconds)

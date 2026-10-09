@@ -13,4 +13,10 @@ struct MYTHOFTHOR_API FMythRoUITextures
 {
 	/** Ex.: Get(TEXT("basic_interface/basewin_bg.bmp")) ou Get(TEXT("map/prontera.bmp")). Nulo se nao existir. */
 	static UTexture2D* Get(const FString& RelativePath);
+
+	/**
+	 * Um quadro de um .spr do cliente como textura (ex.: digitos de dano de 이팩트/숫자.spr).
+	 * SprPath e relativo a data/sprite, sem extensao. Indice conta as imagens indexadas e depois as RGBA.
+	 */
+	static UTexture2D* GetSpriteFrame(const FString& SprPath, int32 Index);
 };

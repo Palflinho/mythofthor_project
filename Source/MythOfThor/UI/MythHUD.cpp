@@ -6,6 +6,9 @@
 #include "Components/CapsuleComponent.h"
 #include "Player/MythPlayerController.h"
 #include "Sprites/MythMonster.h"
+#include "UI/MythRoUITextures.h"
+#include "CanvasItem.h"
+#include "Engine/Texture2D.h"
 
 namespace
 {
@@ -13,11 +16,11 @@ namespace
 	{
 		switch (Type)
 		{
-		case ECombatTextType::Critical:    return FLinearColor(1.f, 0.85f, 0.1f);
-		case ECombatTextType::DamageTaken: return FLinearColor(1.f, 0.15f, 0.15f);
+		case ECombatTextType::Critical:    return FLinearColor(1.f, 0.9f, 0.25f);  // digitos amarelos sobre a estrela
+		case ECombatTextType::DamageTaken: return FLinearColor(1.f, 0.3f, 0.3f);   // dano no jogador: vermelho
 		case ECombatTextType::Miss:        return FLinearColor(0.3f, 0.55f, 1.f);
 		case ECombatTextType::Heal:        return FLinearColor(0.3f, 1.f, 0.4f);
-		default:                           return FLinearColor(1.f, 1.f, 0.85f);
+		default:                           return FLinearColor::White;              // dano causado: branco
 		}
 	}
 }
@@ -46,11 +49,22 @@ void AMythHUD::DrawHUD()
 		return;
 	}
 
-	UFont* Font = GEngine->GetLargeFont();
+	// Numeros de dano do cliente original: digitos de 이팩트/숫자.spr (0-9) e textos de 이팩트/msg.spr
+	// (0 Miss, 1 Guard, 2 Critical, 3 estrela do critico). Os sprites sao brancos e recebem a cor do tipo.
+	static const FString NumberSpr = TEXT("이팩트/숫자"); // 이팩트/숫자
+	static const FString MsgSpr = TEXT("이팩트/msg");             // 이팩트/msg
 	const float Dt = GetWorld()->GetDeltaSeconds();
-	FFontRenderInfo Info;
-	Info.bEnableShadow = true;
-	Info.GlowInfo.bEnableGlow = false;
+
+	auto DrawSprite = [this](UTexture2D* Tex, float X, float Y, float Scale, const FLinearColor& Color)
+	{
+		if (!Tex || !Tex->GetResource())
+		{
+			return;
+		}
+		FCanvasTileItem Tile(FVector2D(X, Y), Tex->GetResource(), FVector2D(Tex->GetSizeX(), Tex->GetSizeY()) * Scale, Color);
+		Tile.BlendMode = SE_BLEND_Translucent;
+		Canvas->DrawItem(Tile);
+	};
 
 	for (int32 i = Entries.Num() - 1; i >= 0; --i)
 	{
@@ -66,27 +80,73 @@ void AMythHUD::DrawHUD()
 		const float T = E.Age / Lifetime;
 		const bool bHops = E.Type == ECombatTextType::DamageDealt || E.Type == ECombatTextType::Critical;
 
-		// Dano causado salta (arco) e depois sobe devagar; os demais sobem direto.
-		float OffsetY = -RisePixels * T;
+		// Como no original: o dano causado sai num arco (sobe, desce passando do ponto de partida) indo para o
+		// lado e encolhendo; dano sofrido e cura sobem em linha reta; Miss sobe.
+		float OffsetX = E.JitterX;
+		float OffsetY = 0.f;
+		float Scale = BaseScale;
 		if (bHops)
 		{
-			const float HopT = FMath::Clamp(E.Age / 0.25f, 0.f, 1.f);
-			OffsetY -= HopPixels * FMath::Sin(HopT * PI);
+			OffsetY = -FMath::Sin(-HALF_PI + PI * (0.5f + T * 1.5f)) * HopPixels - 20.f;
+			OffsetX += T * 45.f;
+			Scale = FMath::Lerp(BaseScale * 1.9f, BaseScale * 0.75f, T);
 		}
-
-		float Scale = BaseScale;
+		else
+		{
+			OffsetY = -RisePixels * T - 20.f;
+		}
 		if (E.Type == ECombatTextType::Critical)
 		{
-			Scale *= 1.8f - 0.5f * FMath::Min(E.Age / 0.2f, 1.f); // "pop" inicial do critico
+			Scale *= 1.2f;
 		}
 
 		FLinearColor Color = ColorFor(E.Type);
-		Color.A = T < 0.6f ? 1.f : 1.f - (T - 0.6f) / 0.4f; // fade no final
+		Color.A = T < 0.7f ? 1.f : 1.f - (T - 0.7f) / 0.3f; // some no final
 
-		float W = 0.f, H = 0.f;
-		Canvas->TextSize(Font, E.Text, W, H, Scale, Scale);
-		Canvas->SetDrawColor(Color.ToFColor(true));
-		Canvas->DrawText(Font, E.Text, Screen2D.X - W * 0.5f + E.JitterX, Screen2D.Y - H + OffsetY, Scale, Scale, Info);
+		if (E.Type == ECombatTextType::Miss)
+		{
+			UTexture2D* Miss = FMythRoUITextures::GetSpriteFrame(MsgSpr, 0);
+			if (Miss)
+			{
+				DrawSprite(Miss, Screen2D.X + OffsetX - Miss->GetSizeX() * Scale * 0.5f, Screen2D.Y + OffsetY - Miss->GetSizeY() * Scale, Scale, FLinearColor(1.f, 1.f, 1.f, Color.A));
+			}
+			continue;
+		}
+
+		// Largura total dos digitos (sobreposicao de 1 px entre eles, como no cliente)
+		TArray<UTexture2D*, TInlineAllocator<8>> Digits;
+		float TotalW = 0.f, MaxH = 0.f;
+		for (const TCHAR Ch : E.Text)
+		{
+			if (Ch < TEXT('0') || Ch > TEXT('9'))
+			{
+				continue;
+			}
+			UTexture2D* D = FMythRoUITextures::GetSpriteFrame(NumberSpr, Ch - TEXT('0'));
+			if (D)
+			{
+				Digits.Add(D);
+				TotalW += (D->GetSizeX() - 1) * Scale;
+				MaxH = FMath::Max(MaxH, D->GetSizeY() * Scale);
+			}
+		}
+		const float CX = Screen2D.X + OffsetX;
+		const float Y = Screen2D.Y + OffsetY - MaxH;
+		if (E.Type == ECombatTextType::Critical)
+		{
+			// Estrela vermelha atras do numero do critico
+			if (UTexture2D* Star = FMythRoUITextures::GetSpriteFrame(MsgSpr, 3))
+			{
+				const float S = Scale * 0.55f;
+				DrawSprite(Star, CX - Star->GetSizeX() * S * 0.5f, Y + MaxH * 0.5f - Star->GetSizeY() * S * 0.5f, S, FLinearColor(1.f, 1.f, 1.f, Color.A));
+			}
+		}
+		float X = CX - TotalW * 0.5f;
+		for (UTexture2D* D : Digits)
+		{
+			DrawSprite(D, X, Y + MaxH - D->GetSizeY() * Scale, Scale, Color);
+			X += (D->GetSizeX() - 1) * Scale;
+		}
 	}
 }
 

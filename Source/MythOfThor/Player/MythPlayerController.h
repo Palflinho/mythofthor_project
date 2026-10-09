@@ -88,6 +88,21 @@ public:
 	UFUNCTION(Exec)
 	void MythDayLength(float Seconds);
 
+	/**
+	 * Console (testes automaticos): MythShot 20 21 noite -> aos 20 s muda para as 21h e, 2 s depois, salva
+	 * Saved/Screenshots/.../noite.png com a HUD. Hora < 0 mantem o horario.
+	 */
+	UFUNCTION(Exec)
+	void MythShot(float DelaySeconds, float Hour, const FString& Name);
+
+	/** Console: MythDelayed 24.5 MythTestDamage -> roda um comando de console depois de N segundos (testes automaticos). */
+	UFUNCTION(Exec)
+	void MythDelayed(float DelaySeconds, const FString& Command);
+
+	/** Console: MythQuitAfter 40 -> fecha o jogo apos 40 s (usado com -ExecCmds nos testes automaticos). */
+	UFUNCTION(Exec)
+	void MythQuitAfter(float Seconds);
+
 	/** Console: MythHurtMonster <dano> -> da dano ao alvo focado (ou ao monstro mais proximo). */
 	UFUNCTION(Exec)
 	void MythHurtMonster(int32 Damage);

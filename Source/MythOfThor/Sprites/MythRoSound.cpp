@@ -72,7 +72,7 @@ namespace
 		return Out;
 	}
 
-	TMap<FString, FDecodedWav>& Cache()
+	TMap<FString, FDecodedWav>& RoWavCache()
 	{
 		static TMap<FString, FDecodedWav> Map;
 		return Map;
@@ -103,7 +103,7 @@ bool UMythRoSound::PlayWavAtLocation(const UObject* WorldContext, const FString&
 		return false;
 	}
 	const FString Key = FileName.ToLower();
-	FDecodedWav* Wav = Cache().Find(Key);
+	FDecodedWav* Wav = RoWavCache().Find(Key);
 	if (!Wav)
 	{
 		TArray<uint8> Bytes;
@@ -117,7 +117,7 @@ bool UMythRoSound::PlayWavAtLocation(const UObject* WorldContext, const FString&
 		{
 			UE_LOG(LogTemp, Verbose, TEXT("MythRoSound: som invalido ou ausente: %s"), *Path);
 		}
-		Wav = &Cache().Add(Key, MoveTemp(Decoded));
+		Wav = &RoWavCache().Add(Key, MoveTemp(Decoded));
 	}
 	if (!Wav->bValid)
 	{

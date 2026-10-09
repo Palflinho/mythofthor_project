@@ -33,7 +33,7 @@ namespace
 
 	FString Basic(const TCHAR* Name) { return FString::Printf(TEXT("basic_interface/%s.bmp"), Name); }
 
-	FString FormatClock(float Seconds)
+	FString RoHudFormatClock(float Seconds)
 	{
 		const int32 Total = FMath::Max(0, FMath::CeilToInt(Seconds));
 		return FString::Printf(TEXT("%02d:%02d:%02d"), Total / 3600, (Total / 60) % 60, Total % 60);
@@ -443,7 +443,7 @@ void UMythRoHUDWidget::RefreshStamina(float RemainingSeconds)
 	}
 	LastShownSecond = Sec;
 	StaminaGauge.SetFraction(RemainingSeconds / UAutoBattleComponent::MAX_DAILY_STAMINA_SECONDS);
-	StaminaText->SetText(FText::FromString(FString::Printf(TEXT("%s / 03:00:00"), *FormatClock(RemainingSeconds))));
+	StaminaText->SetText(FText::FromString(FString::Printf(TEXT("%s / 03:00:00"), *RoHudFormatClock(RemainingSeconds))));
 	if (Sec <= 0 && AutoBattle)
 	{
 		RefreshAutoState(AutoBattle->IsAutoBattleActive());
