@@ -132,3 +132,28 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnEquipResult, int32, Index, int
 
 **Pronto quando:** com `@item 2301` (Roupas de Algodão) e `@item 1201` (Faca), equipar e desequipar logam o
 evento, e o inventário reflete o estado.
+
+## Tarefa A5 — ataque fora de alcance (rede)
+
+Hoje, ao clicar para atacar um monstro a mais de 1 célula, o servidor responde **0x0139**
+(ZC_ATTACK_FAILURE_FOR_DISTANCE) e nada acontece. No cliente original, ele anda até o alvo e ataca de novo.
+O Claude faz a caminhada no PlayerController; falta só ler o pacote.
+
+- Confirmar a struct em `packets.hpp`/`clif.cpp` (`clif_movetoattack`). Deve ser targetAID 4, targetX 2,
+  targetY 2, x 2, y 2, alcance 2 = 16 bytes.
+
+Evento:
+
+```cpp
+// TargetID: alvo. TargetX/TargetY: celula do alvo. Range: alcance de ataque atual (celulas).
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnAttackOutOfRange, int64, TargetID, int32, TargetX, int32, TargetY, int32, Range);
+```
+
+**Pronto quando:** `MythSay+@monster+poring+1` seguido de `MythAttackNearest` com o Poring longe loga o evento.
+
+## Pergunta do usuário (pontos de atributo e de habilidade): conferir o envio
+
+- `CZ_STATUS_CHANGE` 0x00bb (5 bytes) e `CZ_UPGRADE_SKILLLEVEL` 0x0112 (4 bytes) existem em
+  `RagnarokNetworkSubsystem`. Conferir o formato contra `clif_parse_StatusUp` e `clif_parse_SkillUp`.
+- Tratar as respostas: `ZC_STATUS_CHANGE_ACK` (resultado + novo valor) e a atualização da skill
+  (`ZC_SKILLINFO_UPDATE`, ou a lista de novo). Disparar `OnPlayerStatsChanged` e o evento da lista de skills.

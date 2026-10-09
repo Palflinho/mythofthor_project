@@ -349,7 +349,8 @@ void UMythRoSpriteComponent::LoadEquipment(const FString& Root, const FString& S
 		Source = FMythRoSpriteSource();
 		if (!Base.IsEmpty() && FPaths::FileExists(Base + TEXT(".spr")))
 		{
-			LoadSource(Source, Base + TEXT(".spr"), Base + TEXT(".act"), FString());
+			const bool bOk = LoadSource(Source, Base + TEXT(".spr"), Base + TEXT(".act"), FString());
+			UE_LOG(LogTemp, Verbose, TEXT("MythRoSprite: equipamento %s: %s (%d acoes)"), bOk ? TEXT("ok") : TEXT("falhou"), *Base, Source.Act.Actions.Num());
 		}
 		else if (!Base.IsEmpty())
 		{
@@ -785,7 +786,9 @@ void UMythRoSpriteComponent::AddBodyLayer(const FMythRoSpriteSource& Source, int
 		return;
 	}
 	const FRoActAction& Action = Source.Act.Actions[ActionIndex];
-	AddLayerQuads(Source, Action.Frames[FrameIndex % Action.Frames.Num()], FIntPoint::ZeroValue, DepthBase, Section);
+	const FRoActFrame& Frame = Action.Frames[FrameIndex % Action.Frames.Num()];
+	// Parado/andando os .act de arma tem camadas vazias (-1): como no RO, a arma so aparece no golpe
+	AddLayerQuads(Source, Frame, FIntPoint::ZeroValue, DepthBase, Section);
 }
 
 void UMythRoSpriteComponent::AddLayerQuads(const FMythRoSpriteSource& Source, const FRoActFrame& Frame, const FIntPoint& Offset, float DepthBase, int32& Section)

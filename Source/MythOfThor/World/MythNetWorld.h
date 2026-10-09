@@ -72,6 +72,7 @@ private:
 	UFUNCTION() void HandleSkillFailed(int32 SkillID, int32 Cause);
 	UFUNCTION() void HandleSpecialEffect(int64 UnitID, int32 EffectID);
 	UFUNCTION() void HandleEquipChanged(int64 UnitID, uint8 Look, int32 Value);
+	UFUNCTION() void HandleStatusChange(int64 UnitID, int32 EfstID, bool bActive, int32 TotalMs, int32 RemainMs);
 
 	/** Classe, sexo e cabelo do proprio personagem a partir do login/selecao (o sprite padrao e Aprendiz). */
 	void ApplySelfAppearance();

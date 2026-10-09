@@ -1095,6 +1095,7 @@ void AMythPlayerController::MythLook(int32 Look, int32 Value)
 	case 4: S->HeadTop = Value; break;
 	case 5: S->HeadMid = Value; break;
 	case 8: S->Shield = Value; break;
+	case 99: S->PlayAttack(FMath::Max(Value, 1) / 1000.f); return; // so a animacao de ataque (Value = ms)
 	default: return;
 	}
 	UE_LOG(LogTemp, Log, TEXT("MythLook %d = %d"), Look, Value);

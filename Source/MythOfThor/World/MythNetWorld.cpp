@@ -206,6 +206,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnSkillFailed.AddDynamic(this, &AMythNetWorld::HandleSkillFailed);
 	Net->OnSpecialEffect.AddDynamic(this, &AMythNetWorld::HandleSpecialEffect);
 	Net->OnEquipChanged.AddDynamic(this, &AMythNetWorld::HandleEquipChanged);
+	Net->OnStatusChange.AddDynamic(this, &AMythNetWorld::HandleStatusChange);
 
 	// Chegou num mapa novo por ordem do servidor (portal/warp): termina a entrada no proximo quadro, com o
 	// personagem ja criado pelo GameMode, e so entao avisa o servidor (ACTORINIT)
@@ -254,6 +255,7 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnSkillFailed.RemoveAll(this);
 		Net->OnSpecialEffect.RemoveAll(this);
 		Net->OnEquipChanged.RemoveAll(this);
+		Net->OnStatusChange.RemoveAll(this);
 	}
 	Super::EndPlay(EndPlayReason);
 }
@@ -813,6 +815,19 @@ void AMythNetWorld::ApplySelfAppearance()
 	S->Weapon = Slot.Weapon;
 	S->Shield = Slot.Shield;
 	S->ReloadSprites();
+}
+
+void AMythNetWorld::HandleStatusChange(int64 UnitID, int32 EfstID, bool bActive, int32 TotalMs, int32 RemainMs)
+{
+	// Icones de estado so do proprio personagem, na coluna da direita (como no cliente original)
+	const URagnarokNetworkSubsystem* Net = GetNet();
+	if (Net && UnitID == Net->GetSelfID())
+	{
+		if (AMythHUD* Hud = GetGameHud())
+		{
+			Hud->SetStatusIcon(EfstID, bActive, TotalMs, RemainMs);
+		}
+	}
 }
 
 void AMythNetWorld::HandleEquipChanged(int64 UnitID, uint8 Look, int32 Value)
