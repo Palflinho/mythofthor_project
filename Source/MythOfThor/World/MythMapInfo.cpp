@@ -35,8 +35,14 @@ bool AMythMapInfo::IsIndoor() const
 	{
 		return IndoorOverride > 0;
 	}
-	// Convencao do RO: <cidade>_in ou <cidade>_in01, _in02...
+	// Interiores do RO sem o sufixo _in
 	const FString Name = MapName.ToLower();
+	static const TSet<FString> KnownInteriors = { TEXT("prt_church"), TEXT("prt_castle") };
+	if (KnownInteriors.Contains(Name))
+	{
+		return true;
+	}
+	// Convencao do RO: <cidade>_in ou <cidade>_in01, _in02...
 	const int32 Idx = Name.Find(TEXT("_in"), ESearchCase::CaseSensitive, ESearchDir::FromEnd);
 	if (Idx == INDEX_NONE)
 	{

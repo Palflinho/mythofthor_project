@@ -577,6 +577,7 @@ private:
 	void HandlePlayerMove(const uint8* PacketData, int32 PacketSize);
 	void FlushPendingSend();
 	void HandleMapMove(const uint8* PacketData, int32 PacketSize);
+	void HandleItemEntry(const uint8* PacketData, int32 PacketSize);
 	FIntPoint PendingMapCell = FIntPoint::ZeroValue;
 	bool bAwaitingMapLoad = false;
 	/** Bytes aguardando o socket conectar (connect nao-bloqueante) ou sobra de envio parcial. */

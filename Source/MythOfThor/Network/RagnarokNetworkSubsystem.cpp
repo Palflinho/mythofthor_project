@@ -877,6 +877,9 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case RagnarokPackets::HEADER_ZC_ITEM_FALL_ENTRY2:
 				HandleItemFall(PacketData, ActualLen);
 				break;
+			case 0x009d: // ZC_ITEM_ENTRY: item que ja estava no chao ao entrar na visao
+				HandleItemEntry(PacketData, ActualLen);
+				break;
 			case RagnarokPackets::HEADER_ZC_ITEM_DISAPPEAR:
 				HandleItemDisappear(PacketData, ActualLen);
 				break;
@@ -1506,6 +1509,21 @@ void URagnarokNetworkSubsystem::HandleItemFall(const uint8* PacketData, int32 Pa
 	int16 Count = *reinterpret_cast<const int16*>(PacketData + 19);
 
 	OnGroundItemAppear.Broadcast(GID, ItemID, FMath::Max<int32>(1, Count), CellX, CellY);
+}
+
+void URagnarokNetworkSubsystem::HandleItemEntry(const uint8* PacketData, int32 PacketSize)
+{
+	// PACKET_ZC_ITEM_ENTRY (packets_struct.hpp): AID +2, itemId (u32) +6, identify +10, x +11, y +13, amount +15
+	if (PacketSize < 17)
+	{
+		return;
+	}
+	const uint32 GID = *reinterpret_cast<const uint32*>(PacketData + 2);
+	const uint32 ItemID = *reinterpret_cast<const uint32*>(PacketData + 6);
+	const int32 CellX = *reinterpret_cast<const uint16*>(PacketData + 11);
+	const int32 CellY = *reinterpret_cast<const uint16*>(PacketData + 13);
+	const int32 Count = *reinterpret_cast<const uint16*>(PacketData + 15);
+	OnGroundItemAppear.Broadcast(GID, ItemID, FMath::Max(1, Count), CellX, CellY);
 }
 
 void URagnarokNetworkSubsystem::HandleItemDisappear(const uint8* PacketData, int32 PacketSize)
