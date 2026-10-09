@@ -202,6 +202,9 @@ void UMythRoHUDWidget::BuildSkillsWindow()
 		SkillIcons.Add(Icon);
 		SkillNames.Add(AddText(SkillsWindow, 38.f, Y + 3.f, 8, RoWinText));
 		SkillLevels.Add(AddText(SkillsWindow, 38.f, Y + 17.f, 7, RoWinLabel));
+		UImage* Up = AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("lv_up_on"))), W - 32.f, Y + 5.f, 22.f, 22.f);
+		Up->SetVisibility(ESlateVisibility::Collapsed);
+		SkillUpButtons.Add(Up);
 	}
 	const float BarY = H - 32.f;
 	AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("skill_botbar_left"))), 0.f, BarY, 12.f, 32.f);
@@ -421,14 +424,25 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 	int32 Row = 0;
 	if (Net)
 	{
-		for (const FRagnarokSkillInfo& Skill : Net->GetSkillList())
+		const int32 Points = Net->GetPlayerStats().SkillPoints;
+		const TArray<FRagnarokSkillInfo>& List = Net->GetSkillList();
+		SkillScroll = FMath::Clamp(SkillScroll, 0, FMath::Max(0, List.Num() - SkillNames.Num()));
+		int32 Skip = SkillScroll;
+		for (const FRagnarokSkillInfo& Skill : List)
 		{
+			if (Skip > 0)
+			{
+				--Skip;
+				continue;
+			}
 			if (Row >= SkillNames.Num())
 			{
 				break;
 			}
 			SkillRowID[Row] = Skill.SkillID;
 			SkillRowLevel[Row] = Skill.Level;
+			// "Lv Up" como no cliente original: so com pontos sobrando e se o servidor diz que a skill ainda sobe
+			SkillUpButtons[Row]->SetVisibility(Points > 0 && Skill.bUpgradable ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
 			UTexture2D* Icon = FMythRoClientTables::SkillIcon(Skill.SkillID);
 			SkillIcons[Row]->SetBrush(RoWinBrush(Icon, FVector2D(24.f, 24.f) * UIScale));
 			SkillIcons[Row]->SetVisibility(Icon ? ESlateVisibility::Visible : ESlateVisibility::Collapsed); // Visible: arrastavel para a barra
@@ -447,6 +461,7 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 	for (; Row < SkillNames.Num(); ++Row)
 	{
 		SkillIcons[Row]->SetVisibility(ESlateVisibility::Collapsed);
+		SkillUpButtons[Row]->SetVisibility(ESlateVisibility::Collapsed);
 		SkillNames[Row]->SetText(FText::GetEmpty());
 		SkillLevels[Row]->SetText(FText::GetEmpty());
 	}
@@ -481,6 +496,20 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 				if (Net)
 				{
 					Net->SendStatusUp(RoSpStr + i, 1); // CZ_STATUS_CHANGE: o servidor valida e devolve o novo valor
+				}
+				return true;
+			}
+		}
+	}
+	if (SkillsWindow && SkillsWindow->IsVisible())
+	{
+		for (int32 r = 0; r < SkillUpButtons.Num() && r < SkillRowID.Num(); ++r)
+		{
+			if (SkillRowID[r] != 0 && SkillUpButtons[r]->IsVisible() && IsUnder(SkillUpButtons[r], ScreenPos))
+			{
+				if (Net)
+				{
+					Net->SendSkillUp(SkillRowID[r]); // CZ_UPGRADE_SKILLLEVEL: o servidor valida e devolve a skill atualizada
 				}
 				return true;
 			}
@@ -558,4 +587,16 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDoubleClick(const FGeometry& InGeome
 		}
 	}
 	return Super::NativeOnMouseButtonDoubleClick(InGeometry, InMouseEvent);
+}
+
+FReply UMythRoHUDWidget::NativeOnMouseWheel(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+{
+	// Roda do mouse sobre a janela de habilidades: rola a lista
+	if (SkillsWindow && SkillsWindow->IsVisible() && IsUnder(SkillsWindow, InMouseEvent.GetScreenSpacePosition()))
+	{
+		SkillScroll += InMouseEvent.GetWheelDelta() > 0.f ? -1 : 1;
+		RefreshSkillsWindow();
+		return FReply::Handled();
+	}
+	return Super::NativeOnMouseWheel(InGeometry, InMouseEvent);
 }

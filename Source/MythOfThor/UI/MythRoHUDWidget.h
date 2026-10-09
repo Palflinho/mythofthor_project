@@ -105,6 +105,7 @@ protected:
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	// Arrastar janelas pela barra de titulo, como no cliente original
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+	virtual FReply NativeOnMouseWheel(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 	virtual FReply NativeOnMouseMove(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 	virtual FReply NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 	virtual FReply NativeOnMouseButtonDoubleClick(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
@@ -241,6 +242,10 @@ private:
 	UPROPERTY() TObjectPtr<UImage> DragIcon;
 	TArray<int32> SkillRowID;
 	TArray<int32> SkillRowLevel;
+	/** Botao "Lv Up" de cada linha (lv_up_on.bmp do cliente), visivel com pontos e skill que ainda sobe. */
+	UPROPERTY() TArray<TObjectPtr<UImage>> SkillUpButtons;
+	/** Primeira skill mostrada (a roda do mouse rola a lista, que tem mais skills que linhas). */
+	int32 SkillScroll = 0;
 	bool bHotDragging = false;
 	bool bDragIsSkill = false;
 	int32 DragID = 0;
