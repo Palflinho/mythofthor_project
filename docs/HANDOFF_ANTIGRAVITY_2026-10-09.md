@@ -1,0 +1,103 @@
+# Handoff para o Antigravity — buffs, skills de chão e quests de habilidade (09/10/2026)
+
+Divisão para trabalharmos em paralelo. **Antigravity**: rede (parsing de pacotes) e servidor (scripts rAthena).
+**Claude**: o que aparece na tela, que consome os eventos abaixo: ícones de buff com barra de duração, efeitos das
+skills de chão e sprite da classe ao trocar de job.
+
+## Regras do projeto (obrigatórias)
+
+- **Autoridade do servidor:** tudo que o rAthena faz vem por pacote. O cliente não recalcula nada.
+- **Pacotes:** IDs, tamanhos e offsets devem ser **copiados do código do rAthena**, nunca de memória:
+  - `~/mythofthor-server/rathena/src/map/packets.hpp` e `packets_struct.hpp`;
+  - `clif_packetdb.hpp`;
+  - `clif.cpp`.
+  O build é PACKETVER 20211103 com `-DPRERE` (PACKETVER_RE fica definido automaticamente).
+- **Build** pelo atalho `E:\Dev\mythofthor`, porque o acento em `Repositórios` quebra o MSVC.
+- **Teste sem jogador:** os comandos `MythLogin`, `MythSay`, `MythDelayed`, `MythShot` e `MythQuitAfter`
+  funcionam via `-ExecCmds`. Conta de teste e host ficam em `Config/DefaultGame.ini [Myth]`.
+- **Commits** só locais (sem push), um commit por tarefa.
+
+## Arquivos de cada um (para não conflitar)
+
+| Antigravity mexe | Claude mexe (não tocar) |
+|---|---|
+| `Source/MythOfThor/Network/*` | `Source/MythOfThor/UI/*` |
+| `npc/custom/myth/*` no servidor | `Source/MythOfThor/Sprites/*` |
+| `docs/` (só os próprios docs) | `Source/MythOfThor/World/MythNetWorld.*` |
+
+Os eventos novos são `UPROPERTY(BlueprintAssignable)` em `URagnarokNetworkSubsystem`. Do lado do Claude, a
+assinatura abaixo é o contrato. Se precisar mudar, avise o usuário.
+
+## Tarefa A1 — buffs/estados (status change)
+
+Pacotes a tratar. Confirme os IDs e as structs no rAthena; os tamanhos abaixo são do `clif_packetdb.hpp`:
+
+- `0x0983` ZC_MSG_STATE_CHANGE3 (29 bytes): liga um estado, com duração total e restante;
+- o pacote que **desliga** o estado. Veja qual `clif_status_change` / `clif_efst_status_change_sub` envia nessa
+  PACKETVER (provavelmente `0x0196` ZC_MSG_STATE_CHANGE com flag 0);
+- a lista de estados enviada ao entrar no mapa (`clif_efst_status_change_sub` no login), se for outro pacote.
+
+Evento:
+
+```cpp
+// UnitID: dono do estado (o próprio personagem = GetSelfID()). EfstID: o "type" do pacote (EFST_*).
+// bActive: ligou/desligou. TotalMs/RemainMs: duração (0 = sem duração, por exemplo estados permanentes).
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FOnStatusChange, int64, UnitID, int32, EfstID, bool, bActive, int32, TotalMs, int32, RemainMs);
+FOnStatusChange OnStatusChange;
+```
+
+**Pronto quando:** com `-MythNetLog`, `@login` → usar Angelus/Bênção (`MythSay+@job+4`, `MythSay+@allskill`,
+`MythHotkey`/`MythPressF`) loga o evento com EfstID, TotalMs e RemainMs corretos, e o fim do buff loga
+`bActive=false`.
+
+## Tarefa A2 — skills de chão (unidades de skill)
+
+- `0x09ca` ZC_SKILL_ENTRY5 (23 bytes): unidade de skill no chão (Parede de Fogo, Pneuma, armadilhas...);
+- `0x0120` ZC_SKILL_DISAPPEAR: remoção. Confirme o ID nesta PACKETVER.
+
+Eventos:
+
+```cpp
+// UnitID: id da unidade de chão. OwnerID: quem conjurou. UnitType: o "job"/unit id do pacote (UNT_*). X/Y: célula.
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FOnSkillUnitAppear, int64, UnitID, int64, OwnerID, int32, UnitType, int32, X, int32, Y);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSkillUnitDisappear, int64, UnitID);
+```
+
+**Pronto quando:** como Mago (`@job 2`, `@allskill`), Parede de Fogo (skill 18, alvo no chão via `0x0959`) loga
+as unidades aparecendo e sumindo.
+
+## Tarefa A3 — efeitos gerais do servidor
+
+- `0x019b` ZC_NOTIFY_EFFECT (unidade + tipo: subir de nível de base/classe, refino, etc.).
+
+Evento:
+
+```cpp
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnNotifyEffect, int64, UnitID, int32, Type);
+```
+
+O `0x01f3` (ZC_NOTIFY_EFFECT2) **já está tratado** e dispara `OnSpecialEffect`.
+
+## Tarefa B1 — classes só até a transclasse (servidor)
+
+Decisão do usuário: o jogo vai **só até as classes transcendentais**; 3ª e 4ª classes não entram.
+
+- Confirmar que o `npc/scripts_jobs.conf` usado (pre-re) não carrega NPCs de mudança para 3ª/4ª classe, e
+  desativar os que carregarem.
+- Garantir que não existe outro caminho para 3ª/4ª classe: NPCs de mudança de classe, itens e scripts customizados.
+  O `@job` de GM pode continuar.
+- Documentar em `docs/` o que foi desativado.
+
+## Tarefa B2 — quests que liberam habilidades (servidor, só a base)
+
+O usuário quer **novas quests que liberam habilidades extras por classe**, como as quests de habilidade clássicas,
+e talvez adaptar algumas habilidades de 3ª classe para as classes atuais.
+
+- Criar a estrutura em `npc/custom/myth/skill_quests/`:
+  - um NPC de exemplo que verifica a classe e um item/requisito e libera uma habilidade com
+    `skill <id>,<lv>,SKILL_PERM` (confirme o nome da flag em `script_constants.hpp`);
+  - registro do progresso com `setquest`/`completequest` ou variável de personagem.
+- **Não** escrever o conteúdo das quests (quais habilidades, requisitos e história): isso é decisão de design do
+  usuário. Deixe um exemplo e um modelo fácil de copiar.
+- **Habilidades de 3ª classe adaptadas:** só levantar quais funcionam no pre-re sem mudar o código do servidor, e
+  listar num doc. Não implementar ainda.
