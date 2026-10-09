@@ -132,12 +132,29 @@ bool URagnarokNetworkSubsystem::SelectCharacter(int32 SlotIndex)
 		if (Slot.Slot == SlotIndex)
 		{
 			SelectedCharName = Slot.Name;
+			CurrentStats.JobClass = Slot.JobClass;
+			CurrentStats.JobName = GetJobNameFromClass(Slot.JobClass);
+			CurrentStats.BaseLevel = Slot.BaseLevel;
+			CurrentStats.JobLevel = Slot.JobLevel;
+			CurrentStats.HP = Slot.HP;
+			CurrentStats.MaxHP = Slot.MaxHP;
+			CurrentStats.SP = Slot.SP;
+			CurrentStats.MaxSP = Slot.MaxSP;
 			break;
 		}
 	}
 	if (SelectedCharName.IsEmpty() && CachedCharacterSlots.IsValidIndex(SlotIndex))
 	{
-		SelectedCharName = CachedCharacterSlots[SlotIndex].Name;
+		const FRagnarokCharacterSlotInfo& Slot = CachedCharacterSlots[SlotIndex];
+		SelectedCharName = Slot.Name;
+		CurrentStats.JobClass = Slot.JobClass;
+		CurrentStats.JobName = GetJobNameFromClass(Slot.JobClass);
+		CurrentStats.BaseLevel = Slot.BaseLevel;
+		CurrentStats.JobLevel = Slot.JobLevel;
+		CurrentStats.HP = Slot.HP;
+		CurrentStats.MaxHP = Slot.MaxHP;
+		CurrentStats.SP = Slot.SP;
+		CurrentStats.MaxSP = Slot.MaxSP;
 	}
 
 	// Pacote CH_SELECT_CHAR (0x0066) - 3 Bytes
@@ -467,6 +484,73 @@ bool URagnarokNetworkSubsystem::UseSkill(int32 SkillID, int32 SkillLevel, int64 
 	}
 }
 
+bool URagnarokNetworkSubsystem::SendSkillUp(int32 SkillID)
+{
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+
+	#pragma pack(push, 1)
+	struct FCZ_SkillUpPacket
+	{
+		uint16 PacketID = RagnarokPackets::HEADER_CZ_UPGRADE_SKILLLEVEL; // 0x0112
+		uint16 SkillID = 0;
+	};
+	#pragma pack(pop)
+
+	FCZ_SkillUpPacket Packet;
+	Packet.SkillID = static_cast<uint16>(SkillID);
+
+	SendData(reinterpret_cast<const uint8*>(&Packet), sizeof(Packet));
+	return true;
+}
+
+FString URagnarokNetworkSubsystem::GetJobNameFromClass(int32 JobClass)
+{
+	switch (JobClass)
+	{
+		case 0: return TEXT("Aprendiz");
+		case 1: return TEXT("Espadachim");
+		case 2: return TEXT("Mago");
+		case 3: return TEXT("Arqueiro");
+		case 4: return TEXT("Acólito");
+		case 5: return TEXT("Mercador");
+		case 6: return TEXT("Gatuno");
+		case 7: return TEXT("Cavaleiro");
+		case 8: return TEXT("Sacerdote");
+		case 9: return TEXT("Bruxo");
+		case 10: return TEXT("Ferreiro");
+		case 11: return TEXT("Caçador");
+		case 12: return TEXT("Mercenário");
+		case 14: return TEXT("Cavaleiro");
+		case 15: return TEXT("Templário");
+		case 16: return TEXT("Monge");
+		case 17: return TEXT("Sábio");
+		case 18: return TEXT("Arruaceiro");
+		case 19: return TEXT("Alquimista");
+		case 20: return TEXT("Bardo");
+		case 21: return TEXT("Odalisca");
+		case 23: return TEXT("Super Aprendiz");
+		case 24: return TEXT("Justiceiro");
+		case 25: return TEXT("Ninja");
+		case 4001: return TEXT("Lorde");
+		case 4002: return TEXT("Sumo Sacerdote");
+		case 4003: return TEXT("Arquimago");
+		case 4004: return TEXT("Mestre-Ferreiro");
+		case 4005: return TEXT("Atirador de Elite");
+		case 4006: return TEXT("Algoz");
+		case 4008: return TEXT("Paladino");
+		case 4009: return TEXT("Mestre");
+		case 4010: return TEXT("Professor");
+		case 4011: return TEXT("Desordeiro");
+		case 4012: return TEXT("Criador");
+		case 4013: return TEXT("Menestrel");
+		case 4014: return TEXT("Cigana");
+		default: return FString::Printf(TEXT("Classe %d"), JobClass);
+	}
+}
+
 bool URagnarokNetworkSubsystem::ContactNpc(int64 NpcID)
 {
 	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
@@ -681,6 +765,9 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 				break;
 			case RagnarokPackets::HEADER_ZC_NOTIFY_PLAYERMOVE:
 				HandlePlayerMove(PacketData, ActualLen);
+				break;
+			case RagnarokPackets::HEADER_ZC_NOTIFY_MOVE:
+				HandleUnitMove(PacketData, ActualLen);
 				break;
 			case RagnarokPackets::HEADER_ZC_NOTIFY_VANISH:
 				HandleUnitVanish(PacketData, ActualLen);
@@ -905,33 +992,54 @@ void URagnarokNetworkSubsystem::HandleMapAcceptEnter(const uint8* PacketData, in
 
 void URagnarokNetworkSubsystem::HandleUnitAppear(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
 {
+	// Offsets de rathena/src/map/packets_struct.hpp (packet_idle_unit / packet_spawn_unit / packet_unit_walking)
+	// para PACKETVER 20211103. AID (+5) e o ID usado nos demais pacotes (movimento, saida, ataque); o GID (+9)
+	// e o char_id e vale 0 para monstros e NPCs. O walking tem moveStartTime (4 bytes) depois do accessory,
+	// entao tudo a partir dali fica 4 bytes adiante.
+	const bool bWalking = PacketID == RagnarokPackets::HEADER_ZC_UNIT_WALKING;
+	FIntPoint WalkTo(-1, -1);
+	const int32 Shift = bWalking ? 4 : 0;
+	auto U16 = [PacketData](int32 Offset) { return static_cast<int32>(*reinterpret_cast<const uint16*>(PacketData + Offset)); };
+	auto I16 = [PacketData](int32 Offset) { return static_cast<int32>(*reinterpret_cast<const int16*>(PacketData + Offset)); };
+	auto I32 = [PacketData](int32 Offset) { return *reinterpret_cast<const int32*>(PacketData + Offset); };
+
 	FRagnarokUnitVisualInfo Unit;
 	Unit.ObjectType = PacketData[4];
-	Unit.GID = *reinterpret_cast<const uint32*>(PacketData + 9);
-	Unit.Speed = *reinterpret_cast<const int16*>(PacketData + 13);
-	Unit.JobClass = *reinterpret_cast<const int16*>(PacketData + 23);
-	Unit.Head = *reinterpret_cast<const uint16*>(PacketData + 25);
-	Unit.Weapon = *reinterpret_cast<const uint32*>(PacketData + 27);
-	Unit.Shield = *reinterpret_cast<const uint32*>(PacketData + 31);
-	Unit.HeadTop = *reinterpret_cast<const uint16*>(PacketData + 35);
-	Unit.HeadMid = *reinterpret_cast<const uint16*>(PacketData + 37);
-	Unit.HeadBottom = *reinterpret_cast<const uint16*>(PacketData + 39);
-	Unit.HeadPalette = *reinterpret_cast<const int16*>(PacketData + 41);
-	Unit.BodyPalette = *reinterpret_cast<const int16*>(PacketData + 43);
-	Unit.Robe = *reinterpret_cast<const uint16*>(PacketData + 47);
+	Unit.GID = *reinterpret_cast<const uint32*>(PacketData + 5);
+	Unit.Speed = I16(13);
+	Unit.JobClass = I16(23);
+	Unit.Head = U16(25);
+	Unit.Weapon = I32(27);
+	Unit.Shield = I32(31);
+	Unit.HeadBottom = U16(35);           // accessory
+	Unit.HeadTop = U16(37 + Shift);      // accessory2
+	Unit.HeadMid = U16(39 + Shift);      // accessory3
+	Unit.HeadPalette = I16(41 + Shift);
+	Unit.BodyPalette = I16(43 + Shift);
+	Unit.Robe = U16(47 + Shift);
 
-	// Coordenadas
-	if (PacketID == RagnarokPackets::HEADER_ZC_IDLE_UNIT || PacketID == RagnarokPackets::HEADER_ZC_SPAWN_UNIT)
+	// PosDir em 63 (idle/spawn); MoveData em 67 (walking). Depois: xSize, ySize, [state], clevel, font, maxHP, HP
+	if (!bWalking)
 	{
-		RagnarokPackets::UnpackCellCoord(PacketData + 60, Unit.CellX, Unit.CellY, Unit.Direction);
+		RagnarokPackets::UnpackCellCoord(PacketData + 63, Unit.CellX, Unit.CellY, Unit.Direction);
+		if (PacketSize >= 81)
+		{
+			Unit.MaxHP = I32(PacketID == RagnarokPackets::HEADER_ZC_IDLE_UNIT ? 73 : 72);
+			Unit.HP = I32(PacketID == RagnarokPackets::HEADER_ZC_IDLE_UNIT ? 77 : 76);
+		}
 	}
-	else if (PacketID == RagnarokPackets::HEADER_ZC_UNIT_WALKING)
+	else
 	{
 		int32 FromX = 0, FromY = 0, ToX = 0, ToY = 0;
-		RagnarokPackets::UnpackMovePath(PacketData + 60, FromX, FromY, ToX, ToY);
+		RagnarokPackets::UnpackMovePath(PacketData + 67, FromX, FromY, ToX, ToY);
 		Unit.CellX = FromX;
 		Unit.CellY = FromY;
-		OnUnitMove.Broadcast(Unit.GID, ToX, ToY, static_cast<int32>(FPlatformTime::Cycles()));
+		if (PacketSize >= 87) // MoveData 67-72, xSize, ySize, clevel, font, maxHP 79, HP 83
+		{
+			Unit.MaxHP = I32(79);
+			Unit.HP = I32(83);
+		}
+		WalkTo = FIntPoint(ToX, ToY); // anunciado depois do OnUnitAppear (o ator precisa existir)
 	}
 
 	char NameBuf[25] = { 0 };
@@ -943,6 +1051,10 @@ void URagnarokNetworkSubsystem::HandleUnitAppear(const uint8* PacketData, int32 
 	}
 
 	OnUnitAppear.Broadcast(Unit);
+	if (WalkTo.X >= 0)
+	{
+		OnUnitMove.Broadcast(Unit.GID, WalkTo.X, WalkTo.Y, static_cast<int32>(FPlatformTime::Cycles()));
+	}
 }
 
 void URagnarokNetworkSubsystem::HandlePlayerMove(const uint8* PacketData, int32 PacketSize)
@@ -950,8 +1062,17 @@ void URagnarokNetworkSubsystem::HandlePlayerMove(const uint8* PacketData, int32 
 	int32 FromX = 0, FromY = 0, ToX = 0, ToY = 0;
 	RagnarokPackets::UnpackMovePath(PacketData + 6, FromX, FromY, ToX, ToY);
 
-	OnUnitMove.Broadcast(PendingCharID, ToX, ToY, static_cast<int32>(FPlatformTime::Cycles()));
+	OnUnitMove.Broadcast(SavedAccountID, ToX, ToY, static_cast<int32>(FPlatformTime::Cycles())); // no map-server o proprio jogador e o AID
 	OnPlayerMoveConfirmed.Broadcast(ToX, ToY);
+}
+
+void URagnarokNetworkSubsystem::HandleUnitMove(const uint8* PacketData, int32 PacketSize)
+{
+	// ZC_NOTIFY_MOVE (0x0086): gid(2), moveData[6](6), moveStartTime(12) - outra unidade comecou a andar
+	const uint32 GID = *reinterpret_cast<const uint32*>(PacketData + 2);
+	int32 FromX = 0, FromY = 0, ToX = 0, ToY = 0;
+	RagnarokPackets::UnpackMovePath(PacketData + 6, FromX, FromY, ToX, ToY);
+	OnUnitMove.Broadcast(GID, ToX, ToY, static_cast<int32>(FPlatformTime::Cycles()));
 }
 
 void URagnarokNetworkSubsystem::HandleUnitVanish(const uint8* PacketData, int32 PacketSize)
@@ -967,7 +1088,7 @@ void URagnarokNetworkSubsystem::HandleActionNotify(const uint8* PacketData, int3
 	int32 TargetID = *reinterpret_cast<const int32*>(PacketData + 6);
 	int32 DelayMs = *reinterpret_cast<const int32*>(PacketData + 18);
 	int32 Damage = *reinterpret_cast<const int32*>(PacketData + 22);
-	uint8 ActionType = PacketData[31];
+	uint8 ActionType = PacketData[29]; // PACKET_ZC_NOTIFY_ACT 0x08c8: damage(22), isSPDamage(26), div(27), type(29), damage2(30)
 
 	OnDamage.Broadcast(SrcID, TargetID, Damage, ActionType, DelayMs);
 	OnDamageReceived.Broadcast(TargetID, Damage, ActionType == 1, Damage == 0);
@@ -1023,6 +1144,10 @@ void URagnarokNetworkSubsystem::HandleParamChange(const uint8* PacketData, int32
 		case 16: CurrentStats.Int = static_cast<int32>(Value); break;
 		case 17: CurrentStats.Dex = static_cast<int32>(Value); break;
 		case 18: CurrentStats.Luk = static_cast<int32>(Value); break;
+		case 19:
+			CurrentStats.JobClass = static_cast<int32>(Value);
+			CurrentStats.JobName = GetJobNameFromClass(CurrentStats.JobClass);
+			break;
 		case 20: CurrentStats.Zeny = Value; break;
 		case 22: CurrentStats.NextBaseExp = Value; break;
 		case 23: CurrentStats.NextJobExp = Value; break;
@@ -1193,11 +1318,17 @@ void URagnarokNetworkSubsystem::HandleStatus(const uint8* PacketData, int32 Pack
 			const FPACKET_ZC_STATUS* Pkt = reinterpret_cast<const FPACKET_ZC_STATUS*>(PacketData);
 			CurrentStats.StatusPoints = Pkt->point;
 			CurrentStats.Str = Pkt->str;
+			CurrentStats.StrNeed = Pkt->standardStr;
 			CurrentStats.Agi = Pkt->agi;
+			CurrentStats.AgiNeed = Pkt->standardAgi;
 			CurrentStats.Vit = Pkt->vit;
+			CurrentStats.VitNeed = Pkt->standardVit;
 			CurrentStats.Int = Pkt->int_;
+			CurrentStats.IntNeed = Pkt->standardInt;
 			CurrentStats.Dex = Pkt->dex;
+			CurrentStats.DexNeed = Pkt->standardDex;
 			CurrentStats.Luk = Pkt->luk;
+			CurrentStats.LukNeed = Pkt->standardLuk;
 			CurrentStats.Atk = Pkt->attPower;
 			CurrentStats.Atk2 = Pkt->refiningPower;
 			CurrentStats.MatkMin = Pkt->min_mattPower;
@@ -1219,7 +1350,18 @@ void URagnarokNetworkSubsystem::HandleStatus(const uint8* PacketData, int32 Pack
 	{
 		uint16 StatusID = *reinterpret_cast<const uint16*>(PacketData + 2);
 		uint8 Value = PacketData[4];
+		switch (StatusID)
+		{
+		case 32: CurrentStats.StrNeed = Value; break; // SP_USTR
+		case 33: CurrentStats.AgiNeed = Value; break; // SP_UAGI
+		case 34: CurrentStats.VitNeed = Value; break; // SP_UVIT
+		case 35: CurrentStats.IntNeed = Value; break; // SP_UINT
+		case 36: CurrentStats.DexNeed = Value; break; // SP_UDEX
+		case 37: CurrentStats.LukNeed = Value; break; // SP_ULUK
+		default: break;
+		}
 		OnStatusChanged.Broadcast(StatusID, Value);
+		OnPlayerStatsChanged.Broadcast(CurrentStats);
 	}
 	else if (PacketID == RagnarokPackets::HEADER_ZC_STATUS_CHANGE_ACK) // 0x00bc - 6 bytes
 	{
@@ -1228,7 +1370,18 @@ void URagnarokNetworkSubsystem::HandleStatus(const uint8* PacketData, int32 Pack
 		uint8 Val = PacketData[5];
 		if (bOk)
 		{
+			switch (SP)
+			{
+			case 13: CurrentStats.Str = Val; break; // SP_STR
+			case 14: CurrentStats.Agi = Val; break; // SP_AGI
+			case 15: CurrentStats.Vit = Val; break; // SP_VIT
+			case 16: CurrentStats.Int = Val; break; // SP_INT
+			case 17: CurrentStats.Dex = Val; break; // SP_DEX
+			case 18: CurrentStats.Luk = Val; break; // SP_LUK
+			default: break;
+			}
 			OnStatusChanged.Broadcast(SP, Val);
+			OnPlayerStatsChanged.Broadcast(CurrentStats);
 		}
 	}
 }
@@ -1450,8 +1603,11 @@ void URagnarokNetworkSubsystem::HandleInventoryList(const uint8* PacketData, int
 			Item.Index = *reinterpret_cast<const int16*>(Ptr + 0);
 			Item.ItemID = *reinterpret_cast<const uint32*>(Ptr + 2);
 			Item.Type = Ptr[6];
-			Item.EquipLocation = *reinterpret_cast<const uint32*>(Ptr + 7);
-			Item.bIsEquipped = (*reinterpret_cast<const uint32*>(Ptr + 11) != 0);
+			uint32 Location = *reinterpret_cast<const uint32*>(Ptr + 7);
+			uint32 WearState = *reinterpret_cast<const uint32*>(Ptr + 11);
+			Item.WearState = WearState;
+			Item.bIsEquipped = (WearState != 0);
+			Item.EquipLocation = (WearState != 0) ? WearState : Location;
 			Item.Amount = 1;
 
 			Item.Slot1 = *reinterpret_cast<const uint32*>(Ptr + 15);

@@ -157,6 +157,14 @@ struct FRagnarokPlayerStats
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Dex = 1;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Luk = 1;
 
+	// Custos de ponto para aumentar cada atributo (pelo ZC_STATUS need_str ou SP_U*)
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 StrNeed = 2;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 AgiNeed = 2;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 VitNeed = 2;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 IntNeed = 2;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 DexNeed = 2;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 LukNeed = 2;
+
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 StatusPoints = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 SkillPoints = 0;
 
@@ -176,6 +184,9 @@ struct FRagnarokPlayerStats
 
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 BaseLevel = 1;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 JobLevel = 1;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 JobClass = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") FString JobName = TEXT("Aprendiz");
+
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int64 BaseExp = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int64 NextBaseExp = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int64 JobExp = 0;
@@ -204,6 +215,7 @@ struct FRagnarokInventoryItem
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 Type = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 Amount = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 EquipLocation = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 WearState = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 Refine = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") bool bIdentified = true;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") bool bIsEquipped = false;
@@ -385,6 +397,18 @@ public:
 	bool UseSkill(int32 SkillID, int32 SkillLevel, int64 TargetID = 0, int32 TargetX = 0, int32 TargetY = 0);
 
 	/**
+	 * Distribui ponto de habilidade (CZ_UPGRADE_SKILLLEVEL 0x0112).
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
+	bool SendSkillUp(int32 SkillID);
+
+	/**
+	 * Converte ID de classe do rAthena para nome em português.
+	 */
+	UFUNCTION(BlueprintPure, Category = "Ragnarok|Network")
+	static FString GetJobNameFromClass(int32 JobClass);
+
+	/**
 	 * Inicia diálogo ao clicar em um NPC (CZ_CONTACTNPC 0x0090).
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
@@ -419,6 +443,12 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Ragnarok|Network")
 	const TArray<FRagnarokSkillInfo>& GetSkillList() const { return SkillList; }
+
+	/** ID do proprio jogador nos pacotes do map-server (AID da conta), para separar "eu" das outras unidades. */
+	int64 GetSelfID() const { return SavedAccountID; }
+
+	/** Nome do personagem selecionado. */
+	const FString& GetSelfName() const { return SelectedCharName; }
 
 	/**
 	 * Desconecta todos os sockets ativos de forma limpa.
@@ -535,6 +565,7 @@ private:
 	void HandleMapAcceptEnter(const uint8* PacketData, int32 PacketSize);
 	void HandleUnitAppear(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandlePlayerMove(const uint8* PacketData, int32 PacketSize);
+	void HandleUnitMove(const uint8* PacketData, int32 PacketSize);
 	void HandleUnitVanish(const uint8* PacketData, int32 PacketSize);
 	void HandleActionNotify(const uint8* PacketData, int32 PacketSize);
 	void HandleParamChange(const uint8* PacketData, int32 PacketSize, uint16 PacketID);

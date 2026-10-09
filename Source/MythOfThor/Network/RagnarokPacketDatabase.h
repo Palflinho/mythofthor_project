@@ -32,6 +32,7 @@ namespace RagnarokPackets
     static constexpr uint16 HEADER_CZ_NOTIFY_ACTORINIT  = 0x007d; // 2 bytes
     static constexpr uint16 HEADER_CZ_REQUEST_MOVE      = 0x035f; // 5 bytes
     static constexpr uint16 HEADER_ZC_NOTIFY_PLAYERMOVE = 0x0087; // 12 bytes
+    static constexpr uint16 HEADER_ZC_NOTIFY_MOVE       = 0x0086; // 16 bytes: gid, moveData[6], moveStartTime (outras unidades)
     static constexpr uint16 HEADER_CZ_REQUEST_ACT       = 0x088e; // 7 bytes (ou 0x0360)
     static constexpr uint16 HEADER_ZC_NOTIFY_ACT        = 0x08c8; // 34 bytes
     static constexpr uint16 HEADER_ZC_NOTIFY_VANISH     = 0x0080; // 7 bytes
@@ -88,6 +89,7 @@ namespace RagnarokPackets
     static constexpr uint16 HEADER_ZC_ADD_SKILL         = 0x0b31; // 17 bytes (PACKETVER >= 20190807)
     static constexpr uint16 HEADER_ZC_SKILLINFO_UPDATE2 = 0x0b33; // 17 bytes (PACKETVER >= 20190807)
     static constexpr uint16 HEADER_CZ_USE_SKILL         = 0x0438; // 10 bytes
+    static constexpr uint16 HEADER_CZ_UPGRADE_SKILLLEVEL= 0x0112; // 4 bytes (uint16 type, uint16 skill_id)
 
     // Itens no Chão
     static constexpr uint16 HEADER_ZC_ITEM_FALL_ENTRY   = 0x084b; // 19 bytes

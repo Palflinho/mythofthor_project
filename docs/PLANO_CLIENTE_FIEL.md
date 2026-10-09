@@ -115,15 +115,15 @@ A5 (recompilar mapas) — depende de A1
 
 ---
 
-## 5. Pedidos abertos para a rede (Claude → Antigravity)
+## 5. Pedidos para a rede (Claude → Antigravity) — [CONCLUÍDO ✅]
 
-As janelas clássicas da HUD (Alt+A/E/Q/S, `UI/MythRoHUDWindows.cpp`) já leem `GetPlayerStats()`, `GetInventoryItems()` e `GetSkillList()` e enviam `SendStatusUp`, `UseItem`, `EquipItem` e `UnequipItem`. Faltam no `URagnarokNetworkSubsystem`:
+As janelas clássicas da HUD (Alt+A/E/Q/S, `UI/MythRoHUDWindows.cpp`) já contam com todo o suporte integrado no `URagnarokNetworkSubsystem`:
 
-| Pedido | Uso no cliente | Origem no servidor |
-|---|---|---|
-| `SendSkillUp(SkillID)` | Botão de subir habilidade na janela de skills | `CZ_UPGRADE_SKILLLEVEL` (`0x0112`) |
-| Custos de atributo em `FRagnarokPlayerStats` (`StrNeed` ... `LukNeed`) | Número ao lado da seta de cada atributo; esconder a seta quando os pontos não bastam | `ZC_STATUS` (`0x00bd`) já traz `need_str` ... `need_luk` |
-| `JobName`/`Class` no `FRagnarokPlayerStats` ou evento próprio | Título da janela de skills e da janela básica | Classe do personagem selecionado (`0x006b`) |
-| `bIsEquipped` + `EquipLocation` = posição vestida (`wearState`) | Janela de equipamento usa a máscara `EQP_*` para escolher o encaixe | `0x0b39` (`wearState`) |
+| Pedido | Uso no cliente | Origem no servidor | Status |
+|---|---|---|---|
+| `SendSkillUp(SkillID)` | Botão de subir habilidade na janela de skills | `CZ_UPGRADE_SKILLLEVEL` (`0x0112`) | **Concluído ✅** (`URagnarokNetworkSubsystem::SendSkillUp`) |
+| Custos de atributo em `FRagnarokPlayerStats` (`StrNeed` ... `LukNeed`) | Número ao lado da seta de cada atributo; esconder a seta quando os pontos não bastam | `ZC_STATUS` (`0x00bd`, standardStr..standardLuk) e `ZC_STATUS_VALUES` (`0x00be`, SP_USTR 32..37) | **Concluído ✅** (Campos `StrNeed`..`LukNeed` em `FRagnarokPlayerStats`) |
+| `JobName`/`Class` no `FRagnarokPlayerStats` | Título da janela de skills e da janela básica | `0x006b` (seleção de char) e `SP_CLASS` (param change 19) | **Concluído ✅** (`JobClass`, `JobName` e helper `GetJobNameFromClass`) |
+| `bIsEquipped` + `EquipLocation` = posição vestida (`wearState`) | Janela de equipamento usa a máscara `EQP_*` para escolher o encaixe | `0x0b39` (`EQUIPITEM_INFO.wearState`) | **Concluído ✅** (`WearState` preenchido e `EquipLocation` reflete o slot equipado) |
 
-Confirmar os IDs/tamanhos na tabela do próprio rAthena (`clif_packetdb.hpp`) antes de implementar.
+Todos os pacotes foram validados contra o rAthena (`clif_packetdb.hpp`, `packets_struct.hpp`), compilados no UBT e testados via suite live.
