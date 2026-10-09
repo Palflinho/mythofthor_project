@@ -1,8 +1,6 @@
 #include "Sprites/MythPoring.h"
 
-#include "Sprites/MythSpriteAnimComponent.h"
-#include "Sprites/MythSpriteSet.h"
-#include "Components/BoxComponent.h"
+#include "Sprites/MythRoSpriteComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Sound/SoundBase.h"
 #include "UObject/ConstructorHelpers.h"
@@ -15,16 +13,11 @@ AMythPoring::AMythPoring()
 	HP = 50;
 
 	GetCapsuleComponent()->InitCapsuleSize(40.f, 40.f);
-	ClickBox->SetBoxExtent(FVector(45.f, 45.f, 45.f));
+	// Sprite de monstro do cliente original (data/sprite/몬스터/poring.spr/.act); a origem do .act sao os pes.
+	Sprite->MonsterSpriteName = TEXT("poring");
 	Sprite->SetRelativeLocation(FVector(0.f, 0.f, -40.f));
 
-	// Assets opcionais: se ainda nao foram importados, o Poring simplesmente fica sem sprite/som.
-	static ConstructorHelpers::FObjectFinderOptional<UMythSpriteSet> SetFinder(TEXT("/Game/Sprites/poring/DA_poring.DA_poring"));
-	if (SetFinder.Succeeded())
-	{
-		Sprite->SpriteSet = SetFinder.Get();
-	}
-
+	// Sons opcionais (tools/ue_setup_poring.py): sem eles o Poring so fica mudo.
 	static ConstructorHelpers::FObjectFinderOptional<USoundBase> Attack(TEXT("/Game/Monsters/Poring/Audio/SFX_poring_attack.SFX_poring_attack"));
 	static ConstructorHelpers::FObjectFinderOptional<USoundBase> Hit(TEXT("/Game/Monsters/Poring/Audio/SFX_poring_damage.SFX_poring_damage"));
 	static ConstructorHelpers::FObjectFinderOptional<USoundBase> Die(TEXT("/Game/Monsters/Poring/Audio/SFX_poring_die.SFX_poring_die"));

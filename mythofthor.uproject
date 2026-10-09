@@ -1,6 +1,6 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "{E62DDD45-4A66-1A7E-DA06-558A9B2CCDFE}",
+	"EngineAssociation": "5.8",
 	"Category": "",
 	"Description": "Myth of Thor - Ragnarok Online HD-2D",
 	"Modules": [
@@ -24,6 +24,10 @@
 		},
 		{
 			"Name": "Paper2D",
+			"Enabled": true
+		},
+		{
+			"Name": "ProceduralMeshComponent",
 			"Enabled": true
 		},
 		{

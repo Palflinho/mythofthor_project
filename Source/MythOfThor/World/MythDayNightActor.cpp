@@ -124,3 +124,23 @@ void AMythDayNightActor::UpdateLighting()
 		OnNightFactorChanged.Broadcast(NightFactor);
 	}
 }
+
+FVector AMythDayNightActor::GetLightDirection() const
+{
+	const UDirectionalLightComponent* Light = NightFactor > 0.5f ? Moon.Get() : Sun.Get();
+	return Light ? Light->GetForwardVector() : FVector(0.f, 0.f, -1.f);
+}
+
+AMythDayNightActor* AMythDayNightActor::Find(const UObject* WorldContext)
+{
+	const UWorld* World = WorldContext ? WorldContext->GetWorld() : nullptr;
+	if (!World)
+	{
+		return nullptr;
+	}
+	for (TActorIterator<AMythDayNightActor> It(World); It; ++It)
+	{
+		return *It;
+	}
+	return nullptr;
+}

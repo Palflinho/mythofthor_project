@@ -19,7 +19,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMythAttackPerformed, AMythMonster
  *
  * - Botao esquerdo: anda ate o ponto clicado (segurar continua seguindo o cursor).
  * - WASD: anda relativo ao yaw da camera; cancela o movimento por clique.
- * - Camera: C alterna Fixa 45 / Livre 360; no modo livre, botao direito+mouse ou Q/E giram, scroll da zoom.
+ * - Camera (como o cliente original): botao direito + arrastar gira, Shift + botao direito + arrastar inclina,
+ *   scroll da zoom, duplo clique direito reseta; Q/E tambem giram. C trava/destrava no angulo padrao.
  *
  * Todo destino e enviado ao rAthena como CZ_REQUEST_MOVE (celulas) via URagnarokNetworkSubsystem.
  */
@@ -48,6 +49,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
 	float KeyRotateSpeed = 90.f; // graus/s para Q/E
+
+	/** Intervalo maximo entre dois cliques direitos para resetar a camera. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
+	float DoubleClickSeconds = 0.3f;
 
 	/** Console: MythTestDamage -> mostra os 5 tipos de texto sobre o personagem. */
 	UFUNCTION(Exec)
@@ -112,6 +117,7 @@ private:
 	UPROPERTY() TObjectPtr<UInputAction> MoveAction;
 	UPROPERTY() TObjectPtr<UInputAction> ClickAction;
 	UPROPERTY() TObjectPtr<UInputAction> RotateMouseAction;
+	UPROPERTY() TObjectPtr<UInputAction> PitchMouseAction;
 	UPROPERTY() TObjectPtr<UInputAction> RotateKeyAction;
 	UPROPERTY() TObjectPtr<UInputAction> ZoomAction;
 	UPROPERTY() TObjectPtr<UInputAction> ToggleCameraAction;
@@ -132,6 +138,10 @@ private:
 	void OnMove(const FInputActionValue& Value);
 	void OnMoveCompleted(const FInputActionValue& Value);
 	void OnRotateMouse(const FInputActionValue& Value);
+	void OnPitchMouse(const FInputActionValue& Value);
+	bool IsShiftDown() const;
+	void UpdateCameraReset();
+	double LastRightClickTime = -1.0;
 	void OnRotateKey(const FInputActionValue& Value);
 	void OnZoom(const FInputActionValue& Value);
 	void OnToggleCamera(const FInputActionValue& Value);

@@ -1,6 +1,7 @@
 #include "World/MythMeshBuilderLibrary.h"
 
 #include "Engine/StaticMesh.h"
+#include "PhysicsEngine/BodySetup.h"
 
 #if WITH_EDITOR
 #include "MeshDescription.h"
@@ -76,10 +77,36 @@ bool UMythMeshBuilderLibrary::BuildStaticMeshFromTriangles(UStaticMesh* Mesh, co
 	FStaticMeshOperations::ComputeTriangleTangentsAndNormals(MD);
 	FStaticMeshOperations::ComputeTangentsAndNormals(MD, EComputeNTBsFlags::Normals | EComputeNTBsFlags::Tangents);
 
+	// A malha base (cubo duplicado) so tem 1 slot; sem um FStaticMaterial por grupo, todas as secoes caem no slot 0.
+	TArray<FStaticMaterial>& StaticMaterials = Mesh->GetStaticMaterials();
+	StaticMaterials.Reset(SlotNames.Num());
+	for (const FName& Slot : SlotNames)
+	{
+		StaticMaterials.Add(FStaticMaterial(nullptr, Slot, Slot));
+	}
+
 	UStaticMesh::FBuildMeshDescriptionsParams Params;
 	Params.bBuildSimpleCollision = false;
 	Params.bFastBuild = true;
-	return Mesh->BuildFromMeshDescriptions({ &MD }, Params);
+	if (!Mesh->BuildFromMeshDescriptions({ &MD }, Params))
+	{
+		return false;
+	}
+
+	// O cubo duplicado traz uma caixa de colisao de 1 m na origem e dados de fisica ja cozidos:
+	// remove a caixa, usa a propria malha como colisao e recozinha para a geometria nova.
+	if (!Mesh->GetBodySetup())
+	{
+		Mesh->CreateBodySetup();
+	}
+	UBodySetup* Body = Mesh->GetBodySetup();
+	Body->Modify();
+	Body->RemoveSimpleCollision();
+	Body->CollisionTraceFlag = CTF_UseComplexAsSimple;
+	Body->bDoubleSidedGeometry = true; // o winding dos modelos do RO e misto (o material ja e two-sided)
+	Body->InvalidatePhysicsData();
+	Body->CreatePhysicsMeshes();
+	return true;
 #else
 	return false;
 #endif

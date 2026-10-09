@@ -4,13 +4,13 @@
 #include "GameFramework/Character.h"
 #include "MythMonster.generated.h"
 
-class UMythSpriteAnimComponent;
+class UMythRoSpriteComponent;
 class UBoxComponent;
 class USoundBase;
 
 /**
- * Monstro base (Poring, Lunatic...). Crie um Blueprint filho e aponte
- * Sprite->SpriteSet para o DA_ gerado por tools/ue_build_flipbooks.py.
+ * Monstro base (Poring, Lunatic...). O sprite e lido do cliente original:
+ * defina Sprite->MonsterSpriteName (ex.: "poring" = data/sprite/몬스터/poring.spr/.act).
  */
 UCLASS()
 class MYTHOFTHOR_API AMythMonster : public ACharacter
@@ -23,7 +23,7 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprite")
-	TObjectPtr<UMythSpriteAnimComponent> Sprite;
+	TObjectPtr<UMythRoSpriteComponent> Sprite;
 
 	/** Volume que recebe o clique do mouse (canal Visibility); o sprite 2D nao tem colisao. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Targeting")
@@ -94,4 +94,7 @@ private:
 	bool bWasMoving = false;
 
 	void PlaySfx(USoundBase* Sound) const;
+
+	/** Ajusta a ClickBox aos limites do quadro desenhado pelo sprite. */
+	void FitClickBoxToSprite();
 };

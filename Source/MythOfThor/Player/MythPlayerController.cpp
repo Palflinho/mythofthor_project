@@ -8,7 +8,7 @@
 #include "EngineUtils.h"
 #include "Sprites/MythMonster.h"
 #include "Sprites/MythPoring.h"
-#include "Sprites/MythSpriteAnimComponent.h"
+#include "Sprites/MythRoSpriteComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "UI/MythClassicHUDWidget.h"
 #include "Gameplay/MythStatsComponent.h"
@@ -85,6 +85,7 @@ void AMythPlayerController::BuildInputAssets()
 	MoveAction         = MakeAction(TEXT("IA_Move"), EInputActionValueType::Axis2D);
 	ClickAction        = MakeAction(TEXT("IA_Click"), EInputActionValueType::Boolean);
 	RotateMouseAction  = MakeAction(TEXT("IA_RotateMouse"), EInputActionValueType::Axis1D);
+	PitchMouseAction   = MakeAction(TEXT("IA_PitchMouse"), EInputActionValueType::Axis1D);
 	RotateKeyAction    = MakeAction(TEXT("IA_RotateKey"), EInputActionValueType::Axis1D);
 	ZoomAction         = MakeAction(TEXT("IA_Zoom"), EInputActionValueType::Axis1D);
 	ToggleCameraAction = MakeAction(TEXT("IA_ToggleCamera"), EInputActionValueType::Boolean);
@@ -111,6 +112,7 @@ void AMythPlayerController::BuildInputAssets()
 
 	MappingContext->MapKey(ClickAction, EKeys::LeftMouseButton);
 	MappingContext->MapKey(RotateMouseAction, EKeys::MouseX);
+	MappingContext->MapKey(PitchMouseAction, EKeys::MouseY);
 	MappingContext->MapKey(ZoomAction, EKeys::MouseWheelAxis);
 	MappingContext->MapKey(ToggleCameraAction, EKeys::C);
 
@@ -142,6 +144,7 @@ void AMythPlayerController::SetupInputComponent()
 		EIC->BindAction(MoveAction, ETriggerEvent::Completed, this, &AMythPlayerController::OnMoveCompleted);
 		EIC->BindAction(MoveAction, ETriggerEvent::Canceled, this, &AMythPlayerController::OnMoveCompleted);
 		EIC->BindAction(RotateMouseAction, ETriggerEvent::Triggered, this, &AMythPlayerController::OnRotateMouse);
+		EIC->BindAction(PitchMouseAction, ETriggerEvent::Triggered, this, &AMythPlayerController::OnPitchMouse);
 		EIC->BindAction(RotateKeyAction, ETriggerEvent::Triggered, this, &AMythPlayerController::OnRotateKey);
 		EIC->BindAction(ZoomAction, ETriggerEvent::Triggered, this, &AMythPlayerController::OnZoom);
 		EIC->BindAction(ToggleCameraAction, ETriggerEvent::Started, this, &AMythPlayerController::OnToggleCamera);
@@ -253,6 +256,7 @@ void AMythPlayerController::PlayerTick(float DeltaTime)
 	}
 
 	UpdateCombat(DeltaTime);
+	UpdateCameraReset();
 
 	if (bWasdActive)
 	{
@@ -282,15 +286,52 @@ void AMythPlayerController::PlayerTick(float DeltaTime)
 
 // ----------------------------------------------------------------------- Camera
 
+bool AMythPlayerController::IsShiftDown() const
+{
+	return IsInputKeyDown(EKeys::LeftShift) || IsInputKeyDown(EKeys::RightShift);
+}
+
 void AMythPlayerController::OnRotateMouse(const FInputActionValue& Value)
 {
-	if (IsInputKeyDown(EKeys::RightMouseButton))
+	// Botao direito + arrastar gira; com Shift, o arrasto inclina (OnPitchMouse), como no cliente original.
+	if (IsInputKeyDown(EKeys::RightMouseButton) && !IsShiftDown())
 	{
 		if (AMythPlayerCharacter* Char = GetMythCharacter())
 		{
 			Char->RotateCamera(Value.Get<float>() * MouseRotateSensitivity * 10.f);
 		}
 	}
+}
+
+void AMythPlayerController::OnPitchMouse(const FInputActionValue& Value)
+{
+	if (IsInputKeyDown(EKeys::RightMouseButton) && IsShiftDown())
+	{
+		if (AMythPlayerCharacter* Char = GetMythCharacter())
+		{
+			// Arrastar para cima deixa a camera mais de cima (pitch mais negativo).
+			Char->PitchCamera(-Value.Get<float>() * MouseRotateSensitivity * 10.f);
+		}
+	}
+}
+
+void AMythPlayerController::UpdateCameraReset()
+{
+	if (!WasInputKeyJustPressed(EKeys::RightMouseButton))
+	{
+		return;
+	}
+	const double Now = GetWorld()->GetRealTimeSeconds();
+	if (Now - LastRightClickTime <= DoubleClickSeconds)
+	{
+		if (AMythPlayerCharacter* Char = GetMythCharacter())
+		{
+			Char->ResetCamera();
+		}
+		LastRightClickTime = -1.0;
+		return;
+	}
+	LastRightClickTime = Now;
 }
 
 void AMythPlayerController::OnRotateKey(const FInputActionValue& Value)

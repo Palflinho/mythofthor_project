@@ -71,6 +71,13 @@ public:
 	UFUNCTION(BlueprintPure, Category = "DayNight")
 	bool IsNight() const { return NightFactor > 0.5f; }
 
+	/** Direcao em que a luz dominante viaja (sol de dia, lua a noite): usada pelas sombras dos sprites. */
+	UFUNCTION(BlueprintPure, Category = "DayNight")
+	FVector GetLightDirection() const;
+
+	/** O ator de dia/noite do mundo (ou nulo). */
+	static AMythDayNightActor* Find(const UObject* WorldContext);
+
 	UPROPERTY(BlueprintAssignable, Category = "DayNight")
 	FOnMythNightFactorChanged OnNightFactorChanged;
 

@@ -5,9 +5,9 @@
 #include "MythPoring.generated.h"
 
 /**
- * Poring (Lv 1, 50 HP): monstro de teste completo. Carrega, se existirem, os assets gerados por
- * tools/ue_setup_poring.py: sprites 8 direcoes (/Game/Sprites/poring/DA_poring) e os efeitos sonoros
- * (/Game/Monsters/Poring/Audio/SFX_poring_*). Sem os assets ele ainda funciona (invisivel e mudo).
+ * Poring (Lv 1, 50 HP): monstro de teste. O sprite vem do cliente original (몬스터/poring) e os sons,
+ * se existirem, de tools/ue_setup_poring.py (/Game/Monsters/Poring/Audio/SFX_poring_*).
+ * Sem os sons ele funciona normalmente (mudo).
  */
 UCLASS()
 class MYTHOFTHOR_API AMythPoring : public AMythMonster

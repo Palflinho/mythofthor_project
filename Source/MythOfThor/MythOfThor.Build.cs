@@ -15,6 +15,7 @@ public class MythOfThor : ModuleRules
 			"EnhancedInput",
 			"AIModule",
 			"Paper2D",
+			"ProceduralMeshComponent",
 			"UMG",
 			"Synthesis",
 			"MeshDescription",

@@ -18,8 +18,9 @@ import traceback
 
 import unreal
 
-SHEET = 'D:/Ragnarok_Assets/Sprites/PNG/poring_sheet.png'
-WAV_DIR = 'D:/Ragnarok_Assets/wav'
+ASSETS = os.environ.get('MYTH_ASSETS', 'D:/Ragnarok_Assets').replace('\\', '/')
+SHEET = ASSETS + '/Sprites/PNG/poring_sheet.png'
+WAV_DIR = ASSETS + '/wav'
 SFX = {'attack': 'poring_attack.wav', 'damage': 'poring_damage.wav', 'die': 'poring_die.wav', 'move': 'poring_move.wav'}
 AUDIO_DEST = '/Game/Monsters/Poring/Audio'
 

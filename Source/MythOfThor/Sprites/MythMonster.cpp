@@ -1,7 +1,8 @@
 #include "Sprites/MythMonster.h"
 
-#include "Sprites/MythSpriteAnimComponent.h"
+#include "Sprites/MythRoSpriteComponent.h"
 #include "Components/BoxComponent.h"
+
 #include "Components/CapsuleComponent.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
@@ -14,10 +15,11 @@ AMythMonster::AMythMonster()
 	PrimaryActorTick.bCanEverTick = true;
 	GetCapsuleComponent()->InitCapsuleSize(30.f, 40.f);
 
-	Sprite = CreateDefaultSubobject<UMythSpriteAnimComponent>(TEXT("Sprite"));
+	Sprite = CreateDefaultSubobject<UMythRoSpriteComponent>(TEXT("Sprite"));
 	Sprite->SetupAttachment(RootComponent);
 	ClickBox = CreateDefaultSubobject<UBoxComponent>(TEXT("ClickBox"));
-	ClickBox->SetupAttachment(RootComponent);
+	// Presa ao sprite (que fica paralelo a tela): o clique vale onde o monstro aparece desenhado, como no RO.
+	ClickBox->SetupAttachment(Sprite);
 	ClickBox->SetBoxExtent(FVector(40.f, 40.f, 40.f));
 	ClickBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	ClickBox->SetCollisionResponseToAllChannels(ECR_Ignore);
@@ -35,9 +37,23 @@ void AMythMonster::PlaySfx(USoundBase* Sound) const
 	}
 }
 
+void AMythMonster::FitClickBoxToSprite()
+{
+	// Limites do quadro desenhado, no espaco do sprite (X = largura, Z = altura, Y = espessura).
+	const FBox& Bounds = Sprite->GetFrameLocalBounds();
+	if (!Bounds.IsValid)
+	{
+		return;
+	}
+	const FVector Extent = Bounds.GetExtent();
+	ClickBox->SetRelativeLocation(Bounds.GetCenter());
+	ClickBox->SetBoxExtent(FVector(FMath::Max(Extent.X, 15.f), 15.f, FMath::Max(Extent.Z, 15.f)));
+}
+
 void AMythMonster::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+	FitClickBoxToSprite();
 	if (bIsDead)
 	{
 		return;

@@ -4,7 +4,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Sprites/MythSpriteAnimComponent.h"
+#include "Sprites/MythRoSpriteComponent.h"
 #include "Gameplay/MythStatsComponent.h"
 #include "Gameplay/AutoBattleComponent.h"
 
@@ -25,7 +25,7 @@ AMythPlayerCharacter::AMythPlayerCharacter()
 	Move->bConstrainToPlane = true;
 	Move->bSnapToPlaneAtStart = true;
 
-	Sprite = CreateDefaultSubobject<UMythSpriteAnimComponent>(TEXT("Sprite"));
+	Sprite = CreateDefaultSubobject<UMythRoSpriteComponent>(TEXT("Sprite"));
 	Sprite->SetupAttachment(RootComponent);
 	Sprite->SetRelativeLocation(FVector(0.f, 0.f, -90.f)); // pes do sprite no chao da capsula
 
@@ -51,9 +51,7 @@ AMythPlayerCharacter::AMythPlayerCharacter()
 void AMythPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	CameraYaw = FixedYaw;
-	CameraBoom->TargetArmLength = DefaultArmLength;
-	ApplyCamera();
+	ResetCamera();
 }
 
 void AMythPlayerCharacter::SetCameraMode(EMythCameraMode NewMode)
@@ -62,9 +60,27 @@ void AMythPlayerCharacter::SetCameraMode(EMythCameraMode NewMode)
 	if (CameraMode == EMythCameraMode::FixedIsometric)
 	{
 		// Voltar ao modo fixo restaura o angulo classico e o zoom padrao.
-		CameraYaw = FixedYaw;
-		CameraBoom->TargetArmLength = DefaultArmLength;
+		ResetCamera();
+		return;
 	}
+	ApplyCamera();
+}
+
+void AMythPlayerCharacter::ResetCamera()
+{
+	CameraYaw = FixedYaw;
+	CurrentPitch = FMath::Clamp(CameraPitch, MinPitch, MaxPitch);
+	CameraBoom->TargetArmLength = DefaultArmLength;
+	ApplyCamera();
+}
+
+void AMythPlayerCharacter::PitchCamera(float DeltaPitch)
+{
+	if (CameraMode != EMythCameraMode::Free360)
+	{
+		return;
+	}
+	CurrentPitch = FMath::Clamp(CurrentPitch + DeltaPitch, MinPitch, MaxPitch);
 	ApplyCamera();
 }
 
@@ -94,5 +110,5 @@ void AMythPlayerCharacter::ZoomCamera(float Delta)
 
 void AMythPlayerCharacter::ApplyCamera()
 {
-	CameraBoom->SetWorldRotation(FRotator(CameraPitch, CameraYaw, 0.f));
+	CameraBoom->SetWorldRotation(FRotator(CurrentPitch, CameraYaw, 0.f));
 }

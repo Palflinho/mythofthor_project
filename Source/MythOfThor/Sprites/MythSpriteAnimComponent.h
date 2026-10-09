@@ -18,7 +18,7 @@ enum class EMythSpriteState : uint8
  * Renderiza o sprite 2D (Paper2D) e roda a maquina de estados:
  *   Idle <-> Walk (pela velocidade do dono), Attack/Hit (one-shot, voltam ao locomotion), Dead (final).
  * A direcao (8) vem de URagnarokDirectionHelper usando o yaw da camera do jogador;
- * o sprite e sempre virado para a camera (billboard so em yaw).
+ * o sprite fica sempre paralelo a tela (yaw e pitch da camera), como no cliente original.
  *
  * Esta maquina e independente do PaperZD (plugin de marketplace, nao incluido no projeto):
  * um AnimInstance do PaperZD pode ler GetState()/GetDirection() sem mudar nada aqui.
@@ -37,6 +37,10 @@ public:
 	/** Velocidade (cm/s) acima da qual o estado vira Walk. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprite")
 	float WalkSpeedThreshold = 10.f;
+
+	/** Quanto (cm) o sprite e puxado em direcao a camera para nao ser cortado por paredes/chao atras dele. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprite")
+	float CameraDepthOffset = 20.f;
 
 	/** AttackDuration > 0 acelera a animacao para caber no intervalo do ASPD (nunca a desacelera). */
 	UFUNCTION(BlueprintCallable, Category = "Sprite")
@@ -69,6 +73,10 @@ private:
 	EMythSpriteState State = EMythSpriteState::Idle;
 	ERagnarokDirection Direction = ERagnarokDirection::South;
 	bool bOneShotPlaying = false;
+	/** Posicao relativa dos pes (pivo do sprite) definida pelo dono; o billboard parte dela a cada tick. */
+	FVector FeetRelativeLocation = FVector::ZeroVector;
+
+	void UpdateBillboard(const FRotator& CamRot);
 
 	UFUNCTION()
 	void HandleFinishedPlaying();

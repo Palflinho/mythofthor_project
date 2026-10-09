@@ -233,9 +233,17 @@ def try_set(obj, prop, value):
 
 def make_asset(name, folder, cls, factory):
     path = '%s/%s' % (folder, name)
-    if eal.does_asset_exist(path):
-        eal.delete_asset(path)
-    return tools.create_asset(name, folder, cls, factory)
+    if eal.does_asset_exist(path) and not eal.delete_asset(path):
+        # Ainda referenciado (ex.: pela malha antiga ou por um editor aberto): reaproveita o asset existente.
+        existing = eal.load_asset(path)
+        if existing:
+            if isinstance(existing, unreal.Material):
+                mel.delete_all_material_expressions(existing)
+            return existing
+    asset = tools.create_asset(name, folder, cls, factory)
+    if asset is None:
+        raise RuntimeError('nao foi possivel criar %s (feche o editor da Unreal e rode de novo)' % path)
+    return asset
 
 
 def build_parent_materials(folder):
@@ -455,6 +463,22 @@ def add_lighting():
     ppv.set_editor_property('settings', s)
 
 
+def add_night_lights(obj_path, cx, cy, scale):
+    """Cria uma AMythNightLight por luz do <mapa>_lights.json (gerado pelo compile_map_to_obj.py)."""
+    path = os.path.splitext(obj_path)[0] + '_lights.json'
+    if not os.path.exists(path):
+        log('sem luzes noturnas (%s nao existe)' % os.path.basename(path))
+        return
+    import json
+    with open(path, encoding='utf-8') as f:
+        lights = json.load(f).get('lights', [])
+    for i, light in enumerate(lights):
+        # Mesma conversao dos vertices em build_mesh: X = (x-cx)*S ; Y = -(y-cy)*S ; Z = z*S
+        loc = ((light['x'] - cx) * scale, -(light['y'] - cy) * scale, light['z'] * scale)
+        spawn(unreal.MythNightLight, loc, (0, 0, 0), 'NightLight_%03d' % i)
+    log('%d luzes noturnas colocadas' % len(lights))
+
+
 def add_navigation(center, extent):
     vol = spawn(unreal.NavMeshBoundsVolume, (center.x, center.y, center.z), label='NavBounds')
     # O brush padrao tem 200 uu de lado; escala para cobrir a malha inteira (com folga em Z).
@@ -531,6 +555,7 @@ def run():
     near = [v[2] for v in ground if abs((v[0] - cx) * scale - wx) < cell_size and abs(-(v[1] - cy) * scale - wy) < cell_size]
     wz = (max(near) if near else 0.0) * scale + 120.0
     spawn(unreal.PlayerStart, (wx, wy, wz), (0, 0, 0), 'PlayerStart')
+    add_night_lights(obj_path, cx, cy, scale)
     log('PlayerStart na celula (%d,%d) -> mundo (%.0f, %.0f, %.0f)' % (sx, sy, wx, wy, wz))
 
     info = spawn(unreal.MythMapInfo, (0, 0, 0), label='MapInfo')

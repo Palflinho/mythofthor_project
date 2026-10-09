@@ -16,6 +16,7 @@ UMythSpriteAnimComponent::UMythSpriteAnimComponent()
 void UMythSpriteAnimComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	FeetRelativeLocation = GetRelativeLocation();
 	OnFinishedPlaying.AddDynamic(this, &UMythSpriteAnimComponent::HandleFinishedPlaying);
 	ApplyFlipbook(false);
 }
@@ -33,6 +34,25 @@ FRotator UMythSpriteAnimComponent::GetCameraRotation() const
 		}
 	}
 	return FRotator::ZeroRotator;
+}
+
+void UMythSpriteAnimComponent::UpdateBillboard(const FRotator& CamRot)
+{
+	// Como no cliente original: o sprite fica paralelo a tela (acompanha yaw E pitch da camera),
+	// entao inclinar a camera nao o achata. O pivo do sprite e embaixo-centro, logo os pes nao saem do lugar.
+	const FRotationMatrix CamMatrix(CamRot);
+	const FVector CamRight = CamMatrix.GetUnitAxis(EAxis::Y);
+	const FVector CamUp = CamMatrix.GetUnitAxis(EAxis::Z);
+	const FVector CamForward = CamMatrix.GetUnitAxis(EAxis::X);
+	// O X local do sprite aponta para -Right (mesma convencao do billboard antigo, Yaw - 90) e o Z local para o Up da camera.
+	SetWorldRotation(FRotationMatrix::MakeFromXZ(-CamRight, CamUp).Rotator());
+
+	// Avanca o sprite um pouco em direcao a camera para nao atravessar paredes e o chao atras dele.
+	if (const USceneComponent* Parent = GetAttachParent())
+	{
+		const FVector Feet = Parent->GetComponentTransform().TransformPosition(FeetRelativeLocation);
+		SetWorldLocation(Feet - CamForward * CameraDepthOffset);
+	}
 }
 
 UPaperFlipbook* UMythSpriteAnimComponent::FindFlipbook(EMythSpriteState InState, ERagnarokDirection InDir) const
@@ -90,9 +110,7 @@ void UMythSpriteAnimComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 	}
 
 	const FRotator CamRot = GetCameraRotation();
-
-	// Billboard em yaw: o plano do sprite (normal -Y) fica de frente para a camera.
-	SetWorldRotation(FRotator(0.f, CamRot.Yaw - 90.f, 0.f));
+	UpdateBillboard(CamRot);
 
 	if (State == EMythSpriteState::Dead)
 	{

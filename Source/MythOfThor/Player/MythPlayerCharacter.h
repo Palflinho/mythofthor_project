@@ -6,7 +6,7 @@
 
 class USpringArmComponent;
 class UCameraComponent;
-class UMythSpriteAnimComponent;
+class UMythRoSpriteComponent;
 class UMythStatsComponent;
 class UAutoBattleComponent;
 
@@ -44,6 +44,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Myth|Camera")
 	void ZoomCamera(float Delta);
 
+	/** Inclina a camera (graus), limitada a [MinPitch, MaxPitch] (Shift + botao direito no RO). Ignorado no modo Fixo. */
+	UFUNCTION(BlueprintCallable, Category = "Myth|Camera")
+	void PitchCamera(float DeltaPitch);
+
+	/** Volta ao angulo, inclinacao e zoom padrao (duplo clique direito). */
+	UFUNCTION(BlueprintCallable, Category = "Myth|Camera")
+	void ResetCamera();
+
 	UFUNCTION(BlueprintPure, Category = "Myth|Camera")
 	EMythCameraMode GetCameraMode() const { return CameraMode; }
 
@@ -51,11 +59,19 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Myth|Camera")
 	float GetCameraYaw() const { return CameraYaw; }
 
+	/** Yaw padrao. -90 olha para -Y, que e o norte do RO nos mapas importados (norte no topo da tela, como no original). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
-	float FixedYaw = 45.f;
+	float FixedYaw = -90.f;
 
+	/** Inclinacao padrao (negativa = olhando para baixo). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
 	float CameraPitch = -50.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
+	float MinPitch = -70.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
+	float MaxPitch = -30.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
 	float DefaultArmLength = 1200.f;
@@ -69,9 +85,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
 	float ZoomStep = 100.f;
 
-	/** Sprite 2D do personagem; aponte Sprite->SpriteSet para o DA do Aprendiz. */
+	/** Sprite do personagem composto em camadas (corpo + cabeca) a partir dos .spr/.act do cliente original. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprite")
-	TObjectPtr<UMythSpriteAnimComponent> Sprite;
+	TObjectPtr<UMythRoSpriteComponent> Sprite;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Myth|Stats")
 	TObjectPtr<UMythStatsComponent> Stats;
@@ -89,8 +105,10 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Myth|Camera")
 	TObjectPtr<UCameraComponent> FollowCamera;
 
-	EMythCameraMode CameraMode = EMythCameraMode::FixedIsometric;
-	float CameraYaw = 45.f;
+	// O cliente original permite girar/inclinar/zoom sempre; o modo Fixo trava a camera no angulo padrao.
+	EMythCameraMode CameraMode = EMythCameraMode::Free360;
+	float CameraYaw = -90.f;
+	float CurrentPitch = -50.f;
 
 	void ApplyCamera();
 };
