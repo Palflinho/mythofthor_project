@@ -1,5 +1,6 @@
 #include "Player/MythPlayerCharacter.h"
 #include "World/MythMapInfo.h"
+#include "World/MythVisionLightComponent.h"
 
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -36,6 +37,11 @@ AMythPlayerCharacter::AMythPlayerCharacter()
 
 	Stats = CreateDefaultSubobject<UMythStatsComponent>(TEXT("Stats"));
 	AutoBattle = CreateDefaultSubobject<UAutoBattleComponent>(TEXT("AutoBattle"));
+
+	// Raio de visao noturno (so a luz, so do proprio personagem): acima da cabeca para iluminar o chao em volta
+	VisionLight = CreateDefaultSubobject<UMythVisionLightComponent>(TEXT("VisionLight"));
+	VisionLight->SetupAttachment(RootComponent);
+	VisionLight->SetRelativeLocation(FVector(0.f, 0.f, 160.f));
 
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);

@@ -95,6 +95,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Myth|AutoBattle")
 	TObjectPtr<UAutoBattleComponent> AutoBattle;
 
+	/** Luz suave em volta do personagem a noite nos mapas externos (raio pela classe e DEX do servidor). */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Myth|Vision")
+	TObjectPtr<class UMythVisionLightComponent> VisionLight;
+
 protected:
 	virtual void BeginPlay() override;
 
