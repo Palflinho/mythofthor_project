@@ -20,6 +20,12 @@ struct MYTHOFTHOR_API FMythRoClientTables
 	/** Nome do recurso do item (sprite no chao: data/sprite/아이템/<nome>.spr; icone: item/<nome>.bmp). */
 	static FString ItemResource(int32 ItemID);
 
+	/** Raridade visual do item (0 comum .. 4 lendario), de Config/item_rarity.json (tools/gen_item_rarity.py). */
+	static int32 ItemRarity(int32 ItemID);
+
+	/** Cor da raridade (nome no chao e aura), no estilo Diablo: branco, azul, amarelo, roxo, laranja. */
+	static FLinearColor RarityColor(int32 Rarity);
+
 	/** Nome exibido da habilidade (ex.: 5 -> "Golpe Fulminante"). */
 	static FString SkillName(int32 SkillID);
 

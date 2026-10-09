@@ -94,3 +94,36 @@ FString FMythRoClientTables::ItemResource(int32 ItemID)
 	const FRoTableEntry* E = RoItems().Find(ItemID);
 	return E ? E->Resource : FString();
 }
+
+int32 FMythRoClientTables::ItemRarity(int32 ItemID)
+{
+	static const TMap<int32, int32> Table = []()
+	{
+		TMap<int32, int32> Out;
+		FString Text;
+		TSharedPtr<FJsonObject> Root;
+		if (FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("item_rarity.json")))
+			&& FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) && Root.IsValid())
+		{
+			for (const TPair<FString, TSharedPtr<FJsonValue>>& P : Root->Values)
+			{
+				Out.Add(FCString::Atoi(*P.Key), static_cast<int32>(P.Value->AsNumber()));
+			}
+		}
+		return Out;
+	}();
+	const int32* R = Table.Find(ItemID);
+	return R ? *R : 0;
+}
+
+FLinearColor FMythRoClientTables::RarityColor(int32 Rarity)
+{
+	switch (Rarity)
+	{
+	case 1: return FLinearColor(0.35f, 0.58f, 1.f);   // incomum: azul
+	case 2: return FLinearColor(1.f, 0.86f, 0.22f);   // raro: amarelo
+	case 3: return FLinearColor(0.74f, 0.38f, 1.f);   // epico: roxo
+	case 4: return FLinearColor(1.f, 0.52f, 0.1f);    // lendario: laranja
+	default: return FLinearColor(0.95f, 0.95f, 0.95f); // comum: branco
+	}
+}

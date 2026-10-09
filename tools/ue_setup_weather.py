@@ -142,3 +142,67 @@ def build_indoor_void():
 
 
 build_indoor_void()
+
+
+def build_item_beam():
+    """
+    Feixe de luz dos itens raros no chao (estilo Diablo 4): aditivo, sem iluminacao, cor por parametro.
+    Brilho = Color * Strength * (1 - |2U - 1|)^2 * (1 - V)  (forte no centro e na base, some para cima).
+    """
+    path = '/Game/Myth/M_ItemBeam'
+    eal.make_directory('/Game/Myth')
+    if eal.does_asset_exist(path):
+        mat = eal.load_asset(path)
+        mel.delete_all_material_expressions(mat)
+    else:
+        mat = tools.create_asset('M_ItemBeam', '/Game/Myth', unreal.Material, unreal.MaterialFactoryNew())
+    mat.set_editor_property('blend_mode', unreal.BlendMode.BLEND_ADDITIVE)
+    mat.set_editor_property('shading_model', unreal.MaterialShadingModel.MSM_UNLIT)
+    mat.set_editor_property('two_sided', True)
+
+    uv = mel.create_material_expression(mat, unreal.MaterialExpressionTextureCoordinate, -1000, 0)
+    u = uv_channel(mat, uv, 1.0, 0.0, -850, -60)
+    v = uv_channel(mat, uv, 0.0, 1.0, -850, 120)
+
+    # horizontal: (1 - |2U - 1|)^2
+    u2 = mel.create_material_expression(mat, unreal.MaterialExpressionMultiply, -700, -60)
+    mel.connect_material_expressions(u, '', u2, 'A')
+    mel.connect_material_expressions(const(mat, 2.0, -850, 0), '', u2, 'B')
+    um1 = mel.create_material_expression(mat, unreal.MaterialExpressionSubtract, -580, -60)
+    mel.connect_material_expressions(u2, '', um1, 'A')
+    mel.connect_material_expressions(const(mat, 1.0, -700, 10), '', um1, 'B')
+    ua = mel.create_material_expression(mat, unreal.MaterialExpressionAbs, -470, -60)
+    mel.connect_material_expressions(um1, '', ua, '')
+    uo = mel.create_material_expression(mat, unreal.MaterialExpressionOneMinus, -370, -60)
+    mel.connect_material_expressions(ua, '', uo, '')
+    usq = mel.create_material_expression(mat, unreal.MaterialExpressionMultiply, -270, -60)
+    mel.connect_material_expressions(uo, '', usq, 'A')
+    mel.connect_material_expressions(uo, '', usq, 'B')
+
+    # vertical: 1 - V (V = 0 no topo do plano, 1 na base -> invertido abaixo conforme a orientacao do plano)
+    vo = mel.create_material_expression(mat, unreal.MaterialExpressionOneMinus, -700, 120)
+    mel.connect_material_expressions(v, '', vo, '')
+
+    fade = mel.create_material_expression(mat, unreal.MaterialExpressionMultiply, -150, 20)
+    mel.connect_material_expressions(usq, '', fade, 'A')
+    mel.connect_material_expressions(vo, '', fade, 'B')
+
+    color = mel.create_material_expression(mat, unreal.MaterialExpressionVectorParameter, -300, 220)
+    color.set_editor_property('parameter_name', 'Color')
+    color.set_editor_property('default_value', unreal.LinearColor(1.0, 0.6, 0.1, 1.0))
+    strength = mel.create_material_expression(mat, unreal.MaterialExpressionScalarParameter, -300, 320)
+    strength.set_editor_property('parameter_name', 'Strength')
+    strength.set_editor_property('default_value', 3.0)
+    cs = mel.create_material_expression(mat, unreal.MaterialExpressionMultiply, -150, 240)
+    mel.connect_material_expressions(color, '', cs, 'A')
+    mel.connect_material_expressions(strength, '', cs, 'B')
+    out = mel.create_material_expression(mat, unreal.MaterialExpressionMultiply, 0, 100)
+    mel.connect_material_expressions(cs, '', out, 'A')
+    mel.connect_material_expressions(fade, '', out, 'B')
+    mel.connect_material_property(out, '', unreal.MaterialProperty.MP_EMISSIVE_COLOR)
+    mel.recompile_material(mat)
+    eal.save_loaded_asset(mat)
+    unreal.log('[Weather] M_ItemBeam pronto')
+
+
+build_item_beam()

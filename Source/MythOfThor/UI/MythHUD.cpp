@@ -7,6 +7,10 @@
 #include "Player/MythPlayerController.h"
 #include "Sprites/MythMonster.h"
 #include "UI/MythRoUITextures.h"
+#include "UI/MythRoClientTables.h"
+#include "World/MythGroundItem.h"
+#include "EngineUtils.h"
+#include "Camera/PlayerCameraManager.h"
 #include "CanvasItem.h"
 #include "Engine/Texture2D.h"
 
@@ -43,6 +47,7 @@ void AMythHUD::DrawHUD()
 {
 	Super::DrawHUD();
 	DrawTargetRing();
+	DrawGroundItemLabels();
 
 	if (!Canvas || Entries.IsEmpty())
 	{
@@ -245,4 +250,61 @@ void AMythHUD::DrawTargetRing()
 	float PW = 0.f, PH = 0.f;
 	Canvas->TextSize(Font, Pct, PW, PH, 0.55f, 0.55f);
 	Canvas->DrawText(Font, Pct, Head.X - PW * 0.5f, Y + BarH + 3.f, 0.55f, 0.55f, Info);
+}
+
+void AMythHUD::DrawGroundItemLabels()
+{
+	// Nome de cada item no chao, logo abaixo dele, na cor da raridade (estilo Diablo); contorno escuro para ler
+	// sobre qualquer chao. Nomes que se sobreporiam sao empilhados para baixo. Itens longe da camera nao mostram nome.
+	if (!Canvas || !PlayerOwner || !PlayerOwner->PlayerCameraManager)
+	{
+		return;
+	}
+	struct FLabel { FString Text; FLinearColor Color; FVector2D Pos; FVector2D Size; };
+	TArray<FLabel> Labels;
+	const FVector CamLoc = PlayerOwner->PlayerCameraManager->GetCameraLocation();
+	UFont* Font = GEngine ? GEngine->GetSmallFont() : nullptr;
+	const float TextScale = 1.15f;
+	for (TActorIterator<AMythGroundItem> It(GetWorld()); It; ++It)
+	{
+		const FVector At = It->GetActorLocation();
+		if (FVector::DistSquared(At, CamLoc) > FMath::Square(4500.f))
+		{
+			continue;
+		}
+		const FVector Screen = Project(At - FVector(0.f, 0.f, 8.f), true);
+		if (Screen.Z <= 0.f)
+		{
+			continue;
+		}
+		FLabel L;
+		L.Text = It->GetLabel();
+		L.Color = FMythRoClientTables::RarityColor(It->Rarity);
+		float W = 0.f, H = 0.f;
+		Canvas->TextSize(Font, L.Text, W, H, TextScale, TextScale);
+		L.Size = FVector2D(W + 6.f, H + 1.f);
+		L.Pos = FVector2D(Screen.X - L.Size.X * 0.5f, Screen.Y + 6.f);
+		Labels.Add(L);
+	}
+	Labels.Sort([](const FLabel& A, const FLabel& B) { return A.Pos.Y < B.Pos.Y; });
+	TArray<FBox2D> Placed;
+	for (FLabel& L : Labels)
+	{
+		for (int32 Guard = 0; Guard < 12; ++Guard)
+		{
+			const FBox2D Box(L.Pos, L.Pos + L.Size);
+			const bool bHit = Placed.ContainsByPredicate([&Box](const FBox2D& O) { return O.Intersect(Box); });
+			if (!bHit)
+			{
+				break;
+			}
+			L.Pos.Y += L.Size.Y;
+		}
+		Placed.Add(FBox2D(L.Pos, L.Pos + L.Size));
+		FCanvasTextItem Text(L.Pos + FVector2D(3.f, 0.f), FText::FromString(L.Text), Font, L.Color);
+		Text.Scale = FVector2D(TextScale, TextScale);
+		Text.bOutlined = true;
+		Text.OutlineColor = FLinearColor(0.f, 0.f, 0.f, 0.9f);
+		Canvas->DrawItem(Text);
+	}
 }

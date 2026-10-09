@@ -52,6 +52,8 @@ public:
 
 private:
 	void DrawTargetRing();
+	/** Nome dos itens no chao, na cor da raridade. */
+	void DrawGroundItemLabels();
 
 	struct FEntry
 	{

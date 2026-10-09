@@ -47,6 +47,20 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item")
 	TObjectPtr<UBoxComponent> ClickBox;
 
+	/** Raridade visual (0 comum .. 4 lendario), pela taxa de drop do servidor (Config/item_rarity.json). */
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Item")
+	int32 Rarity = 0;
+
+	/** Brilho no chao (raro em diante) e feixe vertical (epico e lendario), estilo Diablo 4. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item")
+	TObjectPtr<class UPointLightComponent> Glow;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item")
+	TObjectPtr<UStaticMeshComponent> Beam;
+
+protected:
+	virtual void BeginPlay() override;
+
 private:
 	float DropTime = -1.f; // > 0 enquanto o pulinho de queda estiver tocando
 	FVector RestLocation = FVector::ZeroVector;

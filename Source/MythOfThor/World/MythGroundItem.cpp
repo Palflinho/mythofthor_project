@@ -4,6 +4,12 @@
 #include "UI/MythRoClientTables.h"
 
 #include "Components/BoxComponent.h"
+#include "Components/PointLightComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "Engine/StaticMesh.h"
+#include "GameFramework/PlayerController.h"
+#include "Camera/PlayerCameraManager.h"
+#include "Materials/MaterialInstanceDynamic.h"
 
 namespace
 {
@@ -32,6 +38,25 @@ AMythGroundItem::AMythGroundItem()
 	ClickBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	ClickBox->SetCollisionResponseToAllChannels(ECR_Ignore);
 	ClickBox->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+
+	// Aura da raridade: brilho colorido no chao e feixe de luz vertical (ligados no BeginPlay conforme a raridade)
+	Glow = CreateDefaultSubobject<UPointLightComponent>(TEXT("Glow"));
+	Glow->SetupAttachment(Root);
+	Glow->SetRelativeLocation(FVector(0.f, 0.f, 40.f));
+	Glow->SetIntensityUnits(ELightUnits::Candelas);
+	Glow->SetCastShadows(false);
+	Glow->SetAttenuationRadius(220.f);
+	Glow->SetVisibility(false);
+
+	Beam = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Beam"));
+	Beam->SetupAttachment(Root);
+	Beam->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Beam->SetCastShadow(false);
+	Beam->SetVisibility(false);
+	if (UStaticMesh* Plane = LoadObject<UStaticMesh>(nullptr, TEXT("/Engine/BasicShapes/Plane.Plane")))
+	{
+		Beam->SetStaticMesh(Plane);
+	}
 }
 
 void AMythGroundItem::Setup(int64 InNetID, int32 InItemID, int32 InAmount, bool bJustDropped)
@@ -43,6 +68,7 @@ void AMythGroundItem::Setup(int64 InNetID, int32 InItemID, int32 InAmount, bool 
 	Sprite->MonsterSpriteName = Resource.IsEmpty() ? TEXT("사과") : Resource; // 사과 (maca) se faltar na tabela
 	RestLocation = GetActorLocation();
 	DropTime = bJustDropped ? 0.f : -1.f;
+	Rarity = FMythRoClientTables::ItemRarity(ItemID);
 }
 
 FString AMythGroundItem::GetLabel() const
@@ -55,9 +81,43 @@ FString AMythGroundItem::GetLabel() const
 	return Amount > 1 ? FString::Printf(TEXT("%s: %d"), *Name, Amount) : Name;
 }
 
+void AMythGroundItem::BeginPlay()
+{
+	Super::BeginPlay();
+	const FLinearColor Color = FMythRoClientTables::RarityColor(Rarity);
+	if (Rarity >= 2)
+	{
+		Glow->SetLightColor(Color);
+		Glow->SetIntensity(Rarity >= 4 ? 30.f : (Rarity == 3 ? 20.f : 12.f));
+		Glow->SetVisibility(true);
+	}
+	if (Rarity >= 3)
+	{
+		if (UMaterialInterface* Base = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Myth/M_ItemBeam.M_ItemBeam")))
+		{
+			UMaterialInstanceDynamic* M = UMaterialInstanceDynamic::Create(Base, this);
+			M->SetVectorParameterValue(TEXT("Color"), Color);
+			M->SetScalarParameterValue(TEXT("Strength"), Rarity >= 4 ? 4.f : 2.5f);
+			Beam->SetMaterial(0, M);
+			Beam->SetVisibility(true);
+		}
+	}
+}
+
 void AMythGroundItem::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+	if (Beam->IsVisible())
+	{
+		// Feixe em pe e virado para a camera (so gira no eixo vertical): 35 cm de largura, 3,5 m de altura
+		if (const APlayerController* PC = GetWorld()->GetFirstPlayerController(); PC && PC->PlayerCameraManager)
+		{
+			const float Yaw = PC->PlayerCameraManager->GetCameraRotation().Yaw;
+			Beam->SetWorldRotation(FRotator(0.f, Yaw + 90.f, 90.f));
+		}
+		Beam->SetWorldLocation(GetActorLocation() + FVector(0.f, 0.f, 175.f));
+		Beam->SetWorldScale3D(FVector(0.35f, 3.5f, 1.f));
+	}
 	if (DropTime < 0.f)
 	{
 		return;
