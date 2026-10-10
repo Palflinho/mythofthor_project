@@ -88,7 +88,7 @@ Saída: `docs/FIDELIDADE_SERVIDOR.md`.
 | **Entrada do jogo** | Login, seleção e criação de personagem (assets ver2/ver3 do LATAM) | Claude |
 | **Teste fechado** (~20 amigos, no seu PC) | Pacote do cliente sem editor; VPN (CGNAT da Vero), contas, backup do banco; checklist de abertura | os dois |
 | **Sistemas próprios do Myth** | Síntese, Grade, Monstro raro ★, Códice de Mímir, HUD sem comandos (o servidor já está pronto, `docs/sistemas/`); **opção a decidir:** bloqueio/aparar para escudo e duas mãos, papel de tank (`docs/sistemas/07_bloqueio_aparar.md`) | Claude |
-| **Visual HD-2D** | Normais cilíndricas nos sprites (`docs/ref/09`), clima e dia/noite por mapa, poças, chuva nas unidades | Claude |
+| **Visual HD-2D** | Normais cilíndricas nos sprites (`docs/ref/09`), clima e dia/noite por mapa, poças, chuva nas unidades, **a aura do 99 (e os efeitos brilhantes em geral) precisam emitir luz no Lumen** (ponto de luz azul seguindo o personagem, como o `AMythLightFlash` dos efeitos de skill) | Claude |
 | **Conteúdo** | Sprites, skills e efeitos de todas as classes até a transclasse; quests de habilidade; skills de 3ª classe adaptadas | os dois |
 
 Sugestão, a decidir quando F3 fechar: uma sessão curta de teste com você e 2 ou 3 amigos antes do teste dos 20, para
