@@ -425,6 +425,7 @@ void AMythPlayerController::PlayerTick(float DeltaTime)
 		if (WasInputKeyJustPressed(EKeys::Down)) { HudWidget->NpcMenuMove(1); }
 	}
 
+	UpdateHeadTurn();
 	FlushPendingMove();
 	UpdateNetChase(DeltaTime);
 	UpdateRoCursor();
@@ -506,6 +507,39 @@ void AMythPlayerController::OnHotkeyEquip() { ToggleHudWindow(EMythRoWindow::Equ
 void AMythPlayerController::OnHotkeySkills() { ToggleHudWindow(EMythRoWindow::Skills); }
 void AMythPlayerController::OnHotkeyBasic() { ToggleHudWindow(EMythRoWindow::Basic); }
 void AMythPlayerController::OnHotkeyMinimap() { ToggleHudWindow(EMythRoWindow::Minimap); }
+
+void AMythPlayerController::UpdateHeadTurn()
+{
+	// Doridori (docs/ref/03 4.3): parado ou sentado, <- e -> viram a cabeca (CZ_CHANGE_DIRECTION com head dir 2 e 1);
+	// o corpo fica onde esta. Andar, bater e apanhar endireitam a cabeca (SetState do sprite).
+	const bool bLeft = WasInputKeyJustPressed(EKeys::Left);
+	const bool bRight = WasInputKeyJustPressed(EKeys::Right);
+	if ((!bLeft && !bRight) || IsAltDown() || (HudWidget && (HudWidget->IsChatFocused() || HudWidget->IsNpcDialogOpen())))
+	{
+		return;
+	}
+	AMythPlayerCharacter* Char = GetMythCharacter();
+	UMythRoSpriteComponent* Sprite = Char ? Char->Sprite.Get() : nullptr;
+	if (!Sprite || (Sprite->GetState() != EMythSpriteState::Idle && Sprite->GetState() != EMythSpriteState::Sit))
+	{
+		return;
+	}
+	SetHeadTurn(bLeft ? 2 : 1);
+}
+
+void AMythPlayerController::SetHeadTurn(uint8 HeadDir)
+{
+	AMythPlayerCharacter* Char = GetMythCharacter();
+	if (!Char || !Char->Sprite)
+	{
+		return;
+	}
+	Char->Sprite->SetHeadDir(HeadDir);
+	if (URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr)
+	{
+		Net->SendChangeDirection(HeadDir, Char->Sprite->GetFacingRoDir());
+	}
+}
 
 void AMythPlayerController::OnHotkeySit()
 {

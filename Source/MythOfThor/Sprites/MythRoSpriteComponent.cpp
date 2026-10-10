@@ -515,6 +515,28 @@ void UMythRoSpriteComponent::SetState(EMythSpriteState NewState, bool bOneShot)
 	StateTime = 0.f;
 	PlayRate = 1.f;
 	WalkDistanceRo = 0.f;
+	if (NewState != EMythSpriteState::Idle && NewState != EMythSpriteState::Sit)
+	{
+		HeadTurn = 0; // andar, bater e apanhar endireitam a cabeca
+	}
+}
+
+void UMythRoSpriteComponent::SetHeadDir(uint8 NewHeadDir)
+{
+	HeadTurn = FMath::Min<uint8>(NewHeadDir, 2);
+}
+
+void UMythRoSpriteComponent::SetFacingRoDir(uint8 RoDir)
+{
+	// Rumo em graus a partir do norte (-Y do mundo), horario visto de cima, leste = +X: rAthena 0 norte, 1 noroeste (-45)...
+	const float Heading = FMath::DegreesToRadians(-45.f * static_cast<float>(RoDir & 7));
+	FacingWorld = FVector2D(FMath::Sin(Heading), -FMath::Cos(Heading));
+}
+
+uint8 UMythRoSpriteComponent::GetFacingRoDir() const
+{
+	const float Heading = FMath::RadiansToDegrees(FMath::Atan2(static_cast<float>(FacingWorld.X), static_cast<float>(-FacingWorld.Y)));
+	return static_cast<uint8>((FMath::RoundToInt(-Heading / 45.f) % 8 + 8) % 8);
 }
 
 void UMythRoSpriteComponent::PlayAttack(float AttackDuration)
@@ -561,7 +583,12 @@ void UMythRoSpriteComponent::FaceLocation(const FVector& WorldLocation)
 {
 	if (const AActor* Owner = GetOwner())
 	{
-		Direction = URagnarokDirectionHelper::CalculateSpriteDirection(WorldLocation - Owner->GetActorLocation(), GetCameraRotation(), Direction);
+		const FVector2D To(WorldLocation.X - Owner->GetActorLocation().X, WorldLocation.Y - Owner->GetActorLocation().Y);
+		if (To.SizeSquared() > 1.0)
+		{
+			FacingWorld = To.GetSafeNormal();
+			Direction = ComputeDirection(GetCameraRotation());
+		}
 	}
 }
 
@@ -598,7 +625,8 @@ int32 UMythRoSpriteComponent::GetFrameIndex(const FRoActAction& Action, bool& bO
 	}
 	if ((State == EMythSpriteState::Idle || State == EMythSpriteState::Sit) && !IsMonster())
 	{
-		return 0; // jogador parado: quadro 0 = cabeca olhando para frente (monstros animam o idle em loop)
+		// Jogador parado ou sentado: a acao tem 3 quadros, um por posicao da cabeca (doridori); monstros animam o idle em loop
+		return FMath::Min<int32>(HeadTurn, Count - 1);
 	}
 	if (State == EMythSpriteState::Walk)
 	{
@@ -646,10 +674,16 @@ void UMythRoSpriteComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	}
 	StateTime += DeltaTime;
 	const FRotator CamRot = GetCameraRotation();
+	const FVector Velocity = Owner->GetVelocity();
+	if (!bOneShotPlaying && State != EMythSpriteState::Dead && Velocity.Size2D() > WalkSpeedThreshold)
+	{
+		FacingWorld = FVector2D(Velocity.X, Velocity.Y).GetSafeNormal(); // andando, olha para onde vai
+	}
+	// Parado tambem: girar a camera mostra outro lado do personagem
+	Direction = ComputeDirection(CamRot);
 
 	if (State != EMythSpriteState::Dead)
 	{
-		const FVector Velocity = Owner->GetVelocity();
 		if (State == EMythSpriteState::Walk)
 		{
 			WalkDistanceRo += Velocity.Size2D() * DeltaTime / 10.f;
@@ -670,7 +704,6 @@ void UMythRoSpriteComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 		}
 		else
 		{
-			Direction = ComputeDirection(Velocity, CamRot);
 			const bool bMoving = Velocity.Size2D() > WalkSpeedThreshold;
 			if (State == EMythSpriteState::Sit && !bMoving)
 			{
@@ -692,21 +725,17 @@ void UMythRoSpriteComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	RebuildMesh(CamRot);
 }
 
-ERagnarokDirection UMythRoSpriteComponent::ComputeDirection(const FVector& Velocity, const FRotator& CamRot) const
+ERagnarokDirection UMythRoSpriteComponent::ComputeDirection(const FRotator& CamRot) const
 {
-	if (Velocity.SizeSquared2D() < FMath::Square(WalkSpeedThreshold))
-	{
-		return Direction;
-	}
-	// Mantem a direcao atual enquanto o movimento estiver ate 22,5 + histerese graus do centro dela.
-	const float MoveAngle = FMath::RadiansToDegrees(FMath::Atan2(Velocity.Y, Velocity.X));
-	const float Relative = FRotator::NormalizeAxis(MoveAngle - CamRot.Yaw);
+	// Mantem a direcao atual enquanto a frente do corpo estiver ate 22,5 + histerese graus do centro dela.
+	const float FacingAngle = FMath::RadiansToDegrees(FMath::Atan2(static_cast<float>(FacingWorld.Y), static_cast<float>(FacingWorld.X)));
+	const float Relative = FRotator::NormalizeAxis(FacingAngle - CamRot.Yaw);
 	const float Center = URagnarokDirectionHelper::DirectionToAngle(Direction);
 	if (FMath::Abs(FRotator::NormalizeAxis(Relative - Center)) <= 22.5f + DirectionHysteresisDeg)
 	{
 		return Direction;
 	}
-	return URagnarokDirectionHelper::CalculateSpriteDirection(Velocity, CamRot, Direction);
+	return URagnarokDirectionHelper::CalculateSpriteDirection(FVector(FacingWorld.X, FacingWorld.Y, 0.0) * 100.0, CamRot, Direction);
 }
 
 void UMythRoSpriteComponent::UpdateBillboard(const FRotator& CamRot)
@@ -822,7 +851,13 @@ void UMythRoSpriteComponent::AddHeadLayer(const FMythRoSpriteSource& Source, con
 		return;
 	}
 	const FRoActAction& Action = Source.Act.Actions[ActionIndex];
-	const FRoActFrame& Frame = Action.Frames[FrameIndex % Action.Frames.Num()];
+	int32 HeadFrame = FrameIndex % Action.Frames.Num();
+	if ((State == EMythSpriteState::Idle || State == EMythSpriteState::Sit) && !IsMonster() && Action.Frames.Num() >= 3)
+	{
+		// Doridori (docs/ref/03 4.3): a acao parada e dividida em 3 blocos iguais, um por posicao da cabeca
+		HeadFrame = (Action.Frames.Num() / 3) * HeadTurn;
+	}
+	const FRoActFrame& Frame = Action.Frames[HeadFrame];
 	// Encaixa no corpo pela diferenca entre as ancoras dos dois quadros (cabelo e acessorios).
 	FIntPoint Offset = FIntPoint::ZeroValue;
 	if (BodyFrame.Anchors.Num() > 0 && Frame.Anchors.Num() > 0)

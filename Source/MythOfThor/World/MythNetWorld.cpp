@@ -195,6 +195,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnUnitAppear.AddDynamic(this, &AMythNetWorld::HandleUnitAppear);
 	Net->OnUnitWalk.AddDynamic(this, &AMythNetWorld::HandleUnitWalk);
 	Net->OnUnitStop.AddDynamic(this, &AMythNetWorld::HandleUnitStop);
+	Net->OnUnitDirection.AddDynamic(this, &AMythNetWorld::HandleUnitDirection);
 	Net->OnUnitVanish.AddDynamic(this, &AMythNetWorld::HandleUnitVanish);
 	Net->OnDamage.AddDynamic(this, &AMythNetWorld::HandleDamage);
 	Net->OnChatMessage.AddDynamic(this, &AMythNetWorld::HandleChat);
@@ -246,6 +247,7 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnUnitAppear.RemoveAll(this);
 		Net->OnUnitWalk.RemoveAll(this);
 		Net->OnUnitStop.RemoveAll(this);
+		Net->OnUnitDirection.RemoveAll(this);
 		Net->OnUnitVanish.RemoveAll(this);
 		Net->OnDamage.RemoveAll(this);
 		Net->OnChatMessage.RemoveAll(this);
@@ -506,6 +508,10 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 	Unit->AutoPossessAI = EAutoPossessAI::Spawned;
 	if (UMythRoSpriteComponent* S = Unit->Sprite)
 	{
+		if (Info.bDirectionKnown)
+		{
+			S->SetFacingRoDir(Info.Direction); // parado olha para onde o servidor manda; andando, a velocidade decide
+		}
 		if (bPlayer)
 		{
 			S->MonsterSpriteName.Empty();
@@ -519,6 +525,7 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 			S->Shield = Info.Shield & 0xFFFF;
 			S->HairStyle = FMath::Max(Info.Head, 1);
 			S->HairColor = Info.HeadPalette;
+			S->SetHeadDir(Info.HeadDir);
 		}
 		else if (!bWarp) // o portal nao tem sprite (os aneis sao do AMythWarpPortal)
 		{
@@ -596,6 +603,17 @@ void AMythNetWorld::HandleUnitStop(int64 ID, int32 X, int32 Y)
 	if (UMythCellMoverComponent* Mover = Actor ? Actor->FindComponentByClass<UMythCellMoverComponent>() : nullptr)
 	{
 		Mover->ServerStop(FIntPoint(X, Y));
+	}
+}
+
+void AMythNetWorld::HandleUnitDirection(int64 ID, uint8 HeadDir, uint8 BodyDir)
+{
+	// ZC_CHANGE_DIRECTION: outro jogador virou o corpo e/ou a cabeca (doridori, Shift+clique)
+	const AActor* Actor = ResolveActor(ID);
+	if (UMythRoSpriteComponent* S = Actor ? Actor->FindComponentByClass<UMythRoSpriteComponent>() : nullptr)
+	{
+		S->SetFacingRoDir(BodyDir);
+		S->SetHeadDir(HeadDir);
 	}
 }
 

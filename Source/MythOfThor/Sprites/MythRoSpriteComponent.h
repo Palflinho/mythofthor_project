@@ -221,6 +221,17 @@ public:
 	UFUNCTION(BlueprintPure, Category = "RO Sprite")
 	ERagnarokDirection GetDirection() const { return Direction; }
 
+	/**
+	 * Para onde o corpo olha no MUNDO, no formato do rAthena (0 norte, 1 noroeste ... 4 sul ... 7 nordeste). O quadro do
+	 * sprite sai desse valor e da camera (docs/ref/01 3.7): girar a camera mostra outro lado do personagem parado.
+	 */
+	void SetFacingRoDir(uint8 RoDir);
+	uint8 GetFacingRoDir() const;
+
+	/** Cabeca parada ("doridori", docs/ref/03 4.3): 0 frente, 1 virada a direita (CW), 2 a esquerda (CCW). */
+	void SetHeadDir(uint8 NewHeadDir);
+	uint8 GetHeadDir() const { return HeadTurn; }
+
 	/** Raiz dos assets extraidos do GRF (pasta que contem 'data'). */
 	static FString GetAssetsRoot();
 
@@ -265,6 +276,9 @@ private:
 
 	EMythSpriteState State = EMythSpriteState::Idle;
 	ERagnarokDirection Direction = ERagnarokDirection::South;
+	/** Frente do corpo no plano do mundo (unitario). Padrao: sul do RO (+Y), de frente para a camera inicial. */
+	FVector2D FacingWorld = FVector2D(0.0, 1.0);
+	uint8 HeadTurn = 0;
 	float StateTime = 0.f;
 	float PlayRate = 1.f;
 	/** Distancia andada (unidades do RO = 10 uu) desde que entrou em Walk: o passo segue o chao (docs/ref/03 4.1). */
@@ -279,8 +293,8 @@ private:
 	bool bFeetZInitialized = false;
 
 	bool IsMonster() const { return !MonsterSpriteName.IsEmpty(); }
-	/** Direcao pela velocidade, com histerese em relacao a direcao atual. */
-	ERagnarokDirection ComputeDirection(const FVector& Velocity, const FRotator& CamRot) const;
+	/** Direcao do sprite pela frente do corpo no mundo e a camera, com histerese em relacao a direcao atual. */
+	ERagnarokDirection ComputeDirection(const FRotator& CamRot) const;
 
 	bool LoadSource(FMythRoSpriteSource& Source, const FString& SprPath, const FString& ActPath, const FString& PalettePath);
 	void BuildAtlas(FMythRoSpriteSource& Source);

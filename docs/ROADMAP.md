@@ -21,9 +21,9 @@ Ordem do que se vê o tempo todo jogando. Quem: Claude, salvo indicação.
 
 | # | Item (ref. na matriz) | Estado |
 |---|---|---|
-| 1.1 | Doridori da cabeça parada (03) | ⬜ |
+| 1.1 | Doridori da cabeça parada (03) e direção do corpo no mundo | 🟡 feito, falta teste |
 | 1.2 | Camadas: capa/asas, carrinho, ordem de costas (03) | ⬜ |
-| 1.3 | Arma guardada em idle/sentado; posturas pickup, readyfight, stun, 2º golpe (03) | ⬜ conferir no cliente original |
+| 1.3 | Posturas pickup, readyfight, stun, 2º golpe (03). A arma guardada já segue o `.act` | ⬜ conferir |
 | 1.4 | Flechas (05) | ⬜ |
 | 1.5 | Tremor de tela, aura do 99 (05) | ⬜ |
 | 1.6 | Efeitos de 2ª classe e transclasse testados jogando (05, 11) | 🟡 receitas prontas, falta testar |

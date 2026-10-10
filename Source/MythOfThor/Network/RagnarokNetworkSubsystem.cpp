@@ -921,6 +921,9 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case RagnarokPackets::HEADER_ZC_STOPMOVE:
 				HandleStopMove(PacketData, ActualLen);
 				break;
+			case 0x009c: // ZC_CHANGE_DIRECTION
+				HandleChangeDirection(PacketData, ActualLen);
+				break;
 			case RagnarokPackets::HEADER_ZC_NOTIFY_VANISH:
 				HandleUnitVanish(PacketData, ActualLen);
 				break;
@@ -1279,6 +1282,7 @@ void URagnarokNetworkSubsystem::HandleUnitAppear(const uint8* PacketData, int32 
 	Unit.HeadMid = U16(39 + Shift);      // accessory3
 	Unit.HeadPalette = I16(41 + Shift);
 	Unit.BodyPalette = I16(43 + Shift);
+	Unit.HeadDir = static_cast<uint8>(FMath::Clamp(U16(45 + Shift), 0, 2));
 	Unit.Robe = U16(47 + Shift);
 	Unit.Sex = PacketData[bWalking ? 66 : 62]; // logo antes de MoveData (walking) / PosDir
 
@@ -1286,6 +1290,7 @@ void URagnarokNetworkSubsystem::HandleUnitAppear(const uint8* PacketData, int32 
 	if (!bWalking)
 	{
 		RagnarokPackets::UnpackCellCoord(PacketData + 63, Unit.CellX, Unit.CellY, Unit.Direction);
+		Unit.bDirectionKnown = true;
 		if (PacketSize >= 81)
 		{
 			Unit.MaxHP = I32(PacketID == RagnarokPackets::HEADER_ZC_IDLE_UNIT ? 73 : 72);
@@ -2419,3 +2424,20 @@ void URagnarokNetworkSubsystem::HandleStopMove(const uint8* PacketData, int32 Pa
 	OnUnitStop.Broadcast(AID, static_cast<int32>(xPos), static_cast<int32>(yPos));
 }
 
+
+void URagnarokNetworkSubsystem::HandleChangeDirection(const uint8* PacketData, int32 PacketSize)
+{
+	// 009c <id>.L <head dir>.W <dir>.B (PACKET_ZC_CHANGE_DIRECTION, 9 bytes); o servidor nao reenvia ao proprio autor
+	if (PacketSize < 9)
+	{
+		return;
+	}
+	const uint32 AID = *reinterpret_cast<const uint32*>(PacketData + 2);
+	const uint16 HeadDir = *reinterpret_cast<const uint16*>(PacketData + 6);
+	const uint8 Dir = PacketData[8];
+	if (bLogPackets)
+	{
+		UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] [OnUnitDirection] AID=%u head=%u dir=%u"), AID, HeadDir, Dir);
+	}
+	OnUnitDirection.Broadcast(AID, static_cast<uint8>(FMath::Min<uint16>(HeadDir, 2)), Dir & 7);
+}

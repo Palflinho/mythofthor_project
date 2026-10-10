@@ -102,6 +102,13 @@ struct FRagnarokUnitVisualInfo
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Unit")
 	uint8 Direction = 0;
 
+	/** Direcao da cabeca (0 frente, 1 CW, 2 CCW) e se Direction veio no pacote (o de andando nao traz). */
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Unit")
+	uint8 HeadDir = 0;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Unit")
+	bool bDirectionKnown = false;
+
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Unit")
 	int32 Speed = 150;
 
@@ -314,6 +321,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnAttackOutOfRange, int64, Target
 // Posição de partida e parada (Tarefa A6)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FOnUnitWalk, int64, UnitID, int32, FromX, int32, FromY, int32, ToX, int32, ToY, int32, StartTick);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnUnitStop, int64, UnitID, int32, X, int32, Y);
+/** ZC_CHANGE_DIRECTION (0x009c): corpo e cabeca de uma unidade viraram (dir do rAthena: 0 norte ... 7 nordeste; cabeca 0 frente, 1 CW, 2 CCW). */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnUnitDirection, int64, UnitID, uint8, HeadDir, uint8, BodyDir);
 
 // Delegates de compatibilidade anterior
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerMoveConfirmed, int32, TargetX, int32, TargetY);
@@ -565,6 +574,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Movement")
 	FOnUnitStop OnUnitStop;
 
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Movement")
+	FOnUnitDirection OnUnitDirection;
+
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
 	FOnUnitVanish OnUnitVanish;
 
@@ -739,4 +751,5 @@ private:
 	void HandleAttackOutOfRange(const uint8* PacketData, int32 PacketSize);
 	void HandleNotifyMove(const uint8* PacketData, int32 PacketSize);
 	void HandleStopMove(const uint8* PacketData, int32 PacketSize);
+	void HandleChangeDirection(const uint8* PacketData, int32 PacketSize);
 };

@@ -64,12 +64,13 @@ Hoje só 👤 o que o roadmap marcava como feito e testado; o resto está ⬜.
 | Recuo elástico de 6 unidades no golpe levado | ❓ P3 | ⬜ | Não vi no sprite. |
 | Morte: para no quadro 4 | ✅ | 👤 | |
 | Sentar sem sombra; morto sem sombra | ❓ P3 | ⬜ | |
-| **"Doridori"** (cabeça girando parado: corpo `quadro = headDir`, cabelo e acessórios em 3 blocos) | ❌ P1 | ⬜ | `GetFrameIndex` devolve 0 para jogador parado. |
+| **"Doridori"** (cabeça girando parado: corpo `quadro = headDir`, cabelo e acessórios em 3 blocos) | 🟡 P1 | ⬜ | Feito em 2026-10-10: setas ← e → parado ou sentado, `CZ_CHANGE_DIRECTION`, `ZC_CHANGE_DIRECTION` (0x009c) e `headDir` das unidades. Conferido nos `.act` reais: corpo, cabeça e acessórios têm 3 quadros parados. Falta o teste do usuário (e `/doridori` no chat, depende da R2.5). |
+| Direção do corpo no mundo: girar a câmera parado mostra outro lado do personagem (`docs/ref/01` 3.7) | 🟡 P1 | ⬜ | Achada na auditoria: o sprite guardava a direção relativa à câmera e só mudava ao andar. Corrigido em 2026-10-10 (`FacingWorld`); falta testar. Direção de spawn vem do pacote; a do próprio jogador ao entrar no mapa ainda não. |
 | Fase compartilhada entre camadas | ❓ P2 | ⬜ | Corpo manda o `FrameIndex`; cabeça usa `FrameIndex % N`. Conferir com chapéu animado. |
 | Ordem das camadas de frente (escudo atrás? carrinho, capa, corpo, cabeça, acessórios, arma, escudo) | ⚠️ P1 | ⬜ | Temos corpo, cabeça, 3 acessórios, arma, escudo. **Faltam capa/asas (`robe`) e carrinho.** |
 | Ordem de costas (3–5): capa por cima do corpo | ❌ P1 | ⬜ | Sem capa. A arma vai atrás (feito), o escudo atrás de 2–5. |
 | `.imf` da classe (ordem por arquivo) | ❌ P2 | ⬜ | Ordem fixa em código. Regra: se o `.imf` não existir usa `{7,0,1,4,3,2,5,6}`. |
-| Arma guardada em idle e sentado (só aparece em combate) | ❓ P2 | ⬜ | Hoje a arma é sempre desenhada. O spec diz que o pré-renewal guarda. Confirmar no cliente do `C:\Gravity\Ragnarok`. |
+| Arma guardada em idle e sentado (só aparece em combate) | ✅ | ⬜ | Os `.act` de arma já trazem as camadas vazias fora do golpe (`AddBodyLayer`), então segue o spec sem regra extra. |
 | Posturas `READYFIGHT`, `PICKUP`, `FREEZE/STUN`, `ATTACK2` (segundo golpe/crítico) | ❓ P2 | ⬜ | Enum mostra Idle/Walk/Sit/Hit/Dead/ataque; conferir pickup (ação 24), readyfight e stun. |
 | Sombra redonda (`shadow.spr`) com escala por tamanho do monstro | ⚠️ P2 | ⬜ | Existe `BlobShadowScale`; ❓ escala por `xSize/ySize` e por MVP. |
 | Sombra projetada do sol (HD-2D) | ✅ extra | 👤 | Camada moderna permitida |

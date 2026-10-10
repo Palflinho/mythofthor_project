@@ -161,6 +161,10 @@ public:
 	UFUNCTION(Exec)
 	void MythTurn(int32 X, int32 Y);
 
+	/** Teste: MythHead 1 -> vira a cabeca como a seta (0 frente, 1 direita, 2 esquerda); doridori. */
+	UFUNCTION(Exec)
+	void MythHead(int32 HeadDir) { SetHeadTurn(static_cast<uint8>(FMath::Clamp(HeadDir, 0, 2))); }
+
 	/** Teste: MythPointAt 160 185 -> poe o mouse sobre a celula e registra no log o cursor do RO escolhido. */
 	UFUNCTION(Exec)
 	void MythPointAt(int32 X, int32 Y);
@@ -267,6 +271,9 @@ private:
 	// Cursores do cliente (data/sprite/cursors.act -> tools/gen_cursors.py): escolhidos a cada quadro pelo que esta
 	// sob o mouse, na prioridade do RO (docs/ref/04 3.1)
 	void SetupRoCursors();
+	/** Setas <- e -> parado ou sentado: vira a cabeca (doridori) e avisa o servidor. */
+	void UpdateHeadTurn();
+	void SetHeadTurn(uint8 HeadDir);
 	/** Vira o personagem para o ponto sem andar e avisa o servidor (Shift+clique). */
 	void TurnToward(const FVector& WorldLocation);
 	void UpdateRoCursor();
