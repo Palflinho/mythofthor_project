@@ -20,6 +20,15 @@ def unpack_pos(p):
     dir_val = p[2] & 0x0F
     return x, y, dir_val
 
+def unpack_pos2(p):
+    x0 = (p[0] << 2) | (p[1] >> 6)
+    y0 = ((p[1] & 0x3F) << 4) | (p[2] >> 4)
+    x1 = ((p[2] & 0x0F) << 6) | (p[3] >> 2)
+    y1 = ((p[3] & 0x03) << 8) | p[4]
+    sx0 = (p[5] & 0xF0) >> 4
+    sy0 = p[5] & 0x0F
+    return x0, y0, x1, y1, sx0, sy0
+
 def send_chat_message(sock, char_name, message):
     # CZ_GLOBAL_MESSAGE (0x00f3)
     text = f"{char_name} : {message}\0".encode('utf-8')
@@ -183,37 +192,59 @@ def run_test():
     print(f"Recebidos {len(world_packets)} bytes de pacotes do mundo no Map Server!")
 
     # -------------------------------------------------------------------------
-    # 4. MOVIMENTO (CZ_REQUEST_MOVE 0x035F)
+    # 4. MOVIMENTO & VALIDAÇÃO WASD (CZ_REQUEST_MOVE 0x035F)
     # -------------------------------------------------------------------------
-    print("\n=== [4] Teste de Movimento (CZ_REQUEST_MOVE 0x035F) ===")
-    target_x, target_y = cur_x + 2, cur_y + 2
-    cz_move = struct.pack("<H", 0x035F) + pack_pos(target_x, target_y)
-    s_map.settimeout(5.0)
+    print("\n=== [4] Teste de Movimento & Validação WASD (CZ_REQUEST_MOVE 0x035F) ===")
+    orig_x, orig_y = cur_x, cur_y
+    target_5_x, target_5_y = cur_x + 5, cur_y
+    cz_move = struct.pack("<H", 0x035F) + pack_pos(target_5_x, target_5_y)
     s_map.sendall(cz_move)
-    print(f"Enviado CZ_REQUEST_MOVE para ({target_x}, {target_y})")
+    print(f"[Passo 1] Enviado CZ_REQUEST_MOVE para 5 celulas a frente: ({target_5_x}, {target_5_y})")
 
-    got_move = False
-    start_wait = time.time()
-    while time.time() - start_wait < 3.0 and not got_move:
-        try:
-            chunk = s_map.recv(4096)
-            if not chunk:
-                break
-            if b'\x87\x00' in chunk:
-                idx = chunk.find(b'\x87\x00')
-                if idx + 12 <= len(chunk):
-                    m_tick, = struct.unpack_from("<I", chunk, idx + 2)
-                    md = chunk[idx + 6 : idx + 12]
-                    x0, y0, d0 = unpack_pos(md[:3])
-                    x1, y1, d1 = unpack_pos(md[3:6])
-                    print(f">>> ZC_NOTIFY_PLAYERMOVE (0x0087) recebido! Rota: ({x0}, {y0}) -> ({x1}, {y1}), Tick: {m_tick}")
-                    got_move = True
-                    break
-        except (socket.timeout, BlockingIOError):
-            break
+    # Aguarda 300ms simulando tempo de caminhada
+    time.sleep(0.3)
+    
+    # Drena primeiro ZC_NOTIFY_PLAYERMOVE
+    s_map.settimeout(0.5)
+    try:
+        chunk = s_map.recv(4096)
+        for i in range(len(chunk) - 5):
+            if chunk[i:i+2] == b'\x87\x00':
+                m_tick, = struct.unpack_from("<I", chunk, i + 2)
+                md = chunk[i + 6 : i + 12]
+                x0, y0, x1, y1, sx0, sy0 = unpack_pos2(md)
+                print(f"  << ZC_NOTIFY_PLAYERMOVE (0x0087) recebido: ({x0},{y0}) -> ({x1},{y1}), sub=({sx0},{sy0}), Tick: {m_tick}")
+            elif chunk[i:i+2] == b'\x88\x00':
+                aid, stop_x, stop_y = struct.unpack_from("<IHH", chunk, i + 2)
+                print(f"  << ZC_STOPMOVE (0x0088) recebido! AID={aid}, Pos=({stop_x},{stop_y})")
+    except socket.timeout:
+        pass
 
-    if not got_move:
-        print("Aviso: Movimento não confirmado no prazo estipulado")
+    # [Passo 2] Envia pedido para CELULA DE ORIGEM (o bug 'anda e volta')
+    print(f"[Passo 2 - Teste Anda e Volta] Enviando CZ_REQUEST_MOVE para CELULA DE ORIGEM ({orig_x}, {orig_y})")
+    cz_move_back = struct.pack("<H", 0x035F) + pack_pos(orig_x, orig_y)
+    s_map.sendall(cz_move_back)
+
+    time.sleep(0.5)
+    s_map.settimeout(1.0)
+    got_rebound = False
+    try:
+        chunk = s_map.recv(4096)
+        for i in range(len(chunk) - 5):
+            if chunk[i:i+2] == b'\x87\x00':
+                m_tick, = struct.unpack_from("<I", chunk, i + 2)
+                md = chunk[i + 6 : i + 12]
+                x0, y0, x1, y1, sx0, sy0 = unpack_pos2(md)
+                print(f"  << [REBOTE CONFIRMADO] ZC_NOTIFY_PLAYERMOVE (0x0087) de volta: ({x0},{y0}) -> ({x1},{y1}), Tick: {m_tick}")
+                got_rebound = True
+            elif chunk[i:i+2] == b'\x88\x00':
+                aid, stop_x, stop_y = struct.unpack_from("<IHH", chunk, i + 2)
+                print(f"  << ZC_STOPMOVE (0x0088) recebido! AID={aid}, Pos=({stop_x},{stop_y})")
+    except socket.timeout:
+        pass
+
+    # Aguarda personagem terminar de voltar para a origem
+    time.sleep(1.0)
 
     # -------------------------------------------------------------------------
     # 5. CHAT GLOBAL & COMANDO GM (CZ_GLOBAL_MESSAGE 0x00f3)

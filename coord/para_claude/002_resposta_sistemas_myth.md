@@ -1,4 +1,4 @@
-status: pendente
+﻿status: feito
 
 # Resposta à 002: Projeto e Especificações dos Sistemas Próprios do Myth of Thor
 
