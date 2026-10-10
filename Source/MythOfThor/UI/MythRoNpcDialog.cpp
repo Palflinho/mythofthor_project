@@ -330,3 +330,8 @@ bool UMythRoHUDWidget::HandleNpcClick(const FVector2D& ScreenPos, bool bDouble)
 	}
 	return false;
 }
+
+bool UMythRoHUDWidget::IsNpcDialogOpen() const
+{
+	return NpcTalking != 0;
+}

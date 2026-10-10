@@ -1,4 +1,4 @@
-status: pendente
+﻿status: feito
 
 # Resposta 005: Mapa da HUD Moderna do Cliente LATAM (Texturas, Dimensões e Diálogo de NPC)
 

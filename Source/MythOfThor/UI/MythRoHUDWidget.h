@@ -112,6 +112,8 @@ public:
 	void HideNpcDialog();
 	/** Enter: avanca/fecha o dialogo aberto. Devolve false se nao havia dialogo esperando. */
 	bool NpcDialogConfirm();
+	/** Dialogo de NPC aberto: como no cliente original, cliques no mundo nao andam nem atacam (docs/ref/04 6). */
+	bool IsNpcDialogOpen() const;
 
 	/** Esc: fecha a janela classica aberta mais recente. Devolve false se nao havia nenhuma. */
 	UFUNCTION(BlueprintCallable, Category = "Myth|HUD")

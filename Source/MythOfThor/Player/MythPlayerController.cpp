@@ -211,6 +211,10 @@ void AMythPlayerController::OnClickTriggered(const FInputActionValue&)
 
 void AMythPlayerController::MoveToCursor()
 {
+	if (HudWidget && HudWidget->IsNpcDialogOpen())
+	{
+		return; // com dialogo de NPC aberto o clique e da janela, nao do mundo
+	}
 	FHitResult Hit;
 	if (GetHitResultUnderCursor(ECC_Visibility, false, Hit) && Hit.bBlockingHit)
 	{
@@ -222,6 +226,10 @@ void AMythPlayerController::MoveToCursor()
 		{
 			if (!Monster->IsDead())
 			{
+				if (!bForceNextMove && (Monster->IsNpc() || FocusedTarget.Get() == Monster))
+				{
+					return; // botao segurado sobre o mesmo alvo/NPC: nao repete o pedido a cada quadro
+				}
 				SetFocusedTarget(Monster);
 				return;
 			}
@@ -229,9 +237,19 @@ void AMythPlayerController::MoveToCursor()
 		if (AMythGroundItem* Item = Cast<AMythGroundItem>(Hit.GetActor()))
 		{
 			// Item no chao: anda ate ele e, perto o bastante, pede ao servidor para pegar (CZ_ITEM_PICKUP)
+			if (!bForceNextMove)
+			{
+				return; // segurando o botao sobre o item: nao refaz o pedido
+			}
 			ClearFocusedTarget();
 			PendingPickup = Item;
-			MoveToLocation(Item->GetActorLocation());
+			PickupTries = 0;
+			LastPickupTryTime = -1000.0;
+			UpdatePickup(); // ja do lado: pega sem andar
+			if (PendingPickup.IsValid() && PickupTries == 0)
+			{
+				MoveToLocation(Item->GetActorLocation(), /*bForceSend=*/true);
+			}
 			return;
 		}
 		PendingPickup = nullptr;
@@ -659,8 +677,34 @@ void AMythPlayerController::HandleAttackOutOfRange(int64 TargetID, int32 TargetX
 	}
 	ChaseTargetID = TargetID;
 	ChaseRange = FMath::Max(Range, 1);
-	ChaseRepathTimer = 0.f;
-	SendCellToServer(GetWorld() && AMythMapInfo::Find(GetWorld()) ? AMythMapInfo::Find(GetWorld())->CellToWorld(FIntPoint(TargetX, TargetY), 0.f) : Target->GetActorLocation(), /*bForce=*/true);
+	ChaseRepathTimer = 1.2f;
+	SendChaseMove(FIntPoint(TargetX, TargetY));
+}
+
+void AMythPlayerController::SendChaseMove(const FIntPoint& TargetCell)
+{
+	// Celula de aproximacao (docs/ref/04 4.2): na linha do alvo ate o jogador, a ChaseRange celulas do alvo
+	// (corpo a corpo = a celula vizinha do lado do jogador; arco = o anel do alcance mais perto do jogador)
+	const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld());
+	const APawn* P = GetPawn();
+	if (!Info || !P)
+	{
+		return;
+	}
+	const FIntPoint Self = WorldToCell(P->GetActorLocation());
+	const FIntPoint D = Self - TargetCell;
+	const int32 Dist = FMath::Max(FMath::Abs(D.X), FMath::Abs(D.Y));
+	FIntPoint Goal = TargetCell;
+	if (Dist > 0)
+	{
+		const float Scale = static_cast<float>(FMath::Min(ChaseRange, Dist)) / Dist;
+		Goal = TargetCell + FIntPoint(FMath::RoundToInt(D.X * Scale), FMath::RoundToInt(D.Y * Scale));
+	}
+	if (!UMythCellMoverComponent::IsWalkable(GetWorld(), Goal))
+	{
+		Goal = TargetCell;
+	}
+	SendCellToServer(Info->CellToWorld(Goal, 0.f), /*bForce=*/true);
 }
 
 void AMythPlayerController::UpdateNetChase(float DeltaTime)
@@ -684,12 +728,12 @@ void AMythPlayerController::UpdateNetChase(float DeltaTime)
 		}
 		return;
 	}
-	// O alvo anda: segue a celula dele (os pedidos respeitam o ritmo de 75 ms / confirmacao)
+	// O alvo anda: refaz a aproximacao a cada 1,2 s (kAttackChaseRequestIntervalMs do cliente)
 	ChaseRepathTimer -= DeltaTime;
 	if (ChaseRepathTimer <= 0.f)
 	{
-		ChaseRepathTimer = 0.3f;
-		SendCellToServer(Target->GetActorLocation(), /*bForce=*/false);
+		ChaseRepathTimer = 1.2f;
+		SendChaseMove(Goal);
 	}
 }
 
@@ -701,14 +745,31 @@ void AMythPlayerController::UpdatePickup()
 	{
 		return;
 	}
-	// O rAthena aceita pegar a ate 2 celulas (pc_takeitem); pede ao chegar a ~1,5 celula
-	if (FVector::Dist2D(P->GetActorLocation(), Item->GetActorLocation()) <= 75.f)
+	// Como o cliente original (docs/ref/04 5): pede ao ficar a ate 1 celula (Chebyshev) e repete a cada 400 ms
+	// ate o item sumir do chao (ZC_ITEM_DISAPPEAR destroi o ator e o ponteiro fraco zera)
+	const FIntPoint Self = WorldToCell(P->GetActorLocation());
+	const FIntPoint At = WorldToCell(Item->GetActorLocation());
+	if (FMath::Max(FMath::Abs(Self.X - At.X), FMath::Abs(Self.Y - At.Y)) > 1)
 	{
-		if (URagnarokNetworkSubsystem* Net = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>())
-		{
-			Net->PickUpItem(Item->NetID);
-		}
-		PendingPickup = nullptr;
+		return;
+	}
+	const double Now = FPlatformTime::Seconds();
+	if (Now - LastPickupTryTime < 0.4)
+	{
+		return;
+	}
+	if (LastPickupTryTime > 0.0 && Now - LastPickupTryTime > 3.0)
+	{
+		LastPickupTryTime = -1000.0; // tentativa velha de outro item
+	}
+	if (URagnarokNetworkSubsystem* Net = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>())
+	{
+		Net->PickUpItem(Item->NetID);
+	}
+	LastPickupTryTime = Now;
+	if (++PickupTries >= 3)
+	{
+		PendingPickup = nullptr; // o servidor recusou (peso, item de outro jogador): desiste
 	}
 }
 

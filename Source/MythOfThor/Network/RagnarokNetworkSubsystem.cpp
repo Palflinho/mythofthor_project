@@ -1023,9 +1023,11 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 
 		LastGoodPacketID = PacketID;
 		LastGoodPacketLen = ActualLen;
-		if (ReceiveGeneration != GenerationBefore)
+		if (ReceiveGeneration != GenerationBefore || ReceiveBuffer.Num() < ActualLen || !CurrentSocket)
 		{
-			break; // o handler trocou de servidor (ConnectToPort limpou o buffer): o resto e do socket antigo
+			// O handler trocou de servidor ou desconectou (Disconnect/ConnectToPort limpam o buffer): o resto e
+			// do socket antigo. Sem esta checagem o RemoveAt abaixo estourava (crash de 10/10 01:35)
+			break;
 		}
 		ReceiveBuffer.RemoveAt(0, ActualLen);
 	}

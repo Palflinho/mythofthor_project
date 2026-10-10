@@ -250,6 +250,9 @@ private:
 	int32 ChaseRange = 1;
 	UFUNCTION() void HandleAttackOutOfRange(int64 TargetID, int32 TargetX, int32 TargetY, int32 Range);
 	void UpdateNetChase(float DeltaTime);
+	void SendChaseMove(const FIntPoint& TargetCell);
+	double LastPickupTryTime = -1000.0;
+	int32 PickupTries = 0;
 
 	void BuildInputAssets();
 
