@@ -52,6 +52,11 @@ void AMythPlayerController::BeginPlay()
 		{
 			PlayerInput->DebugExecBindings.Empty();
 		}
+		if (URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr)
+		{
+			Net->OnPlayerMoveConfirmed.AddUniqueDynamic(this, &AMythPlayerController::HandleMoveConfirmed);
+			Net->OnAttackOutOfRange.AddUniqueDynamic(this, &AMythPlayerController::HandleAttackOutOfRange);
+		}
 		HudWidget = CreateWidget<UMythRoHUDWidget>(this, UMythRoHUDWidget::StaticClass());
 		if (HudWidget)
 		{
@@ -319,11 +324,23 @@ void AMythPlayerController::OnMove(const FInputActionValue& Value)
 void AMythPlayerController::OnMoveCompleted(const FInputActionValue&)
 {
 	bWasdActive = false;
-	if (AMythPlayerCharacter* Char = GetMythCharacter())
+	WasdDirection = FVector::ZeroVector;
+	AMythPlayerCharacter* Char = GetMythCharacter();
+	if (!Char)
 	{
-		// Informa ao servidor a celula onde o personagem parou.
-		SendCellToServer(Char->GetActorLocation(), /*bForce=*/true);
+		return;
 	}
+	if (Char->Mover && Char->Mover->IsMoving())
+	{
+		// Soltou as teclas andando: para numa celula a frente. Pedir a celula atual faz o servidor (que ja esta no
+		// passo seguinte) voltar para ela: era o "anda e volta"
+		const FIntPoint Stop = Char->Mover->GetCellAhead(1);
+		bHasPendingMove = true;
+		PendingMoveCell = Stop;
+		FlushPendingMove();
+		return;
+	}
+	SendCellToServer(Char->GetActorLocation(), /*bForce=*/true);
 }
 
 void AMythPlayerController::PlayerTick(float DeltaTime)
@@ -349,18 +366,31 @@ void AMythPlayerController::PlayerTick(float DeltaTime)
 		HudWidget->FocusChat();
 	}
 
+	FlushPendingMove();
+	UpdateNetChase(DeltaTime);
+
 	if (bWasdActive)
 	{
-		// Projeta o destino alguns tiles a frente e envia limitado por intervalo.
-		TimeSinceWasdSend += DeltaTime;
 		const URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr;
 		const bool bOnline = Net && Net->GetNetworkState() == ERagnarokNetworkState::ConnectedMap;
-		const FVector Dir = bOnline ? WasdDirection : Char->GetVelocity().GetSafeNormal2D();
-		if (TimeSinceWasdSend >= WasdSendInterval && !Dir.IsNearlyZero())
+		if (bOnline)
 		{
-			TimeSinceWasdSend = 0.f;
-			const FVector Ahead = Char->GetActorLocation() + Dir * (WasdLookaheadCells * CellSizeUU);
-			SendCellToServer(Ahead, /*bForce=*/bOnline);
+			// Destino virtual a frente na direcao das teclas, com as regras do clique segurado: so pede de novo
+			// quando ele se afasta mais de 2 celulas do ultimo pedido (andar reto ou virar)
+			if (!WasdDirection.IsNearlyZero())
+			{
+				SendCellToServer(Char->GetActorLocation() + WasdDirection * (WasdLookaheadCells * CellSizeUU), /*bForce=*/false);
+			}
+		}
+		else
+		{
+			TimeSinceWasdSend += DeltaTime;
+			const FVector Dir = Char->GetVelocity().GetSafeNormal2D();
+			if (TimeSinceWasdSend >= WasdSendInterval && !Dir.IsNearlyZero())
+			{
+				TimeSinceWasdSend = 0.f;
+				SendCellToServer(Char->GetActorLocation() + Dir * (WasdLookaheadCells * CellSizeUU), /*bForce=*/false);
+			}
 		}
 	}
 	else if (bHasDirectTarget)
@@ -494,11 +524,37 @@ void AMythPlayerController::OnToggleCamera(const FInputActionValue&)
 void AMythPlayerController::SendCellToServer(const FVector& WorldLocation, bool bForce)
 {
 	const FIntPoint Cell = WorldToCell(WorldLocation);
-	if (!bForce && Cell == LastSentCell)
+	// Segurando o botao / WASD: destino a ate 2 celulas do ultimo pedido mantem o movimento atual
+	if (!bForce && FMath::Max(FMath::Abs(Cell.X - LastSentCell.X), FMath::Abs(Cell.Y - LastSentCell.Y)) <= 2)
 	{
 		return;
 	}
+	PendingMoveCell = Cell;
+	bHasPendingMove = true;
+	FlushPendingMove();
+}
+
+void AMythPlayerController::HandleMoveConfirmed(int32 TargetX, int32 TargetY)
+{
+	bAwaitingMoveAck = false;
+	FlushPendingMove();
+}
+
+void AMythPlayerController::FlushPendingMove()
+{
+	if (!bHasPendingMove)
+	{
+		return;
+	}
+	const double Now = FPlatformTime::Seconds();
+	if (Now - LastMoveSendTime < 0.075 || (bAwaitingMoveAck && Now - LastMoveSendTime < 1.0))
+	{
+		return; // sai no PlayerTick, quando o intervalo passar ou a confirmacao chegar
+	}
+	const FIntPoint Cell = PendingMoveCell;
+	bHasPendingMove = false;
 	LastSentCell = Cell;
+	LastMoveSendTime = Now;
 
 	if (UGameInstance* GI = GetGameInstance())
 	{
@@ -506,6 +562,8 @@ void AMythPlayerController::SendCellToServer(const FVector& WorldLocation, bool 
 		{
 			// Retorna false se nao houver sessao; o jogo segue jogavel offline para testes.
 			const bool bSent = Net->SendMoveRequest(Cell.X, Cell.Y);
+			// O rAthena so responde quando aceita a rota: recusada, o timeout de 1 s libera o proximo pedido
+			bAwaitingMoveAck = bSent;
 			UE_LOG(LogTemp, Log, TEXT("MythNet: CZ_REQUEST_MOVE (%d, %d) %s"), Cell.X, Cell.Y, bSent ? TEXT("enviado") : TEXT("offline"));
 		}
 	}
@@ -551,9 +609,9 @@ AMythMonster* AMythPlayerController::GetFocusedTarget() const
 
 void AMythPlayerController::SetFocusedTarget(AMythMonster* NewTarget)
 {
-	if (FocusedTarget.Get() == NewTarget)
+	if (FocusedTarget.Get() == NewTarget && !(NewTarget && NewTarget->IsNetUnit()))
 	{
-		return; // re-clicar no mesmo alvo nao reinicia a recarga do ataque
+		return; // re-clicar no mesmo alvo nao reinicia a recarga do ataque (com servidor, repete o pedido)
 	}
 	if (NewTarget && NewTarget->IsNetUnit())
 	{
@@ -581,6 +639,52 @@ void AMythPlayerController::SetFocusedTarget(AMythMonster* NewTarget)
 void AMythPlayerController::ClearFocusedTarget()
 {
 	FocusedTarget = nullptr;
+	ChaseTargetID = 0;
+}
+
+void AMythPlayerController::HandleAttackOutOfRange(int64 TargetID, int32 TargetX, int32 TargetY, int32 Range)
+{
+	// Como o cliente original: o servidor disse que o alvo esta longe; anda ate ele e, no alcance, pede o ataque
+	// de novo (o UpdateNetChase cuida disso)
+	const AMythMonster* Target = FocusedTarget.Get();
+	if (!Target || Target->NetID != TargetID)
+	{
+		return;
+	}
+	ChaseTargetID = TargetID;
+	ChaseRange = FMath::Max(Range, 1);
+	ChaseRepathTimer = 0.f;
+	SendCellToServer(GetWorld() && AMythMapInfo::Find(GetWorld()) ? AMythMapInfo::Find(GetWorld())->CellToWorld(FIntPoint(TargetX, TargetY), 0.f) : Target->GetActorLocation(), /*bForce=*/true);
+}
+
+void AMythPlayerController::UpdateNetChase(float DeltaTime)
+{
+	AMythMonster* Target = FocusedTarget.Get();
+	const APawn* P = GetPawn();
+	if (ChaseTargetID == 0 || !Target || !P || Target->NetID != ChaseTargetID || Target->IsDead())
+	{
+		ChaseTargetID = 0;
+		return;
+	}
+	const FIntPoint Self = WorldToCell(P->GetActorLocation());
+	const FIntPoint Goal = WorldToCell(Target->GetActorLocation());
+	if (FMath::Max(FMath::Abs(Self.X - Goal.X), FMath::Abs(Self.Y - Goal.Y)) <= ChaseRange)
+	{
+		// No alcance: retoma o ataque continuo (CZ_REQUEST_ACT 7); o servidor para o personagem e bate
+		ChaseTargetID = 0;
+		if (URagnarokNetworkSubsystem* Net = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>())
+		{
+			Net->SendActionRequest(Target->NetID, 7);
+		}
+		return;
+	}
+	// O alvo anda: segue a celula dele (os pedidos respeitam o ritmo de 75 ms / confirmacao)
+	ChaseRepathTimer -= DeltaTime;
+	if (ChaseRepathTimer <= 0.f)
+	{
+		ChaseRepathTimer = 0.3f;
+		SendCellToServer(Target->GetActorLocation(), /*bForce=*/false);
+	}
 }
 
 void AMythPlayerController::UpdatePickup()

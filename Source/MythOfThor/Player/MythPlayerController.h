@@ -235,6 +235,22 @@ private:
 	float TimeSinceWasdSend = 0.f;
 	bool bWasdActive = false;
 
+	// Ritmo dos pedidos de movimento como o cliente original (docs/ref/01 3.5): no maximo um a cada 75 ms, e
+	// espera a confirmacao do servidor (ZC_NOTIFY_PLAYERMOVE) por ate 1 s antes do proximo. O ultimo destino
+	// barrado fica guardado e sai assim que puder.
+	double LastMoveSendTime = -1000.0;
+	bool bAwaitingMoveAck = false;
+	bool bHasPendingMove = false;
+	FIntPoint PendingMoveCell = FIntPoint(-1, -1);
+	void FlushPendingMove();
+	UFUNCTION() void HandleMoveConfirmed(int32 TargetX, int32 TargetY);
+
+	// Ataque fora de alcance (ZC_ATTACK_FAILURE_FOR_DISTANCE): anda ate o alvo e repete o pedido de ataque
+	int64 ChaseTargetID = 0;
+	int32 ChaseRange = 1;
+	UFUNCTION() void HandleAttackOutOfRange(int64 TargetID, int32 TargetX, int32 TargetY, int32 Range);
+	void UpdateNetChase(float DeltaTime);
+
 	void BuildInputAssets();
 
 	void OnClickStarted(const FInputActionValue& Value);

@@ -89,10 +89,36 @@ bool UMythCellMoverComponent::IsWalkable(const UWorld* World, const FIntPoint& C
 	return !FMath::IsNaN(CellGround(World, Cell));
 }
 
+TArray<FIntPoint> UMythCellMoverComponent::StraightPath(const UWorld* World, const FIntPoint& From, const FIntPoint& To)
+{
+	// Como o PathFinder do cliente: anda na diagonal enquanto os dois eixos faltam, depois reto; qualquer celula
+	// bloqueada (ou quina cortada) desiste e deixa para o A*
+	TArray<FIntPoint> Result;
+	FIntPoint Cur = From;
+	while (Cur != To)
+	{
+		const FIntPoint D(FMath::Sign(To.X - Cur.X), FMath::Sign(To.Y - Cur.Y));
+		const FIntPoint N = Cur + D;
+		if (!IsWalkable(World, N) || (D.X != 0 && D.Y != 0 && (!IsWalkable(World, Cur + FIntPoint(D.X, 0)) || !IsWalkable(World, Cur + FIntPoint(0, D.Y)))))
+		{
+			Result.Reset();
+			return Result;
+		}
+		Result.Add(N);
+		Cur = N;
+	}
+	return Result;
+}
+
 TArray<FIntPoint> UMythCellMoverComponent::FindPath(const UWorld* World, const FIntPoint& From, const FIntPoint& To)
 {
 	TArray<FIntPoint> Result;
 	if (From == To || !IsWalkable(World, To) || FMath::Max(FMath::Abs(To.X - From.X), FMath::Abs(To.Y - From.Y)) > MaxSearch)
+	{
+		return Result;
+	}
+	Result = StraightPath(World, From, To);
+	if (Result.Num() > 0)
 	{
 		return Result;
 	}
@@ -174,6 +200,82 @@ void UMythCellMoverComponent::MoveToCell(const FIntPoint& Dest, int32 InMsPerCel
 	BeginSegment();
 }
 
+void UMythCellMoverComponent::ServerWalk(const FIntPoint& From, const FIntPoint& Dest, int32 InMsPerCell)
+{
+	const FIntPoint Cur = GetCurrentCell();
+	if (FMath::Max(FMath::Abs(Cur.X - From.X), FMath::Abs(Cur.Y - From.Y)) > MaxDesyncCells)
+	{
+		SnapToCell(From);
+	}
+	MoveToCell(Dest, InMsPerCell);
+}
+
+void UMythCellMoverComponent::ServerStop(const FIntPoint& Cell)
+{
+	const FIntPoint Cur = GetCurrentCell();
+	if (IsMoving())
+	{
+		// Servidor igual ou um pouco atras do que o jogador ve: so termina o passo atual (sem passo para tras)
+		if (Passed.Contains(Cell) || Cell == Cur || Cell == Path[0])
+		{
+			Path.SetNum(1);
+			return;
+		}
+		// Mais a frente na rota: para la
+		const int32 Index = Path.Find(Cell);
+		if (Index != INDEX_NONE)
+		{
+			Path.SetNum(Index + 1);
+			return;
+		}
+	}
+	else if (Cell == Cur)
+	{
+		return;
+	}
+	if (FMath::Max(FMath::Abs(Cur.X - Cell.X), FMath::Abs(Cur.Y - Cell.Y)) > MaxDesyncCells)
+	{
+		SnapToCell(Cell);
+		return;
+	}
+	MoveToCell(Cell, MsPerCell);
+}
+
+FIntPoint UMythCellMoverComponent::GetCurrentCell() const
+{
+	const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld());
+	return Info && GetOwner() ? Info->WorldToCell(GetOwner()->GetActorLocation()) : FIntPoint::ZeroValue;
+}
+
+FIntPoint UMythCellMoverComponent::GetNextCell() const
+{
+	return Path.Num() > 0 ? Path[0] : GetCurrentCell();
+}
+
+void UMythCellMoverComponent::SnapToCell(const FIntPoint& Cell)
+{
+	Stop();
+	AActor* Owner = GetOwner();
+	const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld());
+	if (!Owner || !Info)
+	{
+		return;
+	}
+	FVector Pos = Info->CellToWorld(Cell, Owner->GetActorLocation().Z);
+	float Offset = FeetOffset;
+	if (const ACharacter* Char = Cast<ACharacter>(Owner); Char && Offset <= 0.f && Char->GetCapsuleComponent())
+	{
+		Offset = Char->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+	}
+	float Ground = 0.f;
+	if (GroundZ(GetWorld(), Pos, Ground))
+	{
+		Pos.Z = Ground + Offset;
+	}
+	Owner->SetActorLocation(Pos, false, nullptr, ETeleportType::TeleportPhysics);
+	Passed.Reset();
+}
+
 void UMythCellMoverComponent::Stop()
 {
 	Path.Reset();
@@ -240,6 +342,11 @@ void UMythCellMoverComponent::TickComponent(float DeltaTime, ELevelTick TickType
 		Dir = (Target - SegmentStart).GetSafeNormal2D();
 		if (Alpha >= 1.f)
 		{
+			Passed.Add(Path[0]);
+			if (Passed.Num() > 4)
+			{
+				Passed.RemoveAt(0);
+			}
 			Path.RemoveAt(0);
 			if (Path.Num() > 0)
 			{

@@ -192,7 +192,8 @@ void AMythNetWorld::BeginPlay()
 	Net->OnCharacterList.AddDynamic(this, &AMythNetWorld::HandleCharacterList);
 	Net->OnMapEnter.AddDynamic(this, &AMythNetWorld::HandleMapEnter);
 	Net->OnUnitAppear.AddDynamic(this, &AMythNetWorld::HandleUnitAppear);
-	Net->OnUnitMove.AddDynamic(this, &AMythNetWorld::HandleUnitMove);
+	Net->OnUnitWalk.AddDynamic(this, &AMythNetWorld::HandleUnitWalk);
+	Net->OnUnitStop.AddDynamic(this, &AMythNetWorld::HandleUnitStop);
 	Net->OnUnitVanish.AddDynamic(this, &AMythNetWorld::HandleUnitVanish);
 	Net->OnDamage.AddDynamic(this, &AMythNetWorld::HandleDamage);
 	Net->OnChatMessage.AddDynamic(this, &AMythNetWorld::HandleChat);
@@ -241,7 +242,8 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnCharacterList.RemoveAll(this);
 		Net->OnMapEnter.RemoveAll(this);
 		Net->OnUnitAppear.RemoveAll(this);
-		Net->OnUnitMove.RemoveAll(this);
+		Net->OnUnitWalk.RemoveAll(this);
+		Net->OnUnitStop.RemoveAll(this);
 		Net->OnUnitVanish.RemoveAll(this);
 		Net->OnDamage.RemoveAll(this);
 		Net->OnChatMessage.RemoveAll(this);
@@ -550,18 +552,17 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 	}
 }
 
-void AMythNetWorld::HandleUnitMove(int64 ID, int32 TargetX, int32 TargetY, int32 StartTick)
+void AMythNetWorld::HandleUnitWalk(int64 ID, int32 FromX, int32 FromY, int32 TargetX, int32 TargetY, int32 StartTick)
 {
+	// Rota do servidor (ZC_NOTIFY_PLAYERMOVE para o proprio jogador, ZC_NOTIFY_MOVE para os outros): anda pelas
+	// celulas como o cliente original, partindo de onde o ator esta (sem estalo; salta so com mais de 16 de erro)
 	const URagnarokNetworkSubsystem* Net = GetNet();
 	if (Net && ID == Net->GetSelfID())
 	{
-		// O servidor tambem move o proprio jogador (ex.: ao atacar, anda ate o alvo). Segue a rota dele;
-		// se ja estiver indo para la (clique no chao), nao refaz o caminho.
-		// Anda pelas celulas como o cliente original (sem NavMesh e sem fisica: calcadas e degraus sobem)
 		APlayerController* PC = GetWorld()->GetFirstPlayerController();
 		if (AMythPlayerCharacter* Char = PC ? Cast<AMythPlayerCharacter>(PC->GetPawn()) : nullptr; Char && Char->Mover)
 		{
-			Char->Mover->MoveToCell(FIntPoint(TargetX, TargetY), 150);
+			Char->Mover->ServerWalk(FIntPoint(FromX, FromY), FIntPoint(TargetX, TargetY), 150);
 		}
 		return;
 	}
@@ -572,7 +573,17 @@ void AMythNetWorld::HandleUnitMove(int64 ID, int32 TargetX, int32 TargetY, int32
 	}
 	if (Unit->Mover)
 	{
-		Unit->Mover->MoveToCell(FIntPoint(TargetX, TargetY), Unit->NetSpeed);
+		Unit->Mover->ServerWalk(FIntPoint(FromX, FromY), FIntPoint(TargetX, TargetY), Unit->NetSpeed);
+	}
+}
+
+void AMythNetWorld::HandleUnitStop(int64 ID, int32 X, int32 Y)
+{
+	// ZC_STOPMOVE: a regra de ignorar paradas atrasadas (sem "passo para tras") fica no ServerStop
+	const AActor* Actor = ResolveActor(ID);
+	if (UMythCellMoverComponent* Mover = Actor ? Actor->FindComponentByClass<UMythCellMoverComponent>() : nullptr)
+	{
+		Mover->ServerStop(FIntPoint(X, Y));
 	}
 }
 
