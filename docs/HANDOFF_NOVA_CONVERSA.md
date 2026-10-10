@@ -37,7 +37,8 @@ Leia isto primeiro. Resume o projeto sem precisar do histórico.
   -ResX=1600 -ResY=900 -log -ExecCmds="MythDelayed 3 MythLogin, MythShot 26 -1 nome, MythQuitAfter 30"`.
   - Os prints ficam em `Saved/Screenshots/WindowsEditor`.
   - Com `MythDelayed`, use `+` no lugar dos espaços.
-- **Contas:** a `mythtest` é do usuário; o Antigravity testa só com a `mythbot`.
+- **Contas:** a `mythtest` é do usuário (nunca usar nos testes automáticos: eles mudam classe, HP e visual do personagem); o Antigravity usa a `mythbot`; o Claude usa a `mythclaude` (`MythDelayed 3 MythLogin+mythclaude+mythclaude123`, personagem ClaudeTester, criada por `server/init_claude_account.sql`).
+- **Versão de teste do usuário:** `tools/make_test_build.ps1 -Nota "..."` copia o jogo compilado para `E:DevMythTeste` (com `Jogar_Myth_Teste.bat`, `VERSAO.txt` e `COMO_TESTAR.txt` vindo de `docs/TESTE_JOGADOR.md`). Rode depois de compilar uma leva de novidades e atualize `docs/TESTE_JOGADOR.md` com o que testar. Se o jogo de teste estiver aberto, o script recusa. O `build_watch.ps1` não fecha mais a janela de teste do usuário.
 - **Commits:** locais, sem push. Respostas ao usuário em pt-BR.
 - **Fidelidade:** antes de mexer num sistema, leia o spec em `docs/ref/` e a seção dele em `FIDELIDADE.md`; ao
   terminar, atualize a linha da matriz. Se o spec não cobre, peça pesquisa ao Antigravity em vez de deduzir.
