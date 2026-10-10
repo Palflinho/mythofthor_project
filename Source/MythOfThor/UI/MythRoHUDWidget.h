@@ -266,6 +266,8 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UImage>> SkillTabBacks;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> SkillTabTexts;
 	UPROPERTY() TArray<TObjectPtr<UImage>> SkillLinePool;
+	UPROPERTY() TArray<TObjectPtr<UWidget>> SkillBottomBar;
+	void ResizeSkillTree(int32 Rows);
 	TArray<int32> SkillTabJobs;
 	int32 SkillTab = -1; // -1 = a aba da classe atual
 

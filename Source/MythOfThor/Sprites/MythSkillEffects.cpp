@@ -3,6 +3,7 @@
 #include "Sprites/MythRoSound.h"
 #include "Sprites/MythRoSpriteComponent.h"
 #include "Sprites/MythStrEffect.h"
+#include "Sprites/MythProcEffect.h"
 
 #include "Dom/JsonObject.h"
 #include "GameFramework/Actor.h"
@@ -20,6 +21,8 @@ namespace
 		FString File;
 		FString Wav;
 		bool bAttached = true;
+		/** Parte inteira (campos dos efeitos procedurais: CYLINDER, 3D, 2D). */
+		TSharedPtr<FJsonObject> Raw;
 	};
 
 	struct FSkillEntry
@@ -27,6 +30,7 @@ namespace
 		int32 Effect = 0;
 		int32 Hit = 0;
 		int32 Ground = 0;
+		int32 Cast = 0;
 		FString Element;
 	};
 
@@ -46,7 +50,9 @@ namespace
 		}
 		bLoaded = true;
 		FString Text;
-		if (!FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("skill_effects.json"))))
+		// skill_effects_full.json (com os efeitos procedurais, coord 009) quando existir; senao a tabela antiga
+		if (!FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("skill_effects_full.json")))
+			&& !FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("skill_effects.json"))))
 		{
 			UE_LOG(LogTemp, Warning, TEXT("MythSkillEffects: Config/skill_effects.json ausente"));
 			return T;
@@ -65,10 +71,11 @@ namespace
 				{
 					const TSharedPtr<FJsonObject> O = V->AsObject();
 					FEffectPart& P = Parts.AddDefaulted_GetRef();
-					P.Type = O->GetStringField(TEXT("type"));
-					P.File = O->GetStringField(TEXT("file"));
-					P.Wav = O->GetStringField(TEXT("wav"));
-					P.bAttached = O->GetBoolField(TEXT("attached"));
+					O->TryGetStringField(TEXT("type"), P.Type);
+					O->TryGetStringField(TEXT("file"), P.File);
+					O->TryGetStringField(TEXT("wav"), P.Wav);
+					O->TryGetBoolField(TEXT("attached"), P.bAttached);
+					P.Raw = O;
 				}
 			}
 		}
@@ -81,6 +88,7 @@ namespace
 				O->TryGetNumberField(TEXT("effect"), S.Effect);
 				O->TryGetNumberField(TEXT("hit"), S.Hit);
 				O->TryGetNumberField(TEXT("ground"), S.Ground);
+				O->TryGetNumberField(TEXT("cast"), S.Cast);
 				O->TryGetStringField(TEXT("element"), S.Element);
 			}
 		}
@@ -134,7 +142,7 @@ FLinearColor FMythSkillEffects::ElementColor(int32 SkillID)
 	return FLinearColor(1.f, 0.88f, 0.72f);
 }
 
-bool FMythSkillEffects::PlayEffectId(UObject* WorldContext, int32 EffectID, AActor* Target, const FVector& Location)
+bool FMythSkillEffects::PlayEffectId(UObject* WorldContext, int32 EffectID, AActor* Target, const FVector& Location, AActor* Source)
 {
 	const TArray<FEffectPart>* Parts = Tables().Effects.Find(EffectID);
 	if (!Parts)
@@ -145,6 +153,13 @@ bool FMythSkillEffects::PlayEffectId(UObject* WorldContext, int32 EffectID, AAct
 	bool bAny = false;
 	for (const FEffectPart& P : *Parts)
 	{
+		// Desenhados pelo executavel (docs/ref/11): cilindros, particulas/projeteis e raios
+		if (P.Type == TEXT("CYLINDER") || P.Type == TEXT("3D") || P.Type == TEXT("2D"))
+		{
+			const bool bProc = AMythProcEffect::Spawn(WorldContext, P.Raw, Target, Feet, Source);
+			UE_LOG(LogTemp, Verbose, TEXT("MythSkillEffects: efeito %d %s '%s' %s"), EffectID, *P.Type, *P.File, bProc ? TEXT("ok") : TEXT("falhou"));
+			bAny |= bProc;
+		}
 		if (P.Type == TEXT("STR") && !P.File.IsEmpty())
 		{
 			const FString File = ResolveVariant(P.File);
@@ -160,15 +175,26 @@ bool FMythSkillEffects::PlayEffectId(UObject* WorldContext, int32 EffectID, AAct
 	return bAny;
 }
 
-bool FMythSkillEffects::Play(UObject* WorldContext, int32 SkillID, EMythSkillEffectStage Stage, AActor* Target, const FVector& Location, bool bFlashIfMissing)
+int32 FMythSkillEffects::EffectIdFor(int32 SkillID, EMythSkillEffectStage Stage)
 {
 	const FSkillEntry* S = Tables().Skills.Find(SkillID);
-	int32 EffectID = 0;
-	if (S)
+	if (!S)
 	{
-		EffectID = Stage == EMythSkillEffectStage::Hit ? S->Hit : Stage == EMythSkillEffectStage::Ground ? S->Ground : S->Effect;
+		return 0;
 	}
-	const bool bPlayed = EffectID > 0 && PlayEffectId(WorldContext, EffectID, Target, Location);
+	switch (Stage)
+	{
+	case EMythSkillEffectStage::Hit: return S->Hit;
+	case EMythSkillEffectStage::Ground: return S->Ground;
+	case EMythSkillEffectStage::Cast: return S->Cast;
+	default: return S->Effect;
+	}
+}
+
+bool FMythSkillEffects::Play(UObject* WorldContext, int32 SkillID, EMythSkillEffectStage Stage, AActor* Target, const FVector& Location, bool bFlashIfMissing, AActor* Source)
+{
+	const int32 EffectID = EffectIdFor(SkillID, Stage);
+	const bool bPlayed = EffectID > 0 && PlayEffectId(WorldContext, EffectID, Target, Location, Source);
 	UE_LOG(LogTemp, Verbose, TEXT("MythSkillEffects: skill %d estagio %d -> efeito %d (%s)"), SkillID, static_cast<int32>(Stage), EffectID, bPlayed ? TEXT("tocou") : TEXT("sem efeito"));
 	// O .str ja traz a propria luz; sem ele, o clarao do elemento no impacto
 	if (!bPlayed && bFlashIfMissing && Stage != EMythSkillEffectStage::Ground)

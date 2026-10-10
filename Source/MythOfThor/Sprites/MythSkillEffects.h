@@ -10,6 +10,7 @@ enum class EMythSkillEffectStage : uint8
 	Effect,  // ao usar (alvo ou o proprio usuario)
 	Hit,     // em cada alvo atingido
 	Ground,  // na celula do chao
+	Cast,    // no proprio conjurador ao usar (effectIdOnCaster do cliente: Impacto Explosivo, Golpe Fulminante)
 };
 
 /**
@@ -20,10 +21,13 @@ enum class EMythSkillEffectStage : uint8
 struct MYTHOFTHOR_API FMythSkillEffects
 {
 	/** Toca o efeito da skill nesse estagio. Target pode ser nulo (usa Location). Retorna falso se a skill nao tem nada. */
-	static bool Play(UObject* WorldContext, int32 SkillID, EMythSkillEffectStage Stage, AActor* Target, const FVector& Location, bool bFlashIfMissing = true);
+	static bool Play(UObject* WorldContext, int32 SkillID, EMythSkillEffectStage Stage, AActor* Target, const FVector& Location, bool bFlashIfMissing = true, AActor* Source = nullptr);
+
+	/** Id do efeito da skill nesse estagio (0 = nenhum). */
+	static int32 EffectIdFor(int32 SkillID, EMythSkillEffectStage Stage);
 
 	/** Toca um efeito da EffectTable pelo id (os ZC_NOTIFY_EFFECT do servidor e os de cima). */
-	static bool PlayEffectId(UObject* WorldContext, int32 EffectID, AActor* Target, const FVector& Location);
+	static bool PlayEffectId(UObject* WorldContext, int32 EffectID, AActor* Target, const FVector& Location, AActor* Source = nullptr);
 
 	/** Cor da luz do elemento da skill (branco morno para skills sem elemento). */
 	static FLinearColor ElementColor(int32 SkillID);

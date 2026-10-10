@@ -793,11 +793,40 @@ void AMythNetWorld::HandleSkillDamage(int64 SourceID, int64 TargetID, int32 Skil
 	{
 		Hud->AddSkillShout(Source, FMythRoClientTables::SkillName(SkillID));
 	}
-	// Efeito visual: o da skill no alvo e o de impacto (ou o clarao do elemento), com a luz do Lumen
+	// Efeitos como o cliente (SkillEffect): no conjurador uma vez por uso (Impacto Explosivo acerta varios monstros
+	// mas explode uma vez), depois no alvo e o de impacto, sem repetir o mesmo efeito
+	const int32 CastFx = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::Cast);
+	const int32 MainFx = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::Effect);
+	const int32 HitFx = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::Hit);
+	bool bAnyFx = false;
+	if (Source && CastFx > 0)
+	{
+		const double Now = GetWorld()->GetTimeSeconds();
+		const TPair<int64, int32> Key(SourceID, SkillID);
+		if (Now - LastCasterFx.FindRef(Key) > 0.3)
+		{
+			LastCasterFx.Add(Key, Now);
+			bAnyFx |= FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Cast, Source, Source->GetActorLocation(), false, Source);
+		}
+		else
+		{
+			bAnyFx = true;
+		}
+	}
 	if (AActor* Target = ResolveActor(TargetID))
 	{
-		const bool bEffect = FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Effect, Target, Target->GetActorLocation(), false);
-		FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Hit, Target, Target->GetActorLocation(), !bEffect);
+		if (MainFx > 0 && MainFx != CastFx)
+		{
+			bAnyFx |= FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Effect, Target, Target->GetActorLocation(), false, Source);
+		}
+		if (HitFx > 0 && HitFx != CastFx && HitFx != MainFx)
+		{
+			bAnyFx |= FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Hit, Target, Target->GetActorLocation(), false, Source);
+		}
+		if (!bAnyFx)
+		{
+			FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Hit, Target, Target->GetActorLocation(), true, Source); // clarao do elemento
+		}
 	}
 	// Mesmo tratamento do ataque normal: golpe de quem usou, numeros classicos e reacao do alvo.
 	// Golpes multiplos (ex.: Rajada de Flechas) aparecem como um numero por golpe, como no RO.
@@ -826,10 +855,25 @@ void AMythNetWorld::HandleSkillEffect(int64 SourceID, int64 TargetID, int32 Skil
 	{
 		Hud->AddSkillShout(Source, FMythRoClientTables::SkillName(SkillID));
 	}
-	// Efeito visual no alvo (Provocar, Angelus, Bencao...) ou no proprio usuario
+	// Efeito no conjurador (Curar: a coluna de luz em quem cura) e no alvo (Provocar, Angelus, Bencao...)
+	const int32 CastFx = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::Cast);
+	if (Source && CastFx > 0)
+	{
+		const double Now = GetWorld()->GetTimeSeconds();
+		const TPair<int64, int32> Key(SourceID, SkillID);
+		if (Now - LastCasterFx.FindRef(Key) > 0.3) // o dano da mesma skill chega junto e nao repete
+		{
+			LastCasterFx.Add(Key, Now);
+			FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Cast, Source, Source->GetActorLocation(), false, Source);
+		}
+	}
 	if (AActor* At = Target ? Target : Source)
 	{
-		FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Effect, At, At->GetActorLocation());
+		const int32 MainFx = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::Effect);
+		if (MainFx != CastFx || At != Source)
+		{
+			FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Effect, At, At->GetActorLocation(), CastFx == 0, Source);
+		}
 	}
 	// Curas (AL_HEAL 28, curar no aprendiz NV_FIRSTAID 142): numero verde de cura sobre o alvo
 	if ((SkillID == 28 || SkillID == 142) && Target && Value > 0)

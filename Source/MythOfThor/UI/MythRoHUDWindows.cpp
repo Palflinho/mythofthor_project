@@ -73,7 +73,7 @@ namespace
 	constexpr float RoTreeTop = 42.f;
 	constexpr float RoTreeCellW = 40.f;
 	constexpr float RoTreeCellH = 46.f;
-	constexpr int32 RoTreeRows = 6;
+	constexpr int32 RoTreeRows = 9;
 }
 
 URagnarokNetworkSubsystem* UMythRoHUDWidget::GetNet() const
@@ -229,10 +229,39 @@ void UMythRoHUDWidget::BuildSkillsWindow()
 		SkillUpButtons.Add(Up);
 	}
 	const float BarY = H - 32.f;
-	AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("skill_botbar_left"))), 0.f, BarY, 12.f, 32.f);
-	AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("skill_botbar_mid"))), 12.f, BarY, W - 24.f, 32.f);
-	AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("skill_botbar_right"))), W - 12.f, BarY, 12.f, 32.f);
+	SkillBottomBar.Add(AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("skill_botbar_left"))), 0.f, BarY, 12.f, 32.f));
+	SkillBottomBar.Add(AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("skill_botbar_mid"))), 12.f, BarY, W - 24.f, 32.f));
+	SkillBottomBar.Add(AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("skill_botbar_right"))), W - 12.f, BarY, 12.f, 32.f));
 	SkillPointsText = AddText(SkillsWindow, 12.f, BarY + 9.f, 8, RoWinText);
+	SkillBottomBar.Add(SkillPointsText);
+}
+
+void UMythRoHUDWidget::ResizeSkillTree(int32 Rows)
+{
+	// A janela cresce/encolhe com a arvore da aba (Super Aprendiz usa 9 linhas; a 1a classe, 2 ou 3)
+	if (!SkillsWindow)
+	{
+		return;
+	}
+	const float W = RoTreeLeft * 2.f + FMythRoSkillTree::Columns * RoTreeCellW;
+	const float H = RoTreeTop + Rows * RoTreeCellH + 40.f;
+	const float BarY = H - 32.f;
+	if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(SkillsWindow->Slot))
+	{
+		S->SetSize(FVector2D(W, H) * UIScale);
+	}
+	if (UCanvasPanelSlot* S = SkillsWindow->GetChildrenCount() > 0 ? Cast<UCanvasPanelSlot>(SkillsWindow->GetChildAt(0)->Slot) : nullptr)
+	{
+		S->SetSize(FVector2D(W, H - 17.f) * UIScale); // fundo branco do MakeRoPanel
+	}
+	for (UWidget* Part : SkillBottomBar)
+	{
+		if (UCanvasPanelSlot* S = Part ? Cast<UCanvasPanelSlot>(Part->Slot) : nullptr)
+		{
+			const FVector2D Pos = S->GetPosition();
+			S->SetPosition(FVector2D(Pos.X, (Part == SkillPointsText ? BarY + 9.f : BarY) * UIScale));
+		}
+	}
 }
 
 // ------------------------------------------------------------------------------------------------ abrir / fechar
@@ -473,6 +502,15 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 	}
 	const TMap<int32, int32>* Grid = SkillTabJobs.IsValidIndex(SkillTab) ? FMythRoSkillTree::Grid(SkillTabJobs[SkillTab]) : nullptr;
 	TMap<int32, int32> CellOfSkill;
+	int32 LastCell = 0;
+	if (Grid)
+	{
+		for (const TPair<int32, int32>& Cell : *Grid)
+		{
+			LastCell = FMath::Max(LastCell, Cell.Key);
+		}
+	}
+	ResizeSkillTree(FMath::Clamp(LastCell / FMythRoSkillTree::Columns + 1, 3, RoTreeRows));
 	for (int32 i = 0; i < Cells; ++i)
 	{
 		const int32* SkillID = Grid ? Grid->Find(i) : nullptr;
