@@ -154,6 +154,8 @@ protected:
 	UPROPERTY() TObjectPtr<UTextBlock> NameText;
 	UPROPERTY() TObjectPtr<UTextBlock> JobText;
 	UPROPERTY() TObjectPtr<UTextBlock> HPText;
+	UPROPERTY() TObjectPtr<UTextBlock> HPPctText;
+	UPROPERTY() TObjectPtr<UTextBlock> SPPctText;
 	UPROPERTY() TObjectPtr<UTextBlock> SPText;
 	UPROPERTY() TObjectPtr<UTextBlock> BaseLvText;
 	UPROPERTY() TObjectPtr<UTextBlock> JobLvText;
@@ -222,6 +224,20 @@ protected:
 	// ---------------------------------------------------------------- janelas classicas (MythRoHUDWindows.cpp)
 	// Tudo o que aparece nelas vem do servidor (URagnarokNetworkSubsystem); o cliente so desenha e envia pedidos.
 	UPROPERTY() TObjectPtr<UCanvasPanel> BasicWindow;
+	// Informacoes basicas do LATAM: fundo, barra de recolher e a grade de icones do menu (menu_icon/bt_*.bmp)
+	UPROPERTY() TObjectPtr<UImage> BasicBody;
+	UPROPERTY() TObjectPtr<UImage> MenuToggleBar;
+	UPROPERTY() TObjectPtr<UImage> MenuBack;
+	UPROPERTY() TArray<TObjectPtr<UImage>> MenuIcons;
+	TArray<FString> MenuIconNames;
+	bool bBasicMenuOpen = true;
+	int32 BasicDetailStart = 0;
+	TMap<TWeakObjectPtr<UWidget>, ESlateVisibility> BasicSavedVisibility;
+	UPROPERTY() TObjectPtr<UTextBlock> BasicMini1;
+	UPROPERTY() TObjectPtr<UTextBlock> BasicMini2;
+	static constexpr float BasicFullH = 368.f;
+	void SetBasicMenuOpen(bool bOpen);
+	bool HandleBasicMenuClick(const FVector2D& ScreenPos);
 	UPROPERTY() TObjectPtr<UCanvasPanel> StatusWindow;
 	UPROPERTY() TObjectPtr<UCanvasPanel> ItemsWindow;
 	UPROPERTY() TObjectPtr<UCanvasPanel> EquipWindow;

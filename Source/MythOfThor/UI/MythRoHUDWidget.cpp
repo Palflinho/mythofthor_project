@@ -244,86 +244,183 @@ void UMythRoHUDWidget::BuildLayout()
 
 void UMythRoHUDWidget::BuildBasicInfo()
 {
-	// Janela "Informacoes basicas" (basewin_bg, 280x120) no topo-esquerda
-	UCanvasPanel* Win = MakeWindow(FVector2D(0.f, 0.f), FVector2D(0.f, 0.f), FVector2D(8.f, 8.f), FVector2D(280.f, 120.f));
+	// "Basic Information" do cliente LATAM (docs/ref/12, print 17): 232 de largura; nome, classe, HP/SP com "atual /
+	// max" e %, nivel de base/classe com a barra de EXP, peso/zeny, a barra de recolher e a grade de icones do menu
+	constexpr float W = 232.f;
+	UCanvasPanel* Win = MakeWindow(FVector2D(0.f, 0.f), FVector2D(0.f, 0.f), FVector2D(0.f, 0.f), FVector2D(W, BasicFullH));
 	BasicWindow = Win;
-	AddImage(Win, FMythRoUITextures::Get(Basic(TEXT("basewin_bg"))), 0.f, 0.f);
+	BasicBody = AddColor(Win, ColWindow, 0.f, 16.f, W, BasicFullH - 16.f);
+	BasicBody->SetVisibility(ESlateVisibility::Visible); // o clique na janela nao atravessa para o jogo
+	AddTitleBar(Win, W, TEXT("Informações Básicas"));
+	BasicDetailStart = Win->GetChildrenCount(); // daqui para baixo: detalhes que somem na versao recolhida
 
-	NameText = AddText(Win, 8.f, 1.f, 8, ColTitle, true);      // nome na barra de titulo
-	JobText = AddText(Win, 10.f, 20.f, 8, ColText);
-	BaseLvText = AddText(Win, 10.f, 34.f, 8, ColText);
-	JobLvText = AddText(Win, 10.f, 48.f, 8, ColText);
+	NameText = AddText(Win, 6.f, 19.f, 8, ColText, true);
+	JobText = AddText(Win, 6.f, 32.f, 8, ColText);
 
-	// HP e SP nas molduras da direita (85x9)
-	UTextBlock* HPLabel = AddText(Win, 94.f, 20.f, 8, ColLabel);
-	HPLabel->SetText(FText::FromString(TEXT("HP")));
-	HPGauge = MakeGauge(Win, TEXT("red"), 112.f, 23.f, 83.f, false); // dentro da moldura x 111-196, y 22-30
-	HPText = AddText(Win, 128.f, 31.f, 7, ColText);
-	UTextBlock* SPLabel = AddText(Win, 94.f, 41.f, 8, ColLabel);
-	SPLabel->SetText(FText::FromString(TEXT("SP")));
-	SPGauge = MakeGauge(Win, TEXT("blue"), 112.f, 44.f, 83.f, false); // moldura y 43-51
-	SPText = AddText(Win, 128.f, 52.f, 7, ColText);
+	AddText(Win, 6.f, 48.f, 8, ColLabel)->SetText(FText::FromString(TEXT("HP")));
+	HPGauge = MakeGauge(Win, TEXT("red"), 24.f, 50.f, 166.f, false);
+	HPText = AddText(Win, 72.f, 47.f, 7, ColText);
+	HPPctText = AddText(Win, 196.f, 48.f, 7, ColText);
+	AddText(Win, 6.f, 62.f, 8, ColLabel)->SetText(FText::FromString(TEXT("SP")));
+	SPGauge = MakeGauge(Win, TEXT("blue"), 24.f, 64.f, 166.f, false);
+	SPText = AddText(Win, 72.f, 61.f, 7, ColText);
+	SPPctText = AddText(Win, 196.f, 62.f, 7, ColText);
 
-	// Caixa cinza: EXP de base e de classe
-	UTextBlock* BaseExpLabel = AddText(Win, 10.f, 73.f, 7, ColLabel); // caixa cinza y 72-96
-	BaseExpLabel->SetText(FText::FromString(TEXT("Base")));
-	BaseExpGauge = MakeGauge(Win, TEXT("blue"), 44.f, 75.f, 148.f);
-	UTextBlock* JobExpLabel = AddText(Win, 10.f, 84.f, 7, ColLabel);
-	JobExpLabel->SetText(FText::FromString(TEXT("Classe")));
-	JobExpGauge = MakeGauge(Win, TEXT("blue"), 44.f, 86.f, 148.f);
+	// Fundo cinza claro das linhas de nivel, como no print
+	AddColor(Win, FLinearColor(0.9f, 0.92f, 0.96f, 1.f), 2.f, 78.f, W - 4.f, 28.f);
+	BaseLvText = AddText(Win, 8.f, 79.f, 7, ColLabel);
+	BaseExpGauge = MakeGauge(Win, TEXT("blue"), 86.f, 82.f, 138.f);
+	JobLvText = AddText(Win, 8.f, 92.f, 7, ColLabel);
+	JobExpGauge = MakeGauge(Win, TEXT("blue"), 86.f, 95.f, 138.f);
 
-	// Faixa de baixo: peso e zeny
-	WeightZenyText = AddText(Win, 8.f, 102.f, 7, ColText);
+	WeightZenyText = AddText(Win, 8.f, 109.f, 7, ColText);
 
-	// Coluna direita: os 6 botoes classicos (2 colunas x 3 linhas)
-	UButton* B = AddRoButton(Win, TEXT("status"), 206.f, 22.f); B->OnClicked.AddDynamic(this, &UMythRoHUDWidget::OnStatusClicked);
-	B = AddRoButton(Win, TEXT("items"), 242.f, 22.f);  B->OnClicked.AddDynamic(this, &UMythRoHUDWidget::OnItemsClicked);
-	B = AddRoButton(Win, TEXT("equip"), 206.f, 46.f);  B->OnClicked.AddDynamic(this, &UMythRoHUDWidget::OnEquipClicked);
-	B = AddRoButton(Win, TEXT("skill"), 242.f, 46.f);  B->OnClicked.AddDynamic(this, &UMythRoHUDWidget::OnSkillClicked);
-	B = AddRoButton(Win, TEXT("map"), 206.f, 70.f);    B->OnClicked.AddDynamic(this, &UMythRoHUDWidget::OnMapClicked);
-	B = AddRoButton(Win, TEXT("option"), 242.f, 70.f); B->OnClicked.AddDynamic(this, &UMythRoHUDWidget::OnOptionClicked);
-	MakeDraggable(Win, 280.f, 17.f);
+	// Barra de recolher (bt_menu_normal 219x9) e a grade do menu (bg_menu 220x228, icones 32x34 em 5 colunas)
+	MenuToggleBar = AddImage(Win, FMythRoUITextures::Get(TEXT("menu_icon/bt_menu_normal.bmp")), 6.f, 124.f, 219.f, 9.f);
+	MenuToggleBar->SetVisibility(ESlateVisibility::Visible);
+	// No LATAM os icones ficam sobre o fundo branco da janela (o bg_menu.tga e o fundo do menu solto)
+	MenuBack = AddColor(Win, FLinearColor::Transparent, 6.f, 135.f, 220.f, 228.f);
+	static const TCHAR* Icons[] = {
+		TEXT("status"), TEXT("equip"), TEXT("item"), TEXT("skill"), TEXT("party"),
+		TEXT("guild"), TEXT("quest"), TEXT("map"), TEXT("navigation"), TEXT("option"),
+		TEXT("sns"), TEXT("rec"), TEXT("mail"), TEXT("achievement"), TEXT("adventureguide"),
+		TEXT("shop"), TEXT("keyboard"), TEXT("attendance"), TEXT("bank"), TEXT("repute"),
+		TEXT("tip"),
+	};
+	for (int32 i = 0; i < UE_ARRAY_COUNT(Icons); ++i)
+	{
+		const float X = 6.f + 8.f + (i % 5) * 41.f;
+		const float Y = 135.f + 8.f + (i / 5) * 43.f;
+		UImage* Icon = AddImage(Win, FMythRoUITextures::Get(FString::Printf(TEXT("menu_icon/bt_%s.bmp"), Icons[i])), X, Y, 32.f, 34.f);
+		Icon->SetVisibility(ESlateVisibility::Visible);
+		MenuIcons.Add(Icon);
+		MenuIconNames.Add(Icons[i]);
+	}
+	// Versao recolhida (print 21): duas linhas resumidas
+	BasicMini1 = AddText(Win, 6.f, 19.f, 7, ColText);
+	BasicMini2 = AddText(Win, 6.f, 31.f, 7, ColText);
+	BasicMini1->SetVisibility(ESlateVisibility::Collapsed);
+	BasicMini2->SetVisibility(ESlateVisibility::Collapsed);
+	MakeDraggable(Win, W, 16.f);
+}
+
+void UMythRoHUDWidget::SetBasicMenuOpen(bool bOpen)
+{
+	// A seta alterna entre a janela completa (informacoes + grade do menu) e a versao recolhida de 2 linhas do
+	// cliente LATAM ("Nv. 100 / classe / Nv. 16 / Exp. 60 %" e "HP. x / y | SP. x / y")
+	if (!BasicWindow)
+	{
+		return;
+	}
+	bBasicMenuOpen = bOpen;
+	// Os filhos criados depois da barra de titulo sao os detalhes; guarda a visibilidade original deles uma vez
+	if (BasicSavedVisibility.Num() == 0)
+	{
+		for (int32 i = BasicDetailStart; i < BasicWindow->GetChildrenCount(); ++i)
+		{
+			UWidget* Child = BasicWindow->GetChildAt(i);
+			BasicSavedVisibility.Add(Child, Child->GetVisibility());
+		}
+	}
+	for (const TPair<TWeakObjectPtr<UWidget>, ESlateVisibility>& Pair : BasicSavedVisibility)
+	{
+		UWidget* Child = Pair.Key.Get();
+		if (!Child || Child == MenuToggleBar || Child == BasicMini1 || Child == BasicMini2)
+		{
+			continue;
+		}
+		Child->SetVisibility(bOpen ? Pair.Value : ESlateVisibility::Collapsed);
+	}
+	if (BasicMini1) { BasicMini1->SetVisibility(bOpen ? ESlateVisibility::Collapsed : ESlateVisibility::HitTestInvisible); }
+	if (BasicMini2) { BasicMini2->SetVisibility(bOpen ? ESlateVisibility::Collapsed : ESlateVisibility::HitTestInvisible); }
+	if (UCanvasPanelSlot* S = MenuToggleBar ? Cast<UCanvasPanelSlot>(MenuToggleBar->Slot) : nullptr)
+	{
+		S->SetPosition(FVector2D(6.f, bOpen ? 124.f : 44.f) * UIScale);
+	}
+	if (MenuToggleBar)
+	{
+		MenuToggleBar->SetBrush(TextureBrush(FMythRoUITextures::Get(bOpen ? TEXT("menu_icon/bt_menu_normal.bmp") : TEXT("menu_icon/bt_menu_close_normal.bmp")), FVector2D(219.f, 9.f) * UIScale));
+	}
+	const float H = bOpen ? BasicFullH : 56.f;
+	if (UCanvasPanelSlot* S = BasicWindow ? Cast<UCanvasPanelSlot>(BasicWindow->Slot) : nullptr)
+	{
+		S->SetSize(FVector2D(232.f, H) * UIScale);
+	}
+	if (UCanvasPanelSlot* S = BasicBody ? Cast<UCanvasPanelSlot>(BasicBody->Slot) : nullptr)
+	{
+		S->SetSize(FVector2D(232.f, H - 16.f) * UIScale);
+	}
+}
+
+bool UMythRoHUDWidget::HandleBasicMenuClick(const FVector2D& ScreenPos)
+{
+	if (!BasicWindow || !BasicWindow->IsVisible())
+	{
+		return false;
+	}
+	if (IsUnder(MenuToggleBar, ScreenPos))
+	{
+		SetBasicMenuOpen(!bBasicMenuOpen);
+		return true;
+	}
+	for (int32 i = 0; bBasicMenuOpen && i < MenuIcons.Num(); ++i)
+	{
+		if (!IsUnder(MenuIcons[i], ScreenPos))
+		{
+			continue;
+		}
+		const FString& Name = MenuIconNames[i];
+		if (Name == TEXT("status")) { ToggleWindow(EMythRoWindow::Status); }
+		else if (Name == TEXT("equip")) { ToggleWindow(EMythRoWindow::Equip); }
+		else if (Name == TEXT("item")) { ToggleWindow(EMythRoWindow::Items); }
+		else if (Name == TEXT("skill")) { ToggleWindow(EMythRoWindow::Skills); }
+		else if (Name == TEXT("map")) { ToggleWindow(EMythRoWindow::Minimap); }
+		else if (Name == TEXT("option")) { ToggleGameMenu(); }
+		else { AddChatLine(TEXT("Esta janela ainda não existe no Myth of Thor."), ColSystem); }
+		return true;
+	}
+	return false;
 }
 
 void UMythRoHUDWidget::BuildMinimap()
 {
-	// Janela do minimapa (topo-direita): titulo com o nome do mapa, imagem 128x128 e coordenadas
-	const float W = 136.f, H = 17.f + 132.f + 16.f;
-	MinimapWindow = MakeWindow(FVector2D(1.f, 0.f), FVector2D(1.f, 0.f), FVector2D(-8.f, 8.f), FVector2D(W, H));
-	AddColor(MinimapWindow, ColWindowEdge, 0.f, 16.f, W, H - 16.f);
-	AddColor(MinimapWindow, ColWindow, 1.f, 17.f, W - 2.f, H - 18.f);
-	UTextBlock* Title = nullptr;
-	AddTitleBar(MinimapWindow, W, TEXT("Mapa"), &Title);
-	MapTitleText = Title;
-	MinimapImage = AddImage(MinimapWindow, nullptr, 4.f, 19.f, 128.f, 128.f);
+	// Minimapa do LATAM (docs/ref/12, print 22): so a imagem do mapa, sem moldura de janela, no topo-direita, com uma
+	// faixa escura embaixo para as coordenadas. O ponto do jogador e vermelho
+	const float W = 128.f, H = 128.f + 14.f;
+	MinimapWindow = MakeWindow(FVector2D(1.f, 0.f), FVector2D(1.f, 0.f), FVector2D(-4.f, 4.f), FVector2D(W, H));
+	MinimapImage = AddImage(MinimapWindow, nullptr, 0.f, 0.f, 128.f, 128.f);
 	MinimapImage->SetColorAndOpacity(FLinearColor::Transparent);
-	PlayerDot = AddColor(MinimapWindow, FLinearColor(1.f, 0.85f, 0.1f), 0.f, 0.f, 4.f, 4.f);
+	MinimapImage->SetVisibility(ESlateVisibility::Visible); // o clique no minimapa nao anda o personagem
+	PlayerDot = AddColor(MinimapWindow, FLinearColor(0.95f, 0.15f, 0.1f), 0.f, 0.f, 5.f, 5.f);
 	PlayerDot->SetVisibility(ESlateVisibility::Collapsed);
-	CoordsText = AddText(MinimapWindow, 6.f, 149.f, 7, ColText);
-	MakeDraggable(MinimapWindow, W, 17.f);
+	AddColor(MinimapWindow, FLinearColor(0.f, 0.f, 0.f, 0.45f), 0.f, 128.f, W, 14.f);
+	CoordsText = AddText(MinimapWindow, 4.f, 129.f, 7, FLinearColor::White);
+	MapTitleText = AddText(MinimapWindow, 0.f, 0.f, 7, FLinearColor::White);
+	MapTitleText->SetVisibility(ESlateVisibility::Collapsed); // o LATAM nao escreve o nome no minimapa
 }
 
 void UMythRoHUDWidget::BuildHotbar()
 {
-	// Barra de atalhos (shortitem_bg, 280x34) no baixo-centro, com F1..F9 em cada espaco
-	UCanvasPanel* Win = MakeWindow(FVector2D(0.5f, 1.f), FVector2D(0.5f, 1.f), FVector2D(0.f, -8.f), FVector2D(280.f, 34.f));
+	// Barra de atalhos do LATAM (docs/ref/12): no topo, colada a direita das informacoes basicas, moldura
+	// shortcut_frame (290x34) com o numero da linha a esquerda e os 9 espacos (F1..F9)
+	UCanvasPanel* Win = MakeWindow(FVector2D(0.f, 0.f), FVector2D(0.f, 0.f), FVector2D(234.f * UIScale, 2.f), FVector2D(290.f, 34.f));
 	HotbarWindow = Win;
-	AddImage(Win, FMythRoUITextures::Get(Basic(TEXT("shortitem_bg"))), 0.f, 0.f);
+	AddImage(Win, FMythRoUITextures::Get(TEXT("shortcut/shortcut_frame.bmp")), 0.f, 0.f, 290.f, 34.f);
+	AddText(Win, 3.f, 11.f, 7, ColLabel)->SetText(FText::FromString(TEXT("1")));
 	for (int32 i = 0; i < 9; ++i)
 	{
 		// Espaco do atalho: area de soltar (recebe o mouse), icone 24x24 e quantidade/nivel no canto
-		UImage* HotSlot = AddColor(Win, FLinearColor::Transparent, 4.f + 29.f * i, 4.f, 28.f, 28.f);
+		const float X = 12.f + 30.6f * i;
+		UImage* HotSlot = AddColor(Win, FLinearColor::Transparent, X, 3.f, 28.f, 28.f);
 		HotSlot->SetVisibility(ESlateVisibility::Visible);
 		HotbarSlots.Add(HotSlot);
-		UImage* Icon = AddImage(Win, nullptr, 6.f + 29.f * i, 6.f, 24.f, 24.f);
+		UImage* Icon = AddImage(Win, nullptr, X + 2.f, 5.f, 24.f, 24.f);
 		Icon->SetVisibility(ESlateVisibility::Collapsed);
 		HotbarIcons.Add(Icon);
-		UTextBlock* Count = AddText(Win, 20.f + 29.f * i, 21.f, 6, ColText);
+		UTextBlock* Count = AddText(Win, X + 15.f, 20.f, 6, ColText);
 		Count->SetShadowOffset(FVector2D(1.f, 1.f));
 		Count->SetShadowColorAndOpacity(FLinearColor(1.f, 1.f, 1.f, 0.9f));
 		HotbarCounts.Add(Count);
-		UTextBlock* T = AddText(Win, 6.f + 29.f * i, 3.f, 6, ColLabel);
-		T->SetText(FText::FromString(FString::Printf(TEXT("F%d"), i + 1)));
 	}
 	// So a borda esquerda arrasta a barra: o resto recebe os atalhos arrastados
 	MakeDraggable(Win, 4.f, 34.f);
@@ -332,7 +429,7 @@ void UMythRoHUDWidget::BuildHotbar()
 void UMythRoHUDWidget::BuildChat()
 {
 	// Chat (baixo-esquerda): abas originais, area translucida com as linhas e o campo de digitacao
-	const float W = 320.f, H = 21.f + 98.f + 20.f;
+	const float W = 440.f, H = 21.f + 98.f + 20.f; // largura do chat do LATAM (~60% da tela no print)
 	UCanvasPanel* Win = MakeWindow(FVector2D(0.f, 1.f), FVector2D(0.f, 1.f), FVector2D(8.f, -8.f), FVector2D(W, H));
 	// Abas: a textura chat_tab_0 do cliente traz os nomes em coreano; aqui sao desenhadas com o texto em portugues
 	AddColor(Win, ColWindowEdge, 0.f, 4.f, 74.f, 17.f);
@@ -439,13 +536,32 @@ void UMythRoHUDWidget::RefreshStats()
 	BaseLvText->SetText(FText::FromString(FString::Printf(TEXT("Base Lv. %d"), Stats->GetBaseLevel())));
 	JobLvText->SetText(FText::FromString(FString::Printf(TEXT("Job Lv. %d"), NetStats ? NetStats->JobLevel : 1)));
 
-	HPGauge.SetFraction(static_cast<float>(Stats->GetHP()) / FMath::Max(1, Stats->GetMaxHP()));
-	HPText->SetText(FText::FromString(FString::Printf(TEXT("%d / %d"), Stats->GetHP(), Stats->GetMaxHP())));
-	SPGauge.SetFraction(static_cast<float>(Stats->GetSP()) / FMath::Max(1, Stats->GetMaxSP()));
-	SPText->SetText(FText::FromString(FString::Printf(TEXT("%d / %d"), Stats->GetSP(), Stats->GetMaxSP())));
+	const float HPFrac = static_cast<float>(Stats->GetHP()) / FMath::Max(1, Stats->GetMaxHP());
+	const float SPFrac = static_cast<float>(Stats->GetSP()) / FMath::Max(1, Stats->GetMaxSP());
+	HPGauge.SetFraction(HPFrac);
+	HPText->SetText(FText::FromString(FString::Printf(TEXT("%d  /  %d"), Stats->GetHP(), Stats->GetMaxHP())));
+	SPGauge.SetFraction(SPFrac);
+	SPText->SetText(FText::FromString(FString::Printf(TEXT("%d  /  %d"), Stats->GetSP(), Stats->GetMaxSP())));
+	if (BasicMini1 && BasicMini2)
+	{
+		BasicMini1->SetText(FText::FromString(FString::Printf(TEXT("Nv. %d / %s / Nv. %d / Exp. %d %%"), Stats->GetBaseLevel(),
+			NetStats ? *NetStats->JobName : TEXT("Aprendiz"), NetStats ? NetStats->JobLevel : 1, FMath::RoundToInt(Stats->GetExpFraction() * 100.f))));
+		BasicMini2->SetText(FText::FromString(FString::Printf(TEXT("HP. %d / %d  |  SP. %d / %d"), Stats->GetHP(), Stats->GetMaxHP(), Stats->GetSP(), Stats->GetMaxSP())));
+	}
+	if (HPPctText) { HPPctText->SetText(FText::FromString(FString::Printf(TEXT("%d%%"), FMath::RoundToInt(HPFrac * 100.f)))); }
+	if (SPPctText) { SPPctText->SetText(FText::FromString(FString::Printf(TEXT("%d%%"), FMath::RoundToInt(SPFrac * 100.f)))); }
 	BaseExpGauge.SetFraction(Stats->GetExpFraction());
 	JobExpGauge.SetFraction(NetStats && NetStats->NextJobExp > 0 ? static_cast<float>(static_cast<double>(NetStats->JobExp) / NetStats->NextJobExp) : 0.f);
-	WeightZenyText->SetText(FText::FromString(FString::Printf(TEXT("Peso : %.0f%%      Zeny : %lld"), WeightPercent, NetStats ? NetStats->Zeny : 0LL)));
+	// Como o cliente: "Peso : atual / max   Zeny : 29.743" (o rAthena manda o peso em decimos)
+	const FString Zeny = FText::AsNumber(NetStats ? NetStats->Zeny : 0LL).ToString();
+	if (NetStats && NetStats->MaxWeight > 0)
+	{
+		WeightZenyText->SetText(FText::FromString(FString::Printf(TEXT("Peso : %d / %d     Zeny : %s"), NetStats->Weight / 10, NetStats->MaxWeight / 10, *Zeny)));
+	}
+	else
+	{
+		WeightZenyText->SetText(FText::FromString(FString::Printf(TEXT("Peso : %.0f%%     Zeny : %s"), WeightPercent, *Zeny)));
+	}
 }
 
 void UMythRoHUDWidget::RefreshAutoAll()
@@ -787,7 +903,7 @@ void UMythRoHUDWidget::UpdateMinimap()
 		return;
 	}
 	const FIntPoint Cell = Info->WorldToCell(Pawn->GetActorLocation());
-	CoordsText->SetText(FText::FromString(FString::Printf(TEXT("%s  %d, %d"), *Info->MapName, Cell.X, Cell.Y)));
+	CoordsText->SetText(FText::FromString(FString::Printf(TEXT("%d  %d"), Cell.X, Cell.Y))); // como o LATAM: "214 346"
 
 	// O .bmp do minimapa encaixa o mapa inteiro no lado maior e centraliza no outro (como o cliente original).
 	const FIntPoint Size = Info->MapSizeCells;
@@ -800,8 +916,8 @@ void UMythRoHUDWidget::UpdateMinimap()
 	const float K = MapPx / FMath::Max(Size.X, Size.Y);
 	const float OffX = (MapPx - Size.X * K) * 0.5f;
 	const float OffY = (MapPx - Size.Y * K) * 0.5f;
-	const float Px = 4.f + OffX + (Cell.X + 0.5f) * K;
-	const float Py = 19.f + MapPx - (OffY + (Cell.Y + 0.5f) * K); // celula Y cresce para cima; a imagem, para baixo
+	const float Px = OffX + (Cell.X + 0.5f) * K;
+	const float Py = MapPx - (OffY + (Cell.Y + 0.5f) * K); // celula Y cresce para cima; a imagem, para baixo
 	if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(PlayerDot->Slot))
 	{
 		S->SetPosition(FVector2D(Px - 2.f, Py - 2.f) * UIScale);

@@ -622,7 +622,7 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 
 bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 {
-	if (HandleGameMenuClick(ScreenPos))
+	if (HandleGameMenuClick(ScreenPos) || HandleBasicMenuClick(ScreenPos))
 	{
 		return true;
 	}
