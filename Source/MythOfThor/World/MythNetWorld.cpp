@@ -627,6 +627,16 @@ void AMythNetWorld::HandleDamage(int64 SourceID, int64 TargetID, int32 Damage, u
 	AActor* Target = ResolveActor(TargetID);
 	UE_LOG(LogTemp, Log, TEXT("MythNetWorld: dano %d (tipo %d) de %lld em %lld"), Damage, DamageType, SourceID, TargetID);
 
+	// ZC_NOTIFY_ACT que nao e golpe (e_damage_type do rAthena): 1 pegou item, 2 sentou, 3 levantou
+	if (DamageType == 1 || DamageType == 2 || DamageType == 3)
+	{
+		if (UMythRoSpriteComponent* S = Source ? Source->FindComponentByClass<UMythRoSpriteComponent>() : nullptr; S && DamageType != 1)
+		{
+			S->SetSitting(DamageType == 2);
+		}
+		return;
+	}
+
 	// Quem ataca vira para o alvo e toca o golpe no ritmo do servidor (attackMT do ZC_NOTIFY_ACT)
 	if (AMythPlayerCharacter* Char = Cast<AMythPlayerCharacter>(Source))
 	{

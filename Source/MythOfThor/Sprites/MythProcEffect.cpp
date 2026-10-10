@@ -12,8 +12,8 @@
 
 namespace
 {
-	constexpr float Cell = 50.f;      // 1 celula do RO
-	constexpr int32 Segments = 28;
+	constexpr float ProcCell = 50.f;      // 1 celula do RO
+	constexpr int32 ProcSegments = 28;
 
 	float Num(const TSharedPtr<FJsonObject>& O, const TCHAR* Key, float Default)
 	{
@@ -134,13 +134,13 @@ bool AMythProcEffect::Setup(const TSharedPtr<FJsonObject>& Part)
 	bRepeat = Flag(Part, TEXT("repeat"));
 	Animation = static_cast<int32>(Num(Part, TEXT("animation"), 0.f));
 	Tint = FLinearColor(Num(Part, TEXT("red"), 1.f), Num(Part, TEXT("green"), 1.f), Num(Part, TEXT("blue"), 1.f), 1.f);
-	PosZ = Num(Part, TEXT("posz"), Num(Part, TEXT("posZ"), 0.f)) * Cell;
+	PosZ = Num(Part, TEXT("posz"), Num(Part, TEXT("posZ"), 0.f)) * ProcCell;
 
 	if (Type == TEXT("CYLINDER"))
 	{
-		BottomRadius = Num(Part, TEXT("bottomSize"), 1.f) * Cell;
-		TopRadius = Num(Part, TEXT("topSize"), 1.f) * Cell;
-		Height = FMath::Max(Num(Part, TEXT("height"), 1.f) * Cell, 0.f);
+		BottomRadius = Num(Part, TEXT("bottomSize"), 1.f) * ProcCell;
+		TopRadius = Num(Part, TEXT("topSize"), 1.f) * ProcCell;
+		Height = FMath::Max(Num(Part, TEXT("height"), 1.f) * ProcCell, 0.f);
 		BuildCylinder(0.f);
 		if (Material)
 		{
@@ -151,18 +151,18 @@ bool AMythProcEffect::Setup(const TSharedPtr<FJsonObject>& Part)
 	}
 
 	// 3D / 2D: quads voltados para a camera. 3D: tamanho em centesimos de celula; 2D: pixels (~1,5 uu na camera do RO)
-	const float Unit = Type == TEXT("2D") ? 1.5f : Cell / 100.f;
+	const float Unit = Type == TEXT("2D") ? 1.5f : ProcCell / 100.f;
 	const float Size = Num(Part, TEXT("size"), 100.f);
 	SizeStart = FVector2D(Num(Part, TEXT("sizeStartX"), Num(Part, TEXT("sizeRandStartX"), Num(Part, TEXT("sizeX"), Num(Part, TEXT("sizeStart"), Size)))),
 		Num(Part, TEXT("sizeStartY"), Num(Part, TEXT("sizeRandStartY"), Num(Part, TEXT("sizeY"), Num(Part, TEXT("sizeStart"), Size))))) * Unit;
 	SizeEnd = FVector2D(Num(Part, TEXT("sizeEndX"), Num(Part, TEXT("sizeRandEndX"), Num(Part, TEXT("sizeX"), Num(Part, TEXT("sizeEnd"), SizeStart.X / Unit)))),
 		Num(Part, TEXT("sizeEndY"), Num(Part, TEXT("sizeRandEndY"), Num(Part, TEXT("sizeY"), Num(Part, TEXT("sizeEnd"), SizeStart.Y / Unit))))) * Unit;
-	ZStart = Num(Part, TEXT("poszStart"), Num(Part, TEXT("posz"), 1.f)) * Cell;
-	ZEnd = Num(Part, TEXT("poszEnd"), ZStart / Cell) * Cell;
+	ZStart = Num(Part, TEXT("poszStart"), Num(Part, TEXT("posz"), 1.f)) * ProcCell;
+	ZEnd = Num(Part, TEXT("poszEnd"), ZStart / ProcCell) * ProcCell;
 	bToSrc = Flag(Part, TEXT("toSrc")) && bHasSource;
 	bCircle = Part->HasField(TEXT("circlePattern")) || (Type == TEXT("2D") && Part->HasField(TEXT("sizeRandEndY")));
-	CircleInner = 2.2f * Cell;
-	CircleOuter = 5.5f * Cell;
+	CircleInner = 2.2f * ProcCell;
+	CircleOuter = 5.5f * ProcCell;
 
 	const int32 Count = FMath::Clamp(static_cast<int32>(Num(Part, TEXT("duplicate"), bCircle ? 8.f : 1.f)), 1, 40);
 	const float Between = Num(Part, TEXT("timeBetweenDupli"), 0.f) / 1000.f;
@@ -175,14 +175,14 @@ bool AMythProcEffect::Setup(const TSharedPtr<FJsonObject>& Part)
 		if (bSwarm)
 		{
 			// Enxame (centelhas da cura, bolhas): espalhado em volta do alvo
-			const float R = FMath::FRandRange(0.2f, 1.f) * Cell;
+			const float R = FMath::FRandRange(0.2f, 1.f) * ProcCell;
 			C.Offset = FVector(FMath::Cos(FMath::DegreesToRadians(C.Angle)) * R, FMath::Sin(FMath::DegreesToRadians(C.Angle)) * R, 0.f);
 		}
 	}
 	if (bSwarm && FMath::IsNearlyEqual(ZStart, ZEnd))
 	{
 		ZStart = 0.f; // particulas soltas sobem do chao ate a altura do peito
-		ZEnd = 2.f * Cell;
+		ZEnd = 2.f * ProcCell;
 	}
 	if (Part->HasField(TEXT("angle")) && !bToSrc && ZStart > ZEnd)
 	{
@@ -231,17 +231,17 @@ void AMythProcEffect::BuildCylinder(float T)
 	TArray<FColor> Colors;
 	TArray<int32> Tris;
 	const FColor C = FLinearColor(Tint.R, Tint.G, Tint.B, AlphaAt(T)).ToFColor(false);
-	for (int32 s = 0; s <= Segments; ++s)
+	for (int32 s = 0; s <= ProcSegments; ++s)
 	{
-		const float A = 2.f * PI * s / Segments;
+		const float A = 2.f * PI * s / ProcSegments;
 		const FVector Dir(FMath::Cos(A), FMath::Sin(A), 0.f);
 		Verts.Add(Dir * BottomRadius * RadiusScale + FVector(0.f, 0.f, PosZ));
 		Verts.Add(Dir * TopRadius * RadiusScale + FVector(0.f, 0.f, PosZ + Height * HeightScale));
-		UVs.Add(FVector2D(static_cast<float>(s) / Segments, 1.f + VScroll));
-		UVs.Add(FVector2D(static_cast<float>(s) / Segments, 0.f + VScroll));
+		UVs.Add(FVector2D(static_cast<float>(s) / ProcSegments, 1.f + VScroll));
+		UVs.Add(FVector2D(static_cast<float>(s) / ProcSegments, 0.f + VScroll));
 		Colors.Add(C);
 		Colors.Add(C);
-		if (s < Segments)
+		if (s < ProcSegments)
 		{
 			const int32 i = s * 2;
 			Tris.Append({ i, i + 2, i + 1, i + 1, i + 2, i + 3 });
@@ -288,14 +288,14 @@ void AMythProcEffect::BuildQuads()
 		{
 			const float Rad = FMath::DegreesToRadians(Copy.Angle);
 			const FVector Radial = Right * FMath::Cos(Rad) + Up * FMath::Sin(Rad);
-			Center = Origin + FVector(0.f, 0.f, Cell) + Radial * FMath::Lerp(CircleInner, CircleOuter, T) * 0.35f;
+			Center = Origin + FVector(0.f, 0.f, ProcCell) + Radial * FMath::Lerp(CircleInner, CircleOuter, T) * 0.35f;
 			AxisY = Radial;
 			AxisX = FVector::CrossProduct(Radial, Right ^ Up).GetSafeNormal();
 		}
 		else if (bToSrc)
 		{
 			const FVector From = SourcePos + FVector(0.f, 0.f, ZStart);
-			const FVector To = Origin + FVector(0.f, 0.f, ZEnd > 0.f ? ZEnd : Cell);
+			const FVector To = Origin + FVector(0.f, 0.f, ZEnd > 0.f ? ZEnd : ProcCell);
 			Center = FMath::Lerp(From, To, T);
 		}
 		else

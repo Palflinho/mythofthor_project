@@ -153,6 +153,10 @@ public:
 	UFUNCTION(Exec)
 	void MythTargetNearest();
 
+	/** Teste: MythSit -> como apertar Insert (senta/levanta pelo servidor). */
+	UFUNCTION(Exec)
+	void MythSit() { OnHotkeySit(); }
+
 	/** Teste: MythTurn 160 185 -> como Shift+clique na celula: vira sem andar (CZ_CHANGE_DIRECTION). */
 	UFUNCTION(Exec)
 	void MythTurn(int32 X, int32 Y);
@@ -291,6 +295,7 @@ private:
 	void OnHotkeyBasic();
 	void OnHotkeyMinimap();
 	void OnHotkeyEscape();
+	void OnHotkeySit();
 	void UpdateCameraReset();
 	double LastRightClickTime = -1.0;
 	void OnRotateKey(const FInputActionValue& Value);

@@ -202,6 +202,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "RO Sprite")
 	void PlayHit();
 
+	/** Senta/levanta (ZC_NOTIFY_ACT tipo 2/3 do servidor): acao 16..23 do .act, parada. */
+	void SetSitting(bool bSit);
+	bool IsSitting() const { return State == EMythSpriteState::Sit; }
+
 	UFUNCTION(BlueprintCallable, Category = "RO Sprite")
 	void Die();
 

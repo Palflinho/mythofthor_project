@@ -79,6 +79,7 @@ namespace
 	// Jogador: 0 parado, 1 andando, 2 sentado, 3 pegando, 4 em guarda, 5 ataque, 6 dano, 7 congelado, 8 morto...
 	constexpr int32 GroupIdle = 0;
 	constexpr int32 GroupWalk = 1;
+	constexpr int32 GroupSit = 2;
 	constexpr int32 GroupAttack = 5;
 	constexpr int32 GroupHurt = 6;
 	constexpr int32 GroupDead = 8;
@@ -532,7 +533,21 @@ void UMythRoSpriteComponent::PlayAttack(float AttackDuration)
 	}
 }
 
-void UMythRoSpriteComponent::PlayHit() { SetState(EMythSpriteState::Hit, true); }
+void UMythRoSpriteComponent::PlayHit()
+{
+	if (State != EMythSpriteState::Sit) // sentado nao faz a reacao de golpe (o cliente levanta so pelo servidor)
+	{
+		SetState(EMythSpriteState::Hit, true);
+	}
+}
+
+void UMythRoSpriteComponent::SetSitting(bool bSit)
+{
+	if (bSit != (State == EMythSpriteState::Sit))
+	{
+		SetState(bSit ? EMythSpriteState::Sit : EMythSpriteState::Idle, false);
+	}
+}
 void UMythRoSpriteComponent::Die()     { SetState(EMythSpriteState::Dead, false); }
 
 void UMythRoSpriteComponent::Revive()
@@ -561,6 +576,7 @@ int32 UMythRoSpriteComponent::GetActionIndex() const
 	case EMythSpriteState::Attack: Group = bMob ? MobGroupAttack : GroupAttack; break;
 	case EMythSpriteState::Hit:    Group = bMob ? MobGroupHurt : GroupHurt; break;
 	case EMythSpriteState::Dead:   Group = bMob ? MobGroupDead : GroupDead; break;
+	case EMythSpriteState::Sit:    Group = bMob ? GroupIdle : GroupSit; break;
 	}
 	const int32 Index = Group * 8 + static_cast<int32>(Direction);
 	// Sprites com poucas acoes (item no chao: 1; varios NPCs: so as 8 de parado) reaproveitam as que existem
@@ -580,7 +596,7 @@ int32 UMythRoSpriteComponent::GetFrameIndex(const FRoActAction& Action, bool& bO
 	{
 		return 0;
 	}
-	if (State == EMythSpriteState::Idle && !IsMonster())
+	if ((State == EMythSpriteState::Idle || State == EMythSpriteState::Sit) && !IsMonster())
 	{
 		return 0; // jogador parado: quadro 0 = cabeca olhando para frente (monstros animam o idle em loop)
 	}
@@ -656,6 +672,12 @@ void UMythRoSpriteComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 		{
 			Direction = ComputeDirection(Velocity, CamRot);
 			const bool bMoving = Velocity.Size2D() > WalkSpeedThreshold;
+			if (State == EMythSpriteState::Sit && !bMoving)
+			{
+				UpdateBillboard(CamRot);
+				RebuildMesh(CamRot);
+				return; // sentado fica sentado ate o servidor mandar levantar (ou andar)
+			}
 			StillTime = bMoving ? 0.f : StillTime + DeltaTime;
 			// So volta ao Idle depois de IdleDelay parado: quinas do caminho nao reiniciam o ciclo de caminhada.
 			const EMythSpriteState NewState = bMoving ? EMythSpriteState::Walk : (StillTime >= IdleDelay ? EMythSpriteState::Idle : State);

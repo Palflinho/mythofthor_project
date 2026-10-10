@@ -188,6 +188,7 @@ void AMythPlayerController::SetupInputComponent()
 	InputComponent->BindKey(FInputChord(EKeys::V, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyBasic);
 	InputComponent->BindKey(FInputChord(EKeys::Tab, false, true, false, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyMinimap);
 	InputComponent->BindKey(EKeys::Escape, IE_Pressed, this, &AMythPlayerController::OnHotkeyEscape);
+	InputComponent->BindKey(EKeys::Insert, IE_Pressed, this, &AMythPlayerController::OnHotkeySit);
 	// F1..F9: atalhos da barra (itens e skills guardados no servidor)
 	const FKey HotkeyKeys[9] = { EKeys::F1, EKeys::F2, EKeys::F3, EKeys::F4, EKeys::F5, EKeys::F6, EKeys::F7, EKeys::F8, EKeys::F9 };
 	for (int32 i = 0; i < 9; ++i)
@@ -505,6 +506,19 @@ void AMythPlayerController::OnHotkeyEquip() { ToggleHudWindow(EMythRoWindow::Equ
 void AMythPlayerController::OnHotkeySkills() { ToggleHudWindow(EMythRoWindow::Skills); }
 void AMythPlayerController::OnHotkeyBasic() { ToggleHudWindow(EMythRoWindow::Basic); }
 void AMythPlayerController::OnHotkeyMinimap() { ToggleHudWindow(EMythRoWindow::Minimap); }
+
+void AMythPlayerController::OnHotkeySit()
+{
+	// Insert: senta/levanta como no cliente (CZ_REQUEST_ACT 2/3); quem muda o sprite e a resposta do servidor.
+	// Sentado o rAthena recupera HP/SP mais rapido
+	const AMythPlayerCharacter* Char = GetMythCharacter();
+	URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr;
+	if (Char && Char->Sprite && Net && (!HudWidget || !HudWidget->IsChatFocused()))
+	{
+		StopMovement();
+		Net->SendActionRequest(0, Char->Sprite->IsSitting() ? 3 : 2);
+	}
+}
 
 void AMythPlayerController::OnHotkeyEscape()
 {
