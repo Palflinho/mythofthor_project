@@ -10,7 +10,8 @@ $other = Get-CimInstance Win32_Process -Filter "Name='dotnet.exe'" | Where-Objec
 if ($other) { "OUTRO BUILD RODANDO (pid $($other.ProcessId -join ',')): nao iniciei"; exit 3 }
 if (Test-Path $lock) { "BUILD TRAVADO PELO LOCK: $(Get-Content $lock -Raw)"; exit 3 }
 "$Quem $(Get-Date -Format s)" | Set-Content $lock -Encoding UTF8
-Get-Process UnrealEditor -ErrorAction SilentlyContinue | Stop-Process -Force -PassThru | Wait-Process -Timeout 30 -ErrorAction SilentlyContinue  # a DLL fica presa ate o processo sair
+# Fecha so o editor do projeto de desenvolvimento; a versao de teste do usuario (E:DevMythTeste) nunca e fechada
+Get-CimInstance Win32_Process -Filter "Name='UnrealEditor.exe'" | Where-Object { $_.CommandLine -notlike '*MythTeste*' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue; Wait-Process -Id $_.ProcessId -Timeout 30 -ErrorAction SilentlyContinue }  # a DLL fica presa ate o processo sair
 $p = Start-Process -FilePath $bat -ArgumentList $args -RedirectStandardOutput $log -RedirectStandardError "$log.err" -PassThru -WindowStyle Hidden
 $lastCpu = -1.0; $lastLen = -1; $stallSince = Get-Date; $start = Get-Date
 while (-not $p.HasExited) {

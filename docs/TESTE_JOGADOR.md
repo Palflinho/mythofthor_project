@@ -1,0 +1,46 @@
+COMO TESTAR A VERSAO DE TESTE DO MYTH OF THOR
+=============================================
+
+Esta pasta e uma COPIA CONGELADA do jogo: ela nao muda enquanto o desenvolvimento continua. Quando houver novidades,
+o Claude gera uma versao nova (veja VERSAO.txt para saber qual e a atual).
+
+Para abrir
+----------
+1. Ligue o servidor (Docker/WSL do rAthena), como sempre.
+2. De dois cliques em Jogar_Myth_Teste.bat. A janela demora alguns minutos para abrir na primeira vez depois de uma
+   versao nova; depois entra direto no jogo com a conta mythtest.
+3. Feche o jogo antes de pedir uma versao nova (o Claude nao consegue atualizar com o jogo aberto).
+
+Teclas e comandos uteis
+-----------------------
+- Botao esquerdo: andar, atacar, falar, pegar item. Botao direito + arrastar: girar a camera (Shift: inclinar; roda: zoom;
+  duplo clique direito: voltar a camera ao padrao).
+- Insert: sentar. Setas esquerda e direita (parado ou sentado): virar a cabeca (doridori). Esc: fecha janela / menu.
+- Alt+A atributos, Alt+E inventario, Alt+Q equipamento, Alt+S habilidades.
+- No chat (Enter): @job 3 (arqueiro), @changelook 4 11 (arco, so o visual), @changelook 7 1 (asas de anjo),
+  @option 0 0 8 (carrinho de Mercador; @option 0 0 0 tira), @monster poring 3, @die (morrer), @alive, @heal, @go 0,
+  @warp prt_in 101 70 (interior), @blvl 98 / @blvl 1 (nivel de base: a aura do 99 liga em 99 ou mais).
+- Console (F10): MythAura 0, 1 ou 2 (desliga / so brilhos / completa).
+
+O que ja da para testar (e o que deve acontecer)
+------------------------------------------------
+1. Camera: ao arrastar com o botao direito o giro deve ser rapido (0,4 grau por pixel). Gire parado: o personagem
+   e os NPCs devem mostrar outros lados. Mude o zoom, entre num interior e volte: o zoom e a inclinacao ficam guardados
+   (separados para dentro e fora).
+2. Doridori: parado ou sentado, aperte as setas esquerda e direita: so a cabeca vira. Andar ou atacar endireita.
+3. Capa/asas: @changelook 7 1. De frente as asas ficam atras do corpo; de costas ficam por cima.
+4. Carrinho (Mercador): @option 0 0 8. Atras do personagem de frente; na frente dele de costas; a roda gira ao andar.
+5. Arco: @job 3, @changelook 4 11, @monster poring 1 e ataque: uma flecha sai do arqueiro ate o monstro; o numero
+   de dano aparece quando ela chega.
+6. Tremor de tela: efeitos como Martelo (Hammerfall) tremem a camera por um instante.
+7. Barras de vida e SP: finas, sob os pes do personagem (verde/amarela/vermelha e azul). O monstro atingido mostra a
+   barra dele sob os pes.
+8. Morte: @die. O personagem deita e abre a janela "Voce morreu". "Voltar ao ponto de salvamento" leva ao ponto de
+   salvamento e levanta. "Aguardar socorro" so fecha a janela (@alive levanta).
+9. Aura do nivel 99: o personagem de teste ja e nivel 99: anel branco no chao, faixas azuis subindo e brilhos.
+   MythAura 1 deixa so os brilhos. A aura ainda nao ilumina o cenario (isso vem na fase HD-2D).
+
+Como me passar o resultado
+--------------------------
+Diga em palavras o que viu de diferente do esperado (ex.: "as asas aparecem na frente do corpo"). Se puder, tire um
+print (tecla Impr Tela) e diga o numero do item acima.
