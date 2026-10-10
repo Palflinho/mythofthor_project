@@ -263,6 +263,8 @@ private:
 	ERagnarokDirection Direction = ERagnarokDirection::South;
 	float StateTime = 0.f;
 	float PlayRate = 1.f;
+	/** Distancia andada (unidades do RO = 10 uu) desde que entrou em Walk: o passo segue o chao (docs/ref/03 4.1). */
+	float WalkDistanceRo = 0.f;
 	bool bOneShotPlaying = false;
 	FVector FeetRelativeLocation = FVector::ZeroVector;
 	/** Quantas secoes de malha ja foram criadas (uma por camada desenhada). */

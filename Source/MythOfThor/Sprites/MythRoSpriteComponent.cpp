@@ -503,6 +503,7 @@ void UMythRoSpriteComponent::SetState(EMythSpriteState NewState, bool bOneShot)
 	bOneShotPlaying = bOneShot;
 	StateTime = 0.f;
 	PlayRate = 1.f;
+	WalkDistanceRo = 0.f;
 }
 
 void UMythRoSpriteComponent::PlayAttack(float AttackDuration)
@@ -513,9 +514,10 @@ void UMythRoSpriteComponent::PlayAttack(float AttackDuration)
 		const FRoActAction* Action = Body.Act.Actions.IsValidIndex(GetActionIndex()) ? &Body.Act.Actions[GetActionIndex()] : nullptr;
 		if (Action)
 		{
-			// Acelera a animacao para caber no intervalo do ASPD (nunca desacelera), como o original.
+			// Como o GameActor do cliente: velocidade = 432 / attackMT (attackMT em ms), e a animacao inteira sempre
+			// cabe no ciclo de ataque do servidor
 			const float Total = Action->Frames.Num() * Action->IntervalMs / 1000.f;
-			PlayRate = FMath::Max(1.f, Total / AttackDuration);
+			PlayRate = FMath::Max(0.432f / AttackDuration, Total / AttackDuration);
 		}
 	}
 }
@@ -572,11 +574,20 @@ int32 UMythRoSpriteComponent::GetFrameIndex(const FRoActAction& Action, bool& bO
 	{
 		return 0; // jogador parado: quadro 0 = cabeca olhando para frente (monstros animam o idle em loop)
 	}
+	if (State == EMythSpriteState::Walk)
+	{
+		// Passo pela distancia andada, nao pelo tempo: quadro = dist * 1,48 / delay do .act em ticks de 25 ms
+		// (GameActor.cpp ~1660). Mais rapido (AGI Up, montaria) = passos mais rapidos, sem patinar
+		const float DelayTicks = FMath::Max(Action.IntervalMs / 25.f, 0.0001f);
+		return FMath::FloorToInt(WalkDistanceRo * 1.48f / DelayTicks) % Count;
+	}
 	const int32 Step = FMath::FloorToInt(StateTime * PlayRate * 1000.f / FMath::Max(Action.IntervalMs, 1.f));
 	if (bOneShotPlaying || State == EMythSpriteState::Dead)
 	{
 		bOutFinished = Step >= Count;
-		return FMath::Min(Step, Count - 1);
+		// Jogador morto repousa no quadro 4 da acao de morte (kDeathMotion)
+		const int32 Last = (State == EMythSpriteState::Dead && !IsMonster()) ? FMath::Min(Count - 1, 4) : Count - 1;
+		return FMath::Min(Step, Last);
 	}
 	return Step % Count;
 }
@@ -613,6 +624,10 @@ void UMythRoSpriteComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	if (State != EMythSpriteState::Dead)
 	{
 		const FVector Velocity = Owner->GetVelocity();
+		if (State == EMythSpriteState::Walk)
+		{
+			WalkDistanceRo += Velocity.Size2D() * DeltaTime / 10.f;
+		}
 		if (bOneShotPlaying)
 		{
 			bool bFinished = false;
@@ -620,6 +635,8 @@ void UMythRoSpriteComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 			{
 				GetFrameIndex(Body.Act.Actions[GetActionIndex()], bFinished);
 			}
+			// Golpe levado dura 200 ms (kHitReactionDurationMs) e nao segura o proximo comando
+			bFinished |= State == EMythSpriteState::Hit && StateTime >= 0.2f;
 			if (bFinished)
 			{
 				SetState(EMythSpriteState::Idle, false);
