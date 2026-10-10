@@ -1003,7 +1003,13 @@ void AMythPlayerController::MythPickNearest()
 	{
 		UE_LOG(LogTemp, Log, TEXT("MythNet: pegando %s"), *Best->GetLabel());
 		PendingPickup = Best;
-		MoveToLocation(Best->GetActorLocation());
+		PickupTries = 0;
+		LastPickupTryTime = -1000.0;
+		MoveToLocation(Best->GetActorLocation(), /*bForceSend=*/true);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("MythPickNearest: nenhum item no chao"));
 	}
 }
 
@@ -1050,6 +1056,7 @@ void AMythPlayerController::MythAttackNearest()
 
 bool AMythPlayerController::TeleportToCell(int32 X, int32 Y)
 {
+	UE_LOG(LogTemp, Log, TEXT("MythMove: teleporte para (%d, %d)"), X, Y);
 	APawn* P = GetPawn();
 	const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld());
 	if (!P || !Info)
@@ -1067,16 +1074,18 @@ bool AMythPlayerController::TeleportToCell(int32 X, int32 Y)
 				{
 					continue;
 				}
-				const FVector Top = Info->CellToWorld(FIntPoint(X + DX, Y + DY), 20000.f);
-				FHitResult Hit;
-				FCollisionQueryParams Params(TEXT("MythGoto"), false, P);
-				if (GetWorld()->LineTraceSingleByChannel(Hit, Top, Top - FVector(0.f, 0.f, 40000.f), ECC_Visibility, Params))
+				const FVector At = Info->CellToWorld(FIntPoint(X + DX, Y + DY), 0.f);
+				float GroundZ = 0.f;
+				if (UMythCellMoverComponent::GroundZ(GetWorld(), At, GroundZ))
 				{
 					if (UMythCellMoverComponent* Mover = P->FindComponentByClass<UMythCellMoverComponent>())
 					{
-						Mover->Stop();
+						Mover->Stop(); // tambem tira a fisica: a posicao vem do servidor, sem gravidade
 					}
-					P->SetActorLocation(Hit.ImpactPoint + FVector(0.f, 0.f, 120.f), false, nullptr, ETeleportType::TeleportPhysics);
+					// Pes no chao do .gat (sem gravidade para assentar o personagem depois)
+					const ACharacter* Char = Cast<ACharacter>(P);
+					const float HalfHeight = Char && Char->GetCapsuleComponent() ? Char->GetCapsuleComponent()->GetScaledCapsuleHalfHeight() : 90.f;
+					P->SetActorLocation(FVector(At.X, At.Y, GroundZ + HalfHeight), false, nullptr, ETeleportType::TeleportPhysics);
 					StopMovement();
 					bHasDirectTarget = false;
 					return true;

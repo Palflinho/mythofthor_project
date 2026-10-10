@@ -218,6 +218,10 @@ void UMythCellMoverComponent::MoveToCell(const FIntPoint& Dest, int32 InMsPerCel
 void UMythCellMoverComponent::ServerWalk(const FIntPoint& From, const FIntPoint& Dest, int32 InMsPerCell)
 {
 	const FIntPoint Cur = GetCurrentCell();
+	if (const APawn* Pawn = Cast<APawn>(GetOwner()); Pawn && Pawn->IsPlayerControlled())
+	{
+		UE_LOG(LogTemp, Log, TEXT("MythMove: servidor (%d,%d)->(%d,%d), cliente em (%d,%d)"), From.X, From.Y, Dest.X, Dest.Y, Cur.X, Cur.Y);
+	}
 	if (FMath::Max(FMath::Abs(Cur.X - From.X), FMath::Abs(Cur.Y - From.Y)) > MaxDesyncCells)
 	{
 		SnapToCell(From);
@@ -228,6 +232,10 @@ void UMythCellMoverComponent::ServerWalk(const FIntPoint& From, const FIntPoint&
 void UMythCellMoverComponent::ServerStop(const FIntPoint& Cell)
 {
 	const FIntPoint Cur = GetCurrentCell();
+	if (const APawn* Pawn = Cast<APawn>(GetOwner()); Pawn && Pawn->IsPlayerControlled())
+	{
+		UE_LOG(LogTemp, Log, TEXT("MythMove: parada do servidor em (%d,%d), cliente em (%d,%d)"), Cell.X, Cell.Y, Cur.X, Cur.Y);
+	}
 	if (IsMoving())
 	{
 		// Servidor igual ou um pouco atras do que o jogador ve: so termina o passo atual (sem passo para tras)
@@ -321,13 +329,11 @@ void UMythCellMoverComponent::SetOwnerVelocity(const FVector& Velocity)
 	{
 		if (UCharacterMovementComponent* Move = Char->GetCharacterMovement())
 		{
-			if (Path.Num() > 0)
+			// Sem fisica nunca, nem parado: quem decide a posicao e o servidor. Parado em MOVE_Walking, a capsula
+			// era empurrada pelos monstros que passavam por cima (desencaixe) e o jogador "escorregava" celulas
+			if (Move->MovementMode != MOVE_None)
 			{
-				Move->SetMovementMode(MOVE_None); // a fisica nao briga com o caminho do servidor
-			}
-			else if (Move->MovementMode == MOVE_None)
-			{
-				Move->SetMovementMode(MOVE_Walking);
+				Move->SetMovementMode(MOVE_None);
 			}
 			Move->Velocity = Velocity;
 		}

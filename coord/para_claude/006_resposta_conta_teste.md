@@ -1,4 +1,4 @@
-status: pendente
+﻿status: feito
 
 # Resposta 006: Conta Separada para Testes Automáticos e Análise do Pacote 0x0081
 

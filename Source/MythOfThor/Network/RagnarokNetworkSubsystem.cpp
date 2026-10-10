@@ -57,6 +57,7 @@ void URagnarokNetworkSubsystem::Tick(float DeltaTime)
 		// Servidor fechou a conexao (timeout, kick): avisa em vez de seguir "enviando" para um socket morto
 		if (CurrentSocket && CurrentSocket->GetConnectionState() == SCS_ConnectionError)
 		{
+			DisconnectReason = TEXT("A conexão com o servidor caiu.");
 			Disconnect();
 		}
 	}
@@ -784,7 +785,9 @@ void URagnarokNetworkSubsystem::Disconnect()
 		CurrentSocket = nullptr;
 		CurrentState = ERagnarokNetworkState::Disconnected;
 		ReceiveBuffer.Empty();
-		OnNetworkDisconnected.Broadcast(TEXT("Conexão encerrada pelo cliente."));
+		const FString Reason = DisconnectReason.IsEmpty() ? FString(TEXT("Conexão encerrada pelo cliente.")) : DisconnectReason;
+		DisconnectReason.Reset();
+		OnNetworkDisconnected.Broadcast(Reason);
 	}
 }
 
@@ -878,7 +881,7 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 				break;
 			case RagnarokPackets::HEADER_AC_REFUSE_LOGIN:
 			case RagnarokPackets::HEADER_SC_NOTIFY_BAN:
-				HandleLoginRefuse(PacketData, ActualLen);
+				HandleNotifyBan(PacketData, ActualLen);
 				break;
 			case RagnarokPackets::HEADER_HC_ACCEPT_ENTER:
 				HandleCharacterList(PacketData, ActualLen);
@@ -1074,6 +1077,28 @@ void URagnarokNetworkSubsystem::HandleLoginAccept(const uint8* PacketData, int32
 		SendData(reinterpret_cast<const uint8*>(&EnterPacket), sizeof(EnterPacket));
 		CurrentState = ERagnarokNetworkState::ConnectedChar;
 	}
+}
+
+void URagnarokNetworkSubsystem::HandleNotifyBan(const uint8* PacketData, int32 PacketSize)
+{
+	// SC_NOTIFY_BAN (0x0081, 3 bytes: id + codigo), clif_authfail_fd do rAthena. Pode chegar em qualquer servidor,
+	// inclusive jogando (conta aberta em outro lugar): nao e "login recusado" (coord 006)
+	const uint8 Code = PacketSize >= 3 ? PacketData[2] : 0;
+	switch (Code)
+	{
+	case 1: DisconnectReason = TEXT("Servidor fechado para manutenção."); break;
+	case 2: DisconnectReason = TEXT("Alguém entrou com esta conta em outro lugar."); break;
+	case 3: DisconnectReason = TEXT("Desconectado por atraso na conexão."); break;
+	case 4: DisconnectReason = TEXT("O servidor está cheio."); break;
+	case 8: DisconnectReason = TEXT("O servidor ainda reconhece a conexão anterior. Tente de novo em instantes."); break;
+	case 15: DisconnectReason = TEXT("Você foi desconectado por um GM."); break;
+	default: DisconnectReason = FString::Printf(TEXT("Desconectado pelo servidor (código %d)."), Code); break;
+	}
+	if (CurrentState != ERagnarokNetworkState::ConnectedMap && CurrentState != ERagnarokNetworkState::ConnectedChar)
+	{
+		OnLoginResult.Broadcast(false, DisconnectReason);
+	}
+	Disconnect();
 }
 
 void URagnarokNetworkSubsystem::HandleLoginRefuse(const uint8* PacketData, int32 PacketSize)

@@ -685,6 +685,9 @@ private:
 	// Handlers especializados por pacote
 	void HandleLoginAccept(const uint8* PacketData, int32 PacketSize);
 	void HandleLoginRefuse(const uint8* PacketData, int32 PacketSize);
+	void HandleNotifyBan(const uint8* PacketData, int32 PacketSize);
+	/** Motivo da proxima desconexao (vazio = encerrada pelo cliente) */
+	FString DisconnectReason;
 	void HandleCharacterList(const uint8* PacketData, int32 PacketSize);
 	void HandleZoneServerNotify(const uint8* PacketData, int32 PacketSize);
 	void HandleMapAcceptEnter(const uint8* PacketData, int32 PacketSize);

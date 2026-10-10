@@ -745,6 +745,7 @@ void AMythNetWorld::HandleGroundItemAppear(int64 ID, int32 ItemID, int32 Amount,
 	Item->Setup(ID, ItemID, Amount, bInMap);
 	Item->FinishSpawning(Xf);
 	GroundItems.Add(ID, Item);
+	UE_LOG(LogTemp, Log, TEXT("MythNetWorld: item %d x%d no chao em (%d, %d)"), ItemID, Amount, CellX, CellY);
 }
 
 void AMythNetWorld::HandleGroundItemVanish(int64 ID)
@@ -752,6 +753,7 @@ void AMythNetWorld::HandleGroundItemVanish(int64 ID)
 	TObjectPtr<AMythGroundItem> Item;
 	if (GroundItems.RemoveAndCopyValue(ID, Item) && IsValid(Item))
 	{
+		UE_LOG(LogTemp, Log, TEXT("MythNetWorld: item %lld saiu do chao"), ID);
 		Item->Destroy();
 	}
 }
