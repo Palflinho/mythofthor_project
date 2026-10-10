@@ -1311,6 +1311,7 @@ void URagnarokNetworkSubsystem::HandleUnitAppear(const uint8* PacketData, int32 
 	{
 		RagnarokPackets::UnpackCellCoord(PacketData + 63, Unit.CellX, Unit.CellY, Unit.Direction);
 		Unit.bDirectionKnown = true;
+		if (PacketSize >= 71) { Unit.BaseLevel = I16(69); } // xSize 66, ySize 67, state 68, clevel 69
 		if (PacketSize >= 81)
 		{
 			Unit.MaxHP = I32(PacketID == RagnarokPackets::HEADER_ZC_IDLE_UNIT ? 73 : 72);
@@ -1323,6 +1324,7 @@ void URagnarokNetworkSubsystem::HandleUnitAppear(const uint8* PacketData, int32 
 		RagnarokPackets::UnpackMovePath(PacketData + 67, FromX, FromY, ToX, ToY);
 		Unit.CellX = FromX;
 		Unit.CellY = FromY;
+		if (PacketSize >= 78) { Unit.BaseLevel = I16(76); } // MoveData 67..72, xSize 73, ySize 74, state 75, clevel 76
 		if (PacketSize >= 87) // MoveData 67-72, xSize, ySize, clevel, font, maxHP 79, HP 83
 		{
 			Unit.MaxHP = I32(79);

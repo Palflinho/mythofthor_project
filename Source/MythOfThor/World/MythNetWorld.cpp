@@ -7,6 +7,7 @@
 #include "Sprites/MythMonster.h"
 #include "Sprites/MythRoSpriteComponent.h"
 #include "Sprites/MythSkillEffects.h"
+#include "Sprites/MythAura99.h"
 #include "World/MythGroundItem.h"
 #include "World/MythCellMoverComponent.h"
 #include "Sprites/MythRoSound.h"
@@ -522,6 +523,7 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 	Unit->MaxHP = FMath::Max(Info.MaxHP, 1);
 	Unit->AIControllerClass = AAIController::StaticClass();
 	Unit->AutoPossessAI = EAutoPossessAI::Spawned;
+	bool bAuraWanted = false;
 	if (UMythRoSpriteComponent* S = Unit->Sprite)
 	{
 		if (Info.bDirectionKnown)
@@ -541,6 +543,7 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 			S->Shield = Info.Shield & 0xFFFF;
 			S->Robe = Info.Robe;
 			S->CartType = UMythRoSpriteComponent::CartTypeFromOption(Info.Option);
+			bAuraWanted = Info.BaseLevel >= 99;
 			S->HairStyle = FMath::Max(Info.Head, 1);
 			S->HairColor = Info.HeadPalette;
 			S->SetHeadDir(Info.HeadDir);
@@ -552,6 +555,10 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 		}
 	}
 	Unit->FinishSpawning(Xf);
+	if (bAuraWanted)
+	{
+		AMythAura99::Ensure(Unit, true); // outros jogadores nivel 99 tambem brilham (docs/ref/13 2.1)
+	}
 	if (UCharacterMovementComponent* Move = Unit->GetCharacterMovement())
 	{
 		// Velocidade do RO: ms por celula (150 = padrao) -> cm/s com celula de 50 cm
@@ -830,6 +837,7 @@ void AMythNetWorld::HandleStats(const FRagnarokPlayerStats& S)
 	}
 	const URagnarokNetworkSubsystem* Net = GetNet();
 	Char->Stats->SetIdentity(Net && !Net->GetSelfName().IsEmpty() ? Net->GetSelfName() : Char->Stats->GetCharName(), S.BaseLevel);
+	AMythAura99::Ensure(const_cast<AMythPlayerCharacter*>(Char), S.BaseLevel >= 99);
 	if (S.MaxHP > 0)
 	{
 		Char->Stats->SetVitals(static_cast<int32>(S.HP), static_cast<int32>(S.MaxHP), static_cast<int32>(S.SP), static_cast<int32>(FMath::Max<int64>(S.MaxSP, 1)));

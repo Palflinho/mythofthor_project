@@ -12,6 +12,7 @@
 #include "Engine/GameInstance.h"
 #include "Sprites/MythMonster.h"
 #include "Sprites/MythPoring.h"
+#include "Sprites/MythAura99.h"
 #include "Sprites/MythRoSpriteComponent.h"
 #include "Sprites/MythRoSound.h"
 #include "Components/CapsuleComponent.h"
@@ -1684,4 +1685,9 @@ void AMythPlayerController::MythRestart(int32 Type)
 	{
 		Net->SendRestart(static_cast<uint8>(Type));
 	}
+}
+
+void AMythPlayerController::MythAura(int32 Mode)
+{
+	AMythAura99::SetMode(Mode);
 }

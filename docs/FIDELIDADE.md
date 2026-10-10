@@ -99,7 +99,7 @@ Hoje só 👤 o que o roadmap marcava como feito e testado; o resto está ⬜.
 | Números de dano (spr `숫자`, arco, 70 ticks; Miss 80; cura 120) | ✅ | 👤 | `MythHUD.cpp` |
 | Crítico (estrela atrás) | ✅ | 👤 | |
 | Level up (anjo) | ✅ | 👤 | |
-| Aura do nível 99 | ❌ P2 | ⬜ | Os specs só descrevem em palavras. Pesquisa pedida ao Antigravity (coord 012). |
+| Aura do nível 99 | 🟡 P2 | ⬜ | Feita em 2026-10-10 a partir de `docs/ref/13` (`AMythAura99`): 3 faixas espirais (`ring_blue`), 2 anéis de chão pulsantes (`pikapika2`) e 16 brilhos subindo (`whitelight`); liga em todo jogador com `clevel >= 99` (campo do pacote de unidade; o próprio jogador pelo nível de base) e `MythAura 0/1/2` faz o papel do `/aura`. **As unidades do spec (tamanho do anel, deriva e raio dos brilhos) são ambíguas**: usei 1 un = 10 uu e valores visuais; falta comparar com o cliente real. Falta também o `/aura` no chat (R2.5) e as variantes de transclasse (ids 362, 397, 398). |
 | Portal (anéis, textura, velocidade) | ✅ | 👤 | `MythWarpPortal` |
 | Efeitos de skill da 1ª classe: desenhador procedural | 🟡 | 👤 só Impacto Explosivo e Cura | `MythProcEffect`, `skill_effects_full.json` |
 | Efeitos 2ª classe e transclasse | ⚠️ P1 | ⬜ | Tabela completa gerada (coord 010/011), nenhuma testada jogando. |

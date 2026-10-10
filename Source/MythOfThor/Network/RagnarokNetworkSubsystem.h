@@ -113,6 +113,10 @@ struct FRagnarokUnitVisualInfo
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Unit")
 	int32 Option = 0;
 
+	/** clevel do pacote (nivel de base da unidade; 0 se o pacote nao traz). */
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Unit")
+	int32 BaseLevel = 0;
+
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Unit")
 	int32 Speed = 150;
 

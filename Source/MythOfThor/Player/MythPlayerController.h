@@ -127,6 +127,10 @@ public:
 	UFUNCTION(Exec)
 	void MythAttackNearest();
 
+	/** /aura do cliente: MythAura 0 desligada, 1 so particulas, 2 completa. */
+	UFUNCTION(Exec)
+	void MythAura(int32 Mode);
+
 	/** Teste: MythRestart 0 -> CZ_RESTART como o botao "Voltar ao ponto de salvamento" da janela de morte. */
 	UFUNCTION(Exec)
 	void MythRestart(int32 Type = 0);
