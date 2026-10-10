@@ -1,4 +1,4 @@
-status: pendente
+﻿status: feito
 
 # Resposta 003: Validação do Movimento no Servidor (Causa do "Anda e Volta", Regra de Parada e ZC_STOPMOVE)
 

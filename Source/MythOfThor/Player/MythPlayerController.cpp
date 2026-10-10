@@ -330,17 +330,14 @@ void AMythPlayerController::OnMoveCompleted(const FInputActionValue&)
 	{
 		return;
 	}
-	if (Char->Mover && Char->Mover->IsMoving())
+	// Conectado: soltar nao manda nada. O pedido em curso e de 1 celula a frente, entao o servidor termina o
+	// passo e para; pedir a celula atual fazia ele voltar para ela (o "anda e volta", confirmado no rAthena)
+	bHasPendingMove = false;
+	const URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr;
+	if (!(Net && Net->GetNetworkState() == ERagnarokNetworkState::ConnectedMap))
 	{
-		// Soltou as teclas andando: para numa celula a frente. Pedir a celula atual faz o servidor (que ja esta no
-		// passo seguinte) voltar para ela: era o "anda e volta"
-		const FIntPoint Stop = Char->Mover->GetCellAhead(1);
-		bHasPendingMove = true;
-		PendingMoveCell = Stop;
-		FlushPendingMove();
-		return;
+		SendCellToServer(Char->GetActorLocation(), /*bForce=*/true);
 	}
-	SendCellToServer(Char->GetActorLocation(), /*bForce=*/true);
 }
 
 void AMythPlayerController::PlayerTick(float DeltaTime)
@@ -375,11 +372,21 @@ void AMythPlayerController::PlayerTick(float DeltaTime)
 		const bool bOnline = Net && Net->GetNetworkState() == ERagnarokNetworkState::ConnectedMap;
 		if (bOnline)
 		{
-			// Destino virtual a frente na direcao das teclas, com as regras do clique segurado: so pede de novo
-			// quando ele se afasta mais de 2 celulas do ultimo pedido (andar reto ou virar)
-			if (!WasdDirection.IsNearlyZero())
+			// Pede so 1 celula alem do passo em andamento, renovando a cada passo: o servidor troca de rota no fim
+			// do passo (change_walk_target) e, ao soltar, termina o passo e para sem nenhum pacote (coord 003)
+			const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld());
+			if (!WasdDirection.IsNearlyZero() && Info && Char->Mover)
 			{
-				SendCellToServer(Char->GetActorLocation() + WasdDirection * (WasdLookaheadCells * CellSizeUU), /*bForce=*/false);
+				const FIntPoint Base = Char->Mover->GetNextCell();
+				const float MaxAxis = FMath::Max(FMath::Abs(WasdDirection.X), FMath::Abs(WasdDirection.Y));
+				const FVector Step = WasdDirection / MaxAxis * CellSizeUU; // diagonal = 1 celula em cada eixo
+				const FIntPoint Target = Info->WorldToCell(Info->CellToWorld(Base, 0.f) + Step);
+				if (Target != LastSentCell && Target != Base)
+				{
+					PendingMoveCell = Target;
+					bHasPendingMove = true;
+					FlushPendingMove();
+				}
 			}
 		}
 		else

@@ -1,4 +1,4 @@
-status: pendente
+﻿status: feito
 
 # Resposta 004: Portais para dentro das Casas de Prontera (Status no Servidor e na Unreal)
 
