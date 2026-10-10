@@ -1,6 +1,6 @@
 # Roadmap do Myth of Thor
 
-Atualizado em 2026-10-10.
+Atualizado em 2026-10-10 (tarde). Une o plano original com a lista do "jogável mínimo".
 
 **Regra de cada etapa:**
 
@@ -8,81 +8,105 @@ Atualizado em 2026-10-10.
 - Uma etapa só fecha depois de **você testar jogando** e aprovar.
 - O núcleo é 1:1 com o RO pre-renewal. As camadas extras vêm por último.
 
-## Fase 1: o ciclo básico sem travar (agora)
+Legenda: ✅ feito e testado · 🟡 em parte · ⬜ falta
 
-O que o jogador faz nos primeiros 5 minutos precisa estar perfeito.
+## Fase 1: o ciclo básico sem travar ✅
 
-| # | Item | Quem | Base |
+| # | Item | Quem | Status |
 |---|---|---|---|
-| 1.1 | Conexão estável (keepalive, aviso de desconexão com o motivo) | Claude | ✅ feito |
-| 1.2 | Movimento igual ao RO: clique segurado, linha reta antes do A*, sem passo para trás; WASD desligado (9.1). Falta: Shift+clique vira sem andar | Claude | ✅ docs/ref/01 |
-| 1.3 | Combate: anda até o alvo e bate, prioridade do clique, cursores do RO (atacar, falar, pegar, portal, proibido) | Claude | ✅ docs/ref/04 |
-| 1.4 | Pegar item do chão (até 1 célula, repete a cada 400 ms); drops aparecem | Claude | ✅ docs/ref/04 |
-| 1.5 | Câmera do RO: lente estreita, distâncias e inclinações, suavização, interiores travados | Claude | ✅ docs/ref/02 |
-| 1.6 | PACKETVER mais recente (20250402) | Antigravity | ✅ coord 001 |
+| 1.1 | Conexão estável (keepalive, motivo da desconexão) | Claude | ✅ |
+| 1.2 | Movimento do RO (clique segurado, reta antes do A*, sem passo para trás, Shift+clique vira) | Claude | ✅ |
+| 1.3 | Combate: anda até o alvo e bate, prioridade do clique, cursores do RO | Claude | ✅ |
+| 1.4 | Pegar itens do chão; drops | Claude | ✅ |
+| 1.5 | Câmera do RO (lente, distâncias, inclinações, interiores travados) | Claude | ✅ |
+| 1.6 | PACKETVER 20250402 | Antigravity | ✅ |
+| 1.7 | Sentar com Insert (recupera mais rápido) | Claude | ✅ |
+| 1.8 | Porings flutuando parados (sem física ninguém os assentava no chão) | Claude | 🟡 corrigido, falta compilar e testar |
 
-## Fase 2: o mundo com cara de RO
+## Fase 2: o mundo com cara de RO 🟡
 
-| # | Item | Quem | Base |
+| # | Item | Quem | Status |
 |---|---|---|---|
-| 2.1 | Animações: passo pela distância, ataque pelo ASPD do servidor, golpe de 200 ms, morte. Falta: "doridori", ordem das camadas de costas | Claude | 🟡 docs/ref/03 |
-| 2.2 | Números de dano em arco, Miss, crítico, cura (fórmulas do cliente). Falta: level up, aura 99 | Claude | 🟡 docs/ref/05 |
-| 2.3 | Sons: ouvinte no personagem, atenuação do RO, balanço/impacto por arma, reação por armadura. Falta: sons de interface | Claude | 🟡 docs/ref/07 |
-| 2.4 | Portais de Prontera para dentro das casas (portais voltaram a existir; interiores reimportados alinhados) | Claude + Antigravity | ✅ |
-| 2.5 | Borda rosa (magenta) nas folhagens | Antigravity | ✅ feito (coord 006/007) |
+| 2.1 | Animações (passo pela distância, ASPD, golpe 200 ms, morte, arma atrás de costas). Falta: "doridori" | Claude | 🟡 |
+| 2.2 | Números de dano, Miss, crítico, cura, level up (anjo). Falta: aura do nível 99 | Claude | 🟡 |
+| 2.3 | Sons (ouvinte no personagem, atenuação, arma, armadura). Sons de interface: o cliente não tem os arquivos | Claude | ✅ |
+| 2.4 | Portais e interiores de Prontera | os dois | ✅ |
+| 2.5 | Borda rosa nas folhagens | Antigravity | ✅ |
+| 2.6 | Efeitos das skills da 1ª classe (desenhador procedural pronto; Impacto Explosivo e Cura testados). Falta: tremor de tela, flechas (sprite) e testar as outras | Claude | 🟡 |
+| 2.7 | Efeitos das skills da 2ª classe e transclasse | Antigravity → Claude | ⬜ coord 008 (blocos 2 e 3) |
 
-## Fase 3: HUD moderna (estilo Myth of Yggdrasil, com as peças oficiais do cliente LATAM)
+## Fase 3: jogável mínimo (novo) ⬜
 
-| # | Item | Quem | Base |
+O que falta para alguém jogar de Aprendiz até a 2ª classe sem comandos de GM.
+
+| # | Item | Quem | Status |
 |---|---|---|---|
-| 3.1 | Janelas básicas refeitas: status, inventário com abas, equipamento, skills, atalhos, chat, minimapa | Claude | docs/ref/06 + assets LATAM |
-| 3.2 | Diálogo de NPC como o do cliente (360×160 arredondado, Espaço/1–9/setas) | Claude | ✅ docs/ref/06 |
-| 3.3 | Sistemas modernos: navegação, quests (Alt+U), banco | Claude + Antigravity | docs/ref/08 |
-| 3.4 | Esc / Configurações (feito; ajustes conforme seu teste) | Claude | — |
+| 3.1 | Inventário: usar poção, equipar/desequipar, peso, descrição (botão direito) | Claude | 🟡 existe, revisar jogando |
+| 3.2 | Atributos: janela com os "+", pontos, valores derivados | Claude | 🟡 existe, revisar jogando |
+| 3.3 | Árvore de habilidades (subir nível, usar, arrastar para a barra) | Claude | ✅ |
+| 3.4 | Lojas de NPC (comprar e vender) | Claude | ⬜ |
+| 3.5 | Kafra: salvar, armazém, teleporte | Claude | ⬜ |
+| 3.6 | Troca de classe pelas quests originais (Aprendiz → 1ª → 2ª) | os dois | ⬜ |
+| 3.7 | Morrer e voltar ao ponto salvo (janela de "reviver") | Claude | ⬜ |
+| 3.8 | Mapas para upar: campos e cidades das classes (Izlude, Geffen, Payon, Morroc, Alberta) e as primeiras cavernas | Antigravity (importar) → Claude | ⬜ |
+| 3.9 | Chat completo (cochicho, grupo), grupo (party) e troca entre jogadores | Claude | ⬜ |
 
-## Fase 4: visual HD-2D
+## Fase 4: HUD igual à do RO LATAM 🟡
 
-| # | Item | Quem | Base |
+A janela de skills fica no estilo árvore de talentos (decisão do usuário). O resto, igual ao LATAM. **Depende dos prints
+do cliente LATAM.**
+
+| # | Item | Quem | Status |
 |---|---|---|---|
-| 4.1 | Sprites com volume na luz (normais cilíndricas) | Claude | docs/ref/09 |
-| 4.2 | Clima e dia/noite por mapa; poças, chuva nas unidades | Claude | weather backlog |
+| 4.1 | Janelas: informações básicas, status, inventário com abas, equipamento, atalhos, chat, minimapa, menu | Claude | ⬜ falta a referência |
+| 4.2 | Diálogo de NPC (360×160 arredondado, Espaço/1–9/setas) | Claude | ✅ |
+| 4.3 | Chat em português | Claude | ✅ |
+| 4.4 | Esc / Configurações | Claude | ✅ |
+| 4.5 | Sistemas modernos: navegação, quests (Alt+U), banco | os dois | ⬜ docs/ref/08 |
 
-## Fase 5: entrada do jogo
+## Fase 5: visual HD-2D ⬜
 
 | # | Item | Quem |
 |---|---|---|
-| 5.1 | Telas de login, seleção e criação de personagem (assets ver2/ver3 do LATAM) | Claude |
+| 5.1 | Sprites com volume na luz (normais cilíndricas) | Claude |
+| 5.2 | Clima e dia/noite por mapa; poças, chuva nas unidades | Claude |
 
-## Fase 6: sistemas próprios do Myth
-
-O Antigravity projeta e implementa no servidor; o Claude faz as janelas.
-
-| # | Item | Quem | Base |
-|---|---|---|---|
-| 6.1 | Síntese (atributos aleatórios) | Antigravity → Claude | coord 002 |
-| 6.2 | Grade | Antigravity → Claude | coord 002 |
-| 6.3 | Monstro raro ★ | Antigravity → Claude | coord 002 |
-| 6.4 | Códice de Mímir | Antigravity → Claude | coord 002 |
-| 6.5 | HUD sem comandos (autoloot, rates, etc. como botões) | Antigravity → Claude | coord 002 |
-
-## Fase 7: conteúdo
+## Fase 6: entrada do jogo ⬜
 
 | # | Item | Quem |
 |---|---|---|
-| 7.1 | Todas as classes até transclasse: sprites, skills, efeitos | Claude + Antigravity |
-| 7.2 | Quests que liberam habilidades extras | Antigravity | 🟡 docs/sistemas/06 |
-| 7.3 | Adaptar algumas skills de 3ª classe | Antigravity → Claude |
+| 6.1 | Telas de login, seleção e criação de personagem (assets ver2/ver3 do LATAM) | Claude |
 
-## Fase 8: teste fechado (~20 amigos no seu PC)
+## Fase 7: sistemas próprios do Myth
+
+O servidor já está pronto (coord 002); faltam as janelas.
 
 | # | Item | Quem |
 |---|---|---|
-| 8.1 | Pacote do cliente (build de jogo, sem o editor) | Claude |
-| 8.2 | Acesso de fora: VPN (CGNAT da Vero), contas, backup do banco | Antigravity |
-| 8.3 | Checklist de abertura (closed-test-plan) | os dois |
+| 7.1 | Síntese (atributos aleatórios) | Claude |
+| 7.2 | Grade | Claude |
+| 7.3 | Monstro raro ★ (escala 1,35× e nome) | Claude |
+| 7.4 | Códice de Mímir | Claude |
+| 7.5 | HUD sem comandos (autoloot, rates... como botões; Auto-Battle volta aqui) | Claude |
+
+## Fase 8: conteúdo
+
+| # | Item | Quem |
+|---|---|---|
+| 8.1 | Todas as classes até transclasse: sprites, skills, efeitos | os dois |
+| 8.2 | Quests que liberam habilidades extras | Antigravity (🟡 docs/sistemas/06) |
+| 8.3 | Adaptar algumas skills de 3ª classe | Antigravity → Claude |
+
+## Fase 9: teste fechado (~20 amigos no seu PC)
+
+| # | Item | Quem |
+|---|---|---|
+| 9.1 | Pacote do cliente (build de jogo, sem o editor) | Claude |
+| 9.2 | Acesso de fora: VPN (CGNAT da Vero), contas, backup do banco | Antigravity |
+| 9.3 | Checklist de abertura | os dois |
 
 ## Por último
 
 | # | Item | Quem |
 |---|---|---|
-| 9.1 | Movimento por WASD (desligado em 2026-10-10; o código ficou: 1 célula além do passo atual, nada ao soltar) | Claude |
+| 10.1 | Movimento por WASD (código pronto, desligado) | Claude |

@@ -299,6 +299,28 @@ void UMythCellMoverComponent::SnapToCell(const FIntPoint& Cell)
 	Passed.Reset();
 }
 
+void UMythCellMoverComponent::PlaceOnGround()
+{
+	AActor* Owner = GetOwner();
+	if (!Owner)
+	{
+		return;
+	}
+	float Offset = FeetOffset;
+	if (const ACharacter* Char = Cast<ACharacter>(Owner); Char && Offset <= 0.f && Char->GetCapsuleComponent())
+	{
+		Offset = Char->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+	}
+	FVector Pos = Owner->GetActorLocation();
+	float Ground = 0.f;
+	if (GroundZ(GetWorld(), Pos, Ground))
+	{
+		Pos.Z = Ground + Offset;
+		Owner->SetActorLocation(Pos, false, nullptr, ETeleportType::TeleportPhysics);
+	}
+	SetOwnerVelocity(FVector::ZeroVector); // tambem desliga a fisica (MOVE_None)
+}
+
 void UMythCellMoverComponent::Stop()
 {
 	Path.Reset();

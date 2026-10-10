@@ -37,6 +37,9 @@ public:
 	/** Para no lugar (ataque, teleporte). */
 	void Stop();
 
+	/** Poe os pes do dono no chao do .gat onde ele esta (sem fisica, ninguem mais o assenta ao nascer). */
+	void PlaceOnGround();
+
 	bool IsMoving() const { return Path.Num() > 0; }
 
 	/** Celula para onde o passo atual vai (ou a celula atual, parado). */

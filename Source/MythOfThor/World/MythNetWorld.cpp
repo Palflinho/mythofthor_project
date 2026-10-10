@@ -452,6 +452,7 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 		if (FVector::Dist2D(Existing->GetActorLocation(), Ground) > 100.f && !(Mob && Mob->Mover && Mob->Mover->IsMoving()))
 		{
 			Existing->SetActorLocation(Ground + FVector(0.f, 0.f, 45.f), false, nullptr, ETeleportType::TeleportPhysics);
+			if (Mob && Mob->Mover) { Mob->Mover->PlaceOnGround(); }
 		}
 		return;
 	}
@@ -533,6 +534,10 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 	}
 	Unit->NetSpeed = FMath::Max(Info.Speed, 20);
 	Units.Add(Info.GID, Unit);
+	if (Unit->Mover)
+	{
+		Unit->Mover->PlaceOnGround(); // sem fisica: assenta no chao do .gat ao nascer (antes ficava 45 uu no ar)
+	}
 
 	// Portais (JT_WARPNPC 45): no RO sao aneis azuis desenhados pelo executavel, sem sprite. O 139 (portal
 	// escondido) nao mostra nada.
