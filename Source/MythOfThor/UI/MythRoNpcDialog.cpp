@@ -15,15 +15,33 @@
 #include "Components/WrapBox.h"
 #include "Components/WrapBoxSlot.h"
 #include "Styling/CoreStyle.h"
+#include "Brushes/SlateRoundedBoxBrush.h"
 
 namespace
 {
-	const FLinearColor NpcBody(0.975f, 0.975f, 0.985f, 0.97f);
-	const FLinearColor NpcEdge(0.55f, 0.58f, 0.66f, 1.f);
+	const FLinearColor NpcBody(0.985f, 0.985f, 0.99f, 0.96f);
+	const FLinearColor NpcEdge(0.47f, 0.52f, 0.62f, 1.f);
 	const FLinearColor NpcRowHover(0.78f, 0.86f, 0.98f, 1.f);
-	constexpr float NpcW = 300.f;
-	constexpr float NpcH = 120.f;
+	// UISayDialogWnd do cliente (docs/ref/06 3.9): 360 x 160 com cantos de raio 10. Os botoes (btn_next/close/ok/
+	// cancel.bmp) ficam no tamanho nativo de 42 x 20 para nao borrar
+	constexpr float NpcW = 360.f;
+	constexpr float NpcH = 160.f;
+	constexpr float NpcRadius = 10.f;
+	constexpr float NpcBtnW = 42.f;
+	constexpr float NpcBtnH = 20.f;
+	constexpr int32 NpcFontSize = 9;
+	constexpr float NpcRowH = 18.f;
 	constexpr int32 NpcMaxMenuRows = 10;
+
+	/** Caixa branca de cantos arredondados com borda, desenhada como no cliente (sem textura). */
+	void MakeRounded(UImage* Img, float Scale)
+	{
+		if (Img)
+		{
+			Img->SetColorAndOpacity(FLinearColor::White);
+			Img->SetBrush(FSlateRoundedBoxBrush(NpcBody, NpcRadius * Scale, NpcEdge, 1.f));
+		}
+	}
 
 	FSlateBrush NpcBrush(UTexture2D* Tex, const FVector2D& Size)
 	{
@@ -72,40 +90,40 @@ namespace
 
 void UMythRoHUDWidget::BuildNpcDialog()
 {
-	// Caixa de fala: centro-esquerda da tela, como o cliente original
-	NpcWindow = MakeWindow(FVector2D(0.5f, 0.5f), FVector2D(0.5f, 0.5f), FVector2D(-120.f, -150.f), FVector2D(NpcW, NpcH));
-	AddColor(NpcWindow, NpcEdge, 0.f, 0.f, NpcW, NpcH);
-	AddColor(NpcWindow, NpcBody, 1.f, 1.f, NpcW - 2.f, NpcH - 2.f);
+	// Caixa de fala centralizada na tela, um pouco acima do personagem, como o cliente original
+	NpcWindow = MakeWindow(FVector2D(0.5f, 0.5f), FVector2D(0.5f, 0.5f), FVector2D(0.f, -170.f), FVector2D(NpcW, NpcH));
+	MakeRounded(AddColor(NpcWindow, NpcBody, 0.f, 0.f, NpcW, NpcH), UIScale);
 	NpcText = WidgetTree->ConstructWidget<UWrapBox>();
-	NpcText->SetInnerSlotPadding(FVector2D(0.f, 0.f));
+	NpcText->SetInnerSlotPadding(FVector2D(0.f, 1.f));
 	NpcText->SetVisibility(ESlateVisibility::HitTestInvisible);
 	if (UCanvasPanelSlot* S = NpcWindow->AddChildToCanvas(NpcText))
 	{
-		S->SetPosition(FVector2D(10.f, 8.f) * UIScale);
-		S->SetSize(FVector2D(NpcW - 20.f, NpcH - 38.f) * UIScale);
+		S->SetPosition(FVector2D(12.f, 10.f) * UIScale);
+		S->SetSize(FVector2D(NpcW - 24.f, NpcH - NpcBtnH - 20.f) * UIScale);
 	}
-	NpcText->SetWrapSize((NpcW - 20.f) * UIScale);
+	NpcText->SetWrapSize((NpcW - 24.f) * UIScale);
 	NpcText->SetExplicitWrapSize(true);
-	NpcNextButton = AddImage(NpcWindow, FMythRoUITextures::Get(TEXT("btn_next.bmp")), NpcW - 50.f, NpcH - 26.f, 42.f, 20.f);
-	NpcCloseBtn = AddImage(NpcWindow, FMythRoUITextures::Get(TEXT("btn_close.bmp")), NpcW - 50.f, NpcH - 26.f, 42.f, 20.f);
+	NpcNextButton = AddImage(NpcWindow, FMythRoUITextures::Get(TEXT("btn_next.bmp")), NpcW - NpcBtnW - 8.f, NpcH - NpcBtnH - 6.f, NpcBtnW, NpcBtnH);
+	NpcCloseBtn = AddImage(NpcWindow, FMythRoUITextures::Get(TEXT("btn_close.bmp")), NpcW - NpcBtnW - 8.f, NpcH - NpcBtnH - 6.f, NpcBtnW, NpcBtnH);
 	NpcNextButton->SetVisibility(ESlateVisibility::Collapsed);
 	NpcCloseBtn->SetVisibility(ESlateVisibility::Collapsed);
 	NpcWindow->SetVisibility(ESlateVisibility::Collapsed);
 
 	// Caixa de opcoes (select): logo abaixo da fala
-	const float MenuH = 8.f + NpcMaxMenuRows * 16.f + 28.f;
-	NpcMenuWindow = MakeWindow(FVector2D(0.5f, 0.5f), FVector2D(0.5f, 0.f), FVector2D(-120.f, -150.f + NpcH * 0.5f * UIScale + 6.f), FVector2D(NpcW, MenuH));
-	NpcMenuEdge = AddColor(NpcMenuWindow, NpcEdge, 0.f, 0.f, NpcW, MenuH);
-	NpcMenuBody = AddColor(NpcMenuWindow, NpcBody, 1.f, 1.f, NpcW - 2.f, MenuH - 2.f);
+	const float MenuH = 10.f + NpcMaxMenuRows * NpcRowH + NpcBtnH + 14.f;
+	NpcMenuWindow = MakeWindow(FVector2D(0.5f, 0.5f), FVector2D(0.5f, 0.f), FVector2D(0.f, -170.f + NpcH * 0.5f * UIScale + 6.f), FVector2D(NpcW, MenuH));
+	NpcMenuEdge = AddColor(NpcMenuWindow, NpcBody, 0.f, 0.f, NpcW, MenuH);
+	MakeRounded(NpcMenuEdge, UIScale);
+	NpcMenuBody = AddColor(NpcMenuWindow, FLinearColor::Transparent, 0.f, 0.f, 1.f, 1.f);
 	for (int32 i = 0; i < NpcMaxMenuRows; ++i)
 	{
-		UImage* Row = AddColor(NpcMenuWindow, FLinearColor::Transparent, 4.f, 4.f + i * 16.f, NpcW - 8.f, 16.f);
+		UImage* Row = AddColor(NpcMenuWindow, FLinearColor::Transparent, 6.f, 6.f + i * NpcRowH, NpcW - 12.f, NpcRowH);
 		Row->SetVisibility(ESlateVisibility::Visible); // recebe o clique (nao passa para o jogo)
 		NpcMenuRows.Add(Row);
-		NpcMenuTexts.Add(AddText(NpcMenuWindow, 10.f, 5.f + i * 16.f, 8, FLinearColor::Black));
+		NpcMenuTexts.Add(AddText(NpcMenuWindow, 14.f, 7.f + i * NpcRowH, NpcFontSize, FLinearColor::Black));
 	}
-	NpcMenuOk = AddImage(NpcMenuWindow, FMythRoUITextures::Get(TEXT("btn_ok.bmp")), NpcW - 96.f, MenuH - 24.f, 42.f, 20.f);
-	NpcMenuCancel = AddImage(NpcMenuWindow, FMythRoUITextures::Get(TEXT("btn_cancel.bmp")), NpcW - 50.f, MenuH - 24.f, 42.f, 20.f);
+	NpcMenuOk = AddImage(NpcMenuWindow, FMythRoUITextures::Get(TEXT("btn_ok.bmp")), NpcW - 2.f * NpcBtnW - 14.f, MenuH - NpcBtnH - 6.f, NpcBtnW, NpcBtnH);
+	NpcMenuCancel = AddImage(NpcMenuWindow, FMythRoUITextures::Get(TEXT("btn_cancel.bmp")), NpcW - NpcBtnW - 8.f, MenuH - NpcBtnH - 6.f, NpcBtnW, NpcBtnH);
 	NpcMenuOk->SetVisibility(ESlateVisibility::Visible);
 	NpcMenuCancel->SetVisibility(ESlateVisibility::Visible);
 	NpcMenuWindow->SetVisibility(ESlateVisibility::Collapsed);
@@ -134,7 +152,7 @@ void UMythRoHUDWidget::NpcSay(int64 NpcID, const FString& Text)
 	// Cada linha (mes) ocupa a largura toda; as palavras quebram na largura da caixa e mantem a cor
 	TArray<TPair<FString, FLinearColor>> Segments;
 	NpcColorSegments(Text, Segments);
-	const FSlateFontInfo Font = FMythRoUITextures::RoFont(FMath::RoundToInt(8 * UIScale));
+	const FSlateFontInfo Font = FMythRoUITextures::RoFont(FMath::RoundToInt(NpcFontSize * UIScale));
 	for (const TPair<FString, FLinearColor>& Seg : Segments)
 	{
 		TArray<FString> Words;
@@ -210,7 +228,7 @@ void UMythRoHUDWidget::NpcMenu(int64 NpcID, const TArray<FString>& Options)
 		NpcMenuRows[r]->SetVisibility(ESlateVisibility::Collapsed);
 	}
 	// Altura da caixa conforme o numero de opcoes; OK e Cancelar ficam embaixo
-	const float MenuH = 8.f + FMath::Max(Row, 1) * 16.f + 28.f;
+	const float MenuH = 10.f + FMath::Max(Row, 1) * NpcRowH + NpcBtnH + 14.f;
 	auto Place = [this](UWidget* W, float X, float Y, float Wd, float Ht)
 	{
 		if (UCanvasPanelSlot* S = W ? Cast<UCanvasPanelSlot>(W->Slot) : nullptr)
@@ -224,9 +242,8 @@ void UMythRoHUDWidget::NpcMenu(int64 NpcID, const TArray<FString>& Options)
 		S->SetSize(FVector2D(NpcW, MenuH) * UIScale);
 	}
 	Place(NpcMenuEdge, 0.f, 0.f, NpcW, MenuH);
-	Place(NpcMenuBody, 1.f, 1.f, NpcW - 2.f, MenuH - 2.f);
-	Place(NpcMenuOk, NpcW - 96.f, MenuH - 24.f, 42.f, 20.f);
-	Place(NpcMenuCancel, NpcW - 50.f, MenuH - 24.f, 42.f, 20.f);
+	Place(NpcMenuOk, NpcW - 2.f * NpcBtnW - 14.f, MenuH - NpcBtnH - 6.f, NpcBtnW, NpcBtnH);
+	Place(NpcMenuCancel, NpcW - NpcBtnW - 8.f, MenuH - NpcBtnH - 6.f, NpcBtnW, NpcBtnH);
 	NpcMenuSelected = 0;
 	RefreshNpcMenuHighlight();
 	NpcMenuWindow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
@@ -334,4 +351,26 @@ bool UMythRoHUDWidget::HandleNpcClick(const FVector2D& ScreenPos, bool bDouble)
 bool UMythRoHUDWidget::IsNpcDialogOpen() const
 {
 	return NpcTalking != 0;
+}
+
+bool UMythRoHUDWidget::NpcMenuChoose(int32 Row)
+{
+	if (!NpcMenuWindow || !NpcMenuWindow->IsVisible() || !NpcMenuIndex.IsValidIndex(Row))
+	{
+		return false;
+	}
+	NpcMenuSelected = Row;
+	RefreshNpcMenuHighlight();
+	return NpcDialogConfirm();
+}
+
+bool UMythRoHUDWidget::NpcMenuMove(int32 Delta)
+{
+	if (!NpcMenuWindow || !NpcMenuWindow->IsVisible() || NpcMenuIndex.Num() == 0)
+	{
+		return false;
+	}
+	NpcMenuSelected = (NpcMenuSelected + Delta + NpcMenuIndex.Num()) % NpcMenuIndex.Num();
+	RefreshNpcMenuHighlight();
+	return true;
 }

@@ -114,6 +114,9 @@ public:
 	bool NpcDialogConfirm();
 	/** Dialogo de NPC aberto: como no cliente original, cliques no mundo nao andam nem atacam (docs/ref/04 6). */
 	bool IsNpcDialogOpen() const;
+	/** Menu do NPC: tecla 1..9 escolhe a opcao (Row 0..8); setas movem a selecao. False sem menu aberto. */
+	bool NpcMenuChoose(int32 Row);
+	bool NpcMenuMove(int32 Delta);
 
 	/** Esc: fecha a janela classica aberta mais recente. Devolve false se nao havia nenhuma. */
 	UFUNCTION(BlueprintCallable, Category = "Myth|HUD")

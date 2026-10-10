@@ -395,6 +395,25 @@ void AMythPlayerController::PlayerTick(float DeltaTime)
 	{
 		HudWidget->FocusChat();
 	}
+	// Dialogo de NPC (docs/ref/06 3.9): Espaco tambem avanca; no menu, 1..9 escolhem e as setas movem a selecao
+	if (HudWidget && HudWidget->IsNpcDialogOpen() && !HudWidget->IsChatFocused())
+	{
+		if (WasInputKeyJustPressed(EKeys::SpaceBar))
+		{
+			HudWidget->NpcDialogConfirm();
+		}
+		const FKey Digits[9] = { EKeys::One, EKeys::Two, EKeys::Three, EKeys::Four, EKeys::Five, EKeys::Six, EKeys::Seven, EKeys::Eight, EKeys::Nine };
+		const FKey NumPad[9] = { EKeys::NumPadOne, EKeys::NumPadTwo, EKeys::NumPadThree, EKeys::NumPadFour, EKeys::NumPadFive, EKeys::NumPadSix, EKeys::NumPadSeven, EKeys::NumPadEight, EKeys::NumPadNine };
+		for (int32 i = 0; i < 9; ++i)
+		{
+			if (WasInputKeyJustPressed(Digits[i]) || WasInputKeyJustPressed(NumPad[i]))
+			{
+				HudWidget->NpcMenuChoose(i);
+			}
+		}
+		if (WasInputKeyJustPressed(EKeys::Up)) { HudWidget->NpcMenuMove(-1); }
+		if (WasInputKeyJustPressed(EKeys::Down)) { HudWidget->NpcMenuMove(1); }
+	}
 
 	FlushPendingMove();
 	UpdateNetChase(DeltaTime);
