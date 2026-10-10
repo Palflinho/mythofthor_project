@@ -106,6 +106,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite|Equip")
 	int32 Robe = 0;
 
+	/** Carrinho do Mercador (OPTION_CART1..5 do rAthena -> 1..5; 0 = sem carrinho): data/sprite/이팩트/손수레N. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite|Equip")
+	int32 CartType = 0;
+
+	/** Converte o campo option dos pacotes (OPTION_*) no tipo de carrinho. */
+	static int32 CartTypeFromOption(int32 Option);
+
 	/** Filtro bilinear como o cliente original (falso = pixel duro, "nearest"). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
 	bool bSmoothSprites = true;
@@ -254,6 +261,7 @@ private:
 	UPROPERTY() FMythRoSpriteSource WeaponSource;
 	UPROPERTY() FMythRoSpriteSource ShieldSource;
 	UPROPERTY() FMythRoSpriteSource RobeSource;
+	UPROPERTY() FMythRoSpriteSource CartSource;
 	void LoadEquipment(const FString& Root, const FString& Sex);
 	/** Camada que acompanha a cabeca (cabelo e acessorios): encaixa pela ancora do corpo. */
 	void AddHeadLayer(const FMythRoSpriteSource& Source, const FRoActFrame& BodyFrame, int32 ActionIndex, int32 FrameIndex, float DepthBase, int32& Section);

@@ -31,6 +31,8 @@ namespace
 	const TCHAR* AccessoryDir = TEXT("악세사리"); // 악세사리
 	const TCHAR* ShieldDir = TEXT("방패");             // 방패
 	const TCHAR* RobeDir = TEXT("로브");   // 로브
+	const TCHAR* EffectDir = TEXT("이팩트"); // 이팩트 (o carrinho fica aqui)
+	const TCHAR* CartName = TEXT("손수레");   // 손수레
 
 	/** Config/equip_sprites.json (tools/gen_equip_sprites.py): nomes dos sprites de equipamento do cliente. */
 	struct FEquipTables
@@ -441,6 +443,9 @@ void UMythRoSpriteComponent::LoadEquipment(const FString& Root, const FString& S
 		ShieldSource = FMythRoSpriteSource();
 	}
 
+	// Carrinho: data/sprite/이팩트/손수레<1..5>, 8 acoes (uma por direcao) de 6 quadros
+	Load(CartSource, CartType > 0 ? FPaths::Combine(SpriteRoot, EffectDir, FString::Printf(TEXT("%s%d"), CartName, CartType)) : FString());
+
 	// Capa/asas/mochila: data/sprite/로브/<nome>/<sexo>/<sprite da classe>_<sexo> (o mesmo nome do corpo da classe)
 	const FString* RobeName = Robe > 0 ? RobeNames().Find(Robe) : nullptr;
 	Load(RobeSource, RobeName ? FPaths::Combine(SpriteRoot, RobeDir, *RobeName, Sex, FString::Printf(TEXT("%s_%s"), *JobSpriteName, *Sex)) : FString());
@@ -551,6 +556,16 @@ void UMythRoSpriteComponent::SetState(EMythSpriteState NewState, bool bOneShot)
 	{
 		HeadTurn = 0; // andar, bater e apanhar endireitam a cabeca
 	}
+}
+
+int32 UMythRoSpriteComponent::CartTypeFromOption(int32 Option)
+{
+	if (Option & 0x400) { return 5; } // OPTION_CART5
+	if (Option & 0x200) { return 4; }
+	if (Option & 0x100) { return 3; }
+	if (Option & 0x080) { return 2; }
+	if (Option & 0x008) { return 1; } // OPTION_CART1
+	return 0;
 }
 
 void UMythRoSpriteComponent::SetHeadDir(uint8 NewHeadDir)
@@ -855,6 +870,17 @@ void UMythRoSpriteComponent::RebuildMesh(const FRotator& CamRot)
 	const int32 BodyDirIndex = ActionIndex % 8;
 	const bool bBackToCamera = BodyDirIndex >= 3 && BodyDirIndex <= 5;
 	AddBodyLayer(RobeSource, ActionIndex, FrameIndex, bBackToCamera ? 1.f : -1.f, Section);
+	// Carrinho: atras de tudo de frente; de costas fica a frente do personagem. Roda gira ao andar (passo pela distancia)
+	if (CartSource.IsValid() && CartSource.Act.Actions.IsValidIndex(BodyDirIndex) && CartSource.Act.Actions[BodyDirIndex].Frames.Num() > 0)
+	{
+		const FRoActAction& CartAction = CartSource.Act.Actions[BodyDirIndex];
+		int32 CartFrame = 0;
+		if (State == EMythSpriteState::Walk)
+		{
+			CartFrame = FMath::FloorToInt(WalkDistanceRo * 1.48f / FMath::Max(CartAction.IntervalMs / 25.f, 0.0001f)) % CartAction.Frames.Num();
+		}
+		AddLayerQuads(CartSource, CartAction.Frames[CartFrame], FIntPoint::ZeroValue, bBackToCamera ? 9.f : -5.f, Section);
+	}
 	AddLayerQuads(Body, BodyFrame, FIntPoint::ZeroValue, 0.f, Section);
 
 	AddHeadLayer(Head, BodyFrame, ActionIndex, FrameIndex, 2.f, Section);

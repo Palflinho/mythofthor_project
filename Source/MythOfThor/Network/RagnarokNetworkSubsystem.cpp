@@ -924,6 +924,10 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x009c: // ZC_CHANGE_DIRECTION
 				HandleChangeDirection(PacketData, ActualLen);
 				break;
+			case 0x0229: // ZC_STATE_CHANGE (effectState de 4 bytes)
+			case 0x0119: // ZC_STATE_CHANGE (versao antiga, 2 bytes)
+				HandleOptionChange(PacketData, ActualLen, PacketID);
+				break;
 			case RagnarokPackets::HEADER_ZC_NOTIFY_VANISH:
 				HandleUnitVanish(PacketData, ActualLen);
 				break;
@@ -1283,6 +1287,7 @@ void URagnarokNetworkSubsystem::HandleUnitAppear(const uint8* PacketData, int32 
 	Unit.HeadPalette = I16(41 + Shift);
 	Unit.BodyPalette = I16(43 + Shift);
 	Unit.HeadDir = static_cast<uint8>(FMath::Clamp(U16(45 + Shift), 0, 2));
+	Unit.Option = I32(19); // effectState, antes do job (igual nos tres pacotes)
 	Unit.Robe = U16(47 + Shift);
 	Unit.Sex = PacketData[bWalking ? 66 : 62]; // logo antes de MoveData (walking) / PosDir
 
@@ -2440,4 +2445,22 @@ void URagnarokNetworkSubsystem::HandleChangeDirection(const uint8* PacketData, i
 		UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] [OnUnitDirection] AID=%u head=%u dir=%u"), AID, HeadDir, Dir);
 	}
 	OnUnitDirection.Broadcast(AID, static_cast<uint8>(FMath::Min<uint16>(HeadDir, 2)), Dir & 7);
+}
+
+void URagnarokNetworkSubsystem::HandleOptionChange(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
+{
+	// 0229 <id>.L <body state>.W <health state>.W <effect state>.L <pk mode>.B (15 bytes)
+	// 0119 <id>.L <body state>.W <health state>.W <effect state>.W <pk mode>.B (13 bytes)
+	const bool bWide = PacketID == 0x0229;
+	if (PacketSize < (bWide ? 15 : 13))
+	{
+		return;
+	}
+	const uint32 AID = *reinterpret_cast<const uint32*>(PacketData + 2);
+	const int32 Option = bWide ? *reinterpret_cast<const int32*>(PacketData + 10) : static_cast<int32>(*reinterpret_cast<const uint16*>(PacketData + 10));
+	if (bLogPackets)
+	{
+		UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] [OnUnitOption] AID=%u option=0x%X"), AID, Option);
+	}
+	OnUnitOption.Broadcast(AID, Option);
 }

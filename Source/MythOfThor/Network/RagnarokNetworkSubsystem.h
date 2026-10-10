@@ -109,6 +109,10 @@ struct FRagnarokUnitVisualInfo
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Unit")
 	bool bDirectionKnown = false;
 
+	/** effectState do pacote (OPTION_* do rAthena). */
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Unit")
+	int32 Option = 0;
+
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Unit")
 	int32 Speed = 150;
 
@@ -323,6 +327,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FOnUnitWalk, int64, UnitID, int32, 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnUnitStop, int64, UnitID, int32, X, int32, Y);
 /** ZC_CHANGE_DIRECTION (0x009c): corpo e cabeca de uma unidade viraram (dir do rAthena: 0 norte ... 7 nordeste; cabeca 0 frente, 1 CW, 2 CCW). */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnUnitDirection, int64, UnitID, uint8, HeadDir, uint8, BodyDir);
+/** ZC_STATE_CHANGE (0x0229 / 0x0119): opcoes de uma unidade (OPTION_CART1..5 0x08/0x80/0x100/0x200/0x400, riding 0x20, falcon...). */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnUnitOption, int64, UnitID, int32, Option);
 
 // Delegates de compatibilidade anterior
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerMoveConfirmed, int32, TargetX, int32, TargetY);
@@ -577,6 +583,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Movement")
 	FOnUnitDirection OnUnitDirection;
 
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Movement")
+	FOnUnitOption OnUnitOption;
+
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
 	FOnUnitVanish OnUnitVanish;
 
@@ -743,7 +752,7 @@ private:
 	void HandleSkillList(const uint8* PacketData, int32 PacketSize);
 	void HandleInventoryList(const uint8* PacketData, int32 PacketSize, bool bIsEquip);
 	void HandleEffect(const uint8* PacketData, int32 PacketSize);
-	void HandleStateChange(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	void HandleOptionChange(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleSkillUnitAppear(const uint8* PacketData, int32 PacketSize);
 	void HandleSkillUnitDisappear(const uint8* PacketData, int32 PacketSize);
 	void HandleNotifyEffect(const uint8* PacketData, int32 PacketSize);
@@ -752,4 +761,5 @@ private:
 	void HandleNotifyMove(const uint8* PacketData, int32 PacketSize);
 	void HandleStopMove(const uint8* PacketData, int32 PacketSize);
 	void HandleChangeDirection(const uint8* PacketData, int32 PacketSize);
+	void HandleStateChange(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 };

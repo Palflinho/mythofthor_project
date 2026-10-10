@@ -196,6 +196,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnUnitWalk.AddDynamic(this, &AMythNetWorld::HandleUnitWalk);
 	Net->OnUnitStop.AddDynamic(this, &AMythNetWorld::HandleUnitStop);
 	Net->OnUnitDirection.AddDynamic(this, &AMythNetWorld::HandleUnitDirection);
+	Net->OnUnitOption.AddDynamic(this, &AMythNetWorld::HandleUnitOption);
 	Net->OnUnitVanish.AddDynamic(this, &AMythNetWorld::HandleUnitVanish);
 	Net->OnDamage.AddDynamic(this, &AMythNetWorld::HandleDamage);
 	Net->OnChatMessage.AddDynamic(this, &AMythNetWorld::HandleChat);
@@ -248,6 +249,7 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnUnitWalk.RemoveAll(this);
 		Net->OnUnitStop.RemoveAll(this);
 		Net->OnUnitDirection.RemoveAll(this);
+		Net->OnUnitOption.RemoveAll(this);
 		Net->OnUnitVanish.RemoveAll(this);
 		Net->OnDamage.RemoveAll(this);
 		Net->OnChatMessage.RemoveAll(this);
@@ -524,6 +526,7 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 			S->Weapon = Info.Weapon & 0xFFFF;
 			S->Shield = Info.Shield & 0xFFFF;
 			S->Robe = Info.Robe;
+			S->CartType = UMythRoSpriteComponent::CartTypeFromOption(Info.Option);
 			S->HairStyle = FMath::Max(Info.Head, 1);
 			S->HairColor = Info.HeadPalette;
 			S->SetHeadDir(Info.HeadDir);
@@ -615,6 +618,19 @@ void AMythNetWorld::HandleUnitDirection(int64 ID, uint8 HeadDir, uint8 BodyDir)
 	{
 		S->SetFacingRoDir(BodyDir);
 		S->SetHeadDir(HeadDir);
+	}
+}
+
+void AMythNetWorld::HandleUnitOption(int64 ID, int32 Option)
+{
+	// ZC_STATE_CHANGE: carrinho (e depois montaria, falcao...) liga e desliga
+	const AActor* Actor = ResolveActor(ID);
+	UMythRoSpriteComponent* S = Actor ? Actor->FindComponentByClass<UMythRoSpriteComponent>() : nullptr;
+	const int32 Cart = UMythRoSpriteComponent::CartTypeFromOption(Option);
+	if (S && S->MonsterSpriteName.IsEmpty() && S->CartType != Cart)
+	{
+		S->CartType = Cart;
+		S->ReloadSprites();
 	}
 }
 

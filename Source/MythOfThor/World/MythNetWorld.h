@@ -59,6 +59,7 @@ private:
 	UFUNCTION() void HandleUnitWalk(int64 ID, int32 FromX, int32 FromY, int32 TargetX, int32 TargetY, int32 StartTick);
 	UFUNCTION() void HandleUnitStop(int64 ID, int32 X, int32 Y);
 	UFUNCTION() void HandleUnitDirection(int64 ID, uint8 HeadDir, uint8 BodyDir);
+	UFUNCTION() void HandleUnitOption(int64 ID, int32 Option);
 	UFUNCTION() void HandleUnitVanish(int64 ID, uint8 Reason);
 	UFUNCTION() void HandleDamage(int64 SourceID, int64 TargetID, int32 Damage, uint8 DamageType, int32 DelayMs);
 	UFUNCTION() void HandleChat(const FString& Sender, const FString& Text, const FString& ColorHex);
