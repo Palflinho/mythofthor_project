@@ -40,7 +40,7 @@ void AMythHUD::AddCombatText(const FVector& WorldLocation, const FString& Text, 
 	E.Location = WorldLocation;
 	E.Text = Text;
 	E.Type = Type;
-	E.JitterX = FMath::FRandRange(-18.f, 18.f); // evita que golpes simultaneos se sobreponham
+	E.JitterX = FMath::RandBool() ? 1.f : -1.f; // lado do arco (o cliente usa a rotacao do alvo +-90 graus)
 }
 
 void AMythHUD::AddDamageNumber(const FVector& WorldLocation, int32 Amount, ECombatTextType Type)
@@ -78,44 +78,59 @@ void AMythHUD::DrawHUD()
 		Canvas->DrawItem(Tile);
 	};
 
+	// Trajetorias do MsgEffect do cliente (docs/ref/05 3.1-3.3), em "ticks" de 1/24 s e unidades do RO (10 uu)
+	const FVector CamRight = PlayerOwner && PlayerOwner->PlayerCameraManager
+		? FRotationMatrix(PlayerOwner->PlayerCameraManager->GetCameraRotation()).GetUnitAxis(EAxis::Y) : FVector::RightVector;
+	constexpr float RoUnit = 10.f;
 	for (int32 i = Entries.Num() - 1; i >= 0; --i)
 	{
 		FEntry& E = Entries[i];
 		E.Age += Dt;
-		if (E.Age >= Lifetime)
+		const float Tick = E.Age * 24.f;
+		const bool bHeal = E.Type == ECombatTextType::Heal;
+		const bool bMiss = E.Type == ECombatTextType::Miss;
+		const float LifeTicks = bHeal ? 120.f : (bMiss ? 80.f : 70.f);
+		if (Tick >= LifeTicks)
 		{
 			Entries.RemoveAtSwap(i);
 			continue;
 		}
 
-		const FVector2D Screen2D = FVector2D(Project(E.Location));
-		const float T = E.Age / Lifetime;
-		const bool bHops = E.Type == ECombatTextType::DamageDealt || E.Type == ECombatTextType::Critical;
-
-		// Como no original: o dano causado sai num arco (sobe, desce passando do ponto de partida) indo para o
-		// lado e encolhendo; dano sofrido e cura sobem em linha reta; Miss sobe.
-		float OffsetX = E.JitterX;
-		float OffsetY = 0.f;
-		float Scale = BaseScale;
-		if (bHops)
+		FVector World = E.Location;
+		float Zoom = 1.2f;   // escala do cliente; 1,2 = tamanho estavel do dano (BaseScale na tela)
+		float Alpha = 1.f;
+		if (bHeal)
 		{
-			OffsetY = -FMath::Sin(-HALF_PI + PI * (0.5f + T * 1.5f)) * HopPixels - 20.f;
-			OffsetX += T * 45.f;
-			Scale = FMath::Lerp(BaseScale * 1.9f, BaseScale * 0.75f, T);
+			// Cura: sobe devagar em linha reta crescendo ate 3x; opaca ate o tick 90 e some rapido
+			World.Z += Tick * 0.1f * RoUnit;
+			Zoom = FMath::Min(3.f, 1.f + Tick * 0.18f);
+			Alpha = Tick < 90.f ? 1.f : FMath::Max(0.f, 250.f - (Tick - 90.f) * 8.f) / 250.f;
+		}
+		else if (bMiss)
+		{
+			// Miss: sobe 0,54 unidade por tick, 80 ticks
+			World.Z += Tick * 0.54f * RoUnit;
+			Alpha = FMath::Max(0.f, 250.f - Tick * 3.1f) / 250.f;
 		}
 		else
 		{
-			OffsetY = -RisePixels * T - 20.f;
+			// Dano: arco para o lado (t/3 + 3) e salto 8 - (2 - t/30) * t (Y do RO para baixo), sumindo em 70 ticks
+			World += CamRight * E.JitterX * (Tick * 0.3333f + 3.f) * RoUnit;
+			World.Z -= (8.f - (2.f - Tick * 0.0333f) * Tick) * RoUnit;
+			const bool bCrit = E.Type == ECombatTextType::Critical;
+			constexpr float OrgZoom = 3.f;
+			Zoom = bCrit ? FMath::Max(1.f, OrgZoom - Tick * 0.144f) * 1.2f : FMath::Max(1.2f, OrgZoom - Tick * 0.24f);
+			Alpha = FMath::Max(0.f, 250.f - Tick * 3.4f) / 250.f;
 		}
-		if (E.Type == ECombatTextType::Critical)
-		{
-			Scale *= 1.2f;
-		}
+		const FVector2D Screen2D = FVector2D(Project(World));
+		const float OffsetX = 0.f;
+		const float OffsetY = 0.f;
+		const float Scale = BaseScale * Zoom / 1.2f;
 
 		FLinearColor Color = ColorFor(E.Type);
-		Color.A = T < 0.7f ? 1.f : 1.f - (T - 0.7f) / 0.3f; // some no final
+		Color.A = Alpha;
 
-		if (E.Type == ECombatTextType::Miss)
+		if (bMiss)
 		{
 			UTexture2D* Miss = FMythRoUITextures::GetSpriteFrame(MsgSpr, 0);
 			if (Miss)
