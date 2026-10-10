@@ -6,6 +6,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Player/MythPlayerController.h"
 #include "Sprites/MythMonster.h"
+#include "Gameplay/MythStatsComponent.h"
 #include "UI/MythRoUITextures.h"
 #include "UI/MythRoClientTables.h"
 #include "World/MythGroundItem.h"
@@ -52,6 +53,7 @@ void AMythHUD::DrawHUD()
 {
 	Super::DrawHUD();
 	DrawTargetRing();
+	DrawSelfBars();
 	DrawGroundItemLabels();
 	DrawCastBarsAndShouts();
 	DrawStatusIcons();
@@ -262,16 +264,17 @@ void AMythHUD::DrawTargetRing()
 
 	constexpr float BarW = 64.f, BarH = 5.f;
 	const float Frac = Target->GetHealthFraction();
-	const float X = Head.X - BarW * 0.5f;
-	const float Y = Head.Y;
+	// Barra de HP do monstro atingido ABAIXO dos pes (docs/ref/12): verde sobre fundo roxo escuro
+	FVector2D FeetScreen;
+	if (!PC->ProjectWorldLocationToScreen(Center, FeetScreen, false))
+	{
+		return;
+	}
+	const float X = FeetScreen.X - BarW * 0.5f;
+	const float Y = FeetScreen.Y + 8.f;
 	DrawRect(FLinearColor(0.f, 0.f, 0.f, 0.85f), X - 1.f, Y - 1.f, BarW + 2.f, BarH + 2.f);
-	DrawRect(FLinearColor(0.85f, 0.1f, 0.1f, 1.f), X, Y, BarW, BarH);
+	DrawRect(FLinearColor(0.22f, 0.08f, 0.3f, 1.f), X, Y, BarW, BarH);
 	DrawRect(FLinearColor(0.2f, 0.9f, 0.25f, 1.f), X, Y, BarW * Frac, BarH);
-
-	const FString Pct = FString::Printf(TEXT("%d%%"), FMath::CeilToInt(Frac * 100.f));
-	float PW = 0.f, PH = 0.f;
-	Canvas->TextSize(Font, Pct, PW, PH, 0.55f, 0.55f);
-	Canvas->DrawText(Font, Pct, Head.X - PW * 0.5f, Y + BarH + 3.f, 0.55f, 0.55f, Info);
 }
 
 void AMythHUD::DrawGroundItemLabels()
@@ -532,4 +535,37 @@ void AMythHUD::DrawStatusIcons()
 		DrawLabel(Hovered->Name, Right - IconSize - Gap - BarW - 8.f * Sc, HoverY + IconSize * 0.5f - 7.f * Sc,
 			Hovered->bDebuff ? FLinearColor(1.f, 0.45f, 0.45f) : FLinearColor(0.65f, 0.9f, 0.65f));
 	}
+}
+
+void AMythHUD::DrawSelfBars()
+{
+	// Barras do proprio jogador: HP (verde; amarela abaixo de 50%, vermelha abaixo de 25%) e SP (azul), ~60x4, sempre visiveis
+	const AMythPlayerController* PC = Cast<AMythPlayerController>(PlayerOwner);
+	const APawn* Pawn = PC ? PC->GetPawn() : nullptr;
+	const UMythStatsComponent* Stats = Pawn ? Pawn->FindComponentByClass<UMythStatsComponent>() : nullptr;
+	if (!Canvas || !Stats || Stats->GetMaxHP() <= 0)
+	{
+		return;
+	}
+	FVector Feet = Pawn->GetActorLocation();
+	if (const UCapsuleComponent* Cap = Pawn->FindComponentByClass<UCapsuleComponent>())
+	{
+		Feet.Z -= Cap->GetScaledCapsuleHalfHeight();
+	}
+	FVector2D Screen;
+	if (!PC->ProjectWorldLocationToScreen(Feet, Screen, false))
+	{
+		return;
+	}
+	constexpr float BarW = 60.f, BarH = 4.f;
+	const float X = Screen.X - BarW * 0.5f;
+	const float Y = Screen.Y + 6.f;
+	const float HpFrac = FMath::Clamp(static_cast<float>(Stats->GetHP()) / Stats->GetMaxHP(), 0.f, 1.f);
+	const float SpFrac = Stats->GetMaxSP() > 0 ? FMath::Clamp(static_cast<float>(Stats->GetSP()) / Stats->GetMaxSP(), 0.f, 1.f) : 0.f;
+	const FLinearColor HpColor = HpFrac < 0.25f ? FLinearColor(0.9f, 0.15f, 0.1f) : (HpFrac < 0.5f ? FLinearColor(0.95f, 0.8f, 0.15f) : FLinearColor(0.2f, 0.85f, 0.25f));
+	DrawRect(FLinearColor(0.f, 0.f, 0.f, 0.85f), X - 1.f, Y - 1.f, BarW + 2.f, BarH * 2.f + 3.f);
+	DrawRect(FLinearColor(0.15f, 0.15f, 0.18f, 1.f), X, Y, BarW, BarH);
+	DrawRect(HpColor, X, Y, BarW * HpFrac, BarH);
+	DrawRect(FLinearColor(0.15f, 0.15f, 0.18f, 1.f), X, Y + BarH + 1.f, BarW, BarH);
+	DrawRect(FLinearColor(0.2f, 0.45f, 0.95f, 1.f), X, Y + BarH + 1.f, BarW * SpFrac, BarH);
 }

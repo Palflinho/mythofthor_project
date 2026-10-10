@@ -69,6 +69,8 @@ private:
 	TArray<FStatusIcon> StatusIcons;
 
 	void DrawTargetRing();
+	/** Barras finas de HP (verde) e SP (azul) logo abaixo dos pes do proprio jogador (docs/ref/12, no mundo). */
+	void DrawSelfBars();
 	/** Nome dos itens no chao, na cor da raridade. */
 	void DrawGroundItemLabels();
 	void DrawCastBarsAndShouts();

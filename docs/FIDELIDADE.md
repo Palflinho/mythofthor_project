@@ -107,8 +107,8 @@ Hoje só 👤 o que o roadmap marcava como feito e testado; o resto está ⬜.
 | Tremor de tela (`FUNC quake`, 29 efeitos) | ✅ P2 | ⬜ | Feito em 2026-10-10: sacode a câmera na duração do efeito (50 a 200 ms), só se o efeito é a menos de 30 células do jogador; amplitude 15 uu (~10 px, do spec). Visto no log com o Martelo de Hammerfall; o balanço em si só você vê jogando. |
 | Flechas (sprite do projétil) | 🟡 P1 | ⬜ | Feito em 2026-10-10: efeito 2003 (`skel_archer_arrow.spr`, ponta apontando para o alvo) no ataque básico com arco (arma view 11) e nas skills que usam 2003/2004. O número de dano e a reação do alvo esperam a flecha chegar. **Tempo conferido só pelo roBrowser** (soma 192 ms ao attackMT do arco; o spec não diz quando a flecha sai): confirmar no OM. Monstros arqueiros (tabela `AttackEffect.PROJECTILE`) ainda não. |
 | Morte, teleporte, ressurreição | ❓ P2 | ⬜ | |
-| Ícones de status/buff com barra de duração | ❓ P1 | ⬜ | `status_icons.json` existe; conferir se a HUD mostra. |
-| Barra de cast sobre o personagem | ❓ P1 | ⬜ | |
+| Ícones de status/buff com barra de duração | ✅ P1 | ⬜ | Existem (`DrawStatusIcons`, `status_icons.json`); falta conferir posição, ordem e tooltip contra a pesquisa R2.8. |
+| Barra de cast sobre o personagem | ✅ P1 | ⬜ | Existe (`DrawCastBarsAndShouts`); conferir tamanho e posição contra a R2.8 e a interrupção. |
 
 ## 06 e 12 Janelas e HUD (`docs/ref/06`, `docs/ref/12`)
 
@@ -127,7 +127,7 @@ O HUD LATAM tem prioridade sobre o 06 (cliente 2008), por decisão sua. Listo as
 | Equipamento (slots, duplo clique desequipa) | ⚠️ P1 | ⬜ | Existe `Equip`; conferir 10 slots e o personagem no centro |
 | Status (6 atributos com +, derivados) | ⚠️ P1 | ⬜ | Existe; conferir "Base + Bônus" e todos os derivados |
 | Menu Esc e Configurações (abas, ON/OFF) | ⚠️ P2 | ⬜ | `MythRoGameMenu.cpp` existe; faltam as abas do print |
-| Barras de HP/SP sob o personagem | ❌ P1 | ⬜ | |
+| Barras de HP/SP sob o personagem | ✅ P1 | ⬜ | Feito em 2026-10-10 (`DrawSelfBars`): 60×4 sob os pés, HP verde/amarela/vermelha, SP azul. A barra do monstro atingido também foi para baixo dos pés (verde sobre roxo escuro), sem a porcentagem. |
 | Armazém Kafra | ❌ P1 | ⬜ | |
 | Loja de NPC (comprar/vender) | ❌ P1 | ⬜ | |
 | Janela de grupo, amigos, troca | ❌ P2 | ⬜ | |
