@@ -334,7 +334,13 @@ void UMythRoHUDWidget::BuildChat()
 	// Chat (baixo-esquerda): abas originais, area translucida com as linhas e o campo de digitacao
 	const float W = 320.f, H = 21.f + 98.f + 20.f;
 	UCanvasPanel* Win = MakeWindow(FVector2D(0.f, 1.f), FVector2D(0.f, 1.f), FVector2D(8.f, -8.f), FVector2D(W, H));
-	AddImage(Win, FMythRoUITextures::Get(Basic(TEXT("chat_tab_0"))), 0.f, 0.f);
+	// Abas: a textura chat_tab_0 do cliente traz os nomes em coreano; aqui sao desenhadas com o texto em portugues
+	AddColor(Win, ColWindowEdge, 0.f, 4.f, 74.f, 17.f);
+	AddColor(Win, ColWindow, 1.f, 5.f, 72.f, 16.f);
+	AddText(Win, 9.f, 6.f, 8, ColTitle, true)->SetText(FText::FromString(TEXT("Geral")));
+	AddColor(Win, ColWindowEdge, 76.f, 6.f, 74.f, 15.f);
+	AddColor(Win, FLinearColor(0.82f, 0.85f, 0.9f, 1.f), 77.f, 7.f, 72.f, 14.f);
+	AddText(Win, 85.f, 7.f, 8, ColText)->SetText(FText::FromString(TEXT("Batalha")));
 	AddColor(Win, ColChatBack, 0.f, 21.f, W, 98.f);
 
 	ChatLines = WidgetTree->ConstructWidget<UVerticalBox>();
@@ -381,6 +387,8 @@ void UMythRoHUDWidget::BuildAutoBattle()
 	UTextBlock* Hint = AddText(Win, 6.f, 52.f, 6, ColLabel);
 	Hint->SetText(FText::FromString(TEXT("Vigor diario: 3h  |  trava com peso >= 90%")));
 	MakeDraggable(Win, W, 17.f);
+	// O cliente do RO nao tem esta janela na tela: fica escondida ate a HUD nova dar um lugar para ela
+	Win->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 // ------------------------------------------------------------------------------------------------ dados
