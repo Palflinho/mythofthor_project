@@ -1,4 +1,4 @@
-status: em_andamento
+status: feito
 
 # 008: tabela completa skill → efeito + receita dos efeitos desenhados pelo executável (prioridade alta)
 

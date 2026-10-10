@@ -495,6 +495,103 @@ def main():
         1011: {"effect": 607, "sound": "effect/wink_charm", "element": "Neutral"}                    # DC_WINKCHARM
     }
     
+    # Mapeamento detalhado e auditado para as Transclasses
+    trans_class_map = {
+        # === Lord Knight (LK) ===
+        355: {"cast": 16, "effect": 367, "sound": "effect/aurablade", "element": "Neutral"},          # LK_AURABLADE
+        356: {"effect": 336, "sound": "effect/kyrie_guard", "element": "Neutral"},                    # LK_PARRYING
+        357: {"effect": 369, "sound": "effect/concentration", "element": "Neutral"},                  # LK_CONCENTRATION
+        358: {"element": "Neutral"},                                                                  # LK_TENSIONRELAX
+        359: {"effect": 368, "sound": "effect/berserk", "element": "Neutral"},                        # LK_BERSERK
+        360: {"effect": 368, "sound": "effect/berserk", "element": "Neutral"},                        # LK_FURY
+        397: {"cast": 339, "effect": 339, "hit": 80, "sound": "effect/spiral_pierce", "element": "Weapon"}, # LK_SPIRALPIERCE
+        398: {"cast": 399, "hit": 1, "sound": "effect/headcrush", "element": "Weapon"},              # LK_HEADCRUSH
+        399: {"cast": 400, "hit": 1, "sound": "effect/jointbeat", "element": "Weapon"},              # LK_JOINTBEAT
+
+        # === High Priest (HP) ===
+        361: {"effect": 440, "sound": "effect/assumptio", "element": "Holy"},                         # HP_ASSUMPTIO
+        362: {"ground": 374, "sound": "effect/basilica", "element": "Holy"},                          # HP_BASILICA
+        363: {"element": "Neutral"},                                                                  # HP_MEDITATIO
+        481: {"element": "Neutral"},                                                                  # HP_MANARECHARGE
+
+        # === High Wizard (HW) ===
+        364: {"effect": 217, "sound": "effect/souldrain", "element": "Neutral"},                      # HW_SOULDRAIN
+        365: {"effect": 380, "hit": 1, "sound": "effect/magiccrasher", "element": "Weapon"},          # HW_MAGICCRASHER
+        366: {"cast": 16, "effect": 402, "sound": "effect/amplification", "element": "Neutral"},     # HW_MAGICPOWER
+        400: {"effect": 401, "hit": 1, "sound": "effect/napalm_vulcan", "element": "Ghost"},          # HW_NAPALMVULCAN
+        483: {"effect": 223, "ground": 224, "sound": "effect/ganbantein", "element": "Neutral"},     # HW_GANBANTEIN
+        484: {"ground": 522, "sound": "effect/gravitation", "element": "Earth"},                      # HW_GRAVITATION
+
+        # === Paladin (PA) ===
+        367: {"effect": 365, "hit": 152, "sound": "effect/pressure", "element": "Holy"},             # PA_PRESSURE
+        368: {"effect": 366, "hit": 1, "sound": "effect/sacrifice", "element": "Neutral"},           # PA_SACRIFICE
+        369: {"effect": 370, "ground": 370, "sound": "effect/gospel", "element": "Holy"},             # PA_GOSPEL
+        480: {"effect": 2008, "hit": 1, "sound": "effect/shieldchain", "element": "Neutral"},         # PA_SHIELDCHAIN
+
+        # === Champion (CH) ===
+        370: {"hit": 376, "sound": "effect/palmpush", "element": "Weapon"},                           # CH_PALMSTRIKE
+        371: {"cast": 263, "effect": 377, "hit": 1, "sound": "effect/tigerfist", "element": "Weapon"}, # CH_TIGERFIST
+        372: {"effect": 512, "hit": 1, "sound": "effect/chaincrush", "element": "Weapon"},           # CH_CHAINCRUSH
+        401: {"cast": 402, "effect": 12, "sound": "effect/zen", "element": "Neutral"},                # CH_SOULCOLLECT
+
+        # === Professor (PF) ===
+        373: {"cast": 378, "effect": 383, "hit": 379, "sound": "effect/hpconversion", "element": "Neutral"}, # PF_HPCONVERSION
+        374: {"effect": 384, "hit": 385, "sound": "effect/soulchange", "element": "Neutral"},         # PF_SOULCHANGE
+        375: {"effect": 406, "sound": "effect/soulburn", "element": "Neutral"},                      # PF_SOULBURN
+        402: {"effect": 403, "sound": "effect/mindbreaker", "element": "Neutral"},                   # PF_MINDBREAKER
+        403: {"effect": 505, "sound": "effect/memorize", "element": "Neutral"},                      # PF_MEMORIZE
+        404: {"ground": 405, "sound": "effect/fogwall", "element": "Earth"},                          # PF_FOGWALL
+        405: {"ground": 404, "sound": "effect/spiderweb", "element": "Neutral"},                     # PF_SPIDERWEB
+        482: {"effect": 521, "sound": "effect/doublecasting", "element": "Neutral"},                  # PF_DOUBLECASTING
+
+        # === Assassin Cross (ASC) ===
+        376: {"element": "Neutral"},                                                                  # ASC_KATAR
+        377: {"element": "Neutral"},                                                                  # ASC_HALLUCINATION
+        378: {"effect": 493, "sound": "effect/edp", "element": "Poison"},                             # ASC_EDP
+        379: {"effect": 361, "hit": 1, "sound": "effect/souldestroyer", "element": "Weapon"},         # ASC_BREAKER
+        406: {"effect": 409, "hit": 1, "sound": "effect/meteorassault", "element": "Weapon"},         # ASC_METEORASSAULT
+        407: {"element": "Neutral"},                                                                  # ASC_CDP
+
+        # === Sniper (SN) ===
+        380: {"effect": 386, "sound": "effect/truesight", "element": "Neutral"},                      # SN_SIGHT
+        381: {"effect": 387, "hit": 1, "sound": "effect/falconassault", "element": "Neutral"},        # SN_FALCONASSAULT
+        382: {"cast": 16, "effect": 2003, "hit": 388, "sound": "effect/sharpshooting", "element": "Weapon"}, # SN_SHARPSHOOTING
+        383: {"effect": 389, "sound": "effect/windwalk", "element": "Neutral"},                      # SN_WINDWALK
+
+        # === Mastersmith / Whitesmith (WS) ===
+        384: {"effect": 390, "sound": "effect/meltdown", "element": "Neutral"},                      # WS_MELTDOWN
+        385: {"element": "Neutral"},                                                                  # WS_CREATECOIN
+        386: {"element": "Neutral"},                                                                  # WS_CREATENUGGET
+        387: {"effect": 391, "sound": "effect/cartboost", "element": "Neutral"},                     # WS_CARTBOOST
+        388: {"element": "Neutral"},                                                                  # WS_SYSTEMCREATE
+        477: {"element": "Neutral"},                                                                  # WS_WEAPONREFINE
+        485: {"effect": 518, "hit": 1, "sound": "effect/carttermination", "element": "Weapon"},      # WS_CARTTERMINATION
+        486: {"effect": 128, "sound": "effect/overthrust", "element": "Neutral"},                    # WS_OVERTHRUSTMAX
+
+        # === Stalker (ST) ===
+        389: {"cast": 501, "sound": "effect/chasewalk", "element": "Neutral"},                        # ST_CHASEWALK
+        390: {"effect": 392, "sound": "effect/rejectsword", "element": "Neutral"},                    # ST_REJECTSWORD
+        391: {"element": "Neutral"},                                                                  # ST_STEALBACKPACK
+        475: {"effect": 496, "sound": "effect/preserve", "element": "Neutral"},                      # ST_PRESERVE
+        476: {"effect": 495, "sound": "effect/fullstrip", "element": "Neutral"},                     # ST_FULLSTRIP
+
+        # === Creator (CR) ===
+        392: {"element": "Neutral"},                                                                  # CR_ALCHEMY
+        393: {"element": "Neutral"},                                                                  # CR_SYNTHESISPOTION
+        478: {"effect": 299, "sound": "_heal_effect", "element": "Neutral"},                         # CR_SLIMPITCHER
+        479: {"effect": 300, "sound": "effect/chemical_protection", "element": "Neutral"},          # CR_FULLPROTECTION
+        490: {"effect": 537, "hit": 49, "sound": "effect/acid_terror", "element": "Neutral"},         # CR_ACIDDEMONSTRATION
+        491: {"element": "Neutral"},                                                                  # CR_CULTIVATION
+
+        # === Clown & Gypsy (CG) ===
+        394: {"effect": 393, "hit": 1, "sound": "effect/arrowvulcan", "element": "Weapon"},          # CG_ARROWVULCAN
+        395: {"effect": 394, "ground": 394, "sound": "effect/moonlit", "element": "Neutral"},        # CG_MOONLIT
+        396: {"effect": 395, "hit": 396, "sound": "effect/marionette", "element": "Neutral"},        # CG_MARIONETTE
+        487: {"effect": 500, "sound": "effect/longingfreedom", "element": "Neutral"},                 # CG_LONGINGFREEDOM
+        488: {"effect": 517, "ground": 517, "sound": "effect/hermode", "element": "Neutral"},        # CG_HERMODE
+        489: {"effect": 500, "sound": "effect/tarotcard", "element": "Neutral"}                      # CG_TAROTCARD
+    }
+    
     # Aplica na tabela de skills
     for sid, sdata in first_class_map.items():
         sid_str = str(sid)
@@ -503,6 +600,12 @@ def main():
         skills_out[sid_str].update(sdata)
 
     for sid, sdata in second_class_map.items():
+        sid_str = str(sid)
+        if sid_str not in skills_out:
+            skills_out[sid_str] = {}
+        skills_out[sid_str].update(sdata)
+
+    for sid, sdata in trans_class_map.items():
         sid_str = str(sid)
         if sid_str not in skills_out:
             skills_out[sid_str] = {}

@@ -683,8 +683,10 @@ def add_navigation(center, extent):
         warn('RecastNavMesh nao foi criado: o Point & Click cai no movimento em linha reta')
 
 
-def run():
-    args = parse_args(sys.argv[1:])
+def run(argv=None):
+    if argv is None:
+        argv = sys.argv[1:]
+    args = parse_args(argv)
     obj_path = args['obj'].replace(chr(92), '/')
     name, dest, scale = args['name'], args['dest'], args['scale']
     base_dir = os.path.dirname(obj_path)
@@ -792,11 +794,12 @@ def run():
     log('PRONTO: %s' % level_path)
 
 
-try:
-    run()
-except SystemExit as e:
-    warn(str(e))
-except Exception:  # noqa: BLE001
-    import traceback
-    warn('ERRO NO IMPORTADOR:' + chr(10) + traceback.format_exc())
-    raise
+if __name__ == '__main__':
+    try:
+        run()
+    except SystemExit as e:
+        warn(str(e))
+    except Exception:  # noqa: BLE001
+        import traceback
+        warn('ERRO NO IMPORTADOR:' + chr(10) + traceback.format_exc())
+        raise

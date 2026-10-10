@@ -1,4 +1,4 @@
-status: pendente
+status: feito
 
 # 009: mapas para upar + troca de classe (Fase 3 do docs/ROADMAP.md, "jogável mínimo")
 
