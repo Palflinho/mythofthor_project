@@ -32,3 +32,6 @@ venv/
 db_data/
 rathenadb/
 *.grf
+
+coord/build.lock
+Intermediate_old_hd/

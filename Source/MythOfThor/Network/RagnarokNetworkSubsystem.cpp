@@ -49,7 +49,47 @@ void URagnarokNetworkSubsystem::Tick(float DeltaTime)
 	{
 		FlushPendingSend();
 		ProcessIncomingData();
+		// Como o cliente original: um pacote de manutencao a cada 12 s no char-server e no map-server
+		if (CurrentSocket && FPlatformTime::Seconds() - LastKeepAliveTime >= 12.0)
+		{
+			SendKeepAlive();
+		}
+		// Servidor fechou a conexao (timeout, kick): avisa em vez de seguir "enviando" para um socket morto
+		if (CurrentSocket && CurrentSocket->GetConnectionState() == SCS_ConnectionError)
+		{
+			Disconnect();
+		}
 	}
+}
+
+void URagnarokNetworkSubsystem::SendKeepAlive()
+{
+	LastKeepAliveTime = FPlatformTime::Seconds();
+	#pragma pack(push, 1)
+	struct FKeepAlive
+	{
+		uint16 PacketID;
+		uint32 Value;
+	};
+	#pragma pack(pop)
+	FKeepAlive Packet;
+	if (CurrentState == ERagnarokNetworkState::ConnectedMap)
+	{
+		// CZ_REQUEST_TIME (clif_parse_TickSend 0x0363 no PACKETVER 20211103): tick do cliente
+		Packet.PacketID = 0x0363;
+		Packet.Value = FPlatformTime::Cycles();
+	}
+	else if (CurrentState == ERagnarokNetworkState::ConnectedChar)
+	{
+		// CH_PING (0x0187): AID
+		Packet.PacketID = 0x0187;
+		Packet.Value = SavedAccountID;
+	}
+	else
+	{
+		return;
+	}
+	SendData(reinterpret_cast<const uint8*>(&Packet), sizeof(Packet));
 }
 
 bool URagnarokNetworkSubsystem::ConnectToPort(const FString& Host, int32 Port, ERagnarokNetworkState NewState)

@@ -657,6 +657,10 @@ private:
 	TArray<uint8> ReceiveBuffer;
 	ERagnarokNetworkState CurrentState;
 
+	/** Ultimo "ping" de manutencao (o rAthena derruba a sessao com 60 s sem receber nada: stall_time) */
+	double LastKeepAliveTime = 0.0;
+	void SendKeepAlive();
+
 	FString SavedHost;
 	uint32 SavedAccountID;
 	uint32 SavedLoginID1;

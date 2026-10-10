@@ -23,7 +23,7 @@ namespace
 	const FLinearColor MenuLink(0.12f, 0.3f, 0.65f);
 	const TCHAR* MythGfxSection = TEXT("Myth.Graphics");
 
-	FString Basic(const TCHAR* Name) { return FString::Printf(TEXT("basic_interface/%s.bmp"), Name); }
+	FString MenuBasic(const TCHAR* Name) { return FString::Printf(TEXT("basic_interface/%s.bmp"), Name); }
 
 	void SetCVar(const TCHAR* Name, int32 Value)
 	{
@@ -151,8 +151,8 @@ void UMythRoHUDWidget::BuildGameMenu()
 	GfxTabOther = AddText(GraphicsWindow, 110.f, 22.f, 8, MenuLink);
 	GfxTabOther->SetText(FText::FromString(TEXT("Som e interface")));
 	AddText(GraphicsWindow, 14.f, 22.f, 8, MenuText)->SetText(FText::FromString(TEXT("[ Gráficos ]")));
-	UTexture2D* Left = FMythRoUITextures::Get(Basic(TEXT("arw_left")));
-	UTexture2D* Right = FMythRoUITextures::Get(Basic(TEXT("arw_right")));
+	UTexture2D* Left = FMythRoUITextures::Get(MenuBasic(TEXT("arw_left")));
+	UTexture2D* Right = FMythRoUITextures::Get(MenuBasic(TEXT("arw_right")));
 	for (int32 i = 0; i < GfxRowCount; ++i)
 	{
 		const float Y = 48.f + i * 24.f;

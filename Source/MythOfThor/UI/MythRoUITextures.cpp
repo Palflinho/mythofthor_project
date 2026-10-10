@@ -157,12 +157,25 @@ FSlateFontInfo FMythRoUITextures::RoFont(int32 Size, bool bBold)
 	TSharedPtr<const FCompositeFont>& Font = Fonts[bBold ? 1 : 0];
 	if (!Font.IsValid())
 	{
-		const FString Path = FPaths::Combine(FPaths::ProjectContentDir(), TEXT("Myth"), TEXT("Fonts"), bBold ? TEXT("SCDream6.otf") : TEXT("SCDream4.otf"));
-		if (!FPaths::FileExists(Path))
+		// A SCDream do cliente so tem o latim basico (sem a, c, e acentuados): o texto em portugues sai na Roboto
+		// da engine e o coreano (nomes de recurso, NPCs sem traducao) na SCDream
+		const FString Latin = FPaths::Combine(FPaths::EngineContentDir(), TEXT("Slate"), TEXT("Fonts"), bBold ? TEXT("Roboto-Bold.ttf") : TEXT("Roboto-Regular.ttf"));
+		const FString Hangul = FPaths::Combine(FPaths::ProjectContentDir(), TEXT("Myth"), TEXT("Fonts"), bBold ? TEXT("SCDream6.otf") : TEXT("SCDream4.otf"));
+		if (!FPaths::FileExists(Latin))
 		{
 			return FCoreStyle::GetDefaultFontStyle(bBold ? "Bold" : "Regular", Size);
 		}
-		Font = MakeShared<FStandaloneCompositeFont>(NAME_None, Path, EFontHinting::Default, EFontLoadingPolicy::LazyLoad);
+		TSharedRef<FCompositeFont> Composite = MakeShared<FCompositeFont>();
+		Composite->DefaultTypeface.AppendFont(TEXT("Regular"), Latin, EFontHinting::Default, EFontLoadingPolicy::LazyLoad);
+		if (FPaths::FileExists(Hangul))
+		{
+			FCompositeSubFont& Sub = Composite->SubTypefaces.AddDefaulted_GetRef();
+			Sub.Typeface.AppendFont(TEXT("Regular"), Hangul, EFontHinting::Default, EFontLoadingPolicy::LazyLoad);
+			Sub.CharacterRanges.Add(FInt32Range(FInt32Range::BoundsType::Inclusive(0x1100), FInt32Range::BoundsType::Inclusive(0x11FF)));
+			Sub.CharacterRanges.Add(FInt32Range(FInt32Range::BoundsType::Inclusive(0x3130), FInt32Range::BoundsType::Inclusive(0x318F)));
+			Sub.CharacterRanges.Add(FInt32Range(FInt32Range::BoundsType::Inclusive(0xAC00), FInt32Range::BoundsType::Inclusive(0xD7A3)));
+		}
+		Font = Composite;
 	}
 	return FSlateFontInfo(Font, static_cast<float>(Size));
 }
