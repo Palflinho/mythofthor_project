@@ -1,0 +1,1215 @@
+============================================================
+EFFECT ID: 1
+============================================================
+{
+			alphaMax: 12,
+			angleRand: [0, 35],
+			attachedEntity: false,
+			duration: 250,
+			durationRand: [200, 350],
+			fadeOut: true,
+			fade: true,
+			file: 'effect/lens1.tga',
+			sizeEndX: 1,
+			sizeRandEndY: [250, 300],
+			sizeRandStartX: [25, 40],
+			sizeRandStartY: [10, 10],
+			circlePattern: true,
+			circleOuterSizeRand: [5, 6],
+			circleInnerSize: 2.2,
+			type: '2D',
+			overlay: true,
+			zIndex: 1,
+			wav: 'effect/ef_hit2'
+		},
+		{
+			alphaMax: 12,
+			angleRand: [50, 85],
+			attachedEntity: false,
+			duration: 250,
+			durationRand: [200, 350],
+			fadeOut: true,
+			fade: true,
+			file: 'effect/lens2.tga',
+			sizeEndX: 1,
+			sizeRandEndY: [250, 300],
+			sizeRandStartX: [25, 40],
+			sizeRandStartY: [10, 10],
+			circlePattern: true,
+			circleOuterSizeRand: [5, 6],
+			circleInnerSize: 2.2,
+			type: '2D',
+			overlay: true,
+			zIndex: 1
+		},
+		{
+			alphaMax: 12,
+			angleRand: [100, 135],
+			attachedEntity: false,
+			duration: 250,
+			durationRand: [200, 350],
+			fadeOut: true,
+			fade: true,
+			file: 'effect/lens1.tga',
+			sizeEndX: 1,
+			sizeRandEndY: [250, 300],
+			sizeRandStartX: [25, 40],
+			sizeRandStartY: [10, 10],
+			circlePattern: true,
+			circleOuterSizeRand: [5, 6],
+			circleInnerSize: 2.2,
+			type: '2D',
+			overlay: true,
+			zIndex: 1
+		},
+		{
+			alphaMax: 12,
+			angleRand: [150, 185],
+			attachedEntity: false,
+			duration: 250,
+			durationRand: [200, 350],
+			fadeOut: true,
+			fade: true,
+			file: 'effect/lens2.tga',
+			sizeEndX: 1,
+			sizeRandEndY: [250, 300],
+			sizeRandStartX: [25, 40],
+			sizeRandStartY: [10, 10],
+			circlePattern: true,
+			circleOuterSizeRand: [5, 6],
+			circleInnerSize: 2.2,
+			type: '2D',
+			overlay: true,
+			zIndex: 1
+		},
+		{
+			alphaMax: 12,
+			angleRand: [200, 235],
+			attachedEntity: false,
+			duration: 250,
+			durationRand: [200, 350],
+			fadeOut: true,
+			fade: true,
+			file: 'effect/lens1.tga',
+			sizeEndX: 1,
+			sizeRandEndY: [250, 300],
+			sizeRandStartX: [25, 40],
+			sizeRandStartY: [10, 10],
+			circlePattern: true,
+			circleOuterSizeRand: [5, 6],
+			circleInnerSize: 2.2,
+			type: '2D',
+			overlay: true,
+			zIndex: 1
+		},
+		{
+			alphaMax: 12,
+			angleRand: [255, 290],
+			attachedEntity: false,
+			duration: 250,
+			durationRand: [200, 350],
+			fadeOut: true,
+			fade: true,
+			file: 'effect/lens2.tga',
+			sizeEndX: 1,
+			sizeRandEndY: [250, 300],
+			sizeRandStartX: [25, 40],
+			sizeRandStartY: [10, 10],
+			circlePattern: true,
+			circleOuterSizeRand: [5, 6],
+			circleInnerSize: 2.2,
+			type: '2D',
+			overlay: true,
+			zIndex: 1
+		},
+		{
+			alphaMax: 12,
+			angleRand: [300, 335],
+			attachedEntity: false,
+			duration: 250,
+			durationRand: [200, 350],
+			fadeOut: true,
+			fade: true,
+			file: 'effect/lens1.tga',
+			sizeEndX: 1,
+			sizeRandEndY: [250, 300],
+			sizeRandStartX: [25, 40],
+			sizeRandStartY: [10, 10],
+			circlePattern: true,
+			circleOuterSizeRand: [5, 6],
+			circleInnerSize: 2.2,
+			type: '2D',
+			overlay: true,
+			zIndex: 1
+		},
+		{
+			alphaMax: 12,
+			angleRand: [340, 360],
+			attachedEntity: false,
+			duration: 250,
+			durationRand: [200, 350],
+			fadeOut: true,
+			fade: true,
+			file: 'effect/lens2.tga',
+			sizeEndX: 1,
+			sizeRandEndY: [250, 300],
+			sizeRandStartX: [25, 40],
+			sizeRandStartY: [10, 10],
+			circlePattern: true,
+			circleOuterSizeRand: [5, 6],
+			circleInnerSize: 2.2,
+			type: '2D',
+			overlay: true,
+			zIndex: 1
+		}
+
+
+============================================================
+EFFECT ID: 10
+============================================================
+{
+			//EF_COIN	Mammonite
+			type: 'STR',
+			file: 'maemor',
+			min: 'memor_min',
+			wav: 'effect/ef_coin2',
+			attachedEntity: true
+		}
+
+
+============================================================
+EFFECT ID: 11
+============================================================
+{
+			//EF_ENDURE	Endure
+			type: '3D',
+			alphaMax: 1,
+			attachedEntity: true,
+			duration: 1000,
+			fadeIn: true,
+			fadeOut: true,
+			file: 'effect/endure.tga',
+			posz: 2,
+			sizeEnd: 70,
+			sizeSmooth: true,
+			sizeStart: 200,
+			wav: 'effect/ef_endure',
+			zIndex: 10
+		}
+
+
+============================================================
+EFFECT ID: 15
+============================================================
+{
+			//soul strike caster	//EF_SOULSTRIKE	Soul Strike
+			alphaMax: 1,
+			attachedEntity: true,
+			blue: 1,
+			duration: 200,
+			delayLate: 250,
+			//duplicate: -1,
+			fadeIn: true,
+			fadeOut: true,
+			file: 'effect/pok3.tga',
+			toSrc: true,
+			green: 1,
+			poszEnd: 1,
+			poszSmooth: true,
+			poszStartRand: 5,
+			poszStartRandMiddle: 6,
+			red: 1,
+			size: 50,
+			timeBetweenDupli: 150,
+			type: '3D',
+			wav: 'effect/ef_soulstrike',
+			zIndex: 1
+		},
+		{
+			type: '3D',
+			duration: 250,
+			duplicate: 5,
+			timeBetweenDupli: 20,
+			absoluteSpriteName: 'data/sprite/\xc0\xcc\xc6\xd1\xc6\xae/particle1',
+			playSprite: true,
+			toSrc: true,
+			rotateToTarget: true,
+			sizeStart: 100.0,
+			sizeEnd: 500.0,
+			zOffsetStart: 3,
+			arc: 4.0,
+			retreat: 3.0,
+			soulStrikePattern: true
+		}
+
+
+============================================================
+EFFECT ID: 16
+============================================================
+{
+			//hide and monster body relocation sound	//EF_BASH	Hide
+			type: 'CYLINDER',
+			textureName: 'alpha_down',
+			alphaMax: 0.6,
+			duration: 1000,
+			rotate: true,
+			fade: true,
+			angleX: -90,
+			fixedPerspective: true,
+			posZ: 1.5,
+			height: 0,
+			bottomSize: 0.1,
+			topSize: 2,
+			animation: 2,
+			zIndex: 1,
+			wav: 'effect/ef_bash',
+			attachedEntity: true
+		},
+		{
+			type: 'CYLINDER',
+			textureName: 'alpha_center',
+			alphaMax: 0.6,
+			duration: 1000,
+			duplicate: 10,
+			timeBetweenDupli: 0,
+			totalCircleSides: 30,
+			circleSides: 1,
+			rotate: true,
+			fade: true,
+			angleX: -90,
+			angleZRandom: 360,
+			fixedPerspective: true,
+			posZ: 1.5,
+			height: 0,
+			bottomSize: 0.01,
+			topSize: 2.5,
+			animation: 2,
+			zIndex: 1.1,
+			attachedEntity: true
+		},
+		{
+			type: 'CYLINDER',
+			textureName: 'alpha_center',
+			alphaMax: 0.6,
+			duration: 1000,
+			duplicate: 8,
+			timeBetweenDupli: 0,
+			totalCircleSides: 30,
+			circleSides: 1,
+			rotate: true,
+			fade: true,
+			angleX: -90,
+			angleZRandom: 360,
+			fixedPerspective: true,
+			posZ: 1.5,
+			height: 0,
+			bottomSize: 0.01,
+			topSize: 4,
+			animation: 2,
+			zIndex: 1.2,
+			attachedEntity: true
+		}
+
+
+============================================================
+EFFECT ID: 17
+============================================================
+{
+			//EF_MAGNUMBREAK	Magnum Break
+			type: 'CYLINDER',
+			alphaMax: 0.7,
+			animation: 4,
+			attachedEntity: true,
+			bottomSize: 4,
+			duration: 300,
+			fade: true,
+			height: 1,
+			rotate: true,
+			textureName: 'ring_yellow',
+			topSize: 6
+		},
+		{
+			type: 'CYLINDER',
+			alphaMax: 0.6,
+			animation: 4,
+			attachedEntity: true,
+			bottomSize: 4,
+			duration: 300,
+			fade: true,
+			height: 4,
+			rotate: true,
+			textureName: '\xb4\xeb\xc6\xf8\xb9\xdf', //Â´Ã«ÃÃ¸Â¹Ã
+			topSize: 1,
+			wav: 'effect/ef_magnumbreak'
+		}
+
+
+============================================================
+EFFECT ID: quake_magnum
+============================================================
+[NAO ENCONTRADO NO EFFECT_TABLE]
+
+
+============================================================
+EFFECT ID: 18
+============================================================
+{
+			//EF_STEAL	Steal
+			alphaMax: 1,
+			attachedEntity: false,
+			red: 1,
+			green: 1,
+			blue: 0.85,
+			duration: 500,
+			duplicate: 7,
+			timeBetweenDupli: 0,
+			fadeOut: true,
+			file: 'effect/pok1.tga',
+			posxEndRand: 3.5,
+			posyEndRand: 3.5,
+			poszEndRand: 1,
+			poszEndRandMiddle: 3,
+			sizeEnd: 10,
+			sizeStart: 200,
+			type: '3D',
+			zIndex: 10
+		},
+		{
+			wav: 'effect/ef_steal'
+		}
+
+
+============================================================
+EFFECT ID: 20
+============================================================
+{
+			//EF_PATTACK	Envenom/Poison
+			alphaMax: 1,
+			attachedEntity: true,
+			blue: 1,
+			duration: 1000,
+			duplicate: 10,
+			fadeIn: true,
+			fadeOut: true,
+			file: 'effect/pok1.tga',
+			green: 0.7,
+			posxRand: 1,
+			posyRand: 1,
+			poszEnd: 5,
+			poszStart: 0,
+			red: 1,
+			size: 100,
+			sizeRand: 20,
+			type: '3D',
+			zIndex: 1
+		},
+		{
+			attachedEntity: true,
+			wav: 'effect/ef_detoxication' //wav: 'effect/assasin_enchantpoison',
+		}
+
+
+============================================================
+EFFECT ID: 21
+============================================================
+{
+			//EF_DETOXICATION	Detoxify
+			alphaMax: 1,
+			attachedEntity: true,
+			blue: 1,
+			duration: 1000,
+			duplicate: 10,
+			fadeIn: true,
+			fadeOut: true,
+			file: 'effect/pok1.tga',
+			green: 1,
+			posxRand: 1,
+			posyRand: 1,
+			poszEnd: 5,
+			poszStart: 0,
+			red: 0.7,
+			size: 100,
+			sizeRand: 20,
+			type: '3D',
+			zIndex: 1
+		},
+		{
+			attachedEntity: true,
+			wav: 'effect/ef_detoxication' //wav: 'effect/assasin_enchantpoison',
+		}
+
+
+============================================================
+EFFECT ID: 23
+============================================================
+{
+			//EF_STONECURSE	Stone Curse
+			type: 'STR',
+			file: 'stonecurse',
+			attachedEntity: true
+		}
+
+
+============================================================
+EFFECT ID: 24
+============================================================
+{
+			//fireball caster effect (on target effect 49:)	//EF_FIREBALL	Fire Ball
+			type: '3D',
+			alphaMax: 0.2,
+			alphaMaxDelta: 0.2,
+			attachedEntity: true,
+			duration: 250,
+			delayOffset: 160,
+			delayOffsetDelta: -40,
+			spriteName: 'fireball',
+			playSprite: true,
+			duplicate: 5,
+			timeBetweenDupli: 0,
+			toSrc: true,
+			rotateToTarget: true,
+			rotateWithCamera: true,
+			zOffset: 2,
+			size: 200,
+			zIndex: 1
+		},
+		{
+			wav: 'effect/ef_fireball'
+		}
+
+
+============================================================
+EFFECT ID: 25
+============================================================
+{
+			//EF_FIREWALL	Fire Wall
+			type: 'STR',
+			file: 'firewall%d',
+			rand: [1, 2],
+			attachedEntity: false
+		},
+		{
+			wav: 'effect/ef_firewall'
+		}
+
+
+============================================================
+EFFECT ID: 27
+============================================================
+{
+			//EF_FROSTDIVER	Frost Diver (ice spikes traveling from caster to target)
+			type: 'TRAIL',
+			attachedEntity: false,
+			duration: 2500,
+			speed: 24,
+			interval: 17,
+			stopAtTarget: true,
+			overshoot: 2,
+			spread: [0.1, 0.3],
+			spawn: [
+				{
+					type: 'QuadHorn',
+					textureFile: 'effect/ice.tga',
+					attachedEntity: false,
+					duration: 670,
+					height: [0.2, 1.8],
+					offsetX: 0,
+					offsetY: 0,
+					offsetZ: 0,
+					bottomSize: [0.06, 0.22],
+					blendMode: 8,
+					rotateX: [-15, 15],
+					rotateY: [0, 360],
+					color: [1.0, 1.0, 1.0, 1.0],
+					animation: 4,
+					animationSpeed: 330,
+					riseDistance: 2.0,
+					fadeOut: 170
+				}
+			]
+		}
+
+
+============================================================
+EFFECT ID: 28
+============================================================
+{
+			//Frost Diver target hit	//EF_FROSTDIVER2	Frost Diver (Hitting)
+			attachedEntity: true,
+			file: 'freeze', //effect/ice.tga
+			type: 'STR',
+			wav: 'effect/ef_frostdiver2'
+		}
+
+
+============================================================
+EFFECT ID: 29
+============================================================
+{
+			//EF_LIGHTBOLT	Lightning Bolt
+			attachedEntity: true,
+			duplicate: 1,
+			file: 'lightning',
+			type: 'STR'
+		},
+		{
+			attachedEntity: true,
+			file: 'windhit%d',
+			rand: [1, 3],
+			type: 'STR'
+		}
+
+
+============================================================
+EFFECT ID: 30
+============================================================
+{
+			//EF_THUNDERSTORM	Thunder Storm
+			type: 'STR',
+			file: 'thunderstorm',
+			wav: 'effect/magician_thunderstorm',
+			attachedEntity: false
+		}
+
+
+============================================================
+EFFECT ID: 37
+============================================================
+{
+			//EF_INCAGILITY	AGI Up
+			alphaMax: 1,
+			attachedEntity: true,
+			duration: 1000,
+			delayLate: 500,
+			duplicate: 7,
+			fadeOut: true,
+			file: 'effect/ac_center2.tga',
+			posxRand: 1.5,
+			posyRand: 1,
+			poszEndRand: 1,
+			poszEndRandMiddle: 6,
+			poszStartRand: 1,
+			poszStartRandMiddle: 1,
+			sizeRandY: 15,
+			sizeRandYMiddle: 45,
+			sizeX: 2.5,
+			type: '3D',
+			zIndex: 0
+		},
+		{
+			alphaMax: 0.75,
+			attachedEntity: true,
+			duration: 1000,
+			delayOffset: 400,
+			duplicate: 3,
+			fadeOut: true,
+			file: 'effect/ac_center2.tga',
+			posxRand: 1.5,
+			posyRand: 1,
+			poszEndRand: 1,
+			poszEndRandMiddle: 6,
+			poszStartRand: 1,
+			poszStartRandMiddle: 1,
+			sizeRandY: 15,
+			sizeRandYMiddle: 45,
+			sizeX: 2.5,
+			type: '3D',
+			zIndex: 0
+		},
+		{
+			alphaMax: 1,
+			attachedEntity: true,
+			duration: 1000,
+			duplicate: 10,
+			fadeOut: true,
+			file: 'effect/ac_center2.tga',
+			posxRand: 1.5,
+			posyRand: 1,
+			poszEndRand: 1,
+			poszEndRandMiddle: 6,
+			poszStartRand: 1,
+			poszStartRandMiddle: 1,
+			sizeRandY: 15,
+			sizeRandYMiddle: 45,
+			sizeX: 2.5,
+			type: '3D',
+			zIndex: 0
+		},
+		{
+			alphaMax: 1,
+			attachedEntity: true,
+			duration: 1000,
+			fadeIn: true,
+			fadeOut: true,
+			file: 'effect/agi_up.bmp',
+			poszEnd: 3,
+			poszStart: 0.4,
+			sizeEnd: 100,
+			sizeSmooth: true,
+			sizeStart: 100,
+			sizeY: 45,
+			type: '3D',
+			wav: 'effect/ef_incagility',
+			overlay: true,
+			zIndex: 10
+		}
+
+
+============================================================
+EFFECT ID: 38
+============================================================
+{
+			//EF_DECAGILITY	AGI Down
+			alphaMax: 1,
+			attachedEntity: true,
+			duration: 1000,
+			duplicate: 20,
+			fadeOut: true,
+			file: 'effect/ac_center2.tga',
+			posxRand: 1.5,
+			posyRand: 1,
+			poszEndRand: 1,
+			poszEndRandMiddle: 1,
+			poszStartRand: 1,
+			poszStartRandMiddle: 6,
+			sizeRandY: 15,
+			sizeRandYMiddle: 45,
+			sizeX: 2.5,
+			type: '3D',
+			zIndex: 0
+		},
+		{
+			alphaMax: 1,
+			attachedEntity: true,
+			duration: 1000,
+			fadeIn: true,
+			fadeOut: true,
+			file: 'effect/slow.bmp',
+			poszEnd: 0.4,
+			poszStart: 2.8,
+			sizeEnd: 100,
+			sizeSmooth: true,
+			sizeStart: 100,
+			sizeY: 45,
+			type: '3D',
+			wav: 'effect/ef_decagility',
+			zIndex: 10
+		}
+
+
+============================================================
+EFFECT ID: 39
+============================================================
+{
+			//EF_AQUA	Aqua Benedicta
+			type: 'SPR',
+			file: '\xbc\xba\xbc\xf6\xb6\xdf\xb1\xe2',
+			wav: 'effect/ef_aqua',
+			head: true,
+			attachedEntity: true
+		}
+
+
+============================================================
+EFFECT ID: 40
+============================================================
+{
+			//EF_SIGNUM	Signum Crucis
+			type: 'STR',
+			file: 'cross',
+			wav: 'effect/ef_signum',
+			attachedEntity: true
+		}
+
+
+============================================================
+EFFECT ID: 41
+============================================================
+{
+			//EF_ANGELUS	Angelus
+			type: 'STR',
+			file: 'angelus',
+			wav: 'effect/ef_angelus',
+			min: 'jong_mini',
+			head: true,
+			attachedEntity: true
+		}
+
+
+============================================================
+EFFECT ID: 42
+============================================================
+{
+			//EF_BLESSING	Blessing
+			type: 'SPR',
+			attachedEntity: true,
+			delayFrame: 30,
+			file: '\xc3\xe0\xba\xb9',
+			frame: 0,
+			repeat: true,
+			duration: 1500,
+			stackable: true,
+			head: true,
+			yOffset: -120
+		},
+		{
+			alphaMax: 1,
+			attachedEntity: true,
+			duration: 1200,
+			delayOffset: 300,
+			duplicate: 6,
+			fadeIn: true,
+			fadeOut: true,
+			posxRand: 1.2,
+			posyRand: 1,
+			poszEndRand: 0.5,
+			poszEndRandMiddle: 1,
+			poszStartRand: 2,
+			poszStartRandMiddle: 5.5,
+			size: 50,
+			sparkling: true,
+			sparkNumber: 2,
+			spriteName: 'particle6',
+			timeBetweenDupli: 0,
+			type: '3D',
+			zIndex: 1
+		},
+		{
+			alphaMax: 1,
+			attachedEntity: true,
+			duration: 1200,
+			delayOffset: 400,
+			duplicate: 6,
+			fadeIn: true,
+			fadeOut: true,
+			posxRand: 1.4,
+			posyRand: 1.1,
+			poszEndRand: 0.5,
+			poszEndRandMiddle: 1,
+			poszStartRand: 2,
+			poszStartRandMiddle: 5.5,
+			size: 50,
+			spriteName: 'particle6',
+			timeBetweenDupli: 0,
+			type: '3D',
+			zIndex: 1
+		},
+		{
+			alphaMax: 0.3,
+			attachedEntity: false,
+			blendMode: 2,
+			blue: 1,
+			duration: 2500,
+			fadeIn: true,
+			fadeOut: true,
+			file: 'effect/pok2.tga',
+			green: 0.75,
+			posx: 0,
+			posy: 0,
+			posz: 0,
+			red: 0.1,
+			size: 140,
+			type: '3D',
+			wav: 'effect/ef_blessing',
+			zIndex: 10
+		}
+
+
+============================================================
+EFFECT ID: 49
+============================================================
+{
+			//EF_FIREHIT	Firebolt/Wall Hits
+			type: 'STR',
+			file: 'firehit%d',
+			wav: 'effect/ef_firehit',
+			rand: [1, 3],
+			attachedEntity: true
+		}
+
+
+============================================================
+EFFECT ID: 51
+============================================================
+{
+			// water hit	//EF_COLDHIT	Ice Elemental Hit
+			wav: '_hit_fist%d',
+			rand: [3, 4],
+			attachedEntity: true
+		} /*, {
+			type: '2D',
+			alphaMax: 1,
+			angle: 0,
+			angleDelta: 40,
+			attachedEntity: false,
+			duration: 140,
+			duplicates: 9,
+			fadeOut: true,
+			file: 'effect/ice.tga',
+			offsetxEnd: 3,
+			offsetxStart: 0.5,
+			size: 100,
+			timeBetweenDupli: 0
+		}*/
+
+
+============================================================
+EFFECT ID: 52
+============================================================
+{
+			//EF_WINDHIT	Wind Elemental Hit
+			type: 'STR',
+			file: 'windhit%d',
+			wav: '_hit_fist%d',
+			rand: [1, 3],
+			attachedEntity: true
+		}
+
+
+============================================================
+EFFECT ID: 66
+============================================================
+{
+			//EF_CURE	Cure
+			type: 'STR',
+			file: 'cure',
+			wav: 'effect/acolyte_cure',
+			min: 'cure_min',
+			attachedEntity: true
+		}
+
+
+============================================================
+EFFECT ID: 67
+============================================================
+{
+			//EF_PROVOKE	Provoke
+			type: 'STR',
+			file: 'provoke',
+			wav: 'effect/swordman_provoke',
+			attachedEntity: true
+		}
+
+
+============================================================
+EFFECT ID: 141
+============================================================
+{
+			//EF_PNEUMA	Pneuma
+			type: 'STR',
+			file: 'pneuma%d',
+			rand: [1, 3],
+			attachedEntity: false
+		}
+
+
+============================================================
+EFFECT ID: 152
+============================================================
+{
+			//turn undead hit on targer	//EF_HOLYHIT	Turn Undead
+			type: 'STR',
+			file: 'holyhit',
+			attachedEntity: true
+		}
+
+
+============================================================
+EFFECT ID: 153
+============================================================
+{
+			//EF_CONCENTRATION	Increase Concentration
+			type: 'STR',
+			file: 'concentration',
+			wav: 'effect/ac_concentration',
+			attachedEntity: true
+		}
+
+
+============================================================
+EFFECT ID: 169
+============================================================
+{
+			//EF_ENERGYCOAT	Energy Coat Animation
+			type: 'STR',
+			file: 'energycoat',
+			attachedEntity: true
+		}
+
+
+============================================================
+EFFECT ID: 170
+============================================================
+{
+			//EF_CARTREVOLUTION	Cart Revolution
+			type: 'STR',
+			file: 'cartrevolution',
+			wav: 'effect/ef_magnumbreak',
+			attachedEntity: true
+		}
+
+
+============================================================
+EFFECT ID: 308
+============================================================
+{
+			//EF_THROWITEM3	   Throw Stone
+			type: '3D',
+			alphaMax: 1,
+			angle: 180,
+			attachedEntity: true,
+			duration: 200,
+			fadeIn: true,
+			fadeOut: true,
+			file: '\xc0\xaf\xc0\xfa\xc0\xce\xc5\xcd\xc6\xe4\xc0\xcc\xbd\xba/item/\xb5\xb9.bmp',
+			toSrc: true,
+			rotateToTarget: true,
+			rotateWithCamera: true,
+			rotate: true,
+			nbOfRotation: 0.5,
+			size: 20,
+			zOffset: 1,
+			zIndex: 1
+		}
+
+
+============================================================
+EFFECT ID: 309
+============================================================
+{
+			//EF_FIRSTAID	   First Aid
+			type: '2D',
+			alphaMax: 0.2,
+			blendMode: 2,
+			file: 'effect/pikapika2.bmp',
+			fadeOut: true,
+			duration: 1000,
+			size: 100,
+			posz: 2,
+			wav: '_heal_effect'
+		}
+
+
+============================================================
+EFFECT ID: 310
+============================================================
+[NAO ENCONTRADO NO EFFECT_TABLE]
+
+
+============================================================
+EFFECT ID: 311
+============================================================
+{
+			//crazy uproar	//EF_LOUD	Crazy Uproar
+			type: 'STR',
+			file: 'loud',
+			wav: 'effect/\xb0\xed\xbc\xba\xb9\xe6\xb0\xa1',
+			attachedEntity: true
+		}
+
+
+============================================================
+EFFECT ID: 312
+============================================================
+{
+			//EF_HEAL	   Heal Effect
+			alphaMax: 0.2,
+			animation: 1,
+			attachedEntity: true,
+			blendMode: 2,
+			blue: 0.7,
+			bottomSize: 0.95,
+			duration: 1500,
+			fade: true,
+			green: 1,
+			height: 8,
+			red: 0.7,
+			rotate: true,
+			textureName: 'ring_white',
+			topSize: 0.95,
+			type: 'CYLINDER',
+			wav: '_heal_effect'
+		},
+		{
+			alphaMax: 0.2,
+			animation: 1,
+			attachedEntity: true,
+			blendMode: 2,
+			blue: 0.7,
+			bottomSize: 1,
+			duration: 1500,
+			fade: true,
+			green: 1,
+			height: 8,
+			red: 0.7,
+			rotate: true,
+			textureName: 'ring_white',
+			topSize: 1,
+			type: 'CYLINDER'
+		},
+		{
+			alphaMax: 0.6,
+			attachedEntity: true,
+			blendMode: 2,
+			blue: 1,
+			duration: 1300,
+			delayOffset: 400,
+			duplicate: 15,
+			fadeIn: true,
+			fadeOut: true,
+			file: 'effect/pok3.tga',
+			green: 1,
+			posxRand: 1.5,
+			posyRand: 1.5,
+			poszEndRand: 2,
+			poszEndRandMiddle: 6,
+			poszStart: 0,
+			red: 1,
+			size: 9,
+			sizeRand: 2,
+			timeBetweenDupli: 10,
+			type: '3D',
+			zIndex: 1
+		},
+		{
+			alphaMax: 0.6,
+			attachedEntity: true,
+			blendMode: 2,
+			blue: 1,
+			duration: 1100,
+			delayLate: 200,
+			duplicate: 7,
+			fadeIn: true,
+			fadeOut: true,
+			file: 'effect/pok3.tga',
+			green: 1,
+			posxRand: 1,
+			posyRand: 1,
+			poszEnd: 5,
+			poszStartRand: 1,
+			poszStartRandMiddle: 0,
+			red: 1,
+			size: 9,
+			sizeRand: 2,
+			timeBetweenDupli: 50,
+			type: '3D',
+			zIndex: 1
+		}
+
+
+============================================================
+EFFECT ID: 320
+============================================================
+{
+			//EF_HEAL3	   Offensive Heal
+			alphaMax: 0.2,
+			animation: 1,
+			attachedEntity: true,
+			blendMode: 2,
+			blue: 1,
+			bottomSize: 0.95,
+			duration: 1000,
+			fade: true,
+			green: 1,
+			height: 10,
+			red: 1,
+			rotate: true,
+			textureName: 'ring_white',
+			topSize: 0.95,
+			type: 'CYLINDER',
+			wav: '_heal_effect'
+		},
+		{
+			alphaMax: 0.2,
+			animation: 1,
+			attachedEntity: true,
+			blendMode: 2,
+			blue: 1,
+			bottomSize: 1,
+			duration: 1000,
+			fade: true,
+			green: 1,
+			height: 9,
+			red: 1,
+			rotate: true,
+			textureName: 'ring_white',
+			topSize: 1,
+			type: 'CYLINDER'
+		},
+		{
+			alphaMax: 0.8,
+			attachedEntity: true,
+			blendMode: 2,
+			blue: 1,
+			duration: 1000,
+			delayOffset: 400,
+			duplicate: 10,
+			fadeIn: true,
+			fadeOut: true,
+			file: 'effect/pok3.tga',
+			green: 1,
+			posxRand: 1.5,
+			posyRand: 1.5,
+			poszEndRand: 3,
+			poszEndRandMiddle: 6,
+			poszStart: 0,
+			red: 1,
+			size: 9,
+			sizeRand: 2,
+			sparkling: true,
+			sparkNumber: 2,
+			timeBetweenDupli: 10,
+			type: '3D',
+			zIndex: 1
+		},
+		{
+			alphaMax: 0.8,
+			attachedEntity: true,
+			blendMode: 2,
+			blue: 1,
+			duration: 900,
+			delayLate: 200,
+			duplicate: 5,
+			fadeIn: true,
+			fadeOut: true,
+			file: 'effect/pok3.tga',
+			green: 1,
+			posxRand: 1,
+			posyRand: 1,
+			poszEnd: 6,
+			poszStartRand: 1,
+			poszStartRandMiddle: 0,
+			red: 1,
+			size: 9,
+			sizeRand: 2,
+			sparkling: true,
+			sparkNumber: 2,
+			timeBetweenDupli: 50,
+			type: '3D',
+			zIndex: 1
+		}
+
+
+============================================================
+EFFECT ID: ef_coldbolt
+============================================================
+[NAO ENCONTRADO NO EFFECT_TABLE]
+
+
+============================================================
+EFFECT ID: ef_firebolt
+============================================================
+[NAO ENCONTRADO NO EFFECT_TABLE]
+
+
+============================================================
+EFFECT ID: ef_arrow_projectile
+============================================================
+[NAO ENCONTRADO NO EFFECT_TABLE]
+
+
+============================================================
+EFFECT ID: ef_arrow_shower_projectile
+============================================================
+[NAO ENCONTRADO NO EFFECT_TABLE]
+

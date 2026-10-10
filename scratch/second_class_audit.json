@@ -1,0 +1,1959 @@
+{
+  "skills": {
+    "55": {
+      "name": "KN_SPEARMASTERY",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "56": {
+      "name": "KN_PIERCE",
+      "element": "Weapon",
+      "raw": "{ effectIdOnCaster: 148, hitEffectId: 147 }",
+      "fields": {
+        "effectIdOnCaster": "148",
+        "hitEffectId": "147"
+      }
+    },
+    "57": {
+      "name": "KN_BRANDISHSPEAR",
+      "element": "Weapon",
+      "raw": "{ hideCastBar: true, hideCastAura: true, effectId: 70, effectIdOnCaster: 144 }",
+      "fields": {
+        "effectId": "70",
+        "effectIdOnCaster": "144"
+      }
+    },
+    "58": {
+      "name": "KN_SPEARSTAB",
+      "element": "Weapon",
+      "raw": "{ effectIdOnCaster: 150 }",
+      "fields": {
+        "effectIdOnCaster": "150"
+      }
+    },
+    "59": {
+      "name": "KN_SPEARBOOMERANG",
+      "element": "Weapon",
+      "raw": "{\n\teffectIdOnCaster: 151,\n\tbeforeHitEffectId: 'ef_spear_projectile',\n\thitEffectId: 80\n}",
+      "fields": {
+        "effectIdOnCaster": "151",
+        "hitEffectId": "80",
+        "beforeHitEffectId": "'ef_spear_projectile'"
+      }
+    },
+    "60": {
+      "name": "KN_TWOHANDQUICKEN",
+      "element": "Neutral",
+      "raw": "{ effectId: 130 }",
+      "fields": {
+        "effectId": "130"
+      }
+    },
+    "61": {
+      "name": "KN_AUTOCOUNTER",
+      "element": "Weapon",
+      "raw": "{\n\thideCastAura: true /*effectId: 131    NOT USED HERE, but hardcoded in onEntityCastCancel!*/\n}",
+      "fields": {
+        "effectId": "131"
+      }
+    },
+    "62": {
+      "name": "KN_BOWLINGBASH",
+      "element": "Weapon",
+      "raw": "{ hideCastBar: true, hideCastAura: true, effectIdOnCaster: 149, hitEffectId: 1 }",
+      "fields": {
+        "effectIdOnCaster": "149",
+        "hitEffectId": "1"
+      }
+    },
+    "63": {
+      "name": "KN_RIDING",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "64": {
+      "name": "KN_CAVALIERMASTERY",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "65": {
+      "name": "PR_MACEMASTERY",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "66": {
+      "name": "PR_IMPOSITIO",
+      "element": "Neutral",
+      "raw": "{ effectId: 84 }",
+      "fields": {
+        "effectId": "84"
+      }
+    },
+    "67": {
+      "name": "PR_SUFFRAGIUM",
+      "element": "Neutral",
+      "raw": "{ effectId: 88 }",
+      "fields": {
+        "effectId": "88"
+      }
+    },
+    "68": {
+      "name": "PR_ASPERSIO",
+      "element": "Holy",
+      "raw": "{ effectId: 86 }",
+      "fields": {
+        "effectId": "86"
+      }
+    },
+    "69": {
+      "name": "PR_BENEDICTIO",
+      "element": "Neutral",
+      "raw": "{ effectId: 91 }",
+      "fields": {
+        "effectId": "91"
+      }
+    },
+    "70": {
+      "name": "PR_SANCTUARY",
+      "element": "Holy",
+      "raw": "{ effectId: 83, groundEffectId: 319 }",
+      "fields": {
+        "effectId": "83",
+        "groundEffectId": "319"
+      }
+    },
+    "71": {
+      "name": "PR_SLOWPOISON",
+      "element": "Neutral",
+      "raw": "{ effectId: 136 }",
+      "fields": {
+        "effectId": "136"
+      }
+    },
+    "72": {
+      "name": "PR_STRECOVERY",
+      "element": "Neutral",
+      "raw": "{ effectId: 78 }",
+      "fields": {
+        "effectId": "78"
+      }
+    },
+    "73": {
+      "name": "PR_KYRIE",
+      "element": "Neutral",
+      "raw": "{ effectId: 112 }",
+      "fields": {
+        "effectId": "112"
+      }
+    },
+    "74": {
+      "name": "PR_MAGNIFICAT",
+      "element": "Neutral",
+      "raw": "{ effectId: 76 }",
+      "fields": {
+        "effectId": "76"
+      }
+    },
+    "75": {
+      "name": "PR_GLORIA",
+      "element": "Neutral",
+      "raw": "{ effectId: 75 }",
+      "fields": {
+        "effectId": "75"
+      }
+    },
+    "76": {
+      "name": "PR_LEXDIVINA",
+      "element": "Neutral",
+      "raw": "{ effectId: 87 }",
+      "fields": {
+        "effectId": "87"
+      }
+    },
+    "77": {
+      "name": "PR_TURNUNDEAD",
+      "element": "Holy",
+      "raw": "{ hitEffectId: 152 }",
+      "fields": {
+        "hitEffectId": "152"
+      }
+    },
+    "78": {
+      "name": "PR_LEXAETERNA",
+      "element": "Neutral",
+      "raw": "{ effectId: 85 }",
+      "fields": {
+        "effectId": "85"
+      }
+    },
+    "79": {
+      "name": "PR_MAGNUS",
+      "element": "Holy",
+      "raw": "{ effectId: 113, hitEffectId: 152, groundEffectId: 318 }",
+      "fields": {
+        "effectId": "113",
+        "hitEffectId": "152",
+        "groundEffectId": "318"
+      }
+    },
+    "80": {
+      "name": "WZ_FIREPILLAR",
+      "element": "Fire",
+      "raw": "{ effectId: 96, groundEffectId: 138, hitEffectId: 97 }",
+      "fields": {
+        "effectId": "96",
+        "hitEffectId": "97",
+        "groundEffectId": "138"
+      }
+    },
+    "81": {
+      "name": "WZ_SIGHTRASHER",
+      "element": "Fire",
+      "raw": "{ effectId: 62, hitEffectId: 49 }",
+      "fields": {
+        "effectId": "62",
+        "hitEffectId": "49"
+      }
+    },
+    "82": {
+      "name": "WZ_FIREIVY",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "83": {
+      "name": "WZ_METEOR",
+      "element": "Fire",
+      "raw": "{ effectId: 92, hitEffectId: 49 }",
+      "fields": {
+        "effectId": "92",
+        "hitEffectId": "49"
+      }
+    },
+    "84": {
+      "name": "WZ_JUPITEL",
+      "element": "Wind",
+      "raw": "{ effectId: 93, beforeHitEffectId: 94 }",
+      "fields": {
+        "effectId": "93",
+        "beforeHitEffectId": "94"
+      }
+    },
+    "85": {
+      "name": "WZ_VERMILION",
+      "element": "Wind",
+      "raw": "{ effectId: 90, hitEffectId: 52 }",
+      "fields": {
+        "effectId": "90",
+        "hitEffectId": "52"
+      }
+    },
+    "86": {
+      "name": "WZ_WATERBALL",
+      "element": "Water",
+      "raw": "{ beforeHitEffectIdOnCaster: 116, hitEffectIdOnCaster: 117 }",
+      "fields": {}
+    },
+    "87": {
+      "name": "WZ_ICEWALL",
+      "element": "Water",
+      "raw": "{ groundEffectId: 74 }",
+      "fields": {
+        "groundEffectId": "74"
+      }
+    },
+    "88": {
+      "name": "WZ_FROSTNOVA",
+      "element": "Water",
+      "raw": "{ effectIdOnCaster: 28, hitEffectId: 51 }",
+      "fields": {
+        "effectIdOnCaster": "28",
+        "hitEffectId": "51"
+      }
+    },
+    "89": {
+      "name": "WZ_STORMGUST",
+      "element": "Water",
+      "raw": "{ effectId: 89, hitEffectId: 51 }",
+      "fields": {
+        "effectId": "89",
+        "hitEffectId": "51"
+      }
+    },
+    "90": {
+      "name": "WZ_EARTHSPIKE",
+      "element": "Earth",
+      "raw": "{ effectId: 79, hitEffectId: 147 }",
+      "fields": {
+        "effectId": "79",
+        "hitEffectId": "147"
+      }
+    },
+    "91": {
+      "name": "WZ_HEAVENDRIVE",
+      "element": "Earth",
+      "raw": "{ effectId: 142, hitEffectId: 147 }",
+      "fields": {
+        "effectId": "142",
+        "hitEffectId": "147"
+      }
+    },
+    "92": {
+      "name": "WZ_QUAGMIRE",
+      "element": "Earth",
+      "raw": "{ groundEffectId: 95 }",
+      "fields": {
+        "groundEffectId": "95"
+      }
+    },
+    "93": {
+      "name": "WZ_ESTIMATION",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "94": {
+      "name": "BS_IRON",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "95": {
+      "name": "BS_STEEL",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "96": {
+      "name": "BS_ENCHANTEDSTONE",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "97": {
+      "name": "BS_ORIDEOCON",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "98": {
+      "name": "BS_DAGGER",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "99": {
+      "name": "BS_SWORD",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "100": {
+      "name": "BS_TWOHANDSWORD",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "101": {
+      "name": "BS_AXE",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "102": {
+      "name": "BS_MACE",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "103": {
+      "name": "BS_KNUCKLE",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "104": {
+      "name": "BS_SPEAR",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "105": {
+      "name": "BS_HILTBINDING",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "106": {
+      "name": "BS_FINDINGORE",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "107": {
+      "name": "BS_WEAPONRESEARCH",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "108": {
+      "name": "BS_REPAIRWEAPON",
+      "element": "Neutral",
+      "raw": "{ effectId: 101 }",
+      "fields": {
+        "effectId": "101"
+      }
+    },
+    "109": {
+      "name": "BS_SKINTEMPER",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "110": {
+      "name": "BS_HAMMERFALL",
+      "element": "Neutral",
+      "raw": "{ effectId: 102 }",
+      "fields": {
+        "effectId": "102"
+      }
+    },
+    "111": {
+      "name": "BS_ADRENALINE",
+      "element": "Neutral",
+      "raw": "{ beginCastEffectId: '98_beforecast', effectId: 98 }",
+      "fields": {
+        "effectId": "98",
+        "beginCastEffectId": "'98_beforecast'"
+      }
+    },
+    "112": {
+      "name": "BS_WEAPONPERFECT",
+      "element": "Neutral",
+      "raw": "{ effectId: 103 }",
+      "fields": {
+        "effectId": "103"
+      }
+    },
+    "113": {
+      "name": "BS_OVERTHRUST",
+      "element": "Neutral",
+      "raw": "{ effectId: 128 }",
+      "fields": {
+        "effectId": "128"
+      }
+    },
+    "114": {
+      "name": "BS_MAXIMIZE",
+      "element": "Neutral",
+      "raw": "{ beginCastEffectId: 'maximize_power_sounds', effectId: 104 }",
+      "fields": {
+        "effectId": "104",
+        "beginCastEffectId": "'maximize_power_sounds'"
+      }
+    },
+    "115": {
+      "name": "HT_SKIDTRAP",
+      "element": "Neutral",
+      "raw": "{ effectId: 69 }",
+      "fields": {
+        "effectId": "69"
+      }
+    },
+    "116": {
+      "name": "HT_LANDMINE",
+      "element": "Earth",
+      "raw": "{ effectId: 'ef_ht_landmine' }",
+      "fields": {
+        "effectId": "'ef_ht_landmine'"
+      }
+    },
+    "117": {
+      "name": "HT_ANKLESNARE",
+      "element": "Neutral",
+      "raw": "{ groundEffectId: 'ef_anklesnare' }",
+      "fields": {
+        "groundEffectId": "'ef_anklesnare'"
+      }
+    },
+    "118": {
+      "name": "HT_SHOCKWAVE",
+      "element": "Neutral",
+      "raw": "{ effectId: 145, hitEffectId: 146 }",
+      "fields": {
+        "effectId": "145",
+        "hitEffectId": "146"
+      }
+    },
+    "119": {
+      "name": "HT_SANDMAN",
+      "element": "Neutral",
+      "raw": "{ hitEffectId: 139 }",
+      "fields": {
+        "hitEffectId": "139"
+      }
+    },
+    "120": {
+      "name": "HT_FLASHER",
+      "element": "Neutral",
+      "raw": "{ hitEffectId: 99 }",
+      "fields": {
+        "hitEffectId": "99"
+      }
+    },
+    "121": {
+      "name": "HT_FREEZINGTRAP",
+      "element": "Water",
+      "raw": "{ hitEffectId: 108 }",
+      "fields": {
+        "hitEffectId": "108"
+      }
+    },
+    "122": {
+      "name": "HT_BLASTMINE",
+      "element": "Wind",
+      "raw": "{ hitEffectId: 106 }",
+      "fields": {
+        "hitEffectId": "106"
+      }
+    },
+    "123": {
+      "name": "HT_CLAYMORETRAP",
+      "element": "Fire",
+      "raw": "{ hitEffectId: 107 }",
+      "fields": {
+        "hitEffectId": "107"
+      }
+    },
+    "124": {
+      "name": "HT_REMOVETRAP",
+      "element": "Neutral",
+      "raw": "{ effectId: 100 }",
+      "fields": {
+        "effectId": "100"
+      }
+    },
+    "125": {
+      "name": "HT_TALKIEBOX",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "126": {
+      "name": "HT_BEASTBANE",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "127": {
+      "name": "HT_FALCON",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "128": {
+      "name": "HT_STEELCROW",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "129": {
+      "name": "HT_BLITZBEAT",
+      "element": "Neutral",
+      "raw": "{ effectId: 115 }",
+      "fields": {
+        "effectId": "115"
+      }
+    },
+    "130": {
+      "name": "HT_DETECTING",
+      "element": "Neutral",
+      "raw": "{ effectId: 119 }",
+      "fields": {
+        "effectId": "119"
+      }
+    },
+    "131": {
+      "name": "HT_SPRINGTRAP",
+      "element": "Neutral",
+      "raw": "{ effectId: 111 }",
+      "fields": {
+        "effectId": "111"
+      }
+    },
+    "132": {
+      "name": "AS_RIGHT",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "133": {
+      "name": "AS_LEFT",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "134": {
+      "name": "AS_KATAR",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "135": {
+      "name": "AS_CLOAKING",
+      "element": "Neutral",
+      "raw": "{ effectId: 120 }",
+      "fields": {
+        "effectId": "120"
+      }
+    },
+    "136": {
+      "name": "AS_SONICBLOW",
+      "element": "Weapon",
+      "raw": "{ effectIdOnCaster: 121, effectId: 143, hitEffectId: 122 }",
+      "fields": {
+        "effectId": "143",
+        "effectIdOnCaster": "121",
+        "hitEffectId": "122"
+      }
+    },
+    "137": {
+      "name": "AS_GRIMTOOTH",
+      "element": "Weapon",
+      "raw": "{ releaseEffectId: 123, hitEffectId: 132 }",
+      "fields": {
+        "hitEffectId": "132",
+        "releaseEffectId": "123"
+      }
+    },
+    "138": {
+      "name": "AS_ENCHANTPOISON",
+      "element": "Poison",
+      "raw": "{ effectId: 20 }",
+      "fields": {
+        "effectId": "20"
+      }
+    },
+    "139": {
+      "name": "AS_POISONREACT",
+      "element": "Neutral",
+      "raw": "{ effectId: 126, hitEffectId: 127 }",
+      "fields": {
+        "effectId": "126",
+        "hitEffectId": "127"
+      }
+    },
+    "140": {
+      "name": "AS_VENOMDUST",
+      "element": "Poison",
+      "raw": "{ effectId: 124, groundEffectId: 171 }",
+      "fields": {
+        "effectId": "124",
+        "groundEffectId": "171"
+      }
+    },
+    "141": {
+      "name": "AS_SPLASHER",
+      "element": "Weapon",
+      "raw": "{ effectId: 129 }",
+      "fields": {
+        "effectId": "129"
+      }
+    },
+    "210": {
+      "name": "RG_SNATCHER",
+      "element": "Weapon",
+      "raw": "{}",
+      "fields": {}
+    },
+    "211": {
+      "name": "RG_STEALCOIN",
+      "element": "Neutral",
+      "raw": "{ successEffectId: [268, 274] }",
+      "fields": {
+        "successEffectId": "[268, 274]"
+      }
+    },
+    "212": {
+      "name": "RG_BACKSTAP",
+      "element": "Weapon",
+      "raw": "{ hitEffectId: 275 }",
+      "fields": {
+        "hitEffectId": "275"
+      }
+    },
+    "213": {
+      "name": "RG_TUNNELDRIVE",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "214": {
+      "name": "RG_RAID",
+      "element": "Weapon",
+      "raw": "{ effectIdOnCaster: 276 }",
+      "fields": {
+        "effectIdOnCaster": "276"
+      }
+    },
+    "215": {
+      "name": "RG_STRIPWEAPON",
+      "element": "Neutral",
+      "raw": "{ successEffectId: 269 }",
+      "fields": {
+        "successEffectId": "269"
+      }
+    },
+    "216": {
+      "name": "RG_STRIPSHIELD",
+      "element": "Neutral",
+      "raw": "{ successEffectId: 270 }",
+      "fields": {
+        "successEffectId": "270"
+      }
+    },
+    "217": {
+      "name": "RG_STRIPARMOR",
+      "element": "Neutral",
+      "raw": "{ successEffectId: 271 }",
+      "fields": {
+        "successEffectId": "271"
+      }
+    },
+    "218": {
+      "name": "RG_STRIPHELM",
+      "element": "Neutral",
+      "raw": "{ successEffectId: 272 }",
+      "fields": {
+        "successEffectId": "272"
+      }
+    },
+    "219": {
+      "name": "RG_INTIMIDATE",
+      "element": "Weapon",
+      "raw": "{ effectId: 227 }",
+      "fields": {
+        "effectId": "227"
+      }
+    },
+    "220": {
+      "name": "RG_GRAFFITI",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "221": {
+      "name": "RG_FLAGGRAFFITI",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "222": {
+      "name": "RG_CLEANER",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "223": {
+      "name": "RG_GANGSTER",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "224": {
+      "name": "RG_COMPULSION",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "225": {
+      "name": "RG_PLAGIARISM",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "226": {
+      "name": "AM_AXEMASTERY",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "227": {
+      "name": "AM_LEARNINGPOTION",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "228": {
+      "name": "AM_PHARMACY",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "229": {
+      "name": "AM_DEMONSTRATION",
+      "element": "Fire",
+      "raw": "{ groundEffectId: 302 }",
+      "fields": {
+        "groundEffectId": "302"
+      }
+    },
+    "230": {
+      "name": "AM_ACIDTERROR",
+      "element": "Neutral",
+      "raw": "{ beforeHitEffectId: 298 }",
+      "fields": {
+        "beforeHitEffectId": "298"
+      }
+    },
+    "231": {
+      "name": "AM_POTIONPITCHER",
+      "element": "Neutral",
+      "raw": "{ effectId: 299 }",
+      "fields": {
+        "effectId": "299"
+      }
+    },
+    "232": {
+      "name": "AM_CANNIBALIZE",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "233": {
+      "name": "AM_SPHEREMINE",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "234": {
+      "name": "AM_CP_WEAPON",
+      "element": "Neutral",
+      "raw": "{ effectId: 300 }",
+      "fields": {
+        "effectId": "300"
+      }
+    },
+    "235": {
+      "name": "AM_CP_SHIELD",
+      "element": "Neutral",
+      "raw": "{ effectId: 300 }",
+      "fields": {
+        "effectId": "300"
+      }
+    },
+    "236": {
+      "name": "AM_CP_ARMOR",
+      "element": "Neutral",
+      "raw": "{ effectId: 300 }",
+      "fields": {
+        "effectId": "300"
+      }
+    },
+    "237": {
+      "name": "AM_CP_HELM",
+      "element": "Neutral",
+      "raw": "{ effectId: 300 }",
+      "fields": {
+        "effectId": "300"
+      }
+    },
+    "238": {
+      "name": "AM_BIOETHICS",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "239": {
+      "name": "AM_BIOTECHNOLOGY",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "240": {
+      "name": "AM_CREATECREATURE",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "241": {
+      "name": "AM_CULTIVATION",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "242": {
+      "name": "AM_FLAMECONTROL",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "243": {
+      "name": "AM_CALLHOMUN",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "244": {
+      "name": "AM_REST",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "245": {
+      "name": "AM_DRILLMASTER",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "246": {
+      "name": "AM_HEALHOMUN",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "247": {
+      "name": "AM_RESURRECTHOMUN",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "248": {
+      "name": "CR_TRUST",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "249": {
+      "name": "CR_AUTOGUARD",
+      "element": "Neutral",
+      "raw": "{ effectId: 336 }",
+      "fields": {
+        "effectId": "336"
+      }
+    },
+    "250": {
+      "name": "CR_SHIELDCHARGE",
+      "element": "Neutral",
+      "raw": "{ effectId: 246 }",
+      "fields": {
+        "effectId": "246"
+      }
+    },
+    "251": {
+      "name": "CR_SHIELDBOOMERANG",
+      "element": "Neutral",
+      "raw": "{ beforeHitEffectId: 'ef_shield_projectile', effectId: 249 }",
+      "fields": {
+        "effectId": "249",
+        "beforeHitEffectId": "'ef_shield_projectile'"
+      }
+    },
+    "252": {
+      "name": "CR_REFLECTSHIELD",
+      "element": "Neutral",
+      "raw": "{ effectId: 252 }",
+      "fields": {
+        "effectId": "252"
+      }
+    },
+    "253": {
+      "name": "CR_HOLYCROSS",
+      "element": "Holy",
+      "raw": "{ effectId: 245 }",
+      "fields": {
+        "effectId": "245"
+      }
+    },
+    "254": {
+      "name": "CR_GRANDCROSS",
+      "element": "Holy",
+      "raw": "{ effectId: 226 }",
+      "fields": {
+        "effectId": "226"
+      }
+    },
+    "255": {
+      "name": "CR_DEVOTION",
+      "element": "Neutral",
+      "raw": "{ effectId: 251 }",
+      "fields": {
+        "effectId": "251"
+      }
+    },
+    "256": {
+      "name": "CR_PROVIDENCE",
+      "element": "Neutral",
+      "raw": "{ effectId: 248 }",
+      "fields": {
+        "effectId": "248"
+      }
+    },
+    "257": {
+      "name": "CR_DEFENDER",
+      "element": "Neutral",
+      "raw": "{ effectId: 222 }",
+      "fields": {
+        "effectId": "222"
+      }
+    },
+    "258": {
+      "name": "CR_SPEARQUICKEN",
+      "element": "Neutral",
+      "raw": "{ effectId: 250 }",
+      "fields": {
+        "effectId": "250"
+      }
+    },
+    "259": {
+      "name": "MO_IRONHAND",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "260": {
+      "name": "MO_SPIRITSRECOVERY",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "261": {
+      "name": "MO_CALLSPIRITS",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "262": {
+      "name": "MO_ABSORBSPIRITS",
+      "element": "Neutral",
+      "raw": "{ successEffectIdOnCaster: 253 }",
+      "fields": {}
+    },
+    "263": {
+      "name": "MO_TRIPLEATTACK",
+      "element": "Weapon",
+      "raw": "{ effectId: 329 }",
+      "fields": {
+        "effectId": "329"
+      }
+    },
+    "264": {
+      "name": "MO_BODYRELOCATION",
+      "element": "Neutral",
+      "raw": "{ effectId: 166 }",
+      "fields": {
+        "effectId": "166"
+      }
+    },
+    "265": {
+      "name": "MO_DODGE",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "266": {
+      "name": "MO_INVESTIGATE",
+      "element": "Neutral",
+      "raw": "{ effectId: 267 }",
+      "fields": {
+        "effectId": "267"
+      }
+    },
+    "267": {
+      "name": "MO_FINGEROFFENSIVE",
+      "element": "Weapon",
+      "raw": "{ effectId: 265, hitEffectId: 1 }",
+      "fields": {
+        "effectId": "265",
+        "hitEffectId": "1"
+      }
+    },
+    "268": {
+      "name": "MO_STEELBODY",
+      "element": "Neutral",
+      "raw": "{ effectId: [254, 'quake'] }",
+      "fields": {
+        "effectId": "[254, 'quake']"
+      }
+    },
+    "269": {
+      "name": "MO_BLADESTOP",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "270": {
+      "name": "MO_EXPLOSIONSPIRITS",
+      "element": "Neutral",
+      "raw": "{ beginCastEffectId: 12, effectIdOnCaster: [261, 'quake'] }",
+      "fields": {
+        "effectIdOnCaster": "[261, 'quake']",
+        "beginCastEffectId": "12"
+      }
+    },
+    "271": {
+      "name": "MO_EXTREMITYFIST",
+      "element": "Neutral",
+      "raw": "{\n\teffectId: srcAID => {\n\t\tconst src = EntityManager.get(srcAID)",
+      "fields": {
+        "effectId": "srcAID"
+      }
+    },
+    "272": {
+      "name": "MO_CHAINCOMBO",
+      "element": "Weapon",
+      "raw": "{ effectId: [262, 273], effectIdOnCaster: 263 }",
+      "fields": {
+        "effectId": "[262, 273]",
+        "effectIdOnCaster": "263"
+      }
+    },
+    "273": {
+      "name": "MO_COMBOFINISH",
+      "element": "Weapon",
+      "raw": "{ effectId: [330, 'quake'] }",
+      "fields": {
+        "effectId": "[330, 'quake']"
+      }
+    },
+    "274": {
+      "name": "SA_ADVANCEDBOOK",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "275": {
+      "name": "SA_CASTCANCEL",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "276": {
+      "name": "SA_MAGICROD",
+      "element": "Neutral",
+      "raw": "{ successEffectId: 244 }",
+      "fields": {
+        "successEffectId": "244"
+      }
+    },
+    "277": {
+      "name": "SA_SPELLBREAKER",
+      "element": "Neutral",
+      "raw": "{ successEffectId: 234 }",
+      "fields": {
+        "successEffectId": "234"
+      }
+    },
+    "278": {
+      "name": "SA_FREECAST",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "279": {
+      "name": "SA_AUTOSPELL",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "280": {
+      "name": "SA_FLAMELAUNCHER",
+      "element": "Fire",
+      "raw": "{ successEffectId: 255 }",
+      "fields": {
+        "successEffectId": "255"
+      }
+    },
+    "281": {
+      "name": "SA_FROSTWEAPON",
+      "element": "Water",
+      "raw": "{ successEffectId: 256 }",
+      "fields": {
+        "successEffectId": "256"
+      }
+    },
+    "282": {
+      "name": "SA_LIGHTNINGLOADER",
+      "element": "Wind",
+      "raw": "{ successEffectId: 257 }",
+      "fields": {
+        "successEffectId": "257"
+      }
+    },
+    "283": {
+      "name": "SA_SEISMICWEAPON",
+      "element": "Earth",
+      "raw": "{ successEffectId: 258 }",
+      "fields": {
+        "successEffectId": "258"
+      }
+    },
+    "284": {
+      "name": "SA_DRAGONOLOGY",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "285": {
+      "name": "SA_VOLCANO",
+      "element": "Fire",
+      "raw": "{ effectIdOnCaster: 225, groundEffectId: 239 }",
+      "fields": {
+        "effectIdOnCaster": "225",
+        "groundEffectId": "239"
+      }
+    },
+    "286": {
+      "name": "SA_DELUGE",
+      "element": "Water",
+      "raw": "{ effectIdOnCaster: 236, groundEffectId: 240 }",
+      "fields": {
+        "effectIdOnCaster": "236",
+        "groundEffectId": "240"
+      }
+    },
+    "287": {
+      "name": "SA_VIOLENTGALE",
+      "element": "Wind",
+      "raw": "{ effectIdOnCaster: 237, groundEffectId: 241 }",
+      "fields": {
+        "effectIdOnCaster": "237",
+        "groundEffectId": "241"
+      }
+    },
+    "288": {
+      "name": "SA_LANDPROTECTOR",
+      "element": "Neutral",
+      "raw": "{ effectIdOnCaster: 238, groundEffectId: 242 }",
+      "fields": {
+        "effectIdOnCaster": "238",
+        "groundEffectId": "242"
+      }
+    },
+    "289": {
+      "name": "SA_DISPELL",
+      "element": "Neutral",
+      "raw": "{ successEffectId: 235 }",
+      "fields": {
+        "successEffectId": "235"
+      }
+    },
+    "290": {
+      "name": "SA_ABRACADABRA",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "291": {
+      "name": "SA_MONOCELL",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "292": {
+      "name": "SA_CLASSCHANGE",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "293": {
+      "name": "SA_SUMMONMONSTER",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "294": {
+      "name": "SA_REVERSEORCISH",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "295": {
+      "name": "SA_DEATH",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "296": {
+      "name": "SA_FORTUNE",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "297": {
+      "name": "SA_TAMINGMONSTER",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "298": {
+      "name": "SA_QUESTION",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "299": {
+      "name": "SA_GRAVITY",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "300": {
+      "name": "SA_LEVELUP",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "301": {
+      "name": "SA_INSTANTDEATH",
+      "element": "Neutral",
+      "raw": "{ effectId: 'ef_sa_instantdeath' }",
+      "fields": {
+        "effectId": "'ef_sa_instantdeath'"
+      }
+    },
+    "302": {
+      "name": "SA_FULLRECOVERY",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "303": {
+      "name": "SA_COMA",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "304": {
+      "name": "BD_ADAPTATION",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "305": {
+      "name": "BD_ENCORE",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "306": {
+      "name": "BD_LULLABY",
+      "element": "Neutral",
+      "raw": "{ effectId: 278, groundEffectId: '278_ground' }",
+      "fields": {
+        "effectId": "278",
+        "groundEffectId": "'278_ground'"
+      }
+    },
+    "307": {
+      "name": "BD_RICHMANKIM",
+      "element": "Neutral",
+      "raw": "{ effectId: 279, groundEffectId: '279_ground' }",
+      "fields": {
+        "effectId": "279",
+        "groundEffectId": "'279_ground'"
+      }
+    },
+    "308": {
+      "name": "BD_ETERNALCHAOS",
+      "element": "Neutral",
+      "raw": "{ effectId: 280, groundEffectId: '280_ground' }",
+      "fields": {
+        "effectId": "280",
+        "groundEffectId": "'280_ground'"
+      }
+    },
+    "309": {
+      "name": "BD_DRUMBATTLEFIELD",
+      "element": "Neutral",
+      "raw": "{ effectId: 281, groundEffectId: '281_ground' }",
+      "fields": {
+        "effectId": "281",
+        "groundEffectId": "'281_ground'"
+      }
+    },
+    "310": {
+      "name": "BD_RINGNIBELUNGEN",
+      "element": "Neutral",
+      "raw": "{ effectId: 282, groundEffectId: '282_ground' }",
+      "fields": {
+        "effectId": "282",
+        "groundEffectId": "'282_ground'"
+      }
+    },
+    "311": {
+      "name": "BD_ROKISWEIL",
+      "element": "Neutral",
+      "raw": "{ effectId: 283, groundEffectId: '283_ground' }",
+      "fields": {
+        "effectId": "283",
+        "groundEffectId": "'283_ground'"
+      }
+    },
+    "312": {
+      "name": "BD_INTOABYSS",
+      "element": "Neutral",
+      "raw": "{ effectId: 284, groundEffectId: '284_ground' }",
+      "fields": {
+        "effectId": "284",
+        "groundEffectId": "'284_ground'"
+      }
+    },
+    "313": {
+      "name": "BD_SIEGFRIED",
+      "element": "Neutral",
+      "raw": "{ effectId: 285, groundEffectId: '285_ground' }",
+      "fields": {
+        "effectId": "285",
+        "groundEffectId": "'285_ground'"
+      }
+    },
+    "314": {
+      "name": "BD_RAGNAROK",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "315": {
+      "name": "BA_MUSICALLESSON",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "316": {
+      "name": "BA_MUSICALSTRIKE",
+      "element": "Weapon",
+      "raw": "{ hideCastAura: true, beforeHitEffectId: 'ef_arrow_projectile' }",
+      "fields": {
+        "beforeHitEffectId": "'ef_arrow_projectile'"
+      }
+    },
+    "317": {
+      "name": "BA_DISSONANCE",
+      "element": "Neutral",
+      "raw": "{ groundEffectId: '277_ground' }",
+      "fields": {
+        "groundEffectId": "'277_ground'"
+      }
+    },
+    "318": {
+      "name": "BA_FROSTJOKE",
+      "element": "Neutral",
+      "raw": "{ beginCastEffectId: 295 }",
+      "fields": {
+        "beginCastEffectId": "295"
+      }
+    },
+    "319": {
+      "name": "BA_WHISTLE",
+      "element": "Neutral",
+      "raw": "{ effectId: 286, groundEffectId: '286_ground' }",
+      "fields": {
+        "effectId": "286",
+        "groundEffectId": "'286_ground'"
+      }
+    },
+    "320": {
+      "name": "BA_ASSASSINCROSS",
+      "element": "Neutral",
+      "raw": "{ effectId: 287, groundEffectId: '287_ground' }",
+      "fields": {
+        "effectId": "287",
+        "groundEffectId": "'287_ground'"
+      }
+    },
+    "321": {
+      "name": "BA_POEMBRAGI",
+      "element": "Neutral",
+      "raw": "{ effectId: 288, groundEffectId: '288_ground' }",
+      "fields": {
+        "effectId": "288",
+        "groundEffectId": "'288_ground'"
+      }
+    },
+    "322": {
+      "name": "BA_APPLEIDUN",
+      "element": "Neutral",
+      "raw": "{ effectId: 289, groundEffectId: '289_ground' }",
+      "fields": {
+        "effectId": "289",
+        "groundEffectId": "'289_ground'"
+      }
+    },
+    "323": {
+      "name": "DC_DANCINGLESSON",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "324": {
+      "name": "DC_THROWARROW",
+      "element": "Weapon",
+      "raw": "{ hideCastAura: true, beforeHitEffectId: 'ef_arrow_projectile' }",
+      "fields": {
+        "beforeHitEffectId": "'ef_arrow_projectile'"
+      }
+    },
+    "325": {
+      "name": "DC_UGLYDANCE",
+      "element": "Neutral",
+      "raw": "{ groundEffectId: '290_ground' }",
+      "fields": {
+        "groundEffectId": "'290_ground'"
+      }
+    },
+    "326": {
+      "name": "DC_SCREAM",
+      "element": "Neutral",
+      "raw": "{ beginCastEffectId: 296 }",
+      "fields": {
+        "beginCastEffectId": "296"
+      }
+    },
+    "327": {
+      "name": "DC_HUMMING",
+      "element": "Neutral",
+      "raw": "{ effectId: 291, groundEffectId: '291_ground' }",
+      "fields": {
+        "effectId": "291",
+        "groundEffectId": "'291_ground'"
+      }
+    },
+    "328": {
+      "name": "DC_DONTFORGETME",
+      "element": "Neutral",
+      "raw": "{ effectId: 292, groundEffectId: '292_ground' }",
+      "fields": {
+        "effectId": "292",
+        "groundEffectId": "'292_ground'"
+      }
+    },
+    "329": {
+      "name": "DC_FORTUNEKISS",
+      "element": "Neutral",
+      "raw": "{ effectId: 293, groundEffectId: '293_ground' }",
+      "fields": {
+        "effectId": "293",
+        "groundEffectId": "'293_ground'"
+      }
+    },
+    "330": {
+      "name": "DC_SERVICEFORYOU",
+      "element": "Neutral",
+      "raw": "{ effectId: 294, groundEffectId: '294_ground' }",
+      "fields": {
+        "effectId": "294",
+        "groundEffectId": "'294_ground'"
+      }
+    },
+    "446": {
+      "name": "AM_BERSERKPITCHER",
+      "element": "Neutral",
+      "raw": "{ beforeHitEffectId: 541, effectId: 220 }",
+      "fields": {
+        "effectId": "220",
+        "beforeHitEffectId": "541"
+      }
+    },
+    "459": {
+      "name": "BS_ADRENALINE2",
+      "element": "Neutral",
+      "raw": "{ effectId: 'ef_bs_adrenaline2' }",
+      "fields": {
+        "effectId": "'ef_bs_adrenaline2'"
+      }
+    },
+    "495": {
+      "name": "KN_ONEHAND",
+      "element": "Neutral",
+      "raw": "SkillEffect[SK.KN_TWOHANDQUICKEN]",
+      "fields": {}
+    },
+    "496": {
+      "name": "AM_TWILIGHT1",
+      "element": "Neutral",
+      "raw": "{ effectId: 497 }",
+      "fields": {
+        "effectId": "497"
+      }
+    },
+    "497": {
+      "name": "AM_TWILIGHT2",
+      "element": "Neutral",
+      "raw": "{ effectId: 498 }",
+      "fields": {
+        "effectId": "498"
+      }
+    },
+    "498": {
+      "name": "AM_TWILIGHT3",
+      "element": "Neutral",
+      "raw": "{ effectId: 499 }",
+      "fields": {
+        "effectId": "499"
+      }
+    },
+    "499": {
+      "name": "HT_POWER",
+      "element": "Weapon",
+      "raw": "{}",
+      "fields": {}
+    },
+    "576": {
+      "name": "AM_TWILIGHT4",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "1001": {
+      "name": "KN_CHARGEATK",
+      "element": "Weapon",
+      "raw": "{ beginCastEffectId: 'white_pulse', hitEffectId: 'enemy_hit_normal1' }",
+      "fields": {
+        "hitEffectId": "'enemy_hit_normal1'",
+        "beginCastEffectId": "'white_pulse'"
+      }
+    },
+    "1002": {
+      "name": "CR_SHRINK",
+      "element": "Neutral",
+      "raw": "{ effectId: 599 }",
+      "fields": {
+        "effectId": "599"
+      }
+    },
+    "1003": {
+      "name": "AS_SONICACCEL",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "1004": {
+      "name": "AS_VENOMKNIFE",
+      "element": "Neutral",
+      "raw": "{ beforeHitEffectId: 600 }",
+      "fields": {
+        "beforeHitEffectId": "600"
+      }
+    },
+    "1005": {
+      "name": "RG_CLOSECONFINE",
+      "element": "Neutral",
+      "raw": "{ effectId: 602, groundEffectId: 604 }",
+      "fields": {
+        "effectId": "602",
+        "groundEffectId": "604"
+      }
+    },
+    "1006": {
+      "name": "WZ_SIGHTBLASTER",
+      "element": "Fire",
+      "raw": "{ effectId: 601 }",
+      "fields": {
+        "effectId": "601"
+      }
+    },
+    "1007": {
+      "name": "SA_CREATECON",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "1008": {
+      "name": "SA_ELEMENTWATER",
+      "element": "Water",
+      "raw": "{ effectId: 256 }",
+      "fields": {
+        "effectId": "256"
+      }
+    },
+    "1009": {
+      "name": "HT_PHANTASMIC",
+      "element": "Weapon",
+      "raw": "{ beforeHitEffectId: 'ef_arrow_projectile', hitEffectId: 1 }",
+      "fields": {
+        "hitEffectId": "1",
+        "beforeHitEffectId": "'ef_arrow_projectile'"
+      }
+    },
+    "1010": {
+      "name": "BA_PANGVOICE",
+      "element": "Neutral",
+      "raw": "{ successEffectId: 606 }",
+      "fields": {
+        "successEffectId": "606"
+      }
+    },
+    "1011": {
+      "name": "DC_WINKCHARM",
+      "element": "Neutral",
+      "raw": "{ successEffectId: 607 }",
+      "fields": {
+        "successEffectId": "607"
+      }
+    },
+    "1012": {
+      "name": "BS_UNFAIRLYTRICK",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "1013": {
+      "name": "BS_GREED",
+      "element": "Neutral",
+      "raw": "{ effectId: 'ef_greed_sound' }",
+      "fields": {
+        "effectId": "'ef_greed_sound'"
+      }
+    },
+    "1014": {
+      "name": "PR_REDEMPTIO",
+      "element": "Holy",
+      "raw": "{}",
+      "fields": {}
+    },
+    "1015": {
+      "name": "MO_KITRANSLATION",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "1016": {
+      "name": "MO_BALKYOUNG",
+      "element": "Weapon",
+      "raw": "{ effectId: 514 }",
+      "fields": {
+        "effectId": "514"
+      }
+    },
+    "1017": {
+      "name": "SA_ELEMENTGROUND",
+      "element": "Earth",
+      "raw": "{ effectId: 258 }",
+      "fields": {
+        "effectId": "258"
+      }
+    },
+    "1018": {
+      "name": "SA_ELEMENTFIRE",
+      "element": "Fire",
+      "raw": "{ effectId: 255 }",
+      "fields": {
+        "effectId": "255"
+      }
+    },
+    "1019": {
+      "name": "SA_ELEMENTWIND",
+      "element": "Wind",
+      "raw": "{ effectId: 257 }",
+      "fields": {
+        "effectId": "257"
+      }
+    },
+    "3036": {
+      "name": "BA_POEMBRAGI2",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    },
+    "3037": {
+      "name": "DC_FORTUNEKISS2",
+      "element": "Neutral",
+      "raw": "{}",
+      "fields": {}
+    }
+  },
+  "effects_found": [
+    "1",
+    "12",
+    "20",
+    "28",
+    "49",
+    "51",
+    "52",
+    "62",
+    "69",
+    "70",
+    "74",
+    "75",
+    "76",
+    "78",
+    "79",
+    "80",
+    "83",
+    "84",
+    "85",
+    "86",
+    "87",
+    "88",
+    "89",
+    "90",
+    "91",
+    "92",
+    "93",
+    "94",
+    "95",
+    "96",
+    "97",
+    "98",
+    "99",
+    "100",
+    "101",
+    "102",
+    "103",
+    "104",
+    "106",
+    "107",
+    "108",
+    "111",
+    "112",
+    "113",
+    "115",
+    "119",
+    "120",
+    "121",
+    "122",
+    "123",
+    "124",
+    "126",
+    "127",
+    "128",
+    "129",
+    "130",
+    "131",
+    "132",
+    "136",
+    "138",
+    "139",
+    "142",
+    "143",
+    "144",
+    "145",
+    "146",
+    "147",
+    "148",
+    "149",
+    "150",
+    "151",
+    "152",
+    "166",
+    "171",
+    "220",
+    "222",
+    "226",
+    "227",
+    "234",
+    "235",
+    "239",
+    "240",
+    "241",
+    "242",
+    "244",
+    "245",
+    "246",
+    "248",
+    "249",
+    "250",
+    "251",
+    "252",
+    "254",
+    "255",
+    "256",
+    "257",
+    "258",
+    "261",
+    "262",
+    "263",
+    "265",
+    "267",
+    "268",
+    "269",
+    "270",
+    "271",
+    "272",
+    "273",
+    "274",
+    "275",
+    "276",
+    "278",
+    "279",
+    "280",
+    "281",
+    "282",
+    "283",
+    "284",
+    "285",
+    "286",
+    "287",
+    "288",
+    "289",
+    "291",
+    "292",
+    "293",
+    "294",
+    "295",
+    "296",
+    "298",
+    "300",
+    "302",
+    "318",
+    "319",
+    "329",
+    "336",
+    "600",
+    "604",
+    "606",
+    "607",
+    "277_ground",
+    "278_ground",
+    "279_ground",
+    "280_ground",
+    "281_ground",
+    "282_ground",
+    "283_ground",
+    "284_ground",
+    "285_ground",
+    "286_ground",
+    "287_ground",
+    "288_ground",
+    "289_ground",
+    "290_ground",
+    "291_ground",
+    "292_ground",
+    "293_ground",
+    "294_ground",
+    "98_beforecast",
+    "ef_arrow_projectile",
+    "ef_bs_adrenaline2",
+    "ef_greed_sound",
+    "ef_ht_landmine",
+    "ef_sa_instantdeath",
+    "ef_shield_projectile",
+    "ef_spear_projectile",
+    "enemy_hit_normal1",
+    "maximize_power_sounds",
+    "quake",
+    "white_pulse"
+  ],
+  "effects_missing": [
+    "225",
+    "236",
+    "237",
+    "238",
+    "299",
+    "330",
+    "497",
+    "498",
+    "499",
+    "514",
+    "541",
+    "599",
+    "601",
+    "602",
+    "ef_anklesnare"
+  ]
+}

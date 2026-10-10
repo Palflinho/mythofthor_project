@@ -1,0 +1,2253 @@
+{
+  "70": [
+    {
+      "type": "STR",
+      "file": "brandish",
+      "wav": "effect/knight_brandish_spear"
+    }
+  ],
+  "80": [
+    {
+      "type": "FUNC",
+      "file": "",
+      "wav": "effect/ef_fireball"
+    }
+  ],
+  "130": [
+    {
+      "type": "STR",
+      "file": "twohand",
+      "wav": "effect/knight_twohandquicken"
+    }
+  ],
+  "131": [
+    {
+      "type": "STR",
+      "file": "autocounter",
+      "wav": "effect/knight_autocounter"
+    }
+  ],
+  "144": [
+    {
+      "type": "STR",
+      "file": "brandish2",
+      "wav": "effect/knight_brandish_spear"
+    }
+  ],
+  "147": [
+    {
+      "type": "STR",
+      "file": "earthhit",
+      "wav": ""
+    }
+  ],
+  "148": [
+    {
+      "type": "STR",
+      "file": "pierce",
+      "wav": ""
+    }
+  ],
+  "149": [
+    {
+      "type": "STR",
+      "file": "bowling",
+      "wav": "_enemy_hit_normal1"
+    }
+  ],
+  "150": [
+    {
+      "type": "STR",
+      "file": "spearstab",
+      "wav": "_enemy_hit_normal1"
+    }
+  ],
+  "151": [
+    {
+      "type": "STR",
+      "file": "spearboomerang",
+      "wav": "effect/knight_spear_boomerang"
+    }
+  ],
+  "ef_spear_projectile": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": "",
+      "duration": "140",
+      "alphaMax": "1",
+      "size": "100",
+      "toSrc": "true"
+    }
+  ],
+  "75": [
+    {
+      "type": "STR",
+      "file": "gloria",
+      "wav": "effect/priest_gloria"
+    }
+  ],
+  "76": [
+    {
+      "type": "STR",
+      "file": "magnificat",
+      "wav": "effect/priest_magnificat"
+    }
+  ],
+  "78": [
+    {
+      "type": "STR",
+      "file": "recovery",
+      "wav": "effect/priest_recovery"
+    }
+  ],
+  "83": [
+    {
+      "type": "STR",
+      "file": "sanctuary",
+      "wav": "effect/priest_sanctuary"
+    }
+  ],
+  "84": [
+    {
+      "type": "STR",
+      "file": "impositio",
+      "wav": "effect/priest_impositio"
+    }
+  ],
+  "85": [
+    {
+      "type": "STR",
+      "file": "lexaeterna",
+      "wav": "effect/priest_lexaeterna"
+    }
+  ],
+  "86": [
+    {
+      "type": "STR",
+      "file": "aspersio",
+      "wav": "effect/priest_aspersio"
+    }
+  ],
+  "87": [
+    {
+      "type": "STR",
+      "file": "lexdivina",
+      "wav": "effect/priest_lexdivina"
+    }
+  ],
+  "88": [
+    {
+      "type": "STR",
+      "file": "suffragium",
+      "wav": "effect/priest_suffragium"
+    }
+  ],
+  "91": [
+    {
+      "type": "STR",
+      "file": "benedictio",
+      "wav": "effect/priest_benedictio"
+    }
+  ],
+  "112": [
+    {
+      "type": "STR",
+      "file": "kyrie",
+      "wav": "effect/priest_kyrie_eleison_a"
+    }
+  ],
+  "113": [
+    {
+      "type": "STR",
+      "file": "magnus",
+      "wav": "effect/priest_magnus"
+    }
+  ],
+  "136": [
+    {
+      "type": "STR",
+      "file": "slowp",
+      "wav": "effect/priest_slowpoison"
+    }
+  ],
+  "318": [
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "50000",
+      "alphaMax": "0.2",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "0",
+      "rotate": "false",
+      "fade": "false"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "2000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "rotate": "false",
+      "fade": "true",
+      "repeat": "true"
+    }
+  ],
+  "319": [
+    {
+      "type": "CYLINDER",
+      "file": "magic_green",
+      "wav": "",
+      "duration": "50000",
+      "alphaMax": "0.3",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "2",
+      "animation": "0",
+      "rotate": "false",
+      "fade": "false"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "magic_green",
+      "wav": "",
+      "duration": "2000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "2",
+      "animation": "1",
+      "rotate": "false",
+      "fade": "true",
+      "repeat": "true"
+    }
+  ],
+  "62": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": "",
+      "duration": "800",
+      "alphaMax": "0.5",
+      "blendMode": "8",
+      "sizeStart": "60",
+      "sizeEnd": "160",
+      "duplicate": "4"
+    },
+    {
+      "type": "3D",
+      "file": "",
+      "wav": "",
+      "duration": "800",
+      "alphaMax": "123 / 255",
+      "blendMode": "8",
+      "sizeStart": "20",
+      "sizeEnd": "260",
+      "duplicate": "4"
+    },
+    {
+      "type": "3D",
+      "file": "",
+      "wav": "",
+      "duration": "800",
+      "alphaMax": "0.5",
+      "blendMode": "8",
+      "sizeStart": "60",
+      "sizeEnd": "160",
+      "duplicate": "4"
+    },
+    {
+      "type": "3D",
+      "file": "",
+      "wav": "",
+      "duration": "800",
+      "alphaMax": "123 / 255",
+      "blendMode": "8",
+      "sizeStart": "20",
+      "sizeEnd": "260",
+      "duplicate": "4"
+    },
+    {
+      "type": "3D",
+      "file": "",
+      "wav": "",
+      "duration": "800",
+      "alphaMax": "0.5",
+      "blendMode": "8",
+      "sizeStart": "60",
+      "sizeEnd": "160",
+      "duplicate": "4"
+    },
+    {
+      "type": "3D",
+      "file": "",
+      "wav": "",
+      "duration": "800",
+      "alphaMax": "123 / 255",
+      "blendMode": "8",
+      "sizeStart": "20",
+      "sizeEnd": "260",
+      "duplicate": "4"
+    },
+    {
+      "type": "3D",
+      "file": "",
+      "wav": "",
+      "duration": "800",
+      "alphaMax": "0.5",
+      "blendMode": "8",
+      "sizeStart": "60",
+      "sizeEnd": "160",
+      "duplicate": "4"
+    },
+    {
+      "type": "3D",
+      "file": "",
+      "wav": "",
+      "duration": "800",
+      "alphaMax": "123 / 255",
+      "blendMode": "8",
+      "sizeStart": "20",
+      "sizeEnd": "260",
+      "duplicate": "4"
+    },
+    {
+      "type": "3D",
+      "file": "",
+      "wav": "",
+      "duration": "800",
+      "alphaMax": "0.5",
+      "blendMode": "8",
+      "sizeStart": "60",
+      "sizeEnd": "160",
+      "duplicate": "4"
+    },
+    {
+      "type": "3D",
+      "file": "",
+      "wav": "",
+      "duration": "800",
+      "alphaMax": "123 / 255",
+      "blendMode": "8",
+      "sizeStart": "20",
+      "sizeEnd": "260",
+      "duplicate": "4"
+    },
+    {
+      "type": "3D",
+      "file": "",
+      "wav": "",
+      "duration": "800",
+      "alphaMax": "0.5",
+      "blendMode": "8",
+      "sizeStart": "60",
+      "sizeEnd": "160",
+      "duplicate": "4"
+    },
+    {
+      "type": "3D",
+      "file": "",
+      "wav": "",
+      "duration": "800",
+      "alphaMax": "123 / 255",
+      "blendMode": "8",
+      "sizeStart": "20",
+      "sizeEnd": "260",
+      "duplicate": "4"
+    },
+    {
+      "type": "3D",
+      "file": "",
+      "wav": "",
+      "duration": "800",
+      "alphaMax": "0.5",
+      "blendMode": "8",
+      "sizeStart": "60",
+      "sizeEnd": "160",
+      "duplicate": "4"
+    },
+    {
+      "type": "3D",
+      "file": "",
+      "wav": "",
+      "duration": "800",
+      "alphaMax": "123 / 255",
+      "blendMode": "8",
+      "sizeStart": "20",
+      "sizeEnd": "260",
+      "duplicate": "4"
+    },
+    {
+      "type": "3D",
+      "file": "",
+      "wav": "",
+      "duration": "800",
+      "alphaMax": "0.5",
+      "blendMode": "8",
+      "sizeStart": "60",
+      "sizeEnd": "160",
+      "duplicate": "4"
+    },
+    {
+      "type": "3D",
+      "file": "",
+      "wav": "",
+      "duration": "800",
+      "alphaMax": "123 / 255",
+      "blendMode": "8",
+      "sizeStart": "20",
+      "sizeEnd": "260",
+      "duplicate": "4"
+    },
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/wizard_sightrasher"
+    }
+  ],
+  "74": [
+    {
+      "type": "QuadHorn",
+      "file": "",
+      "wav": "",
+      "blendMode": "8",
+      "bottomSize": "[0.3",
+      "height": "[2.8",
+      "animation": "1"
+    },
+    {
+      "type": "QuadHorn",
+      "file": "",
+      "wav": "",
+      "blendMode": "8",
+      "bottomSize": "[0.3",
+      "height": "[2.3",
+      "animation": "1"
+    },
+    {
+      "type": "QuadHorn",
+      "file": "",
+      "wav": "",
+      "blendMode": "8",
+      "bottomSize": "[0.3",
+      "height": "[2.5",
+      "animation": "1"
+    },
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/wizard_icewall"
+    }
+  ],
+  "79": [
+    {
+      "type": "QuadHorn",
+      "file": "",
+      "wav": "",
+      "duration": "5000",
+      "blendMode": "1",
+      "bottomSize": "[0.5",
+      "height": "[0.95",
+      "animation": "3"
+    },
+    {
+      "type": "QuadHorn",
+      "file": "",
+      "wav": "",
+      "duration": "5000",
+      "blendMode": "1",
+      "bottomSize": "[0.1",
+      "height": "[0.2",
+      "animation": "2"
+    },
+    {
+      "type": "QuadHorn",
+      "file": "",
+      "wav": "",
+      "duration": "5000",
+      "blendMode": "1",
+      "bottomSize": "[0.1",
+      "height": "[0.2",
+      "animation": "2"
+    },
+    {
+      "type": "QuadHorn",
+      "file": "",
+      "wav": "",
+      "duration": "5000",
+      "blendMode": "1",
+      "bottomSize": "[0.1",
+      "height": "[0.2",
+      "animation": "2"
+    },
+    {
+      "type": "QuadHorn",
+      "file": "",
+      "wav": "",
+      "duration": "5000",
+      "blendMode": "1",
+      "bottomSize": "[0.1",
+      "height": "[0.2",
+      "animation": "2"
+    },
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/wizard_earthspike"
+    },
+    {
+      "type": "FUNC",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "89": [
+    {
+      "type": "STR",
+      "file": "stormgust",
+      "wav": "effect/wizard_stormgust"
+    }
+  ],
+  "90": [
+    {
+      "type": "STR",
+      "file": "lord",
+      "wav": "effect/wizard_fire_ivy"
+    }
+  ],
+  "92": [
+    {
+      "type": "STR",
+      "file": "meteor%d",
+      "wav": "effect/wizard_meteor"
+    },
+    {
+      "type": "FUNC",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "93": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/hunter_shockwavetrap"
+    },
+    {
+      "type": "3D",
+      "file": "effect/thunder_center.bmp",
+      "wav": "",
+      "duration": "200",
+      "alphaMax": "0.66 // 170/255 on C++",
+      "blendMode": "2",
+      "size": "35",
+      "toSrc": "true"
+    },
+    {
+      "type": "3D",
+      "file": "",
+      "wav": "",
+      "duration": "200",
+      "blendMode": "2 // RF_EMISSIVE (Aprox. Additive)",
+      "size": "45",
+      "toSrc": "true"
+    }
+  ],
+  "94": [
+    {
+      "type": "3D",
+      "file": "effect/thunder_pang.bmp",
+      "wav": "",
+      "duration": "100",
+      "blendMode": "2",
+      "sizeStart": "0",
+      "sizeEnd": "25"
+    },
+    {
+      "type": "3D",
+      "file": "",
+      "wav": "",
+      "duration": "300",
+      "blendMode": "2",
+      "size": "75"
+    }
+  ],
+  "95": [
+    {
+      "type": "STR",
+      "file": "quagmire",
+      "wav": ""
+    },
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/wizard_quagmire"
+    }
+  ],
+  "96": [
+    {
+      "type": "STR",
+      "file": "firepillar",
+      "wav": "effect/wizard_fire_pillar_a"
+    }
+  ],
+  "97": [
+    {
+      "type": "STR",
+      "file": "firepillarbomb",
+      "wav": "effect/wizard_fire_pillar_b"
+    }
+  ],
+  "116": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": "effect/wizard_waterball_chulung",
+      "duration": "500",
+      "blendMode": "2",
+      "size": "30.5"
+    }
+  ],
+  "117": [
+    {
+      "type": "3D",
+      "file": "data/sprite/\\xc0\\xcc\\xc6\\xd1\\xc6\\xae/waterball",
+      "wav": "effect/wizard_waterball_chulung",
+      "duration": "500",
+      "size": "50.0",
+      "duplicate": "20"
+    }
+  ],
+  "138": [
+    {
+      "type": "CYLINDER",
+      "file": "magic_red",
+      "wav": "",
+      "duration": "5000",
+      "bottomSize": "1.0",
+      "topSize": "2.0",
+      "height": "3",
+      "rotate": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "magic_red",
+      "wav": "",
+      "duration": "5000",
+      "bottomSize": "0.7",
+      "topSize": "1.5",
+      "height": "5",
+      "rotate": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "magic_red",
+      "wav": "",
+      "duration": "5000",
+      "bottomSize": "0.5",
+      "topSize": "1.0",
+      "height": "7",
+      "rotate": "true"
+    }
+  ],
+  "142": [
+    {
+      "type": "QuadHorn",
+      "file": "",
+      "wav": "",
+      "duration": "1000",
+      "blendMode": "1",
+      "bottomSize": "[0.4",
+      "height": "[0.75",
+      "animation": "3"
+    },
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/wizard_earthspike"
+    },
+    {
+      "type": "FUNC",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "69": [
+    {
+      "type": "STR",
+      "file": "skidtrap",
+      "wav": "effect/hunter_skidtrap"
+    }
+  ],
+  "98": [
+    {
+      "type": "FUNC",
+      "file": "",
+      "wav": "effect/black_adrenalinerush_b"
+    }
+  ],
+  "98_beforecast": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/black_adrenalinerush_a"
+    }
+  ],
+  "101": [
+    {
+      "type": "STR",
+      "file": "repairweapon",
+      "wav": ""
+    },
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/black_weapon_repair_a"
+    },
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/black_weapon_repair_a"
+    }
+  ],
+  "102": [
+    {
+      "type": "STR",
+      "file": "crashearth",
+      "wav": "effect/black_hammerfall"
+    },
+    {
+      "type": "FUNC",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "103": [
+    {
+      "type": "STR",
+      "file": "weaponperfection",
+      "wav": "effect/black_weapon_perfection"
+    }
+  ],
+  "104": [
+    {
+      "type": "STR",
+      "file": "maximizepower",
+      "wav": ""
+    }
+  ],
+  "128": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/black_overthrust"
+    }
+  ],
+  "99": [
+    {
+      "type": "FUNC",
+      "file": "",
+      "wav": "effect/hunter_flasher"
+    }
+  ],
+  "100": [
+    {
+      "type": "FUNC",
+      "file": "",
+      "wav": "effect/hunter_removetrap"
+    }
+  ],
+  "106": [
+    {
+      "type": "STR",
+      "file": "blastmine",
+      "wav": "effect/hunter_blastmine"
+    }
+  ],
+  "107": [
+    {
+      "type": "STR",
+      "file": "claymore",
+      "wav": "effect/hunter_claymoretrap"
+    }
+  ],
+  "108": [
+    {
+      "type": "STR",
+      "file": "freezing",
+      "wav": "effect/hunter_freezingtrap"
+    }
+  ],
+  "111": [
+    {
+      "type": "STR",
+      "file": "spring",
+      "wav": "effect/hunter_springtrap"
+    }
+  ],
+  "115": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/hunter_blitzbeat"
+    }
+  ],
+  "119": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/hunter_detecting"
+    }
+  ],
+  "139": [
+    {
+      "type": "STR",
+      "file": "sandman",
+      "wav": "effect/hunter_sandman"
+    }
+  ],
+  "145": [
+    {
+      "type": "SPR",
+      "file": "shockwave",
+      "wav": "effect/hunter_shockwavetrap"
+    }
+  ],
+  "146": [
+    {
+      "type": "STR",
+      "file": "shockwavehit",
+      "wav": ""
+    }
+  ],
+  "120": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/assasin_cloaking"
+    }
+  ],
+  "121": [
+    {
+      "type": "3D",
+      "file": "effect/ring2.bmp",
+      "wav": "effect/ef_stonecurse",
+      "duration": "400",
+      "alphaMax": "1.0",
+      "blendMode": "2",
+      "sizeStart": "100",
+      "sizeEnd": "300"
+    }
+  ],
+  "122": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "123": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/ef_frostdiver"
+    },
+    {
+      "type": "TRAIL",
+      "file": "",
+      "wav": "",
+      "duration": "2500",
+      "blendMode": "8",
+      "bottomSize": "[0.05",
+      "height": "[0.6",
+      "animation": "4"
+    }
+  ],
+  "124": [
+    {
+      "type": "STR",
+      "file": "venomdust",
+      "wav": "effect/assasin_poisonreact"
+    }
+  ],
+  "126": [
+    {
+      "type": "STR",
+      "file": "poisonreact_1st",
+      "wav": "effect/assasin_poisonreact"
+    }
+  ],
+  "127": [
+    {
+      "type": "STR",
+      "file": "poisonreact",
+      "wav": "effect/assasin_poisonreact"
+    }
+  ],
+  "129": [
+    {
+      "type": "STR",
+      "file": "venomsplasher",
+      "wav": "effect/assasin_venomsplasher"
+    }
+  ],
+  "132": [
+    {
+      "type": "QuadHorn",
+      "file": "",
+      "wav": "",
+      "duration": "15000",
+      "blendMode": "1",
+      "bottomSize": "0.15",
+      "height": "2.5",
+      "animation": "3"
+    },
+    {
+      "type": "QuadHorn",
+      "file": "",
+      "wav": "",
+      "duration": "15000",
+      "blendMode": "1",
+      "bottomSize": "0.15",
+      "height": "2.5",
+      "animation": "3"
+    },
+    {
+      "type": "QuadHorn",
+      "file": "",
+      "wav": "",
+      "duration": "15000",
+      "blendMode": "1",
+      "bottomSize": "0.15",
+      "height": "2.5",
+      "animation": "3"
+    }
+  ],
+  "143": [
+    {
+      "type": "STR",
+      "file": "sonicblow",
+      "wav": ""
+    }
+  ],
+  "171": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": "",
+      "duration": "100",
+      "alphaMax": "1",
+      "size": "80",
+      "repeat": "true"
+    }
+  ],
+  "600": [
+    {
+      "type": "3D",
+      "file": "\\xc0\\xaf\\xc0\\xfa\\xc0\\xce\\xc5\\xcd\\xc6\\xe4\\xc0\\xcc\\xbd\\xba/item/\\xba\\xa3\\xb3\\xd1\\xb3\\xaa\\xc0\\xcc\\xc7\\xc1.bmp",
+      "wav": "",
+      "duration": "200",
+      "alphaMax": "1",
+      "size": "30",
+      "rotate": "true",
+      "toSrc": "true"
+    }
+  ],
+  "222": [
+    {
+      "type": "CYLINDER",
+      "file": "ring_black",
+      "wav": "",
+      "duration": "3000",
+      "alphaMax": "0.6",
+      "blendMode": "8",
+      "bottomSize": "1.5",
+      "topSize": "1.5",
+      "height": "10",
+      "animation": "1",
+      "rotate": "true",
+      "fade": "true"
+    }
+  ],
+  "226": [
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "0.7",
+      "topSize": "0.7",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "3",
+      "topSize": "3",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "3",
+      "topSize": "3",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "3",
+      "topSize": "3",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_red",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.1",
+      "blendMode": "2",
+      "bottomSize": "3",
+      "topSize": "3",
+      "height": "5",
+      "animation": "1",
+      "duplicate": "3",
+      "rotate": "false",
+      "fade": "true"
+    },
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/cru_grand cross"
+    }
+  ],
+  "245": [
+    {
+      "type": "STR",
+      "file": "holy_cross",
+      "wav": "effect/cru_holy cross"
+    }
+  ],
+  "246": [
+    {
+      "type": "STR",
+      "file": "shield_charge",
+      "wav": ""
+    }
+  ],
+  "248": [
+    {
+      "type": "STR",
+      "file": "providence",
+      "wav": ""
+    }
+  ],
+  "249": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/cru_shield boomerang"
+    }
+  ],
+  "250": [
+    {
+      "type": "STR",
+      "file": "twohand",
+      "wav": "effect/knight_twohandquicken"
+    }
+  ],
+  "251": [
+    {
+      "type": "STR",
+      "file": "devotion",
+      "wav": ""
+    }
+  ],
+  "252": [
+    {
+      "type": "CYLINDER",
+      "file": "ring_yellow",
+      "wav": "",
+      "duration": "3000",
+      "alphaMax": "0.6",
+      "blendMode": "8",
+      "bottomSize": "1.5",
+      "topSize": "1.5",
+      "height": "10",
+      "animation": "1",
+      "rotate": "true",
+      "fade": "true"
+    }
+  ],
+  "336": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/kyrie_guard"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "guardk",
+      "wav": "",
+      "duration": "600",
+      "alphaMax": "0.6",
+      "blendMode": "2",
+      "bottomSize": "1.5",
+      "topSize": "1",
+      "height": "0.7",
+      "posZ": "2.14",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "guardk",
+      "wav": "",
+      "duration": "600",
+      "alphaMax": "0.6",
+      "blendMode": "2",
+      "bottomSize": "1.5",
+      "topSize": "1.5",
+      "height": "1.14",
+      "posZ": "1",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "guardk",
+      "wav": "",
+      "duration": "600",
+      "alphaMax": "0.6",
+      "blendMode": "2",
+      "bottomSize": "1",
+      "topSize": "1.5",
+      "height": "0.7",
+      "posZ": "0.3",
+      "fade": "true"
+    }
+  ],
+  "166": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "253": [
+    {
+      "type": "CYLINDER",
+      "file": "ring_blue",
+      "wav": "effect/\\xc8\\xed\\xb1\\xe2",
+      "duration": "1500",
+      "alphaMax": "0.3",
+      "blendMode": "2",
+      "bottomSize": "1.1",
+      "topSize": "1.1",
+      "height": "15",
+      "animation": "1",
+      "rotate": "true",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_blue",
+      "wav": "",
+      "duration": "1500",
+      "alphaMax": "0.3",
+      "blendMode": "2",
+      "bottomSize": "1",
+      "topSize": "1",
+      "height": "13",
+      "animation": "1",
+      "rotate": "true",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_blue",
+      "wav": "",
+      "duration": "1500",
+      "alphaMax": "0.3",
+      "blendMode": "2",
+      "bottomSize": "1.1",
+      "topSize": "3",
+      "height": "2",
+      "animation": "1",
+      "rotate": "true",
+      "fade": "true"
+    },
+    {
+      "type": "3D",
+      "file": "effect/pok3.tga",
+      "wav": "",
+      "duration": "1500",
+      "alphaMax": "0.8",
+      "blendMode": "2",
+      "size": "9",
+      "duplicate": "4"
+    },
+    {
+      "type": "3D",
+      "file": "effect/pok3.tga",
+      "wav": "",
+      "duration": "1300",
+      "alphaMax": "0.8",
+      "blendMode": "2",
+      "size": "9",
+      "duplicate": "20"
+    },
+    {
+      "type": "3D",
+      "file": "effect/pok3.tga",
+      "wav": "",
+      "duration": "1100",
+      "alphaMax": "0.8",
+      "blendMode": "2",
+      "size": "9",
+      "duplicate": "10"
+    }
+  ],
+  "254": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/mon_\\xb1\\xdd\\xb0\\xad\\xba\\xd2\\xb1\\xab"
+    }
+  ],
+  "261": [
+    {
+      "type": "CYLINDER",
+      "file": "ring_yellow",
+      "wav": "",
+      "duration": "1500",
+      "alphaMax": "0.5",
+      "blendMode": "8",
+      "bottomSize": "2",
+      "topSize": "5",
+      "height": "2",
+      "animation": "4",
+      "duplicate": "4",
+      "rotate": "true",
+      "fade": "true"
+    },
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/mon_\\xc6\\xf8\\xb1\\xe2"
+    }
+  ],
+  "262": [
+    {
+      "type": "3D",
+      "file": "effect/alpha_center.tga",
+      "wav": "effect/\\x6d\\x6f\\x6e\\x5f\\xc6\\xf8\\xb1\\xe2",
+      "duration": "550",
+      "alphaMax": "0.8",
+      "blendMode": "2",
+      "duplicate": "12"
+    }
+  ],
+  "263": [
+    {
+      "type": "CYLINDER",
+      "file": "ring_yellow",
+      "wav": "",
+      "duration": "1000",
+      "alphaMax": "0.3",
+      "blendMode": "8",
+      "bottomSize": "3",
+      "topSize": "6",
+      "height": "2",
+      "animation": "4",
+      "duplicate": "4",
+      "rotate": "true",
+      "fade": "true"
+    }
+  ],
+  "265": [
+    {
+      "type": "3D",
+      "file": "effect/blue_ivy.bmp",
+      "wav": "effect/mon_\\xc5\\xba\\xc1\\xf6\\xbd\\xc5\\xc5\\xeb",
+      "duration": "150",
+      "alphaMax": "1",
+      "blendMode": "2",
+      "size": "50",
+      "toSrc": "true"
+    }
+  ],
+  "266": [
+    {
+      "type": "3D",
+      "file": "effect/lens1.tga",
+      "wav": "effect/\\x6d\\x6f\\x6e\\x5f\\xbe\\xc6\\xbc\\xf6\\xb6\\xf3\\x20\\xc6\\xd0\\xc8\\xb2\\xb1\\xc7",
+      "duration": "550",
+      "alphaMax": "0.8",
+      "blendMode": "2",
+      "duplicate": "24"
+    }
+  ],
+  "267": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/mon_\\xc4\\xa7\\xc5\\xf5\\xb0\\xe6"
+    }
+  ],
+  "273": [
+    {
+      "type": "STR",
+      "file": "\\xbf\\xac\\xc8\\xaf",
+      "wav": "effect/mon_\\xbf\\xac\\xc8\\xaf"
+    }
+  ],
+  "328": [
+    {
+      "type": "CYLINDER",
+      "file": "ring_white",
+      "wav": "",
+      "duration": "800",
+      "blendMode": "2",
+      "bottomSize": "1",
+      "topSize": "4.5",
+      "height": "-4",
+      "animation": "2",
+      "fade": "true"
+    },
+    {
+      "type": "CYLINDER",
+      "file": "ring_white",
+      "wav": "",
+      "duration": "800",
+      "blendMode": "2",
+      "bottomSize": "1",
+      "topSize": "2.5",
+      "height": "-4",
+      "animation": "2",
+      "fade": "true"
+    },
+    {
+      "type": "3D",
+      "file": "effect/asura1.tga",
+      "wav": "",
+      "duration": "1200",
+      "alphaMax": "1",
+      "sizeStart": "250",
+      "sizeEnd": "120",
+      "posz": "4",
+      "duplicate": "3"
+    },
+    {
+      "type": "3D",
+      "file": "effect/asura1.tga",
+      "wav": "",
+      "duration": "400",
+      "alphaMax": "1",
+      "sizeStart": "120",
+      "sizeEnd": "200",
+      "posz": "4"
+    },
+    {
+      "type": "3D",
+      "file": "effect/asura2.tga",
+      "wav": "",
+      "duration": "1200",
+      "alphaMax": "1",
+      "sizeStart": "250",
+      "sizeEnd": "120",
+      "posz": "4",
+      "duplicate": "3"
+    },
+    {
+      "type": "3D",
+      "file": "effect/asura2.tga",
+      "wav": "",
+      "duration": "400",
+      "alphaMax": "1",
+      "sizeStart": "120",
+      "sizeEnd": "200",
+      "posz": "4"
+    },
+    {
+      "type": "3D",
+      "file": "effect/asura3.tga",
+      "wav": "",
+      "duration": "1200",
+      "alphaMax": "1",
+      "sizeStart": "250",
+      "sizeEnd": "120",
+      "posz": "4",
+      "duplicate": "3"
+    },
+    {
+      "type": "3D",
+      "file": "effect/asura3.tga",
+      "wav": "",
+      "duration": "400",
+      "alphaMax": "1",
+      "sizeStart": "120",
+      "sizeEnd": "200",
+      "posz": "4"
+    },
+    {
+      "type": "3D",
+      "file": "effect/asura4.tga",
+      "wav": "",
+      "duration": "1200",
+      "alphaMax": "1",
+      "sizeStart": "250",
+      "sizeEnd": "120",
+      "posz": "4",
+      "duplicate": "3"
+    },
+    {
+      "type": "3D",
+      "file": "effect/asura4.tga",
+      "wav": "",
+      "duration": "400",
+      "alphaMax": "1",
+      "sizeStart": "120",
+      "sizeEnd": "200",
+      "posz": "4"
+    },
+    {
+      "type": "3D",
+      "file": "effect/asura5.tga",
+      "wav": "",
+      "duration": "1200",
+      "alphaMax": "1",
+      "sizeStart": "250",
+      "sizeEnd": "120",
+      "posz": "4",
+      "duplicate": "3"
+    },
+    {
+      "type": "3D",
+      "file": "effect/asura5.tga",
+      "wav": "",
+      "duration": "400",
+      "alphaMax": "1",
+      "sizeStart": "120",
+      "sizeEnd": "200",
+      "posz": "4"
+    },
+    {
+      "type": "3D",
+      "file": "effect/asura6.tga",
+      "wav": "",
+      "duration": "1200",
+      "alphaMax": "1",
+      "sizeStart": "250",
+      "sizeEnd": "120",
+      "posz": "4",
+      "duplicate": "3"
+    },
+    {
+      "type": "3D",
+      "file": "effect/asura6.tga",
+      "wav": "",
+      "duration": "400",
+      "alphaMax": "1",
+      "sizeStart": "120",
+      "sizeEnd": "200",
+      "posz": "4"
+    }
+  ],
+  "329": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/ef_hit2"
+    },
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/ef_hit4"
+    },
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/ef_hit2"
+    }
+  ],
+  "234": [
+    {
+      "type": "STR",
+      "file": "spell",
+      "wav": "effect/sage_spell breake"
+    }
+  ],
+  "235": [
+    {
+      "type": "STR",
+      "file": "\\xb5\\xf0\\xbd\\xba\\xc6\\xe7",
+      "wav": ""
+    }
+  ],
+  "239": [
+    {
+      "type": "FUNC",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "240": [
+    {
+      "type": "FUNC",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "241": [
+    {
+      "type": "FUNC",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "242": [
+    {
+      "type": "FUNC",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "244": [
+    {
+      "type": "STR",
+      "file": "\\xb8\\xc5\\xc1\\xf7\\xb7\\xce\\xb5\\xe5",
+      "wav": "effect/sage_magic rod"
+    }
+  ],
+  "255": [
+    {
+      "type": "STR",
+      "file": "enc_fire",
+      "wav": "_enemy_hit_wind1"
+    }
+  ],
+  "256": [
+    {
+      "type": "STR",
+      "file": "enc_ice",
+      "wav": "_enemy_hit_wind1"
+    }
+  ],
+  "257": [
+    {
+      "type": "STR",
+      "file": "enc_wind",
+      "wav": "effect/_enemy_hit_wind1"
+    }
+  ],
+  "258": [
+    {
+      "type": "STR",
+      "file": "enc_earth",
+      "wav": "_enemy_hit_wind1"
+    }
+  ],
+  "227": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/rog_intimidate"
+    }
+  ],
+  "268": [
+    {
+      "type": "STR",
+      "file": "steal_coin",
+      "wav": ""
+    }
+  ],
+  "269": [
+    {
+      "type": "STR",
+      "file": "strip_weapon",
+      "wav": "effect/\\x74\\x5f\\xba\\xae\\xc6\\xa8\\xb1\\xe8"
+    }
+  ],
+  "270": [
+    {
+      "type": "STR",
+      "file": "strip_shield",
+      "wav": "effect/\\x74\\x5f\\xba\\xae\\xc6\\xa8\\xb1\\xe8"
+    }
+  ],
+  "271": [
+    {
+      "type": "STR",
+      "file": "strip_armor",
+      "wav": "effect/\\x74\\x5f\\xba\\xae\\xc6\\xa8\\xb1\\xe8"
+    }
+  ],
+  "272": [
+    {
+      "type": "STR",
+      "file": "strip_helm",
+      "wav": "effect/\\x74\\x5f\\xba\\xae\\xc6\\xa8\\xb1\\xe8"
+    }
+  ],
+  "274": [
+    {
+      "type": "2D",
+      "file": "effect/coin_a.bmp",
+      "wav": "",
+      "duration": "1500",
+      "alphaMax": "0.8",
+      "blendMode": "2",
+      "size": "20",
+      "posz": "2",
+      "duplicate": "30"
+    },
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/rog_steal coin"
+    }
+  ],
+  "275": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/rog_back stap"
+    }
+  ],
+  "276": [
+    {
+      "type": "3D",
+      "file": "effect/lens1.tga",
+      "wav": "",
+      "duration": "550",
+      "alphaMax": "0.8",
+      "blendMode": "2",
+      "duplicate": "20"
+    }
+  ],
+  "604": [
+    {
+      "type": "SPR",
+      "file": "cconfine",
+      "wav": "effect/ef_hit6"
+    }
+  ],
+  "298": [
+    {
+      "type": "3D",
+      "file": "\\xc0\\xaf\\xc0\\xfa\\xc0\\xce\\xc5\\xcd\\xc6\\xe4\\xc0\\xcc\\xbd\\xba/item/\\xbf\\xb0\\xbb\\xea\\xba\\xb4.bmp",
+      "wav": "",
+      "duration": "300",
+      "alphaMax": "1",
+      "size": "30",
+      "rotate": "true",
+      "toSrc": "true"
+    }
+  ],
+  "300": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "apocalips_attack"
+    }
+  ],
+  "302": [
+    {
+      "type": "SPR",
+      "file": "\\xb5\\xa5\\xb8\\xf3\\xbd\\xba\\xc6\\xae\\xb7\\xb9\\xc0\\xcc\\xbc\\xc7",
+      "wav": ""
+    }
+  ],
+  "278": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/\\xc0\\xda\\xc0\\xe5\\xb0\\xa1"
+    }
+  ],
+  "278_ground": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "279": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/\\xb1\\xe8\\xbc\\xad\\xb9\\xe6\\xb5\\xb7"
+    }
+  ],
+  "279_ground": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "280": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/\\xbf\\xb5\\xbf\\xf8\\xc0\\xc7\\x20\\xc8\\xa5\\xb5\\xb7"
+    }
+  ],
+  "280_ground": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "281": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/\\xc0\\xfc\\xc0\\xe5\\xc0\\xc7"
+    }
+  ],
+  "281_ground": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "282": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/\\xb4\\xcf\\xba\\xa7\\xb7\\xee\\xb0\\xd5\\xc0\\xc7\\x20\\xb9\\xdd\\xc1\\xf6"
+    }
+  ],
+  "282_ground": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "283": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/\\xb7\\xce\\xc5\\xb0"
+    }
+  ],
+  "283_ground": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "284": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/\\xbd\\xc9\\xbf\\xac\\xbc\\xd3\\xc0\\xb8\\xb7\\xce"
+    }
+  ],
+  "284_ground": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "285": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/\\xba\\xd2\\xbb\\xe7\\xbd\\xc5"
+    }
+  ],
+  "285_ground": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "286": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/\\xb4\\xde\\xba\\xfb\\xbc\\xbc\\xb7\\xb9\\xb3\\xaa\\xb5\\xa5"
+    }
+  ],
+  "286_ground": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "287": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/\\xbc\\xae\\xbe\\xe7\\xc0\\xc7\\x20\\xbe\\xee\\xbd\\xd8\\xbd\\xc5"
+    }
+  ],
+  "287_ground": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "288": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/\\xba\\xea\\xb6\\xf3\\xb1\\xe2\\xc0\\xc7\\x20\\xbd\\xc3"
+    }
+  ],
+  "288_ground": [
+    {
+      "type": "FUNC",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "289": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/\\xc0\\xcc\\xb5\\xd0\\xc0\\xc7\\x20\\xbb\\xe7\\xb0\\xfa"
+    }
+  ],
+  "289_ground": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "291": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/\\xc8\\xef\\xbe\\xf3\\xb0\\xc5\\xb8\\xb2"
+    }
+  ],
+  "291_ground": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "292": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/\\xb3\\xaa\\xb8\\xa6\\xc0\\xd8\\xc1\\xf6\\xb8\\xbb\\xbe\\xc6\\xbf\\xe4"
+    }
+  ],
+  "292_ground": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "293": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/\\xc7\\xe0\\xbf\\xee\\xc0\\xc7"
+    }
+  ],
+  "293_ground": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "294": [
+    {
+      "type": "WAV",
+      "file": "",
+      "wav": "effect/\\xb4\\xe7\\xbd\\xc5\\xc0\\xbb\\x20\\xc0\\xa7\\xc7\\xd1\\x20\\xbc\\xad\\xba\\xf1\\xbd\\xba"
+    }
+  ],
+  "294_ground": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "295": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "296": [
+    {
+      "type": "3D",
+      "file": "",
+      "wav": ""
+    }
+  ],
+  "606": [
+    {
+      "type": "SPR",
+      "file": "fvoice",
+      "wav": "amon_ra_die01"
+    }
+  ],
+  "607": [
+    {
+      "type": "SPR",
+      "file": "wink",
+      "wav": ""
+    }
+  ]
+}
