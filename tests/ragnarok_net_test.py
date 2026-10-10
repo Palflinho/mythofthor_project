@@ -307,8 +307,8 @@ def test_live_server_flow(host: str, reporter: TestReporter):
         return
 
     import time
-    username = "mythtest"
-    password = "mythtest123"
+    username = "mythbot"
+    password = "mythbot"
 
     try:
         # 4.1 Login Server (6900)

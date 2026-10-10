@@ -5,8 +5,8 @@ import sys
 
 LOGIN_HOST = "127.0.0.1"
 LOGIN_PORT = 6900
-USERNAME = "mythtest"
-PASSWORD = "mythtest123"
+USERNAME = "mythbot"
+PASSWORD = "mythbot"
 
 def pack_pos(x, y, dir_val=0):
     b0 = (x >> 2) & 0xFF
