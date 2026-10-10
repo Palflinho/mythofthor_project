@@ -4,6 +4,9 @@
 #include "Sprites/MythRoSpriteComponent.h"
 #include "Sprites/MythStrEffect.h"
 #include "Sprites/MythProcEffect.h"
+#include "Player/MythPlayerCharacter.h"
+#include "Engine/World.h"
+#include "GameFramework/PlayerController.h"
 
 #include "Dom/JsonObject.h"
 #include "GameFramework/Actor.h"
@@ -159,6 +162,18 @@ bool FMythSkillEffects::PlayEffectId(UObject* WorldContext, int32 EffectID, AAct
 			const bool bProc = AMythProcEffect::Spawn(WorldContext, P.Raw, Target, Feet, Source);
 			UE_LOG(LogTemp, Verbose, TEXT("MythSkillEffects: efeito %d %s '%s' %s"), EffectID, *P.Type, *P.File, bProc ? TEXT("ok") : TEXT("falhou"));
 			bAny |= bProc;
+		}
+		// FUNC quake: tremor de tela (Magnum Break 50 ms, Impacto Explosivo...); so se o efeito e perto do jogador
+		if (P.Type == TEXT("FUNC") && P.Raw.IsValid() && P.Raw->GetStringField(TEXT("func")) == TEXT("quake"))
+		{
+			const APlayerController* PC = WorldContext ? WorldContext->GetWorld()->GetFirstPlayerController() : nullptr;
+			if (AMythPlayerCharacter* Char = PC ? Cast<AMythPlayerCharacter>(PC->GetPawn()) : nullptr; Char && FVector::Dist2D(Char->GetActorLocation(), Feet) < 1500.f)
+			{
+				double Ms = 100.0;
+				P.Raw->TryGetNumberField(TEXT("duration"), Ms);
+				Char->StartQuake(static_cast<float>(Ms) / 1000.f);
+				bAny = true;
+			}
 		}
 		if (P.Type == TEXT("STR") && !P.File.IsEmpty())
 		{

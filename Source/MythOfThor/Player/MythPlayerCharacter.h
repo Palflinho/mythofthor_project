@@ -97,6 +97,9 @@ public:
 
 	virtual void Tick(float DeltaSeconds) override;
 
+	/** Tremor de tela (FUNC quake da EffectTable, docs/ref/11): sacode a camera por Seconds com a amplitude em uu. */
+	void StartQuake(float Seconds, float AmplitudeUU = 15.f);
+
 	/** Sprite do personagem composto em camadas (corpo + cabeca) a partir dos .spr/.act do cliente original. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprite")
 	TObjectPtr<UMythRoSpriteComponent> Sprite;
@@ -135,6 +138,9 @@ private:
 	float DestPitch = -45.f;
 	float DestArm = 5000.f;
 	bool bCameraLockedByMap = false;
+	float QuakeLeft = 0.f;
+	float QuakeTotal = 0.f;
+	float QuakeAmplitude = 0.f;
 
 	void ApplyCamera();
 };

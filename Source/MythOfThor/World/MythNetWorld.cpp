@@ -610,14 +610,14 @@ void AMythNetWorld::HandleUnitStop(int64 ID, int32 X, int32 Y)
 	}
 }
 
-void AMythNetWorld::HandleUnitDirection(int64 ID, uint8 HeadDir, uint8 BodyDir)
+void AMythNetWorld::HandleUnitDirection(int64 ID, uint8 HeadTurnValue, uint8 BodyDirValue)
 {
 	// ZC_CHANGE_DIRECTION: outro jogador virou o corpo e/ou a cabeca (doridori, Shift+clique)
 	const AActor* Actor = ResolveActor(ID);
 	if (UMythRoSpriteComponent* S = Actor ? Actor->FindComponentByClass<UMythRoSpriteComponent>() : nullptr)
 	{
-		S->SetFacingRoDir(BodyDir);
-		S->SetHeadDir(HeadDir);
+		S->SetFacingRoDir(BodyDirValue);
+		S->SetHeadDir(HeadTurnValue);
 	}
 }
 

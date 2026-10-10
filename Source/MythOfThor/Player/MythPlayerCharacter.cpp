@@ -148,8 +148,26 @@ void AMythPlayerCharacter::Tick(float DeltaSeconds)
 	ApplyCamera();
 }
 
+void AMythPlayerCharacter::StartQuake(float Seconds, float AmplitudeUU)
+{
+	QuakeLeft = QuakeTotal = FMath::Max(Seconds, 0.03f);
+	QuakeAmplitude = AmplitudeUU;
+	UE_LOG(LogTemp, Verbose, TEXT("MythQuake: %.0f ms, %.0f uu"), Seconds * 1000.f, AmplitudeUU);
+}
+
 void AMythPlayerCharacter::ApplyCamera()
 {
+	// Tremor: deslocamento aleatorio no plano da tela (mais forte na vertical), que some no fim
+	if (QuakeLeft > 0.f)
+	{
+		QuakeLeft -= GetWorld() ? GetWorld()->GetDeltaSeconds() : 0.016f;
+		const float Fade = FMath::Clamp(QuakeLeft / QuakeTotal, 0.f, 1.f);
+		CameraBoom->SocketOffset = FVector(0.f, FMath::FRandRange(-0.6f, 0.6f), FMath::FRandRange(-1.f, 1.f)) * QuakeAmplitude * Fade;
+	}
+	else if (!CameraBoom->SocketOffset.IsZero())
+	{
+		CameraBoom->SocketOffset = FVector::ZeroVector;
+	}
 	CameraBoom->TargetArmLength = CurrentArm;
 	CameraBoom->SetWorldRotation(FRotator(CurrentPitch, CameraYaw, 0.f));
 }

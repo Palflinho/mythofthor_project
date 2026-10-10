@@ -25,7 +25,7 @@ Ordem do que se vê o tempo todo jogando. Quem: Claude, salvo indicação.
 | 1.2 | Camadas: capa/asas e carrinho feitos e vistos no jogo (03); falta teste do usuário | 🟡 |
 | 1.3 | Posturas pickup, readyfight, stun, 2º golpe (03). A arma guardada já segue o `.act` | ⬜ conferir |
 | 1.4 | Flechas (05): arco do jogador feito; falta monstros arqueiros e conferir o tempo | 🟡 |
-| 1.5 | Tremor de tela, aura do 99 (05) | ⬜ |
+| 1.5 | Tremor de tela feito; aura do 99 espera a pesquisa (coord 012) (05) | 🟡 |
 | 1.6 | Efeitos de 2ª classe e transclasse testados jogando (05, 11) | 🟡 receitas prontas, falta testar |
 | 1.7 | Barra de cast, ícones de buff e debuff (05) | ⬜ conferir |
 | 1.8 | Câmera: clamp do terreno, `viewpointtable`, memória entre mapas (02) | ⬜ |

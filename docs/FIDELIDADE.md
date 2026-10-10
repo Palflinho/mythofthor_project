@@ -99,12 +99,12 @@ Hoje só 👤 o que o roadmap marcava como feito e testado; o resto está ⬜.
 | Números de dano (spr `숫자`, arco, 70 ticks; Miss 80; cura 120) | ✅ | 👤 | `MythHUD.cpp` |
 | Crítico (estrela atrás) | ✅ | 👤 | |
 | Level up (anjo) | ✅ | 👤 | |
-| Aura do nível 99 | ❌ P2 | ⬜ | |
+| Aura do nível 99 | ❌ P2 | ⬜ | Os specs só descrevem em palavras. Pesquisa pedida ao Antigravity (coord 012). |
 | Portal (anéis, textura, velocidade) | ✅ | 👤 | `MythWarpPortal` |
 | Efeitos de skill da 1ª classe: desenhador procedural | 🟡 | 👤 só Impacto Explosivo e Cura | `MythProcEffect`, `skill_effects_full.json` |
 | Efeitos 2ª classe e transclasse | ⚠️ P1 | ⬜ | Tabela completa gerada (coord 010/011), nenhuma testada jogando. |
 | Efeitos `.str` | ✅ | ❓ | `MythStrEffect` |
-| Tremor de tela | ❌ P2 | ⬜ | Nenhuma ocorrência no código. |
+| Tremor de tela (`FUNC quake`, 29 efeitos) | ✅ P2 | ⬜ | Feito em 2026-10-10: sacode a câmera na duração do efeito (50 a 200 ms), só se o efeito é a menos de 30 células do jogador; amplitude 15 uu (~10 px, do spec). Visto no log com o Martelo de Hammerfall; o balanço em si só você vê jogando. |
 | Flechas (sprite do projétil) | 🟡 P1 | ⬜ | Feito em 2026-10-10: efeito 2003 (`skel_archer_arrow.spr`, ponta apontando para o alvo) no ataque básico com arco (arma view 11) e nas skills que usam 2003/2004. O número de dano e a reação do alvo esperam a flecha chegar. **Tempo conferido só pelo roBrowser** (soma 192 ms ao attackMT do arco; o spec não diz quando a flecha sai): confirmar no OM. Monstros arqueiros (tabela `AttackEffect.PROJECTILE`) ainda não. |
 | Morte, teleporte, ressurreição | ❓ P2 | ⬜ | |
 | Ícones de status/buff com barra de duração | ❓ P1 | ⬜ | `status_icons.json` existe; conferir se a HUD mostra. |
