@@ -858,6 +858,12 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case RagnarokPackets::HEADER_ZC_NOTIFY_PLAYERMOVE:
 				HandlePlayerMove(PacketData, ActualLen);
 				break;
+			case RagnarokPackets::HEADER_ZC_NOTIFY_MOVE:
+				HandleNotifyMove(PacketData, ActualLen);
+				break;
+			case RagnarokPackets::HEADER_ZC_STOPMOVE:
+				HandleStopMove(PacketData, ActualLen);
+				break;
 			case RagnarokPackets::HEADER_ZC_NOTIFY_VANISH:
 				HandleUnitVanish(PacketData, ActualLen);
 				break;
@@ -1170,6 +1176,8 @@ void URagnarokNetworkSubsystem::HandleUnitAppear(const uint8* PacketData, int32 
 	// entao tudo a partir dali fica 4 bytes adiante.
 	const bool bWalking = PacketID == RagnarokPackets::HEADER_ZC_UNIT_WALKING;
 	FIntPoint WalkTo(-1, -1);
+	FIntPoint WalkFrom(-1, -1);
+	uint32 WalkTick = 0;
 	const int32 Shift = bWalking ? 4 : 0;
 	auto U16 = [PacketData](int32 Offset) { return static_cast<int32>(*reinterpret_cast<const uint16*>(PacketData + Offset)); };
 	auto I16 = [PacketData](int32 Offset) { return static_cast<int32>(*reinterpret_cast<const int16*>(PacketData + Offset)); };
@@ -1213,6 +1221,8 @@ void URagnarokNetworkSubsystem::HandleUnitAppear(const uint8* PacketData, int32 
 			Unit.HP = I32(83);
 		}
 		WalkTo = FIntPoint(ToX, ToY); // anunciado depois do OnUnitAppear (o ator precisa existir)
+		WalkFrom = FIntPoint(FromX, FromY);
+		WalkTick = (PacketSize >= 41) ? *reinterpret_cast<const uint32*>(PacketData + 37) : static_cast<uint32>(FPlatformTime::Cycles());
 	}
 
 	char NameBuf[25] = { 0 };
@@ -1226,7 +1236,8 @@ void URagnarokNetworkSubsystem::HandleUnitAppear(const uint8* PacketData, int32 
 	OnUnitAppear.Broadcast(Unit);
 	if (WalkTo.X >= 0)
 	{
-		OnUnitMove.Broadcast(Unit.GID, WalkTo.X, WalkTo.Y, static_cast<int32>(FPlatformTime::Cycles()));
+		OnUnitWalk.Broadcast(Unit.GID, WalkFrom.X, WalkFrom.Y, WalkTo.X, WalkTo.Y, static_cast<int32>(WalkTick));
+		OnUnitMove.Broadcast(Unit.GID, WalkTo.X, WalkTo.Y, static_cast<int32>(WalkTick));
 	}
 }
 
@@ -1234,8 +1245,10 @@ void URagnarokNetworkSubsystem::HandlePlayerMove(const uint8* PacketData, int32 
 {
 	int32 FromX = 0, FromY = 0, ToX = 0, ToY = 0;
 	RagnarokPackets::UnpackMovePath(PacketData + 6, FromX, FromY, ToX, ToY);
+	uint32 StartTick = (PacketSize >= 6) ? *reinterpret_cast<const uint32*>(PacketData + 2) : static_cast<uint32>(FPlatformTime::Cycles());
 
-	OnUnitMove.Broadcast(SavedAccountID, ToX, ToY, static_cast<int32>(FPlatformTime::Cycles())); // no map-server o proprio jogador e o AID
+	OnUnitWalk.Broadcast(SavedAccountID, FromX, FromY, ToX, ToY, static_cast<int32>(StartTick));
+	OnUnitMove.Broadcast(SavedAccountID, ToX, ToY, static_cast<int32>(StartTick)); // no map-server o proprio jogador e o AID
 	OnPlayerMoveConfirmed.Broadcast(ToX, ToY);
 }
 
@@ -2278,5 +2291,47 @@ void URagnarokNetworkSubsystem::HandleAttackOutOfRange(const uint8* PacketData, 
 	}
 
 	OnAttackOutOfRange.Broadcast(Pkt->TargetAID, Pkt->TargetX, Pkt->TargetY, Pkt->CurrentAttRange);
+}
+
+void URagnarokNetworkSubsystem::HandleNotifyMove(const uint8* PacketData, int32 PacketSize)
+{
+	if (PacketSize < 16)
+	{
+		return;
+	}
+
+	uint32 GID = *reinterpret_cast<const uint32*>(PacketData + 2);
+	int32 FromX = 0, FromY = 0, ToX = 0, ToY = 0;
+	RagnarokPackets::UnpackMovePath(PacketData + 6, FromX, FromY, ToX, ToY);
+	uint32 StartTick = *reinterpret_cast<const uint32*>(PacketData + 12);
+
+	if (bLogPackets)
+	{
+		UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] [OnUnitWalk] GID=%u From=(%d,%d) To=(%d,%d) Tick=%u"),
+			GID, FromX, FromY, ToX, ToY, StartTick);
+	}
+
+	OnUnitWalk.Broadcast(GID, FromX, FromY, ToX, ToY, static_cast<int32>(StartTick));
+	OnUnitMove.Broadcast(GID, ToX, ToY, static_cast<int32>(StartTick));
+}
+
+void URagnarokNetworkSubsystem::HandleStopMove(const uint8* PacketData, int32 PacketSize)
+{
+	if (PacketSize < 10)
+	{
+		return;
+	}
+
+	uint32 AID = *reinterpret_cast<const uint32*>(PacketData + 2);
+	uint16 xPos = *reinterpret_cast<const uint16*>(PacketData + 6);
+	uint16 yPos = *reinterpret_cast<const uint16*>(PacketData + 8);
+
+	if (bLogPackets)
+	{
+		UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] [OnUnitStop] AID=%u Pos=(%u,%u)"),
+			AID, xPos, yPos);
+	}
+
+	OnUnitStop.Broadcast(AID, static_cast<int32>(xPos), static_cast<int32>(yPos));
 }
 

@@ -311,6 +311,10 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnEquipResult, int32, Index, int
 // Ataque fora de alcance (Tarefa A5)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnAttackOutOfRange, int64, TargetID, int32, TargetX, int32, TargetY, int32, Range);
 
+// Posição de partida e parada (Tarefa A6)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FOnUnitWalk, int64, UnitID, int32, FromX, int32, FromY, int32, ToX, int32, ToY, int32, StartTick);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnUnitStop, int64, UnitID, int32, X, int32, Y);
+
 // Delegates de compatibilidade anterior
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerMoveConfirmed, int32, TargetX, int32, TargetY);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnDamageReceived, int64, TargetID, int32, Damage, bool, bIsCritical, bool, bIsMiss);
@@ -552,6 +556,12 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
 	FOnUnitMove OnUnitMove;
 
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Movement")
+	FOnUnitWalk OnUnitWalk;
+
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Movement")
+	FOnUnitStop OnUnitStop;
+
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
 	FOnUnitVanish OnUnitVanish;
 
@@ -717,4 +727,6 @@ private:
 	void HandleNotifyEffect(const uint8* PacketData, int32 PacketSize);
 	void HandleEquipAck(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleAttackOutOfRange(const uint8* PacketData, int32 PacketSize);
+	void HandleNotifyMove(const uint8* PacketData, int32 PacketSize);
+	void HandleStopMove(const uint8* PacketData, int32 PacketSize);
 };

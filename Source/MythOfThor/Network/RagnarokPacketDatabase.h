@@ -32,6 +32,8 @@ namespace RagnarokPackets
     static constexpr uint16 HEADER_CZ_NOTIFY_ACTORINIT  = 0x007d; // 2 bytes
     static constexpr uint16 HEADER_CZ_REQUEST_MOVE      = 0x0881; // 5 bytes (clif_parse_WalkToXY em 20211103; 0x035f virou ReqClickBuyingStore)
     static constexpr uint16 HEADER_ZC_NOTIFY_PLAYERMOVE = 0x0087; // 12 bytes
+    static constexpr uint16 HEADER_ZC_NOTIFY_MOVE       = 0x0086; // 16 bytes (outras unidades andando)
+    static constexpr uint16 HEADER_ZC_STOPMOVE          = 0x0088; // 10 bytes (unidade parou: AID, x, y)
     static constexpr uint16 HEADER_CZ_REQUEST_ACT       = 0x088e; // 7 bytes (ou 0x0360)
     static constexpr uint16 HEADER_ZC_NOTIFY_ACT        = 0x08c8; // 34 bytes
     static constexpr uint16 HEADER_ZC_ATTACK_FAILURE_FOR_DISTANCE = 0x0139; // 16 bytes (alvo longe ao atacar)
@@ -163,7 +165,9 @@ namespace RagnarokPackets
             case 0x0083: return 2;
             case 0x0084: return 2;
             case 0x0085: return 10;
+            case 0x0086: return 16;
             case 0x0087: return 12;
+            case 0x0088: return 10;
             case 0x0089: return 11;
             case 0x008b: return 2;
             case 0x008c: return 14;
