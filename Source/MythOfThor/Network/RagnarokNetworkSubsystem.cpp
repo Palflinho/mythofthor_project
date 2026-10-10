@@ -264,6 +264,18 @@ bool URagnarokNetworkSubsystem::SendMoveRequest(int32 TargetX, int32 TargetY)
 	return true;
 }
 
+bool URagnarokNetworkSubsystem::SendChangeDirection(uint8 HeadDir, uint8 BodyDir)
+{
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	// CZ_CHANGE_DIRECTION (clif_parse_ChangeDir 0x0897, 5 bytes): headdir no byte 2, dir no byte 4 (DIR_NORTH 0 ... NORTHEAST 7)
+	uint8 Packet[5] = { 0x97, 0x08, HeadDir, 0, BodyDir };
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
 bool URagnarokNetworkSubsystem::SendActionRequest(int64 TargetID, uint8 ActionType)
 {
 	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)

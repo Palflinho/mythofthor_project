@@ -268,6 +268,15 @@ void AMythPlayerController::MoveToCursor()
 			}
 			return;
 		}
+		if (IsShiftDown())
+		{
+			// Shift+clique: so vira para a celula, sem andar (docs/ref/01 3.7), e avisa o servidor (CZ_CHANGE_DIRECTION)
+			if (bForceNextMove)
+			{
+				TurnToward(Hit.ImpactPoint);
+			}
+			return;
+		}
 		PendingPickup = nullptr;
 		ClearFocusedTarget(); // clicar no chao cancela o alvo
 		// Segurando o botao: so pede de novo quando a celula sob o cursor muda (nao inunda o servidor)
@@ -700,6 +709,32 @@ void AMythPlayerController::SetFocusedTarget(AMythMonster* NewTarget)
 	ChaseRepathTimer = 0.f;
 }
 
+void AMythPlayerController::TurnToward(const FVector& WorldLocation)
+{
+	AMythPlayerCharacter* Char = GetMythCharacter();
+	if (!Char)
+	{
+		return;
+	}
+	if (Char->Sprite)
+	{
+		Char->Sprite->FaceLocation(WorldLocation);
+	}
+	// Direcao do rAthena pela diferenca de celulas (Y do grid cresce para o norte): 0 N, 1 NO, 2 O, 3 SO, 4 S, 5 SE, 6 L, 7 NE
+	const FIntPoint From = WorldToCell(Char->GetActorLocation());
+	const FIntPoint To = WorldToCell(WorldLocation);
+	if (From == To)
+	{
+		return;
+	}
+	const float Angle = FMath::RadiansToDegrees(FMath::Atan2(static_cast<float>(-(To.X - From.X)), static_cast<float>(To.Y - From.Y)));
+	const uint8 Dir = static_cast<uint8>((FMath::RoundToInt(Angle / 45.f) + 8) % 8);
+	if (URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr)
+	{
+		Net->SendChangeDirection(0, Dir);
+	}
+}
+
 void AMythPlayerController::SetupRoCursors()
 {
 	UGameViewportClient* Viewport = GetWorld() ? GetWorld()->GetGameViewport() : nullptr;
@@ -829,6 +864,15 @@ void AMythPlayerController::UpdateRoCursor()
 		UE_LOG(LogTemp, Verbose, TEXT("MythCursor: %d"), static_cast<int32>(Want));
 	}
 	CurrentMouseCursor = Want;
+}
+
+void AMythPlayerController::MythTurn(int32 X, int32 Y)
+{
+	if (const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld()))
+	{
+		UE_LOG(LogTemp, Log, TEXT("MythTurn: virando para (%d, %d)"), X, Y);
+		TurnToward(Info->CellToWorld(FIntPoint(X, Y), 0.f));
+	}
 }
 
 void AMythPlayerController::MythPointAt(int32 X, int32 Y)

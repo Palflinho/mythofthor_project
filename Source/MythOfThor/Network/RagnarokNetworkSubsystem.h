@@ -378,6 +378,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
 	bool SendMoveRequest(int32 TargetX, int32 TargetY);
 
+	/** Vira o personagem sem andar (Shift+clique, sentado): CZ_CHANGE_DIRECTION. Dir do rAthena: 0 norte ... 7 nordeste. */
+	bool SendChangeDirection(uint8 HeadDir, uint8 BodyDir);
+
 	/**
 	 * Envia requisição de ação/ataque básico para o Map-Server (CZ_REQUEST_ACT 0x088E / 0x0360).
 	 */

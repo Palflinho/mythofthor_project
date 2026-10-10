@@ -153,6 +153,10 @@ public:
 	UFUNCTION(Exec)
 	void MythTargetNearest();
 
+	/** Teste: MythTurn 160 185 -> como Shift+clique na celula: vira sem andar (CZ_CHANGE_DIRECTION). */
+	UFUNCTION(Exec)
+	void MythTurn(int32 X, int32 Y);
+
 	/** Teste: MythPointAt 160 185 -> poe o mouse sobre a celula e registra no log o cursor do RO escolhido. */
 	UFUNCTION(Exec)
 	void MythPointAt(int32 X, int32 Y);
@@ -259,6 +263,8 @@ private:
 	// Cursores do cliente (data/sprite/cursors.act -> tools/gen_cursors.py): escolhidos a cada quadro pelo que esta
 	// sob o mouse, na prioridade do RO (docs/ref/04 3.1)
 	void SetupRoCursors();
+	/** Vira o personagem para o ponto sem andar e avisa o servidor (Shift+clique). */
+	void TurnToward(const FVector& WorldLocation);
 	void UpdateRoCursor();
 	bool IsCursorOverUi() const;
 	/** Celula (ou vizinha) de um NPC de portal (45/139) */
