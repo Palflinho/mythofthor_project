@@ -29,7 +29,7 @@ O que o jogador faz nos primeiros 5 minutos precisa estar perfeito.
 | 2.2 | Números de dano em arco, Miss, crítico, cura (fórmulas do cliente). Falta: level up, aura 99 | Claude | 🟡 docs/ref/05 |
 | 2.3 | Sons: ouvinte no personagem, atenuação do RO, balanço/impacto por arma, reação por armadura. Falta: sons de interface | Claude | 🟡 docs/ref/07 |
 | 2.4 | Portais de Prontera para dentro das casas (portais voltaram a existir; interiores reimportados alinhados) | Claude + Antigravity | ✅ |
-| 2.5 | Borda rosa (magenta) nas folhagens | Antigravity | coord 006 |
+| 2.5 | Borda rosa (magenta) nas folhagens | Antigravity | ✅ feito (coord 006/007) |
 
 ## Fase 3: HUD moderna (estilo Myth of Yggdrasil, com as peças oficiais do cliente LATAM)
 
@@ -70,7 +70,7 @@ O Antigravity projeta e implementa no servidor; o Claude faz as janelas.
 | # | Item | Quem |
 |---|---|---|
 | 7.1 | Todas as classes até transclasse: sprites, skills, efeitos | Claude + Antigravity |
-| 7.2 | Quests que liberam habilidades extras | Antigravity |
+| 7.2 | Quests que liberam habilidades extras | Antigravity | 🟡 docs/sistemas/06 |
 | 7.3 | Adaptar algumas skills de 3ª classe | Antigravity → Claude |
 
 ## Fase 8: teste fechado (~20 amigos no seu PC)
