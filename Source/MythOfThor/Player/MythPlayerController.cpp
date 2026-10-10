@@ -1643,3 +1643,33 @@ void AMythPlayerController::MythTargetNearest()
 		HandleSkillTargetClick(Hit);
 	}
 }
+
+void AMythPlayerController::MythFireArrow(int32 Count)
+{
+	if (Count > 1)
+	{
+		// Rajada: uma flecha a cada 80 ms, para pegar uma no ar nos prints
+		for (int32 i = 0; i < FMath::Min(Count, 100); ++i)
+		{
+			FTimerHandle H;
+			GetWorldTimerManager().SetTimer(H, FTimerDelegate::CreateWeakLambda(this, [this]() { MythFireArrow(1); }), 0.08f * i + 0.01f, false);
+		}
+		return;
+	}
+	const APawn* P = GetPawn();
+	AMythMonster* Best = nullptr;
+	float BestDist = TNumericLimits<float>::Max();
+	for (TActorIterator<AMythMonster> It(GetWorld()); It && P; ++It)
+	{
+		const float D = FVector::DistSquared(It->GetActorLocation(), P->GetActorLocation());
+		if (!It->IsDead() && D < BestDist)
+		{
+			BestDist = D;
+			Best = *It;
+		}
+	}
+	if (Best && P)
+	{
+		FMythSkillEffects::PlayEffectId(this, 2003, Best, Best->GetActorLocation(), const_cast<APawn*>(P));
+	}
+}

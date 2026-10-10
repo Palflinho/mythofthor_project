@@ -1,6 +1,8 @@
 #include "Sprites/MythProcEffect.h"
 
 #include "Sprites/MythStrEffect.h"
+#include "Sprites/MythRoSpriteComponent.h"
+#include "Sprites/RoSpriteFormats.h"
 #include "UI/MythRoUITextures.h"
 
 #include "Camera/PlayerCameraManager.h"
@@ -64,6 +66,44 @@ namespace
 		}
 		return Tex;
 	}
+
+	/** "data/sprite/npc/skel_archer_arrow": primeira imagem da primeira acao do .spr/.act do cliente, como textura. */
+	UTexture2D* LoadSpriteImage(const FString& File, FVector2D& OutPixels)
+	{
+		const FString Base = FPaths::Combine(UMythRoSpriteComponent::GetAssetsRoot(), File);
+		TArray<uint8> SprBytes, ActBytes;
+		FRoSpr Spr;
+		FRoAct Act;
+		if (!FFileHelper::LoadFileToArray(SprBytes, *(Base + TEXT(".spr"))) || !FFileHelper::LoadFileToArray(ActBytes, *(Base + TEXT(".act")))
+			|| !Spr.Load(SprBytes) || !Act.Load(ActBytes) || Act.Actions.Num() == 0 || Act.Actions[0].Frames.Num() == 0)
+		{
+			return nullptr;
+		}
+		for (const FRoActLayer& L : Act.Actions[0].Frames[0].Layers)
+		{
+			const FRoSprImage* Img = L.SprIndex >= 0 ? Spr.Find(L.SprIndex, L.SprType) : nullptr;
+			if (!Img || Img->Width <= 0 || Img->Height <= 0)
+			{
+				continue;
+			}
+			UTexture2D* Tex = UTexture2D::CreateTransient(Img->Width, Img->Height, PF_B8G8R8A8);
+			if (!Tex)
+			{
+				return nullptr;
+			}
+			Tex->Filter = TF_Bilinear;
+			Tex->SRGB = true;
+			Tex->NeverStream = true;
+			FTexture2DMipMap& Mip = Tex->GetPlatformData()->Mips[0];
+			void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
+			FMemory::Memcpy(Data, Img->Pixels.GetData(), Img->Pixels.Num() * sizeof(FColor));
+			Mip.BulkData.Unlock();
+			Tex->UpdateResource();
+			OutPixels = FVector2D(Img->Width, Img->Height);
+			return Tex;
+		}
+		return nullptr;
+	}
 }
 
 AMythProcEffect::AMythProcEffect()
@@ -87,7 +127,11 @@ bool AMythProcEffect::Spawn(UObject* WorldContext, const TSharedPtr<FJsonObject>
 	{
 		return false;
 	}
-	UTexture2D* Tex = LoadEffectTexture(Part->GetStringField(TEXT("file")));
+	const FString FileName = Part->GetStringField(TEXT("file"));
+	// Projeteis de sprite (flecha: data/sprite/npc/skel_archer_arrow): uma imagem do .spr, nao uma textura de efeito
+	const bool bSprite = FileName.StartsWith(TEXT("data/sprite/"), ESearchCase::IgnoreCase);
+	FVector2D ImagePixels = FVector2D::ZeroVector;
+	UTexture2D* Tex = bSprite ? LoadSpriteImage(FileName, ImagePixels) : LoadEffectTexture(FileName);
 	if (!Tex)
 	{
 		UE_LOG(LogTemp, Verbose, TEXT("MythProcEffect: sem textura '%s'"), *Part->GetStringField(TEXT("file")));
@@ -101,13 +145,24 @@ bool AMythProcEffect::Spawn(UObject* WorldContext, const TSharedPtr<FJsonObject>
 		return false;
 	}
 	E->Origin = Feet;
+	E->bSpriteImage = bSprite;
+	E->ImagePixels = ImagePixels;
 	E->Follow = Flag(Part, TEXT("attached")) ? Target : nullptr;
 	if (Source)
 	{
 		E->SourcePos = AMythStrEffect::FeetOf(Source);
 		E->bHasSource = true;
 	}
-	if (UMaterialInterface* Additive = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Myth/M_StrAdditive.M_StrAdditive")))
+	if (bSprite)
+	{
+		// Sprite opaco (sem brilho aditivo): o mesmo material mascarado sem luz dos sprites do jogo
+		if (UMaterialInterface* Masked = LoadObject<UMaterialInterface>(nullptr, TEXT("/Paper2D/MaskedUnlitSpriteMaterial.MaskedUnlitSpriteMaterial")))
+		{
+			E->Material = UMaterialInstanceDynamic::Create(Masked, E);
+			E->Material->SetTextureParameterValue(TEXT("SpriteTexture"), Tex);
+		}
+	}
+	else if (UMaterialInterface* Additive = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Myth/M_StrAdditive.M_StrAdditive")))
 	{
 		E->Material = UMaterialInstanceDynamic::Create(Additive, E);
 		E->Material->SetTextureParameterValue(TEXT("Tex"), Tex);
@@ -157,6 +212,10 @@ bool AMythProcEffect::Setup(const TSharedPtr<FJsonObject>& Part)
 		Num(Part, TEXT("sizeStartY"), Num(Part, TEXT("sizeRandStartY"), Num(Part, TEXT("sizeY"), Num(Part, TEXT("sizeStart"), Size))))) * Unit;
 	SizeEnd = FVector2D(Num(Part, TEXT("sizeEndX"), Num(Part, TEXT("sizeRandEndX"), Num(Part, TEXT("sizeX"), Num(Part, TEXT("sizeEnd"), SizeStart.X / Unit)))),
 		Num(Part, TEXT("sizeEndY"), Num(Part, TEXT("sizeRandEndY"), Num(Part, TEXT("sizeY"), Num(Part, TEXT("sizeEnd"), SizeStart.Y / Unit))))) * Unit;
+	if (bSpriteImage)
+	{
+		SizeStart = SizeEnd = ImagePixels * 2.f; // 1 px = 2 cm, como o resto dos sprites
+	}
 	ZStart = Num(Part, TEXT("poszStart"), Num(Part, TEXT("posz"), 1.f)) * ProcCell;
 	ZEnd = Num(Part, TEXT("poszEnd"), ZStart / ProcCell) * ProcCell;
 	bToSrc = Flag(Part, TEXT("toSrc")) && bHasSource;
@@ -297,6 +356,18 @@ void AMythProcEffect::BuildQuads()
 			const FVector From = SourcePos + FVector(0.f, 0.f, ZStart);
 			const FVector To = Origin + FVector(0.f, 0.f, ZEnd > 0.f ? ZEnd : ProcCell);
 			Center = FMath::Lerp(From, To, T);
+			if (bSpriteImage)
+			{
+				// A ponta (parte de baixo da imagem) aponta, na tela, para onde a flecha vai (rotateToTarget)
+				const FVector Delta = To - From;
+				const float DX = FVector::DotProduct(Delta, Right);
+				const float DY = FVector::DotProduct(Delta, Up);
+				if (FMath::Square(DX) + FMath::Square(DY) > 1.f)
+				{
+					AxisY = -(Right * DX + Up * DY).GetSafeNormal();
+					AxisX = (Right * DY - Up * DX).GetSafeNormal();
+				}
+			}
 		}
 		else
 		{
@@ -308,7 +379,7 @@ void AMythProcEffect::BuildQuads()
 		const int32 i = Verts.Num();
 		Verts.Append({ Center - HX + HY, Center + HX + HY, Center - HX - HY, Center + HX - HY });
 		UVs.Append({ FVector2D(0.f, 0.f), FVector2D(1.f, 0.f), FVector2D(0.f, 1.f), FVector2D(1.f, 1.f) });
-		const FColor C = FLinearColor(Tint.R, Tint.G, Tint.B, AlphaAt(T)).ToFColor(false);
+		const FColor C = FLinearColor(Tint.R, Tint.G, Tint.B, bSpriteImage ? 1.f : AlphaAt(T)).ToFColor(false);
 		Colors.Append({ C, C, C, C });
 		Tris.Append({ i, i + 1, i + 2, i + 1, i + 3, i + 2 });
 	}

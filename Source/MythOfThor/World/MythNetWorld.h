@@ -62,6 +62,8 @@ private:
 	UFUNCTION() void HandleUnitOption(int64 ID, int32 Option);
 	UFUNCTION() void HandleUnitVanish(int64 ID, uint8 Reason);
 	UFUNCTION() void HandleDamage(int64 SourceID, int64 TargetID, int32 Damage, uint8 DamageType, int32 DelayMs);
+	/** Numero de dano, sons e reacao do alvo (adiado ate a flecha chegar no caso do arco). */
+	void ShowImpact(int64 TargetID, AActor* Source, AActor* Target, int32 Damage, uint8 DamageType);
 	UFUNCTION() void HandleChat(const FString& Sender, const FString& Text, const FString& ColorHex);
 	UFUNCTION() void HandleStats(const FRagnarokPlayerStats& Stats);
 	UFUNCTION() void HandleDisconnected(const FString& Reason);

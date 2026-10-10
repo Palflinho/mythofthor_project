@@ -127,6 +127,10 @@ public:
 	UFUNCTION(Exec)
 	void MythAttackNearest();
 
+	/** Teste: MythFireArrow -> a flecha do arco (efeito 2003) do personagem ate o monstro mais proximo. */
+	UFUNCTION(Exec)
+	void MythFireArrow(int32 Count = 1);
+
 	/** Console: MythTalkNearest -> conversa com o NPC do servidor mais proximo; MythNpcNext = Enter no dialogo. */
 	UFUNCTION(Exec)
 	void MythTalkNearest();

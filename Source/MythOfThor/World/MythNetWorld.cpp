@@ -695,6 +695,40 @@ void AMythNetWorld::HandleDamage(int64 SourceID, int64 TargetID, int32 Damage, u
 		return;
 	}
 
+	// Arco (view 11 da arma): a flecha sai ao fim do golpe e leva ~190 ms; o numero de dano e a reacao do alvo so
+	// aparecem quando ela chega (docs/ref/03; roBrowser soma 8 quadros de 24 ms ao attackMT para o arco)
+	const UMythRoSpriteComponent* SrcSprite = Source ? Source->FindComponentByClass<UMythRoSpriteComponent>() : nullptr;
+	if (SrcSprite && SrcSprite->MonsterSpriteName.IsEmpty() && SrcSprite->Weapon == 11)
+	{
+		const float Attack = FMath::Max(DelayMs, 1) / 1000.f;
+		TWeakObjectPtr<AActor> WSource(Source);
+		TWeakObjectPtr<AActor> WTarget(Target);
+		FTimerHandle LaunchHandle;
+		GetWorldTimerManager().SetTimer(LaunchHandle, FTimerDelegate::CreateWeakLambda(this, [this, WSource, WTarget]()
+		{
+			if (WSource.IsValid() && WTarget.IsValid())
+			{
+				FMythSkillEffects::PlayEffectId(this, 2003, WTarget.Get(), WTarget->GetActorLocation(), WSource.Get()); // ef_arrow_projectile
+			}
+		}), Attack + 0.05f, false);
+		FTimerHandle ImpactHandle;
+		GetWorldTimerManager().SetTimer(ImpactHandle, FTimerDelegate::CreateWeakLambda(this, [this, TargetID, WSource, WTarget, Damage, DamageType]()
+		{
+			ShowImpact(TargetID, WSource.Get(), WTarget.Get(), Damage, DamageType);
+		}), Attack + 0.192f, false);
+		return;
+	}
+	ShowImpact(TargetID, Source, Target, Damage, DamageType);
+}
+
+void AMythNetWorld::ShowImpact(int64 TargetID, AActor* Source, AActor* Target, int32 Damage, uint8 DamageType)
+{
+	if (!Target)
+	{
+		return;
+	}
+	const URagnarokNetworkSubsystem* Net = GetNet();
+	const int64 Self = Net ? Net->GetSelfID() : 0;
 	const FVector At = Target->GetActorLocation() + FVector(0.f, 0.f, 50.f);
 	if (Damage <= 0 || DamageType == DmgLuckyDodge)
 	{

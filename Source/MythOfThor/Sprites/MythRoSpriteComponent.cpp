@@ -31,7 +31,7 @@ namespace
 	const TCHAR* AccessoryDir = TEXT("악세사리"); // 악세사리
 	const TCHAR* ShieldDir = TEXT("방패");             // 방패
 	const TCHAR* RobeDir = TEXT("로브");   // 로브
-	const TCHAR* EffectDir = TEXT("이팩트"); // 이팩트 (o carrinho fica aqui)
+	const TCHAR* EffectSpriteDir = TEXT("이팩트"); // 이팩트 (o carrinho fica aqui)
 	const TCHAR* CartName = TEXT("손수레");   // 손수레
 
 	/** Config/equip_sprites.json (tools/gen_equip_sprites.py): nomes dos sprites de equipamento do cliente. */
@@ -444,7 +444,7 @@ void UMythRoSpriteComponent::LoadEquipment(const FString& Root, const FString& S
 	}
 
 	// Carrinho: data/sprite/이팩트/손수레<1..5>, 8 acoes (uma por direcao) de 6 quadros
-	Load(CartSource, CartType > 0 ? FPaths::Combine(SpriteRoot, EffectDir, FString::Printf(TEXT("%s%d"), CartName, CartType)) : FString());
+	Load(CartSource, CartType > 0 ? FPaths::Combine(SpriteRoot, EffectSpriteDir, FString::Printf(TEXT("%s%d"), CartName, CartType)) : FString());
 
 	// Capa/asas/mochila: data/sprite/로브/<nome>/<sexo>/<sprite da classe>_<sexo> (o mesmo nome do corpo da classe)
 	const FString* RobeName = Robe > 0 ? RobeNames().Find(Robe) : nullptr;

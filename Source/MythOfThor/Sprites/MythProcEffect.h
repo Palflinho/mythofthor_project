@@ -38,6 +38,9 @@ private:
 	FVector Origin = FVector::ZeroVector;
 	FVector SourcePos = FVector::ZeroVector;
 	bool bHasSource = false;
+	/** Projetil de sprite (.spr): uma imagem, com a ponta girada para o alvo. */
+	bool bSpriteImage = false;
+	FVector2D ImagePixels = FVector2D::ZeroVector;
 
 	FString Type;
 	float Time = 0.f;

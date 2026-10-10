@@ -105,7 +105,7 @@ Hoje só 👤 o que o roadmap marcava como feito e testado; o resto está ⬜.
 | Efeitos 2ª classe e transclasse | ⚠️ P1 | ⬜ | Tabela completa gerada (coord 010/011), nenhuma testada jogando. |
 | Efeitos `.str` | ✅ | ❓ | `MythStrEffect` |
 | Tremor de tela | ❌ P2 | ⬜ | Nenhuma ocorrência no código. |
-| Flechas (sprite do projétil) | ❌ P1 | ⬜ | Arqueiro, Caçador, Bardo, etc. dependem. |
+| Flechas (sprite do projétil) | 🟡 P1 | ⬜ | Feito em 2026-10-10: efeito 2003 (`skel_archer_arrow.spr`, ponta apontando para o alvo) no ataque básico com arco (arma view 11) e nas skills que usam 2003/2004. O número de dano e a reação do alvo esperam a flecha chegar. **Tempo conferido só pelo roBrowser** (soma 192 ms ao attackMT do arco; o spec não diz quando a flecha sai): confirmar no OM. Monstros arqueiros (tabela `AttackEffect.PROJECTILE`) ainda não. |
 | Morte, teleporte, ressurreição | ❓ P2 | ⬜ | |
 | Ícones de status/buff com barra de duração | ❓ P1 | ⬜ | `status_icons.json` existe; conferir se a HUD mostra. |
 | Barra de cast sobre o personagem | ❓ P1 | ⬜ | |
