@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 
 /**
- * Tabela de tamanhos de pacotes para o protocolo rAthena (PACKETVER 20211103).
+ * Tabela de tamanhos de pacotes para o protocolo rAthena (PACKETVER 20250402).
  * Gerado automaticamente diretamente dos fontes e binários do servidor rAthena.
  * 
  * Regra de framing:
@@ -94,6 +94,7 @@ namespace RagnarokPackets
     static constexpr uint16 HEADER_ZC_SKILLINFO_UPDATE  = 0x010e; // 11 bytes (atualizacao apos subir nivel de skill)
     static constexpr uint16 HEADER_ZC_SKILLINFO_UPDATE2 = 0x0b33; // 17 bytes (PACKETVER >= 20190807)
     static constexpr uint16 HEADER_CZ_USE_SKILL         = 0x089b; // 10 bytes (clif_parse_UseSkillToId; 0x0438 e DropItem)
+    static constexpr uint16 HEADER_CZ_USE_SKILL_TOGROUND= 0x0af4; // 11 bytes (clif_parse_UseSkillToPos no PACKETVER >= 20180207; 0x0959 em clientes antigos)
     static constexpr uint16 HEADER_CZ_UPGRADE_SKILLLEVEL= 0x0112; // 4 bytes (uint16 type, uint16 skill_id)
 
     // Itens no Chão

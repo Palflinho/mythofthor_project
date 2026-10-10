@@ -41,7 +41,7 @@ services:
     command: "/rathena/tools/docker/builder.sh"
     profiles: ["build"] # so roda com: docker compose --profile build run --rm builder
     environment:
-      BUILDER_CONFIGURE: "--enable-packetver=20211103 --enable-prere=yes"
+      BUILDER_CONFIGURE: "--enable-packetver=20250402 --enable-prere=yes"
 
   login:
     <<: *rathena

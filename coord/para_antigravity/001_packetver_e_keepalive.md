@@ -1,4 +1,4 @@
-status: em_andamento
+status: feito
 
 # 001: A7 (PACKETVER mais recente) + aviso sobre o keepalive
 

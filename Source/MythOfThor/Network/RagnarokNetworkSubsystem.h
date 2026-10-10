@@ -357,7 +357,7 @@ public:
 	static constexpr int32 LOGIN_SERVER_PORT = 6900;
 	static constexpr int32 CHAR_SERVER_PORT  = 6121;
 	static constexpr int32 MAP_SERVER_PORT   = 5121;
-	static constexpr uint32 CLIENT_PACKETVER = 20211103;
+	static constexpr uint32 CLIENT_PACKETVER = 20250402;
 
 	/**
 	 * Conecta ao Login-Server do rAthena e autentica a conta (CA_LOGIN 0x0064).

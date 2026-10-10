@@ -41,7 +41,7 @@ def run_test():
     s_login.connect((LOGIN_HOST, LOGIN_PORT))
 
     # CA_LOGIN (0x0064) - 55 bytes
-    ca_login = struct.pack("<HI24s24sB", 0x0064, 20211103, USERNAME.encode('ascii').ljust(24, b'\x00'), PASSWORD.encode('ascii').ljust(24, b'\x00'), 0)
+    ca_login = struct.pack("<HI24s24sB", 0x0064, 20250402, USERNAME.encode('ascii').ljust(24, b'\x00'), PASSWORD.encode('ascii').ljust(24, b'\x00'), 0)
     s_login.sendall(ca_login)
 
     resp = s_login.recv(1024)

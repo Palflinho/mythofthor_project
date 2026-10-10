@@ -550,11 +550,12 @@ bool URagnarokNetworkSubsystem::UseSkill(int32 SkillID, int32 SkillLevel, int64 
 		#pragma pack(push, 1)
 		struct FCZ_UseSkillToPosPacket
 		{
-			uint16 PacketID = 0x0959; // CZ_USE_SKILL_TOGROUND (lv 2, id 4, x 6, y 8) ativo em 20211103
+			uint16 PacketID = 0x0af4; // CZ_USE_SKILL_TOGROUND (clif_parse_UseSkillToPos 0x0af4, len: 11 no PACKETVER 20250402)
 			uint16 SkillLevel = 1;
 			uint16 SkillID = 0;
 			uint16 X = 0;
 			uint16 Y = 0;
+			uint8 MoreInfo = 0;
 		};
 		#pragma pack(pop)
 
@@ -563,6 +564,7 @@ bool URagnarokNetworkSubsystem::UseSkill(int32 SkillID, int32 SkillLevel, int64 
 		Packet.SkillID = static_cast<uint16>(SkillID);
 		Packet.X = static_cast<uint16>(TargetX);
 		Packet.Y = static_cast<uint16>(TargetY);
+		Packet.MoreInfo = 0;
 		SendData(reinterpret_cast<const uint8*>(&Packet), sizeof(Packet));
 		return true;
 	}
