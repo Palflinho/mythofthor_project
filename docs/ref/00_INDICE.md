@@ -22,6 +22,10 @@
 | [**11_efeitos_procedurais.md**](file:///e:/Documentos/Reposit%C3%B3rios/mythofthor_project/docs/ref/11_efeitos_procedurais.md) | **Efeitos Procedurais de Habilidades** | Catálogo completo dos efeitos procedurais de habilidades (1ª, 2ª e transclasses) com geometrias 3D, cilindros, partículas e blends. | RB `EffectTable.js`, `SkillEffect.js` |
 | [**12_hud_latam_prints.md**](file:///e:/Documentos/Reposit%C3%B3rios/mythofthor_project/docs/ref/12_hud_latam_prints.md) | **Prints e Medidas da HUD LATAM** | Análise comparativa e catalogação pixel a pixel dos elementos visuais da interface moderna. | Capturas oficiais LATAM |
 | [**13_efeitos_aura99.md**](file:///e:/Documentos/Reposit%C3%B3rios/mythofthor_project/docs/ref/13_efeitos_aura99.md) | **Aura 99 e Efeitos FUNC** | Matemática e geometria exata da Aura 99 (SwirlingAura, GroundAura, Level99Bubble), modos /aura e catálogo dos 33 FUNC vazios. | RB `SwirlingAura.js`, `GroundAura.js`, `Level99Bubble.js`, `EntityAura.js` |
+| [**14_lojas_npc.md**](file:///e:/Documentos/Reposit%C3%B3rios/mythofthor_project/docs/ref/14_lojas_npc.md) | **Lojas de NPC (Compra e Venda)** | Diálogo comercial, vitrine e cesta de compras/vendas, limites de peso (90%), fórmulas de Desconto e Superfaturar, e protocolo de pacotes. | OM `UIChooseSellBuyWnd.cpp`, `UIItemShopWnd.cpp`; RB `NpcStore.js`; rAthena |
+| [**15_kafra.md**](file:///e:/Documentos/Reposit%C3%B3rios/mythofthor_project/docs/ref/15_kafra.md) | **Serviços da Kafra e Armazém** | Menu de atendimento, registro de Ponto de Salve, janela de Armazém (300 slots, trava de movimento), tarifas e rotas de teleporte e carrinho. | OM `UIStorageWnd.h`; RB `StorageCommon.js`; rAthena `kafras.txt` |
+| [**16_morte_e_reviver.md**](file:///e:/Documentos/Reposit%C3%B3rios/mythofthor_project/docs/ref/16_morte_e_reviver.md) | **Morte, Renascimento e Ressurreição** | Transição para estado de morte (queda do sprite, gemido de dor), penalidade de 1% de EXP, popup de retorno ao Save Point e ressurreição em campo. | OM `GameActor.cpp`, `UIChooseWnd.cpp`; RB `EntityAction.js`; rAthena |
+
 
 
 ---

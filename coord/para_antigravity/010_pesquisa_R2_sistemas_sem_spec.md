@@ -1,4 +1,4 @@
-status: pendente
+status: em_andamento
 
 # 010: pesquisa R2, sistemas do cliente que ainda não têm spec (prioridade alta)
 
