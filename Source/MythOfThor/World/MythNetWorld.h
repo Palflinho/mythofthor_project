@@ -72,6 +72,7 @@ private:
 	UFUNCTION() void HandleSkillCast(int64 SourceID, int64 TargetID, int32 SkillID, int32 CastMs, int32 CellX, int32 CellY);
 	UFUNCTION() void HandleSkillFailed(int32 SkillID, int32 Cause);
 	UFUNCTION() void HandleSpecialEffect(int64 UnitID, int32 EffectID);
+	UFUNCTION() void HandleNotifyEffect(int64 UnitID, int32 Type);
 	UFUNCTION() void HandleEquipChanged(int64 UnitID, uint8 Look, int32 Value);
 	UFUNCTION() void HandleStatusChange(int64 UnitID, int32 EfstID, bool bActive, int32 TotalMs, int32 RemainMs);
 

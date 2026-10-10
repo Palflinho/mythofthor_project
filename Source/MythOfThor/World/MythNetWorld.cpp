@@ -209,6 +209,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnSkillCast.AddDynamic(this, &AMythNetWorld::HandleSkillCast);
 	Net->OnSkillFailed.AddDynamic(this, &AMythNetWorld::HandleSkillFailed);
 	Net->OnSpecialEffect.AddDynamic(this, &AMythNetWorld::HandleSpecialEffect);
+	Net->OnNotifyEffect.AddDynamic(this, &AMythNetWorld::HandleNotifyEffect);
 	Net->OnEquipChanged.AddDynamic(this, &AMythNetWorld::HandleEquipChanged);
 	Net->OnStatusChange.AddDynamic(this, &AMythNetWorld::HandleStatusChange);
 
@@ -259,6 +260,7 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnSkillCast.RemoveAll(this);
 		Net->OnSkillFailed.RemoveAll(this);
 		Net->OnSpecialEffect.RemoveAll(this);
+		Net->OnNotifyEffect.RemoveAll(this);
 		Net->OnEquipChanged.RemoveAll(this);
 		Net->OnStatusChange.RemoveAll(this);
 	}
@@ -923,6 +925,34 @@ void AMythNetWorld::HandleEquipChanged(int64 UnitID, uint8 Look, int32 Value)
 	default: return; // cor da roupa, sapatos, capa: ainda nao desenhados
 	}
 	S->ReloadSprites();
+}
+
+void AMythNetWorld::HandleNotifyEffect(int64 UnitID, int32 Type)
+{
+	// ZC_NOTIFY_EFFECT: 0 level de base, 1 de classe, 2/3 refino falhou/deu certo, 7/8 super aprendiz, 9 taekwon.
+	// Como o cliente: o anjo (angel.str + levelup.wav, efeito 371) e o joblvup.str (158) da tabela de efeitos
+	AActor* Unit = ResolveActor(UnitID);
+	if (!Unit)
+	{
+		return;
+	}
+	int32 EffectID = 0;
+	switch (Type)
+	{
+	case 0: case 7: case 9: EffectID = 371; break;
+	case 1: case 8: EffectID = 158; break;
+	case 2: EffectID = 155; break;
+	case 3: EffectID = 154; break;
+	default: break;
+	}
+	if (EffectID > 0)
+	{
+		FMythSkillEffects::PlayEffectId(this, EffectID, Unit, Unit->GetActorLocation());
+	}
+	if (Type == 1 || Type == 8)
+	{
+		UMythRoSound::PlayWavAtLocation(this, TEXT("levelup.wav"), Unit->GetActorLocation());
+	}
 }
 
 void AMythNetWorld::HandleSpecialEffect(int64 UnitID, int32 EffectID)

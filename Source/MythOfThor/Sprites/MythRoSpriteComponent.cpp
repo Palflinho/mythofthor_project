@@ -776,8 +776,10 @@ void UMythRoSpriteComponent::RebuildMesh(const FRotator& CamRot)
 	AddHeadLayer(HatBottom, BodyFrame, ActionIndex, FrameIndex, 3.f, Section);
 	AddHeadLayer(HatMid, BodyFrame, ActionIndex, FrameIndex, 4.f, Section);
 	AddHeadLayer(HatTop, BodyFrame, ActionIndex, FrameIndex, 5.f, Section);
-	AddBodyLayer(WeaponSource, ActionIndex, FrameIndex, 6.5f, Section);
 	const int32 Dir = ActionIndex % 8;
+	// De costas para a camera (3..5) a arma tambem vai para tras do tronco (docs/ref/03 4.4)
+	const bool bWeaponBehind = Dir > 2 && Dir < 6;
+	AddBodyLayer(WeaponSource, ActionIndex, FrameIndex, bWeaponBehind ? -2.f : 6.5f, Section);
 	const bool bShieldBehind = Dir > 1 && Dir < 6;
 	AddBodyLayer(ShieldSource, ActionIndex, FrameIndex, bShieldBehind ? -3.f : 8.f, Section);
 
