@@ -33,7 +33,7 @@ Legenda: ✅ feito e testado · 🟡 em parte · ⬜ falta
 | 2.4 | Portais e interiores de Prontera | os dois | ✅ |
 | 2.5 | Borda rosa nas folhagens | Antigravity | ✅ |
 | 2.6 | Efeitos das skills da 1ª classe (desenhador procedural pronto; Impacto Explosivo e Cura testados). Falta: tremor de tela, flechas (sprite) e testar as outras | Claude | 🟡 |
-| 2.7 | Efeitos das skills da 2ª classe e transclasse | Antigravity → Claude | ⬜ coord 008 (blocos 2 e 3) |
+| 2.7 | Efeitos das skills da 2ª classe e transclasse | Antigravity → Claude | ✅ receitas procedurais e tabela completa gerada (coord 010 e 011) |
 
 ## Fase 3: jogável mínimo (novo) ⬜
 
@@ -46,9 +46,9 @@ O que falta para alguém jogar de Aprendiz até a 2ª classe sem comandos de GM.
 | 3.3 | Árvore de habilidades (subir nível, usar, arrastar para a barra) | Claude | ✅ |
 | 3.4 | Lojas de NPC (comprar e vender) | Claude | ⬜ |
 | 3.5 | Kafra: salvar, armazém, teleporte | Claude | ⬜ |
-| 3.6 | Troca de classe pelas quests originais (Aprendiz → 1ª → 2ª) | os dois | ⬜ |
+| 3.6 | Troca de classe pelas quests originais (Aprendiz → 1ª → 2ª) | os dois | 🟡 NPCs e pacotes mapeados (coord 012) |
 | 3.7 | Morrer e voltar ao ponto salvo (janela de "reviver") | Claude | ⬜ |
-| 3.8 | Mapas para upar: campos e cidades das classes (Izlude, Geffen, Payon, Morroc, Alberta) e as primeiras cavernas | Antigravity (importar) → Claude | ⬜ |
+| 3.8 | Mapas para upar: campos e cidades das classes (Izlude, Geffen, Payon, Morroc, Alberta) e as primeiras cavernas | Antigravity (importar) → Claude | ✅ 40 mapas importados no UE 5.8 (coord 013) |
 | 3.9 | Chat completo (cochicho, grupo), grupo (party) e troca entre jogadores | Claude | ⬜ |
 
 ## Fase 4: HUD igual à do RO LATAM 🟡
