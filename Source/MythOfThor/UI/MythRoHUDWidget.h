@@ -260,6 +260,14 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> SkillNames;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> SkillLevels;
 	UPROPERTY() TObjectPtr<UTextBlock> SkillPointsText;
+	// Arvore de habilidades (skilltreeview.lub do cliente): celulas da grade 7 colunas, abas por etapa da classe e
+	// as linhas que ligam cada skill ao pre-requisito
+	UPROPERTY() TArray<TObjectPtr<UImage>> SkillCellFrames;
+	UPROPERTY() TArray<TObjectPtr<UImage>> SkillTabBacks;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> SkillTabTexts;
+	UPROPERTY() TArray<TObjectPtr<UImage>> SkillLinePool;
+	TArray<int32> SkillTabJobs;
+	int32 SkillTab = -1; // -1 = a aba da classe atual
 
 	float WindowRefreshTimer = 0.f;
 

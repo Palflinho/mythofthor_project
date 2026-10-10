@@ -5,6 +5,7 @@
 #include "UI/MythRoHUDWidget.h"
 
 #include "UI/MythRoClientTables.h"
+#include "UI/MythRoSkillTree.h"
 #include "UI/MythRoUITextures.h"
 #include "Network/RagnarokNetworkSubsystem.h"
 #include "Player/MythPlayerController.h"
@@ -67,6 +68,12 @@ namespace
 	constexpr int32 RoItemCols = 8;
 	constexpr int32 RoItemRows = 3;
 	constexpr int32 RoSkillRows = 7;
+	// Arvore de habilidades: grade de 7 colunas, celula de 40 x 46 (moldura 32, icone 24, nivel embaixo)
+	constexpr float RoTreeLeft = 8.f;
+	constexpr float RoTreeTop = 42.f;
+	constexpr float RoTreeCellW = 40.f;
+	constexpr float RoTreeCellH = 46.f;
+	constexpr int32 RoTreeRows = 6;
 }
 
 URagnarokNetworkSubsystem* UMythRoHUDWidget::GetNet() const
@@ -183,27 +190,41 @@ void UMythRoHUDWidget::BuildEquipWindow()
 
 void UMythRoHUDWidget::BuildSkillsWindow()
 {
-	// Habilidades (Alt+S): barra de cima (skill_upbar), linhas de 32 px com icone/nome/nivel, barra de baixo com os pontos
-	const float W = 280.f;
-	const float H = 17.f + 20.f + RoSkillRows * 32.f + 32.f;
-	SkillsWindow = MakeRoPanel(TEXT("Habilidades"), FVector2D(W, H), FVector2D(340.f, 150.f));
+	// Habilidades (Alt+S) em arvore, como a janela do cliente moderno: abas por etapa da classe, grade de 7 colunas
+	// na posicao do skilltreeview.lub, linhas ate os pre-requisitos e o nivel/"+" em cada skill
+	const float W = RoTreeLeft * 2.f + FMythRoSkillTree::Columns * RoTreeCellW;
+	const float H = RoTreeTop + RoTreeRows * RoTreeCellH + 40.f;
+	SkillsWindow = MakeRoPanel(TEXT("Habilidades"), FVector2D(W, H), FVector2D(340.f, 110.f));
 	AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("skill_upbar_left"))), 0.f, 17.f, 12.f, 20.f);
 	AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("skill_upbar_mid"))), 12.f, 17.f, W - 24.f, 20.f);
 	AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("skill_upbar_right"))), W - 12.f, 17.f, 12.f, 20.f);
-	AddText(SkillsWindow, 10.f, 20.f, 7, RoWinLabel)->SetText(FText::FromString(TEXT("Lista de habilidades")));
-	for (int32 i = 0; i < RoSkillRows; ++i)
+	for (int32 t = 0; t < 4; ++t)
 	{
-		const float Y = 37.f + i * 32.f;
-		if (i % 2 == 1)
-		{
-			AddColor(SkillsWindow, FLinearColor(0.90f, 0.92f, 0.96f, 0.9f), 0.f, Y, W, 32.f);
-		}
-		UImage* Icon = AddImage(SkillsWindow, nullptr, 6.f, Y + 4.f, 24.f, 24.f);
+		UImage* Back = AddColor(SkillsWindow, FLinearColor::Transparent, 6.f + t * 78.f, 19.f, 76.f, 16.f);
+		Back->SetVisibility(ESlateVisibility::Collapsed);
+		SkillTabBacks.Add(Back);
+		SkillTabTexts.Add(AddText(SkillsWindow, 12.f + t * 78.f, 20.f, 7, RoWinText));
+	}
+	// Linhas primeiro (ficam por baixo dos icones)
+	for (int32 i = 0; i < 90; ++i)
+	{
+		UImage* Line = AddColor(SkillsWindow, FLinearColor(0.62f, 0.66f, 0.74f, 1.f), 0.f, 0.f, 1.f, 1.f);
+		Line->SetVisibility(ESlateVisibility::Collapsed);
+		SkillLinePool.Add(Line);
+	}
+	for (int32 i = 0; i < RoTreeRows * FMythRoSkillTree::Columns; ++i)
+	{
+		const float X = RoTreeLeft + (i % FMythRoSkillTree::Columns) * RoTreeCellW;
+		const float Y = RoTreeTop + (i / FMythRoSkillTree::Columns) * RoTreeCellH;
+		UImage* Frame = AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("itemwin_mid"))), X + 5.f, Y, 32.f, 32.f);
+		Frame->SetVisibility(ESlateVisibility::Collapsed);
+		SkillCellFrames.Add(Frame);
+		UImage* Icon = AddImage(SkillsWindow, nullptr, X + 9.f, Y + 4.f, 24.f, 24.f);
 		Icon->SetVisibility(ESlateVisibility::Collapsed);
 		SkillIcons.Add(Icon);
-		SkillNames.Add(AddText(SkillsWindow, 38.f, Y + 3.f, 8, RoWinText));
-		SkillLevels.Add(AddText(SkillsWindow, 38.f, Y + 17.f, 7, RoWinLabel));
-		UImage* Up = AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("lv_up_on"))), W - 32.f, Y + 5.f, 22.f, 22.f);
+		SkillNames.Add(AddText(SkillsWindow, X + 7.f, Y + 32.f, 7, RoWinText)); // nivel "3/10"
+		SkillLevels.Add(nullptr);
+		UImage* Up = AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("lv_up_on"))), X + 27.f, Y + 18.f, 14.f, 14.f);
 		Up->SetVisibility(ESlateVisibility::Collapsed);
 		SkillUpButtons.Add(Up);
 	}
@@ -419,57 +440,143 @@ void UMythRoHUDWidget::RefreshEquipWindow()
 
 void UMythRoHUDWidget::RefreshSkillsWindow()
 {
-	SkillRowID.Init(0, SkillNames.Num());
-	SkillRowLevel.Init(0, SkillNames.Num());
+	const int32 Cells = SkillIcons.Num();
+	SkillRowID.Init(0, Cells);
+	SkillRowLevel.Init(0, Cells);
 	const URagnarokNetworkSubsystem* Net = GetNet();
-	int32 Row = 0;
+	const int32 Points = Net ? Net->GetPlayerStats().SkillPoints : 0;
+	const int32 Job = Net ? Net->GetPlayerStats().JobClass : 0;
+
+	// Abas: uma por etapa da classe (Aprendiz, 1a, 2a, trans); sem escolha, abre na classe atual
+	SkillTabJobs = FMythRoSkillTree::JobChain(Job);
+	if (!SkillTabJobs.IsValidIndex(SkillTab))
+	{
+		SkillTab = SkillTabJobs.Num() - 1;
+	}
+	for (int32 t = 0; t < SkillTabTexts.Num(); ++t)
+	{
+		const bool bHas = SkillTabJobs.IsValidIndex(t);
+		SkillTabTexts[t]->SetText(bHas ? FText::FromString(FMythRoSkillTree::JobTabName(SkillTabJobs[t])) : FText::GetEmpty());
+		SkillTabTexts[t]->SetColorAndOpacity(FSlateColor(t == SkillTab ? RoWinText : RoWinLabel));
+		SkillTabBacks[t]->SetVisibility(bHas ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+		SkillTabBacks[t]->SetColorAndOpacity(t == SkillTab ? FLinearColor(1.f, 1.f, 1.f, 0.85f) : FLinearColor(0.85f, 0.88f, 0.94f, 0.6f));
+	}
+
+	// Nivel de cada skill que o servidor mandou (ZC_SKILLINFO_LIST): ausente = ainda bloqueada
+	TMap<int32, const FRagnarokSkillInfo*> Known;
 	if (Net)
 	{
-		const int32 Points = Net->GetPlayerStats().SkillPoints;
-		const TArray<FRagnarokSkillInfo>& List = Net->GetSkillList();
-		SkillScroll = FMath::Clamp(SkillScroll, 0, FMath::Max(0, List.Num() - SkillNames.Num()));
-		int32 Skip = SkillScroll;
-		for (const FRagnarokSkillInfo& Skill : List)
+		for (const FRagnarokSkillInfo& S : Net->GetSkillList())
 		{
-			if (Skip > 0)
-			{
-				--Skip;
-				continue;
-			}
-			if (Row >= SkillNames.Num())
-			{
-				break;
-			}
-			SkillRowID[Row] = Skill.SkillID;
-			SkillRowLevel[Row] = Skill.Level;
-			// "Lv Up" como no cliente original: so com pontos sobrando e se o servidor diz que a skill ainda sobe
-			SkillUpButtons[Row]->SetVisibility(Points > 0 && Skill.bUpgradable ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
-			UTexture2D* Icon = FMythRoClientTables::SkillIcon(Skill.SkillID);
-			SkillIcons[Row]->SetBrush(RoWinBrush(Icon, FVector2D(24.f, 24.f) * UIScale));
-			SkillIcons[Row]->SetVisibility(Icon ? ESlateVisibility::Visible : ESlateVisibility::Collapsed); // Visible: arrastavel para a barra
-			FString Name = FMythRoClientTables::SkillName(Skill.SkillID);
-			if (Name.IsEmpty())
-			{
-				Name = Skill.SkillName;
-			}
-			SkillNames[Row]->SetText(FText::FromString(Name));
-			SkillLevels[Row]->SetText(FText::FromString(Skill.SpCost > 0
-				? FString::Printf(TEXT("Nv %d    Sp %d"), Skill.Level, Skill.SpCost)
-				: FString::Printf(TEXT("Nv %d"), Skill.Level)));
-			++Row;
+			Known.Add(S.SkillID, &S);
 		}
 	}
-	for (; Row < SkillNames.Num(); ++Row)
+	const TMap<int32, int32>* Grid = SkillTabJobs.IsValidIndex(SkillTab) ? FMythRoSkillTree::Grid(SkillTabJobs[SkillTab]) : nullptr;
+	TMap<int32, int32> CellOfSkill;
+	for (int32 i = 0; i < Cells; ++i)
 	{
-		SkillIcons[Row]->SetVisibility(ESlateVisibility::Collapsed);
-		SkillUpButtons[Row]->SetVisibility(ESlateVisibility::Collapsed);
-		SkillNames[Row]->SetText(FText::GetEmpty());
-		SkillLevels[Row]->SetText(FText::GetEmpty());
+		const int32* SkillID = Grid ? Grid->Find(i) : nullptr;
+		const bool bUsed = SkillID && *SkillID > 0;
+		SkillCellFrames[i]->SetVisibility(bUsed ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
+		if (!bUsed)
+		{
+			SkillIcons[i]->SetVisibility(ESlateVisibility::Collapsed);
+			SkillUpButtons[i]->SetVisibility(ESlateVisibility::Collapsed);
+			SkillNames[i]->SetText(FText::GetEmpty());
+			continue;
+		}
+		CellOfSkill.Add(*SkillID, i);
+		const FRagnarokSkillInfo* Info = Known.FindRef(*SkillID);
+		const FMythTreeSkill* Tree = FMythRoSkillTree::Skill(*SkillID);
+		const int32 Level = Info ? Info->Level : 0;
+		SkillRowID[i] = *SkillID;
+		SkillRowLevel[i] = Level;
+		UTexture2D* Icon = FMythRoClientTables::SkillIcon(*SkillID);
+		SkillIcons[i]->SetBrush(RoWinBrush(Icon, FVector2D(24.f, 24.f) * UIScale));
+		SkillIcons[i]->SetVisibility(Icon ? ESlateVisibility::Visible : ESlateVisibility::Collapsed); // Visible: arrastavel
+		// Aprendida: cor cheia; liberada (o servidor mandou com nivel 0): um pouco apagada; bloqueada: cinza
+		SkillIcons[i]->SetColorAndOpacity(Level > 0 ? FLinearColor::White : (Info ? FLinearColor(1.f, 1.f, 1.f, 0.7f) : FLinearColor(0.35f, 0.35f, 0.38f, 0.55f)));
+		SkillNames[i]->SetText(FText::FromString(FString::Printf(TEXT("%d/%d"), Level, Tree ? Tree->MaxLevel : Level)));
+		SkillNames[i]->SetColorAndOpacity(FSlateColor(Level > 0 ? RoWinText : RoWinLabel));
+		SkillUpButtons[i]->SetVisibility(Points > 0 && Info && Info->bUpgradable ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
 	}
+
+	// Linhas ate os pre-requisitos da mesma aba: desce do pre-requisito, anda na horizontal no vao acima da skill e
+	// desce ate ela. Azul quando o pre-requisito ja esta no nivel pedido
+	auto Place = [this](UImage* Img, float X, float Y, float W, float H, const FLinearColor& Color)
+	{
+		if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(Img->Slot))
+		{
+			S->SetPosition(FVector2D(X, Y) * UIScale);
+			S->SetSize(FVector2D(FMath::Max(W, 2.f), FMath::Max(H, 2.f)) * UIScale);
+		}
+		Img->SetColorAndOpacity(Color);
+		Img->SetVisibility(ESlateVisibility::HitTestInvisible);
+	};
+	int32 Used = 0;
+	for (const TPair<int32, int32>& Pair : CellOfSkill)
+	{
+		const FMythTreeSkill* Tree = FMythRoSkillTree::Skill(Pair.Key);
+		if (!Tree)
+		{
+			continue;
+		}
+		for (const FIntPoint& Need : Tree->Need)
+		{
+			const int32* From = CellOfSkill.Find(Need.X);
+			if (!From || Used + 3 > SkillLinePool.Num())
+			{
+				continue;
+			}
+			const FRagnarokSkillInfo* Have = Known.FindRef(Need.X);
+			const FLinearColor Color = Have && Have->Level >= Need.Y ? FLinearColor(0.35f, 0.55f, 0.9f, 1.f) : FLinearColor(0.68f, 0.71f, 0.78f, 1.f);
+			const float FX = RoTreeLeft + (*From % FMythRoSkillTree::Columns) * RoTreeCellW + 20.f;
+			const float FY = RoTreeTop + (*From / FMythRoSkillTree::Columns) * RoTreeCellH;
+			const float TX = RoTreeLeft + (Pair.Value % FMythRoSkillTree::Columns) * RoTreeCellW + 20.f;
+			const float TY = RoTreeTop + (Pair.Value / FMythRoSkillTree::Columns) * RoTreeCellH;
+			if (FMath::IsNearlyEqual(FY, TY))
+			{
+				Place(SkillLinePool[Used++], FMath::Min(FX, TX), FY + 16.f, FMath::Abs(TX - FX), 2.f, Color); // mesma linha
+				continue;
+			}
+			const float MidY = TY - 6.f; // vao entre a linha de cima e a skill
+			Place(SkillLinePool[Used++], FX - 1.f, FY + 32.f, 2.f, MidY - (FY + 32.f), Color);
+			Place(SkillLinePool[Used++], FMath::Min(FX, TX) - 1.f, MidY, FMath::Abs(TX - FX) + 2.f, 2.f, Color);
+			Place(SkillLinePool[Used++], TX - 1.f, MidY, 2.f, TY - MidY, Color);
+		}
+	}
+	for (int32 i = Used; i < SkillLinePool.Num(); ++i)
+	{
+		SkillLinePool[i]->SetVisibility(ESlateVisibility::Collapsed);
+	}
+
 	if (SkillPointsText)
 	{
-		const int32 Points = Net ? Net->GetPlayerStats().SkillPoints : 0;
-		SkillPointsText->SetText(FText::FromString(FString::Printf(TEXT("Pontos de Habilidade: %d"), Points)));
+		// Barra de baixo: pontos e a skill selecionada (clique) com nome, nivel e SP
+		FString Line = FString::Printf(TEXT("Pontos: %d"), Points);
+		if (SkillRowID.IsValidIndex(SkillScroll) && SkillRowID[SkillScroll] > 0)
+		{
+			const int32 Id = SkillRowID[SkillScroll];
+			const FMythTreeSkill* Tree = FMythRoSkillTree::Skill(Id);
+			const FRagnarokSkillInfo* Info = Known.FindRef(Id);
+			FString Name = Tree ? Tree->Name : FMythRoClientTables::SkillName(Id);
+			Line += FString::Printf(TEXT("     %s  Nv %d/%d"), *Name, SkillRowLevel[SkillScroll], Tree ? Tree->MaxLevel : 0);
+			if (Info && Info->SpCost > 0)
+			{
+				Line += FString::Printf(TEXT("  SP %d"), Info->SpCost);
+			}
+			if (!Info && Tree && Tree->Need.Num() > 0)
+			{
+				Line += TEXT("  (requer: ");
+				for (int32 n = 0; n < Tree->Need.Num(); ++n)
+				{
+					const FMythTreeSkill* Req = FMythRoSkillTree::Skill(Tree->Need[n].X);
+					Line += FString::Printf(TEXT("%s%s %d"), n ? TEXT(", ") : TEXT(""), Req ? *Req->Name : TEXT("?"), Tree->Need[n].Y);
+				}
+				Line += TEXT(")");
+			}
+		}
+		SkillPointsText->SetText(FText::FromString(Line));
 	}
 }
 
@@ -508,6 +615,25 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 	}
 	if (SkillsWindow && SkillsWindow->IsVisible())
 	{
+		for (int32 t = 0; t < SkillTabBacks.Num(); ++t)
+		{
+			if (SkillTabJobs.IsValidIndex(t) && IsUnder(SkillTabBacks[t], ScreenPos))
+			{
+				SkillTab = t; // aba de outra etapa da classe
+				SkillScroll = -1;
+				RefreshSkillsWindow();
+				return true;
+			}
+		}
+		for (int32 r = 0; r < SkillIcons.Num() && r < SkillRowID.Num(); ++r)
+		{
+			if (SkillRowID[r] != 0 && IsUnder(SkillIcons[r], ScreenPos) && !IsUnder(SkillUpButtons[r], ScreenPos))
+			{
+				SkillScroll = r; // selecionada: nome, nivel e requisitos na barra de baixo (o arrasto continua valendo)
+				RefreshSkillsWindow();
+				break;
+			}
+		}
 		for (int32 r = 0; r < SkillUpButtons.Num() && r < SkillRowID.Num(); ++r)
 		{
 			if (SkillRowID[r] != 0 && SkillUpButtons[r]->IsVisible() && IsUnder(SkillUpButtons[r], ScreenPos))
@@ -596,11 +722,15 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDoubleClick(const FGeometry& InGeome
 
 FReply UMythRoHUDWidget::NativeOnMouseWheel(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
-	// Roda do mouse sobre a janela de habilidades: rola a lista
+	// Roda do mouse sobre a arvore de habilidades: troca de aba (a grade inteira cabe na janela)
 	if (SkillsWindow && SkillsWindow->IsVisible() && IsUnder(SkillsWindow, InMouseEvent.GetScreenSpacePosition()))
 	{
-		SkillScroll += InMouseEvent.GetWheelDelta() > 0.f ? -1 : 1;
-		RefreshSkillsWindow();
+		if (SkillTabJobs.Num() > 0)
+		{
+			SkillTab = FMath::Clamp(SkillTab + (InMouseEvent.GetWheelDelta() > 0.f ? -1 : 1), 0, SkillTabJobs.Num() - 1);
+			SkillScroll = -1;
+			RefreshSkillsWindow();
+		}
 		return FReply::Handled();
 	}
 	return Super::NativeOnMouseWheel(InGeometry, InMouseEvent);
