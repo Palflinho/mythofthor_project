@@ -14,28 +14,29 @@ O que o jogador faz nos primeiros 5 minutos precisa estar perfeito.
 
 | # | Item | Quem | Base |
 |---|---|---|---|
-| 1.1 | Conexão estável (keepalive, aviso de desconexão) | Claude | feito, falta seu teste |
-| 1.2 | Movimento igual ao RO: sem "anda e volta" no WASD, clique segurado, linha reta antes do A*, Shift+clique vira sem andar | Claude | docs/ref/01 |
-| 1.3 | Combate: andar até o alvo quando está longe, ataque contínuo, prioridade do clique (NPC > monstro > item > chão), cursores | Claude | docs/ref/04 |
-| 1.4 | Pegar item do chão; drops aparecendo ao matar | Claude | docs/ref/04 |
-| 1.5 | Câmera: ângulo, zoom e rotação do RO | Claude | docs/ref/02 |
-| 1.6 | PACKETVER mais recente (A7) | Antigravity | coord 001 |
+| 1.1 | Conexão estável (keepalive, aviso de desconexão com o motivo) | Claude | ✅ feito |
+| 1.2 | Movimento igual ao RO: clique segurado, linha reta antes do A*, sem passo para trás; WASD desligado (9.1). Falta: Shift+clique vira sem andar | Claude | ✅ docs/ref/01 |
+| 1.3 | Combate: anda até o alvo e bate, prioridade do clique, cursores do RO (atacar, falar, pegar, portal, proibido) | Claude | ✅ docs/ref/04 |
+| 1.4 | Pegar item do chão (até 1 célula, repete a cada 400 ms); drops aparecem | Claude | ✅ docs/ref/04 |
+| 1.5 | Câmera do RO: lente estreita, distâncias e inclinações, suavização, interiores travados | Claude | ✅ docs/ref/02 |
+| 1.6 | PACKETVER mais recente (20250402) | Antigravity | ✅ coord 001 |
 
 ## Fase 2: o mundo com cara de RO
 
 | # | Item | Quem | Base |
 |---|---|---|---|
-| 2.1 | Animações: tempo dos quadros, ASPD, "doridori", ordem das camadas, sombra | Claude | docs/ref/03 |
-| 2.2 | Efeitos do executável: números de dano em arco, Miss, crítico, cura, level up | Claude | docs/ref/05 |
-| 2.3 | Sons: passos, golpes por arma, BGM por mapa | Claude | docs/ref/07 |
-| 2.4 | Portais de Prontera para dentro das casas | Claude + Antigravity | docs/PORTAIS_PRONTERA.md |
+| 2.1 | Animações: passo pela distância, ataque pelo ASPD do servidor, golpe de 200 ms, morte. Falta: "doridori", ordem das camadas de costas | Claude | 🟡 docs/ref/03 |
+| 2.2 | Números de dano em arco, Miss, crítico, cura (fórmulas do cliente). Falta: level up, aura 99 | Claude | 🟡 docs/ref/05 |
+| 2.3 | Sons: ouvinte no personagem, atenuação do RO, balanço/impacto por arma, reação por armadura. Falta: sons de interface | Claude | 🟡 docs/ref/07 |
+| 2.4 | Portais de Prontera para dentro das casas (portais voltaram a existir; interiores reimportados alinhados) | Claude + Antigravity | ✅ |
+| 2.5 | Borda rosa (magenta) nas folhagens | Antigravity | coord 006 |
 
 ## Fase 3: HUD moderna (estilo Myth of Yggdrasil, com as peças oficiais do cliente LATAM)
 
 | # | Item | Quem | Base |
 |---|---|---|---|
 | 3.1 | Janelas básicas refeitas: status, inventário com abas, equipamento, skills, atalhos, chat, minimapa | Claude | docs/ref/06 + assets LATAM |
-| 3.2 | Diálogo de NPC novo (o que você achou estranho) | Claude | docs/ref/06 |
+| 3.2 | Diálogo de NPC como o do cliente (360×160 arredondado, Espaço/1–9/setas) | Claude | ✅ docs/ref/06 |
 | 3.3 | Sistemas modernos: navegação, quests (Alt+U), banco | Claude + Antigravity | docs/ref/08 |
 | 3.4 | Esc / Configurações (feito; ajustes conforme seu teste) | Claude | — |
 
