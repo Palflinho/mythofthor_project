@@ -157,3 +157,44 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnAttackOutOfRange, int64, Target
   `RagnarokNetworkSubsystem`. Conferir o formato contra `clif_parse_StatusUp` e `clif_parse_SkillUp`.
 - Tratar as respostas: `ZC_STATUS_CHANGE_ACK` (resultado + novo valor) e a atualização da skill
   (`ZC_SKILLINFO_UPDATE`, ou a lista de novo). Disparar `OnPlayerStatsChanged` e o evento da lista de skills.
+
+## Tarefa A6 — posição de partida e parada (rede): o WASD "anda e volta"
+
+O cliente agora anda célula a célula seguindo o servidor (`UMythCellMoverComponent`, do Claude). Para corrigir
+a posição sem saltos, o cliente precisa saber **de onde** o servidor começou o caminho e **onde ele parou**:
+
+- `ZC_NOTIFY_PLAYERMOVE` (0x0087): hoje só o destino sai em `OnUnitMove`. Expor também a célula de partida
+  (MoveData).
+- `ZC_NOTIFY_MOVE` (0x0086) e o walking unit (0x09fd): o mesmo, com a partida.
+- `ZC_STOPMOVE` (0x0088): unidade parou nessa célula (inclusive o próprio personagem).
+
+Eventos:
+
+```cpp
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FOnUnitWalk, int64, UnitID, int32, FromX, int32, FromY, int32, ToX, int32, ToY, int32, StartTick);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnUnitStop, int64, UnitID, int32, X, int32, Y);
+```
+
+Mantenha o `OnUnitMove` atual para não quebrar nada.
+
+## Tarefa B3 — portais de Prontera para as casas (servidor + lista)
+
+O usuário quer entrar nas casas de Prontera para testar. O cliente já desenha os portais (NPC de classe 45,
+anéis azuis). Falta saber o que o servidor tem:
+
+- Listar os warps de `prontera` (npc/pre-re/warps/cities/prontera.txt e afins): célula, mapa de destino e
+  célula de destino.
+- Marcar quais destinos já têm mapa importado no cliente (hoje: prt_in, prt_church, prt_castle, prt_fild05/06/08)
+  e quais faltam. Colocar a lista em `docs/PORTAIS_PRONTERA.md`.
+- Se alguma casa de Prontera não tiver warp no pre-re, não inventar: só listar.
+
+## Tarefa B4 — NPC de teste (servidor)
+
+Uma NPC GM em Prontera (perto de 156,191), só para contas GM, com menu:
+- "Classe" (escolher entre as classes do jogo, até a transclasse);
+- "Nível 99 / Job máximo";
+- "Todas as habilidades";
+- "Kit de equipamentos" (Campo de Treinamento + algumas armas e escudos);
+- "Poções e asas".
+
+Arquivo em `npc/custom/myth/test_npc.txt`. Serve para o usuário testar sem decorar comandos.
