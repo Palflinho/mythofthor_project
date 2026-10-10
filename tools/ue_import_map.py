@@ -519,16 +519,27 @@ def add_lighting():
 
 
 def read_gat_size(obj_path, map_name):
-    """Largura x altura em celulas, do cabecalho do <mapa>.gat ao lado do .obj (None se nao houver)."""
-    path = os.path.join(os.path.dirname(obj_path), '%s.gat' % map_name)
-    if not os.path.exists(path):
-        return None
+    """Largura x altura em celulas, lido do .gat ou .gnd ao lado do .obj (None se nao houver)."""
+    base_dir = os.path.dirname(obj_path)
+    base_name = re.sub(r'_full$', '', os.path.splitext(os.path.basename(obj_path))[0])
     import struct
-    with open(path, 'rb') as f:
-        head = f.read(14)
-    if head[:4] != b'GRAT':
-        return None
-    return struct.unpack_from('<II', head, 6)
+    for cand in (map_name, base_name):
+        if not cand:
+            continue
+        gat_path = os.path.join(base_dir, '%s.gat' % cand)
+        if os.path.exists(gat_path):
+            with open(gat_path, 'rb') as f:
+                head = f.read(14)
+            if head[:4] == b'GRAT':
+                return struct.unpack_from('<II', head, 6)
+        gnd_path = os.path.join(base_dir, '%s.gnd' % cand)
+        if os.path.exists(gnd_path):
+            with open(gnd_path, 'rb') as f:
+                head = f.read(14)
+            if head[:4] == b'GRGN':
+                gw, gh = struct.unpack_from('<II', head, 6)
+                return (gw * 2, gh * 2)
+    return None
 
 
 def read_window_textures(obj_path):
@@ -624,9 +635,18 @@ def run():
     mats = parse_mtl(mtl_path)
     log('%d vertices, %d triangulos, %d materiais' % (len(verts), len(tris), len(mats)))
 
-    xs = [v[0] for v in ground]
-    ys = [v[1] for v in ground]
-    cx, cy = (min(xs) + max(xs)) / 2.0, (min(ys) + max(ys)) / 2.0
+    gat_size = read_gat_size(obj_path, args['map_name'])
+    if gat_size:
+        # Grade do rAthena / compile_map_to_obj: 1 celula = 5 unidades do OBJ.
+        # Centro verdadeiro e constante: (gat_w * 5 / 2, gat_h * 5 / 2).
+        cx = gat_size[0] * 5.0 / 2.0
+        cy = gat_size[1] * 5.0 / 2.0
+        log('centro do mapa pelo grid do .gat (%dx%d celulas): cx=%.2f, cy=%.2f' % (gat_size[0], gat_size[1], cx, cy))
+    else:
+        xs = [v[0] for v in ground]
+        ys = [v[1] for v in ground]
+        cx, cy = (min(xs) + max(xs)) / 2.0, (min(ys) + max(ys)) / 2.0
+        warn('sem .gat/.gnd para definir o centro; usando bounding box do Ground: cx=%.2f, cy=%.2f' % (cx, cy))
 
     tex_index = index_textures(args['texture_dir'] or os.path.join(base_dir, 'texture'))
     staging = os.path.join(unreal.Paths.project_saved_dir(), 'MythImport', name)
@@ -701,7 +721,6 @@ def run():
     try_set(info, 'map_name', args['map_name'])
     try_set(info, 'cell_size_uu', cell_size)
     try_set(info, 'cell_origin_uu', unreal.Vector2D(origin_x, origin_y))
-    gat_size = read_gat_size(obj_path, args['map_name'])
     if gat_size:
         try_set(info, 'map_size_cells', unreal.IntPoint(*gat_size))
         log('mapa com %dx%d celulas (.gat)' % gat_size)
