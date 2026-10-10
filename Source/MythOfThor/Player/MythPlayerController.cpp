@@ -127,10 +127,9 @@ void AMythPlayerController::BuildInputAssets()
 			Mapping.Modifiers.Add(NewObject<UInputModifierNegate>(this));
 		}
 	};
-	MapMove(EKeys::W, true, false);
-	MapMove(EKeys::S, true, true);
-	MapMove(EKeys::D, false, false);
-	MapMove(EKeys::A, false, true);
+	// Como no RO, o personagem anda so pelo mouse: o WASD fica desligado (as teclas ficam livres para atalhos).
+	// Para religar, mapear W/S (swizzle, S negado) e D/A (A negado) com MapMove.
+	(void)MapMove;
 
 	MappingContext->MapKey(ClickAction, EKeys::LeftMouseButton);
 	MappingContext->MapKey(RotateMouseAction, EKeys::MouseX);

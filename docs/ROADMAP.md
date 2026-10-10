@@ -79,3 +79,9 @@ O Antigravity projeta e implementa no servidor; o Claude faz as janelas.
 | 8.1 | Pacote do cliente (build de jogo, sem o editor) | Claude |
 | 8.2 | Acesso de fora: VPN (CGNAT da Vero), contas, backup do banco | Antigravity |
 | 8.3 | Checklist de abertura (closed-test-plan) | os dois |
+
+## Por último
+
+| # | Item | Quem |
+|---|---|---|
+| 9.1 | Movimento por WASD (desligado em 2026-10-10; o código ficou: 1 célula além do passo atual, nada ao soltar) | Claude |
