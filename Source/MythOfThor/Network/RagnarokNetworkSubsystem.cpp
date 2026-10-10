@@ -1119,12 +1119,14 @@ void URagnarokNetworkSubsystem::HandleZoneServerNotify(const uint8* PacketData, 
 		EnterMap.Sex = SavedSex;
 
 		SendData(reinterpret_cast<const uint8*>(&EnterMap), sizeof(EnterMap));
-		CurrentState = ERagnarokNetworkState::ConnectedMap;
+		// Continua "ConnectingMap" ate o ZC_ACCEPT_ENTER: o rAthena exige que o primeiro pacote da conexao seja so
+		// o de entrada (cliques no chao durante a conexao iam juntos, 19+5+5 bytes, e o servidor derrubava).
 	}
 }
 
 void URagnarokNetworkSubsystem::HandleMapAcceptEnter(const uint8* PacketData, int32 PacketSize)
 {
+	CurrentState = ERagnarokNetworkState::ConnectedMap; // so agora o cliente pode mandar pedidos de jogo
 	int32 CellX = 0, CellY = 0;
 	uint8 Direction = 0;
 	RagnarokPackets::UnpackCellCoord(PacketData + 6, CellX, CellY, Direction);

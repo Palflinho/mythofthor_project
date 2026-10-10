@@ -5,6 +5,7 @@
 #include "UI/MythRoHUDWidget.h"
 
 #include "UI/MythRoUITextures.h"
+#include "Sprites/MythRoSound.h"
 
 #include "AudioDevice.h"
 #include "Components/CanvasPanel.h"
@@ -130,10 +131,10 @@ void UMythRoHUDWidget::ApplyGraphicsOptions()
 void UMythRoHUDWidget::BuildGameMenu()
 {
 	// Menu principal (como a janela de "Sair" do RO, com as opcoes de hoje)
-	const FVector2D MenuSize(200.f, 17.f + 4 * 24.f + 12.f);
+	const FVector2D MenuSize(200.f, 17.f + 3 * 24.f + 12.f);
 	GameMenuWindow = MakeRoPanel(TEXT("Menu"), MenuSize, FVector2D::ZeroVector);
-	const TCHAR* Items[4] = { TEXT("Voltar ao jogo"), TEXT("Configurações gráficas"), TEXT("Som e interface"), TEXT("Sair do jogo") };
-	for (int32 i = 0; i < 4; ++i)
+	const TCHAR* Items[3] = { TEXT("Voltar ao jogo"), TEXT("Configurações"), TEXT("Sair do jogo") };
+	for (int32 i = 0; i < 3; ++i)
 	{
 		UTextBlock* T = AddText(GameMenuWindow, 18.f, 26.f + i * 24.f, 9, MenuLink);
 		T->SetText(FText::FromString(Items[i]));
@@ -143,14 +144,18 @@ void UMythRoHUDWidget::BuildGameMenu()
 
 	// Configuracoes graficas: "rotulo   <  valor  >" por linha
 	const TCHAR* Labels[GfxRowCount] = { TEXT("Modo de tela"), TEXT("Resolução"), TEXT("Qualidade geral"), TEXT("Sombras"),
-		TEXT("Iluminação (Lumen)"), TEXT("Anti-aliasing"), TEXT("Escala de resolução"), TEXT("Limite de FPS"), TEXT("V-Sync"), TEXT("Volume") };
-	const FVector2D Size(380.f, 17.f + GfxRowCount * 24.f + 44.f);
+		TEXT("Iluminação (Lumen)"), TEXT("Anti-aliasing"), TEXT("Escala de resolução"), TEXT("Limite de FPS"), TEXT("V-Sync") };
+	const FVector2D Size(380.f, 17.f + 22.f + GfxRowCount * 24.f + 44.f);
 	GraphicsWindow = MakeRoPanel(TEXT("Configurações"), Size, FVector2D::ZeroVector);
+	// Abas: Graficos | Som e interface (as duas janelas ficam no mesmo lugar e se alternam)
+	GfxTabOther = AddText(GraphicsWindow, 110.f, 22.f, 8, MenuLink);
+	GfxTabOther->SetText(FText::FromString(TEXT("Som e interface")));
+	AddText(GraphicsWindow, 14.f, 22.f, 8, MenuText)->SetText(FText::FromString(TEXT("[ Gráficos ]")));
 	UTexture2D* Left = FMythRoUITextures::Get(Basic(TEXT("arw_left")));
 	UTexture2D* Right = FMythRoUITextures::Get(Basic(TEXT("arw_right")));
 	for (int32 i = 0; i < GfxRowCount; ++i)
 	{
-		const float Y = 26.f + i * 24.f;
+		const float Y = 48.f + i * 24.f;
 		AddText(GraphicsWindow, 14.f, Y, 8, MenuText)->SetText(FText::FromString(Labels[i]));
 		UImage* L = AddImage(GraphicsWindow, Left, 186.f, Y + 2.f, 11.f, 11.f);
 		UImage* R = AddImage(GraphicsWindow, Right, 352.f, Y + 2.f, 11.f, 11.f);
@@ -168,6 +173,69 @@ void UMythRoHUDWidget::BuildGameMenu()
 	GfxHint = AddText(GraphicsWindow, 14.f, BY + 4.f, 7, FLinearColor(0.4f, 0.4f, 0.4f));
 	GraphicsWindow->SetVisibility(ESlateVisibility::Collapsed);
 	LoadGraphicsOptions();
+
+	// Som e interface
+	const TCHAR* SndLabels[SndRowCount] = { TEXT("Volume geral"), TEXT("Música"), TEXT("Efeitos"), TEXT("Escala da interface") };
+	const FVector2D SSize = Size; // mesmo tamanho: troca de aba sem a janela "pular"
+	SoundWindow = MakeRoPanel(TEXT("Configurações"), SSize, FVector2D::ZeroVector);
+	SndTabOther = AddText(SoundWindow, 14.f, 22.f, 8, MenuLink);
+	SndTabOther->SetText(FText::FromString(TEXT("Gráficos")));
+	AddText(SoundWindow, 110.f, 22.f, 8, MenuText)->SetText(FText::FromString(TEXT("[ Som e interface ]")));
+	for (int32 i = 0; i < SndRowCount; ++i)
+	{
+		const float Y = 48.f + i * 24.f;
+		AddText(SoundWindow, 14.f, Y, 8, MenuText)->SetText(FText::FromString(SndLabels[i]));
+		UImage* L = AddImage(SoundWindow, Left, 186.f, Y + 2.f, 11.f, 11.f);
+		UImage* R = AddImage(SoundWindow, Right, 352.f, Y + 2.f, 11.f, 11.f);
+		L->SetVisibility(ESlateVisibility::Visible);
+		R->SetVisibility(ESlateVisibility::Visible);
+		SndLeft.Add(L);
+		SndRight.Add(R);
+		SndValues.Add(AddText(SoundWindow, 206.f, Y, 8, MenuLink));
+	}
+	SndClose = AddText(SoundWindow, SSize.X - 60.f, SSize.Y - 26.f, 9, MenuLink);
+	SndClose->SetText(FText::FromString(TEXT("Fechar")));
+	SndHint = AddText(SoundWindow, 14.f, SSize.Y - 26.f, 7, FLinearColor(0.4f, 0.4f, 0.4f));
+	SoundWindow->SetVisibility(ESlateVisibility::Collapsed);
+	SndMusic = FMath::RoundToInt(UMythRoSound::GetMusicVolume() * 10.f);
+	SndEffects = FMath::RoundToInt(UMythRoSound::GetEffectsVolume() * 10.f);
+	SndUIScale = UIScale;
+}
+
+void UMythRoHUDWidget::RefreshSoundWindow()
+{
+	if (!SoundWindow || SndValues.Num() < SndRowCount)
+	{
+		return;
+	}
+	SndValues[0]->SetText(FText::FromString(FString::Printf(TEXT("%d%%"), Gfx.Volume * 10)));
+	SndValues[1]->SetText(FText::FromString(FString::Printf(TEXT("%d%%"), SndMusic * 10)));
+	SndValues[2]->SetText(FText::FromString(FString::Printf(TEXT("%d%%"), SndEffects * 10)));
+	SndValues[3]->SetText(FText::FromString(FString::Printf(TEXT("%d%%"), FMath::RoundToInt(SndUIScale * 100.f))));
+	SndHint->SetText(FText::FromString(FMath::IsNearlyEqual(SndUIScale, UIScale) ? TEXT("") : TEXT("A escala vale ao abrir o jogo de novo.")));
+}
+
+void UMythRoHUDWidget::StepSoundOption(int32 Row, int32 Delta)
+{
+	// O som muda na hora e ja fica salvo (como nas opcoes de som do cliente original)
+	switch (Row)
+	{
+	case 0:
+		Gfx.Volume = FMath::Clamp(Gfx.Volume + Delta, 0, 10);
+		GConfig->SetInt(MythGfxSection, TEXT("Volume"), Gfx.Volume, GGameUserSettingsIni);
+		ApplyMythGraphics();
+		break;
+	case 1: SndMusic = FMath::Clamp(SndMusic + Delta, 0, 10); break;
+	case 2: SndEffects = FMath::Clamp(SndEffects + Delta, 0, 10); break;
+	case 3:
+		SndUIScale = FMath::Clamp(SndUIScale + Delta * 0.1f, 0.8f, 2.5f);
+		GConfig->SetFloat(TEXT("Myth.UI"), TEXT("Scale"), SndUIScale, GGameUserSettingsIni);
+		break;
+	default:
+		return;
+	}
+	UMythRoSound::SetVolumes(SndMusic / 10.f, SndEffects / 10.f); // tambem grava o ini
+	RefreshSoundWindow();
 }
 
 void UMythRoHUDWidget::RefreshGraphicsWindow()
@@ -177,7 +245,7 @@ void UMythRoHUDWidget::RefreshGraphicsWindow()
 		return;
 	}
 	static const TCHAR* Modes[3] = { TEXT("Janela"), TEXT("Tela cheia (sem borda)"), TEXT("Tela cheia") };
-	static const TCHAR* AA[4] = { TEXT("Nenhum"), TEXT("FXAA"), TEXT("TAA"), TEXT("TSR (recomendado)") };
+	static const TCHAR* AA[4] = { TEXT("Nenhum"), TEXT("FXAA (recomendado)"), TEXT("TAA"), TEXT("TSR") };
 	static const TCHAR* Fps[5] = { TEXT("30"), TEXT("60"), TEXT("120"), TEXT("144"), TEXT("Sem limite") };
 	const FIntPoint Res = Gfx.Resolutions.IsValidIndex(Gfx.ResolutionIndex) ? Gfx.Resolutions[Gfx.ResolutionIndex] : FIntPoint(1600, 900);
 	const FString Values[GfxRowCount] = {
@@ -189,8 +257,7 @@ void UMythRoHUDWidget::RefreshGraphicsWindow()
 		AA[FMath::Clamp(Gfx.AntiAliasing, 0, 3)],
 		FString::Printf(TEXT("%d%%"), Gfx.ResolutionScale * 10),
 		Fps[FMath::Clamp(Gfx.FpsIndex, 0, 4)],
-		Gfx.bVSync ? TEXT("Ligado") : TEXT("Desligado"),
-		FString::Printf(TEXT("%d%%"), Gfx.Volume * 10) };
+		Gfx.bVSync ? TEXT("Ligado") : TEXT("Desligado") };
 	for (int32 i = 0; i < GfxRowCount; ++i)
 	{
 		GfxValues[i]->SetText(FText::FromString(Values[i]));
@@ -212,7 +279,6 @@ void UMythRoHUDWidget::StepGraphicsOption(int32 Row, int32 Delta)
 	case 6: Gfx.ResolutionScale = FMath::Clamp(Gfx.ResolutionScale + Delta, 5, 10); break;
 	case 7: Cycle(Gfx.FpsIndex, 5); break;
 	case 8: Gfx.bVSync = !Gfx.bVSync; break;
-	case 9: Gfx.Volume = FMath::Clamp(Gfx.Volume + Delta, 0, 10); ApplyMythGraphics(); break; // volume muda na hora
 	default: return;
 	}
 	bGfxDirty = true;
@@ -249,7 +315,6 @@ bool UMythRoHUDWidget::HandleGameMenuClick(const FVector2D& ScreenPos)
 			switch (i)
 			{
 			case 1:
-			case 2:
 				LoadGraphicsOptions();
 				bGfxDirty = false;
 				RefreshGraphicsWindow();
@@ -257,7 +322,7 @@ bool UMythRoHUDWidget::HandleGameMenuClick(const FVector2D& ScreenPos)
 				OpenOrder.Remove(GraphicsWindow);
 				OpenOrder.Add(GraphicsWindow);
 				break;
-			case 3:
+			case 2:
 				UKismetSystemLibrary::QuitGame(this, GetOwningPlayer(), EQuitPreference::Quit, false);
 				break;
 			default:
@@ -283,6 +348,37 @@ bool UMythRoHUDWidget::HandleGameMenuClick(const FVector2D& ScreenPos)
 		if (IsUnder(GfxClose, ScreenPos))
 		{
 			GraphicsWindow->SetVisibility(ESlateVisibility::Collapsed);
+			return true;
+		}
+		if (IsUnder(GfxTabOther, ScreenPos))
+		{
+			GraphicsWindow->SetVisibility(ESlateVisibility::Collapsed);
+			RefreshSoundWindow();
+			SoundWindow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+			OpenOrder.Remove(SoundWindow);
+			OpenOrder.Add(SoundWindow);
+			return true;
+		}
+	}
+	if (SoundWindow && SoundWindow->IsVisible())
+	{
+		for (int32 i = 0; i < SndRowCount && i < SndLeft.Num(); ++i)
+		{
+			if (IsUnder(SndLeft[i], ScreenPos)) { StepSoundOption(i, -1); return true; }
+			if (IsUnder(SndRight[i], ScreenPos) || IsUnder(SndValues[i], ScreenPos)) { StepSoundOption(i, 1); return true; }
+		}
+		if (IsUnder(SndClose, ScreenPos))
+		{
+			SoundWindow->SetVisibility(ESlateVisibility::Collapsed);
+			return true;
+		}
+		if (IsUnder(SndTabOther, ScreenPos))
+		{
+			SoundWindow->SetVisibility(ESlateVisibility::Collapsed);
+			RefreshGraphicsWindow();
+			GraphicsWindow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+			OpenOrder.Remove(GraphicsWindow);
+			OpenOrder.Add(GraphicsWindow);
 			return true;
 		}
 	}

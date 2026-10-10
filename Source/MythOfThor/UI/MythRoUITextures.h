@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Fonts/SlateFontInfo.h"
 
 class UTexture2D;
 
@@ -16,6 +17,12 @@ struct MYTHOFTHOR_API FMythRoUITextures
 
 	/** Cor media da textura (ponderada pelo brilho dos pixels), usada para a cor da luz dos efeitos. */
 	static FLinearColor AverageColor(const FString& RelativePath);
+
+	/**
+	 * Fonte da interface do cliente (System/font/SCDream4.otf regular, SCDream6.otf negrito; copiadas para
+	 * Content/Myth/Fonts). Carregada do arquivo em runtime, sem asset; sem o arquivo, cai na fonte padrao.
+	 */
+	static FSlateFontInfo RoFont(int32 Size, bool bBold = false);
 
 	/**
 	 * Um quadro de um .spr do cliente como textura (ex.: digitos de dano de 이팩트/숫자.spr).

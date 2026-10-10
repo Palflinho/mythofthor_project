@@ -1,4 +1,5 @@
 #include "Sprites/MythRoSound.h"
+#include "Misc/ConfigCacheIni.h"
 
 #include "Sprites/MythRoSpriteComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -96,8 +97,44 @@ USoundAttenuation* UMythRoSound::GetAttenuation()
 	return Attenuation.Get();
 }
 
+namespace
+{
+	float GMythMusicVolume = -1.f;
+	float GMythEffectsVolume = -1.f;
+
+	void LoadMythVolumes()
+	{
+		if (GMythMusicVolume >= 0.f)
+		{
+			return;
+		}
+		int32 Music = 10, Effects = 10;
+		GConfig->GetInt(TEXT("Myth.Audio"), TEXT("Music"), Music, GGameUserSettingsIni);
+		GConfig->GetInt(TEXT("Myth.Audio"), TEXT("Effects"), Effects, GGameUserSettingsIni);
+		GMythMusicVolume = FMath::Clamp(Music, 0, 10) / 10.f;
+		GMythEffectsVolume = FMath::Clamp(Effects, 0, 10) / 10.f;
+	}
+}
+
+float UMythRoSound::GetMusicVolume() { LoadMythVolumes(); return GMythMusicVolume; }
+float UMythRoSound::GetEffectsVolume() { LoadMythVolumes(); return GMythEffectsVolume; }
+
+void UMythRoSound::SetVolumes(float Music, float Effects)
+{
+	GMythMusicVolume = FMath::Clamp(Music, 0.f, 1.f);
+	GMythEffectsVolume = FMath::Clamp(Effects, 0.f, 1.f);
+	GConfig->SetInt(TEXT("Myth.Audio"), TEXT("Music"), FMath::RoundToInt(GMythMusicVolume * 10.f), GGameUserSettingsIni);
+	GConfig->SetInt(TEXT("Myth.Audio"), TEXT("Effects"), FMath::RoundToInt(GMythEffectsVolume * 10.f), GGameUserSettingsIni);
+	GConfig->Flush(false, GGameUserSettingsIni);
+}
+
 bool UMythRoSound::PlayWavAtLocation(const UObject* WorldContext, const FString& FileName, const FVector& Location, float Volume)
 {
+	Volume *= GetEffectsVolume();
+	if (Volume <= 0.001f)
+	{
+		return true; // efeitos mudos pelo jogador
+	}
 	if (!WorldContext || FileName.IsEmpty())
 	{
 		return false;

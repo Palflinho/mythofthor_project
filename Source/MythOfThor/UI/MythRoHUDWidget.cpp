@@ -86,6 +86,12 @@ void FMythRoGauge::SetFraction(float Fraction)
 
 void UMythRoHUDWidget::NativeOnInitialized()
 {
+	// Escala da interface escolhida no menu Esc (Som e interface); vale ao abrir o jogo
+	float SavedScale = 0.f;
+	if (GConfig->GetFloat(TEXT("Myth.UI"), TEXT("Scale"), SavedScale, GGameUserSettingsIni) && SavedScale >= 0.8f && SavedScale <= 2.5f)
+	{
+		UIScale = SavedScale;
+	}
 	Super::NativeOnInitialized();
 	BuildLayout();
 }
@@ -138,7 +144,7 @@ UImage* UMythRoHUDWidget::AddColor(UCanvasPanel* Parent, const FLinearColor& Col
 UTextBlock* UMythRoHUDWidget::AddText(UCanvasPanel* Parent, float X, float Y, int32 Size, const FLinearColor& Color, bool bShadow)
 {
 	UTextBlock* T = WidgetTree->ConstructWidget<UTextBlock>();
-	T->SetFont(FCoreStyle::GetDefaultFontStyle("Regular", FMath::RoundToInt(Size * UIScale)));
+	T->SetFont(FMythRoUITextures::RoFont(FMath::RoundToInt(Size * UIScale)));
 	T->SetColorAndOpacity(FSlateColor(Color));
 	if (bShadow)
 	{
@@ -362,7 +368,7 @@ void UMythRoHUDWidget::BuildAutoBattle()
 	AutoButton = WidgetTree->ConstructWidget<UButton>();
 	AutoButton->OnClicked.AddDynamic(this, &UMythRoHUDWidget::OnAutoButtonClicked);
 	AutoButtonText = WidgetTree->ConstructWidget<UTextBlock>();
-	AutoButtonText->SetFont(FCoreStyle::GetDefaultFontStyle("Bold", FMath::RoundToInt(7 * UIScale)));
+	AutoButtonText->SetFont(FMythRoUITextures::RoFont(FMath::RoundToInt(7 * UIScale), true));
 	AutoButtonText->SetColorAndOpacity(FSlateColor(ColText));
 	AutoButton->AddChild(AutoButtonText);
 	if (UCanvasPanelSlot* S = Win->AddChildToCanvas(AutoButton))
@@ -521,7 +527,7 @@ void UMythRoHUDWidget::AddChatLine(const FString& Text, FLinearColor Color)
 		ChatLines->RemoveChildAt(0);
 	}
 	UTextBlock* T = WidgetTree->ConstructWidget<UTextBlock>();
-	T->SetFont(FCoreStyle::GetDefaultFontStyle("Regular", FMath::RoundToInt(7 * UIScale)));
+	T->SetFont(FMythRoUITextures::RoFont(FMath::RoundToInt(7 * UIScale)));
 	T->SetColorAndOpacity(FSlateColor(Color));
 	T->SetShadowOffset(FVector2D(1.f, 1.f));
 	T->SetShadowColorAndOpacity(FLinearColor(0.f, 0.f, 0.f, 0.9f));

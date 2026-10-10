@@ -1,4 +1,5 @@
 #include "World/MythNightAudioComponent.h"
+#include "Sprites/MythRoSound.h"
 
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -113,11 +114,11 @@ void UMythNightAudioComponent::ApplyNightFactor()
 
 	if (BgmComponent)
 	{
-		BgmComponent->SetVolumeMultiplier(BgmBaseVolume * FMath::Lerp(1.f, NightBgmVolume, NightFactor));
+		BgmComponent->SetVolumeMultiplier(BgmBaseVolume * FMath::Lerp(1.f, NightBgmVolume, NightFactor) * UMythRoSound::GetMusicVolume());
 	}
 	if (AmbienceComponent)
 	{
-		AmbienceComponent->SetVolumeMultiplier(AmbienceVolume * NightFactor);
+		AmbienceComponent->SetVolumeMultiplier(AmbienceVolume * NightFactor * UMythRoSound::GetEffectsVolume());
 	}
 }
 

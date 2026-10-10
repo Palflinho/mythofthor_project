@@ -106,7 +106,7 @@ void UMythRoHUDWidget::ShowItemInfo(const FRagnarokInventoryItem& Item)
 		auto MakeText = [this, FontSize](const FString& Text, const FLinearColor& Color)
 		{
 			UTextBlock* T = WidgetTree->ConstructWidget<UTextBlock>();
-			T->SetFont(FCoreStyle::GetDefaultFontStyle("Regular", FontSize));
+			T->SetFont(FMythRoUITextures::RoFont(FontSize));
 			T->SetColorAndOpacity(FSlateColor(Color));
 			T->SetText(FText::FromString(Text));
 			return T;

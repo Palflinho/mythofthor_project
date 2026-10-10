@@ -13,7 +13,7 @@ struct FMythGfxOptions
 	int32 Quality = 3;         // 0 baixa .. 4 cinematica
 	int32 Shadows = 3;
 	int32 Lumen = 1;
-	int32 AntiAliasing = 3;    // 0 nenhum, 1 FXAA, 2 TAA, 3 TSR
+	int32 AntiAliasing = 1;    // 0 nenhum, 1 FXAA (padrao do projeto: TSR/TAA deixam rastro nos sprites), 2 TAA, 3 TSR
 	int32 ResolutionScale = 10; // 5..10 = 50%..100%
 	int32 FpsIndex = 1;        // 30, 60, 120, 144, sem limite
 	bool bVSync = true;
@@ -313,7 +313,7 @@ protected:
 	bool HandleItemInfoClick(const FVector2D& ScreenPos);
 
 	// Menu Esc e configuracoes graficas (MythRoGameMenu.cpp)
-	static constexpr int32 GfxRowCount = 10;
+	static constexpr int32 GfxRowCount = 9;
 	void BuildGameMenu();
 	void LoadGraphicsOptions();
 	void ApplyGraphicsOptions();
@@ -332,6 +332,20 @@ protected:
 	UPROPERTY() TObjectPtr<UImage> GfxApply;
 	UPROPERTY() TObjectPtr<UTextBlock> GfxClose;
 	UPROPERTY() TObjectPtr<UTextBlock> GfxHint;
+	// Som e interface
+	static constexpr int32 SndRowCount = 4;
+	void RefreshSoundWindow();
+	void StepSoundOption(int32 Row, int32 Delta);
+	int32 SndMusic = 10, SndEffects = 10;
+	float SndUIScale = 1.35f;
+	UPROPERTY() TObjectPtr<UCanvasPanel> SoundWindow;
+	UPROPERTY() TArray<TObjectPtr<UImage>> SndLeft;
+	UPROPERTY() TArray<TObjectPtr<UImage>> SndRight;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> SndValues;
+	UPROPERTY() TObjectPtr<UTextBlock> SndClose;
+	UPROPERTY() TObjectPtr<UTextBlock> SndHint;
+	UPROPERTY() TObjectPtr<UTextBlock> GfxTabOther;
+	UPROPERTY() TObjectPtr<UTextBlock> SndTabOther;
 	void RefreshWindows();
 	void RefreshStatusWindow();
 	void RefreshItemsWindow();

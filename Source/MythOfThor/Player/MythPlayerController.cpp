@@ -30,6 +30,7 @@
 #include "NavigationSystem.h"
 #include "UnrealClient.h"
 #include "TimerManager.h"
+#include "GameFramework/PlayerInput.h"
 #include "Sprites/MythSkillEffects.h"
 #include "World/MythCellMoverComponent.h"
 #include "Sprites/MythStrEffect.h"
@@ -45,6 +46,12 @@ void AMythPlayerController::BeginPlay()
 	Super::BeginPlay();
 	if (IsLocalController())
 	{
+		// Atalhos de depuracao da Unreal (BaseInput.ini: F1-F5 viewmode, F9 print, Ctrl+Tab, Shift, ";" camera)
+		// brigam com os do RO (F1-F9 da barra, Ctrl+Tab do minimapa). Fora do jogo final eles existem: desliga.
+		if (PlayerInput)
+		{
+			PlayerInput->DebugExecBindings.Empty();
+		}
 		HudWidget = CreateWidget<UMythRoHUDWidget>(this, UMythRoHUDWidget::StaticClass());
 		if (HudWidget)
 		{

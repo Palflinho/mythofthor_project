@@ -21,6 +21,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "RO Sound", meta = (WorldContext = "WorldContext"))
 	static bool PlayWavAtLocation(const UObject* WorldContext, const FString& FileName, const FVector& Location, float Volume = 1.f);
 
+	/** Volumes do jogador (menu Esc > Som e interface), 0..1; salvos em [Myth.Audio] do GameUserSettings.ini. */
+	static float GetMusicVolume();
+	static float GetEffectsVolume();
+	static void SetVolumes(float Music, float Effects);
+
 private:
 	static USoundAttenuation* GetAttenuation();
 };

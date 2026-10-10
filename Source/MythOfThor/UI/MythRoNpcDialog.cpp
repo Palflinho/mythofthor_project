@@ -134,7 +134,7 @@ void UMythRoHUDWidget::NpcSay(int64 NpcID, const FString& Text)
 	// Cada linha (mes) ocupa a largura toda; as palavras quebram na largura da caixa e mantem a cor
 	TArray<TPair<FString, FLinearColor>> Segments;
 	NpcColorSegments(Text, Segments);
-	const FSlateFontInfo Font = FCoreStyle::GetDefaultFontStyle("Regular", FMath::RoundToInt(8 * UIScale));
+	const FSlateFontInfo Font = FMythRoUITextures::RoFont(FMath::RoundToInt(8 * UIScale));
 	for (const TPair<FString, FLinearColor>& Seg : Segments)
 	{
 		TArray<FString> Words;

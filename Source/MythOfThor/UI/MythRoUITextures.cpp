@@ -1,4 +1,6 @@
 #include "UI/MythRoUITextures.h"
+#include "Styling/CoreStyle.h"
+#include "Fonts/CompositeFont.h"
 
 #include "Sprites/MythRoSpriteComponent.h"
 #include "Sprites/RoSpriteFormats.h"
@@ -147,4 +149,20 @@ FLinearColor FMythRoUITextures::AverageColor(const FString& RelativePath)
 	Get(RelativePath);
 	const FLinearColor* C = UITextureAverage().Find(RelativePath.ToLower());
 	return C ? *C : FLinearColor::White;
+}
+
+FSlateFontInfo FMythRoUITextures::RoFont(int32 Size, bool bBold)
+{
+	static TSharedPtr<const FCompositeFont> Fonts[2];
+	TSharedPtr<const FCompositeFont>& Font = Fonts[bBold ? 1 : 0];
+	if (!Font.IsValid())
+	{
+		const FString Path = FPaths::Combine(FPaths::ProjectContentDir(), TEXT("Myth"), TEXT("Fonts"), bBold ? TEXT("SCDream6.otf") : TEXT("SCDream4.otf"));
+		if (!FPaths::FileExists(Path))
+		{
+			return FCoreStyle::GetDefaultFontStyle(bBold ? "Bold" : "Regular", Size);
+		}
+		Font = MakeShared<FStandaloneCompositeFont>(NAME_None, Path, EFontHinting::Default, EFontLoadingPolicy::LazyLoad);
+	}
+	return FSlateFontInfo(Font, static_cast<float>(Size));
 }
