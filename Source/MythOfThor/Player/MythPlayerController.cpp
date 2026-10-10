@@ -33,7 +33,14 @@
 #include "GameFramework/PlayerInput.h"
 #include "Sprites/MythSkillEffects.h"
 #include "World/MythCellMoverComponent.h"
+#include "World/MythWarpPortal.h"
 #include "Sprites/MythStrEffect.h"
+#include "Engine/GameViewportClient.h"
+#include "Framework/Application/SlateApplication.h"
+#include "Misc/FileHelper.h"
+#include "Dom/JsonObject.h"
+#include "Serialization/JsonReader.h"
+#include "Serialization/JsonSerializer.h"
 
 AMythPlayerController::AMythPlayerController()
 {
@@ -52,6 +59,7 @@ void AMythPlayerController::BeginPlay()
 		{
 			PlayerInput->DebugExecBindings.Empty();
 		}
+		SetupRoCursors();
 		if (URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr)
 		{
 			Net->OnPlayerMoveConfirmed.AddUniqueDynamic(this, &AMythPlayerController::HandleMoveConfirmed);
@@ -222,6 +230,14 @@ void AMythPlayerController::MoveToCursor()
 		{
 			return; // clique de mira de skill
 		}
+		if (AMythMonster* Monster = Cast<AMythMonster>(Hit.GetActor()); Monster && Monster->ActorHasTag(TEXT("MythWarp")))
+		{
+			// Portal: clicar nele e andar ate a celula (o servidor teleporta ao pisar), nunca CZ_CONTACTNPC
+			PendingPickup = nullptr;
+			ClearFocusedTarget();
+			MoveToLocation(Monster->GetActorLocation(), bForceNextMove);
+			return;
+		}
 		if (AMythMonster* Monster = Cast<AMythMonster>(Hit.GetActor()))
 		{
 			if (!Monster->IsDead())
@@ -382,6 +398,7 @@ void AMythPlayerController::PlayerTick(float DeltaTime)
 
 	FlushPendingMove();
 	UpdateNetChase(DeltaTime);
+	UpdateRoCursor();
 
 	if (bWasdActive)
 	{
@@ -658,6 +675,183 @@ void AMythPlayerController::SetFocusedTarget(AMythMonster* NewTarget)
 	}
 	FocusedTarget = NewTarget;
 	ChaseRepathTimer = 0.f;
+}
+
+void AMythPlayerController::SetupRoCursors()
+{
+	UGameViewportClient* Viewport = GetWorld() ? GetWorld()->GetGameViewport() : nullptr;
+	FString Text;
+	if (!Viewport || !FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("cursors.json"))))
+	{
+		return;
+	}
+	TSharedPtr<FJsonObject> Root;
+	if (!FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) || !Root.IsValid())
+	{
+		return;
+	}
+	// Formas do Slate usadas como "vaga" de cada cursor do RO (acao do cursors.act)
+	const TPair<EMouseCursor::Type, int32> Slots[] = {
+		{ EMouseCursor::Default, 0 },          // seta
+		{ EMouseCursor::GrabHand, 1 },         // falar (NPC)
+		{ EMouseCursor::ResizeLeftRight, 4 },  // girar a camera
+		{ EMouseCursor::GrabHandClosed, 5 },   // atacar
+		{ EMouseCursor::CardinalCross, 7 },    // portal
+		{ EMouseCursor::SlashedCircle, 8 },    // proibido (celula bloqueada)
+		{ EMouseCursor::Hand, 9 },             // pegar item
+		{ EMouseCursor::Crosshairs, 10 },      // mira de skill
+	};
+	for (const TPair<EMouseCursor::Type, int32>& Slot : Slots)
+	{
+		const TSharedPtr<FJsonObject>* Entry;
+		if (!Root->TryGetObjectField(FString::FromInt(Slot.Value), Entry))
+		{
+			continue;
+		}
+		const TArray<TSharedPtr<FJsonValue>>& Hot = (*Entry)->GetArrayField(TEXT("hotspot"));
+		const TArray<TSharedPtr<FJsonValue>>& Size = (*Entry)->GetArrayField(TEXT("size"));
+		if (Hot.Num() < 2 || Size.Num() < 2)
+		{
+			continue;
+		}
+		// Ponto quente normalizado (0..1) na imagem
+		const FVector2D HotSpot(Hot[0]->AsNumber() / FMath::Max(1.0, Size[0]->AsNumber()), Hot[1]->AsNumber() / FMath::Max(1.0, Size[1]->AsNumber()));
+		Viewport->SetHardwareCursor(Slot.Key, FName(*(*Entry)->GetStringField(TEXT("png"))), HotSpot);
+	}
+}
+
+bool AMythPlayerController::IsWarpCell(const FIntPoint& Cell) const
+{
+	for (TActorIterator<AMythMonster> It(GetWorld()); It; ++It)
+	{
+		if (It->ActorHasTag(TEXT("MythWarp")))
+		{
+			const FIntPoint WarpCell = WorldToCell(It->GetActorLocation());
+			if (FMath::Max(FMath::Abs(WarpCell.X - Cell.X), FMath::Abs(WarpCell.Y - Cell.Y)) <= 1)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool AMythPlayerController::IsCursorOverUi() const
+{
+	// Mouse sobre uma janela da HUD (o ultimo widget sob o mouse nao e o viewport do jogo)
+	if (!FSlateApplication::IsInitialized())
+	{
+		return false;
+	}
+	FSlateApplication& App = FSlateApplication::Get();
+	const FWidgetPath Path = App.LocateWindowUnderMouse(App.GetCursorPos(), App.GetInteractiveTopLevelWindows());
+	return Path.IsValid() && Path.Widgets.Num() > 0 && Path.Widgets.Last().Widget->GetType() != FName(TEXT("SViewport"));
+}
+
+void AMythPlayerController::UpdateRoCursor()
+{
+	EMouseCursor::Type Want = EMouseCursor::Default;
+	if (IsInputKeyDown(EKeys::RightMouseButton))
+	{
+		Want = EMouseCursor::ResizeLeftRight;
+	}
+	else if (IsCursorOverUi())
+	{
+		Want = EMouseCursor::Default;
+	}
+	else if (PendingSkillID != 0)
+	{
+		Want = EMouseCursor::Crosshairs;
+	}
+	else
+	{
+		FHitResult Hit;
+		if (GetHitResultUnderCursor(ECC_Visibility, false, Hit) && Hit.bBlockingHit)
+		{
+			AActor* A = Hit.GetActor();
+			if (AMythMonster* M = Cast<AMythMonster>(A); M && !M->IsDead())
+			{
+				Want = M->ActorHasTag(TEXT("MythWarp")) ? EMouseCursor::CardinalCross : (M->IsNpc() ? EMouseCursor::GrabHand : EMouseCursor::GrabHandClosed);
+			}
+			else if (A && A->IsA<AMythGroundItem>())
+			{
+				Want = EMouseCursor::Hand;
+			}
+			else if (A && A->IsA<AMythWarpPortal>())
+			{
+				Want = EMouseCursor::CardinalCross;
+			}
+			else
+			{
+				// Portal: o NPC do warp (45 com aneis, 139 escondido nas portas) nao tem sprite para o raio acertar;
+				// como o cliente (HasWarpAtAttrCell), vale a celula
+				const FIntPoint Cell = WorldToCell(Hit.ImpactPoint);
+				if (IsWarpCell(Cell))
+				{
+					Want = EMouseCursor::CardinalCross;
+				}
+				if (Want == EMouseCursor::Default && !UMythCellMoverComponent::IsWalkable(GetWorld(), Cell))
+				{
+					Want = EMouseCursor::SlashedCircle;
+				}
+			}
+		}
+		else
+		{
+			Want = EMouseCursor::SlashedCircle;
+		}
+	}
+	if (Want != CurrentMouseCursor)
+	{
+		UE_LOG(LogTemp, Verbose, TEXT("MythCursor: %d"), static_cast<int32>(Want));
+	}
+	CurrentMouseCursor = Want;
+}
+
+void AMythPlayerController::MythPointAt(int32 X, int32 Y)
+{
+	// Teste: poe o mouse sobre a celula e diz qual cursor do RO ficou
+	const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld());
+	const APawn* P = GetPawn();
+	FVector2D Screen;
+	if (Info && P && ProjectWorldLocationToScreen(Info->CellToWorld(FIntPoint(X, Y), P->GetActorLocation().Z - 60.f), Screen))
+	{
+		SetMouseLocation(FMath::RoundToInt(Screen.X), FMath::RoundToInt(Screen.Y));
+		GetWorldTimerManager().SetTimerForNextTick(FTimerDelegate::CreateWeakLambda(this, [this, X, Y]()
+		{
+			UpdateRoCursor();
+			const TCHAR* Name = TEXT("?");
+			switch (CurrentMouseCursor.GetValue())
+			{
+			case EMouseCursor::Default: Name = TEXT("seta"); break;
+			case EMouseCursor::GrabHand: Name = TEXT("falar"); break;
+			case EMouseCursor::GrabHandClosed: Name = TEXT("atacar"); break;
+			case EMouseCursor::Hand: Name = TEXT("pegar item"); break;
+			case EMouseCursor::CardinalCross: Name = TEXT("portal"); break;
+			case EMouseCursor::SlashedCircle: Name = TEXT("proibido"); break;
+			case EMouseCursor::Crosshairs: Name = TEXT("mira de skill"); break;
+			case EMouseCursor::ResizeLeftRight: Name = TEXT("girar camera"); break;
+			default: break;
+			}
+			FHitResult Hit;
+			const bool bHit = GetHitResultUnderCursor(ECC_Visibility, false, Hit) && Hit.bBlockingHit;
+			FString Warps;
+			for (TActorIterator<AMythMonster> It(GetWorld()); It; ++It)
+			{
+				if (It->ActorHasTag(TEXT("MythWarp")))
+				{
+					const FIntPoint C = WorldToCell(It->GetActorLocation());
+					if (FMath::Abs(C.X - X) <= 8 && FMath::Abs(C.Y - Y) <= 8)
+					{
+						Warps += FString::Printf(TEXT(" (%d,%d)"), C.X, C.Y);
+					}
+				}
+			}
+			UE_LOG(LogTemp, Log, TEXT("MythPointAt (%d, %d): cursor %s | raio em %s celula %s | portais perto:%s"), X, Y, Name,
+				bHit && Hit.GetActor() ? *Hit.GetActor()->GetName() : TEXT("nada"),
+				bHit ? *WorldToCell(Hit.ImpactPoint).ToString() : TEXT("-"), *Warps);
+		}));
+	}
 }
 
 void AMythPlayerController::ClearFocusedTarget()
@@ -1086,6 +1280,7 @@ bool AMythPlayerController::TeleportToCell(int32 X, int32 Y)
 					const ACharacter* Char = Cast<ACharacter>(P);
 					const float HalfHeight = Char && Char->GetCapsuleComponent() ? Char->GetCapsuleComponent()->GetScaledCapsuleHalfHeight() : 90.f;
 					P->SetActorLocation(FVector(At.X, At.Y, GroundZ + HalfHeight), false, nullptr, ETeleportType::TeleportPhysics);
+					UE_LOG(LogTemp, Log, TEXT("MythMove: no chao da celula (%d, %d) em %s"), X + DX, Y + DY, *P->GetActorLocation().ToString());
 					StopMovement();
 					bHasDirectTarget = false;
 					return true;

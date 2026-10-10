@@ -1,0 +1,170 @@
+{
+ "0": {
+  "png": "Myth/Cursors/cursor_0",
+  "hotspot": [
+   0,
+   0
+  ],
+  "size": [
+   22,
+   30
+  ],
+  "frames": 11
+ },
+ "1": {
+  "png": "Myth/Cursors/cursor_1",
+  "hotspot": [
+   15,
+   11
+  ],
+  "size": [
+   31,
+   23
+  ],
+  "frames": 9
+ },
+ "2": {
+  "png": "Myth/Cursors/cursor_2",
+  "hotspot": [
+   0,
+   2
+  ],
+  "size": [
+   26,
+   22
+  ],
+  "frames": 3
+ },
+ "3": {
+  "png": "Myth/Cursors/cursor_3",
+  "hotspot": [
+   7,
+   85
+  ],
+  "size": [
+   14,
+   10
+  ],
+  "frames": 21
+ },
+ "4": {
+  "png": "Myth/Cursors/cursor_4",
+  "hotspot": [
+   16,
+   6
+  ],
+  "size": [
+   33,
+   13
+  ],
+  "frames": 1
+ },
+ "5": {
+  "png": "Myth/Cursors/cursor_5",
+  "hotspot": [
+   0,
+   0
+  ],
+  "size": [
+   24,
+   20
+  ],
+  "frames": 1
+ },
+ "6": {
+  "png": "Myth/Cursors/cursor_6",
+  "hotspot": [
+   0,
+   0
+  ],
+  "size": [
+   24,
+   20
+  ],
+  "frames": 1
+ },
+ "7": {
+  "png": "Myth/Cursors/cursor_7",
+  "hotspot": [
+   8,
+   13
+  ],
+  "size": [
+   16,
+   30
+  ],
+  "frames": 10
+ },
+ "8": {
+  "png": "Myth/Cursors/cursor_8",
+  "hotspot": [
+   12,
+   12
+  ],
+  "size": [
+   24,
+   25
+  ],
+  "frames": 1
+ },
+ "9": {
+  "png": "Myth/Cursors/cursor_9",
+  "hotspot": [
+   15,
+   12
+  ],
+  "size": [
+   30,
+   24
+  ],
+  "frames": 3
+ },
+ "10": {
+  "png": "Myth/Cursors/cursor_10",
+  "hotspot": [
+   17,
+   31
+  ],
+  "size": [
+   35,
+   41
+  ],
+  "frames": 20
+ },
+ "11": {
+  "png": "Myth/Cursors/cursor_11",
+  "hotspot": [
+   17,
+   31
+  ],
+  "size": [
+   35,
+   41
+  ],
+  "frames": 20
+ },
+ "12": {
+  "png": "Myth/Cursors/cursor_12",
+  "hotspot": [
+   8,
+   13
+  ],
+  "size": [
+   16,
+   30
+  ],
+  "frames": 2
+ },
+ "13": {
+  "png": "Myth/Cursors/cursor_13",
+  "hotspot": [
+   13,
+   6
+  ],
+  "size": [
+   43,
+   43
+  ],
+  "frames": 22
+ }
+}

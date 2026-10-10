@@ -472,9 +472,11 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 	{
 		if (const FString* N = Tables.Mob.Find(Info.JobClass)) { SpriteName = *N; }
 	}
-	if (!bPlayer && !NetSpriteExists(Folder, SpriteName))
+	const bool bWarp = Info.ObjectType == UnitNpc && (Info.JobClass == 45 || Info.JobClass == 139);
+	if (!bPlayer && !bWarp && !NetSpriteExists(Folder, SpriteName))
 	{
-		// NPC sem sprite neste cliente (warp, efeito, bandeira de guilda...): nao desenha nada
+		// NPC sem sprite neste cliente (efeito, bandeira de guilda...): nao desenha nada. O portal tambem nao tem
+		// sprite, mas precisa existir (aneis, cursor e clique de portal)
 		if (Info.ObjectType == UnitNpc)
 		{
 			return;
@@ -514,7 +516,7 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 			S->HairStyle = FMath::Max(Info.Head, 1);
 			S->HairColor = Info.HeadPalette;
 		}
-		else
+		else if (!bWarp) // o portal nao tem sprite (os aneis sao do AMythWarpPortal)
 		{
 			S->MonsterSpriteName = SpriteName;
 			S->MonsterSpriteFolder = Folder;
@@ -531,8 +533,10 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 
 	// Portais (JT_WARPNPC 45): no RO sao aneis azuis desenhados pelo executavel, sem sprite. O 139 (portal
 	// escondido) nao mostra nada.
-	if (Info.ObjectType == UnitNpc && (Info.JobClass == 45 || Info.JobClass == 139))
+	if (bWarp)
 	{
+		// Celula de portal: cursor de portal e clique = andar ate ela (o cliente nao "fala" com o warp)
+		Unit->Tags.AddUnique(TEXT("MythWarp"));
 		if (Unit->Sprite)
 		{
 			Unit->Sprite->SetVisibility(false, true);

@@ -153,6 +153,10 @@ public:
 	UFUNCTION(Exec)
 	void MythTargetNearest();
 
+	/** Teste: MythPointAt 160 185 -> poe o mouse sobre a celula e registra no log o cursor do RO escolhido. */
+	UFUNCTION(Exec)
+	void MythPointAt(int32 X, int32 Y);
+
 	/** Direcao do WASD conectado (o servidor anda; aqui so a intencao). */
 	FVector WasdDirection = FVector::ZeroVector;
 
@@ -251,6 +255,14 @@ private:
 	UFUNCTION() void HandleAttackOutOfRange(int64 TargetID, int32 TargetX, int32 TargetY, int32 Range);
 	void UpdateNetChase(float DeltaTime);
 	void SendChaseMove(const FIntPoint& TargetCell);
+
+	// Cursores do cliente (data/sprite/cursors.act -> tools/gen_cursors.py): escolhidos a cada quadro pelo que esta
+	// sob o mouse, na prioridade do RO (docs/ref/04 3.1)
+	void SetupRoCursors();
+	void UpdateRoCursor();
+	bool IsCursorOverUi() const;
+	/** Celula (ou vizinha) de um NPC de portal (45/139) */
+	bool IsWarpCell(const FIntPoint& Cell) const;
 	double LastPickupTryTime = -1000.0;
 	int32 PickupTries = 0;
 
