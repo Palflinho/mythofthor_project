@@ -9,6 +9,7 @@
 #include "Sprites/MythSkillEffects.h"
 #include "World/MythGroundItem.h"
 #include "World/MythCellMoverComponent.h"
+#include "Sprites/MythRoSound.h"
 #include "World/MythWarpPortal.h"
 #include "UI/MythRoClientTables.h"
 #include "UI/MythHUD.h"
@@ -624,13 +625,13 @@ void AMythNetWorld::HandleDamage(int64 SourceID, int64 TargetID, int32 Damage, u
 	AActor* Target = ResolveActor(TargetID);
 	UE_LOG(LogTemp, Log, TEXT("MythNetWorld: dano %d (tipo %d) de %lld em %lld"), Damage, DamageType, SourceID, TargetID);
 
-	// Quem ataca vira para o alvo e toca o golpe
+	// Quem ataca vira para o alvo e toca o golpe no ritmo do servidor (attackMT do ZC_NOTIFY_ACT)
 	if (AMythPlayerCharacter* Char = Cast<AMythPlayerCharacter>(Source))
 	{
 		if (Char->Sprite && Target)
 		{
 			Char->Sprite->FaceLocation(Target->GetActorLocation());
-			Char->Sprite->PlayAttack();
+			Char->Sprite->PlayAttack(DelayMs > 0 ? DelayMs / 1000.f : 0.f);
 		}
 	}
 	else if (AMythMonster* Mob = Cast<AMythMonster>(Source))
@@ -650,6 +651,19 @@ void AMythNetWorld::HandleDamage(int64 SourceID, int64 TargetID, int32 Damage, u
 	}
 	ECombatTextType Type = TargetID == Self ? ECombatTextType::DamageTaken : (DamageType == DmgCritical ? ECombatTextType::Critical : ECombatTextType::DamageDealt);
 	UMythCombatText::ShowDamage(this, At, Damage, Type);
+
+	// Sons de impacto (docs/ref/07 2.3): a arma de quem bateu (jogador) e, se o alvo e um jogador, a roupa dele
+	const UMythRoSpriteComponent* SourceSprite = Source ? Source->FindComponentByClass<UMythRoSpriteComponent>() : nullptr;
+	const UMythRoSpriteComponent* TargetSprite = Target->FindComponentByClass<UMythRoSpriteComponent>();
+	if (SourceSprite && SourceSprite->MonsterSpriteName.IsEmpty())
+	{
+		const int32 W = SourceSprite->Weapon;
+		UMythRoSound::PlayWavAtLocation(this, UMythRoSound::WeaponHitWav(W > 0 && W <= 23 ? W : (W > 0 ? 2 : 0)), Target->GetActorLocation());
+	}
+	if (TargetSprite && TargetSprite->MonsterSpriteName.IsEmpty())
+	{
+		UMythRoSound::PlayWavAtLocation(this, UMythRoSound::JobHitWav(TargetSprite->JobClass, TargetSprite->bMale), Target->GetActorLocation());
+	}
 	if (AMythMonster* Mob = Cast<AMythMonster>(Target))
 	{
 		Mob->NetHit();

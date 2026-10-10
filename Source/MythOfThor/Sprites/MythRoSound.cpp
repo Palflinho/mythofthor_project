@@ -90,11 +90,70 @@ USoundAttenuation* UMythRoSound::GetAttenuation()
 		A->Attenuation.bAttenuate = true;
 		A->Attenuation.bSpatialize = true;
 		A->Attenuation.AttenuationShape = EAttenuationShape::Sphere;
-		A->Attenuation.AttenuationShapeExtents = FVector(900.f, 0.f, 0.f); // volume cheio ate ~9 m
-		A->Attenuation.FalloffDistance = 2200.f;
+		// Como o Audio.cpp do cliente (docs/ref/07 3.2): cheio ate 4 celulas (200 uu), depois volume = 4 / distancia
+		// em celulas, e mudo a partir de 25 celulas (1250 uu)
+		constexpr float Inner = 200.f;
+		constexpr float Outer = 1250.f;
+		A->Attenuation.AttenuationShapeExtents = FVector(Inner, 0.f, 0.f);
+		A->Attenuation.FalloffDistance = Outer - Inner;
+		A->Attenuation.DistanceAlgorithm = EAttenuationDistanceModel::Custom;
+		FRichCurve* Curve = A->Attenuation.CustomAttenuationCurve.GetRichCurve();
+		for (float D = Inner; D <= Outer; D += 75.f)
+		{
+			Curve->AddKey((D - Inner) / (Outer - Inner), D >= Outer - 1.f ? 0.f : Inner / D);
+		}
+		Curve->AddKey(1.f, 0.f);
 		Attenuation = A;
 	}
 	return Attenuation.Get();
+}
+
+FString UMythRoSound::WeaponSwingWav(int32 WeaponType)
+{
+	switch (WeaponType)
+	{
+	case 1: return FMath::RandBool() ? TEXT("attack_short_sword.wav") : TEXT("attack_short_sword_.wav");
+	case 2: case 22: return TEXT("attack_sword.wav");
+	case 3: return TEXT("attack_twohand_sword.wav");
+	case 4: case 5: return TEXT("attack_spear.wav");
+	case 6: case 7: return TEXT("attack_axe.wav");
+	case 8: case 9: case 13: return TEXT("attack_mace.wav");
+	case 10: case 23: return TEXT("attack_rod.wav");
+	case 11: return FMath::RandBool() ? TEXT("attack_bow1.wav") : TEXT("attack_bow2.wav");
+	case 14: return TEXT("attack_whip.wav");
+	case 15: return TEXT("attack_book.wav");
+	case 16: return TEXT("attack_katar.wav");
+	default: return TEXT("attack_fist.wav");
+	}
+}
+
+FString UMythRoSound::WeaponHitWav(int32 WeaponType)
+{
+	switch (WeaponType)
+	{
+	case 1: case 2: case 3: case 22: return TEXT("_hit_sword.wav");
+	case 4: case 5: return TEXT("_hit_spear.wav");
+	case 6: case 7: return TEXT("_hit_axe.wav");
+	case 8: case 9: case 13: case 14: case 15: case 16: return TEXT("_hit_mace.wav");
+	case 10: case 23: return TEXT("_hit_rod.wav");
+	case 11: return TEXT("_hit_arrow.wav");
+	default: return FString::Printf(TEXT("_hit_fist%d.wav"), FMath::RandRange(1, 4));
+	}
+}
+
+FString UMythRoSound::JobHitWav(int32 JobClass, bool bMale)
+{
+	// Transclasses (4001..4021) usam a armadura da classe base correspondente
+	int32 Job = JobClass;
+	if (Job >= 4001 && Job <= 4007) { Job -= 4001; }
+	else if (Job >= 4008 && Job <= 4021) { Job -= 4001; }
+	switch (Job)
+	{
+	case 1: case 7: case 14: case 15: return TEXT("player_metal.wav");
+	case 3: case 6: case 11: case 12: case 17: case 19: case 20: case 25:
+		return bMale ? TEXT("player_wooden_male.wav") : TEXT("player_wooden_female.wav");
+	default: return TEXT("player_clothes.wav");
+	}
 }
 
 namespace

@@ -1334,7 +1334,8 @@ void URagnarokNetworkSubsystem::HandleActionNotify(const uint8* PacketData, int3
 {
 	int32 SrcID = *reinterpret_cast<const int32*>(PacketData + 2);
 	int32 TargetID = *reinterpret_cast<const int32*>(PacketData + 6);
-	int32 DelayMs = *reinterpret_cast<const int32*>(PacketData + 18);
+	// srcSpeed (+14) = attackMT de quem bate, o ritmo da animacao do golpe; dmgSpeed (+18) e o do alvo
+	int32 DelayMs = *reinterpret_cast<const int32*>(PacketData + 14);
 	int32 Damage = *reinterpret_cast<const int32*>(PacketData + 22);
 	uint8 ActionType = PacketData[29]; // PACKET_ZC_NOTIFY_ACT 0x08c8: damage(22), isSPDamage(26), div(27), type(29), damage2(30)
 

@@ -418,6 +418,9 @@ void AMythPlayerController::PlayerTick(float DeltaTime)
 	FlushPendingMove();
 	UpdateNetChase(DeltaTime);
 	UpdateRoCursor();
+	// Como o cliente, quem "ouve" e o personagem (a camera fica a ~50 m e deixaria tudo mudo); a orientacao segue a
+	// camera para o som da esquerda sair na esquerda da tela
+	SetAudioListenerOverride(Char->GetRootComponent(), FVector::ZeroVector, FRotator(0.f, Char->GetCameraYaw(), 0.f));
 
 	if (bWasdActive)
 	{

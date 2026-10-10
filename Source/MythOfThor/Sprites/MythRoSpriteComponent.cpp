@@ -243,11 +243,21 @@ void UMythRoSpriteComponent::PlayFrameEvent(const FRoActFrame& Frame, int32 Acti
 	{
 		return;
 	}
-	// Eventos do .act: nomes de .wav tocam o som; "atk" so marca o instante do golpe (sem som proprio).
+	// Eventos do .act: nomes de .wav tocam o som; "atk" (jogadores) toca o balanco da arma equipada (WeaponSoundTable)
 	const FString& Event = Body.Act.Events[Frame.EventId];
-	if (Event.EndsWith(TEXT(".wav"), ESearchCase::IgnoreCase) && GetOwner())
+	if (!GetOwner())
+	{
+		return;
+	}
+	if (Event.EndsWith(TEXT(".wav"), ESearchCase::IgnoreCase))
 	{
 		UMythRoSound::PlayWavAtLocation(this, Event, GetOwner()->GetActorLocation());
+	}
+	else if (Event.Equals(TEXT("atk"), ESearchCase::IgnoreCase) && !IsMonster())
+	{
+		// A arma vem como o "view" do item; nas armas comuns ele e o proprio tipo (W_DAGGER 1 ... W_2HSTAFF 23)
+		const int32 WeaponType = Weapon > 0 && Weapon <= 23 ? Weapon : (Weapon > 0 ? 2 : 0);
+		UMythRoSound::PlayWavAtLocation(this, UMythRoSound::WeaponSwingWav(WeaponType), GetOwner()->GetActorLocation());
 	}
 }
 

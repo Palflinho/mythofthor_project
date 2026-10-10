@@ -26,6 +26,14 @@ public:
 	static float GetEffectsVolume();
 	static void SetVolumes(float Music, float Effects);
 
+	// Tabelas de som do cliente (docs/ref/07 2.2 e 2.3), pelo tipo de arma do rAthena (W_FIST 0, W_DAGGER 1 ... W_2HSTAFF 23)
+	/** Balanco da arma no quadro "atk" do .act (attack_*.wav). */
+	static FString WeaponSwingWav(int32 WeaponType);
+	/** Impacto no alvo pela arma de quem bateu (_hit_*.wav; desarmado sorteia _hit_fist1..4). */
+	static FString WeaponHitWav(int32 WeaponType);
+	/** Reacao do corpo do jogador atingido: tecido, metal ou couro, pela classe (player_*.wav). */
+	static FString JobHitWav(int32 JobClass, bool bMale);
+
 private:
 	static USoundAttenuation* GetAttenuation();
 };
