@@ -523,6 +523,7 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 			S->HeadBottom = Info.HeadBottom;
 			S->Weapon = Info.Weapon & 0xFFFF;
 			S->Shield = Info.Shield & 0xFFFF;
+			S->Robe = Info.Robe;
 			S->HairStyle = FMath::Max(Info.Head, 1);
 			S->HairColor = Info.HeadPalette;
 			S->SetHeadDir(Info.HeadDir);
@@ -956,6 +957,7 @@ void AMythNetWorld::ApplySelfAppearance()
 	S->HeadBottom = Slot.HeadBottom;
 	S->Weapon = Slot.Weapon;
 	S->Shield = Slot.Shield;
+	S->Robe = Slot.Robe;
 	S->ReloadSprites();
 }
 
@@ -999,7 +1001,8 @@ void AMythNetWorld::HandleEquipChanged(int64 UnitID, uint8 Look, int32 Value)
 	case 5: S->HeadMid = Value; break;
 	case 6: S->HairColor = Value; break;
 	case 8: S->Shield = Value; break;
-	default: return; // cor da roupa, sapatos, capa: ainda nao desenhados
+	case 12: S->Robe = Value; break; // LOOK_ROBE
+	default: return; // cor da roupa e sapatos: ainda nao desenhados
 	}
 	S->ReloadSprites();
 }

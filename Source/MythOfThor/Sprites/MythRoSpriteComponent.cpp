@@ -30,6 +30,7 @@ namespace
 	const TCHAR* MonsterDir = TEXT("몬스터"); // 몬스터
 	const TCHAR* AccessoryDir = TEXT("악세사리"); // 악세사리
 	const TCHAR* ShieldDir = TEXT("방패");             // 방패
+	const TCHAR* RobeDir = TEXT("로브");   // 로브
 
 	/** Config/equip_sprites.json (tools/gen_equip_sprites.py): nomes dos sprites de equipamento do cliente. */
 	struct FEquipTables
@@ -73,6 +74,33 @@ namespace
 		Fill(TEXT("shields"), T.Shields);
 		Fill(TEXT("weapon_jobs"), T.WeaponJobs);
 		return T;
+	}
+
+	/** Config/robe_sprites.json (tools/gen_robe_sprites.py): id visual da capa -> nome da pasta em data/sprite/로브. */
+	const TMap<int32, FString>& RobeNames()
+	{
+		static TMap<int32, FString> Names;
+		static bool bLoaded = false;
+		if (!bLoaded)
+		{
+			bLoaded = true;
+			FString Text;
+			TSharedPtr<FJsonObject> Root;
+			const TSharedPtr<FJsonObject>* Obj = nullptr;
+			if (FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("robe_sprites.json")))
+				&& FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) && Root.IsValid() && Root->TryGetObjectField(TEXT("robes"), Obj))
+			{
+				for (const auto& Pair : (*Obj)->Values)
+				{
+					Names.Add(FCString::Atoi(*Pair.Key), Pair.Value->AsString());
+				}
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("MythRoSprite: Config/robe_sprites.json ausente (tools/gen_robe_sprites.py)"));
+			}
+		}
+		return Names;
 	}
 
 	// Grupos de acao do .act (acao = grupo * 8 + direcao), iguais ao cliente original.
@@ -412,6 +440,10 @@ void UMythRoSpriteComponent::LoadEquipment(const FString& Root, const FString& S
 	{
 		ShieldSource = FMythRoSpriteSource();
 	}
+
+	// Capa/asas/mochila: data/sprite/로브/<nome>/<sexo>/<sprite da classe>_<sexo> (o mesmo nome do corpo da classe)
+	const FString* RobeName = Robe > 0 ? RobeNames().Find(Robe) : nullptr;
+	Load(RobeSource, RobeName ? FPaths::Combine(SpriteRoot, RobeDir, *RobeName, Sex, FString::Printf(TEXT("%s_%s"), *JobSpriteName, *Sex)) : FString());
 }
 
 bool UMythRoSpriteComponent::LoadSource(FMythRoSpriteSource& Source, const FString& SprPath, const FString& ActPath, const FString& PalettePath)
@@ -819,6 +851,10 @@ void UMythRoSpriteComponent::RebuildMesh(const FRotator& CamRot)
 
 	int32 Section = 0;
 	FrameLocalBounds = FBox(ForceInit);
+	// Capa (docs/ref/03 4.4): atras do corpo de frente; de costas (noroeste, norte, nordeste) fica POR CIMA do corpo
+	const int32 BodyDirIndex = ActionIndex % 8;
+	const bool bBackToCamera = BodyDirIndex >= 3 && BodyDirIndex <= 5;
+	AddBodyLayer(RobeSource, ActionIndex, FrameIndex, bBackToCamera ? 1.f : -1.f, Section);
 	AddLayerQuads(Body, BodyFrame, FIntPoint::ZeroValue, 0.f, Section);
 
 	AddHeadLayer(Head, BodyFrame, ActionIndex, FrameIndex, 2.f, Section);

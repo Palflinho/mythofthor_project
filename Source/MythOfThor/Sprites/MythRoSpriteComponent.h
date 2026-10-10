@@ -102,6 +102,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite|Equip")
 	int32 Shield = 0;
 
+	/** Capa/asas/mochila (LOOK_ROBE do rAthena): id visual -> data/sprite/로브/<nome> (Config/robe_sprites.json). 0 = sem capa. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite|Equip")
+	int32 Robe = 0;
+
 	/** Filtro bilinear como o cliente original (falso = pixel duro, "nearest"). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
 	bool bSmoothSprites = true;
@@ -249,6 +253,7 @@ private:
 	UPROPERTY() FMythRoSpriteSource HatTop;
 	UPROPERTY() FMythRoSpriteSource WeaponSource;
 	UPROPERTY() FMythRoSpriteSource ShieldSource;
+	UPROPERTY() FMythRoSpriteSource RobeSource;
 	void LoadEquipment(const FString& Root, const FString& Sex);
 	/** Camada que acompanha a cabeca (cabelo e acessorios): encaixa pela ancora do corpo. */
 	void AddHeadLayer(const FMythRoSpriteSource& Source, const FRoActFrame& BodyFrame, int32 ActionIndex, int32 FrameIndex, float DepthBase, int32& Section);
