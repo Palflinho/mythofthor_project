@@ -1,4 +1,4 @@
-status: pendente
+status: feito
 
 # 002: projeto dos sistemas próprios do Myth of Thor (algoritmos + dados no rAthena)
 

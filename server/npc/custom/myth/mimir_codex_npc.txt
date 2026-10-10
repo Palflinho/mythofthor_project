@@ -1,0 +1,47 @@
+//=============================================================================
+// Myth of Thor - Guardião do Códice de Mímir (Bestiário e Relíquias)
+//=============================================================================
+prontera,156,185,5	script	Guardião de Mímir#myth	4_M_SAGE_A,{
+	mes "[Mímir]";
+	mes "Eu guardo as memórias das nove dimensões sob a copa de Yggdrasil.";
+	mes "Suas jornadas e batalhas estão registradas neste grande tomo.";
+	next;
+	switch(select("Consultar Conhecimento Acumulado:Resgatar Recompensas de Marcos:Como funciona o Códice?:Cancelar")) {
+	case 1:
+		mes "[Mímir]";
+		mes "Pontos de Conhecimento de Mímir: ^0000FF" + MIMIR_PTS + "^000000";
+		mes "Continue caçando criaturas e explorando masmorras para expandir seus registros.";
+		close;
+
+	case 2:
+		mes "[Mímir]";
+		mes "Verificando seus marcos de conhecimento...";
+		if (MIMIR_PTS >= 10 && !(MIMIR_REWARD & 1)) {
+			MIMIR_REWARD = MIMIR_REWARD | 1;
+			mes "Parabéns! Você alcançou o Marco de 10 Pontos: [Observador de Midgard]!";
+			specialeffect2 EF_LEVELUP;
+			close;
+		}
+		if (MIMIR_PTS >= 30 && !(MIMIR_REWARD & 2)) {
+			MIMIR_REWARD = MIMIR_REWARD | 2;
+			mes "Parabéns! Você alcançou o Marco de 30 Pontos: [Erudito de Prontera]!";
+			specialeffect2 EF_LEVELUP;
+			close;
+		}
+		mes "Nenhum novo marco atingido no momento.";
+		close;
+
+	case 3:
+		mes "[Mímir]";
+		mes "Cada espécie de monstro possui 3 níveis de maestria:";
+		mes "- Nível 1 (1 abate): Identificação básica.";
+		mes "- Nível 2 (50 abates): Visão do HP na barra de alvo.";
+		mes "- Nível 3 (250 abates): Tabela de drops e +1% de dano permanente contra a espécie.";
+		close;
+
+	case 4:
+		mes "[Mímir]";
+		mes "A sabedoria é a maior de todas as armas.";
+		close;
+	}
+}
