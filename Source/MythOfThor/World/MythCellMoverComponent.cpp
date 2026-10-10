@@ -191,6 +191,21 @@ void UMythCellMoverComponent::MoveToCell(const FIntPoint& Dest, int32 InMsPerCel
 		return;
 	}
 	MsPerCell = FMath::Max(InMsPerCell, 20);
+	if (Path.Num() > 0)
+	{
+		// Trocou de rota andando: como o servidor (change_walk_target do rAthena), termina o passo atual e segue
+		// dali. Recalcular da celula "atual" fazia meia-volta quando o passo ainda nao tinha passado do meio
+		const FIntPoint Next = Path[0];
+		TArray<FIntPoint> Rest = FindPath(GetWorld(), Next, Dest);
+		if (Rest.Num() == 0 && Next != Dest)
+		{
+			Rest.Add(Dest);
+		}
+		Path.Reset();
+		Path.Add(Next);
+		Path.Append(Rest);
+		return; // o segmento em andamento (SegmentStart/Time) continua igual
+	}
 	const FIntPoint From = Info->WorldToCell(Owner->GetActorLocation());
 	Path = FindPath(GetWorld(), From, Dest);
 	if (Path.Num() == 0 && From != Dest)
