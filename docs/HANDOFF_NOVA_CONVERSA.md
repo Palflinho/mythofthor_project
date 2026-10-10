@@ -45,13 +45,20 @@ Leia isto primeiro. Resume o projeto sem precisar do histórico.
 ## Estado agora
 
 - **F0 (auditoria):** feita, `docs/FIDELIDADE.md`.
-- **F1 (divergências já especificadas):** não começou. Primeiro item: doridori (1.1), depois camadas de capa/carrinho,
-  flechas, barras de HP/SP sob o personagem, inventário/equipamento/status completos.
-- **F2 (pesquisa R2 para lojas, Kafra, morte, grupo, chat, itens, atributos, cast e buffs, troca, login, montaria):**
-  precisa ser pedida ao Antigravity (nova tarefa em `coord/para_antigravity/`, status `pendente`).
-- **F4 (auditoria do servidor):** idem, pedir ao Antigravity.
-- **Teste pendente do usuário:** porings no chão (commit `f4ca760`), HUD LATAM (commit `d0f1d3a`), efeitos de skill da 2ª
-  classe e transclasse.
+- **F1 (divergências já especificadas), feito em 2026-10-10 e *ainda não testado pelo usuário jogando*:**
+  doridori e direção do corpo no mundo (a câmera gira o sprite parado), capa/asas, carrinho do Mercador, flecha do arco,
+  tremor de tela, barras de HP/SP sob os pés, memória da câmera entre mapas, sensibilidade do mouse (o eixo do mouse
+  vinha multiplicado por 0,07).
+- **F1, falta:** aura do 99 (pesquisa coord 012), clamp da câmera no terreno, `FixPathTime`, mira de skill em área,
+  inventário/equipamento/status completos, skills com Apply/Reset, menu Esc com abas, flechas de monstros, posturas
+  pickup/readyfight/stun, conferir tempos da flecha no OM.
+- **Pesquisas pendentes no Antigravity (coord, status `pendente`):** 010 (R2: lojas, Kafra, morte, grupo, chat, itens,
+  atributos, cast e buffs, troca, login, montaria), 011 (auditoria do servidor), 012 (aura do 99 e FUNC vazios).
+- **Teste pendente do usuário:** tudo acima, mais porings no chão (`f4ca760`), HUD LATAM (`d0f1d3a`), efeitos de skill.
+- **Cuidados de build:** o projeto compila em unity build; constantes em namespace anônimo com nome comum (`HeadDir`,
+  `EffectDir`) colidem entre arquivos. Prefira nomes específicos.
+- **Teste automático:** `Start-Process` precisa das aspas no `-ExecCmds="..."` dentro da string de argumentos, senão os
+  espaços somem. O editor leva alguns minutos para abrir depois de recompilar.
 
 ## Já pronto
 

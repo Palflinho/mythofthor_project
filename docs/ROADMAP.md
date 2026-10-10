@@ -28,7 +28,7 @@ Ordem do que se vê o tempo todo jogando. Quem: Claude, salvo indicação.
 | 1.5 | Tremor de tela feito; aura do 99 espera a pesquisa (coord 012) (05) | 🟡 |
 | 1.6 | Efeitos de 2ª classe e transclasse testados jogando (05, 11) | 🟡 receitas prontas, falta testar |
 | 1.7 | Barra de cast, ícones de buff e debuff (05) | 🟡 existem; conferir com a R2.8 |
-| 1.8 | Câmera: clamp do terreno, `viewpointtable`, memória entre mapas (02) | ⬜ |
+| 1.8 | Câmera: memória entre mapas feita; falta o clamp do terreno (precisa só da altura do GND, não dos prédios) e o `viewpointtable` (02) | 🟡 |
 | 1.9 | Movimento: tempo do servidor (`FixPathTime`), bloqueio de clique ao carregar mapa (01) | ⬜ |
 | 1.10 | Mira de skill em área (04) | ⬜ |
 | 1.11 | Inventário, equipamento e status completos (06, 12): descarte, arrastar ao atalho, "Base + Bônus", slots | 🟡 |

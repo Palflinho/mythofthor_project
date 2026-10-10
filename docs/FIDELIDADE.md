@@ -51,7 +51,7 @@ Hoje só 👤 o que o roadmap marcava como feito e testado; o resto está ⬜.
 | Ctrl+direito zoom por arrasto (só no RB) | ❌ P3 | ⬜ | Não é do cliente 2008; ignorar. |
 | Câmera nunca abaixo do terreno | ❌ P2 | ⬜ | `bDoCollisionTest = false`; sem o clamp do `BuildViewMatrix`. Inclinação −25° perto de morros pode entrar no chão. |
 | `viewpointtable.txt` (câmera por mapa) | ⚠️ P2 | ⬜ | Só existe o caso indoor genérico; mapas com tabela própria não usam seus limites. |
-| Guardar zoom e inclinação entre mapas (indoor e outdoor separados) | ❌ P2 | ⬜ | Cada mapa começa no padrão. |
+| Guardar zoom e inclinação entre mapas (indoor e outdoor separados) | ✅ P2 | ⬜ | Feito em 2026-10-10 (`FSavedCamera` em `MythPlayerCharacter.cpp`): o destino de zoom e inclinação do jogador passa para o próximo mapa do mesmo tipo. Só testei que a câmera padrão não regrediu; a memória só aparece jogando. |
 | Giro por teclado (`KeyRotateSpeed`) | ⚠️ P3 | ⬜ | Extra nosso, não está no spec. Decidir se mantém. |
 
 ## 03 Atores e animação (`docs/ref/03_atores_animacao.md`)

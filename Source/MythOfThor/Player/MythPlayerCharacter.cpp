@@ -11,6 +11,18 @@
 #include "Gameplay/MythStatsComponent.h"
 #include "Gameplay/AutoBattleComponent.h"
 
+namespace
+{
+	// Zoom e inclinacao escolhidos pelo jogador, guardados por tipo de mapa e mantidos entre mapas (docs/ref/02 3.4)
+	struct FSavedCamera
+	{
+		float Arm = -1.f;
+		float Pitch = 0.f;
+	};
+	FSavedCamera SavedOutdoor;
+	FSavedCamera SavedIndoor;
+}
+
 AMythPlayerCharacter::AMythPlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true; // suavizacao da camera
@@ -76,8 +88,14 @@ void AMythPlayerCharacter::BeginPlay()
 		DefaultArmLength = 3500.f;
 		MaxArmLength = 4200.f;
 	}
+	const bool bIndoorMap = bCameraLockedByMap;
 	DestArm = CurrentArm = DefaultArmLength;
 	ResetCamera();
+	if (const FSavedCamera& Saved = bIndoorMap ? SavedIndoor : SavedOutdoor; Saved.Arm > 0.f)
+	{
+		DestArm = CurrentArm = FMath::Clamp(Saved.Arm, MinArmLength, MaxArmLength);
+		DestPitch = FMath::Clamp(Saved.Pitch, MinPitch, MaxPitch);
+	}
 	CameraYaw = DestYaw;
 	CurrentPitch = DestPitch;
 	ApplyCamera();
@@ -145,6 +163,8 @@ void AMythPlayerCharacter::Tick(float DeltaSeconds)
 	CameraYaw += FRotator::NormalizeAxis(DestYaw - CameraYaw) * Alpha; // menor arco
 	CurrentPitch += (DestPitch - CurrentPitch) * Alpha;
 	CurrentArm += (DestArm - CurrentArm) * Alpha;
+	// Guarda o que o jogador escolheu (destino, nao o valor suavizado) para o proximo mapa do mesmo tipo
+	(bCameraLockedByMap ? SavedIndoor : SavedOutdoor) = FSavedCamera{ DestArm, DestPitch };
 	ApplyCamera();
 }
 
