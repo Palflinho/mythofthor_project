@@ -1,112 +1,104 @@
 # Roadmap do Myth of Thor
 
-Atualizado em 2026-10-10 (tarde). Une o plano original com a lista do "jogável mínimo".
+Replanejado em 2026-10-10. **Princípio:** primeiro o jogo fica 1:1 com o Ragnarok Online que já existe; só depois entram
+login, teste fechado, sistemas próprios, visual HD-2D e conteúdo novo.
 
-**Regra de cada etapa:**
-
-- O Claude implementa o cliente; o Antigravity cuida do servidor e da pesquisa (tarefas em `coord/`).
+- Cada divergência do cliente com o RO está listada em [`FIDELIDADE.md`](FIDELIDADE.md). Aquele arquivo é a fonte do que
+  falta; este aqui organiza a ordem.
+- O comportamento esperado vem dos specs em `docs/ref/` (pesquisa do Antigravity nos clientes abertos OM, RB e KO).
+- O servidor (rAthena) decide as regras; o cliente só mostra (`docs/PLANO_CLIENTE_FIEL.md`, seção 1).
 - Uma etapa só fecha depois de **você testar jogando** e aprovar.
-- O núcleo é 1:1 com o RO pre-renewal. As camadas extras vêm por último.
 
 Legenda: ✅ feito e testado · 🟡 em parte · ⬜ falta
 
-## Fase 1: o ciclo básico sem travar ✅
+## F0. Auditoria de fidelidade ✅
 
-| # | Item | Quem | Status |
+Matriz de divergências em `docs/FIDELIDADE.md` (2026-10-10). Refazer a leitura de um sistema quando ele for mexido.
+
+## F1. Fechar as divergências dos sistemas já especificados
+
+Ordem do que se vê o tempo todo jogando. Quem: Claude, salvo indicação.
+
+| # | Item (ref. na matriz) | Estado |
+|---|---|---|
+| 1.1 | Doridori da cabeça parada (03) | ⬜ |
+| 1.2 | Camadas: capa/asas, carrinho, ordem de costas (03) | ⬜ |
+| 1.3 | Arma guardada em idle/sentado; posturas pickup, readyfight, stun, 2º golpe (03) | ⬜ conferir no cliente original |
+| 1.4 | Flechas (05) | ⬜ |
+| 1.5 | Tremor de tela, aura do 99 (05) | ⬜ |
+| 1.6 | Efeitos de 2ª classe e transclasse testados jogando (05, 11) | 🟡 receitas prontas, falta testar |
+| 1.7 | Barra de cast, ícones de buff e debuff (05) | ⬜ conferir |
+| 1.8 | Câmera: clamp do terreno, `viewpointtable`, memória entre mapas (02) | ⬜ |
+| 1.9 | Movimento: tempo do servidor (`FixPathTime`), bloqueio de clique ao carregar mapa (01) | ⬜ |
+| 1.10 | Mira de skill em área (04) | ⬜ |
+| 1.11 | Inventário, equipamento e status completos (06, 12): descarte, arrastar ao atalho, "Base + Bônus", slots | 🟡 |
+| 1.12 | Barras de HP/SP sob o personagem (12) | ⬜ |
+| 1.13 | Skills com Apply/Reset e "◀ nível ▶", menu Esc com abas (12) | ⬜ |
+| 1.14 | Porings no chão (corrigido no `f4ca760`, falta testar) | 🟡 |
+
+Já conforme o spec e testado: movimento básico, combate e coleta, câmera, cursores, sons, números de dano, diálogo de NPC,
+portais e interiores de Prontera, sentar com Insert, chat em português, árvore de skills.
+
+## F2. Nova rodada de pesquisa R2 (Antigravity, em paralelo com F1)
+
+Sem spec hoje. Mesmo formato do `docs/HANDOFF_ANTIGRAVITY_PESQUISA_REFERENCIAS.md` (comportamento e números, sem copiar
+código GPL, citando a origem). Um doc por tema em `docs/ref/`.
+
+| # | Tema | Prioridade |
+|---|---|---|
+| R2.1 | Lojas de NPC (compra, venda, lista, desconto, peso, mensagens) | P1 |
+| R2.2 | Kafra (salvar, armazém, teleporte, taxas) | P1 |
+| R2.3 | Morte e reviver (janela, ponto de save, penalidade de EXP) | P1 |
+| R2.4 | Grupo (criar, convidar, divisão de EXP, HP dos membros) | P1 |
+| R2.5 | Chat completo (abas, cochicho, grupo, guilda, comandos `/`, emoções) | P1 |
+| R2.6 | Itens: usar, equipar, peso, tooltip, cartas, descarte | P1 |
+| R2.7 | Atributos: fórmulas exibidas, pontos, bônus | P1 |
+| R2.8 | Barra de cast, buffs e debuffs, ícones de status | P1 |
+| R2.9 | Troca entre jogadores | P2 |
+| R2.10 | Login, seleção e criação de personagem | P2 |
+| R2.11 | Montaria, carrinho, falcão | P2 |
+
+## F3. Implementar o que veio do R2 e fechar o ciclo Aprendiz → 2ª classe
+
+| # | Item | Quem | Estado |
 |---|---|---|---|
-| 1.1 | Conexão estável (keepalive, motivo da desconexão) | Claude | ✅ |
-| 1.2 | Movimento do RO (clique segurado, reta antes do A*, sem passo para trás, Shift+clique vira) | Claude | ✅ |
-| 1.3 | Combate: anda até o alvo e bate, prioridade do clique, cursores do RO | Claude | ✅ |
-| 1.4 | Pegar itens do chão; drops | Claude | ✅ |
-| 1.5 | Câmera do RO (lente, distâncias, inclinações, interiores travados) | Claude | ✅ |
-| 1.6 | PACKETVER 20250402 | Antigravity | ✅ |
-| 1.7 | Sentar com Insert (recupera mais rápido) | Claude | ✅ |
-| 1.8 | Porings flutuando parados (sem física ninguém os assentava no chão) | Claude | 🟡 corrigido, falta compilar e testar |
+| 3.1 | Lojas, Kafra, morte e reviver | Claude | ⬜ |
+| 3.2 | Troca de classe pelas quests originais (NPCs mapeados em coord 012) | os dois | 🟡 |
+| 3.3 | Grupo, cochicho, chat completo, emoções | Claude | ⬜ |
+| 3.4 | Mapas de campos e cidades das classes | Antigravity → Claude | ✅ 40 mapas importados (coord 013) |
+| 3.5 | Troca entre jogadores, montaria e carrinho | Claude | ⬜ |
+| 3.6 | Efeitos de skill ainda faltando | Claude | ⬜ |
 
-## Fase 2: o mundo com cara de RO 🟡
+## F4. Auditoria do servidor (Antigravity)
 
-| # | Item | Quem | Status |
-|---|---|---|---|
-| 2.1 | Animações (passo pela distância, ASPD, golpe 200 ms, morte, arma atrás de costas). Falta: "doridori" | Claude | 🟡 |
-| 2.2 | Números de dano, Miss, crítico, cura, level up (anjo). Falta: aura do nível 99 | Claude | 🟡 |
-| 2.3 | Sons (ouvinte no personagem, atenuação, arma, armadura). Sons de interface: o cliente não tem os arquivos | Claude | ✅ |
-| 2.4 | Portais e interiores de Prontera | os dois | ✅ |
-| 2.5 | Borda rosa nas folhagens | Antigravity | ✅ |
-| 2.6 | Efeitos das skills da 1ª classe (desenhador procedural pronto; Impacto Explosivo e Cura testados). Falta: tremor de tela, flechas (sprite) e testar as outras | Claude | 🟡 |
-| 2.7 | Efeitos das skills da 2ª classe e transclasse | Antigravity → Claude | ✅ receitas procedurais e tabela completa gerada (coord 010 e 011) |
+O rAthena também precisa ser 1:1 com o RO oficial:
 
-## Fase 3: jogável mínimo (novo) ⬜
+- rates, drops, spawns e `mob_db` do pre-renewal contra o oficial; listar o que foi alterado e por quê;
+- skills pre-renewal (custo, cast, delay, dano) contra a `skill_db`;
+- scripts de troca de classe e de quests de habilidade;
+- alinhar a documentação de `PACKETVER` (20250402 hoje);
+- separar e documentar o que é customização do Myth (`docs/sistemas/`).
 
-O que falta para alguém jogar de Aprendiz até a 2ª classe sem comandos de GM.
+Saída: `docs/FIDELIDADE_SERVIDOR.md`.
 
-| # | Item | Quem | Status |
-|---|---|---|---|
-| 3.1 | Inventário: usar poção, equipar/desequipar, peso, descrição (botão direito) | Claude | 🟡 existe, revisar jogando |
-| 3.2 | Atributos: janela com os "+", pontos, valores derivados | Claude | 🟡 existe, revisar jogando |
-| 3.3 | Árvore de habilidades (subir nível, usar, arrastar para a barra) | Claude | ✅ |
-| 3.4 | Lojas de NPC (comprar e vender) | Claude | ⬜ |
-| 3.5 | Kafra: salvar, armazém, teleporte | Claude | ⬜ |
-| 3.6 | Troca de classe pelas quests originais (Aprendiz → 1ª → 2ª) | os dois | 🟡 NPCs e pacotes mapeados (coord 012) |
-| 3.7 | Morrer e voltar ao ponto salvo (janela de "reviver") | Claude | ⬜ |
-| 3.8 | Mapas para upar: campos e cidades das classes (Izlude, Geffen, Payon, Morroc, Alberta) e as primeiras cavernas | Antigravity (importar) → Claude | ✅ 40 mapas importados no UE 5.8 (coord 013) |
-| 3.9 | Chat completo (cochicho, grupo), grupo (party) e troca entre jogadores | Claude | ⬜ |
+## Depois da fidelidade
 
-## Fase 4: HUD igual à do RO LATAM 🟡
-
-A janela de skills fica no estilo árvore de talentos (decisão do usuário). O resto, igual ao LATAM. **Depende dos prints
-do cliente LATAM.**
-
-| # | Item | Quem | Status |
-|---|---|---|---|
-| 4.1 | Janelas: informações básicas, status, inventário com abas, equipamento, atalhos, chat, minimapa, menu | Claude | ⬜ falta a referência |
-| 4.2 | Diálogo de NPC (360×160 arredondado, Espaço/1–9/setas) | Claude | ✅ |
-| 4.3 | Chat em português | Claude | ✅ |
-| 4.4 | Esc / Configurações | Claude | ✅ |
-| 4.5 | Sistemas modernos: navegação, quests (Alt+U), banco | os dois | ⬜ docs/ref/08 |
-
-## Fase 5: visual HD-2D ⬜
-
-| # | Item | Quem |
+| Fase | Conteúdo | Quem |
 |---|---|---|
-| 5.1 | Sprites com volume na luz (normais cilíndricas) | Claude |
-| 5.2 | Clima e dia/noite por mapa; poças, chuva nas unidades | Claude |
+| **Entrada do jogo** | Login, seleção e criação de personagem (assets ver2/ver3 do LATAM) | Claude |
+| **Teste fechado** (~20 amigos, no seu PC) | Pacote do cliente sem editor; VPN (CGNAT da Vero), contas, backup do banco; checklist de abertura | os dois |
+| **Sistemas próprios do Myth** | Síntese, Grade, Monstro raro ★, Códice de Mímir, HUD sem comandos (o servidor já está pronto, `docs/sistemas/`) | Claude |
+| **Visual HD-2D** | Normais cilíndricas nos sprites (`docs/ref/09`), clima e dia/noite por mapa, poças, chuva nas unidades | Claude |
+| **Conteúdo** | Sprites, skills e efeitos de todas as classes até a transclasse; quests de habilidade; skills de 3ª classe adaptadas | os dois |
 
-## Fase 6: entrada do jogo ⬜
+Sugestão, a decidir quando F3 fechar: uma sessão curta de teste com você e 2 ou 3 amigos antes do teste dos 20, para
+validar a fidelidade com outras pessoas.
 
-| # | Item | Quem |
-|---|---|---|
-| 6.1 | Telas de login, seleção e criação de personagem (assets ver2/ver3 do LATAM) | Claude |
+## Backlog (não bloqueia nada)
 
-## Fase 7: sistemas próprios do Myth
+Movimento por WASD (código pronto, desligado), navegação `/navi`, quests (Alt+U) e banco (`docs/ref/08`), sons de
+interface (o cliente local não tem os arquivos), extras de câmera (giro por teclado).
 
-O servidor já está pronto (coord 002); faltam as janelas.
+## Como retomar
 
-| # | Item | Quem |
-|---|---|---|
-| 7.1 | Síntese (atributos aleatórios) | Claude |
-| 7.2 | Grade | Claude |
-| 7.3 | Monstro raro ★ (escala 1,35× e nome) | Claude |
-| 7.4 | Códice de Mímir | Claude |
-| 7.5 | HUD sem comandos (autoloot, rates... como botões; Auto-Battle volta aqui) | Claude |
-
-## Fase 8: conteúdo
-
-| # | Item | Quem |
-|---|---|---|
-| 8.1 | Todas as classes até transclasse: sprites, skills, efeitos | os dois |
-| 8.2 | Quests que liberam habilidades extras | Antigravity (🟡 docs/sistemas/06) |
-| 8.3 | Adaptar algumas skills de 3ª classe | Antigravity → Claude |
-
-## Fase 9: teste fechado (~20 amigos no seu PC)
-
-| # | Item | Quem |
-|---|---|---|
-| 9.1 | Pacote do cliente (build de jogo, sem o editor) | Claude |
-| 9.2 | Acesso de fora: VPN (CGNAT da Vero), contas, backup do banco | Antigravity |
-| 9.3 | Checklist de abertura | os dois |
-
-## Por último
-
-| # | Item | Quem |
-|---|---|---|
-| 10.1 | Movimento por WASD (código pronto, desligado) | Claude |
+`docs/HANDOFF_NOVA_CONVERSA.md`. Arquivos antigos: `docs/arquivo/`.

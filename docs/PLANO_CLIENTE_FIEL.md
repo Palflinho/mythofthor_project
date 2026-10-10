@@ -42,7 +42,7 @@ O combate atual (dano sorteado em `MythPlayerController.cpp`, HP local em `AMyth
 **A2. Recepção de pacotes no `URagnarokNetworkSubsystem`**
 - Hoje `ProcessIncomingData()` está vazio. Implementar leitura não bloqueante (tick), buffer com framing pela **tabela de tamanhos de pacote do próprio rAthena** para `PACKETVER 20211103` (fonte: `src/map/clif_packetdb.hpp`, `src/common/packets.hpp`, `src/map/packets_struct.hpp`, `src/login/`, `src/char/`). **Não digitar IDs/tamanhos de memória — copiar do servidor.**
 - Fluxo completo: Login (6900) → Char (6121, lista e seleção de personagem) → Map (5121, entrar no mapa).
-- Conferir o ID do pacote de login: o código usa `0x0064`, o `PROJECT_HANDOFF.md` cita `0x02B0`. Validar contra o servidor real.
+- Conferir o ID do pacote de login: o código usa `0x0064`, o antigo `PROJECT_HANDOFF.md` (agora em `docs/arquivo/`) cita `0x02B0`. Validar contra o servidor real.
 - Expor os eventos da **Seção 3** (contrato) — é por eles que o cliente visual consome a rede.
 
 **A3. Conta e personagem de teste no servidor**

@@ -129,7 +129,8 @@ flowchart LR
 ```text
 mythofthor_project/
 ├── docs/                                  # Documentação e Diretrizes
-│   ├── PLANOGRAMA.md                      # Roteiro completo de entregas e fases
+│   ├── ROADMAP.md                         # Plano atual (fases e status)
+│   ├── FIDELIDADE.md                      # Matriz de divergências contra o RO original
 │   ├── ARQUITETURA_REDE.md                # Especificação dos pacotes binários
 │   ├── DIRETRIZES_PROJETO_E_CLAUDE.md    # Guia oficial de alinhamento com o Claude
 │   ├── PROGRESSAO_REGIOES_E_NIVEIS.md     # Detalhamento das 5 fases até o 99
