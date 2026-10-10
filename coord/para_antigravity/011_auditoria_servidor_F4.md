@@ -1,4 +1,4 @@
-status: pendente
+status: feito
 
 # 011: auditoria do servidor, o rAthena também precisa ser 1:1 (prioridade média)
 
