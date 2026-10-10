@@ -58,14 +58,24 @@ UMythCellMoverComponent::UMythCellMoverComponent()
 	PrimaryComponentTick.TickGroup = TG_PrePhysics;
 }
 
-bool UMythCellMoverComponent::GroundZ(const UWorld* World, const FVector& At, float& OutZ)
+bool UMythCellMoverComponent::GroundZ(const UWorld* World, const FVector& At, float& OutZ, const float* NearZ)
 {
 	// O chao do .gat so existe nas celulas livres e so responde ao canal Visibility (a malha visual nao)
 	// So pecas estaticas: as caixas de clique das unidades tambem respondem a Visibility e nao sao chao
 	FHitResult Hit;
-	const FVector Top(At.X, At.Y, 20000.f);
 	FCollisionQueryParams Params(TEXT("MythCellGround"), false);
 	Params.MobilityType = EQueryMobilityType::Static;
+	if (World && NearZ)
+	{
+		// Perto dos pes primeiro: copas de arvore, postes e telhados acima nao viram chao
+		const FVector From(At.X, At.Y, *NearZ + StepUp);
+		if (World->LineTraceSingleByChannel(Hit, From, From - FVector(0.f, 0.f, StepUp + 2000.f), ECC_Visibility, Params))
+		{
+			OutZ = Hit.ImpactPoint.Z;
+			return true;
+		}
+	}
+	const FVector Top(At.X, At.Y, 20000.f);
 	if (World && World->LineTraceSingleByChannel(Hit, Top, Top - FVector(0.f, 0.f, 40000.f), ECC_Visibility, Params))
 	{
 		OutZ = Hit.ImpactPoint.Z;
@@ -242,14 +252,15 @@ void UMythCellMoverComponent::TickComponent(float DeltaTime, ELevelTick TickType
 		}
 	}
 	// Altura pelo chao do .gat no ponto atual (sobe calcadas e escadas sem colisao)
-	float Ground = 0.f;
-	if (GroundZ(GetWorld(), Pos, Ground))
+	float Offset = FeetOffset;
+	if (const ACharacter* Char = Cast<ACharacter>(Owner); Char && Offset <= 0.f && Char->GetCapsuleComponent())
 	{
-		float Offset = FeetOffset;
-		if (const ACharacter* Char = Cast<ACharacter>(Owner); Char && Offset <= 0.f && Char->GetCapsuleComponent())
-		{
-			Offset = Char->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
-		}
+		Offset = Char->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+	}
+	const float FeetZ = Owner->GetActorLocation().Z - Offset;
+	float Ground = 0.f;
+	if (GroundZ(GetWorld(), Pos, Ground, &FeetZ))
+	{
 		Pos.Z = Ground + Offset;
 	}
 	Owner->SetActorLocation(Pos, false, nullptr, ETeleportType::TeleportPhysics);

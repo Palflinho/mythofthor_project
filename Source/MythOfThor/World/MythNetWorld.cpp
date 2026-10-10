@@ -9,6 +9,7 @@
 #include "Sprites/MythSkillEffects.h"
 #include "World/MythGroundItem.h"
 #include "World/MythCellMoverComponent.h"
+#include "World/MythWarpPortal.h"
 #include "UI/MythRoClientTables.h"
 #include "UI/MythHUD.h"
 #include "UI/MythRoHUDWidget.h"
@@ -525,6 +526,28 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 	}
 	Unit->NetSpeed = FMath::Max(Info.Speed, 20);
 	Units.Add(Info.GID, Unit);
+
+	// Portais (JT_WARPNPC 45): no RO sao aneis azuis desenhados pelo executavel, sem sprite. O 139 (portal
+	// escondido) nao mostra nada.
+	if (Info.ObjectType == UnitNpc && (Info.JobClass == 45 || Info.JobClass == 139))
+	{
+		if (Unit->Sprite)
+		{
+			Unit->Sprite->SetVisibility(false, true);
+			Unit->Sprite->bBlobShadow = false;
+			Unit->Sprite->bCastSpriteShadow = false;
+		}
+		if (Info.JobClass == 45)
+		{
+			FActorSpawnParameters P;
+			P.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+			P.Owner = Unit;
+			if (AMythWarpPortal* Portal = GetWorld()->SpawnActor<AMythWarpPortal>(Ground, FRotator::ZeroRotator, P))
+			{
+				Portal->AttachToActor(Unit, FAttachmentTransformRules::KeepWorldTransform);
+			}
+		}
+	}
 }
 
 void AMythNetWorld::HandleUnitMove(int64 ID, int32 TargetX, int32 TargetY, int32 StartTick)
@@ -559,6 +582,13 @@ void AMythNetWorld::HandleUnitVanish(int64 ID, uint8 Reason)
 	if (!Units.RemoveAndCopyValue(ID, Unit) || !IsValid(Unit))
 	{
 		return;
+	}
+	// Visuais presos na unidade (aneis do portal) saem junto
+	TArray<AActor*> Attached;
+	Unit->GetAttachedActors(Attached);
+	for (AActor* A : Attached)
+	{
+		A->Destroy();
 	}
 	// 1 = morreu (toca a animacao de morte); 0 saiu da visao, 2 logout, 3 teleporte
 	if (Reason == 1)

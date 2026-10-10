@@ -3,6 +3,23 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Types/SlateEnums.h"
+
+/** Opcoes graficas do menu Esc (valores da tela; aplicadas pelo UGameUserSettings). */
+struct FMythGfxOptions
+{
+	TArray<FIntPoint> Resolutions;
+	int32 ResolutionIndex = 0;
+	int32 WindowMode = 0;      // 0 janela, 1 tela cheia sem borda, 2 tela cheia
+	int32 Quality = 3;         // 0 baixa .. 4 cinematica
+	int32 Shadows = 3;
+	int32 Lumen = 1;
+	int32 AntiAliasing = 3;    // 0 nenhum, 1 FXAA, 2 TAA, 3 TSR
+	int32 ResolutionScale = 10; // 5..10 = 50%..100%
+	int32 FpsIndex = 1;        // 30, 60, 120, 144, sem limite
+	bool bVSync = true;
+	int32 Volume = 10;         // 0..10
+};
+
 #include "MythRoHUDWidget.generated.h"
 
 class UButton;
@@ -100,6 +117,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Myth|HUD")
 	bool CloseTopWindow();
 
+	/** Menu do jogo (Esc sem janela aberta). Retorna verdadeiro se abriu. */
+	bool ToggleGameMenu();
+
 protected:
 	virtual void NativeOnInitialized() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
@@ -110,7 +130,7 @@ protected:
 	virtual FReply NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 	virtual FReply NativeOnMouseButtonDoubleClick(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 
-private:
+protected:
 	/** Janelas arrastaveis e a altura (px originais) da faixa que serve de "alca" (barra de titulo). */
 	struct FDragWindow
 	{
@@ -291,6 +311,27 @@ private:
 	/** Janela de descricao do item (botao direito no inventario/equipamento), como no cliente original. */
 	void ShowItemInfo(const struct FRagnarokInventoryItem& Item);
 	bool HandleItemInfoClick(const FVector2D& ScreenPos);
+
+	// Menu Esc e configuracoes graficas (MythRoGameMenu.cpp)
+	static constexpr int32 GfxRowCount = 10;
+	void BuildGameMenu();
+	void LoadGraphicsOptions();
+	void ApplyGraphicsOptions();
+	void ApplyMythGraphics();
+	void RefreshGraphicsWindow();
+	void StepGraphicsOption(int32 Row, int32 Delta);
+	bool HandleGameMenuClick(const FVector2D& ScreenPos);
+	FMythGfxOptions Gfx;
+	bool bGfxDirty = false;
+	UPROPERTY() TObjectPtr<UCanvasPanel> GameMenuWindow;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> GameMenuItems;
+	UPROPERTY() TObjectPtr<UCanvasPanel> GraphicsWindow;
+	UPROPERTY() TArray<TObjectPtr<UImage>> GfxLeft;
+	UPROPERTY() TArray<TObjectPtr<UImage>> GfxRight;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> GfxValues;
+	UPROPERTY() TObjectPtr<UImage> GfxApply;
+	UPROPERTY() TObjectPtr<UTextBlock> GfxClose;
+	UPROPERTY() TObjectPtr<UTextBlock> GfxHint;
 	void RefreshWindows();
 	void RefreshStatusWindow();
 	void RefreshItemsWindow();

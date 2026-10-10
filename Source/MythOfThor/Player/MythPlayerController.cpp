@@ -404,9 +404,10 @@ void AMythPlayerController::OnHotkeyEscape()
 		CancelSkillTargeting(); // Esc cancela a mira antes de fechar janelas
 		return;
 	}
-	if (HudWidget)
+	// Como no cliente original: Esc fecha a janela de cima; sem janela aberta, abre o menu do jogo
+	if (HudWidget && !HudWidget->CloseTopWindow())
 	{
-		HudWidget->CloseTopWindow();
+		HudWidget->ToggleGameMenu();
 	}
 }
 

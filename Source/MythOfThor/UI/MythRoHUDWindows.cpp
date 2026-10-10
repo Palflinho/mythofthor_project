@@ -477,6 +477,10 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 
 bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 {
+	if (HandleGameMenuClick(ScreenPos))
+	{
+		return true;
+	}
 	for (const TPair<TWeakObjectPtr<UImage>, TWeakObjectPtr<UCanvasPanel>>& Pair : CloseButtons)
 	{
 		UCanvasPanel* Win = Pair.Value.Get();

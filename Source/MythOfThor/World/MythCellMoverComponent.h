@@ -36,8 +36,14 @@ public:
 	/** Celula andavel? (existe chao do .gat nela) */
 	static bool IsWalkable(const UWorld* World, const FIntPoint& Cell);
 
-	/** Altura do chao do .gat no ponto (Z), ou falso se nao ha chao. */
-	static bool GroundZ(const UWorld* World, const FVector& At, float& OutZ);
+	/**
+	 * Altura do chao do .gat no ponto (Z), ou falso se nao ha chao. Com NearZ, procura so perto dessa altura
+	 * (degraus de ate StepUp): copas de arvore, postes e telhados acima nao viram "chao".
+	 */
+	static bool GroundZ(const UWorld* World, const FVector& At, float& OutZ, const float* NearZ = nullptr);
+
+	/** Quanto (cm) o chao pode subir de uma vez seguindo o caminho (calcadas, escadas). */
+	static constexpr float StepUp = 120.f;
 
 	/** Caminho de From ate To (sem incluir From); vazio se nao houver. */
 	static TArray<FIntPoint> FindPath(const UWorld* World, const FIntPoint& From, const FIntPoint& To);
