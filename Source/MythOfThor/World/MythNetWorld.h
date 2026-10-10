@@ -60,6 +60,7 @@ private:
 	UFUNCTION() void HandleUnitStop(int64 ID, int32 X, int32 Y);
 	UFUNCTION() void HandleUnitDirection(int64 ID, uint8 HeadDir, uint8 BodyDir);
 	UFUNCTION() void HandleUnitOption(int64 ID, int32 Option);
+	UFUNCTION() void HandleUnitRevive(int64 ID);
 	UFUNCTION() void HandleUnitVanish(int64 ID, uint8 Reason);
 	UFUNCTION() void HandleDamage(int64 SourceID, int64 TargetID, int32 Damage, uint8 DamageType, int32 DelayMs);
 	/** Numero de dano, sons e reacao do alvo (adiado ate a flecha chegar no caso do arco). */

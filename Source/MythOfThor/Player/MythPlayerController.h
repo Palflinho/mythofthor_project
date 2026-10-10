@@ -127,6 +127,10 @@ public:
 	UFUNCTION(Exec)
 	void MythAttackNearest();
 
+	/** Teste: MythRestart 0 -> CZ_RESTART como o botao "Voltar ao ponto de salvamento" da janela de morte. */
+	UFUNCTION(Exec)
+	void MythRestart(int32 Type = 0);
+
 	/** Teste: MythFireArrow -> a flecha do arco (efeito 2003) do personagem ate o monstro mais proximo. */
 	UFUNCTION(Exec)
 	void MythFireArrow(int32 Count = 1);

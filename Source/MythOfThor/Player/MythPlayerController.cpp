@@ -220,6 +220,10 @@ void AMythPlayerController::OnClickTriggered(const FInputActionValue&)
 
 void AMythPlayerController::MoveToCursor()
 {
+	if (const AMythPlayerCharacter* Self = GetMythCharacter(); Self && Self->Sprite && Self->Sprite->GetState() == EMythSpriteState::Dead)
+	{
+		return; // morto: nao anda nem ataca (a janela de morte oferece voltar ao ponto de salvamento)
+	}
 	if (HudWidget && HudWidget->IsNpcDialogOpen())
 	{
 		return; // com dialogo de NPC aberto o clique e da janela, nao do mundo
@@ -1671,5 +1675,13 @@ void AMythPlayerController::MythFireArrow(int32 Count)
 	if (Best && P)
 	{
 		FMythSkillEffects::PlayEffectId(this, 2003, Best, Best->GetActorLocation(), const_cast<APawn*>(P));
+	}
+}
+
+void AMythPlayerController::MythRestart(int32 Type)
+{
+	if (URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr)
+	{
+		Net->SendRestart(static_cast<uint8>(Type));
 	}
 }

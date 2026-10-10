@@ -62,7 +62,7 @@ código GPL, citando a origem). Um doc por tema em `docs/ref/`.
 
 | # | Item | Quem | Estado |
 |---|---|---|---|
-| 3.1 | Lojas, Kafra, morte e reviver | Claude | ⬜ |
+| 3.1 | Lojas, Kafra, morte e reviver (reviver feito, falta lojas e Kafra) | Claude | 🟡 |
 | 3.2 | Troca de classe pelas quests originais (NPCs mapeados em coord 012) | os dois | 🟡 |
 | 3.3 | Grupo, cochicho, chat completo, emoções | Claude | ⬜ |
 | 3.4 | Mapas de campos e cidades das classes | Antigravity → Claude | ✅ 40 mapas importados (coord 013) |
@@ -87,7 +87,7 @@ Saída: `docs/FIDELIDADE_SERVIDOR.md`.
 |---|---|---|
 | **Entrada do jogo** | Login, seleção e criação de personagem (assets ver2/ver3 do LATAM) | Claude |
 | **Teste fechado** (~20 amigos, no seu PC) | Pacote do cliente sem editor; VPN (CGNAT da Vero), contas, backup do banco; checklist de abertura | os dois |
-| **Sistemas próprios do Myth** | Síntese, Grade, Monstro raro ★, Códice de Mímir, HUD sem comandos (o servidor já está pronto, `docs/sistemas/`) | Claude |
+| **Sistemas próprios do Myth** | Síntese, Grade, Monstro raro ★, Códice de Mímir, HUD sem comandos (o servidor já está pronto, `docs/sistemas/`); **opção a decidir:** bloqueio/aparar para escudo e duas mãos, papel de tank (`docs/sistemas/07_bloqueio_aparar.md`) | Claude |
 | **Visual HD-2D** | Normais cilíndricas nos sprites (`docs/ref/09`), clima e dia/noite por mapa, poças, chuva nas unidades | Claude |
 | **Conteúdo** | Sprites, skills e efeitos de todas as classes até a transclasse; quests de habilidade; skills de 3ª classe adaptadas | os dois |
 

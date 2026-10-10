@@ -264,6 +264,18 @@ bool URagnarokNetworkSubsystem::SendMoveRequest(int32 TargetX, int32 TargetY)
 	return true;
 }
 
+bool URagnarokNetworkSubsystem::SendRestart(uint8 Type)
+{
+	// CZ_RESTART (clif_parse_Restart, 0x00b2, 3 bytes): tipo no byte 2
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	const uint8 Packet[3] = { 0xb2, 0x00, Type };
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
 bool URagnarokNetworkSubsystem::SendChangeDirection(uint8 HeadDir, uint8 BodyDir)
 {
 	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
@@ -923,6 +935,9 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 				break;
 			case 0x009c: // ZC_CHANGE_DIRECTION
 				HandleChangeDirection(PacketData, ActualLen);
+				break;
+			case 0x0148: // ZC_RESURRECTION
+				HandleResurrection(PacketData, ActualLen);
 				break;
 			case 0x0229: // ZC_STATE_CHANGE (effectState de 4 bytes)
 			case 0x0119: // ZC_STATE_CHANGE (versao antiga, 2 bytes)
@@ -2463,4 +2478,14 @@ void URagnarokNetworkSubsystem::HandleOptionChange(const uint8* PacketData, int3
 		UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] [OnUnitOption] AID=%u option=0x%X"), AID, Option);
 	}
 	OnUnitOption.Broadcast(AID, Option);
+}
+
+void URagnarokNetworkSubsystem::HandleResurrection(const uint8* PacketData, int32 PacketSize)
+{
+	// 0148 <id>.L <type>.W (PACKET_ZC_RESURRECTION, 8 bytes)
+	if (PacketSize < 8)
+	{
+		return;
+	}
+	OnUnitRevive.Broadcast(*reinterpret_cast<const uint32*>(PacketData + 2));
 }

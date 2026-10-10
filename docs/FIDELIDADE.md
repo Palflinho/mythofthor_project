@@ -131,7 +131,7 @@ O HUD LATAM tem prioridade sobre o 06 (cliente 2008), por decisão sua. Listo as
 | Armazém Kafra | ❌ P1 | ⬜ | |
 | Loja de NPC (comprar/vender) | ❌ P1 | ⬜ | |
 | Janela de grupo, amigos, troca | ❌ P2 | ⬜ | |
-| Janela de reviver | ❌ P1 | ⬜ | |
+| Janela de reviver | 🟡 P1 | ⬜ | Feito em 2026-10-10: ao morrer (`ZC_NOTIFY_VANISH` tipo 1 para o próprio jogador) o sprite deita e abre a janela "Você morreu" com "Voltar ao ponto de salvamento" (`CZ_RESTART` 0) e "Aguardar socorro"; `ZC_RESURRECTION` (0x0148) e a entrada no mapa tiram do estado de morte; morto não anda nem ataca. Testado com `@die` + respawn. Falta: item Token de Siegfried (só o roBrowser mostra o botão), penalidade de EXP, texto original em português (R2.3). **Servidor:** o respawn deixou HP 2/3059, conferir `restart_hp_rate` na auditoria F4. |
 | Navegação `/navi`, quests (Alt+U), banco | ❌ P3 | ⬜ | Ver `docs/ref/08` |
 
 ## 07 Sons (`docs/ref/07_sons.md`)

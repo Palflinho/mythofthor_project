@@ -197,6 +197,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnUnitStop.AddDynamic(this, &AMythNetWorld::HandleUnitStop);
 	Net->OnUnitDirection.AddDynamic(this, &AMythNetWorld::HandleUnitDirection);
 	Net->OnUnitOption.AddDynamic(this, &AMythNetWorld::HandleUnitOption);
+	Net->OnUnitRevive.AddDynamic(this, &AMythNetWorld::HandleUnitRevive);
 	Net->OnUnitVanish.AddDynamic(this, &AMythNetWorld::HandleUnitVanish);
 	Net->OnDamage.AddDynamic(this, &AMythNetWorld::HandleDamage);
 	Net->OnChatMessage.AddDynamic(this, &AMythNetWorld::HandleChat);
@@ -250,6 +251,7 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnUnitStop.RemoveAll(this);
 		Net->OnUnitDirection.RemoveAll(this);
 		Net->OnUnitOption.RemoveAll(this);
+		Net->OnUnitRevive.RemoveAll(this);
 		Net->OnUnitVanish.RemoveAll(this);
 		Net->OnDamage.RemoveAll(this);
 		Net->OnChatMessage.RemoveAll(this);
@@ -405,6 +407,18 @@ void AMythNetWorld::HandleMapEnter(const FString& MapName, int32 CellX, int32 Ce
 
 void AMythNetWorld::FinishMapEnter(const FString& Map, int32 CellX, int32 CellY)
 {
+	// Entrar no mapa (inclusive o respawn no ponto de salvamento, que so manda a troca de posicao) tira do estado de morte
+	if (const AMythPlayerController* DeadPC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()))
+	{
+		if (const AMythPlayerCharacter* Self = Cast<AMythPlayerCharacter>(DeadPC->GetPawn()); Self && Self->Sprite)
+		{
+			Self->Sprite->Revive();
+		}
+		if (DeadPC->GetHud())
+		{
+			DeadPC->GetHud()->HideDeathWindow();
+		}
+	}
 	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()))
 	{
 		PC->TeleportToCell(CellX, CellY);
@@ -634,8 +648,43 @@ void AMythNetWorld::HandleUnitOption(int64 ID, int32 Option)
 	}
 }
 
+void AMythNetWorld::HandleUnitRevive(int64 ID)
+{
+	// ZC_RESURRECTION: de pe de novo; para o proprio jogador, fecha a janela de morte
+	const URagnarokNetworkSubsystem* Net = GetNet();
+	const AActor* Actor = ResolveActor(ID);
+	if (UMythRoSpriteComponent* S = Actor ? Actor->FindComponentByClass<UMythRoSpriteComponent>() : nullptr)
+	{
+		S->Revive();
+	}
+	if (Net && ID == Net->GetSelfID())
+	{
+		if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
+		{
+			PC->GetHud()->HideDeathWindow();
+		}
+	}
+}
+
 void AMythNetWorld::HandleUnitVanish(int64 ID, uint8 Reason)
 {
+	// O proprio jogador morreu (type 1): deita no chao e abre a janela de morte. O servidor manda o vanish tambem a ele
+	if (const URagnarokNetworkSubsystem* Net = GetNet(); Net && ID == Net->GetSelfID())
+	{
+		if (Reason == 1)
+		{
+			const AActor* Self = ResolveActor(ID);
+			if (UMythRoSpriteComponent* S = Self ? Self->FindComponentByClass<UMythRoSpriteComponent>() : nullptr)
+			{
+				S->Die();
+			}
+			if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
+			{
+				PC->GetHud()->ShowDeathWindow();
+			}
+		}
+		return;
+	}
 	TObjectPtr<AMythMonster> Unit;
 	if (!Units.RemoveAndCopyValue(ID, Unit) || !IsValid(Unit))
 	{

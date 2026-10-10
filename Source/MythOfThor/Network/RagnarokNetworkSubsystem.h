@@ -329,6 +329,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnUnitStop, int64, UnitID, int32
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnUnitDirection, int64, UnitID, uint8, HeadDir, uint8, BodyDir);
 /** ZC_STATE_CHANGE (0x0229 / 0x0119): opcoes de uma unidade (OPTION_CART1..5 0x08/0x80/0x100/0x200/0x400, riding 0x20, falcon...). */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnUnitOption, int64, UnitID, int32, Option);
+/** ZC_RESURRECTION (0x0148): a unidade voltou a vida. */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUnitRevive, int64, UnitID);
 
 // Delegates de compatibilidade anterior
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerMoveConfirmed, int32, TargetX, int32, TargetY);
@@ -395,6 +397,9 @@ public:
 
 	/** Vira o personagem sem andar (Shift+clique, sentado): CZ_CHANGE_DIRECTION. Dir do rAthena: 0 norte ... 7 nordeste. */
 	bool SendChangeDirection(uint8 HeadDir, uint8 BodyDir);
+
+	/** CZ_RESTART (0x00b2): 0 = voltar ao ponto de salvamento (reviver), 1 = tela de selecao de personagem. */
+	bool SendRestart(uint8 Type);
 
 	/**
 	 * Envia requisição de ação/ataque básico para o Map-Server (CZ_REQUEST_ACT 0x088E / 0x0360).
@@ -586,6 +591,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Movement")
 	FOnUnitOption OnUnitOption;
 
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Movement")
+	FOnUnitRevive OnUnitRevive;
+
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
 	FOnUnitVanish OnUnitVanish;
 
@@ -753,6 +761,7 @@ private:
 	void HandleInventoryList(const uint8* PacketData, int32 PacketSize, bool bIsEquip);
 	void HandleEffect(const uint8* PacketData, int32 PacketSize);
 	void HandleOptionChange(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	void HandleResurrection(const uint8* PacketData, int32 PacketSize);
 	void HandleSkillUnitAppear(const uint8* PacketData, int32 PacketSize);
 	void HandleSkillUnitDisappear(const uint8* PacketData, int32 PacketSize);
 	void HandleNotifyEffect(const uint8* PacketData, int32 PacketSize);

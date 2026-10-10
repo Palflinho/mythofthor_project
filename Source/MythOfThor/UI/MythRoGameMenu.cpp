@@ -6,6 +6,7 @@
 
 #include "UI/MythRoUITextures.h"
 #include "Sprites/MythRoSound.h"
+#include "Network/RagnarokNetworkSubsystem.h"
 
 #include "AudioDevice.h"
 #include "Components/CanvasPanel.h"
@@ -197,6 +198,17 @@ void UMythRoHUDWidget::BuildGameMenu()
 	SndClose->SetText(FText::FromString(TEXT("Fechar")));
 	SndHint = AddText(SoundWindow, 14.f, SSize.Y - 26.f, 7, FLinearColor(0.4f, 0.4f, 0.4f));
 	SoundWindow->SetVisibility(ESlateVisibility::Collapsed);
+
+	// Janela de morte: sempre oferece voltar ao ponto de salvamento (CZ_RESTART 0); o fechar/Aguardar so a esconde
+	const FVector2D DeathSize(260.f, 17.f + 74.f);
+	DeathWindow = MakeRoPanel(TEXT("Você morreu"), DeathSize, FVector2D(0.f, -120.f));
+	AddText(DeathWindow, 14.f, 26.f, 8, MenuText)->SetText(FText::FromString(TEXT("Você foi derrotado.")));
+	DeathSaveLink = AddText(DeathWindow, 14.f, 44.f, 9, MenuLink);
+	DeathSaveLink->SetText(FText::FromString(TEXT("Voltar ao ponto de salvamento")));
+	DeathWaitLink = AddText(DeathWindow, 14.f, 64.f, 9, MenuLink);
+	DeathWaitLink->SetText(FText::FromString(TEXT("Aguardar socorro")));
+	DeathWindow->SetVisibility(ESlateVisibility::Collapsed);
+	SoundWindow->SetVisibility(ESlateVisibility::Collapsed);
 	SndMusic = FMath::RoundToInt(UMythRoSound::GetMusicVolume() * 10.f);
 	SndEffects = FMath::RoundToInt(UMythRoSound::GetEffectsVolume() * 10.f);
 	SndUIScale = UIScale;
@@ -301,8 +313,43 @@ bool UMythRoHUDWidget::ToggleGameMenu()
 	return bOpen;
 }
 
+void UMythRoHUDWidget::ShowDeathWindow()
+{
+	if (DeathWindow)
+	{
+		DeathWindow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+		OpenOrder.Remove(DeathWindow);
+		OpenOrder.Add(DeathWindow);
+	}
+}
+
+void UMythRoHUDWidget::HideDeathWindow()
+{
+	if (DeathWindow)
+	{
+		DeathWindow->SetVisibility(ESlateVisibility::Collapsed);
+	}
+}
+
 bool UMythRoHUDWidget::HandleGameMenuClick(const FVector2D& ScreenPos)
 {
+	if (DeathWindow && DeathWindow->IsVisible())
+	{
+		if (IsUnder(DeathSaveLink, ScreenPos))
+		{
+			if (URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr)
+			{
+				Net->SendRestart(0); // o rAthena leva ao ponto de salvamento e manda o novo mapa
+			}
+			DeathWindow->SetVisibility(ESlateVisibility::Collapsed);
+			return true;
+		}
+		if (IsUnder(DeathWaitLink, ScreenPos))
+		{
+			DeathWindow->SetVisibility(ESlateVisibility::Collapsed);
+			return true;
+		}
+	}
 	if (GameMenuWindow && GameMenuWindow->IsVisible())
 	{
 		for (int32 i = 0; i < GameMenuItems.Num(); ++i)

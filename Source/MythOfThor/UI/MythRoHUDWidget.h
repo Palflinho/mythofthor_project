@@ -352,6 +352,14 @@ protected:
 	void RefreshGraphicsWindow();
 	void StepGraphicsOption(int32 Row, int32 Delta);
 	bool HandleGameMenuClick(const FVector2D& ScreenPos);
+	/** Janela de morte (docs/ref: Escape em modo morte): voltar ao ponto de salvamento ou aguardar socorro. */
+public:
+	void ShowDeathWindow();
+	void HideDeathWindow();
+protected:
+	UPROPERTY() TObjectPtr<UCanvasPanel> DeathWindow;
+	UPROPERTY() TObjectPtr<UTextBlock> DeathSaveLink;
+	UPROPERTY() TObjectPtr<UTextBlock> DeathWaitLink;
 	FMythGfxOptions Gfx;
 	bool bGfxDirty = false;
 	UPROPERTY() TObjectPtr<UCanvasPanel> GameMenuWindow;
