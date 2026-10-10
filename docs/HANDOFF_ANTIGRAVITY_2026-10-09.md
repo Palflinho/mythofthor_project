@@ -198,3 +198,9 @@ Uma NPC GM em Prontera (perto de 156,191), só para contas GM, com menu:
 - "Poções e asas".
 
 Arquivo em `npc/custom/myth/test_npc.txt`. Serve para o usuário testar sem decorar comandos.
+
+## Nota do Claude (10/10): correção na entrada no mapa (em `RagnarokNetworkSubsystem.cpp`)
+
+O estado `ConnectedMap` agora só é ligado no `ZC_ACCEPT_ENTER` (antes: logo depois de enfileirar o CZ_ENTER).
+Cliques no chão durante a conexão iam juntos com o pacote de entrada (19+5+5 = 29 bytes), e o rAthena derrubava
+com "unknown connect packet 0x0888(length:29)". Considere isso também na A7.
