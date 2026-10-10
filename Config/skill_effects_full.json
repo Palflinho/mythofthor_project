@@ -1623,12 +1623,80 @@
         "wav": ""
       }
     ],
+    "2006": [
+      {
+        "alphaMax": 1,
+        "attached": true,
+        "duration": 140,
+        "fadeIn": true,
+        "fadeOut": true,
+        "file": "",
+        "size": 100,
+        "toSrc": true,
+        "type": "3D",
+        "wav": ""
+      }
+    ],
+    "2007": [
+      {
+        "attached": true,
+        "file": "landmine",
+        "type": "STR",
+        "wav": ""
+      }
+    ],
+    "2008": [
+      {
+        "alphaMax": 1,
+        "attached": true,
+        "duration": 140,
+        "fadeIn": true,
+        "fadeOut": true,
+        "file": "effect/shield_boomerang.bmp",
+        "rotate": true,
+        "size": 50,
+        "toSrc": true,
+        "type": "3D",
+        "wav": ""
+      }
+    ],
+    "2009": [
+      {
+        "alphaMax": 1,
+        "attached": true,
+        "duration": 140,
+        "fadeIn": true,
+        "fadeOut": true,
+        "file": "effect/토마.bmp",
+        "rotate": true,
+        "size": 50,
+        "toSrc": true,
+        "type": "3D",
+        "wav": ""
+      }
+    ],
     "201": [
       {
         "attached": true,
         "file": "",
         "type": "FUNC",
         "wav": ""
+      }
+    ],
+    "2010": [
+      {
+        "attached": true,
+        "file": "adrenaline",
+        "type": "STR",
+        "wav": ""
+      }
+    ],
+    "2011": [
+      {
+        "attached": true,
+        "file": "",
+        "type": "WAV",
+        "wav": "effect/ef_entry"
       }
     ],
     "202": [
@@ -17934,62 +18002,236 @@
       "effect": 22,
       "element": "Fire"
     },
+    "100": {
+      "element": "Neutral"
+    },
     "1001": {
-      "element": "Weapon"
+      "cast": 16,
+      "element": "Weapon",
+      "hit": 1,
+      "sound": "effect/chargeattack"
+    },
+    "1002": {
+      "effect": 599,
+      "element": "Neutral",
+      "sound": "effect/shrink"
+    },
+    "1003": {
+      "element": "Neutral"
+    },
+    "1004": {
+      "effect": 600,
+      "element": "Poison",
+      "hit": 20,
+      "sound": "effect/throw_knife"
+    },
+    "1005": {
+      "effect": 602,
+      "element": "Neutral",
+      "ground": 604,
+      "sound": "effect/close_confine"
     },
     "1006": {
-      "element": "Fire"
+      "effect": 601,
+      "element": "Fire",
+      "sound": "effect/sightblaster"
+    },
+    "1007": {
+      "element": "Neutral"
     },
     "1008": {
+      "effect": 256,
       "element": "Water"
     },
     "1009": {
-      "element": "Weapon"
+      "effect": 2003,
+      "element": "Weapon",
+      "hit": 1,
+      "sound": "effect/ac_double"
+    },
+    "101": {
+      "element": "Neutral"
+    },
+    "1010": {
+      "effect": 606,
+      "element": "Neutral",
+      "sound": "effect/pang_voice"
+    },
+    "1011": {
+      "effect": 607,
+      "element": "Neutral",
+      "sound": "effect/wink_charm"
+    },
+    "1012": {
+      "element": "Neutral"
+    },
+    "1013": {
+      "effect": 2011,
+      "element": "Neutral",
+      "sound": "effect/ef_entry"
     },
     "1014": {
-      "element": "Holy"
+      "effect": 312,
+      "element": "Holy",
+      "sound": "effect/redemptio"
+    },
+    "1015": {
+      "element": "Neutral"
     },
     "1016": {
-      "element": "Weapon"
+      "effect": 514,
+      "element": "Weapon",
+      "hit": 1,
+      "sound": "effect/balkyoung"
     },
     "1017": {
+      "effect": 258,
       "element": "Earth"
     },
     "1018": {
+      "effect": 255,
       "element": "Fire"
     },
     "1019": {
+      "effect": 257,
       "element": "Wind"
+    },
+    "102": {
+      "element": "Neutral"
+    },
+    "103": {
+      "element": "Neutral"
+    },
+    "104": {
+      "element": "Neutral"
+    },
+    "105": {
+      "element": "Neutral"
+    },
+    "106": {
+      "element": "Neutral"
+    },
+    "107": {
+      "element": "Neutral"
+    },
+    "108": {
+      "effect": 101,
+      "element": "Neutral",
+      "sound": "effect/repair_weapon"
+    },
+    "109": {
+      "element": "Neutral"
     },
     "11": {
       "element": "Ghost",
       "hit": 1
     },
     "110": {
-      "effect": 102
+      "effect": 102,
+      "element": "Neutral",
+      "hit": 1,
+      "sound": "effect/hammerfall"
+    },
+    "111": {
+      "cast": 98,
+      "effect": 98,
+      "element": "Neutral",
+      "sound": "effect/adrenaline"
     },
     "112": {
-      "effect": 103
+      "effect": 103,
+      "element": "Neutral",
+      "sound": "effect/weapon_perfection"
+    },
+    "113": {
+      "effect": 128,
+      "element": "Neutral",
+      "sound": "effect/overthrust"
     },
     "114": {
-      "effect": 104
+      "effect": 104,
+      "element": "Neutral",
+      "sound": "effect/black_maximize_power_circle"
+    },
+    "115": {
+      "element": "Neutral",
+      "ground": 69,
+      "sound": "effect/hunter_trap"
     },
     "116": {
-      "element": "Earth"
+      "element": "Earth",
+      "ground": 2007,
+      "hit": 49,
+      "sound": "effect/hunter_trap"
+    },
+    "117": {
+      "element": "Neutral",
+      "ground": 145,
+      "sound": "effect/hunter_trap"
+    },
+    "118": {
+      "element": "Neutral",
+      "ground": 145,
+      "hit": 146,
+      "sound": "effect/hunter_shockwavetrap"
+    },
+    "119": {
+      "element": "Neutral",
+      "ground": 145,
+      "hit": 139,
+      "sound": "effect/hunter_trap"
     },
     "12": {
       "effect": 315,
       "element": "Ghost",
       "ground": 141
     },
+    "120": {
+      "element": "Neutral",
+      "ground": 145,
+      "hit": 99,
+      "sound": "effect/hunter_trap"
+    },
     "121": {
-      "element": "Water"
+      "element": "Water",
+      "ground": 145,
+      "hit": 108,
+      "sound": "effect/hunter_trap"
     },
     "122": {
-      "element": "Wind"
+      "element": "Wind",
+      "ground": 145,
+      "hit": 106,
+      "sound": "effect/hunter_trap"
     },
     "123": {
-      "element": "Fire"
+      "element": "Fire",
+      "ground": 145,
+      "hit": 107,
+      "sound": "effect/hunter_trap"
+    },
+    "124": {
+      "effect": 100,
+      "element": "Neutral",
+      "sound": "effect/hunter_trap"
+    },
+    "125": {
+      "element": "Neutral"
+    },
+    "126": {
+      "element": "Neutral"
+    },
+    "127": {
+      "element": "Neutral"
+    },
+    "128": {
+      "element": "Neutral"
+    },
+    "129": {
+      "effect": 115,
+      "element": "Neutral",
+      "hit": 1,
+      "sound": "effect/blitzbeat"
     },
     "13": {
       "effect": 15,
@@ -17997,21 +18239,53 @@
       "hit": 1,
       "sound": "effect/ef_soulstrike"
     },
+    "130": {
+      "effect": 119,
+      "element": "Neutral",
+      "sound": "effect/detecting"
+    },
     "131": {
-      "effect": 111
+      "effect": 111,
+      "element": "Neutral",
+      "sound": "effect/springtrap"
+    },
+    "132": {
+      "element": "Neutral"
+    },
+    "133": {
+      "element": "Neutral"
+    },
+    "134": {
+      "element": "Neutral"
+    },
+    "135": {
+      "effect": 120,
+      "element": "Neutral",
+      "sound": "effect/cloaking"
     },
     "136": {
+      "cast": 121,
       "effect": 143,
-      "element": "Weapon"
+      "element": "Weapon",
+      "hit": 122,
+      "sound": "effect/sonicblow"
     },
     "137": {
-      "element": "Weapon"
+      "cast": 123,
+      "element": "Weapon",
+      "hit": 132,
+      "sound": "effect/grimtooth"
     },
     "138": {
-      "element": "Poison"
+      "effect": 20,
+      "element": "Poison",
+      "sound": "effect/enchant_poison"
     },
     "139": {
-      "effect": 126
+      "effect": 126,
+      "element": "Neutral",
+      "hit": 127,
+      "sound": "effect/poison_react"
     },
     "14": {
       "effect": 2001,
@@ -18021,11 +18295,14 @@
     },
     "140": {
       "effect": 124,
-      "element": "Poison"
+      "element": "Poison",
+      "ground": 171,
+      "sound": "effect/venomdust"
     },
     "141": {
       "effect": 129,
-      "element": "Weapon"
+      "element": "Weapon",
+      "sound": "effect/venomsplasher"
     },
     "142": {
       "effect": 309,
@@ -18336,30 +18613,56 @@
       "element": "Weapon"
     },
     "211": {
-      "effect": 268
+      "effect": 268,
+      "element": "Neutral",
+      "hit": 274,
+      "sound": "effect/ef_coin2"
     },
     "212": {
-      "element": "Weapon"
+      "effect": 16,
+      "element": "Weapon",
+      "hit": 275,
+      "sound": "effect/backstab"
+    },
+    "213": {
+      "element": "Neutral"
     },
     "214": {
-      "element": "Weapon"
+      "cast": 276,
+      "element": "Weapon",
+      "hit": 1,
+      "sound": "effect/raid"
     },
     "215": {
-      "effect": 269
+      "effect": 269,
+      "element": "Neutral",
+      "sound": "effect/strip_weapon"
     },
     "216": {
-      "effect": 270
+      "effect": 270,
+      "element": "Neutral",
+      "sound": "effect/strip_shield"
     },
     "217": {
-      "effect": 271
+      "effect": 271,
+      "element": "Neutral",
+      "sound": "effect/strip_armor"
     },
     "218": {
-      "effect": 272
+      "effect": 272,
+      "element": "Neutral",
+      "sound": "effect/strip_helm"
     },
     "219": {
-      "element": "Weapon"
+      "effect": 227,
+      "element": "Weapon",
+      "hit": 1,
+      "sound": "effect/intimidate"
     },
     "22": {
+      "element": "Neutral"
+    },
+    "220": {
       "element": "Neutral"
     },
     "2202": {
@@ -18373,6 +18676,9 @@
     },
     "2207": {
       "element": "Earth"
+    },
+    "221": {
+      "element": "Neutral"
     },
     "2211": {
       "element": "Fire"
@@ -18391,6 +18697,9 @@
     },
     "2219": {
       "element": "Water"
+    },
+    "222": {
+      "element": "Neutral"
     },
     "2220": {
       "element": "Wind"
@@ -18422,17 +18731,26 @@
     "2229": {
       "element": "Earth"
     },
+    "223": {
+      "element": "Neutral"
+    },
     "2233": {
       "element": "Weapon"
     },
     "2236": {
       "element": "Weapon"
     },
+    "224": {
+      "element": "Neutral"
+    },
     "2242": {
       "element": "Weapon"
     },
     "2249": {
       "element": "Fire"
+    },
+    "225": {
+      "element": "Neutral"
     },
     "2250": {
       "element": "Water"
@@ -18461,17 +18779,26 @@
     "2259": {
       "element": "Fire"
     },
+    "226": {
+      "element": "Neutral"
+    },
     "2260": {
       "element": "Water"
     },
     "2261": {
       "element": "Weapon"
     },
+    "227": {
+      "element": "Neutral"
+    },
     "2278": {
       "element": "Weapon"
     },
     "2279": {
       "element": "Weapon"
+    },
+    "228": {
+      "element": "Neutral"
     },
     "2280": {
       "element": "Weapon"
@@ -18483,10 +18810,19 @@
       "element": "Weapon"
     },
     "229": {
-      "element": "Fire"
+      "element": "Fire",
+      "ground": 302,
+      "hit": 49,
+      "sound": "effect/demonstration"
     },
     "23": {
       "element": "Neutral"
+    },
+    "230": {
+      "effect": 298,
+      "element": "Neutral",
+      "hit": 1,
+      "sound": "effect/acid_terror"
     },
     "2304": {
       "element": "Weapon"
@@ -18497,6 +18833,11 @@
     "2308": {
       "element": "Weapon"
     },
+    "231": {
+      "effect": 299,
+      "element": "Neutral",
+      "sound": "effect/_heal_effect"
+    },
     "2312": {
       "element": "Weapon"
     },
@@ -18505,6 +18846,9 @@
     },
     "2317": {
       "element": "Weapon"
+    },
+    "232": {
+      "element": "Neutral"
     },
     "2320": {
       "element": "Weapon"
@@ -18530,6 +18874,9 @@
     "2329": {
       "element": "Weapon"
     },
+    "233": {
+      "element": "Neutral"
+    },
     "2330": {
       "element": "Weapon"
     },
@@ -18542,6 +18889,11 @@
     "2337": {
       "element": "Weapon"
     },
+    "234": {
+      "effect": 300,
+      "element": "Neutral",
+      "sound": "effect/chemical_protection"
+    },
     "2342": {
       "element": "Weapon"
     },
@@ -18551,15 +18903,51 @@
     "2344": {
       "element": "Weapon"
     },
+    "235": {
+      "effect": 300,
+      "element": "Neutral",
+      "sound": "effect/chemical_protection"
+    },
+    "236": {
+      "effect": 300,
+      "element": "Neutral",
+      "sound": "effect/chemical_protection"
+    },
+    "237": {
+      "effect": 300,
+      "element": "Neutral",
+      "sound": "effect/chemical_protection"
+    },
+    "238": {
+      "element": "Neutral"
+    },
+    "239": {
+      "element": "Neutral"
+    },
     "24": {
       "element": "Holy",
       "hit": 1
+    },
+    "240": {
+      "element": "Neutral"
+    },
+    "241": {
+      "element": "Neutral"
     },
     "2413": {
       "element": "Weapon"
     },
     "2415": {
       "element": "Weapon"
+    },
+    "242": {
+      "element": "Neutral"
+    },
+    "243": {
+      "element": "Neutral"
+    },
+    "244": {
+      "element": "Neutral"
     },
     "2443": {
       "element": "Fire"
@@ -18575,6 +18963,9 @@
     },
     "2448": {
       "element": "Poison"
+    },
+    "245": {
+      "element": "Neutral"
     },
     "2450": {
       "element": "Poison"
@@ -18594,6 +18985,9 @@
     "2459": {
       "element": "Wind"
     },
+    "246": {
+      "element": "Neutral"
+    },
     "2460": {
       "element": "Earth"
     },
@@ -18609,11 +19003,17 @@
     "2468": {
       "element": "Earth"
     },
+    "247": {
+      "element": "Neutral"
+    },
     "2476": {
       "element": "Weapon"
     },
     "2477": {
       "element": "Weapon"
+    },
+    "248": {
+      "element": "Neutral"
     },
     "2481": {
       "element": "Weapon"
@@ -18624,12 +19024,26 @@
     "2485": {
       "element": "Fire"
     },
+    "249": {
+      "effect": 336,
+      "element": "Neutral",
+      "sound": "effect/kyrie_guard"
+    },
     "25": {
       "element": "Neutral",
       "ground": 141
     },
     "250": {
-      "effect": 246
+      "effect": 246,
+      "element": "Weapon",
+      "hit": 1,
+      "sound": "effect/shield_charge"
+    },
+    "251": {
+      "effect": 2008,
+      "element": "Weapon",
+      "hit": 1,
+      "sound": "effect/cru_shield"
     },
     "2516": {
       "element": "Weapon"
@@ -18643,18 +19057,31 @@
     "2519": {
       "element": "Weapon"
     },
+    "252": {
+      "effect": 252,
+      "element": "Neutral",
+      "sound": "effect/reflect_shield"
+    },
     "2520": {
       "element": "Weapon"
     },
     "253": {
       "effect": 245,
-      "element": "Holy"
+      "element": "Holy",
+      "hit": 1,
+      "sound": "effect/holy_cross"
     },
     "254": {
-      "element": "Holy"
+      "cast": 16,
+      "effect": 226,
+      "element": "Holy",
+      "hit": 152,
+      "sound": "effect/grand_cross"
     },
     "255": {
-      "effect": 251
+      "effect": 251,
+      "element": "Neutral",
+      "sound": "effect/devotion"
     },
     "2553": {
       "element": "Weapon"
@@ -18669,7 +19096,9 @@
       "element": "Weapon"
     },
     "256": {
-      "effect": 248
+      "effect": 248,
+      "element": "Neutral",
+      "sound": "effect/providence"
     },
     "2561": {
       "element": "Weapon"
@@ -18689,6 +19118,11 @@
     "2569": {
       "element": "Weapon"
     },
+    "257": {
+      "effect": 222,
+      "element": "Neutral",
+      "sound": "effect/defender"
+    },
     "2570": {
       "element": "Weapon"
     },
@@ -18696,28 +19130,116 @@
       "element": "Weapon"
     },
     "258": {
-      "effect": 249
+      "effect": 250,
+      "element": "Neutral",
+      "sound": "effect/spear_quicken"
+    },
+    "259": {
+      "element": "Neutral"
     },
     "26": {
       "effect": 34,
       "element": "Neutral"
     },
+    "260": {
+      "element": "Neutral"
+    },
+    "261": {
+      "effect": 261,
+      "element": "Neutral",
+      "sound": "effect/call_spirits"
+    },
+    "262": {
+      "effect": 253,
+      "element": "Neutral",
+      "sound": "effect/흡기"
+    },
     "263": {
-      "element": "Weapon"
+      "effect": 329,
+      "element": "Weapon",
+      "hit": 1,
+      "sound": "effect/triple_attack"
+    },
+    "264": {
+      "effect": 166,
+      "element": "Neutral",
+      "sound": "effect/body_relocation"
+    },
+    "265": {
+      "element": "Neutral"
+    },
+    "266": {
+      "effect": 267,
+      "element": "Weapon",
+      "hit": 1,
+      "sound": "effect/investigate"
     },
     "267": {
-      "element": "Weapon"
+      "effect": 265,
+      "element": "Weapon",
+      "hit": 1,
+      "sound": "effect/finger_offensive"
+    },
+    "268": {
+      "effect": 254,
+      "element": "Neutral",
+      "sound": "effect/steel_body"
+    },
+    "269": {
+      "element": "Neutral"
     },
     "27": {
       "element": "Neutral",
       "ground": 317,
       "sound": "effect/ef_portal"
     },
+    "270": {
+      "cast": 12,
+      "effect": 261,
+      "element": "Neutral",
+      "sound": "effect/explosion_spirits"
+    },
+    "271": {
+      "cast": 12,
+      "effect": 328,
+      "element": "Weapon",
+      "hit": 266,
+      "sound": "effect/asura_strike"
+    },
     "272": {
-      "element": "Weapon"
+      "cast": 263,
+      "effect": 262,
+      "element": "Weapon",
+      "hit": 273,
+      "sound": "effect/chain_combo"
     },
     "273": {
-      "element": "Weapon"
+      "effect": 330,
+      "element": "Weapon",
+      "hit": 1,
+      "sound": "effect/combo_finish"
+    },
+    "274": {
+      "element": "Neutral"
+    },
+    "275": {
+      "element": "Neutral"
+    },
+    "276": {
+      "effect": 244,
+      "element": "Neutral",
+      "sound": "effect/magic_rod"
+    },
+    "277": {
+      "effect": 234,
+      "element": "Neutral",
+      "sound": "effect/spell_breaker"
+    },
+    "278": {
+      "element": "Neutral"
+    },
+    "279": {
+      "element": "Neutral"
     },
     "28": {
       "cast": 312,
@@ -18727,30 +19249,64 @@
       "sound": "effect/_heal_effect"
     },
     "280": {
-      "element": "Fire"
+      "effect": 255,
+      "element": "Fire",
+      "sound": "effect/endow_fire"
     },
     "281": {
-      "element": "Water"
+      "effect": 256,
+      "element": "Water",
+      "sound": "effect/endow_water"
     },
     "282": {
-      "element": "Wind"
+      "effect": 257,
+      "element": "Wind",
+      "sound": "effect/endow_wind"
     },
     "283": {
-      "element": "Earth"
+      "effect": 258,
+      "element": "Earth",
+      "sound": "effect/endow_earth"
+    },
+    "284": {
+      "element": "Neutral"
     },
     "285": {
-      "element": "Fire"
+      "cast": 225,
+      "element": "Fire",
+      "ground": 239,
+      "sound": "effect/volcano"
     },
     "286": {
-      "element": "Water"
+      "cast": 236,
+      "element": "Water",
+      "ground": 240,
+      "sound": "effect/deluge"
     },
     "287": {
-      "element": "Wind"
+      "cast": 237,
+      "element": "Wind",
+      "ground": 241,
+      "sound": "effect/violent_gale"
+    },
+    "288": {
+      "cast": 238,
+      "element": "Neutral",
+      "ground": 242,
+      "sound": "effect/land_protector"
+    },
+    "289": {
+      "effect": 235,
+      "element": "Neutral",
+      "sound": "effect/dispell"
     },
     "29": {
       "effect": 37,
       "element": "Neutral",
       "sound": "effect/ef_incagility"
+    },
+    "290": {
+      "element": "Neutral"
     },
     "3": {
       "element": "Weapon"
@@ -18787,26 +19343,160 @@
     "3018": {
       "element": "Earth"
     },
+    "304": {
+      "element": "Neutral"
+    },
+    "305": {
+      "element": "Neutral"
+    },
+    "306": {
+      "effect": 278,
+      "element": "Neutral",
+      "ground": 278,
+      "sound": "effect/lullaby"
+    },
+    "307": {
+      "effect": 279,
+      "element": "Neutral",
+      "ground": 279,
+      "sound": "effect/richmankim"
+    },
+    "308": {
+      "effect": 280,
+      "element": "Neutral",
+      "ground": 280,
+      "sound": "effect/eternal_chaos"
+    },
+    "309": {
+      "effect": 281,
+      "element": "Neutral",
+      "ground": 281,
+      "sound": "effect/drumbattlefield"
+    },
     "31": {
       "effect": 39,
       "element": "Neutral",
       "sound": "effect/ef_aqua"
     },
+    "310": {
+      "effect": 282,
+      "element": "Neutral",
+      "ground": 282,
+      "sound": "effect/ringnibelungen"
+    },
+    "311": {
+      "effect": 283,
+      "element": "Neutral",
+      "ground": 283,
+      "sound": "effect/rokisweil"
+    },
+    "312": {
+      "effect": 284,
+      "element": "Neutral",
+      "ground": 284,
+      "sound": "effect/intoabyss"
+    },
+    "313": {
+      "effect": 285,
+      "element": "Neutral",
+      "ground": 285,
+      "sound": "effect/siegfried"
+    },
+    "315": {
+      "element": "Neutral"
+    },
     "316": {
-      "element": "Weapon"
+      "effect": 2003,
+      "element": "Weapon",
+      "hit": 1,
+      "sound": "effect/musical_strike"
+    },
+    "317": {
+      "element": "Neutral",
+      "ground": 277,
+      "sound": "effect/dissonance"
+    },
+    "318": {
+      "effect": 295,
+      "element": "Neutral",
+      "sound": "effect/frost_joke"
+    },
+    "319": {
+      "effect": 286,
+      "element": "Neutral",
+      "ground": 286,
+      "sound": "effect/whistle"
     },
     "32": {
       "effect": 40,
       "element": "Neutral",
       "sound": "effect/ef_signum"
     },
+    "320": {
+      "effect": 287,
+      "element": "Neutral",
+      "ground": 287,
+      "sound": "effect/assassin_cross"
+    },
+    "321": {
+      "effect": 288,
+      "element": "Neutral",
+      "ground": 288,
+      "sound": "effect/poem_bragi"
+    },
+    "322": {
+      "effect": 289,
+      "element": "Neutral",
+      "ground": 289,
+      "sound": "effect/apple_idun"
+    },
+    "323": {
+      "element": "Neutral"
+    },
     "324": {
-      "element": "Weapon"
+      "effect": 2003,
+      "element": "Weapon",
+      "hit": 1,
+      "sound": "effect/arrow_shuffle"
+    },
+    "325": {
+      "element": "Neutral",
+      "ground": 290,
+      "sound": "effect/ugly_dance"
+    },
+    "326": {
+      "effect": 296,
+      "element": "Neutral",
+      "sound": "effect/scream"
+    },
+    "327": {
+      "effect": 291,
+      "element": "Neutral",
+      "ground": 291,
+      "sound": "effect/humming"
+    },
+    "328": {
+      "effect": 292,
+      "element": "Neutral",
+      "ground": 292,
+      "sound": "effect/dont_forget_me"
+    },
+    "329": {
+      "effect": 293,
+      "element": "Neutral",
+      "ground": 293,
+      "sound": "effect/fortunes_kiss"
     },
     "33": {
       "effect": 41,
       "element": "Neutral",
       "sound": "effect/ef_angelus"
+    },
+    "330": {
+      "effect": 294,
+      "element": "Neutral",
+      "ground": 294,
+      "sound": "effect/service_for_you"
     },
     "337": {
       "element": "Weapon"
@@ -18961,10 +19651,20 @@
     "44": {
       "element": "Neutral"
     },
+    "446": {
+      "effect": 220,
+      "element": "Neutral",
+      "sound": "effect/potion"
+    },
     "45": {
       "effect": 153,
       "element": "Neutral",
       "sound": "effect/ac_concentration"
+    },
+    "459": {
+      "effect": 98,
+      "element": "Neutral",
+      "sound": "effect/adrenaline"
     },
     "46": {
       "cast": 16,
@@ -18998,8 +19698,30 @@
     "49": {
       "element": "Neutral"
     },
+    "495": {
+      "effect": 130,
+      "element": "Neutral",
+      "sound": "effect/ef_twohandquicken"
+    },
+    "496": {
+      "effect": 497,
+      "element": "Neutral",
+      "sound": "effect/pharmacy"
+    },
+    "497": {
+      "effect": 498,
+      "element": "Neutral",
+      "sound": "effect/pharmacy"
+    },
+    "498": {
+      "effect": 499,
+      "element": "Neutral",
+      "sound": "effect/pharmacy"
+    },
     "499": {
-      "element": "Weapon"
+      "element": "Weapon",
+      "hit": 1,
+      "sound": "effect/ac_double"
     },
     "5": {
       "cast": 16,
@@ -19134,21 +19856,35 @@
     "542": {
       "element": "Wind"
     },
+    "55": {
+      "element": "Neutral"
+    },
     "56": {
+      "cast": 148,
       "effect": 148,
-      "element": "Weapon"
+      "element": "Weapon",
+      "hit": 147,
+      "sound": "effect/pierce"
     },
     "57": {
-      "effect": 144,
-      "element": "Weapon"
+      "cast": 144,
+      "effect": 70,
+      "element": "Weapon",
+      "sound": "effect/brandish_spear"
     },
     "58": {
+      "cast": 150,
       "effect": 150,
-      "element": "Weapon"
+      "element": "Weapon",
+      "hit": 1,
+      "sound": "effect/pierce"
     },
     "59": {
-      "effect": 151,
-      "element": "Weapon"
+      "cast": 151,
+      "effect": 2006,
+      "element": "Weapon",
+      "hit": 80,
+      "sound": "effect/spear_boomerang"
     },
     "6": {
       "effect": 67,
@@ -19156,15 +19892,30 @@
       "sound": "effect/swordman_provoke"
     },
     "60": {
-      "effect": 249
+      "effect": 130,
+      "element": "Neutral",
+      "sound": "effect/ef_twohandquicken"
     },
     "61": {
       "effect": 131,
-      "element": "Weapon"
+      "element": "Weapon",
+      "sound": "effect/ef_autocounter"
     },
     "62": {
+      "cast": 149,
       "effect": 149,
-      "element": "Weapon"
+      "element": "Weapon",
+      "hit": 1,
+      "sound": "effect/bowlingbash"
+    },
+    "63": {
+      "element": "Neutral"
+    },
+    "64": {
+      "element": "Neutral"
+    },
+    "65": {
+      "element": "Neutral"
     },
     "654": {
       "element": "Fire"
@@ -19182,7 +19933,9 @@
       "element": "Dark"
     },
     "66": {
-      "effect": 84
+      "effect": 84,
+      "element": "Neutral",
+      "sound": "effect/impositio_manus"
     },
     "660": {
       "element": "Weapon"
@@ -19191,7 +19944,9 @@
       "element": "Fire"
     },
     "67": {
-      "effect": 88
+      "effect": 88,
+      "element": "Neutral",
+      "sound": "effect/suffragium"
     },
     "670": {
       "element": "Dark"
@@ -19204,10 +19959,13 @@
     },
     "68": {
       "effect": 86,
-      "element": "Holy"
+      "element": "Holy",
+      "sound": "effect/aspersio"
     },
     "69": {
-      "effect": 91
+      "effect": 91,
+      "element": "Neutral",
+      "sound": "effect/sacramenti"
     },
     "7": {
       "cast": 17,
@@ -19218,22 +19976,35 @@
     },
     "70": {
       "effect": 83,
-      "element": "Holy"
+      "element": "Holy",
+      "ground": 319,
+      "sound": "effect/sanctuary"
     },
     "706": {
       "element": "Poison"
     },
+    "71": {
+      "effect": 136,
+      "element": "Neutral",
+      "sound": "effect/slow_poison"
+    },
     "72": {
-      "effect": 78
+      "effect": 78,
+      "element": "Neutral",
+      "sound": "effect/status_recovery"
     },
     "73": {
-      "effect": 112
+      "effect": 112,
+      "element": "Neutral",
+      "sound": "effect/kyrie_guard"
     },
     "739": {
       "element": "Poison"
     },
     "74": {
-      "effect": 76
+      "effect": 76,
+      "element": "Neutral",
+      "sound": "effect/magnificat"
     },
     "740": {
       "element": "Fire"
@@ -19248,22 +20019,32 @@
       "element": "Fire"
     },
     "75": {
-      "effect": 75
+      "effect": 75,
+      "element": "Neutral",
+      "sound": "effect/gloria"
     },
     "76": {
-      "effect": 87
+      "effect": 87,
+      "element": "Neutral",
+      "sound": "effect/lex_divina"
     },
     "77": {
       "effect": 152,
-      "element": "Holy"
+      "element": "Holy",
+      "hit": 152,
+      "sound": "effect/turn_undead"
     },
     "78": {
-      "effect": 85
+      "effect": 85,
+      "element": "Neutral",
+      "sound": "effect/lex_aeterna"
     },
     "79": {
       "effect": 113,
       "element": "Holy",
-      "hit": 152
+      "ground": 318,
+      "hit": 152,
+      "sound": "effect/magnus_exorcismus"
     },
     "8": {
       "effect": 11,
@@ -19271,7 +20052,11 @@
       "sound": "effect/ef_endure"
     },
     "80": {
-      "element": "Fire"
+      "effect": 96,
+      "element": "Fire",
+      "ground": 138,
+      "hit": 97,
+      "sound": "effect/firepillar"
     },
     "8019": {
       "element": "Poison"
@@ -19298,7 +20083,13 @@
       "element": "Fire"
     },
     "81": {
-      "element": "Fire"
+      "effect": 62,
+      "element": "Fire",
+      "hit": 49,
+      "sound": "effect/sightrasher"
+    },
+    "82": {
+      "element": "Neutral"
     },
     "8201": {
       "element": "Weapon"
@@ -19345,10 +20136,14 @@
     "83": {
       "effect": 92,
       "element": "Fire",
-      "hit": 49
+      "hit": 49,
+      "sound": "effect/meteor_storm"
     },
     "84": {
-      "element": "Wind"
+      "effect": 93,
+      "element": "Wind",
+      "hit": 94,
+      "sound": "effect/hunter_shockwavetrap"
     },
     "8401": {
       "element": "Fire"
@@ -19413,33 +20208,73 @@
     "85": {
       "effect": 90,
       "element": "Wind",
-      "hit": 52
+      "hit": 52,
+      "sound": "effect/vermilion"
     },
     "86": {
-      "element": "Water"
+      "cast": 116,
+      "element": "Water",
+      "hit": 117,
+      "sound": "effect/wizard_waterball_chulung"
     },
     "87": {
-      "element": "Water"
+      "element": "Water",
+      "ground": 74,
+      "sound": "effect/icewall"
     },
     "88": {
-      "element": "Water"
+      "effect": 28,
+      "element": "Water",
+      "hit": 51,
+      "sound": "effect/frostnova"
     },
     "89": {
       "effect": 89,
-      "element": "Water"
+      "element": "Water",
+      "ground": 89,
+      "hit": 51,
+      "sound": "effect/stormgust"
     },
     "9": {
       "element": "Neutral"
     },
     "90": {
-      "element": "Earth"
+      "effect": 79,
+      "element": "Earth",
+      "hit": 147,
+      "sound": "effect/earthspike"
     },
     "91": {
-      "element": "Earth"
+      "effect": 142,
+      "element": "Earth",
+      "hit": 147,
+      "sound": "effect/heavensdrive"
     },
     "92": {
       "element": "Earth",
-      "ground": 95
+      "ground": 95,
+      "sound": "effect/quagmire"
+    },
+    "93": {
+      "element": "Neutral"
+    },
+    "94": {
+      "element": "Neutral"
+    },
+    "95": {
+      "element": "Neutral"
+    },
+    "96": {
+      "element": "Neutral"
+    },
+    "97": {
+      "element": "Neutral"
+    },
+    "98": {
+      "element": "Neutral"
+    },
+    "99": {
+      "element": "Neutral"
     }
   }
 }
