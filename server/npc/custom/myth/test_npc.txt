@@ -1,0 +1,208 @@
+//===== rAthena Script =======================================
+//= Myth of Thor - NPC de Teste para Game Masters (Tarefa B4)
+//===== Por: ==================================================
+//= Antigravity
+//===== Descrição: ============================================
+//= NPC de testes para GM localizado em Prontera (156, 191).
+//= Permite mudança de classe (até a transclasse), nível máximo,
+//= todas as habilidades, kits de equipamentos e consumíveis.
+//============================================================
+
+prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
+	.@npc_name$ = "[Assistente de Testes]";
+
+	// Apenas contas de Game Master podem usar o assistente
+	if (getgmlevel() == 0) {
+		mes .@npc_name$;
+		mes "Acesso restrito a Game Masters.";
+		close;
+	}
+
+	mes .@npc_name$;
+	mes "Olá, Mestre! Em que posso ajudar nos testes hoje?";
+	next;
+
+	while (1) {
+		switch(select("Mudar de Classe:Nível 99 / Job Máximo:Aprender Todas as Habilidades:Kit de Equipamentos:Poções e Asas:Resetar Atributos e Habilidades:Encerrar")) {
+		case 1: // Mudar de Classe
+			mes .@npc_name$;
+			mes "Escolha a categoria da classe desejada:";
+			next;
+
+			switch(select("Aprendiz (Novice):1ªs Classes:2ªs Classes Normais:Classes Transcendentais (Transclasse):Voltar")) {
+			case 1: // Aprendiz
+				.@c = select("Aprendiz (Novice):Super Aprendiz:Aprendiz T. (Novice High)");
+				if (.@c == 1) .@target = JOB_NOVICE;
+				else if (.@c == 2) .@target = JOB_SUPER_NOVICE;
+				else if (.@c == 3) .@target = JOB_NOVICE_HIGH;
+				break;
+
+			case 2: // 1ªs Classes
+				.@c = select("Espadachim:Mago:Arqueiro:Noviço:Mercador:Gatuno:Taekwon:Justiceiro:Ninja");
+				if (.@c == 1) .@target = JOB_SWORDMAN;
+				else if (.@c == 2) .@target = JOB_MAGE;
+				else if (.@c == 3) .@target = JOB_ARCHER;
+				else if (.@c == 4) .@target = JOB_ACOLYTE;
+				else if (.@c == 5) .@target = JOB_MERCHANT;
+				else if (.@c == 6) .@target = JOB_THIEF;
+				else if (.@c == 7) .@target = JOB_TAEKWON;
+				else if (.@c == 8) .@target = JOB_GUNSLINGER;
+				else if (.@c == 9) .@target = JOB_NINJA;
+				break;
+
+			case 3: // 2ªs Classes Normais
+				.@c = select("Cavaleiro:Bruxo:Caçador:Sacerdote:Ferreiro:Mercenário:Templário:Sábio:Bardo / Odalisca:Monge:Alquimista:Arruaceiro:Mestre Taekwon:Espiritualista");
+				if (.@c == 1) .@target = JOB_KNIGHT;
+				else if (.@c == 2) .@target = JOB_WIZARD;
+				else if (.@c == 3) .@target = JOB_HUNTER;
+				else if (.@c == 4) .@target = JOB_PRIEST;
+				else if (.@c == 5) .@target = JOB_BLACKSMITH;
+				else if (.@c == 6) .@target = JOB_ASSASSIN;
+				else if (.@c == 7) .@target = JOB_CRUSADER;
+				else if (.@c == 8) .@target = JOB_SAGE;
+				else if (.@c == 9) .@target = (Sex == SEX_MALE ? JOB_BARD : JOB_DANCER);
+				else if (.@c == 10) .@target = JOB_MONK;
+				else if (.@c == 11) .@target = JOB_ALCHEMIST;
+				else if (.@c == 12) .@target = JOB_ROGUE;
+				else if (.@c == 13) .@target = JOB_STAR_GLADIATOR;
+				else if (.@c == 14) .@target = JOB_SOUL_LINKER;
+				break;
+
+			case 4: // Transclasses
+				.@c = select("Lorde:Arquimago:Atirador de Elite:Sumo Sacerdote:Mestre-Ferreiro:Algoz:Paladino:Professor:Menestrel / Cigana:Mestre:Criador:Desordeiro");
+				if (.@c == 1) .@target = JOB_LORD_KNIGHT;
+				else if (.@c == 2) .@target = JOB_HIGH_WIZARD;
+				else if (.@c == 3) .@target = JOB_SNIPER;
+				else if (.@c == 4) .@target = JOB_HIGH_PRIEST;
+				else if (.@c == 5) .@target = JOB_WHITESMITH;
+				else if (.@c == 6) .@target = JOB_ASSASSIN_CROSS;
+				else if (.@c == 7) .@target = JOB_PALADIN;
+				else if (.@c == 8) .@target = JOB_PROFESSOR;
+				else if (.@c == 9) .@target = (Sex == SEX_MALE ? JOB_CLOWN : JOB_GYPSY);
+				else if (.@c == 10) .@target = JOB_CHAMPION;
+				else if (.@c == 11) .@target = JOB_CREATOR;
+				else if (.@c == 12) .@target = JOB_STALKER;
+				break;
+
+			default:
+				.@target = 0;
+				break;
+			}
+
+			if (.@target > 0) {
+				jobchange .@target;
+				specialeffect2 EF_ANGEL2;
+				specialeffect2 EF_ELECTRIC;
+				mes .@npc_name$;
+				mes "Sua classe foi alterada com sucesso!";
+				next;
+			}
+			break;
+
+		case 2: // Nível 99 / Job Máximo
+			atcommand "@blvl 99";
+			atcommand "@jlvl 70";
+			specialeffect2 EF_LEVELUP;
+			specialeffect2 EF_ANGEL;
+			mes .@npc_name$;
+			mes "Seu nível de Base foi definido para 99 e Job para o nível máximo!";
+			next;
+			break;
+
+		case 3: // Todas as Habilidades
+			atcommand "@allskill";
+			specialeffect2 EF_INCAGILITY;
+			mes .@npc_name$;
+			mes "Todas as habilidades da sua classe foram liberadas no nível máximo!";
+			next;
+			break;
+
+		case 4: // Kit de Equipamentos
+			mes .@npc_name$;
+			mes "Selecione o kit de equipamentos:";
+			next;
+			switch(select("Kit Campo de Treinamento:Kit Armas Básicas:Kit Escudos:Receber Todos os Kits:Voltar")) {
+			case 1:
+				getitem 2341, 1; // Traje do Aprendiz
+				getitem 1207, 1; // Faca do Aprendiz
+				getitem 2501, 1; // Capuz
+				getitem 2401, 1; // Sandálias
+				getitem 2101, 1; // Vambrance / Guard
+				getitem 5013, 1; // Sombrero
+				mes .@npc_name$;
+				mes "Kit de Treinamento entregue!";
+				next;
+				break;
+			case 2:
+				getitem 1116, 1; // Katana
+				getitem 1154, 1; // Espada Larga
+				getitem 1219, 1; // Damasco
+				getitem 1220, 1; // Gladius
+				getitem 1714, 1; // Gakkung
+				getitem 1718, 1; // Arco de Caça
+				getitem 1750, 500; // Flechas de Ferro
+				getitem 1601, 1; // Bastão
+				getitem 1605, 1; // Varinha do Arcano
+				getitem 1510, 1; // Mangual d'Armas (Chain)
+				mes .@npc_name$;
+				mes "Kit de Armas entregue!";
+				next;
+				break;
+			case 3:
+				getitem 2103, 1; // Broquel (Buckler)
+				getitem 2102, 1; // Escudo (Shield)
+				getitem 2107, 1; // Escudo Espelhado (Mirror Shield)
+				mes .@npc_name$;
+				mes "Kit de Escudos entregue!";
+				next;
+				break;
+			case 4:
+				// Treinamento
+				getitem 2341, 1; getitem 1207, 1; getitem 2501, 1;
+				getitem 2401, 1; getitem 2101, 1; getitem 5013, 1;
+				// Armas
+				getitem 1116, 1; getitem 1154, 1; getitem 1219, 1;
+				getitem 1220, 1; getitem 1714, 1; getitem 1718, 1;
+				getitem 1750, 500; getitem 1601, 1; getitem 1605, 1; getitem 1510, 1;
+				// Escudos
+				getitem 2103, 1; getitem 2102, 1; getitem 2107, 1;
+				mes .@npc_name$;
+				mes "Todos os equipamentos foram entregues!";
+				next;
+				break;
+			default:
+				break;
+			}
+			break;
+
+		case 5: // Poções e Asas
+			getitem 504, 100; // Poção Branca
+			getitem 505, 50;  // Poção Azul
+			getitem 506, 20;  // Poção Verde
+			getitem 601, 50;  // Asa de Mosca
+			getitem 602, 20;  // Asa de Borboleta
+			getitem 645, 10;  // Poção da Concentração
+			getitem 656, 10;  // Poção do Despertar
+			getitem 657, 10;  // Poção da Fúria Selvagem
+			specialeffect2 EF_POTION_SUCCEED;
+			mes .@npc_name$;
+			mes "Aqui estão suas poções e asas!";
+			next;
+			break;
+
+		case 6: // Resetar Atributos e Habilidades
+			resetstatus;
+			resetskill;
+			specialeffect2 EF_ANGEL;
+			mes .@npc_name$;
+			mes "Seus atributos e pontos de habilidade foram resetados com sucesso.";
+			next;
+			break;
+
+		case 7: // Encerrar
+			mes .@npc_name$;
+			mes "Bom trabalho nos testes! Até logo.";
+			close;
+		}
+	}
+}
