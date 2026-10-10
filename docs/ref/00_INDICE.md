@@ -18,6 +18,11 @@
 | [**07_sons.md**](file:///e:/Documentos/Reposit%C3%B3rios/mythofthor_project/docs/ref/07_sons.md) | **Efeitos Sonoros e BGM** | Mapeamento de BGM contínua via `mp3nametable.txt`, disparos de WAV pelo .act, resolução de armas e armaduras, e atenuação espacial (25 células). | OM `Audio.cpp`, `Audio.h`; RB `SoundManager.js`, `WeaponSoundTable.js` |
 | [**08_ui_moderna_rb.md**](file:///e:/Documentos/Reposit%C3%B3rios/mythofthor_project/docs/ref/08_ui_moderna_rb.md) | **Sistemas de UI Moderna** | Inventário em abas com travas de segurança, navegador geográfico `/navi`, janela e rastreador de missões (Alt+U), conquistas, banco e RODEX. | RB `UI/Components/*` (InventoryV3, Navigation, Quest, Rodex, Bank) |
 | [**09_render_korangar.md**](file:///e:/Documentos/Reposit%C3%B3rios/mythofthor_project/docs/ref/09_render_korangar.md) | **Render e Iluminação HD-2D** | Geração de normais cilíndricas para dar volume 3D aos sprites 2D, prevenção de Z-fighting via offsets, e integração com o Lumen do UE5. | KO `shaders/passes/forward/entity.slang`, `model.slang` |
+| [**10_hud_moderna_latam.md**](file:///e:/Documentos/Reposit%C3%B3rios/mythofthor_project/docs/ref/10_hud_moderna_latam.md) | **HUD Moderna LATAM** | Layout medido peça por peça da interface atualizada (estilo LATAM 2026), mapa de texturas e especificações de ancoragem. | Interface oficial RO LATAM / RB |
+| [**11_efeitos_procedurais.md**](file:///e:/Documentos/Reposit%C3%B3rios/mythofthor_project/docs/ref/11_efeitos_procedurais.md) | **Efeitos Procedurais de Habilidades** | Catálogo completo dos efeitos procedurais de habilidades (1ª, 2ª e transclasses) com geometrias 3D, cilindros, partículas e blends. | RB `EffectTable.js`, `SkillEffect.js` |
+| [**12_hud_latam_prints.md**](file:///e:/Documentos/Reposit%C3%B3rios/mythofthor_project/docs/ref/12_hud_latam_prints.md) | **Prints e Medidas da HUD LATAM** | Análise comparativa e catalogação pixel a pixel dos elementos visuais da interface moderna. | Capturas oficiais LATAM |
+| [**13_efeitos_aura99.md**](file:///e:/Documentos/Reposit%C3%B3rios/mythofthor_project/docs/ref/13_efeitos_aura99.md) | **Aura 99 e Efeitos FUNC** | Matemática e geometria exata da Aura 99 (SwirlingAura, GroundAura, Level99Bubble), modos /aura e catálogo dos 33 FUNC vazios. | RB `SwirlingAura.js`, `GroundAura.js`, `Level99Bubble.js`, `EntityAura.js` |
+
 
 ---
 

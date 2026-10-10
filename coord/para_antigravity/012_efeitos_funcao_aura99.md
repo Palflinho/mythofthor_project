@@ -1,4 +1,4 @@
-status: pendente
+status: feito
 
 # 012: receitas dos efeitos feitos em código com `"type": "FUNC"` vazio (aura do nível 99 primeiro)
 
