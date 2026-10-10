@@ -230,6 +230,7 @@ void UMythRoHUDWidget::BuildLayout()
 	BuildItemsWindow();
 	BuildEquipWindow();
 	BuildSkillsWindow();
+	BuildItemInfoWindow();
 	BuildNpcDialog();
 	AddChatLine(TEXT("Bem-vindo a Rune-Midgard."), ColSystem);
 }
@@ -616,6 +617,10 @@ void UMythRoHUDWidget::MakeDraggable(UCanvasPanel* Window, float Width, float Ha
 
 FReply UMythRoHUDWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
+	if (InMouseEvent.GetEffectingButton() == EKeys::RightMouseButton && Root && HandleItemInfoClick(InMouseEvent.GetScreenSpacePosition()))
+	{
+		return FReply::Handled(); // botao direito num item: descricao
+	}
 	if (InMouseEvent.GetEffectingButton() != EKeys::LeftMouseButton || !Root)
 	{
 		return Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
@@ -663,6 +668,14 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, co
 		Dragging = Win;
 		DragOffset = RootGeo.AbsoluteToLocal(Screen) - TopLeft;
 		return FReply::Handled().CaptureMouse(TakeWidget());
+	}
+	// Clique em qualquer lugar de uma janela aberta fica na interface, como no cliente original
+	for (const FDragWindow& D : DragWindows)
+	{
+		if (D.Window.IsValid() && D.Window->GetVisibility() != ESlateVisibility::Collapsed && IsUnder(D.Window.Get(), Screen))
+		{
+			return FReply::Handled();
+		}
 	}
 	return Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 }

@@ -1,4 +1,5 @@
 #include "UI/MythRoClientTables.h"
+#include "Sprites/MythRoSpriteComponent.h"
 
 #include "UI/MythRoUITextures.h"
 
@@ -65,10 +66,78 @@ namespace
 	}
 }
 
+namespace
+{
+	const TMap<int32, FMythRoItemInfo>& RoItemInfo()
+	{
+		static TMap<int32, FMythRoItemInfo> Table;
+		static bool bLoaded = false;
+		if (bLoaded)
+		{
+			return Table;
+		}
+		bLoaded = true;
+		FString Text;
+		TSharedPtr<FJsonObject> Root;
+		if (!FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("item_info.json")))
+			|| !FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) || !Root.IsValid())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("MythRoClientTables: Config/item_info.json ausente (tools/gen_item_info.py)"));
+			return Table;
+		}
+		auto Lines = [](const TSharedPtr<FJsonObject>& O, const TCHAR* Key)
+		{
+			TArray<FString> Out;
+			const TArray<TSharedPtr<FJsonValue>>* Arr = nullptr;
+			if (O->TryGetArrayField(Key, Arr))
+			{
+				for (const TSharedPtr<FJsonValue>& V : *Arr) { Out.Add(V->AsString()); }
+			}
+			return Out;
+		};
+		for (const auto& Pair : Root->Values)
+		{
+			const TSharedPtr<FJsonObject> O = Pair.Value->AsObject();
+			FMythRoItemInfo& I = Table.Add(FCString::Atoi(*Pair.Key));
+			I.Name = O->GetStringField(TEXT("name"));
+			I.Desc = Lines(O, TEXT("desc"));
+			I.UnidentifiedName = O->GetStringField(TEXT("unidentified_name"));
+			I.UnidentifiedDesc = Lines(O, TEXT("unidentified_desc"));
+			I.Resource = O->GetStringField(TEXT("resource"));
+			I.Slots = static_cast<int32>(O->GetNumberField(TEXT("slots")));
+		}
+		return Table;
+	}
+}
+
+const FMythRoItemInfo* FMythRoClientTables::ItemInfo(int32 ItemID)
+{
+	return RoItemInfo().Find(ItemID);
+}
+
 FString FMythRoClientTables::ItemName(int32 ItemID)
 {
+	// Nome do itemInfo.lua do cliente (bRO) primeiro: o items.json antigo so tinha "Carta" para todas as cartas
+	if (const FMythRoItemInfo* I = RoItemInfo().Find(ItemID); I && !I->Name.IsEmpty())
+	{
+		return I->Name;
+	}
 	const FRoTableEntry* E = RoItems().Find(ItemID);
 	return E ? E->Name : FString();
+}
+
+UTexture2D* FMythRoClientTables::ItemIllustration(int32 ItemID)
+{
+	const FMythRoItemInfo* I = RoItemInfo().Find(ItemID);
+	if (!I || I->Resource.IsEmpty())
+	{
+		return nullptr;
+	}
+	// Cartas (4001-4999) tem ilustracao propria em cardbmp; o resto em collection. Sem arquivo: nulo (sem aviso)
+	const bool bCard = ItemID >= 4001 && ItemID < 5000;
+	const FString Rel = FString::Printf(TEXT("%s/%s.bmp"), bCard ? TEXT("cardbmp") : TEXT("collection"), *I->Resource);
+	const FString Full = FPaths::Combine(UMythRoSpriteComponent::GetAssetsRoot(), TEXT("data"), TEXT("texture"), TEXT("유저인터페이스"), Rel);
+	return FPaths::FileExists(Full) ? FMythRoUITextures::Get(Rel) : nullptr;
 }
 
 UTexture2D* FMythRoClientTables::ItemIcon(int32 ItemID)

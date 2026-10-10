@@ -5,6 +5,7 @@
 #include "MythMonster.generated.h"
 
 class UMythRoSpriteComponent;
+class UMythCellMoverComponent;
 class UBoxComponent;
 class USoundBase;
 
@@ -24,6 +25,10 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprite")
 	TObjectPtr<UMythRoSpriteComponent> Sprite;
+
+	/** Anda pelas celulas do .gat seguindo o servidor (unidades online). */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Myth")
+	TObjectPtr<UMythCellMoverComponent> Mover;
 
 	/** Volume que recebe o clique do mouse (canal Visibility); o sprite 2D nao tem colisao. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Targeting")
@@ -88,6 +93,9 @@ public:
 	/** ID da unidade no rAthena (AID do pacote de entrada). 0 = monstro local de teste, sem servidor. */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Network")
 	int64 NetID = 0;
+
+	/** Velocidade do servidor (ms por celula). */
+	int32 NetSpeed = 150;
 
 	/** Tipo da unidade no pacote (0 jogador, 5 monstro, 6 NPC, 7 pet...). */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Network")

@@ -8,6 +8,7 @@
 #include "Sprites/MythRoSpriteComponent.h"
 #include "Sprites/MythSkillEffects.h"
 #include "World/MythGroundItem.h"
+#include "World/MythCellMoverComponent.h"
 #include "UI/MythRoClientTables.h"
 #include "UI/MythHUD.h"
 #include "UI/MythRoHUDWidget.h"
@@ -441,7 +442,8 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 	{
 		// Unidade ja em campo: o rAthena reenvia o pacote a cada passo (0x09fd = andando). So corrige a posicao
 		// se divergiu mais de 2 celulas; o destino chega logo depois pelo OnUnitMove.
-		if (FVector::Dist2D(Existing->GetActorLocation(), Ground) > 100.f)
+		AMythMonster* Mob = Cast<AMythMonster>(Existing);
+		if (FVector::Dist2D(Existing->GetActorLocation(), Ground) > 100.f && !(Mob && Mob->Mover && Mob->Mover->IsMoving()))
 		{
 			Existing->SetActorLocation(Ground + FVector(0.f, 0.f, 45.f), false, nullptr, ETeleportType::TeleportPhysics);
 		}
@@ -521,6 +523,7 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 		// Velocidade do RO: ms por celula (150 = padrao) -> cm/s com celula de 50 cm
 		Move->MaxWalkSpeed = 50.f * 1000.f / FMath::Max(Info.Speed, 20);
 	}
+	Unit->NetSpeed = FMath::Max(Info.Speed, 20);
 	Units.Add(Info.GID, Unit);
 }
 
@@ -531,12 +534,11 @@ void AMythNetWorld::HandleUnitMove(int64 ID, int32 TargetX, int32 TargetY, int32
 	{
 		// O servidor tambem move o proprio jogador (ex.: ao atacar, anda ate o alvo). Segue a rota dele;
 		// se ja estiver indo para la (clique no chao), nao refaz o caminho.
+		// Anda pelas celulas como o cliente original (sem NavMesh e sem fisica: calcadas e degraus sobem)
 		APlayerController* PC = GetWorld()->GetFirstPlayerController();
-		const FVector Dest = CellToGround(TargetX, TargetY);
-		if (PC && PC->GetPawn() && (FVector::Dist2D(LastSelfDestination, Dest) > 60.f))
+		if (AMythPlayerCharacter* Char = PC ? Cast<AMythPlayerCharacter>(PC->GetPawn()) : nullptr; Char && Char->Mover)
 		{
-			LastSelfDestination = Dest;
-			UAIBlueprintHelperLibrary::SimpleMoveToLocation(PC, Dest);
+			Char->Mover->MoveToCell(FIntPoint(TargetX, TargetY), 150);
 		}
 		return;
 	}
@@ -545,9 +547,9 @@ void AMythNetWorld::HandleUnitMove(int64 ID, int32 TargetX, int32 TargetY, int32
 	{
 		return;
 	}
-	if (AController* C = Unit->GetController())
+	if (Unit->Mover)
 	{
-		UAIBlueprintHelperLibrary::SimpleMoveToLocation(C, CellToGround(TargetX, TargetY));
+		Unit->Mover->MoveToCell(FIntPoint(TargetX, TargetY), Unit->NetSpeed);
 	}
 }
 

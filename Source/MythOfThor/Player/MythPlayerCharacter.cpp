@@ -1,4 +1,5 @@
 #include "Player/MythPlayerCharacter.h"
+#include "World/MythCellMoverComponent.h"
 #include "World/MythMapInfo.h"
 #include "World/MythVisionLightComponent.h"
 
@@ -32,6 +33,7 @@ AMythPlayerCharacter::AMythPlayerCharacter()
 	Move->bSnapToPlaneAtStart = false;
 
 	Sprite = CreateDefaultSubobject<UMythRoSpriteComponent>(TEXT("Sprite"));
+	Mover = CreateDefaultSubobject<UMythCellMoverComponent>(TEXT("Mover"));
 	Sprite->SetupAttachment(RootComponent);
 	Sprite->SetRelativeLocation(FVector(0.f, 0.f, -90.f)); // pes do sprite no chao da capsula
 

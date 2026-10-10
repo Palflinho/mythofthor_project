@@ -102,6 +102,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite|Equip")
 	int32 Shield = 0;
 
+	/** Filtro bilinear como o cliente original (falso = pixel duro, "nearest"). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
+	bool bSmoothSprites = true;
+
 	/** Centimetros por pixel do sprite (mesma escala dos flipbooks: 1 px = 2 cm). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
 	float UnitsPerPixel = 2.f;

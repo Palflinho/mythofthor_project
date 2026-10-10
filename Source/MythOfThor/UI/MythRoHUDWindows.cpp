@@ -89,7 +89,8 @@ bool UMythRoHUDWidget::IsUnder(const UWidget* Widget, const FVector2D& ScreenPos
 UCanvasPanel* UMythRoHUDWidget::MakeRoPanel(const FString& Title, const FVector2D& Size, const FVector2D& Offset)
 {
 	UCanvasPanel* Win = MakeWindow(FVector2D(0.5f, 0.5f), FVector2D(0.5f, 0.5f), Offset, Size);
-	AddColor(Win, RoWinBody, 0.f, 17.f, Size.X, Size.Y - 17.f);
+	// Fundo "Visible": o clique na janela chega ao HUD e nao atravessa para o jogo (nao anda nem ataca)
+	AddColor(Win, RoWinBody, 0.f, 17.f, Size.X, Size.Y - 17.f)->SetVisibility(ESlateVisibility::Visible);
 	AddTitleBar(Win, Size.X, Title);
 	MakeDraggable(Win, Size.X, 17.f);
 	// Botao de fechar (sys_close) por cima da alca de arrastar; o clique e testado antes do arrasto

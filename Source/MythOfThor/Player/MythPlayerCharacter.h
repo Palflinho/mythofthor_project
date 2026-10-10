@@ -7,6 +7,7 @@
 class USpringArmComponent;
 class UCameraComponent;
 class UMythRoSpriteComponent;
+class UMythCellMoverComponent;
 class UMythStatsComponent;
 class UAutoBattleComponent;
 
@@ -88,6 +89,10 @@ public:
 	/** Sprite do personagem composto em camadas (corpo + cabeca) a partir dos .spr/.act do cliente original. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprite")
 	TObjectPtr<UMythRoSpriteComponent> Sprite;
+
+	/** Online: anda pelas celulas confirmadas pelo servidor (sem fisica, como o cliente original). */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Myth")
+	TObjectPtr<UMythCellMoverComponent> Mover;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Myth|Stats")
 	TObjectPtr<UMythStatsComponent> Stats;

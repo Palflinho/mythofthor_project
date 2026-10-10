@@ -440,13 +440,14 @@ void UMythRoSpriteComponent::BuildAtlas(FMythRoSpriteSource& Source)
 
 	TArray<FIntPoint> Positions;
 	Positions.SetNum(Images.Num());
-	int32 X = 0, Y = 0, ShelfH = 0, UsedW = 1;
+	// Margem de 2 px (e 1 px antes da primeira): com filtro bilinear uma imagem nao "vaza" na vizinha
+	int32 X = 1, Y = 1, ShelfH = 0, UsedW = 1;
 	for (int32 i = 0; i < Images.Num(); ++i)
 	{
-		const FIntPoint Size(Images[i]->Width + 1, Images[i]->Height + 1);
+		const FIntPoint Size(Images[i]->Width + 2, Images[i]->Height + 2);
 		if (X + Size.X > MaxWidth)
 		{
-			X = 0;
+			X = 1;
 			Y += ShelfH;
 			ShelfH = 0;
 		}
@@ -477,7 +478,8 @@ void UMythRoSpriteComponent::BuildAtlas(FMythRoSpriteSource& Source)
 	{
 		return;
 	}
-	Tex->Filter = TF_Nearest; // pixel art sem filtro, como no original
+	// O cliente original desenha os sprites com filtro bilinear (suave); "nearest" serrilha em escala fracionaria
+	Tex->Filter = bSmoothSprites ? TF_Bilinear : TF_Nearest;
 	Tex->SRGB = true;
 	Tex->NeverStream = true;
 	Tex->LODGroup = TEXTUREGROUP_Pixels2D;

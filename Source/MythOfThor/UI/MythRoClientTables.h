@@ -4,6 +4,17 @@
 
 class UTexture2D;
 
+/** Descricao do item do itemInfo.lua do cliente (Config/item_info.json, tools/gen_item_info.py). */
+struct FMythRoItemInfo
+{
+	FString Name;
+	TArray<FString> Desc;
+	FString UnidentifiedName;
+	TArray<FString> UnidentifiedDesc;
+	FString Resource;
+	int32 Slots = 0;
+};
+
 /**
  * Tabelas do cliente original (iteminfo / skillinfo), extraidas do data.grf para Config/items.json e
  * Config/skills.json (tools/extract_client_tables.py). Carregadas sob demanda, uma unica vez.
@@ -13,6 +24,12 @@ struct MYTHOFTHOR_API FMythRoClientTables
 {
 	/** Nome exibido do item (ex.: 501 -> "Pocao Vermelha"). Vazio se o ID nao existir. */
 	static FString ItemName(int32 ItemID);
+
+	/** Nome, descricao e slots do item como no cliente (itemInfo.lua). Nulo se nao existir. */
+	static const FMythRoItemInfo* ItemInfo(int32 ItemID);
+
+	/** Ilustracao grande do item (texture/유저인터페이스/collection/<recurso>.bmp; cartas: cardbmp). */
+	static UTexture2D* ItemIllustration(int32 ItemID);
 
 	/** Icone 24x24 do item (texture/유저인터페이스/item/<resource_name>.bmp). */
 	static UTexture2D* ItemIcon(int32 ItemID);

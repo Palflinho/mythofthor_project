@@ -213,6 +213,10 @@ private:
 
 	// Itens: abas item/equip/etc, celulas 32x32 com icone e quantidade, linha de informacao
 	UPROPERTY() TObjectPtr<UImage> ItemTabImage;
+	UPROPERTY() TObjectPtr<UCanvasPanel> ItemInfoWindow;
+	UPROPERTY() TObjectPtr<UImage> ItemInfoImage;
+	UPROPERTY() TObjectPtr<UTextBlock> ItemInfoName;
+	UPROPERTY() TObjectPtr<class UScrollBox> ItemInfoBody;
 	UPROPERTY() TArray<TObjectPtr<UImage>> ItemCells;
 	UPROPERTY() TArray<TObjectPtr<UImage>> ItemIcons;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> ItemAmounts;
@@ -283,6 +287,10 @@ private:
 	void BuildItemsWindow();
 	void BuildEquipWindow();
 	void BuildSkillsWindow();
+	void BuildItemInfoWindow();
+	/** Janela de descricao do item (botao direito no inventario/equipamento), como no cliente original. */
+	void ShowItemInfo(const struct FRagnarokInventoryItem& Item);
+	bool HandleItemInfoClick(const FVector2D& ScreenPos);
 	void RefreshWindows();
 	void RefreshStatusWindow();
 	void RefreshItemsWindow();

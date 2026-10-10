@@ -1,4 +1,5 @@
 #include "Sprites/MythMonster.h"
+#include "World/MythCellMoverComponent.h"
 
 #include "Sprites/MythRoSpriteComponent.h"
 #include "Components/BoxComponent.h"
@@ -16,6 +17,7 @@ AMythMonster::AMythMonster()
 	GetCapsuleComponent()->InitCapsuleSize(20.f, 40.f); // raio pequeno: cabe nas faixas de 1 celula do .gat
 
 	Sprite = CreateDefaultSubobject<UMythRoSpriteComponent>(TEXT("Sprite"));
+	Mover = CreateDefaultSubobject<UMythCellMoverComponent>(TEXT("Mover"));
 	Sprite->SetupAttachment(RootComponent);
 	ClickBox = CreateDefaultSubobject<UBoxComponent>(TEXT("ClickBox"));
 	// Presa ao sprite (que fica paralelo a tela): o clique vale onde o monstro aparece desenhado, como no RO.

@@ -31,6 +31,7 @@
 #include "UnrealClient.h"
 #include "TimerManager.h"
 #include "Sprites/MythSkillEffects.h"
+#include "World/MythCellMoverComponent.h"
 #include "Sprites/MythStrEffect.h"
 
 AMythPlayerController::AMythPlayerController()
@@ -182,7 +183,9 @@ void AMythPlayerController::SetupInputComponent()
 
 void AMythPlayerController::OnClickStarted(const FInputActionValue&)
 {
+	bForceNextMove = true; // clique novo: pede mesmo que seja a mesma celula
 	MoveToCursor();
+	bForceNextMove = false;
 }
 
 void AMythPlayerController::OnClickTriggered(const FInputActionValue&)
@@ -222,7 +225,8 @@ void AMythPlayerController::MoveToCursor()
 		}
 		PendingPickup = nullptr;
 		ClearFocusedTarget(); // clicar no chao cancela o alvo
-		MoveToLocation(Hit.ImpactPoint);
+		// Segurando o botao: so pede de novo quando a celula sob o cursor muda (nao inunda o servidor)
+		MoveToLocation(Hit.ImpactPoint, bForceNextMove);
 	}
 }
 
@@ -294,6 +298,13 @@ void AMythPlayerController::OnMove(const FInputActionValue& Value)
 	const FVector Forward = FRotationMatrix(YawRot).GetUnitAxis(EAxis::X);
 	const FVector Right = FRotationMatrix(YawRot).GetUnitAxis(EAxis::Y);
 
+	// Conectado: o WASD so escolhe a direcao; quem anda e o servidor (PlayerTick pede o destino a frente)
+	const URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr;
+	if (Net && Net->GetNetworkState() == ERagnarokNetworkState::ConnectedMap)
+	{
+		WasdDirection = (Forward * Input.Y + Right * Input.X).GetSafeNormal2D();
+		return;
+	}
 	Char->AddMovementInput(Forward, Input.Y);
 	Char->AddMovementInput(Right, Input.X);
 }
@@ -335,12 +346,14 @@ void AMythPlayerController::PlayerTick(float DeltaTime)
 	{
 		// Projeta o destino alguns tiles a frente e envia limitado por intervalo.
 		TimeSinceWasdSend += DeltaTime;
-		const FVector Velocity = Char->GetVelocity();
-		if (TimeSinceWasdSend >= WasdSendInterval && !Velocity.IsNearlyZero())
+		const URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr;
+		const bool bOnline = Net && Net->GetNetworkState() == ERagnarokNetworkState::ConnectedMap;
+		const FVector Dir = bOnline ? WasdDirection : Char->GetVelocity().GetSafeNormal2D();
+		if (TimeSinceWasdSend >= WasdSendInterval && !Dir.IsNearlyZero())
 		{
 			TimeSinceWasdSend = 0.f;
-			const FVector Ahead = Char->GetActorLocation() + Velocity.GetSafeNormal2D() * (WasdLookaheadCells * CellSizeUU);
-			SendCellToServer(Ahead, /*bForce=*/false);
+			const FVector Ahead = Char->GetActorLocation() + Dir * (WasdLookaheadCells * CellSizeUU);
+			SendCellToServer(Ahead, /*bForce=*/bOnline);
 		}
 	}
 	else if (bHasDirectTarget)
@@ -880,6 +893,10 @@ bool AMythPlayerController::TeleportToCell(int32 X, int32 Y)
 				FCollisionQueryParams Params(TEXT("MythGoto"), false, P);
 				if (GetWorld()->LineTraceSingleByChannel(Hit, Top, Top - FVector(0.f, 0.f, 40000.f), ECC_Visibility, Params))
 				{
+					if (UMythCellMoverComponent* Mover = P->FindComponentByClass<UMythCellMoverComponent>())
+					{
+						Mover->Stop();
+					}
 					P->SetActorLocation(Hit.ImpactPoint + FVector(0.f, 0.f, 120.f), false, nullptr, ETeleportType::TeleportPhysics);
 					StopMovement();
 					bHasDirectTarget = false;

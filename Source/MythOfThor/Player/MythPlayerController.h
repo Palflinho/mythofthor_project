@@ -153,6 +153,12 @@ public:
 	UFUNCTION(Exec)
 	void MythTargetNearest();
 
+	/** Direcao do WASD conectado (o servidor anda; aqui so a intencao). */
+	FVector WasdDirection = FVector::ZeroVector;
+
+	/** Verdadeiro so durante o clique inicial (forca o pedido de movimento). */
+	bool bForceNextMove = false;
+
 	/** Teste: toca data/texture/effect/<File>.str no personagem (sem servidor). */
 	UFUNCTION(Exec)
 	void MythPlayStr(const FString& File);
