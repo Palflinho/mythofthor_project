@@ -35,7 +35,15 @@ Log completo em <projeto>/Saved/MythImport/import.log.
 import os
 import re
 import shutil
+import site
 import sys
+
+# Garante acesso aos pacotes instalados com --user (PIL, NumPy) no Python embarcado da Unreal
+user_site = site.getusersitepackages()
+appdata_site = os.path.expandvars(r'%APPDATA%\Python\Python311\site-packages')
+for _p in (user_site, appdata_site):
+    if os.path.exists(_p) and _p not in sys.path:
+        sys.path.insert(0, _p)
 
 import unreal
 
@@ -175,6 +183,70 @@ def index_textures(tex_dir):
             for key in (fn.lower(), fix_korean(fn).lower()):
                 found.setdefault(key, os.path.join(root, fn))
     return found
+
+
+def process_texture_magenta(src_path, dst_png_path, passes=4):
+    """
+    Se o BMP contiver pixels magenta (chave de transparencia do RO):
+      - marca pixels magenta/quase-magenta (R > 200, G < 60, B > 200) com alfa = 0;
+      - dilata a cor (color bleed/padding) em 4 passadas preenchendo o vazio com a media dos vizinhos opacos;
+      - salva como RGBA (PNG 32-bit com canal alfa).
+    Devolve True se a textura tinha magenta e foi salva em dst_png_path, ou False se for totalmente opaca.
+    """
+    try:
+        from PIL import Image
+        import numpy as np
+    except ImportError as e:
+        warn('Pillow ou NumPy ausente: %s' % e)
+        return bmp_has_magenta(src_path)
+
+    try:
+        im = Image.open(src_path).convert('RGBA')
+        arr = np.array(im, dtype=np.uint8)
+        r, g, b = arr[:, :, 0], arr[:, :, 1], arr[:, :, 2]
+
+        dist_sq = (r.astype(np.int32) - 255) ** 2 + g.astype(np.int32) ** 2 + (b.astype(np.int32) - 255) ** 2
+        is_magenta = ((r > 200) & (g < 60) & (b > 200)) | (dist_sq < 9000)
+        if not np.any(is_magenta):
+            return False
+
+        alpha = np.where(is_magenta, 0, 255).astype(np.uint8)
+        rgb = arr[:, :, :3].astype(np.float32)
+        has_color = ~is_magenta
+        h, w = is_magenta.shape
+
+        for _ in range(passes):
+            accum_rgb = np.zeros_like(rgb)
+            count = np.zeros((h, w), dtype=np.float32)
+            for dy in (-1, 0, 1):
+                for dx in (-1, 0, 1):
+                    if dy == 0 and dx == 0:
+                        continue
+                    sy_src = slice(max(0, -dy), min(h, h - dy))
+                    sx_src = slice(max(0, -dx), min(w, w - dx))
+                    sy_dst = slice(max(0, dy), min(h, h + dy))
+                    sx_dst = slice(max(0, dx), min(w, dx + w))
+
+                    mask = has_color[sy_src, sx_src]
+                    count[sy_dst, sx_dst] += mask
+                    accum_rgb[sy_dst, sx_dst] += rgb[sy_src, sx_src] * mask[:, :, None]
+
+            fill_mask = (~has_color) & (count > 0)
+            if not np.any(fill_mask):
+                break
+            rgb[fill_mask] = accum_rgb[fill_mask] / count[fill_mask, None]
+            has_color[fill_mask] = True
+
+        out = np.empty((h, w, 4), dtype=np.uint8)
+        out[:, :, :3] = np.clip(rgb, 0, 255).astype(np.uint8)
+        out[:, :, 3] = alpha
+
+        dilated_img = Image.fromarray(out, 'RGBA')
+        dilated_img.save(dst_png_path, format='PNG')
+        return True
+    except Exception as e:  # noqa: BLE001
+        warn('erro ao dilatar magenta em %s: %s' % (src_path, e))
+        return False
 
 
 def bmp_has_magenta(path):
@@ -318,26 +390,9 @@ def build_parent_materials(folder):
         mel.connect_material_property(spec, '', unreal.MaterialProperty.MP_SPECULAR)
 
         if masked:
-            # opacidade = saturate((distancia(cor, magenta) - 0.2) * 30): magenta vira buraco
             mat.set_editor_property('blend_mode', unreal.BlendMode.BLEND_MASKED)
-            key = mel.create_material_expression(mat, unreal.MaterialExpressionConstant3Vector, -700, 250)
-            key.set_editor_property('constant', unreal.LinearColor(1.0, 0.0, 1.0, 1.0))
-            dist = mel.create_material_expression(mat, unreal.MaterialExpressionDistance, -450, 150)
-            mel.connect_material_expressions(tex, 'RGB', dist, 'A')
-            mel.connect_material_expressions(key, '', dist, 'B')
-            sub = mel.create_material_expression(mat, unreal.MaterialExpressionSubtract, -300, 100)
-            mel.connect_material_expressions(dist, '', sub, 'A')
-            thr = mel.create_material_expression(mat, unreal.MaterialExpressionConstant, -450, 260)
-            thr.set_editor_property('r', 0.2)
-            mel.connect_material_expressions(thr, '', sub, 'B')
-            mul = mel.create_material_expression(mat, unreal.MaterialExpressionMultiply, -150, 100)
-            mel.connect_material_expressions(sub, '', mul, 'A')
-            gain = mel.create_material_expression(mat, unreal.MaterialExpressionConstant, -300, 220)
-            gain.set_editor_property('r', 30.0)
-            mel.connect_material_expressions(gain, '', mul, 'B')
-            sat = mel.create_material_expression(mat, unreal.MaterialExpressionSaturate, 0, 100)
-            mel.connect_material_expressions(mul, '', sat, '')
-            mel.connect_material_property(sat, '', unreal.MaterialProperty.MP_OPACITY_MASK)
+            mat.set_editor_property('opacity_mask_clip_value', 0.3333)
+            mel.connect_material_property(tex, 'A', unreal.MaterialProperty.MP_OPACITY_MASK)
         add_window_glow(mat, tex)
         mel.recompile_material(mat)
         result[masked] = mat
@@ -345,7 +400,7 @@ def build_parent_materials(folder):
 
 
 def import_textures(mats, tex_index, dest, staging):
-    """Copia cada textura usada para um nome ASCII e importa em lote. Devolve {nome_original: (Texture2D, mascarada)}."""
+    """Copia/converte cada textura usada para um nome ASCII e importa em lote. Devolve {nome_original: (Texture2D, mascarada)}."""
     os.makedirs(staging, exist_ok=True)
     tasks, meta = [], {}
     for i, tex_name in enumerate(sorted({t for t in mats.values() if t})):
@@ -354,8 +409,13 @@ def import_textures(mats, tex_index, dest, staging):
             warn('textura nao encontrada: %s' % tex_name)
             continue
         asset = 'T_%s' % ascii_stem(tex_name, i)
-        local = os.path.join(staging, asset + os.path.splitext(src)[1].lower())
-        shutil.copyfile(src, local)  # copia: os originais nunca sao tocados
+        png_path = os.path.join(staging, asset + '.png')
+        masked = process_texture_magenta(src, png_path, passes=4)
+        if masked:
+            local = png_path
+        else:
+            local = os.path.join(staging, asset + os.path.splitext(src)[1].lower())
+            shutil.copyfile(src, local)  # copia: os originais nunca sao tocados
         t = unreal.AssetImportTask()
         t.set_editor_property('filename', local)
         t.set_editor_property('destination_path', dest + '/Textures')
@@ -364,7 +424,7 @@ def import_textures(mats, tex_index, dest, staging):
         t.set_editor_property('automated', True)
         t.set_editor_property('save', False)
         tasks.append(t)
-        meta[tex_name] = (asset, bmp_has_magenta(src))
+        meta[tex_name] = (asset, masked)
     log('importando %d texturas...' % len(tasks))
     tools.import_asset_tasks(tasks)
     out = {}
