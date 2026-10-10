@@ -496,7 +496,7 @@ void AMythPlayerController::OnRotateMouse(const FInputActionValue& Value)
 	{
 		if (AMythPlayerCharacter* Char = GetMythCharacter())
 		{
-			Char->RotateCamera(Value.Get<float>() * MouseRotateSensitivity * 10.f);
+			Char->RotateCamera(Value.Get<float>() * MouseRotateSensitivity); // 0,4 grau por pixel (View.cpp)
 		}
 	}
 }
@@ -507,8 +507,9 @@ void AMythPlayerController::OnPitchMouse(const FInputActionValue& Value)
 	{
 		if (AMythPlayerCharacter* Char = GetMythCharacter())
 		{
-			// Arrastar para cima deixa a camera mais de cima (pitch mais negativo).
-			Char->PitchCamera(-Value.Get<float>() * MouseRotateSensitivity * 10.f);
+			// Como o cliente (-0,3 grau por pixel com Y da tela para baixo): arrastar para baixo deixa a camera mais
+			// de cima; para cima, mais deitada. O MouseY da Unreal e positivo para cima.
+			Char->PitchCamera(Value.Get<float>() * 0.3f);
 		}
 	}
 }

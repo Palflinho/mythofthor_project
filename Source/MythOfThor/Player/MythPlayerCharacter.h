@@ -60,31 +60,42 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Myth|Camera")
 	float GetCameraYaw() const { return CameraYaw; }
 
-	/** Yaw padrao. -90 olha para -Y, que e o norte do RO nos mapas importados (norte no topo da tela, como no original). */
+	// Camera do cliente original (docs/ref/02): distancias em unidades do RO (1 unidade = 10 uu; celula = 5), lente
+	// estreita (FOV vertical ~15 graus, quase isometrica) e tudo suavizado em 10% por quadro
+
+	/** Yaw padrao. -90 olha para -Y, que e o norte do RO nos mapas importados (longitude 0 do cliente). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
 	float FixedYaw = -90.f;
 
-	/** Inclinacao padrao (negativa = olhando para baixo). */
+	/** Inclinacao padrao (negativa = olhando para baixo): -45 fora, -40 em mapas internos. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
-	float CameraPitch = -50.f;
+	float CameraPitch = -45.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
-	float MinPitch = -70.f;
+	float MinPitch = -65.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
-	float MaxPitch = -30.f;
+	float MaxPitch = -25.f;
+
+	/** Distancia da camera (uu): padrao 500, de 150 a 700 unidades do RO fora; 350 / 150..420 dentro. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
+	float DefaultArmLength = 5000.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
-	float DefaultArmLength = 1200.f;
+	float MinArmLength = 1500.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
-	float MinArmLength = 500.f;
+	float MaxArmLength = 7000.f;
 
+	/** Por entalhe da roda: 60 unidades do RO. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
-	float MaxArmLength = 2500.f;
+	float ZoomStep = 600.f;
 
+	/** Campo de visao horizontal (graus) para 16:9 com ~15 graus na vertical, como o cliente. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
-	float ZoomStep = 100.f;
+	float CameraFOV = 26.4f;
+
+	virtual void Tick(float DeltaSeconds) override;
 
 	/** Sprite do personagem composto em camadas (corpo + cabeca) a partir dos .spr/.act do cliente original. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprite")
@@ -116,8 +127,13 @@ private:
 
 	// O cliente original permite girar/inclinar/zoom sempre; o modo Fixo trava a camera no angulo padrao.
 	EMythCameraMode CameraMode = EMythCameraMode::Free360;
+	// Valores atuais (suavizados) e de destino, como cur/dest do CView do cliente
 	float CameraYaw = -90.f;
-	float CurrentPitch = -50.f;
+	float CurrentPitch = -45.f;
+	float CurrentArm = 5000.f;
+	float DestYaw = -90.f;
+	float DestPitch = -45.f;
+	float DestArm = 5000.f;
 	bool bCameraLockedByMap = false;
 
 	void ApplyCamera();

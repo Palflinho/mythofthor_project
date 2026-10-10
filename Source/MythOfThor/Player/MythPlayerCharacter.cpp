@@ -13,7 +13,7 @@
 
 AMythPlayerCharacter::AMythPlayerCharacter()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true; // suavizacao da camera
 
 	// A camera nunca deve girar junto com o controle: o yaw e controlado manualmente.
 	bUseControllerRotationPitch = false;
@@ -53,7 +53,7 @@ AMythPlayerCharacter::AMythPlayerCharacter()
 	CameraBoom->bInheritRoll = false;
 	CameraBoom->bDoCollisionTest = false;
 	CameraBoom->bEnableCameraLag = true;
-	CameraBoom->CameraLagSpeed = 12.f;
+	CameraBoom->CameraLagSpeed = 6.3f; // foco segue o personagem a 10% por quadro (60 fps), como o cliente
 	CameraBoom->TargetArmLength = DefaultArmLength;
 
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
@@ -64,14 +64,23 @@ AMythPlayerCharacter::AMythPlayerCharacter()
 void AMythPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	// Mapa interno: camera mais perto e travada no angulo classico (girar/afastar mostraria as outras salas)
+	FollowCamera->SetFieldOfView(CameraFOV);
+	// Mapa interno (indoorrswtable do cliente): mais perto, inclinacao limitada e giro travado a 45 graus
 	if (const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld()); Info && Info->IsIndoor())
 	{
 		bCameraLockedByMap = true;
-		DefaultArmLength = Info->IndoorArmLength;
-		CameraMode = EMythCameraMode::FixedIsometric;
+		FixedYaw = -90.f + 45.f;
+		CameraPitch = -40.f;
+		MinPitch = -55.f;
+		MaxPitch = -35.f;
+		DefaultArmLength = 3500.f;
+		MaxArmLength = 4200.f;
 	}
+	DestArm = CurrentArm = DefaultArmLength;
 	ResetCamera();
+	CameraYaw = DestYaw;
+	CurrentPitch = DestPitch;
+	ApplyCamera();
 }
 
 void AMythPlayerCharacter::SetCameraMode(EMythCameraMode NewMode)
@@ -81,17 +90,15 @@ void AMythPlayerCharacter::SetCameraMode(EMythCameraMode NewMode)
 	{
 		// Voltar ao modo fixo restaura o angulo classico e o zoom padrao.
 		ResetCamera();
-		return;
+		DestArm = DefaultArmLength;
 	}
-	ApplyCamera();
 }
 
 void AMythPlayerCharacter::ResetCamera()
 {
-	CameraYaw = FixedYaw;
-	CurrentPitch = FMath::Clamp(CameraPitch, MinPitch, MaxPitch);
-	CameraBoom->TargetArmLength = DefaultArmLength;
-	ApplyCamera();
+	// Duplo clique direito: so os angulos voltam ao padrao; o zoom fica (CView::ResetToDefaultOrientation)
+	DestYaw = FixedYaw;
+	DestPitch = FMath::Clamp(CameraPitch, MinPitch, MaxPitch);
 }
 
 void AMythPlayerCharacter::PitchCamera(float DeltaPitch)
@@ -100,8 +107,7 @@ void AMythPlayerCharacter::PitchCamera(float DeltaPitch)
 	{
 		return;
 	}
-	CurrentPitch = FMath::Clamp(CurrentPitch + DeltaPitch, MinPitch, MaxPitch);
-	ApplyCamera();
+	DestPitch = FMath::Clamp(DestPitch + DeltaPitch, MinPitch, MaxPitch);
 }
 
 void AMythPlayerCharacter::ToggleCameraMode()
@@ -115,12 +121,11 @@ void AMythPlayerCharacter::ToggleCameraMode()
 
 void AMythPlayerCharacter::RotateCamera(float DeltaYaw)
 {
-	if (CameraMode != EMythCameraMode::Free360)
+	if (CameraMode != EMythCameraMode::Free360 || bCameraLockedByMap)
 	{
-		return;
+		return; // mapa interno: longitude travada
 	}
-	CameraYaw = FRotator::NormalizeAxis(CameraYaw + DeltaYaw);
-	ApplyCamera();
+	DestYaw = DestYaw + DeltaYaw;
 }
 
 void AMythPlayerCharacter::ZoomCamera(float Delta)
@@ -129,10 +134,22 @@ void AMythPlayerCharacter::ZoomCamera(float Delta)
 	{
 		return;
 	}
-	CameraBoom->TargetArmLength = FMath::Clamp(CameraBoom->TargetArmLength - Delta * ZoomStep, MinArmLength, MaxArmLength);
+	DestArm = FMath::Clamp(DestArm - Delta * ZoomStep, MinArmLength, MaxArmLength);
+}
+
+void AMythPlayerCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	// cur += (dest - cur) * 0.1 por quadro do cliente (~60 por segundo), independente do FPS daqui
+	const float Alpha = 1.f - FMath::Pow(0.9f, DeltaSeconds * 60.f);
+	CameraYaw += FRotator::NormalizeAxis(DestYaw - CameraYaw) * Alpha; // menor arco
+	CurrentPitch += (DestPitch - CurrentPitch) * Alpha;
+	CurrentArm += (DestArm - CurrentArm) * Alpha;
+	ApplyCamera();
 }
 
 void AMythPlayerCharacter::ApplyCamera()
 {
+	CameraBoom->TargetArmLength = CurrentArm;
 	CameraBoom->SetWorldRotation(FRotator(CurrentPitch, CameraYaw, 0.f));
 }

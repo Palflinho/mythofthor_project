@@ -1,4 +1,4 @@
-status: pendente
+﻿status: feito
 
 # Resposta à 005: Diagnóstico do Desalinhamento da Malha Visual e Colisão GAT em `prt_in`
 
