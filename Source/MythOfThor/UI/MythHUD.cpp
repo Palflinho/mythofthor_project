@@ -1,4 +1,5 @@
 #include "UI/MythHUD.h"
+#include "UI/MythQuestTitles.h"
 
 #include "Engine/Canvas.h"
 #include "Engine/Engine.h"
@@ -59,6 +60,7 @@ void AMythHUD::DrawHUD()
 	DrawCursorTile();
 	DrawMapBanner();
 	DrawChatRoomTitles();
+	DrawQuestTracker();
 	DrawTargetRing();
 	DrawSelfBars();
 	DrawGroundItemLabels();
@@ -367,6 +369,45 @@ void AMythHUD::DrawMapBanner()
 	DrawRect(FLinearColor(0.f, 0.f, 0.f, 0.35f * Alpha), Canvas->SizeX * 0.5f - TW * 0.5f - 40.f, 70.f, TW + 80.f, TH + 14.f);
 	Canvas->SetDrawColor(FColor(255, 255, 255, static_cast<uint8>(255.f * Alpha)));
 	Canvas->DrawText(Font, BannerText, Canvas->SizeX * 0.5f - TW * 0.5f, 76.f, Scale, Scale, Info);
+}
+
+void AMythHUD::DrawQuestTracker()
+{
+	const URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr;
+	UFont* Font = GEngine ? GEngine->GetSmallFont() : nullptr;
+	if (!Canvas || !Net || !Font)
+	{
+		return;
+	}
+	// Rastreador de missoes: abaixo do minimapa, so as quests ativas (olho ligado na janela Alt+U)
+	float Y = 190.f;
+	const float Right = Canvas->SizeX - 12.f;
+	FFontRenderInfo Info;
+	Info.bEnableShadow = true;
+	int32 Shown = 0;
+	for (const FRoQuest& Q : Net->GetQuests())
+	{
+		if (!Q.bActive || Shown >= 4)
+		{
+			continue;
+		}
+		++Shown;
+		TArray<FString> Lines;
+		Lines.Add(MythQuests::TitleFor(Q.Id));
+		for (const FRoQuestObjective& O : Q.Objectives)
+		{
+			Lines.Add(FString::Printf(TEXT("  %s %d/%d"), *O.Name, O.Count, O.Total));
+		}
+		for (int32 i = 0; i < Lines.Num(); ++i)
+		{
+			float TW = 0.f, TH = 0.f;
+			Canvas->TextSize(Font, Lines[i], TW, TH);
+			Canvas->SetDrawColor(i == 0 ? FColor(255, 240, 140) : FColor(235, 235, 235));
+			Canvas->DrawText(Font, Lines[i], Right - TW, Y, 1.f, 1.f, Info);
+			Y += TH + 2.f;
+		}
+		Y += 6.f;
+	}
 }
 
 void AMythHUD::DrawChatRoomTitles()

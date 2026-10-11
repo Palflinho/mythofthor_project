@@ -970,6 +970,14 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x00df: // ZC_CHANGE_CHATROOM
 				HandleChatRoomPacket(PacketData, ActualLen, PacketID);
 				break;
+			case 0x09f8: // ZC_ALL_QUEST_LIST3
+			case 0x09f9: // ZC_ADD_QUEST_EX
+			case 0x09fa: // ZC_UPDATE_MISSION_HUNT_EX
+			case 0x08fe: // ZC_HUNTING_QUEST_INFO
+			case 0x02b4: // ZC_DEL_QUEST
+			case 0x02b7: // ZC_ACTIVE_QUEST
+				HandleQuestPacket(PacketData, ActualLen, PacketID);
+				break;
 			case 0x0201: // ZC_FRIENDS_LIST
 			case 0x0206: // ZC_FRIENDS_STATE
 			case 0x0207: // ZC_REQ_ADD_FRIENDS
@@ -3204,6 +3212,114 @@ bool URagnarokNetworkSubsystem::SendFriendReply(int32 AccountId, int32 CharId, b
 	SendData(Packet, sizeof(Packet));
 	return true;
 }
+
+// ---- Quests (clif_quest_send_list, clif_quest_add, clif_quest_update_objective...) ----
+
+bool URagnarokNetworkSubsystem::SendQuestActive(int32 QuestId, bool bActive)
+{
+	// CZ_ACTIVE_QUEST 0x02b6 <quest id>.L <active>.B (7 bytes)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	uint8 Packet[7] = { 0xb6, 0x02 };
+	*reinterpret_cast<int32*>(Packet + 2) = QuestId;
+	Packet[6] = bActive ? 1 : 0;
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+void URagnarokNetworkSubsystem::HandleQuestPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
+{
+	auto Find = [this](int32 Id) -> FRoQuest* { return Quests.FindByPredicate([Id](const FRoQuest& Q) { return Q.Id == Id; }); };
+	switch (PacketID)
+	{
+	case 0x09f8: // <len>.W <n>.L { <id>.L <ativa>.B <inicio>.L <fim>.L <mobs>.W { <ident>.L <tipo>.L <mob>.L <min>.W <max>.W <atual>.W <total>.W <nome>.24B }* }*
+		if (PacketSize >= 8)
+		{
+			Quests.Reset();
+			int32 Off = 8;
+			const int32 Count = *reinterpret_cast<const int32*>(PacketData + 4);
+			for (int32 i = 0; i < Count && Off + 15 <= PacketSize; ++i)
+			{
+				FRoQuest Q;
+				Q.Id = *reinterpret_cast<const int32*>(PacketData + Off);
+				Q.bActive = PacketData[Off + 4] != 0;
+				const int32 Mobs = *reinterpret_cast<const uint16*>(PacketData + Off + 13);
+				Off += 15;
+				for (int32 j = 0; j < Mobs && Off + 44 <= PacketSize; ++j, Off += 44)
+				{
+					FRoQuestObjective O;
+					O.MobId = *reinterpret_cast<const int32*>(PacketData + Off + 8);
+					O.Count = *reinterpret_cast<const uint16*>(PacketData + Off + 16);
+					O.Total = *reinterpret_cast<const uint16*>(PacketData + Off + 18);
+					O.Name = PartyFixed(PacketData + Off + 20, 24);
+					Q.Objectives.Add(O);
+				}
+				Quests.Add(Q);
+			}
+			OnQuestsChanged.Broadcast();
+		}
+		break;
+	case 0x09f9: // <id>.L <ativa>.B <inicio>.L <fim>.L <mobs>.W { <ident>.L <tipo>.L <mob>.L <min>.W <max>.W <atual>.W <nome>.24B }*3 (143 bytes)
+		if (PacketSize >= 17)
+		{
+			FRoQuest Q;
+			Q.Id = *reinterpret_cast<const int32*>(PacketData + 2);
+			Q.bActive = PacketData[6] != 0;
+			const int32 Mobs = FMath::Min<int32>(*reinterpret_cast<const uint16*>(PacketData + 15), 3);
+			for (int32 j = 0, Off = 17; j < Mobs && Off + 42 <= PacketSize; ++j, Off += 42)
+			{
+				FRoQuestObjective O;
+				O.MobId = *reinterpret_cast<const int32*>(PacketData + Off + 8);
+				O.Count = *reinterpret_cast<const uint16*>(PacketData + Off + 16);
+				O.Name = PartyFixed(PacketData + Off + 18, 24);
+				Q.Objectives.Add(O);
+			}
+			if (FRoQuest* Old = Find(Q.Id)) { *Old = Q; } else { Quests.Add(Q); }
+			OnQuestsChanged.Broadcast();
+		}
+		break;
+	case 0x08fe: // <len>.W { <ident>.L <mob>.L <total>.W <atual>.W }*: ident = quest * 1000 + indice (totais da quest recem-adicionada)
+	case 0x09fa: // <len>.W <n>.W { <quest>.L <ident>.L <total>.W <atual>.W }*
+	{
+		const bool bAdd = PacketID == 0x08fe;
+		const int32 Start = bAdd ? 4 : 6;
+		const int32 Stride = 12;
+		for (int32 Off = Start; Off + Stride <= PacketSize; Off += Stride)
+		{
+			const int32 Ident = *reinterpret_cast<const int32*>(PacketData + Off + (bAdd ? 0 : 4));
+			const int32 QuestId = bAdd ? Ident / 1000 : *reinterpret_cast<const int32*>(PacketData + Off);
+			const int32 Index = Ident % 1000;
+			if (FRoQuest* Q = Find(QuestId); Q && Q->Objectives.IsValidIndex(Index))
+			{
+				Q->Objectives[Index].Total = *reinterpret_cast<const uint16*>(PacketData + Off + 8);
+				Q->Objectives[Index].Count = *reinterpret_cast<const uint16*>(PacketData + Off + 10);
+			}
+		}
+		OnQuestsChanged.Broadcast();
+		break;
+	}
+	case 0x02b4: // <id>.L
+		if (PacketSize >= 6)
+		{
+			const int32 Id = *reinterpret_cast<const int32*>(PacketData + 2);
+			Quests.RemoveAll([Id](const FRoQuest& Q) { return Q.Id == Id; });
+			OnQuestsChanged.Broadcast();
+		}
+		break;
+	case 0x02b7: // <id>.L <ativa>.B
+		if (PacketSize >= 7)
+		{
+			if (FRoQuest* Q = Find(*reinterpret_cast<const int32*>(PacketData + 2))) { Q->bActive = PacketData[6] != 0; }
+			OnQuestsChanged.Broadcast();
+		}
+		break;
+	default:
+		break;
+	}
+}
+
 
 void URagnarokNetworkSubsystem::HandleFriendsPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
 {

@@ -37,7 +37,7 @@ Ordem do que se vê o tempo todo jogando. Quem: Claude, salvo indicação.
 | 1.14 | Porings no chão (corrigido no `f4ca760`, falta testar) | 🟡 |
 | 1.15 | **Acabamento visual da HUD** contra os prints do LATAM (`docs/ref/hud_latam`, 10 e 12): texturas reais com transparência em vez de retângulos chapados, cantos arredondados, fundo translúcido nas janelas, hotbar, chat e minimapa; opção de opacidade | Claude | ⬜ pedido do usuário em 2026-10-11 |
 | 1.16 | Janelas do cliente clássico que faltam (doc 12): sala de chat (Alt+C), lista de emoções (Alt+L), lista de atalhos (Alt+M / F12), info básica recolhida, nome do mapa ao entrar, **quadrado do tile sob o mouse** (cantos verdes, imagem 23), pegadas de outros jogadores (chave da aba Effect) | Claude | 🟨 sala de chat feita; falta lista de atalhos F12 e pegadas |
-| 1.17 | Quests (Alt+U) com rastreador na tela, mapa-múndi (Ctrl+`) e `/navi` (docs 08, 12) | Claude | ⬜ |
+| 1.17 | Quests (Alt+U) com rastreador na tela, mapa-múndi (Ctrl+`) e `/navi` (docs 08, 12) | Claude | 🟨 quests + rastreador feitos; faltam mapa-múndi e /navi |
 | 1.18 | Sobrepeso (50% trava regeneração, 90% trava combate), cores `^RRGGBB` nas descrições (doc 19) | Claude | ⬜ conferir |
 | 1.19 | Sistemas modernos do LATAM, **todos entram, adaptados depois ao pre-renovação** (decisão do usuário 2026-10-11): RODEX, Conquistas, Reputação, Agência de Aventureiros, Banco, `/navi`, troca rápida de equipamento. **JCoins fica de fora** (não haverá RO Premium/ROPs) | Claude | ⬜ |
 | 1.20 | Sons de interface e o campo `wav` dos efeitos de skill (doc 07) | Claude | ⬜ |

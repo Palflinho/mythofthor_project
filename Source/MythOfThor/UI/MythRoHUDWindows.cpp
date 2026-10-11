@@ -282,6 +282,7 @@ void UMythRoHUDWidget::ToggleWindow(EMythRoWindow Window)
 	case EMythRoWindow::Macros:  Target = MacroWindow; break;
 	case EMythRoWindow::Friends: Target = FriendsWindow; break;
 	case EMythRoWindow::ChatRoom: OpenChatRoomWindow(); return;
+	case EMythRoWindow::Quests: Target = QuestWindow; break;
 	}
 	if (!Target)
 	{
@@ -357,6 +358,7 @@ void UMythRoHUDWidget::RefreshWindows()
 	if (PartyWindow && PartyWindow->IsVisible()) { RefreshParty(); }
 	if (EmotionWindow && EmotionWindow->IsVisible()) { RefreshEmotionList(); }
 	if (FriendsWindow && FriendsWindow->IsVisible()) { RefreshFriends(); }
+	if (QuestWindow && QuestWindow->IsVisible()) { RefreshQuests(); }
 }
 
 void UMythRoHUDWidget::RefreshStatusWindow()
@@ -684,6 +686,10 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 		return true;
 	}
 	if (HandleChatRoomClick(ScreenPos))
+	{
+		return true;
+	}
+	if (HandleQuestClick(ScreenPos))
 	{
 		return true;
 	}

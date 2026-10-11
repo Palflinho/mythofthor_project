@@ -52,7 +52,8 @@ enum class EMythRoWindow : uint8
 	Emotions, // Alt+L: lista de emocoes
 	Macros,   // Alt+M: lista de atalhos de emocao
 	Friends,  // Alt+H: amigos
-	ChatRoom  // Alt+C: sala de chat
+	ChatRoom, // Alt+C: sala de chat
+	Quests    // Alt+U: missoes
 };
 
 /** Barra de medidor classica (gze*_left/mid/right sobre gze_bg): o meio estica conforme a fracao. */
@@ -431,6 +432,19 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardName;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo2;
+
+	// Missoes (MythRoQuests.cpp)
+public:
+	void RefreshQuests();
+protected:
+	void BuildQuestWindow();
+	bool HandleQuestClick(const FVector2D& ScreenPos);
+	UPROPERTY() TObjectPtr<UCanvasPanel> QuestWindow;
+	UPROPERTY() TObjectPtr<UTextBlock> QuestHeader;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> QuestTitles;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> QuestEyes;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> QuestDetail;
+	int32 QuestSelected = -1;
 
 	// Sala de chat (MythRoChatRoom.cpp)
 public:

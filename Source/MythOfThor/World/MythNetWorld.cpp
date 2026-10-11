@@ -213,6 +213,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnTradeChanged.AddDynamic(this, &AMythNetWorld::HandleTradeChanged);
 	Net->OnFriendsChanged.AddDynamic(this, &AMythNetWorld::HandleFriendsChanged);
 	Net->OnChatRoomChanged.AddDynamic(this, &AMythNetWorld::HandleChatRoomChanged);
+	Net->OnQuestsChanged.AddDynamic(this, &AMythNetWorld::HandleQuestsChanged);
 	Net->OnFriendRequest.AddDynamic(this, &AMythNetWorld::HandleFriendRequest);
 	Net->OnSkillUnitAppear.AddDynamic(this, &AMythNetWorld::HandleSkillUnitAppear);
 	Net->OnSkillUnitDisappear.AddDynamic(this, &AMythNetWorld::HandleSkillUnitDisappear);
@@ -296,6 +297,7 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnTradeChanged.RemoveAll(this);
 		Net->OnFriendsChanged.RemoveAll(this);
 		Net->OnChatRoomChanged.RemoveAll(this);
+		Net->OnQuestsChanged.RemoveAll(this);
 		Net->OnFriendRequest.RemoveAll(this);
 		Net->OnSkillUnitAppear.RemoveAll(this);
 		Net->OnSkillUnitDisappear.RemoveAll(this);
@@ -903,6 +905,14 @@ void AMythNetWorld::HandleTradeRequest(const FString& FromName)
 	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
 	{
 		PC->GetHud()->OnTradeRequestReceived(FromName);
+	}
+}
+
+void AMythNetWorld::HandleQuestsChanged()
+{
+	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
+	{
+		PC->GetHud()->RefreshQuests();
 	}
 }
 

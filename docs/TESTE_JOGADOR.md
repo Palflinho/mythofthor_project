@@ -82,3 +82,5 @@ NOVO (rodada 7): Amigos (Alt+H): /friend Nome ou botao direito no jogador > Adic
 NOVO (rodada 8): arqueiros inimigos (Orc Archer, Skeleton Archer etc.) atiram flechas visiveis. Na arvore de skills (Alt+S) as skills com mais de um nivel mostram '< n/max >': clique no lado esquerdo ou direito escolhe o nivel usado ao arrastar para o atalho ou dar duplo clique.
 
 NOVO (rodada 9): Sala de chat (Alt+C): defina titulo, limite, publica/privada e senha e clique em Criar; o titulo aparece sobre a cabeca de quem abriu. Outro jogador clica no titulo para entrar (pede senha se privada). A janela mostra quem esta dentro; o dono pode Expulsar; "Sair da sala" sai. Precisa de 2 jogadores. A venda em lojas de NPC (cesta, Vender) foi testada e funciona.
+
+NOVO (rodada 10): Missoes (Alt+U): lista as quests do servidor com [Ocultar]/[Rastrear]; clique no titulo para ver os objetivos. As quests ativas aparecem como rastreador no canto direito da tela com a contagem (ex.: Poring 37/1000). Os titulos estao em ingles (vem do banco do servidor). O Zeny agora aparece certo ja ao entrar no jogo (antes mostrava 0).

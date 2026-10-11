@@ -364,6 +364,7 @@ private:
 	void OnHotkeyMacros();
 	void OnHotkeyFriends();
 	void OnHotkeyChatRoom();
+	void OnHotkeyQuests();
 	void OnHotkeyItems();
 	void OnHotkeyEquip();
 	void OnHotkeySkills();

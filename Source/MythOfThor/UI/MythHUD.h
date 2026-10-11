@@ -76,6 +76,7 @@ private:
 	void DrawTargetRing();
 	void DrawMapBanner();
 	void DrawChatRoomTitles();
+	void DrawQuestTracker();
 	struct FRoomHit { FBox2D Box; int32 Id = 0; int32 Type = 1; };
 	TArray<FRoomHit> RoomHits;
 public:
