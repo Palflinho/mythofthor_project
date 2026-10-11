@@ -2,6 +2,7 @@
 
 #include "World/MythDayNightActor.h"
 #include "World/MythNightLight.h"
+#include "Sprites/MythSprEffect.h"
 #include "Sprites/MythRoSound.h"
 #include "Components/PointLightComponent.h"
 #include "EngineUtils.h"
@@ -571,8 +572,40 @@ namespace
 	}
 }
 
-void UMythRoSpriteComponent::SetBodyState(int32 Value) { BodyState = Value; RecomputeStatusTint(); }
-void UMythRoSpriteComponent::SetHealthState(int32 Value) { HealthState = Value; RecomputeStatusTint(); }
+void UMythRoSpriteComponent::SetStatusAttachment(FName Name, const TCHAR* SprFile, bool bOn)
+{
+	TWeakObjectPtr<AActor>* Found = StatusAttachments.Find(Name);
+	if (bOn && (!Found || !Found->IsValid()))
+	{
+		if (AActor* A = AMythSprEffect::Attach(GetOwner(), SprFile, true))
+		{
+			StatusAttachments.Add(Name, A);
+		}
+	}
+	else if (!bOn && Found)
+	{
+		if (Found->IsValid())
+		{
+			Found->Get()->Destroy();
+		}
+		StatusAttachments.Remove(Name);
+	}
+}
+
+void UMythRoSpriteComponent::SetBodyState(int32 Value)
+{
+	BodyState = Value;
+	SetStatusAttachment(TEXT("sleep"), TEXT("status-sleep"), Value == 4);
+	SetStatusAttachment(TEXT("stun"), TEXT("status-stun"), Value == 3);
+	RecomputeStatusTint();
+}
+
+void UMythRoSpriteComponent::SetHealthState(int32 Value)
+{
+	HealthState = Value;
+	SetStatusAttachment(TEXT("curse"), TEXT("status-curse"), (Value & 0x2) != 0);
+	RecomputeStatusTint();
+}
 
 void UMythRoSpriteComponent::SetEfstVirtue(int32 EfstId, bool bOn)
 {

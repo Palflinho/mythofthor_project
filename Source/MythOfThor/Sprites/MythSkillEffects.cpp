@@ -3,6 +3,7 @@
 #include "Sprites/MythRoSound.h"
 #include "Sprites/MythRoSpriteComponent.h"
 #include "Sprites/MythStrEffect.h"
+#include "Sprites/MythSprEffect.h"
 #include "Sprites/MythProcEffect.h"
 #include "Player/MythPlayerCharacter.h"
 #include "Engine/World.h"
@@ -203,6 +204,19 @@ bool FMythSkillEffects::PlayEffectId(UObject* WorldContext, int32 EffectID, AAct
 				Char->StartQuake(static_cast<float>(Ms) / 1000.f);
 				bAny = true;
 			}
+		}
+		if (P.Type == TEXT("SPR") && !P.File.IsEmpty())
+		{
+			bool bRepeat = false;
+			double Ms = 0.0;
+			if (P.Raw.IsValid())
+			{
+				P.Raw->TryGetBoolField(TEXT("repeat"), bRepeat);
+				P.Raw->TryGetNumberField(TEXT("duration"), Ms);
+			}
+			const bool bSpr = AMythSprEffect::Play(WorldContext, P.File, Feet, P.bAttached ? Target : nullptr, bRepeat, static_cast<float>(Ms) / 1000.f) != nullptr;
+			UE_LOG(LogTemp, Verbose, TEXT("MythSkillEffects: efeito %d spr '%s' %s"), EffectID, *P.File, bSpr ? TEXT("ok") : TEXT("falhou"));
+			bAny |= bSpr;
 		}
 		if (P.Type == TEXT("STR") && !P.File.IsEmpty())
 		{

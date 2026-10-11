@@ -300,6 +300,8 @@ private:
 	bool bStatusDim = false;
 	bool bStatusHidden = false;
 	void RecomputeStatusTint();
+	TMap<FName, TWeakObjectPtr<AActor>> StatusAttachments;
+	void SetStatusAttachment(FName Name, const TCHAR* SprFile, bool bOn);
 	float SunVisibility = 1.f;
 	float SunTraceTimer = 0.f;
 	TArray<TWeakObjectPtr<class AMythNightLight>> NearbyLamps;
