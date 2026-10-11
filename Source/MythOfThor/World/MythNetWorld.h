@@ -68,6 +68,7 @@ private:
 	UFUNCTION() void HandleStorageOpen(const TArray<FRagnarokInventoryItem>& Items);
 	UFUNCTION() void HandleStorageChanged(const TArray<FRagnarokInventoryItem>& Items);
 	UFUNCTION() void HandlePartyChanged();
+	UFUNCTION() void HandleSkillGround(int64 SourceID, int32 SkillID, int32 Level, int32 CellX, int32 CellY);
 	UFUNCTION() void HandleSkillUnitAppear(int64 UnitID, int64 OwnerID, int32 UnitType, int32 X, int32 Y);
 	UFUNCTION() void HandleSkillUnitDisappear(int64 UnitID);
 	UFUNCTION() void HandleMonsterHp(int64 UnitID, int32 Hp, int32 MaxHp);
@@ -96,6 +97,8 @@ private:
 	TMap<TPair<int64, int32>, double> LastCasterFx;
 	/** Unidades de skill no chao (Muralha de Fogo, Santuario, Portal...): o efeito se repete enquanto a unidade existir. */
 	TMap<int64, FTimerHandle> SkillUnitTimers;
+	/** Quando cada skill de area foi usada no chao: o efeito do chao ja cobre o alvo, entao o do alvo nao repete. */
+	TMap<int32, double> LastGroundSkill;
 	UFUNCTION() void HandleEquipChanged(int64 UnitID, uint8 Look, int32 Value);
 	UFUNCTION() void HandleStatusChange(int64 UnitID, int32 EfstID, bool bActive, int32 TotalMs, int32 RemainMs);
 

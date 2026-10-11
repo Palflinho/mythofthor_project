@@ -210,6 +210,19 @@ def process_texture_magenta(src_path, dst_png_path, passes=4):
         if not np.any(is_magenta):
             return False
 
+        # Defringe: pixels rosados (mistura de magenta com a cor do desenho, comum em BMPs reamostrados) encostados
+        # no magenta viram transparentes tambem; senao o filtro deixa um contorno rosa nas bordas (arvores dos campos)
+        pinkish = ((r.astype(np.int32) - g.astype(np.int32)) > 55) & ((b.astype(np.int32) - g.astype(np.int32)) > 40) & (r > 140) & (b > 120)
+        near = is_magenta.copy()
+        for _ in range(2):
+            grown = near.copy()
+            grown[1:, :] |= near[:-1, :]
+            grown[:-1, :] |= near[1:, :]
+            grown[:, 1:] |= near[:, :-1]
+            grown[:, :-1] |= near[:, 1:]
+            near = grown
+        is_magenta = is_magenta | (pinkish & near)
+
         alpha = np.where(is_magenta, 0, 255).astype(np.uint8)
         rgb = arr[:, :, :3].astype(np.float32)
         has_color = ~is_magenta

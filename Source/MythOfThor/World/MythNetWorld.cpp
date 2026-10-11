@@ -227,6 +227,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnSkillDamage.AddDynamic(this, &AMythNetWorld::HandleSkillDamage);
 	Net->OnSkillEffect.AddDynamic(this, &AMythNetWorld::HandleSkillEffect);
 	Net->OnSkillCast.AddDynamic(this, &AMythNetWorld::HandleSkillCast);
+	Net->OnSkillGround.AddDynamic(this, &AMythNetWorld::HandleSkillGround);
 	Net->OnSkillFailed.AddDynamic(this, &AMythNetWorld::HandleSkillFailed);
 	Net->OnSpecialEffect.AddDynamic(this, &AMythNetWorld::HandleSpecialEffect);
 	Net->OnNotifyEffect.AddDynamic(this, &AMythNetWorld::HandleNotifyEffect);
@@ -297,6 +298,7 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnSkillDamage.RemoveAll(this);
 		Net->OnSkillEffect.RemoveAll(this);
 		Net->OnSkillCast.RemoveAll(this);
+		Net->OnSkillGround.RemoveAll(this);
 		Net->OnSkillFailed.RemoveAll(this);
 		Net->OnSpecialEffect.RemoveAll(this);
 		Net->OnNotifyEffect.RemoveAll(this);
@@ -956,6 +958,10 @@ void AMythNetWorld::HandleDamage(int64 SourceID, int64 TargetID, int32 Damage, u
 		{
 			S->SetSitting(DamageType == 2);
 		}
+		else if (UMythRoSpriteComponent* Picker = Source ? Source->FindComponentByClass<UMythRoSpriteComponent>() : nullptr; Picker && DamageType == 1)
+		{
+			Picker->PlayPickup();
+		}
 		return;
 	}
 
@@ -1189,7 +1195,7 @@ void AMythNetWorld::HandleSkillDamage(int64 SourceID, int64 TargetID, int32 Skil
 	}
 	if (AActor* Target = ResolveActor(TargetID))
 	{
-		if (MainFx > 0 && MainFx != CastFx)
+		if (MainFx > 0 && MainFx != CastFx && GetWorld()->GetTimeSeconds() - LastGroundSkill.FindRef(SkillID) > 0.6)
 		{
 			bAnyFx |= FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Effect, Target, Target->GetActorLocation(), false, Source);
 		}
@@ -1258,6 +1264,33 @@ void AMythNetWorld::HandleSkillEffect(int64 SourceID, int64 TargetID, int32 Skil
 	{
 		Char->Sprite->PlayAttack(); // gesto de conjurar
 	}
+}
+
+void AMythNetWorld::HandleSkillGround(int64 SourceID, int32 SkillID, int32 Level, int32 CellX, int32 CellY)
+{
+	AActor* Source = ResolveActor(SourceID);
+	const FVector At = CellToGround(CellX, CellY);
+	if (AMythHUD* Hud = GetGameHud(); Hud && Source)
+	{
+		Hud->AddSkillShout(Source, FMythRoClientTables::SkillName(SkillID));
+	}
+	if (AMythPlayerCharacter* Char = Cast<AMythPlayerCharacter>(Source); Char && Char->Sprite)
+	{
+		Char->Sprite->FaceLocation(At);
+		Char->Sprite->PlayAttack(); // gesto de conjurar
+	}
+	// Efeito no chao da celula, haja alvo ou nao (o dano em quem estiver la chega pelo 0x01de)
+	const int32 GroundFx = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::Ground);
+	const int32 MainFx = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::Effect);
+	if (GroundFx > 0)
+	{
+		FMythSkillEffects::PlayEffectId(this, GroundFx, nullptr, At, Source);
+	}
+	else if (MainFx > 0)
+	{
+		FMythSkillEffects::PlayEffectId(this, MainFx, nullptr, At, Source);
+	}
+	LastGroundSkill.Add(SkillID, GetWorld()->GetTimeSeconds());
 }
 
 void AMythNetWorld::HandleSkillCast(int64 SourceID, int64 TargetID, int32 SkillID, int32 CastMs, int32 CellX, int32 CellY)

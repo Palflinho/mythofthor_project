@@ -110,6 +110,7 @@ namespace
 	constexpr int32 GroupIdle = 0;
 	constexpr int32 GroupWalk = 1;
 	constexpr int32 GroupSit = 2;
+	constexpr int32 GroupPickup = 3;
 	constexpr int32 GroupAttack = 5;
 	constexpr int32 GroupHurt = 6;
 	constexpr int32 GroupDead = 8;
@@ -602,6 +603,14 @@ void UMythRoSpriteComponent::PlayAttack(float AttackDuration)
 	}
 }
 
+void UMythRoSpriteComponent::PlayPickup()
+{
+	if (!IsMonster() && State != EMythSpriteState::Sit && State != EMythSpriteState::Dead)
+	{
+		SetState(EMythSpriteState::Pickup, true);
+	}
+}
+
 void UMythRoSpriteComponent::PlayHit()
 {
 	if (State != EMythSpriteState::Sit) // sentado nao faz a reacao de golpe (o cliente levanta so pelo servidor)
@@ -651,6 +660,7 @@ int32 UMythRoSpriteComponent::GetActionIndex() const
 	case EMythSpriteState::Hit:    Group = bMob ? MobGroupHurt : GroupHurt; break;
 	case EMythSpriteState::Dead:   Group = bMob ? MobGroupDead : GroupDead; break;
 	case EMythSpriteState::Sit:    Group = bMob ? GroupIdle : GroupSit; break;
+	case EMythSpriteState::Pickup: Group = bMob ? GroupIdle : GroupPickup; break;
 	}
 	const int32 Index = Group * 8 + static_cast<int32>(Direction);
 	// Sprites com poucas acoes (item no chao: 1; varios NPCs: so as 8 de parado) reaproveitam as que existem

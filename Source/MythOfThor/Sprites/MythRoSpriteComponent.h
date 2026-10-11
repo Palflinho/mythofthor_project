@@ -212,6 +212,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "RO Sprite")
 	void PlayHit();
+	/** Gesto de pegar item do chao (acao 3 do .act do jogador). */
+	void PlayPickup();
 
 	/** Senta/levanta (ZC_NOTIFY_ACT tipo 2/3 do servidor): acao 16..23 do .act, parada. */
 	void SetSitting(bool bSit);

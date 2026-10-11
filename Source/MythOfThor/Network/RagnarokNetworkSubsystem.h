@@ -320,6 +320,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWeather, const FString&, Weather
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FOnSkillDamage, int64, SourceID, int64, TargetID, int32, SkillID, int32, Damage, int32, Hits, uint8, DamageType);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnSkillEffect, int64, SourceID, int64, TargetID, int32, SkillID, int32, Value);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FOnSkillCast, int64, SourceID, int64, TargetID, int32, SkillID, int32, CastMs, int32, CellX, int32, CellY);
+/** ZC_NOTIFY_GROUNDSKILL 0x0117: skill de area usada em uma celula (com ou sem alvos). */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FOnSkillGround, int64, SourceID, int32, SkillID, int32, Level, int32, CellX, int32, CellY);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSkillFailed, int32, SkillID, int32, Cause);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSpecialEffect, int64, UnitID, int32, EffectID);
 
@@ -744,6 +746,7 @@ public:
 	/** Inicio da conjuracao (ZC_USESKILL_ACK 0x0b1a): barra de conjuracao por CastMs. */
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
 	FOnSkillCast OnSkillCast;
+	FOnSkillGround OnSkillGround;
 
 	/** Falha ao usar a skill (ZC_ACK_TOUSESKILL 0x0110): sem SP, fora de alcance... */
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")

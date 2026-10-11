@@ -1018,6 +1018,7 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x0b20: // ZC_SHORTCUT_KEY_LIST
 				HandleHotkeys(PacketData, ActualLen);
 				break;
+			case 0x0117: // ZC_NOTIFY_GROUNDSKILL
 			case 0x01de: // ZC_NOTIFY_SKILL
 			case 0x09cb: // ZC_USE_SKILL
 			case 0x0b1a: // ZC_USESKILL_ACK
@@ -2176,6 +2177,12 @@ void URagnarokNetworkSubsystem::HandleSkillResult(const uint8* PacketData, int32
 	auto U32 = [PacketData](int32 O) { return static_cast<int64>(*reinterpret_cast<const uint32*>(PacketData + O)); };
 	switch (PacketID)
 	{
+	case 0x0117: // ZC_NOTIFY_GROUNDSKILL: SKID +2, AID +4, level +8, x +10, y +12
+		if (PacketSize >= 18)
+		{
+			OnSkillGround.Broadcast(U32(4), U16(2), U16(8), U16(10), U16(12));
+		}
+		break;
 	case 0x01de: // ZC_NOTIFY_SKILL: SKID +2, AID +4, targetID +8, damage +24, level +28, count +30, action +32
 		if (PacketSize >= 33)
 		{

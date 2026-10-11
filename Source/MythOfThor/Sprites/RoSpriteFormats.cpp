@@ -58,6 +58,63 @@ bool FRoSpr::LoadPalette(const TArray<uint8>& Bytes, TArray<FColor>& OutPalette)
 	return true;
 }
 
+namespace
+{
+	/**
+	 * Pixels transparentes do .spr trazem o magenta da paleta; o filtro bilinear os mistura com a borda opaca e gera o
+	 * contorno rosa. Aqui eles herdam a cor dos vizinhos opacos (2 passadas), sem mudar o alfa.
+	 */
+	void BleedTransparent(FRoSprImage& Img)
+	{
+		const int32 W = Img.Width, H = Img.Height;
+		if (W <= 0 || H <= 0 || Img.Pixels.Num() != W * H)
+		{
+			return;
+		}
+		TArray<bool> Solid;
+		Solid.SetNumUninitialized(W * H);
+		for (int32 i = 0; i < W * H; ++i)
+		{
+			Solid[i] = Img.Pixels[i].A > 0;
+		}
+		for (int32 Pass = 0; Pass < 2; ++Pass)
+		{
+			TArray<FColor> Next = Img.Pixels;
+			TArray<bool> NextSolid = Solid;
+			for (int32 y = 0; y < H; ++y)
+			{
+				for (int32 x = 0; x < W; ++x)
+				{
+					if (Solid[y * W + x])
+					{
+						continue;
+					}
+					int32 R = 0, G = 0, B = 0, N = 0;
+					for (int32 dy = -1; dy <= 1; ++dy)
+					{
+						for (int32 dx = -1; dx <= 1; ++dx)
+						{
+							const int32 nx = x + dx, ny = y + dy;
+							if (nx >= 0 && ny >= 0 && nx < W && ny < H && Solid[ny * W + nx])
+							{
+								const FColor& C = Img.Pixels[ny * W + nx];
+								R += C.R; G += C.G; B += C.B; ++N;
+							}
+						}
+					}
+					if (N > 0)
+					{
+						Next[y * W + x] = FColor(R / N, G / N, B / N, 0);
+						NextSolid[y * W + x] = true;
+					}
+				}
+			}
+			Img.Pixels = MoveTemp(Next);
+			Solid = MoveTemp(NextSolid);
+		}
+	}
+}
+
 bool FRoSpr::Load(const TArray<uint8>& Bytes, const TArray<FColor>* PaletteOverride)
 {
 	Indexed.Reset();
@@ -160,6 +217,11 @@ bool FRoSpr::Load(const TArray<uint8>& Bytes, const TArray<FColor>* PaletteOverr
 			}
 		}
 		R.Skip(Total * 4);
+	}
+	if (R.bOk)
+	{
+		for (FRoSprImage& Img : Indexed) { BleedTransparent(Img); }
+		for (FRoSprImage& Img : Rgba) { BleedTransparent(Img); }
 	}
 	return R.bOk;
 }
