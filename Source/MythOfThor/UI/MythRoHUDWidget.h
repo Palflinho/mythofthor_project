@@ -380,6 +380,8 @@ protected:
 	// Entrada do jogo: login, escolha e criacao de personagem (MythRoEntry.cpp)
 public:
 	void ShowEntryLogin(const FString& Message = FString());
+	/** Menu Esc "Seleção de personagem": sai do mapa e entra de novo com o login da sessão (a senha fica só na memoria). */
+	void ReturnToCharacterSelect();
 	void ShowEntryCharacters(const TArray<FRagnarokCharacterSlotInfo>& Chars);
 	void HideEntry();
 	/** Teste: preenche usuario e senha e entra. */

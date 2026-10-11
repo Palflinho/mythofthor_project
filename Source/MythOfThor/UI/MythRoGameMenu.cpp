@@ -132,10 +132,10 @@ void UMythRoHUDWidget::ApplyGraphicsOptions()
 void UMythRoHUDWidget::BuildGameMenu()
 {
 	// Menu principal (como a janela de "Sair" do RO, com as opcoes de hoje)
-	const FVector2D MenuSize(200.f, 17.f + 4 * 24.f + 12.f);
+	const FVector2D MenuSize(200.f, 17.f + 5 * 24.f + 12.f);
 	GameMenuWindow = MakeRoPanel(TEXT("Menu"), MenuSize, FVector2D::ZeroVector);
-	const TCHAR* Items[4] = { TEXT("Voltar ao jogo"), TEXT("Configurações"), TEXT("Opções do jogo"), TEXT("Sair do jogo") };
-	for (int32 i = 0; i < 4; ++i)
+	const TCHAR* Items[5] = { TEXT("Seleção de personagem"), TEXT("Configurações"), TEXT("Opções do jogo"), TEXT("Sair do jogo"), TEXT("Voltar ao jogo") };
+	for (int32 i = 0; i < 5; ++i)
 	{
 		UTextBlock* T = AddText(GameMenuWindow, 18.f, 26.f + i * 24.f, 9, MenuLink);
 		T->SetText(FText::FromString(Items[i]));
@@ -365,6 +365,9 @@ bool UMythRoHUDWidget::HandleGameMenuClick(const FVector2D& ScreenPos)
 			GameMenuWindow->SetVisibility(ESlateVisibility::Collapsed);
 			switch (i)
 			{
+			case 0:
+				ReturnToCharacterSelect();
+				break;
 			case 1:
 				LoadGraphicsOptions();
 				bGfxDirty = false;

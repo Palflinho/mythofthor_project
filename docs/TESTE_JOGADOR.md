@@ -86,3 +86,5 @@ NOVO (rodada 9): Sala de chat (Alt+C): defina titulo, limite, publica/privada e 
 NOVO (rodada 10): Missoes (Alt+U): lista as quests do servidor com [Ocultar]/[Rastrear]; clique no titulo para ver os objetivos. As quests ativas aparecem como rastreador no canto direito da tela com a contagem (ex.: Poring 37/1000). Os titulos estao em ingles (vem do banco do servidor). O Zeny agora aparece certo ja ao entrar no jogo (antes mostrava 0).
 
 NOVO (rodada 11): o peso fica vermelho na Informacao Basica quando passa de 50% (o servidor aplica os efeitos). Som ao pegar item do chao e ao vestir equipamento.
+
+NOVO (rodada 12): menu Esc agora tem "Selecao de personagem" (primeiro item): sai do mapa e volta para a lista de personagens sem pedir a senha de novo, para trocar de personagem. Ordem do menu: Selecao de personagem, Configuracoes, Opcoes do jogo, Sair do jogo, Voltar ao jogo.

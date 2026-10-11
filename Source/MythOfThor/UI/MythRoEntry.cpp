@@ -222,6 +222,23 @@ void UMythRoHUDWidget::ShowEntryLogin(const FString& Message)
 	}
 }
 
+void UMythRoHUDWidget::ReturnToCharacterSelect()
+{
+	URagnarokNetworkSubsystem* Net = GetNet();
+	if (!Net)
+	{
+		return;
+	}
+	Net->Disconnect();
+	ShowEntryLogin();
+	if (Net->GetSessionUser().IsEmpty())
+	{
+		return; // sem login guardado: digite de novo
+	}
+	FTimerHandle Handle;
+	GetWorld()->GetTimerManager().SetTimer(Handle, FTimerDelegate::CreateWeakLambda(this, [this]() { if (URagnarokNetworkSubsystem* N = GetNet()) { EntryFillAndLogin(N->GetSessionUser(), N->GetSessionPass()); } }), 0.6f, false);
+}
+
 void UMythRoHUDWidget::HideEntry()
 {
 	SetEntryPanel(0);

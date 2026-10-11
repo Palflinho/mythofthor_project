@@ -503,6 +503,9 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
 	bool ConnectAndLogin(const FString& ServerHost, const FString& Username, const FString& Password);
+	/** Login da sessao (so na memoria): usado pelo menu Esc "Selecao de personagem" para entrar de novo sem pedir a senha. */
+	const FString& GetSessionUser() const { return SessionUser; }
+	const FString& GetSessionPass() const { return SessionPass; }
 
 	/**
 	 * Seleciona um personagem na lista do Char-Server para entrar no mundo (CH_SELECT_CHAR 0x0066).
@@ -904,6 +907,8 @@ private:
 	void SendKeepAlive();
 
 	FString SavedHost;
+	FString SessionUser;
+	FString SessionPass;
 	uint32 SavedAccountID;
 	uint32 SavedLoginID1;
 	uint32 SavedLoginID2;

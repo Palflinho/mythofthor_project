@@ -161,6 +161,8 @@ bool URagnarokNetworkSubsystem::ConnectToPort(const FString& Host, int32 Port, E
 bool URagnarokNetworkSubsystem::ConnectAndLogin(const FString& ServerHost, const FString& Username, const FString& Password)
 {
 	SavedHost = ServerHost;
+	SessionUser = Username;
+	SessionPass = Password;
 
 	if (!ConnectToPort(ServerHost, LOGIN_SERVER_PORT, ERagnarokNetworkState::ConnectingLogin))
 	{
