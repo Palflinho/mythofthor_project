@@ -10,28 +10,52 @@
 #include "Components/CanvasPanelSlot.h"
 #include "Components/EditableTextBox.h"
 #include "Components/TextBlock.h"
+#include "UI/MythRoUITextures.h"
 
 namespace
 {
 	const FLinearColor BkText(0.12f, 0.12f, 0.12f);
+	const FLinearColor BkLinkQ(0.12f, 0.3f, 0.65f);
 	const FLinearColor BkLink(0.12f, 0.3f, 0.65f);
 	const FLinearColor BkGray(0.55f, 0.55f, 0.55f);
 }
 
 void UMythRoHUDWidget::BuildBankWindow()
 {
-	BankWindow = MakeRoPanel(TEXT("Banco"), FVector2D(280.f, 17.f + 140.f), FVector2D(-280.f, 60.f));
-	BankBalanceText = AddText(BankWindow, 14.f, 26.f, 9, BkText);
-	BankZenyText = AddText(BankWindow, 14.f, 46.f, 9, BkGray);
-	AddText(BankWindow, 14.f, 76.f, 9, BkText)->SetText(FText::FromString(TEXT("Quantia")));
+	// Janela do banco (print "Bank Window"): depositado e zeny atual em cima, a faixa cinza com o saco de zeny, a quantia, os botoes
+	// Depositar e Sacar e os atalhos de valor (Max, 10M, 1M, 100K)
+	BankWindow = MakeRoPanel(TEXT("Banco"), FVector2D(290.f, 17.f + 138.f), FVector2D(-280.f, 60.f));
+	AddText(BankWindow, 14.f, 24.f, 8, BkText, true)->SetText(FText::FromString(TEXT("Depositado")));
+	AddText(BankWindow, 14.f, 42.f, 8, BkText, true)->SetText(FText::FromString(TEXT("Zeny atual")));
+	for (int32 i = 0; i < 2; ++i)
+	{
+		UTextBlock* Value = AddText(BankWindow, 140.f, 24.f + i * 18.f, 8, BkText);
+		Value->SetJustification(ETextJustify::Right);
+		if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(Value->Slot))
+		{
+			S->SetAutoSize(false);
+			S->SetSize(FVector2D(136.f, 14.f) * UIScale);
+		}
+		(i == 0 ? BankBalanceText : BankZenyText) = Value;
+	}
+	AddColor(BankWindow, FLinearColor(0.88f, 0.9f, 0.95f, 1.f), 0.f, 17.f + 50.f, 290.f, 54.f);
+	AddImage(BankWindow, FMythRoUITextures::Get(TEXT("basic_interface/zeny.bmp")), 16.f, 17.f + 60.f, 32.f, 32.f);
 	BankAmountBox = WidgetTree->ConstructWidget<UEditableTextBox>();
 	if (UCanvasPanelSlot* S = BankWindow->AddChildToCanvas(BankAmountBox))
 	{
-		S->SetPosition(FVector2D(70.f, 72.f) * UIScale);
-		S->SetSize(FVector2D(190.f, 20.f) * UIScale);
+		S->SetPosition(FVector2D(56.f, 17.f + 66.f) * UIScale);
+		S->SetSize(FVector2D(116.f, 20.f) * UIScale);
 	}
-	BankDepositLink = AddTextButton(BankWindow, TEXT("Depositar"), 30.f, 106.f, 90.f);
-	BankWithdrawLink = AddTextButton(BankWindow, TEXT("Sacar"), 150.f, 106.f, 90.f);
+	BankDepositLink = AddTextButton(BankWindow, TEXT("Depositar"), 188.f, 17.f + 54.f, 90.f);
+	BankWithdrawLink = AddTextButton(BankWindow, TEXT("Sacar"), 188.f, 17.f + 80.f, 90.f);
+	// Atalhos de valor: Max :: 10M :: 1M :: 100K
+	const TCHAR* Quick[4] = { TEXT("Máx"), TEXT("10M"), TEXT("1M"), TEXT("100K") };
+	for (int32 i = 0; i < 4; ++i)
+	{
+		UTextBlock* T = AddText(BankWindow, 52.f + i * 54.f, 17.f + 112.f, 8, BkLink);
+		T->SetText(FText::FromString(Quick[i]));
+		BankQuick.Add(T);
+	}
 }
 
 void UMythRoHUDWidget::OpenBankWindow()
@@ -65,8 +89,8 @@ void UMythRoHUDWidget::RefreshBank()
 	{
 		return;
 	}
-	BankBalanceText->SetText(FText::FromString(FString::Printf(TEXT("Saldo no banco: %s z"), *FText::AsNumber(Net->GetBankBalance()).ToString())));
-	BankZenyText->SetText(FText::FromString(FString::Printf(TEXT("Zeny com você: %s z"), *FText::AsNumber(Net->GetPlayerStats().Zeny).ToString())));
+	BankBalanceText->SetText(FText::FromString(FString::Printf(TEXT("%s z"), *FText::AsNumber(Net->GetBankBalance()).ToString())));
+	BankZenyText->SetText(FText::FromString(FString::Printf(TEXT("%s z"), *FText::AsNumber(Net->GetPlayerStats().Zeny).ToString())));
 }
 
 bool UMythRoHUDWidget::HandleBankClick(const FVector2D& ScreenPos)
@@ -75,6 +99,15 @@ bool UMythRoHUDWidget::HandleBankClick(const FVector2D& ScreenPos)
 	if (!Net || !BankWindow || !BankWindow->IsVisible())
 	{
 		return false;
+	}
+	for (int32 i = 0; i < BankQuick.Num(); ++i)
+	{
+		if (IsUnder(BankQuick[i], ScreenPos))
+		{
+			const int64 Amount = i == 0 ? Net->GetPlayerStats().Zeny : (i == 1 ? 10000000 : (i == 2 ? 1000000 : 100000));
+			BankAmountBox->SetText(FText::AsNumber(FMath::Min<int64>(Amount, MAX_int32)));
+			return true;
+		}
 	}
 	const bool bDeposit = IsUnder(BankDepositLink, ScreenPos);
 	if (bDeposit || IsUnder(BankWithdrawLink, ScreenPos))

@@ -505,7 +505,18 @@ protected:
 	UPROPERTY() TObjectPtr<UTextBlock> MailTakeZeny;
 	UPROPERTY() TObjectPtr<UTextBlock> MailTakeItems;
 	UPROPERTY() TObjectPtr<UTextBlock> MailDelete;
-	UPROPERTY() TObjectPtr<UTextBlock> MailWrite;
+	UPROPERTY() TObjectPtr<UImage> MailWrite;
+	UPROPERTY() TObjectPtr<UImage> MailRefresh;
+	UPROPERTY() TObjectPtr<UImage> MailPrev;
+	UPROPERTY() TObjectPtr<UImage> MailNext;
+	UPROPERTY() TArray<TObjectPtr<UImage>> MailRowHits;
+	UPROPERTY() TArray<TObjectPtr<UImage>> MailRowIcons;
+	UPROPERTY() TArray<TObjectPtr<UImage>> MailRowGifts;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> MailSenders;
+	UPROPERTY() TObjectPtr<UTextBlock> MailClose;
+	UPROPERTY() TObjectPtr<UTextBlock> MailReadClose;
+	UPROPERTY() TObjectPtr<UCanvasPanel> MailReadWindow;
+	int32 MailPage = 0;
 	UPROPERTY() TObjectPtr<UEditableTextBox> MailToBox;
 	UPROPERTY() TObjectPtr<UEditableTextBox> MailTitleBox;
 	UPROPERTY() TObjectPtr<UEditableTextBox> MailTextBox;
@@ -589,6 +600,7 @@ protected:
 	UPROPERTY() TObjectPtr<UEditableTextBox> BankAmountBox;
 	UPROPERTY() TObjectPtr<UTextBlock> BankDepositLink;
 	UPROPERTY() TObjectPtr<UTextBlock> BankWithdrawLink;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> BankQuick;
 
 	// Atalhos de teclado (MythRoShortcuts.cpp)
 	void BuildShortcutWindow();

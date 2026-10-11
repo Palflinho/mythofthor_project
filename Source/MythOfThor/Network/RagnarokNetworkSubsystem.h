@@ -749,6 +749,7 @@ public:
 	const FString& GetOpenMailText() const { return OpenMailText; }
 	int64 GetOpenMailZeny() const { return OpenMailZeny; }
 	int32 GetOpenMailItems() const { return OpenMailItems; }
+	void ClearOpenMail() { OpenMailId = 0; OpenMailText.Reset(); OpenMailZeny = 0; OpenMailItems = 0; }
 	bool IsInChatRoom() const { return bInChatRoom; }
 	const FString& GetChatRoomTitle() const { return CurrentChatRoomTitle; }
 	const TArray<FString>& GetChatRoomMembers() const { return ChatRoomMembers; }
