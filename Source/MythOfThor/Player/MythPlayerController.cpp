@@ -194,6 +194,7 @@ void AMythPlayerController::SetupInputComponent()
 	InputComponent->BindKey(FInputChord(EKeys::C, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyChatRoom);
 	InputComponent->BindKey(FInputChord(EKeys::U, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyQuests);
 	InputComponent->BindKey(EKeys::F12, IE_Pressed, this, &AMythPlayerController::OnHotkeyShortcuts);
+	InputComponent->BindKey(FInputChord(EKeys::B, false, true, false, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyBank);
 	InputComponent->BindKey(FInputChord(EKeys::Tab, false, true, false, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyMinimap);
 	InputComponent->BindKey(EKeys::Escape, IE_Pressed, this, &AMythPlayerController::OnHotkeyEscape);
 	InputComponent->BindKey(EKeys::Insert, IE_Pressed, this, &AMythPlayerController::OnHotkeySit);
@@ -579,6 +580,7 @@ void AMythPlayerController::ToggleHudWindow(EMythRoWindow Window)
 }
 
 void AMythPlayerController::OnHotkeyEmotions() { ToggleHudWindow(EMythRoWindow::Emotions); }
+void AMythPlayerController::OnHotkeyBank() { ToggleHudWindow(EMythRoWindow::Bank); }
 void AMythPlayerController::OnHotkeyShortcuts() { ToggleHudWindow(EMythRoWindow::Shortcuts); }
 void AMythPlayerController::OnHotkeyQuests() { ToggleHudWindow(EMythRoWindow::Quests); }
 void AMythPlayerController::OnHotkeyChatRoom() { ToggleHudWindow(EMythRoWindow::ChatRoom); }
@@ -1879,3 +1881,11 @@ void AMythPlayerController::MythPartyAnswer(int32 Accept) { if (HudWidget) { Hud
 void AMythPlayerController::MythStore(int32 ToStorage, int32 Row, int32 Qty) { if (HudWidget) { HudWidget->StorageMove(ToStorage != 0, Row, Qty); } }
 
 void AMythPlayerController::MythChat(const FString& Text) { if (HudWidget) { HudWidget->SubmitChat(Text.Replace(TEXT("+"), TEXT(" "))); } }
+
+void AMythPlayerController::MythBank(int32 Op, int32 Amount)
+{
+	if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>())
+	{
+		N->SendBankCommand(Op == 1 ? 0x09a7 : 0x09a9, Amount);
+	}
+}

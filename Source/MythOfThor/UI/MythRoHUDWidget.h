@@ -54,7 +54,8 @@ enum class EMythRoWindow : uint8
 	Friends,  // Alt+H: amigos
 	ChatRoom, // Alt+C: sala de chat
 	Quests,   // Alt+U: missoes
-	Shortcuts // F12: tabela de teclas
+	Shortcuts, // F12: tabela de teclas
+	Bank      // Ctrl+B: banco
 };
 
 /** Barra de medidor classica (gze*_left/mid/right sobre gze_bg): o meio estica conforme a fracao. */
@@ -435,6 +436,20 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardName;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo2;
+
+	// Banco (MythRoBank.cpp)
+public:
+	void OpenBankWindow();
+	void RefreshBank();
+protected:
+	void BuildBankWindow();
+	bool HandleBankClick(const FVector2D& ScreenPos);
+	UPROPERTY() TObjectPtr<UCanvasPanel> BankWindow;
+	UPROPERTY() TObjectPtr<UTextBlock> BankBalanceText;
+	UPROPERTY() TObjectPtr<UTextBlock> BankZenyText;
+	UPROPERTY() TObjectPtr<UEditableTextBox> BankAmountBox;
+	UPROPERTY() TObjectPtr<UTextBlock> BankDepositLink;
+	UPROPERTY() TObjectPtr<UTextBlock> BankWithdrawLink;
 
 	// Atalhos de teclado (MythRoShortcuts.cpp)
 	void BuildShortcutWindow();

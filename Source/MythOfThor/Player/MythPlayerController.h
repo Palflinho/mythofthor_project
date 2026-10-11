@@ -198,6 +198,10 @@ public:
 	UFUNCTION(Exec)
 	void MythCharSelect() { if (HudWidget) { HudWidget->ReturnToCharacterSelect(); } }
 
+	/** Teste: MythBank 1 500 deposita, MythBank 2 200 saca. */
+	UFUNCTION(Exec)
+	void MythBank(int32 Op, int32 Amount);
+
 	/** Console: MythWalk 133 183 -> anda ate a celula como um clique no chao (CZ_REQUEST_MOVE ao servidor). */
 	UFUNCTION(Exec)
 	void MythWalk(int32 X, int32 Y);
@@ -370,6 +374,7 @@ private:
 	void OnHotkeyChatRoom();
 	void OnHotkeyQuests();
 	void OnHotkeyShortcuts();
+	void OnHotkeyBank();
 	void OnHotkeyItems();
 	void OnHotkeyEquip();
 	void OnHotkeySkills();

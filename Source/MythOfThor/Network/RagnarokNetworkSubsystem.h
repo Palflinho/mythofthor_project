@@ -450,6 +450,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTradeRequest, const FString&, Fro
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTradeChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFriendsChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnQuestsChanged);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBankChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnChatRoomChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnFriendRequest, int32, AccountId, int32, CharId, const FString&, Name);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPartyInvite, int32, PartyId, const FString&, PartyName);
@@ -562,6 +563,9 @@ public:
 
 	/** CZ_ACTIVE_QUEST 0x02b6: mostra ou esconde uma quest no rastreador. */
 	bool SendQuestActive(int32 QuestId, bool bActive);
+
+	/** Banco: 0x09b6 abrir, 0x09ab consultar, 0x09b8 fechar, 0x09a7 depositar, 0x09a9 sacar. */
+	bool SendBankCommand(uint16 PacketId, int32 Money);
 
 	/** Sala de chat: criar (0x00d5), entrar (0x00d9), sair (0x00e3), expulsar (0x00e2). */
 	bool SendCreateChatRoom(const FString& Title, int32 Limit, bool bPublic, const FString& Password);
@@ -692,6 +696,7 @@ public:
 	bool IsTradeOpen() const { return bTradeOpen; }
 	const TArray<FRoFriend>& GetFriends() const { return Friends; }
 	const TArray<FRoQuest>& GetQuests() const { return Quests; }
+	int64 GetBankBalance() const { return BankBalance; }
 	bool IsInChatRoom() const { return bInChatRoom; }
 	const FString& GetChatRoomTitle() const { return CurrentChatRoomTitle; }
 	const TArray<FString>& GetChatRoomMembers() const { return ChatRoomMembers; }
@@ -803,6 +808,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Trade") FOnTradeChanged OnTradeChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Friends") FOnFriendsChanged OnFriendsChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Quests") FOnQuestsChanged OnQuestsChanged;
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Bank") FOnBankChanged OnBankChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|ChatRoom") FOnChatRoomChanged OnChatRoomChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Friends") FOnFriendRequest OnFriendRequest;
 
@@ -930,6 +936,8 @@ private:
 	FString PartyName;
 	TArray<FRoFriend> Friends;
 	TArray<FRoQuest> Quests;
+	int64 BankBalance = 0;
+	bool bBankOpen = false;
 	TMap<int32, FRoChatRoom> ChatRooms;
 	bool bInChatRoom = false;
 	int32 CurrentChatRoomId = 0;
@@ -1008,6 +1016,7 @@ private:
 	void HandleTradePacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleFriendsPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleQuestPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	void HandleBankPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleChatRoomPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleSkillUnitAppear(const uint8* PacketData, int32 PacketSize);
 	void HandleSkillUnitDisappear(const uint8* PacketData, int32 PacketSize);

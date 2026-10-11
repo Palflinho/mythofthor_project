@@ -972,6 +972,13 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x00df: // ZC_CHANGE_CHATROOM
 				HandleChatRoomPacket(PacketData, ActualLen, PacketID);
 				break;
+			case 0x09b7: // ZC_ACK_OPEN_BANKING
+			case 0x09b9: // ZC_ACK_CLOSE_BANKING
+			case 0x09a6: // ZC_BANKING_CHECK
+			case 0x09a8: // ZC_ACK_BANKING_DEPOSIT
+			case 0x09aa: // ZC_ACK_BANKING_WITHDRAW
+				HandleBankPacket(PacketData, ActualLen, PacketID);
+				break;
 			case 0x09f8: // ZC_ALL_QUEST_LIST3
 			case 0x09f9: // ZC_ADD_QUEST_EX
 			case 0x09fa: // ZC_UPDATE_MISSION_HUNT_EX
@@ -3230,6 +3237,69 @@ bool URagnarokNetworkSubsystem::SendQuestActive(int32 QuestId, bool bActive)
 	SendData(Packet, sizeof(Packet));
 	return true;
 }
+
+// ---- Banco (clif_bank_open, clif_Bank_Check, clif_bank_deposit, clif_bank_withdraw) ----
+
+bool URagnarokNetworkSubsystem::SendBankCommand(uint16 PacketId, int32 Money)
+{
+	// 0x09b6 abrir, 0x09ab consultar, 0x09b8 fechar: <aid>.L (6 bytes); 0x09a7 depositar, 0x09a9 sacar: <aid>.L <zeny>.L (10 bytes)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	uint8 Packet[10] = {};
+	*reinterpret_cast<uint16*>(Packet) = PacketId;
+	*reinterpret_cast<int32*>(Packet + 2) = SavedAccountID;
+	*reinterpret_cast<int32*>(Packet + 6) = Money;
+	SendData(Packet, (PacketId == 0x09a7 || PacketId == 0x09a9) ? 10 : 6);
+	return true;
+}
+
+void URagnarokNetworkSubsystem::HandleBankPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
+{
+	auto Say = [this](const FString& Text) { OnChatMessage.Broadcast(TEXT(""), Text, TEXT("#FFFF00")); };
+	switch (PacketID)
+	{
+	case 0x09b7: // ZC_ACK_OPEN_BANKING
+		bBankOpen = true;
+		SendBankCommand(0x09ab, 0);
+		break;
+	case 0x09b9: // ZC_ACK_CLOSE_BANKING
+		bBankOpen = false;
+		OnBankChanged.Broadcast();
+		break;
+	case 0x09a6: // <saldo>.Q <motivo>.W
+		if (PacketSize >= 12)
+		{
+			BankBalance = *reinterpret_cast<const int64*>(PacketData + 2);
+			OnBankChanged.Broadcast();
+		}
+		break;
+	case 0x09a8: // deposito: <motivo>.W <saldo no banco>.Q <zeny>.L
+	case 0x09aa: // saque
+		if (PacketSize >= 16)
+		{
+			const int32 Reason = *reinterpret_cast<const int16*>(PacketData + 2);
+			if (Reason == 0)
+			{
+				BankBalance = *reinterpret_cast<const int64*>(PacketData + 4);
+			}
+			else if (PacketID == 0x09a8)
+			{
+				Say(Reason == 2 ? TEXT("Zeny insuficiente para depositar.") : (Reason == 3 ? TEXT("O banco não aceita tanto zeny.") : TEXT("Não foi possível depositar.")));
+			}
+			else
+			{
+				Say(Reason == 1 ? TEXT("Saldo insuficiente no banco.") : TEXT("Não foi possível sacar."));
+			}
+			OnBankChanged.Broadcast();
+		}
+		break;
+	default:
+		break;
+	}
+}
+
 
 void URagnarokNetworkSubsystem::HandleQuestPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
 {

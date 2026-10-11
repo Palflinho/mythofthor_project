@@ -88,3 +88,5 @@ NOVO (rodada 10): Missoes (Alt+U): lista as quests do servidor com [Ocultar]/[Ra
 NOVO (rodada 11): o peso fica vermelho na Informacao Basica quando passa de 50% (o servidor aplica os efeitos). Som ao pegar item do chao e ao vestir equipamento.
 
 NOVO (rodada 12): menu Esc agora tem "Selecao de personagem" (primeiro item): sai do mapa e volta para a lista de personagens sem pedir a senha de novo, para trocar de personagem. Ordem do menu: Selecao de personagem, Configuracoes, Opcoes do jogo, Sair do jogo, Voltar ao jogo.
+
+NOVO (rodada 13): Banco (Ctrl+B): mostra o saldo guardado no servidor; digite a quantia e clique Depositar ou Sacar. Janela de atalhos de teclado (F12). Menu Esc: Selecao de personagem, Configuracoes do jogo, Atalhos, Sair, Voltar.
