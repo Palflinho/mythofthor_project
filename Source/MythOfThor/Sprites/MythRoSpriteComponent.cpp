@@ -574,12 +574,12 @@ namespace
 	}
 }
 
-void UMythRoSpriteComponent::SetStatusAttachment(FName Name, const TCHAR* SprFile, bool bOn)
+void UMythRoSpriteComponent::SetStatusAttachment(FName Name, const TCHAR* SprFile, bool bOn, bool bAboveHead, float SideOffsetUU, float UpOffsetUU)
 {
 	TWeakObjectPtr<AActor>* Found = StatusAttachments.Find(Name);
 	if (bOn && (!Found || !Found->IsValid()))
 	{
-		if (AActor* A = AMythSprEffect::Attach(GetOwner(), SprFile, true))
+		if (AActor* A = AMythSprEffect::Attach(GetOwner(), SprFile, bAboveHead, SideOffsetUU, UpOffsetUU))
 		{
 			StatusAttachments.Add(Name, A);
 		}
@@ -627,6 +627,7 @@ void UMythRoSpriteComponent::SetEffectOption(int32 Option, bool bSelf)
 	bStatusHidden = bConcealed && !bSelf;
 	bStatusDim = bConcealed && bSelf;
 	SetVisibility(!bStatusHidden, true);
+	SetStatusAttachment(TEXT("falcon"), TEXT("매"), (Option & 0x10) != 0 && !bStatusHidden, false, 55.f, 55.f); // o falcao do Cacador acompanha ao lado
 	RecomputeStatusTint();
 }
 

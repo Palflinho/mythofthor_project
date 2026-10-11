@@ -26,7 +26,7 @@ public:
 	static AMythSprEffect* Play(UObject* WorldContext, const FString& SprFile, const FVector& Location, AActor* Follow, bool bRepeat, float DurationSec);
 
 	/** Adereco de estado que fica em loop preso a quem esta com o estado (sono, atordoado, maldicao); destrua o ator para tirar. */
-	static AMythSprEffect* Attach(AActor* Owner, const FString& SprFile, bool bAboveHead);
+	static AMythSprEffect* Attach(AActor* Owner, const FString& SprFile, bool bAboveHead, float SideOffset = 0.f, float UpOffset = 0.f);
 
 	virtual void Tick(float DeltaSeconds) override;
 
@@ -40,4 +40,5 @@ private:
 	float Length = 1.f;
 	bool bLoop = false;
 	float HeightOffset = 0.f;
+	float SideOffset = 0.f; // para a direita da camera (uu)
 };

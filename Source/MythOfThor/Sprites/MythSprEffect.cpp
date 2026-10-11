@@ -147,7 +147,7 @@ AMythSprEffect* AMythSprEffect::Play(UObject* WorldContext, const FString& SprFi
 	return E;
 }
 
-AMythSprEffect* AMythSprEffect::Attach(AActor* Owner, const FString& SprFile, bool bAboveHead)
+AMythSprEffect* AMythSprEffect::Attach(AActor* Owner, const FString& SprFile, bool bAboveHead, float SideOffsetUU, float UpOffset)
 {
 	if (!Owner)
 	{
@@ -162,6 +162,11 @@ AMythSprEffect* AMythSprEffect::Attach(AActor* Owner, const FString& SprFile, bo
 			Half = Char->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
 		}
 		E->HeightOffset = Half * 1.7f;
+	}
+	if (E)
+	{
+		E->HeightOffset += UpOffset;
+		E->SideOffset = SideOffsetUU;
 	}
 	return E;
 }
@@ -178,7 +183,12 @@ void AMythSprEffect::Tick(float DeltaSeconds)
 	}
 	if (FollowActor.IsValid())
 	{
-		SetActorLocation(AMythStrEffect::FeetOf(FollowActor.Get()) + FVector(0.f, 0.f, HeightOffset));
+		FVector CamRight = FVector::RightVector;
+		if (const APlayerController* SidePC = GetWorld() ? GetWorld()->GetFirstPlayerController() : nullptr; SidePC && SidePC->PlayerCameraManager)
+		{
+			CamRight = FRotationMatrix(SidePC->PlayerCameraManager->GetCameraRotation()).GetUnitAxis(EAxis::Y);
+		}
+		SetActorLocation(AMythStrEffect::FeetOf(FollowActor.Get()) + FVector(0.f, 0.f, HeightOffset) + CamRight * SideOffset);
 	}
 	const FRoActAction& Act = D->Act.Actions[0];
 	const int32 Count = Act.Frames.Num();

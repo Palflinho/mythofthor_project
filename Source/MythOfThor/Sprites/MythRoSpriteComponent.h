@@ -303,7 +303,7 @@ private:
 	/** Segundos que o jogador ainda fica em postura de combate (acao 4 do .act) depois de bater ou apanhar. */
 	float ReadyTimeLeft = 0.f;
 	TMap<FName, TWeakObjectPtr<AActor>> StatusAttachments;
-	void SetStatusAttachment(FName Name, const TCHAR* SprFile, bool bOn);
+	void SetStatusAttachment(FName Name, const TCHAR* SprFile, bool bOn, bool bAboveHead = true, float SideOffsetUU = 0.f, float UpOffsetUU = 0.f);
 	float SunVisibility = 1.f;
 	float SunTraceTimer = 0.f;
 	TArray<TWeakObjectPtr<class AMythNightLight>> NearbyLamps;
