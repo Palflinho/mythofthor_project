@@ -455,6 +455,10 @@ void AMythNetWorld::HandleMapEnter(const FString& MapName, int32 CellX, int32 Ce
 
 void AMythNetWorld::FinishMapEnter(const FString& Map, int32 CellX, int32 CellY)
 {
+	if (AMythHUD* BannerHud = GetGameHud())
+	{
+		BannerHud->ShowMapBanner(Map);
+	}
 	// Entrar no mapa (inclusive o respawn no ponto de salvamento, que so manda a troca de posicao) tira do estado de morte
 	if (const AMythPlayerController* DeadPC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()))
 	{

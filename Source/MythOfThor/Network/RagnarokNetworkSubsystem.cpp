@@ -1610,7 +1610,7 @@ void URagnarokNetworkSubsystem::HandleChatMessage(const uint8* PacketData, int32
 		}
 	}
 
-	if (PacketID == RagnarokPackets::HEADER_ZC_NOTIFY_CHAT && !Text.IsEmpty() && Sender != TEXT("System")) // so fala de verdade (nome : texto), nao aviso do servidor
+	if (PacketID == RagnarokPackets::HEADER_ZC_NOTIFY_CHAT && !Text.IsEmpty() && Sender.Equals(SelectedCharName, ESearchCase::IgnoreCase)) // so a propria fala "Nome : texto"; avisos do servidor tambem chegam por aqui (ex.: "rAthena Version Git Hash : ...")
 	{
 		OnSpeech.Broadcast(static_cast<int64>(SavedAccountID), Text); // propria fala: balao sobre o proprio personagem
 	}

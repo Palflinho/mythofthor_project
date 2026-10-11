@@ -53,6 +53,9 @@ public:
 	/** Barra de conjuracao sobre a unidade (ZC_USESKILL_ACK), como no cliente original. */
 	void AddCastBar(AActor* Caster, float Seconds);
 
+	/** Nome do mapa em letras grandes ao entrar (cliente LATAM, print 61034761): aparece, segura e some em ~4 s. */
+	void ShowMapBanner(const FString& MapId);
+
 	/** Nome da skill sobre quem a usou, por um instante (o RO mostra o grito da skill). */
 	void AddSkillShout(AActor* Caster, const FString& SkillName);
 	/** Balao de fala sobre a cabeca (fala publica; dura 4,5 s, docs/ref/18 2.3). */
@@ -71,6 +74,9 @@ private:
 	TArray<FStatusIcon> StatusIcons;
 
 	void DrawTargetRing();
+	void DrawMapBanner();
+	FString BannerText;
+	double BannerStart = -100.0;
 	/** Quadrado do tile sob o mouse (cantos verdes) e, mirando skill de area, o anel branco com o nivel da skill. */
 	void DrawCursorTile();
 	/** Barras finas de HP (verde) e SP (azul) logo abaixo dos pes do proprio jogador (docs/ref/12, no mundo). */

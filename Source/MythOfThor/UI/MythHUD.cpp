@@ -56,6 +56,7 @@ void AMythHUD::DrawHUD()
 {
 	Super::DrawHUD();
 	DrawCursorTile();
+	DrawMapBanner();
 	DrawTargetRing();
 	DrawSelfBars();
 	DrawGroundItemLabels();
@@ -303,6 +304,67 @@ void AMythHUD::DrawCursorTile()
 			Canvas->DrawText(Font, FString::FromInt(PC->GetPendingSkillLevel()), Right.X + 6.f, Right.Y - 10.f, 1.2f, 1.2f, Info2);
 		}
 	}
+}
+
+void AMythHUD::ShowMapBanner(const FString& MapId)
+{
+	if (!FMythOptions::Get(TEXT("MapName")))
+	{
+		return;
+	}
+	static TMap<FString, FString> MapDisplayNames;
+	static bool bLoaded = false;
+	if (!bLoaded)
+	{
+		bLoaded = true;
+		FString Text;
+		TSharedPtr<FJsonObject> Root;
+		if (FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("maps.json"))) && FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) && Root.IsValid())
+		{
+			for (const auto& Pair : Root->Values)
+			{
+				const TSharedPtr<FJsonObject>* Obj = nullptr;
+				FString Name;
+				if (Pair.Value->TryGetObject(Obj) && (*Obj)->TryGetStringField(TEXT("name"), Name))
+				{
+					Name.TrimStartAndEndInline();
+					MapDisplayNames.Emplace(Pair.Key, Name);
+				}
+			}
+		}
+	}
+	const FString* Found = MapDisplayNames.Find(MapId.ToLower());
+	BannerText = Found ? *Found : MapId;
+	BannerStart = GetWorld() ? GetWorld()->GetTimeSeconds() : 0.0;
+}
+
+void AMythHUD::DrawMapBanner()
+{
+	if (!Canvas || BannerText.IsEmpty() || !GetWorld())
+	{
+		return;
+	}
+	const float T = static_cast<float>(GetWorld()->GetTimeSeconds() - BannerStart);
+	constexpr float FadeIn = 0.6f, Hold = 2.6f, FadeOut = 1.2f;
+	if (T < 0.f || T > FadeIn + Hold + FadeOut)
+	{
+		return;
+	}
+	const float Alpha = T < FadeIn ? T / FadeIn : (T > FadeIn + Hold ? 1.f - (T - FadeIn - Hold) / FadeOut : 1.f);
+	UFont* Font = GEngine ? GEngine->GetLargeFont() : nullptr;
+	if (!Font)
+	{
+		return;
+	}
+	const float Scale = 2.2f;
+	float TW = 0.f, TH = 0.f;
+	Canvas->TextSize(Font, BannerText, TW, TH, Scale, Scale);
+	FFontRenderInfo Info;
+	Info.bEnableShadow = true;
+	// faixa escura suave atras (o cliente usa uma sombra sob o nome) e o nome em branco
+	DrawRect(FLinearColor(0.f, 0.f, 0.f, 0.35f * Alpha), Canvas->SizeX * 0.5f - TW * 0.5f - 40.f, 70.f, TW + 80.f, TH + 14.f);
+	Canvas->SetDrawColor(FColor(255, 255, 255, static_cast<uint8>(255.f * Alpha)));
+	Canvas->DrawText(Font, BannerText, Canvas->SizeX * 0.5f - TW * 0.5f, 76.f, Scale, Scale, Info);
 }
 
 void AMythHUD::DrawTargetRing()
