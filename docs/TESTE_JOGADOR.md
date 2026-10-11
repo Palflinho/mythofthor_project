@@ -62,3 +62,7 @@ Como me passar o resultado
 --------------------------
 Diga em palavras o que viu de diferente do esperado (ex.: "as asas aparecem na frente do corpo"). Se puder, tire um
 print (tecla Impr Tela) e diga o numero do item acima.
+
+NOVO (rodada 2): barra de vida do monstro agora desce com o dano (servidor manda 0x0977); clique em janela/atalho nao anda
+mais o personagem; usar skill interrompe a perseguicao do ataque comum; /resetchar (GM) volta o personagem a Aprendiz 1/1
+sem pontos nem skills, para testar progressao e troca de classe.

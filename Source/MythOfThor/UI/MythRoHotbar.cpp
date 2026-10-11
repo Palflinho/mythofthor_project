@@ -3,6 +3,7 @@
 // atalho; arrastar um atalho para fora da barra o apaga.
 
 #include "UI/MythRoHUDWidget.h"
+#include "Framework/Application/SlateApplication.h"
 
 #include "UI/MythRoClientTables.h"
 #include "UI/MythRoUITextures.h"
@@ -212,6 +213,16 @@ bool UMythRoHUDWidget::EndHotDrag(const FVector2D& ScreenPos)
 	}
 	RefreshHotbar();
 	return true;
+}
+
+bool UMythRoHUDWidget::IsPointerOverUi() const
+{
+	if (!FSlateApplication::IsInitialized())
+	{
+		return false;
+	}
+	const FVector2D Pos = FSlateApplication::Get().GetCursorPos();
+	return IsOverAnyWindow(Pos) || HotbarSlotAt(Pos) != INDEX_NONE || IsNpcDialogOpen();
 }
 
 bool UMythRoHUDWidget::IsOverAnyWindow(const FVector2D& ScreenPos) const

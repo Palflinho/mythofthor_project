@@ -369,6 +369,8 @@ struct FRoPartyMember
 /** Fala publica (0x008d de outros, 0x008e propria) para o balao sobre a cabeca, e emocao (0x00c0). */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSpeech, int64, UnitID, const FString&, Text);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnEmotion, int64, UnitID, int32, EmotionType);
+/** ZC_HP_INFO 0x0977: PV do monstro que voce atingiu (barra sob os pes). */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnMonsterHp, int64, UnitID, int32, Hp, int32, MaxHp);
 
 /** Armazem da Kafra (clif.cpp): lista completa (0x0b08 inicio, 0x0b09/0x0b39 invType 2, 0x0b0b fim), 0x0b44 item entrou, 0x00f6 saiu, 0x00f2 contagem, 0x00f8 fechou. */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStorageOpen, const TArray<FRagnarokInventoryItem>&, Items);
@@ -685,6 +687,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Shop") FOnShopResult OnShopResult;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Chat") FOnSpeech OnSpeech;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Chat") FOnEmotion OnEmotion;
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Combat") FOnMonsterHp OnMonsterHp;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Storage") FOnStorageOpen OnStorageOpen;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Storage") FOnStorageChanged OnStorageChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Storage") FOnStorageClose OnStorageClose;

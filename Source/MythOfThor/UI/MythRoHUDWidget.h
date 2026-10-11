@@ -369,6 +369,8 @@ protected:
 	bool HandleGameMenuClick(const FVector2D& ScreenPos);
 	// Grupo (MythRoParty.cpp)
 public:
+	/** O cursor esta sobre janela, atalhos ou dialogo: o clique e da interface, nunca do mundo. */
+	bool IsPointerOverUi() const;
 	void RefreshParty();
 	void ShowPartyInvite(int32 PartyId, const FString& PartyName);
 	void AnswerPartyInvite(bool bAccept);

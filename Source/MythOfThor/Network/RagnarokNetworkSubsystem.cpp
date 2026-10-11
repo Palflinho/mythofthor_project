@@ -971,6 +971,12 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x00c0: // ZC_EMOTION
 				HandleChatExtras(PacketData, ActualLen, PacketID);
 				break;
+			case 0x0977: // ZC_HP_INFO <id>.L <pv>.L <pv max>.L
+				if (ActualLen >= 14)
+				{
+					OnMonsterHp.Broadcast(*reinterpret_cast<const uint32*>(PacketData + 2), *reinterpret_cast<const int32*>(PacketData + 6), *reinterpret_cast<const int32*>(PacketData + 10));
+				}
+				break;
 			case 0x0148: // ZC_RESURRECTION
 				HandleResurrection(PacketData, ActualLen);
 				break;

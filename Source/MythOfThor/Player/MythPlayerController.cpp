@@ -226,6 +226,10 @@ void AMythPlayerController::MoveToCursor()
 	{
 		return; // morto: nao anda nem ataca (a janela de morte oferece voltar ao ponto de salvamento)
 	}
+	if (HudWidget && HudWidget->IsPointerOverUi())
+	{
+		return; // clique em janela ou atalho: nao anda nem ataca (o clique da interface e tratado la)
+	}
 	if (HudWidget && HudWidget->IsNpcDialogOpen())
 	{
 		return; // com dialogo de NPC aberto o clique e da janela, nao do mundo
@@ -1541,6 +1545,7 @@ void AMythPlayerController::BeginSkill(int32 SkillID, int32 Level)
 	}
 	if (Inf & 0x04)
 	{
+		ClearFocusedTarget();
 		Net->UseSkill(SkillID, Level, Net->GetSelfID()); // em si: sem mira
 		return;
 	}
@@ -1568,6 +1573,7 @@ bool AMythPlayerController::HandleSkillTargetClick(const FHitResult& Hit)
 	const int32 Level = PendingSkillLevel;
 	const int32 Inf = PendingSkillInf;
 	CancelSkillTargeting();
+	ClearFocusedTarget(); // usar skill interrompe o ataque comum (o cliente nao deve retomar a perseguicao)
 
 	AActor* HitActor = Hit.GetActor();
 	if (AMythMonster* Unit = Cast<AMythMonster>(HitActor); Unit && Unit->IsNetUnit() && (Inf & (0x01 | 0x10)))

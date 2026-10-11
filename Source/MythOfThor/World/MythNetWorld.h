@@ -68,6 +68,7 @@ private:
 	UFUNCTION() void HandleStorageOpen(const TArray<FRagnarokInventoryItem>& Items);
 	UFUNCTION() void HandleStorageChanged(const TArray<FRagnarokInventoryItem>& Items);
 	UFUNCTION() void HandlePartyChanged();
+	UFUNCTION() void HandleMonsterHp(int64 UnitID, int32 Hp, int32 MaxHp);
 	UFUNCTION() void HandlePartyInvite(int32 PartyId, const FString& PartyName);
 	UFUNCTION() void HandleStorageClose();
 	UFUNCTION() void HandleSpeech(int64 UnitID, const FString& Text);

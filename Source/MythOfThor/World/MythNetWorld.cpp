@@ -207,6 +207,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnStorageOpen.AddDynamic(this, &AMythNetWorld::HandleStorageOpen);
 	Net->OnStorageChanged.AddDynamic(this, &AMythNetWorld::HandleStorageChanged);
 	Net->OnPartyChanged.AddDynamic(this, &AMythNetWorld::HandlePartyChanged);
+	Net->OnMonsterHp.AddDynamic(this, &AMythNetWorld::HandleMonsterHp);
 	Net->OnPartyInvite.AddDynamic(this, &AMythNetWorld::HandlePartyInvite);
 	Net->OnStorageClose.AddDynamic(this, &AMythNetWorld::HandleStorageClose);
 	Net->OnSpeech.AddDynamic(this, &AMythNetWorld::HandleSpeech);
@@ -273,6 +274,7 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnShopResult.RemoveAll(this);
 		Net->OnStorageOpen.RemoveAll(this);
 		Net->OnPartyChanged.RemoveAll(this);
+		Net->OnMonsterHp.RemoveAll(this);
 		Net->OnPartyInvite.RemoveAll(this);
 		Net->OnStorageChanged.RemoveAll(this);
 		Net->OnStorageClose.RemoveAll(this);
@@ -722,6 +724,15 @@ void AMythNetWorld::HandleStorageChanged(const TArray<FRagnarokInventoryItem>&)
 	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
 	{
 		PC->GetHud()->RefreshStorage();
+	}
+}
+
+void AMythNetWorld::HandleMonsterHp(int64 UnitID, int32 Hp, int32 MaxHp)
+{
+	if (const TObjectPtr<AMythMonster>* Mob = Units.Find(UnitID); Mob && *Mob)
+	{
+		(*Mob)->MaxHP = FMath::Max(1, MaxHp);
+		(*Mob)->HP = FMath::Clamp(Hp, 0, MaxHp);
 	}
 }
 

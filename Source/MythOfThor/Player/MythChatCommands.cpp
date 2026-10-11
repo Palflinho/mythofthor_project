@@ -29,6 +29,19 @@ bool AMythPlayerController::RunSlashCommand(const FString& Command, const FStrin
 		OnHotkeySit();
 		return true;
 	}
+	if (Cmd == TEXT("resetchar") || Cmd == TEXT("resetpersonagem"))
+	{
+		// Ferramenta de GM para testar a progressao: volta a Aprendiz nivel 1/1, sem pontos nem skills (so quem e GM no servidor)
+		if (Net)
+		{
+			for (const TCHAR* Gm : { TEXT("@job 0"), TEXT("@blvl -98"), TEXT("@jlevel -98"), TEXT("@reset"), TEXT("@heal") })
+			{
+				Net->SendGlobalMessage(Gm);
+			}
+			Say(TEXT("Personagem reiniciado: Aprendiz 1/1 (comandos de GM enviados)."));
+		}
+		return true;
+	}
 	if (Cmd == TEXT("where"))
 	{
 		const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld());
