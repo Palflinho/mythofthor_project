@@ -277,6 +277,7 @@ void UMythRoHUDWidget::ToggleWindow(EMythRoWindow Window)
 	case EMythRoWindow::Skills:  Target = SkillsWindow; break;
 	case EMythRoWindow::Basic:   Target = BasicWindow; break;
 	case EMythRoWindow::Minimap: Target = MinimapWindow; break;
+	case EMythRoWindow::Party:   Target = PartyWindow; break;
 	}
 	if (!Target)
 	{
@@ -315,6 +316,11 @@ bool UMythRoHUDWidget::CloseTopWindow()
 				CloseStorage(true);
 				return true;
 			}
+			if (Win == PartyInviteWindow)
+			{
+				AnswerPartyInvite(false);
+				return true;
+			}
 			Win->SetVisibility(ESlateVisibility::Collapsed);
 			return true;
 		}
@@ -332,6 +338,7 @@ void UMythRoHUDWidget::RefreshWindows()
 	if (EquipWindow && EquipWindow->IsVisible()) { RefreshEquipWindow(); }
 	if (SkillsWindow && SkillsWindow->IsVisible()) { RefreshSkillsWindow(); }
 	if (StorageWindow && StorageWindow->IsVisible()) { RefreshStorage(); }
+	if (PartyWindow && PartyWindow->IsVisible()) { RefreshParty(); }
 }
 
 void UMythRoHUDWidget::RefreshStatusWindow()
@@ -641,6 +648,10 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 	{
 		return true;
 	}
+	if (HandlePartyClick(ScreenPos))
+	{
+		return true;
+	}
 	if (HandleGameMenuClick(ScreenPos) || HandleBasicMenuClick(ScreenPos))
 	{
 		return true;
@@ -658,6 +669,11 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 			if (Win == StorageWindow)
 			{
 				CloseStorage(true);
+				return true;
+			}
+			if (Win == PartyInviteWindow)
+			{
+				AnswerPartyInvite(false);
 				return true;
 			}
 			Win->SetVisibility(ESlateVisibility::Collapsed);

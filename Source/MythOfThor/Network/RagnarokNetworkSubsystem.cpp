@@ -33,6 +33,9 @@ void URagnarokNetworkSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 			PacketLengths.Add(static_cast<uint16>(FCString::Strtoi(*P.Key, nullptr, 16)), static_cast<int16>(P.Value->AsNumber()));
 		}
 	}
+	// Grupo (PACKETVER >= 20171207): ZC_ADD_MEMBER_TO_GROUP 0x0ae4 e ZC_GROUP_LIST 0x0ae5 (packets_struct.hpp) nao estao no JSON
+	PacketLengths.FindOrAdd(0x0ae4) = 89;
+	PacketLengths.FindOrAdd(0x0ae5) = -1;
 	UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] %d tamanhos de pacote carregados de %s"), PacketLengths.Num(), *Path);
 	bLogPackets = FParse::Param(FCommandLine::Get(), TEXT("MythNetLog"));
 }
@@ -950,6 +953,17 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x00f2: // ZC_NOTIFY_STOREITEM_COUNTINFO
 			case 0x00f8: // ZC_CLOSE_STORE
 				HandleStoragePacket(PacketData, ActualLen, PacketID);
+				break;
+			case 0x00fa: // ZC_ACK_MAKE_GROUP
+			case 0x0ae4: // ZC_ADD_MEMBER_TO_GROUP (PACKETVER >= 20171207)
+			case 0x0ae5: // ZC_GROUP_LIST
+			case 0x02c6: // ZC_PARTY_JOIN_REQ
+			case 0x02c5: // ZC_PARTY_JOIN_REQ_ACK
+			case 0x0105: // ZC_DELETE_MEMBER_FROM_GROUP
+			case 0x080e: // ZC_NOTIFY_HP_TO_GROUPM
+			case 0x0107: // ZC_NOTIFY_POSITION_TO_GROUPM
+			case 0x0ab2: // ZC_GROUP_ISALIVE
+				HandlePartyPacket(PacketData, ActualLen, PacketID);
 				break;
 			case 0x008d: // ZC_NOTIFY_CHAT (fala publica de outro jogador)
 			case 0x0109: // ZC_NOTIFY_CHAT_PARTY
@@ -2594,6 +2608,263 @@ bool URagnarokNetworkSubsystem::SendShopClose()
 	SendData(Packet, sizeof(Packet));
 	return true;
 }
+
+// ---- Grupo (clif_party_*, packets_struct.hpp) ----
+
+namespace
+{
+	FString PartyFixed(const uint8* Data, int32 Len)
+	{
+		char Buf[64] = {};
+		FMemory::Memcpy(Buf, Data, FMath::Min(Len, 63));
+		return UTF8_TO_TCHAR(Buf);
+	}
+}
+
+bool URagnarokNetworkSubsystem::SendCreateParty(const FString& Name)
+{
+	// CZ_MAKE_GROUP2 0x01e8 <nome>.24B <pegar item>.B <dividir item>.B (28 bytes)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap || Name.IsEmpty())
+	{
+		return false;
+	}
+	uint8 Packet[28] = { 0xe8, 0x01 };
+	FTCHARToUTF8 Utf8(*Name);
+	FMemory::Memcpy(Packet + 2, Utf8.Get(), FMath::Min<int32>(Utf8.Length(), 23));
+	Packet[26] = 1; // cada um fica com o que pega
+	Packet[27] = 1; // dividir igualmente (o servidor decide o que vale)
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendPartyInvite(const FString& CharName)
+{
+	// CZ_PARTY_JOIN_REQ 0x02c4 <nome>.24B (26 bytes)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap || CharName.IsEmpty())
+	{
+		return false;
+	}
+	uint8 Packet[26] = { 0xc4, 0x02 };
+	FTCHARToUTF8 Utf8(*CharName);
+	FMemory::Memcpy(Packet + 2, Utf8.Get(), FMath::Min<int32>(Utf8.Length(), 23));
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendPartyInviteReply(int32 PartyId, bool bAccept)
+{
+	// CZ_PARTY_JOIN_REQ_ACK 0x02c7 <party id>.L <aceitar>.B (7 bytes)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	uint8 Packet[7] = { 0xc7, 0x02 };
+	*reinterpret_cast<uint32*>(Packet + 2) = static_cast<uint32>(PartyId);
+	Packet[6] = bAccept ? 1 : 0;
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendLeaveParty()
+{
+	// CZ_REQ_LEAVE_GROUP 0x0100 (2 bytes)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	const uint8 Packet[2] = { 0x00, 0x01 };
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendPartyExpel(int32 AccountId, const FString& CharName)
+{
+	// CZ_REQ_EXPEL_GROUP_MEMBER 0x0103 <aid>.L <nome>.24B (30 bytes)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	uint8 Packet[30] = { 0x03, 0x01 };
+	*reinterpret_cast<uint32*>(Packet + 2) = static_cast<uint32>(AccountId);
+	FTCHARToUTF8 Utf8(*CharName);
+	FMemory::Memcpy(Packet + 6, Utf8.Get(), FMath::Min<int32>(Utf8.Length(), 23));
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendPartyChangeLeader(int32 AccountId)
+{
+	// CZ_PARTY_CHANGE_LEADER 0x07da <aid>.L (6 bytes)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	uint8 Packet[6] = { 0xda, 0x07 };
+	*reinterpret_cast<uint32*>(Packet + 2) = static_cast<uint32>(AccountId);
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+void URagnarokNetworkSubsystem::HandlePartyPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
+{
+	auto Say = [this](const FString& Text) { OnChatMessage.Broadcast(TEXT(""), Text, TEXT("#FFFF00")); };
+	auto FindMember = [this](int32 Aid) -> FRoPartyMember*
+	{
+		return PartyMembers.FindByPredicate([Aid](const FRoPartyMember& M) { return M.AccountId == Aid; });
+	};
+	switch (PacketID)
+	{
+	case 0x00fa: // <resultado>.B
+	{
+		const uint8 R = PacketSize >= 3 ? PacketData[2] : 0;
+		switch (R)
+		{
+		case 0: Say(TEXT("Grupo criado.")); break;
+		case 1: Say(TEXT("Já existe um grupo com esse nome.")); break;
+		case 2: Say(TEXT("Você já está em um grupo.")); break;
+		case 3: Say(TEXT("Não é possível criar um grupo neste mapa.")); break;
+		default: break;
+		}
+		break;
+	}
+	case 0x0ae4: // <aid>.L <gid>.L <lider>.L <classe>.W <nivel>.W <x>.W <y>.W <offline>.B <grupo>.24B <nome>.24B <mapa>.16B <pegar>.B <dividir>.B
+		if (PacketSize >= 89)
+		{
+			const int32 Aid = *reinterpret_cast<const int32*>(PacketData + 2);
+			FRoPartyMember* M = FindMember(Aid);
+			if (!M)
+			{
+				M = &PartyMembers.AddDefaulted_GetRef();
+				M->AccountId = Aid;
+			}
+			M->bLeader = *reinterpret_cast<const uint32*>(PacketData + 10) == 0; // 0 = lider
+			M->ClassId = *reinterpret_cast<const uint16*>(PacketData + 14);
+			M->Level = *reinterpret_cast<const uint16*>(PacketData + 16);
+			M->X = *reinterpret_cast<const int16*>(PacketData + 18);
+			M->Y = *reinterpret_cast<const int16*>(PacketData + 20);
+			M->bOffline = PacketData[22] != 0;
+			PartyName = PartyFixed(PacketData + 23, 24);
+			M->Name = PartyFixed(PacketData + 47, 24);
+			M->Map = PartyFixed(PacketData + 71, 16);
+			OnPartyChanged.Broadcast();
+		}
+		break;
+	case 0x0ae5: // <len>.W <grupo>.24B { <aid>.L <gid>.L <nome>.24B <mapa>.16B <lider>.B <offline>.B <classe>.W <nivel>.W }* (54 bytes)
+	{
+		TArray<FRoPartyMember> Old = MoveTemp(PartyMembers);
+		PartyMembers.Reset();
+		PartyName = PartyFixed(PacketData + 4, 24);
+		for (int32 Off = 28; Off + 54 <= PacketSize; Off += 54)
+		{
+			FRoPartyMember M;
+			M.AccountId = *reinterpret_cast<const int32*>(PacketData + Off);
+			M.Name = PartyFixed(PacketData + Off + 8, 24);
+			M.Map = PartyFixed(PacketData + Off + 32, 16);
+			M.bLeader = PacketData[Off + 48] == 0;
+			M.bOffline = PacketData[Off + 49] != 0;
+			M.ClassId = *reinterpret_cast<const uint16*>(PacketData + Off + 50);
+			M.Level = *reinterpret_cast<const uint16*>(PacketData + Off + 52);
+			if (const FRoPartyMember* Prev = Old.FindByPredicate([&M](const FRoPartyMember& O) { return O.AccountId == M.AccountId; }))
+			{
+				M.Hp = Prev->Hp;
+				M.MaxHp = Prev->MaxHp;
+				M.X = Prev->X;
+				M.Y = Prev->Y;
+				M.bDead = Prev->bDead;
+			}
+			PartyMembers.Add(M);
+		}
+		OnPartyChanged.Broadcast();
+		break;
+	}
+	case 0x02c6: // <id do grupo>.L <nome do grupo>.24B
+		if (PacketSize >= 30)
+		{
+			OnPartyInvite.Broadcast(*reinterpret_cast<const int32*>(PacketData + 2), PartyFixed(PacketData + 6, 24));
+		}
+		break;
+	case 0x02c5: // <nome>.24B <resultado>.L
+		if (PacketSize >= 30)
+		{
+			const FString Who = PartyFixed(PacketData + 2, 24);
+			FString Text;
+			switch (*reinterpret_cast<const int32*>(PacketData + 26))
+			{
+			case 0: Text = FString::Printf(TEXT("%s já está em um grupo."), *Who); break;
+			case 1: Text = FString::Printf(TEXT("%s recusou o convite."), *Who); break;
+			case 2: Text = FString::Printf(TEXT("%s aceitou o convite."), *Who); break;
+			case 3: Text = TEXT("O grupo está cheio."); break;
+			case 4: Text = FString::Printf(TEXT("Outro personagem da conta de %s já está no grupo."), *Who); break;
+			case 5: Text = FString::Printf(TEXT("%s não aceita convites de grupo."), *Who); break;
+			case 7: Text = TEXT("Esse jogador não está conectado."); break;
+			case 8: Text = FString::Printf(TEXT("%s está em um mapa onde não se pode entrar em grupo."), *Who); break;
+			case 9: Text = TEXT("Não é possível entrar em grupo neste mapa."); break;
+			case 10: Text = TEXT("Não é possível convidar ou expulsar em uma masmorra de memória."); break;
+			case 11: Text = FString::Printf(TEXT("%s tem um nível que não pode entrar no grupo."), *Who); break;
+			default: break;
+			}
+			if (!Text.IsEmpty())
+			{
+				Say(Text);
+			}
+		}
+		break;
+	case 0x0105: // <aid>.L <nome>.24B <resultado>.B (0 saiu, 1 expulso)
+		if (PacketSize >= 31)
+		{
+			const int32 Aid = *reinterpret_cast<const int32*>(PacketData + 2);
+			const FString Who = PartyFixed(PacketData + 6, 24);
+			const bool bExpelled = PacketData[30] == 1;
+			if (static_cast<uint32>(Aid) == SavedAccountID)
+			{
+				PartyMembers.Reset();
+				PartyName.Reset();
+				Say(bExpelled ? TEXT("Você foi expulso do grupo.") : TEXT("Você saiu do grupo."));
+			}
+			else
+			{
+				PartyMembers.RemoveAll([Aid](const FRoPartyMember& M) { return M.AccountId == Aid; });
+				Say(bExpelled ? FString::Printf(TEXT("%s foi expulso do grupo."), *Who) : FString::Printf(TEXT("%s saiu do grupo."), *Who));
+			}
+			OnPartyChanged.Broadcast();
+		}
+		break;
+	case 0x080e: // <aid>.L <pv>.L <pv max>.L
+		if (PacketSize >= 14)
+		{
+			if (FRoPartyMember* M = FindMember(*reinterpret_cast<const int32*>(PacketData + 2)))
+			{
+				M->Hp = *reinterpret_cast<const int32*>(PacketData + 6);
+				M->MaxHp = *reinterpret_cast<const int32*>(PacketData + 10);
+				OnPartyChanged.Broadcast();
+			}
+		}
+		break;
+	case 0x0107: // <aid>.L <x>.W <y>.W
+		if (PacketSize >= 10)
+		{
+			if (FRoPartyMember* M = FindMember(*reinterpret_cast<const int32*>(PacketData + 2)))
+			{
+				M->X = *reinterpret_cast<const int16*>(PacketData + 6);
+				M->Y = *reinterpret_cast<const int16*>(PacketData + 8);
+			}
+		}
+		break;
+	case 0x0ab2: // <aid>.L <morto>.B
+		if (PacketSize >= 7)
+		{
+			if (FRoPartyMember* M = FindMember(*reinterpret_cast<const int32*>(PacketData + 2)))
+			{
+				M->bDead = PacketData[6] != 0;
+				OnPartyChanged.Broadcast();
+			}
+		}
+		break;
+	default:
+		break;
+	}
+}
+
 
 void URagnarokNetworkSubsystem::HandleShopPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
 {

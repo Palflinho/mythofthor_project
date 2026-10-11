@@ -67,6 +67,8 @@ private:
 	UFUNCTION() void HandleShopResult(bool bSell, int32 Result);
 	UFUNCTION() void HandleStorageOpen(const TArray<FRagnarokInventoryItem>& Items);
 	UFUNCTION() void HandleStorageChanged(const TArray<FRagnarokInventoryItem>& Items);
+	UFUNCTION() void HandlePartyChanged();
+	UFUNCTION() void HandlePartyInvite(int32 PartyId, const FString& PartyName);
 	UFUNCTION() void HandleStorageClose();
 	UFUNCTION() void HandleSpeech(int64 UnitID, const FString& Text);
 	UFUNCTION() void HandleEmotion(int64 UnitID, int32 EmotionType);

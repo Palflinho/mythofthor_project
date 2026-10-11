@@ -28,7 +28,7 @@ namespace
 		TMap<int32, TObjectPtr<UTexture2D>> Textures; // imagem do .spr -> textura (mantida viva)
 	};
 
-	FEmotionData& Data()
+	FEmotionData& EmotionAssets()
 	{
 		static FEmotionData D;
 		if (!D.bLoaded)
@@ -86,7 +86,7 @@ AMythEmotion::AMythEmotion()
 
 void AMythEmotion::Show(AActor* Owner, int32 Type)
 {
-	FEmotionData& D = Data();
+	FEmotionData& D = EmotionAssets();
 	if (!Owner || !Owner->GetWorld() || !D.bOk || !D.Act.Actions.IsValidIndex(Type) || D.Act.Actions[Type].Frames.Num() == 0)
 	{
 		return;
@@ -129,7 +129,7 @@ void AMythEmotion::Tick(float DeltaSeconds)
 		Destroy();
 		return;
 	}
-	FEmotionData& D = Data();
+	FEmotionData& D = EmotionAssets();
 	const FRoActAction& Act = D.Act.Actions[Action];
 	const int32 FrameIdx = FMath::Min(FMath::FloorToInt(Age / FrameSeconds), Act.Frames.Num() - 1);
 	const FRoActFrame& Frame = Act.Frames[FrameIdx];

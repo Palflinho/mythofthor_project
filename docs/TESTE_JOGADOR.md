@@ -36,6 +36,9 @@ NOVO nesta versao
 - Loja de NPC: va ate o Chef Assistant de Prontera (156,212), clique nele. Abre "Comprar / Vender / Cancelar". Comprar:
   clique num item da vitrine (soma 1; Shift soma 10), clique na cesta para tirar, "Comprar" confirma. O zeny e o peso
   mudam. Dica: @zeny 5000. Vender: o mesmo, com os itens do seu inventario. Esc ou Cancelar fecha.
+- Grupo: Alt+Z abre a janela. /organize NomeDoGrupo cria; /invite NomePersonagem convida (o outro ve um aviso com Aceitar/Recusar);
+  /leave sai; o lider ve "Expulsar" ao lado dos membros. % mensagem fala no grupo. Precisa de 2 jogadores (a conta
+  mythclaude2 / personagem ClaudeTester2 existe para isso). Obs.: criar grupo no servidor exige a skill Habilidades Basicas.
 - Corrigido: personagens, NPCs e monstros flutuando (o chao agora ignora as caixas de clique).
 - Tremor de tela agora tambem no Punho Supremo de Asura (150 ms, mais forte).
 

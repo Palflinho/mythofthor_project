@@ -99,6 +99,38 @@ bool UMythRoHUDWidget::HandleChatCommand(const FString& Msg)
 		if (Type >= 0 && bOnline) { Net->SendEmotion(Type); }
 		return true;
 	}
+	// Grupo: /organize "nome", /invite nome, /leave, /expulsar nome
+	if (Cmd == TEXT("organize") || Cmd == TEXT("invite") || Cmd == TEXT("leave") || Cmd == TEXT("expel"))
+	{
+		if (!bOnline) { Offline(); return true; }
+		FString Arg = Args;
+		Arg.TrimQuotesInline();
+		if (Cmd == TEXT("leave"))
+		{
+			Net->SendLeaveParty();
+		}
+		else if (Arg.IsEmpty())
+		{
+			AddChatLine(Cmd == TEXT("organize") ? TEXT("Uso: /organize \"nome do grupo\"") : TEXT("Uso: /invite nome do personagem"), FLinearColor(1.f, 0.4f, 0.4f));
+		}
+		else if (Cmd == TEXT("organize"))
+		{
+			Net->SendCreateParty(Arg);
+		}
+		else if (Cmd == TEXT("invite"))
+		{
+			Net->SendPartyInvite(Arg);
+		}
+		else if (const FRoPartyMember* M = Net->GetPartyMembers().FindByPredicate([&Arg](const FRoPartyMember& P) { return P.Name.Equals(Arg, ESearchCase::IgnoreCase); }))
+		{
+			Net->SendPartyExpel(M->AccountId, M->Name);
+		}
+		else
+		{
+			AddChatLine(TEXT("Esse personagem não está no seu grupo."), FLinearColor(1.f, 0.4f, 0.4f));
+		}
+		return true;
+	}
 	if (PC && PC->RunSlashCommand(Cmd, Args))
 	{
 		return true;

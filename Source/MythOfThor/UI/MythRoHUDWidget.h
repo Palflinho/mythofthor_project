@@ -46,7 +46,8 @@ enum class EMythRoWindow : uint8
 	Equip,    // Alt+Q: equipamento
 	Skills,   // Alt+S: habilidades
 	Basic,    // Alt+V: informacoes basicas
-	Minimap   // Ctrl+Tab: minimapa
+	Minimap,  // Ctrl+Tab: minimapa
+	Party     // Alt+Z: grupo
 };
 
 /** Barra de medidor classica (gze*_left/mid/right sobre gze_bg): o meio estica conforme a fracao. */
@@ -366,6 +367,29 @@ protected:
 	void RefreshGraphicsWindow();
 	void StepGraphicsOption(int32 Row, int32 Delta);
 	bool HandleGameMenuClick(const FVector2D& ScreenPos);
+	// Grupo (MythRoParty.cpp)
+public:
+	void RefreshParty();
+	void ShowPartyInvite(int32 PartyId, const FString& PartyName);
+	void AnswerPartyInvite(bool bAccept);
+protected:
+	void BuildPartyWindow();
+	bool HandlePartyClick(const FVector2D& ScreenPos);
+	static constexpr int32 PartyRowCount = 12;
+	UPROPERTY() TObjectPtr<UCanvasPanel> PartyWindow;
+	UPROPERTY() TObjectPtr<UCanvasPanel> PartyInviteWindow;
+	UPROPERTY() TObjectPtr<UTextBlock> PartyNameText;
+	UPROPERTY() TObjectPtr<UTextBlock> PartyLeaveLink;
+	UPROPERTY() TObjectPtr<UTextBlock> PartyInviteText;
+	UPROPERTY() TObjectPtr<UTextBlock> PartyAcceptLink;
+	UPROPERTY() TObjectPtr<UTextBlock> PartyDeclineLink;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> PartyRowNames;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> PartyRowInfo;
+	UPROPERTY() TArray<TObjectPtr<UImage>> PartyBarBg;
+	UPROPERTY() TArray<TObjectPtr<UImage>> PartyBarFill;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> PartyExpelLinks;
+	int32 PendingPartyId = 0;
+
 	// Armazem da Kafra (MythRoStorage.cpp, docs/ref/15; pacotes conferidos no clif.cpp)
 public:
 	void OpenStorage();

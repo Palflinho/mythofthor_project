@@ -141,6 +141,10 @@ public:
 	UFUNCTION(Exec)
 	void MythStore(int32 ToStorage, int32 Row, int32 Qty);
 
+	/** Teste do grupo: MythPartyAnswer 1 aceita o convite recebido, 0 recusa. */
+	UFUNCTION(Exec)
+	void MythPartyAnswer(int32 Accept);
+
 	/** Teste: MythDropFirst [quantidade] -> joga no chao o primeiro item nao equipado da mochila (CZ_ITEM_THROW). */
 	UFUNCTION(Exec)
 	void MythDropFirst(int32 Amount = 1);
@@ -338,6 +342,7 @@ private:
 	bool IsAltDown() const;
 	void ToggleHudWindow(EMythRoWindow Window);
 	void OnHotkeyStatus();
+	void OnHotkeyParty();
 	void OnHotkeyItems();
 	void OnHotkeyEquip();
 	void OnHotkeySkills();

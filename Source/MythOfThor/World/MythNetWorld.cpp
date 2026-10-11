@@ -206,6 +206,8 @@ void AMythNetWorld::BeginPlay()
 	Net->OnShopResult.AddDynamic(this, &AMythNetWorld::HandleShopResult);
 	Net->OnStorageOpen.AddDynamic(this, &AMythNetWorld::HandleStorageOpen);
 	Net->OnStorageChanged.AddDynamic(this, &AMythNetWorld::HandleStorageChanged);
+	Net->OnPartyChanged.AddDynamic(this, &AMythNetWorld::HandlePartyChanged);
+	Net->OnPartyInvite.AddDynamic(this, &AMythNetWorld::HandlePartyInvite);
 	Net->OnStorageClose.AddDynamic(this, &AMythNetWorld::HandleStorageClose);
 	Net->OnSpeech.AddDynamic(this, &AMythNetWorld::HandleSpeech);
 	Net->OnEmotion.AddDynamic(this, &AMythNetWorld::HandleEmotion);
@@ -268,6 +270,8 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnShopSellList.RemoveAll(this);
 		Net->OnShopResult.RemoveAll(this);
 		Net->OnStorageOpen.RemoveAll(this);
+		Net->OnPartyChanged.RemoveAll(this);
+		Net->OnPartyInvite.RemoveAll(this);
 		Net->OnStorageChanged.RemoveAll(this);
 		Net->OnStorageClose.RemoveAll(this);
 		Net->OnSpeech.RemoveAll(this);
@@ -716,6 +720,22 @@ void AMythNetWorld::HandleStorageChanged(const TArray<FRagnarokInventoryItem>&)
 	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
 	{
 		PC->GetHud()->RefreshStorage();
+	}
+}
+
+void AMythNetWorld::HandlePartyChanged()
+{
+	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
+	{
+		PC->GetHud()->RefreshParty();
+	}
+}
+
+void AMythNetWorld::HandlePartyInvite(int32 PartyId, const FString& PartyName)
+{
+	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
+	{
+		PC->GetHud()->ShowPartyInvite(PartyId, PartyName);
 	}
 }
 

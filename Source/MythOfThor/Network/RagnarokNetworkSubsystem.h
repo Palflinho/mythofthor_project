@@ -349,6 +349,23 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnUnitOption, int64, UnitID, int32
 /** ZC_RESURRECTION (0x0148): a unidade voltou a vida. */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUnitRevive, int64, UnitID);
 
+/** Membro do grupo como o servidor informa (0x0ae5 lista, 0x0ae4 entrada, 0x080e PV, 0x0107 posicao, 0x0ab2 morte). */
+struct FRoPartyMember
+{
+	int32 AccountId = 0;
+	FString Name;
+	FString Map;
+	bool bLeader = false;
+	bool bOffline = false;
+	bool bDead = false;
+	int32 ClassId = 0;
+	int32 Level = 0;
+	int32 Hp = 0;
+	int32 MaxHp = 0;
+	int32 X = 0;
+	int32 Y = 0;
+};
+
 /** Fala publica (0x008d de outros, 0x008e propria) para o balao sobre a cabeca, e emocao (0x00c0). */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSpeech, int64, UnitID, const FString&, Text);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnEmotion, int64, UnitID, int32, EmotionType);
@@ -363,6 +380,10 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnShopDealType, int64, NpcID);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnShopBuyList, const TArray<FRagnarokShopItem>&, Items);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnShopSellList, const TArray<FRagnarokShopItem>&, Items);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnShopResult, bool, bSell, int32, Result);
+
+/** Grupo (clif.cpp party): a lista mudou (membros, PV, posicao, lider) ou o convite chegou / o resultado do convite. */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPartyChanged);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPartyInvite, int32, PartyId, const FString&, PartyName);
 
 // Delegates de compatibilidade anterior
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerMoveConfirmed, int32, TargetX, int32, TargetY);
@@ -445,6 +466,14 @@ public:
 	bool SendShopBuy(const TArray<TPair<int32, int32>>& ItemIdAmount);
 	bool SendShopSell(const TArray<TPair<int32, int32>>& IndexAmount);
 	bool SendShopClose();
+
+	/** Grupo: criar (0x01e8), convidar pelo nome (0x02c4), responder ao convite (0x02c7), sair (0x0100), expulsar (0x0103), passar a lideranca (0x07da). */
+	bool SendCreateParty(const FString& Name);
+	bool SendPartyInvite(const FString& CharName);
+	bool SendPartyInviteReply(int32 PartyId, bool bAccept);
+	bool SendLeaveParty();
+	bool SendPartyExpel(int32 AccountId, const FString& CharName);
+	bool SendPartyChangeLeader(int32 AccountId);
 
 	/**
 	 * Envia requisição de ação/ataque básico para o Map-Server (CZ_REQUEST_ACT 0x088E / 0x0360).
@@ -565,6 +594,10 @@ public:
 	int32 GetStorageCount() const { return StorageCount; }
 	int32 GetStorageMax() const { return StorageMax; }
 
+	bool IsInParty() const { return !PartyName.IsEmpty(); }
+	const FString& GetPartyName() const { return PartyName; }
+	const TArray<FRoPartyMember>& GetPartyMembers() const { return PartyMembers; }
+
 	UFUNCTION(BlueprintPure, Category = "Ragnarok|Network")
 	const TArray<FRagnarokSkillInfo>& GetSkillList() const { return SkillList; }
 
@@ -655,6 +688,8 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Storage") FOnStorageOpen OnStorageOpen;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Storage") FOnStorageChanged OnStorageChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Storage") FOnStorageClose OnStorageClose;
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Party") FOnPartyChanged OnPartyChanged;
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Party") FOnPartyInvite OnPartyInvite;
 
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
 	FOnUnitVanish OnUnitVanish;
@@ -773,6 +808,9 @@ private:
 	TArray<FRagnarokInventoryItem> StorageItems;
 	int32 StorageCount = 0;
 	int32 StorageMax = 300;
+
+	FString PartyName;
+	TArray<FRoPartyMember> PartyMembers;
 	TArray<FRagnarokSkillInfo> SkillList;
 
 	bool ConnectToPort(const FString& Host, int32 Port, ERagnarokNetworkState NewState);
@@ -830,6 +868,7 @@ private:
 	void HandleChatExtras(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleStoragePacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleShopPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	void HandlePartyPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleSkillUnitAppear(const uint8* PacketData, int32 PacketSize);
 	void HandleSkillUnitDisappear(const uint8* PacketData, int32 PacketSize);
 	void HandleNotifyEffect(const uint8* PacketData, int32 PacketSize);
