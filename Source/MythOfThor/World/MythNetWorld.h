@@ -76,6 +76,7 @@ private:
 	UFUNCTION() void HandleChatRoomChanged();
 	UFUNCTION() void HandleQuestsChanged();
 	UFUNCTION() void HandleBankChanged();
+	UFUNCTION() void HandleEquipSwitchChanged();
 	UFUNCTION() void HandleSpiritBalls(int64 UnitID, int32 Count);
 	UFUNCTION() void HandleAchievementsChanged();
 	UFUNCTION() void HandleFriendRequest(int32 AccountId, int32 CharId, const FString& Name);

@@ -194,6 +194,7 @@ void AMythPlayerController::SetupInputComponent()
 	InputComponent->BindKey(FInputChord(EKeys::C, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyChatRoom);
 	InputComponent->BindKey(FInputChord(EKeys::U, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyQuests);
 	InputComponent->BindKey(EKeys::F12, IE_Pressed, this, &AMythPlayerController::OnHotkeyShortcuts);
+	InputComponent->BindKey(FInputChord(EKeys::W, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyEquipSwitch);
 	InputComponent->BindKey(FInputChord(EKeys::Y, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyAchievements);
 	InputComponent->BindKey(FInputChord(EKeys::B, false, true, false, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyBank);
 	InputComponent->BindKey(FInputChord(EKeys::Tab, false, true, false, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyMinimap);
@@ -582,6 +583,7 @@ void AMythPlayerController::ToggleHudWindow(EMythRoWindow Window)
 
 void AMythPlayerController::OnHotkeyEmotions() { ToggleHudWindow(EMythRoWindow::Emotions); }
 void AMythPlayerController::OnHotkeyAchievements() { ToggleHudWindow(EMythRoWindow::Achievements); }
+void AMythPlayerController::OnHotkeyEquipSwitch() { ToggleHudWindow(EMythRoWindow::EquipSwitch); }
 void AMythPlayerController::OnHotkeyBank() { ToggleHudWindow(EMythRoWindow::Bank); }
 void AMythPlayerController::OnHotkeyShortcuts() { ToggleHudWindow(EMythRoWindow::Shortcuts); }
 void AMythPlayerController::OnHotkeyQuests() { ToggleHudWindow(EMythRoWindow::Quests); }
@@ -1889,5 +1891,20 @@ void AMythPlayerController::MythBank(int32 Op, int32 Amount)
 	if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>())
 	{
 		N->SendBankCommand(Op == 1 ? 0x09a7 : 0x09a9, Amount);
+	}
+}
+
+void AMythPlayerController::MythSwitch(int32 Op)
+{
+	URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>();
+	if (!N) { return; }
+	if (Op == 1) { N->SendEquipSwitchAll(); return; }
+	for (const FRagnarokInventoryItem& It : N->GetInventoryItems())
+	{
+		if ((It.Type == 4 || It.Type == 5) && !It.bIsEquipped && It.EquipLocation != 0)
+		{
+			N->SendEquipSwitchAdd(It.Index, It.EquipLocation);
+			break;
+		}
 	}
 }

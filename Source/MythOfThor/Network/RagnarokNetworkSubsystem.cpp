@@ -972,6 +972,12 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x00df: // ZC_CHANGE_CHATROOM
 				HandleChatRoomPacket(PacketData, ActualLen, PacketID);
 				break;
+			case 0x0a9b: // ZC_EQUIPWIN_MICROSCOPE... lista da troca rapida
+			case 0x0a98: // ack incluir
+			case 0x0a9a: // ack remover
+			case 0x0a9d: // ack trocar tudo
+				HandleEquipSwitchPacket(PacketData, ActualLen, PacketID);
+				break;
 			case 0x0a23: // ZC_ALL_ACH_LIST
 			case 0x0a24: // ZC_ACH_UPDATE
 			case 0x0a26: // ZC_REQ_ACH_REWARD_ACK
@@ -3281,6 +3287,94 @@ bool URagnarokNetworkSubsystem::SendAchievementReward(int32 AchievementId)
 	SendData(Packet, sizeof(Packet));
 	return true;
 }
+
+// ---- Troca rapida de equipamento (clif_equipswitch_*; 0x0a97 adicionar, 0x0a99 remover, 0x0a9c trocar tudo) ----
+
+bool URagnarokNetworkSubsystem::SendEquipSwitchAdd(int32 ItemIndex, int32 Position)
+{
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	uint8 Packet[8] = { 0x97, 0x0a };
+	*reinterpret_cast<uint16*>(Packet + 2) = static_cast<uint16>(ItemIndex);
+	*reinterpret_cast<uint32*>(Packet + 4) = static_cast<uint32>(Position);
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendEquipSwitchRemove(int32 ItemIndex)
+{
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	uint8 Packet[4] = { 0x99, 0x0a };
+	*reinterpret_cast<uint16*>(Packet + 2) = static_cast<uint16>(ItemIndex);
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendEquipSwitchAll()
+{
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	const uint8 Packet[2] = { 0x9c, 0x0a };
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+void URagnarokNetworkSubsystem::HandleEquipSwitchPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
+{
+	auto Say = [this](const FString& Text) { OnChatMessage.Broadcast(TEXT(""), Text, TEXT("#FFFF00")); };
+	switch (PacketID)
+	{
+	case 0x0a9b: // <len>.W { <indice>.W <posicao>.L }*
+		EquipSwitch.Reset();
+		for (int32 Off = 4; Off + 6 <= PacketSize; Off += 6)
+		{
+			EquipSwitch.Add(FIntPoint(*reinterpret_cast<const uint16*>(PacketData + Off), *reinterpret_cast<const int32*>(PacketData + Off + 2)));
+		}
+		OnEquipSwitchChanged.Broadcast();
+		break;
+	case 0x0a98: // adicionou: <indice>.W <posicao>.L <resultado>.W (0 = ok)
+		if (PacketSize >= 10)
+		{
+			const int32 Index = *reinterpret_cast<const uint16*>(PacketData + 2);
+			const int32 Pos = *reinterpret_cast<const int32*>(PacketData + 4);
+			if (*reinterpret_cast<const uint16*>(PacketData + 8) == 0)
+			{
+				EquipSwitch.RemoveAll([Index](const FIntPoint& P) { return P.X == Index; });
+				EquipSwitch.Add(FIntPoint(Index, Pos));
+			}
+			else
+			{
+				Say(TEXT("Não foi possível colocar esse item na troca rápida."));
+			}
+			OnEquipSwitchChanged.Broadcast();
+		}
+		break;
+	case 0x0a9a: // removeu: <indice>.W <posicao>.L <falhou>.W
+		if (PacketSize >= 10 && *reinterpret_cast<const uint16*>(PacketData + 8) == 0)
+		{
+			const int32 Index = *reinterpret_cast<const uint16*>(PacketData + 2);
+			EquipSwitch.RemoveAll([Index](const FIntPoint& P) { return P.X == Index; });
+			OnEquipSwitchChanged.Broadcast();
+		}
+		break;
+	case 0x0a9d: // resultado da troca completa: <falhou>.W
+		if (PacketSize >= 4 && *reinterpret_cast<const uint16*>(PacketData + 2) != 0)
+		{
+			Say(TEXT("Não há item para trocar."));
+		}
+		break;
+	default:
+		break;
+	}
+}
+
 
 void URagnarokNetworkSubsystem::HandleAchievementPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
 {

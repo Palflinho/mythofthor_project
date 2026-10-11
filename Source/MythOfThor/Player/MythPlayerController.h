@@ -198,6 +198,10 @@ public:
 	UFUNCTION(Exec)
 	void MythCharSelect() { if (HudWidget) { HudWidget->ReturnToCharacterSelect(); } }
 
+	/** Teste: MythSwitch 0 poe o primeiro equipamento solto na troca rapida; MythSwitch 1 troca tudo. */
+	UFUNCTION(Exec)
+	void MythSwitch(int32 Op);
+
 	/** Teste: MythBank 1 500 deposita, MythBank 2 200 saca. */
 	UFUNCTION(Exec)
 	void MythBank(int32 Op, int32 Amount);
@@ -375,6 +379,7 @@ private:
 	void OnHotkeyQuests();
 	void OnHotkeyShortcuts();
 	void OnHotkeyBank();
+	void OnHotkeyEquipSwitch();
 	void OnHotkeyAchievements();
 	void OnHotkeyItems();
 	void OnHotkeyEquip();

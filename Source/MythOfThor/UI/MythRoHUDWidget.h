@@ -56,7 +56,8 @@ enum class EMythRoWindow : uint8
 	Quests,   // Alt+U: missoes
 	Shortcuts, // F12: tabela de teclas
 	Bank,     // Ctrl+B: banco
-	Achievements // Alt+Y: conquistas
+	Achievements, // Alt+Y: conquistas
+	EquipSwitch // Alt+W: troca rapida
 };
 
 /** Barra de medidor classica (gze*_left/mid/right sobre gze_bg): o meio estica conforme a fracao. */
@@ -437,6 +438,17 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardName;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo2;
+
+	// Troca rapida (MythRoEquipSwitch.cpp)
+public:
+	void RefreshEquipSwitch();
+protected:
+	void BuildEquipSwitchWindow();
+	bool HandleEquipSwitchClick(const FVector2D& ScreenPos);
+	UPROPERTY() TObjectPtr<UCanvasPanel> EquipSwitchWindow;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EsNames;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EsRemove;
+	UPROPERTY() TObjectPtr<UTextBlock> EsSwitchAll;
 
 	// Conquistas (MythRoAchievements.cpp)
 public:

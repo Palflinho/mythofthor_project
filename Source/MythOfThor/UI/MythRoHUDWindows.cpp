@@ -284,6 +284,7 @@ void UMythRoHUDWidget::ToggleWindow(EMythRoWindow Window)
 	case EMythRoWindow::ChatRoom: OpenChatRoomWindow(); return;
 	case EMythRoWindow::Bank: OpenBankWindow(); return;
 	case EMythRoWindow::Achievements: OpenAchievementWindow(); return;
+	case EMythRoWindow::EquipSwitch: Target = EquipSwitchWindow; break;
 	case EMythRoWindow::Quests: Target = QuestWindow; break;
 	case EMythRoWindow::Shortcuts: Target = ShortcutWindow; break;
 	}
@@ -364,6 +365,7 @@ void UMythRoHUDWidget::RefreshWindows()
 	if (QuestWindow && QuestWindow->IsVisible()) { RefreshQuests(); }
 	if (BankWindow && BankWindow->IsVisible()) { RefreshBank(); }
 	if (AchievementWindow && AchievementWindow->IsVisible()) { RefreshAchievements(); }
+	if (EquipSwitchWindow && EquipSwitchWindow->IsVisible()) { RefreshEquipSwitch(); }
 }
 
 void UMythRoHUDWidget::RefreshStatusWindow()
@@ -706,6 +708,10 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 	{
 		return true;
 	}
+	if (HandleEquipSwitchClick(ScreenPos))
+	{
+		return true;
+	}
 	if (HandleEmotionClick(ScreenPos))
 	{
 		return true;
@@ -866,7 +872,14 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDoubleClick(const FGeometry& InGeome
 				{
 					if (RoItemTab(Item.Type) == 1)
 					{
-						Net->EquipItem(Item.Index, Item.EquipLocation);
+						if (InMouseEvent.IsControlDown())
+						{
+							Net->SendEquipSwitchAdd(Item.Index, Item.EquipLocation); // Ctrl + duplo clique: vai para a troca rapida
+						}
+						else
+						{
+							Net->EquipItem(Item.Index, Item.EquipLocation);
+						}
 					}
 					else if (RoItemTab(Item.Type) == 0)
 					{

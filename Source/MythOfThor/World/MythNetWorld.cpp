@@ -216,6 +216,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnChatRoomChanged.AddDynamic(this, &AMythNetWorld::HandleChatRoomChanged);
 	Net->OnQuestsChanged.AddDynamic(this, &AMythNetWorld::HandleQuestsChanged);
 	Net->OnBankChanged.AddDynamic(this, &AMythNetWorld::HandleBankChanged);
+	Net->OnEquipSwitchChanged.AddDynamic(this, &AMythNetWorld::HandleEquipSwitchChanged);
 	Net->OnSpiritBalls.AddDynamic(this, &AMythNetWorld::HandleSpiritBalls);
 	Net->OnAchievementsChanged.AddDynamic(this, &AMythNetWorld::HandleAchievementsChanged);
 	Net->OnFriendRequest.AddDynamic(this, &AMythNetWorld::HandleFriendRequest);
@@ -304,6 +305,7 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnChatRoomChanged.RemoveAll(this);
 		Net->OnQuestsChanged.RemoveAll(this);
 		Net->OnBankChanged.RemoveAll(this);
+		Net->OnEquipSwitchChanged.RemoveAll(this);
 		Net->OnSpiritBalls.RemoveAll(this);
 		Net->OnAchievementsChanged.RemoveAll(this);
 		Net->OnFriendRequest.RemoveAll(this);
@@ -939,6 +941,14 @@ void AMythNetWorld::HandleSpiritBalls(int64 UnitID, int32 Count)
 	else
 	{
 		PendingSpirits.Add(UnitID, Count);
+	}
+}
+
+void AMythNetWorld::HandleEquipSwitchChanged()
+{
+	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
+	{
+		PC->GetHud()->RefreshEquipSwitch();
 	}
 }
 

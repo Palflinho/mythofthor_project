@@ -463,6 +463,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFriendsChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnQuestsChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBankChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAchievementsChanged);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEquipSwitchChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnChatRoomChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnFriendRequest, int32, AccountId, int32, CharId, const FString&, Name);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPartyInvite, int32, PartyId, const FString&, PartyName);
@@ -581,6 +582,11 @@ public:
 
 	/** CZ_REQ_ACH_REWARD 0x0a25: pede o premio de uma conquista concluida. */
 	bool SendAchievementReward(int32 AchievementId);
+
+	/** Troca rapida de equipamento: 0x0a97 incluir, 0x0a99 remover, 0x0a9c trocar tudo. */
+	bool SendEquipSwitchAdd(int32 ItemIndex, int32 Position);
+	bool SendEquipSwitchRemove(int32 ItemIndex);
+	bool SendEquipSwitchAll();
 
 	/** Sala de chat: criar (0x00d5), entrar (0x00d9), sair (0x00e3), expulsar (0x00e2). */
 	bool SendCreateChatRoom(const FString& Title, int32 Limit, bool bPublic, const FString& Password);
@@ -715,6 +721,8 @@ public:
 	const TArray<FRoAchievement>& GetAchievements() const { return Achievements; }
 	int32 GetAchievementPoints() const { return AchievementPoints; }
 	int32 GetAchievementRank() const { return AchievementRank; }
+	/** Itens do segundo conjunto: X = indice (como no pacote), Y = posicao de equipar. */
+	const TArray<FIntPoint>& GetEquipSwitch() const { return EquipSwitch; }
 	bool IsInChatRoom() const { return bInChatRoom; }
 	const FString& GetChatRoomTitle() const { return CurrentChatRoomTitle; }
 	const TArray<FString>& GetChatRoomMembers() const { return ChatRoomMembers; }
@@ -829,6 +837,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Quests") FOnQuestsChanged OnQuestsChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Bank") FOnBankChanged OnBankChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Achievements") FOnAchievementsChanged OnAchievementsChanged;
+	FOnEquipSwitchChanged OnEquipSwitchChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|ChatRoom") FOnChatRoomChanged OnChatRoomChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Friends") FOnFriendRequest OnFriendRequest;
 
@@ -958,6 +967,7 @@ private:
 	TArray<FRoQuest> Quests;
 	int64 BankBalance = 0;
 	TArray<FRoAchievement> Achievements;
+	TArray<FIntPoint> EquipSwitch;
 	int32 AchievementPoints = 0;
 	int32 AchievementRank = 0;
 	bool bBankOpen = false;
@@ -1041,6 +1051,7 @@ private:
 	void HandleQuestPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleBankPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleAchievementPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	void HandleEquipSwitchPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleChatRoomPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleSkillUnitAppear(const uint8* PacketData, int32 PacketSize);
 	void HandleSkillUnitDisappear(const uint8* PacketData, int32 PacketSize);
