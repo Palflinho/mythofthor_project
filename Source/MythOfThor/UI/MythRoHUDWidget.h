@@ -155,6 +155,8 @@ protected:
 	virtual void NativeOnInitialized() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	void UpdateButtons();
+	/** Poe todas as caixas de texto no estilo do cliente (mesma fonte e tamanho do resto da interface). */
+	void StyleEditBoxes();
 	// Arrastar janelas pela barra de titulo, como no cliente original
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 	virtual FReply NativeOnPreviewKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
@@ -551,16 +553,28 @@ public:
 protected:
 	void BuildAchievementWindow();
 	bool HandleAchievementClick(const FVector2D& ScreenPos);
-	static constexpr int32 AchRowCount = 12;
 	UPROPERTY() TObjectPtr<UCanvasPanel> AchievementWindow;
 	UPROPERTY() TObjectPtr<UTextBlock> AchHeader;
+	UPROPERTY() TObjectPtr<UTextBlock> AchPoints;
+	UPROPERTY() TObjectPtr<UTextBlock> AchRank;
+	UPROPERTY() TArray<TObjectPtr<UImage>> AchTabBoxes;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> AchTabTexts;
+	UPROPERTY() TArray<TObjectPtr<UImage>> AchCards;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> AchNames;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> AchProgress;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> AchScores;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> AchClaim;
-	UPROPERTY() TObjectPtr<UTextBlock> AchPrev;
-	UPROPERTY() TObjectPtr<UTextBlock> AchNext;
-	UPROPERTY() TObjectPtr<UTextBlock> AchPage;
-	int32 AchPageIndex = 0;
+	UPROPERTY() TObjectPtr<UTextBlock> AchDetailTitle;
+	UPROPERTY() TObjectPtr<UImage> AchStamp;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> AchDetailLines;
+	UPROPERTY() TObjectPtr<UImage> AchReceive;
+	UPROPERTY() TObjectPtr<UTextBlock> AchReceiveLabel;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> AchOverview;
+	UPROPERTY() TArray<TObjectPtr<UImage>> AchOverviewBars;
+	int32 AchTab = 0;
+	int32 AchScroll = 0;
+	int32 AchSelectedId = 0;
+	bool HandleAchievementWheel(const FVector2D& ScreenPos, float Delta);
 
 	// Banco (MythRoBank.cpp)
 public:

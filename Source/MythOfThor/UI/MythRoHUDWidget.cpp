@@ -18,6 +18,8 @@
 #include "Components/VerticalBox.h"
 #include "Components/VerticalBoxSlot.h"
 #include "Framework/Application/SlateApplication.h"
+#include "Brushes/SlateRoundedBoxBrush.h"
+#include "Styling/SlateTypes.h"
 #include "GameFramework/Pawn.h"
 #include "Styling/CoreStyle.h"
 
@@ -382,6 +384,7 @@ void UMythRoHUDWidget::BuildLayout()
 	BuildMailWindows();
 	BuildEntryScreens();
 	BuildNpcDialog();
+	StyleEditBoxes();
 	AddChatLine(TEXT("Bem-vindo a Rune-Midgard."), ColSystem);
 }
 
@@ -1200,6 +1203,33 @@ void UMythRoHUDWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime
 		WindowRefreshTimer = 0.25f;
 		RefreshWindows();
 	}
+}
+
+void UMythRoHUDWidget::StyleEditBoxes()
+{
+	// Todas as caixas de texto usam a fonte da interface no mesmo tamanho dos rotulos, fundo branco com borda fina e o texto escuro
+	FTextBlockStyle TextStyle;
+	TextStyle.SetFont(FMythRoUITextures::RoFont(FMath::RoundToInt(8 * UIScale)));
+	TextStyle.SetColorAndOpacity(FSlateColor(FLinearColor(0.08f, 0.1f, 0.18f)));
+	const FSlateRoundedBoxBrush Normal(FLinearColor(1.f, 1.f, 1.f, 0.97f), 2.f, FLinearColor(0.55f, 0.6f, 0.75f, 1.f), 1.f);
+	const FSlateRoundedBoxBrush Focused(FLinearColor(1.f, 1.f, 1.f, 1.f), 2.f, FLinearColor(0.3f, 0.5f, 0.9f, 1.f), 1.f);
+	FEditableTextBoxStyle Style;
+	Style.SetTextStyle(TextStyle);
+	Style.SetBackgroundImageNormal(Normal);
+	Style.SetBackgroundImageHovered(Normal);
+	Style.SetBackgroundImageFocused(Focused);
+	Style.SetBackgroundImageReadOnly(Normal);
+	Style.SetForegroundColor(FSlateColor(FLinearColor(0.08f, 0.1f, 0.18f)));
+	Style.SetFocusedForegroundColor(FSlateColor(FLinearColor(0.08f, 0.1f, 0.18f)));
+	Style.SetPadding(FMargin(5.f, 1.f));
+	WidgetTree->ForEachWidget([&Style](UWidget* Widget)
+	{
+		if (UEditableTextBox* Box = Cast<UEditableTextBox>(Widget))
+		{
+			Box->WidgetStyle = Style;
+			Box->SynchronizeProperties();
+		}
+	});
 }
 
 void UMythRoHUDWidget::UpdateButtons()
