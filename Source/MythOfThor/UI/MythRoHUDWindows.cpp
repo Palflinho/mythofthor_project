@@ -65,8 +65,8 @@ namespace
 		}
 	}
 
-	constexpr int32 RoItemCols = 8;
-	constexpr int32 RoItemRows = 3;
+	constexpr int32 RoItemCols = 7;
+	constexpr int32 RoItemRows = 4;
 	constexpr int32 RoSkillRows = 7;
 	// Arvore de habilidades: grade de 7 colunas, celula de 40 x 46 (moldura 32, icone 24, nivel embaixo)
 	constexpr float RoTreeLeft = 8.f;
@@ -74,6 +74,12 @@ namespace
 	constexpr float RoTreeCellW = 40.f;
 	constexpr float RoTreeCellH = 46.f;
 	constexpr int32 RoTreeRows = 9;
+}
+
+// Aba da mochila de um item (print 04): 0 consumiveis, 1 equipamentos, 2 diversos e 3 favoritos (o servidor guarda a marca)
+static int32 RoItemTabOf(const FRagnarokInventoryItem& Item)
+{
+	return Item.bFavorite ? 3 : RoItemTab(Item.Type);
 }
 
 URagnarokNetworkSubsystem* UMythRoHUDWidget::GetNet() const
@@ -141,16 +147,17 @@ void UMythRoHUDWidget::BuildStatusWindow()
 
 void UMythRoHUDWidget::BuildItemsWindow()
 {
-	// Inventario (Alt+E): abas verticais (tab_itm_0N) + grade 8x3 de celulas 32x32 (itemwin_mid) + linha de info
-	const float W = 22.f + RoItemCols * 32.f + 2.f;
-	const float H = 17.f + RoItemRows * 32.f + 4.f + 16.f;
+	// Inventario (Alt+E, prints 04-07): faixa de 4 abas com icone (tab_pri_0N) a esquerda, grade de 7 x 4 celulas 32x32
+	// (itemwin_mid) e o rodape com a contagem de itens (48/100), o cadeado de descarte e a busca
+	const float W = 24.f + RoItemCols * 32.f + 6.f;
+	const float H = 17.f + RoItemRows * 32.f + 6.f + 24.f;
 	ItemsWindow = MakeRoPanel(TEXT("Itens"), FVector2D(W, H), FVector2D(340.f, -170.f));
-	ItemTabImage = AddImage(ItemsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("tab_itm_01"))), 0.f, 17.f, 20.f, 82.f);
+	ItemTabImage = AddImage(ItemsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("tab_pri_01"))), 0.f, 19.f, 21.f, 134.f);
 	UTexture2D* CellTex = FMythRoUITextures::Get(RoWinArt(TEXT("itemwin_mid")));
 	for (int32 i = 0; i < RoItemCols * RoItemRows; ++i)
 	{
-		const float X = 22.f + (i % RoItemCols) * 32.f;
-		const float Y = 19.f + (i / RoItemCols) * 32.f;
+		const float X = 24.f + (i % RoItemCols) * 32.f;
+		const float Y = 21.f + (i / RoItemCols) * 32.f;
 		UImage* Cell = AddImage(ItemsWindow, CellTex, X, Y, 32.f, 32.f);
 		Cell->SetVisibility(ESlateVisibility::Visible); // recebe hover/clique (nao passa para o jogo)
 		ItemCells.Add(Cell);
@@ -163,8 +170,13 @@ void UMythRoHUDWidget::BuildItemsWindow()
 		ItemAmounts.Add(Amount);
 		ItemCellIndex.Add(-1);
 	}
-	ItemInfoText = AddText(ItemsWindow, 24.f, H - 15.f, 7, RoWinText);
-	ItemCountText = AddText(ItemsWindow, W - 60.f, H - 15.f, 7, RoWinFaint);
+	// Rodape: livro + "n/100", cadeado, lupa de comparacao e o botao de busca
+	AddImage(ItemsWindow, FMythRoUITextures::Get(TEXT("inventory/icon_num.bmp")), 26.f, H - 20.f);
+	ItemCountText = AddText(ItemsWindow, 40.f, H - 21.f, 7, RoWinText);
+	AddImage(ItemsWindow, FMythRoUITextures::Get(TEXT("inventory/item_drop_lock_off.bmp")), 82.f, H - 19.f);
+	AddImage(ItemsWindow, FMythRoUITextures::Get(TEXT("inventory/item_compare_off.bmp")), 102.f, H - 19.f);
+	ItemInfoText = AddText(ItemsWindow, 122.f, H - 21.f, 7, RoWinFaint);
+	AddButtonEx(ItemsWindow, TEXT("inventory/btn_search_new_out.bmp"), TEXT("inventory/btn_search_new_over.bmp"), TEXT("inventory/btn_search_new_press.bmp"), W - 32.f, H - 22.f);
 }
 
 void UMythRoHUDWidget::BuildEquipWindow()
@@ -404,7 +416,7 @@ void UMythRoHUDWidget::RefreshItemsWindow()
 	const URagnarokNetworkSubsystem* Net = GetNet();
 	if (ItemTabImage)
 	{
-		ItemTabImage->SetBrush(RoWinBrush(FMythRoUITextures::Get(RoWinArt(*FString::Printf(TEXT("tab_itm_%02d"), ItemTab + 1))), FVector2D(20.f, 82.f) * UIScale));
+		ItemTabImage->SetBrush(RoWinBrush(FMythRoUITextures::Get(RoWinArt(*FString::Printf(TEXT("tab_pri_%02d"), ItemTab + 1))), FVector2D(21.f, 134.f) * UIScale));
 	}
 	int32 Cell = 0;
 	int32 Total = 0;
@@ -417,7 +429,7 @@ void UMythRoHUDWidget::RefreshItemsWindow()
 				continue; // equipados aparecem na janela de equipamento
 			}
 			++Total;
-			if (RoItemTab(Item.Type) != ItemTab || Cell >= ItemCells.Num())
+			if (RoItemTabOf(Item) != ItemTab || Cell >= ItemCells.Num())
 			{
 				continue;
 			}
@@ -853,7 +865,7 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 	{
 		const FGeometry& Geo = ItemTabImage->GetCachedGeometry();
 		const float LocalY = Geo.AbsoluteToLocal(ScreenPos).Y / FMath::Max(Geo.GetLocalSize().Y, 1.f);
-		ItemTab = FMath::Clamp(FMath::FloorToInt(LocalY * 3.f), 0, 2);
+		ItemTab = FMath::Clamp(FMath::FloorToInt(LocalY * 4.f), 0, 3);
 		RefreshItemsWindow();
 		return true;
 	}
@@ -894,7 +906,7 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDoubleClick(const FGeometry& InGeome
 			{
 				if (Item.Index == ItemCellIndex[i])
 				{
-					if (RoItemTab(Item.Type) == 1)
+					if (RoItemTabOf(Item) == 1)
 					{
 						if (InMouseEvent.IsControlDown())
 						{
@@ -905,7 +917,7 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDoubleClick(const FGeometry& InGeome
 							Net->EquipItem(Item.Index, Item.EquipLocation);
 						}
 					}
-					else if (RoItemTab(Item.Type) == 0)
+					else if (RoItemTabOf(Item) == 0)
 					{
 						Net->UseItem(Item.Index);
 					}

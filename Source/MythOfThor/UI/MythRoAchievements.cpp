@@ -72,11 +72,9 @@ void UMythRoHUDWidget::BuildAchievementWindow()
 		AchProgress.Add(AddText(AchievementWindow, 250.f, Y, 7, AcGray));
 		AchClaim.Add(AddText(AchievementWindow, AcW - 74.f, Y, 7, AcLink));
 	}
-	AchPrev = AddText(AchievementWindow, 12.f, H - 26.f, 10, AcLink);
-	AchPrev->SetText(FText::FromString(TEXT("◀ Anterior")));
+	AchPrev = AddButtonHit(AchievementWindow, TEXT("back"), 12.f, H - 30.f);
 	AchPage = AddText(AchievementWindow, AcW * 0.5f - 24.f, H - 24.f, 8, AcGray);
-	AchNext = AddText(AchievementWindow, AcW - 90.f, H - 26.f, 10, AcLink);
-	AchNext->SetText(FText::FromString(TEXT("Próxima ▶")));
+	AchNext = AddButtonHit(AchievementWindow, TEXT("next"), AcW - 56.f, H - 30.f);
 }
 
 void UMythRoHUDWidget::RefreshAchievements()

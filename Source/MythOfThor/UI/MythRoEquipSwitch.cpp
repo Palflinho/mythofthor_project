@@ -32,8 +32,7 @@ void UMythRoHUDWidget::BuildEquipSwitchWindow()
 		EsNames.Add(AddText(EquipSwitchWindow, 12.f, Y, 8, EsText));
 		EsRemove.Add(AddText(EquipSwitchWindow, EsW - 66.f, Y, 7, EsLink));
 	}
-	EsSwitchAll = AddText(EquipSwitchWindow, 90.f, H - 26.f, 10, EsLink);
-	EsSwitchAll->SetText(FText::FromString(TEXT("Trocar tudo")));
+	EsSwitchAll = AddTextButton(EquipSwitchWindow, TEXT("Trocar tudo"), 90.f, H - 30.f, 100.f);
 }
 
 void UMythRoHUDWidget::RefreshEquipSwitch()

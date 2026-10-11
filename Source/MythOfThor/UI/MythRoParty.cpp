@@ -39,16 +39,13 @@ void UMythRoHUDWidget::BuildPartyWindow()
 		Expel->SetText(FText::FromString(TEXT("Expulsar")));
 		PartyExpelLinks.Add(Expel);
 	}
-	PartyLeaveLink = AddText(PartyWindow, 8.f, H - 26.f, 9, PartyLink);
-	PartyLeaveLink->SetText(FText::FromString(TEXT("Sair do grupo")));
+	PartyLeaveLink = AddButtonHit(PartyWindow, TEXT("exit"), 8.f, H - 30.f);
 
 	// Convite recebido
 	PartyInviteWindow = MakeRoPanel(TEXT("Convite de grupo"), FVector2D(300.f, 92.f), FVector2D(0.f, -120.f));
 	PartyInviteText = AddText(PartyInviteWindow, 10.f, 26.f, 9, PartyText);
-	PartyAcceptLink = AddText(PartyInviteWindow, 60.f, 62.f, 10, PartyLink);
-	PartyAcceptLink->SetText(FText::FromString(TEXT("Aceitar")));
-	PartyDeclineLink = AddText(PartyInviteWindow, 180.f, 62.f, 10, PartyLink);
-	PartyDeclineLink->SetText(FText::FromString(TEXT("Recusar")));
+	PartyAcceptLink = AddButtonHit(PartyInviteWindow, TEXT("agree"), 50.f, 58.f);
+	PartyDeclineLink = AddButtonHit(PartyInviteWindow, TEXT("disagree"), 170.f, 58.f);
 }
 
 void UMythRoHUDWidget::RefreshParty()

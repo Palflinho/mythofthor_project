@@ -62,8 +62,7 @@ void UMythRoHUDWidget::BuildStorageWindow()
 		}
 	}
 	StorageCountText = AddText(StorageWindow, StoreColA, H - 26.f, 8, StoreGray);
-	StorageCloseLink = AddText(StorageWindow, StoreW - 70.f, H - 28.f, 9, StoreLink);
-	StorageCloseLink->SetText(FText::FromString(TEXT("Fechar")));
+	StorageCloseLink = AddButtonHit(StorageWindow, TEXT("close"), StoreW - 56.f, H - 30.f);
 	StorageWindow->SetVisibility(ESlateVisibility::Collapsed);
 }
 

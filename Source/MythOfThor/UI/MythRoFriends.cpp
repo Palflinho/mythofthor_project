@@ -37,10 +37,8 @@ void UMythRoHUDWidget::BuildFriendsWindow()
 
 	FriendAskWindow = MakeRoPanel(TEXT("Pedido de amizade"), FVector2D(300.f, 92.f), FVector2D(0.f, -180.f));
 	FriendAskText = AddText(FriendAskWindow, 10.f, 26.f, 9, FrText);
-	FriendAcceptLink = AddText(FriendAskWindow, 60.f, 62.f, 10, FrLink);
-	FriendAcceptLink->SetText(FText::FromString(TEXT("Aceitar")));
-	FriendDeclineLink = AddText(FriendAskWindow, 180.f, 62.f, 10, FrLink);
-	FriendDeclineLink->SetText(FText::FromString(TEXT("Recusar")));
+	FriendAcceptLink = AddButtonHit(FriendAskWindow, TEXT("agree"), 50.f, 58.f);
+	FriendDeclineLink = AddButtonHit(FriendAskWindow, TEXT("disagree"), 170.f, 58.f);
 }
 
 void UMythRoHUDWidget::RefreshFriends()

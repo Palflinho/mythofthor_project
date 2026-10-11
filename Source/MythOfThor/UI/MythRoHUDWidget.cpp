@@ -148,6 +148,48 @@ UImage* UMythRoHUDWidget::AddButtonEx(UCanvasPanel* Parent, const FString& Norma
 	return Img;
 }
 
+UTextBlock* UMythRoHUDWidget::AddButtonHit(UCanvasPanel* Parent, const TCHAR* Name, float X, float Y)
+{
+	UImage* Img = AddButton(Parent, Name, X, Y);
+	const FVector2D Size = Img->GetBrush().ImageSize; // ja com a escala da interface
+	UTextBlock* Hit = AddText(Parent, X, Y, 6, FLinearColor::Transparent);
+	if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(Hit->Slot))
+	{
+		S->SetAutoSize(false);
+		S->SetSize(Size);
+	}
+	return Hit;
+}
+
+UTextBlock* UMythRoHUDWidget::AddTextButton(UCanvasPanel* Parent, const FString& Label, float X, float Y, float W)
+{
+	// Moldura de 3 partes do cliente (btn_out_left/mid/right, over e press) com o texto centralizado por cima
+	constexpr float H = 20.f;
+	auto Part = [](const TCHAR* State, const TCHAR* Side) { return FString::Printf(TEXT("basic_interface/btn_%s_%s.bmp"), State, Side); };
+	UImage* L = AddImage(Parent, FMythRoUITextures::Get(Part(TEXT("out"), TEXT("left"))), X, Y, 6.f, H);
+	UImage* M = AddImage(Parent, FMythRoUITextures::Get(Part(TEXT("out"), TEXT("mid"))), X + 6.f, Y, W - 12.f, H);
+	UImage* R = AddImage(Parent, FMythRoUITextures::Get(Part(TEXT("out"), TEXT("right"))), X + W - 6.f, Y, 6.f, H);
+	M->SetVisibility(ESlateVisibility::Visible);
+	FRoButton B;
+	B.Image = M;
+	B.Left = L;
+	B.Right = R;
+	B.Part = TEXT("text");
+	B.Normal = FMythRoUITextures::Get(Part(TEXT("out"), TEXT("mid")));
+	B.Hover = FMythRoUITextures::Get(Part(TEXT("over"), TEXT("mid")));
+	B.Pressed = FMythRoUITextures::Get(Part(TEXT("press"), TEXT("mid")));
+	RoButtons.Add(B);
+	UTextBlock* T = AddText(Parent, X, Y + 4.f, 7, FLinearColor(0.1f, 0.1f, 0.15f));
+	T->SetText(FText::FromString(Label));
+	T->SetJustification(ETextJustify::Center);
+	if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(T->Slot))
+	{
+		S->SetAutoSize(false);
+		S->SetSize(FVector2D(W, H - 4.f) * UIScale);
+	}
+	return T;
+}
+
 UImage* UMythRoHUDWidget::AddColor(UCanvasPanel* Parent, const FLinearColor& Color, float X, float Y, float W, float H)
 {
 	UImage* Img = WidgetTree->ConstructWidget<UImage>();
@@ -249,7 +291,8 @@ void UMythRoHUDWidget::AddTitleBar(UCanvasPanel* Parent, float Width, const FStr
 	AddImage(Parent, FMythRoUITextures::Get(Basic(TEXT("titlebar_left"))), 0.f, 0.f, 12.f, 17.f);
 	AddImage(Parent, FMythRoUITextures::Get(Basic(TEXT("titlebar_mid"))), 12.f, 0.f, Width - 24.f, 17.f);
 	AddImage(Parent, FMythRoUITextures::Get(Basic(TEXT("titlebar_right"))), Width - 12.f, 0.f, 12.f, 17.f);
-	UTextBlock* T = AddText(Parent, 8.f, 2.f, 8, ColTitle, true);
+	AddImage(Parent, FMythRoUITextures::Get(Basic(TEXT("sys_base_off"))), 4.f, 3.f, 11.f, 11.f); // o icone redondo da janela, como no cliente moderno
+	UTextBlock* T = AddText(Parent, 18.f, 2.f, 8, ColTitle, true);
 	T->SetText(FText::FromString(Title));
 	if (OutText)
 	{
@@ -1005,6 +1048,27 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, co
 		}
 		return FReply::Handled();
 	}
+	// Ctrl + botao direito num item da mochila: poe ou tira dos favoritos (aba com a estrela)
+	if (InMouseEvent.GetEffectingButton() == EKeys::RightMouseButton && InMouseEvent.IsControlDown() && ItemsWindow && ItemsWindow->IsVisible())
+	{
+		if (URagnarokNetworkSubsystem* FavNet = GetNet())
+		{
+			for (int32 c = 0; c < ItemCells.Num(); ++c)
+			{
+				if (ItemCellIndex[c] >= 0 && IsUnder(ItemCells[c], InMouseEvent.GetScreenSpacePosition()))
+				{
+					for (const FRagnarokInventoryItem& It : FavNet->GetInventoryItems())
+					{
+						if (It.Index == ItemCellIndex[c])
+						{
+							FavNet->SendItemFavorite(It.Index, It.bFavorite);
+							return FReply::Handled();
+						}
+					}
+				}
+			}
+		}
+	}
 	if (InMouseEvent.GetEffectingButton() == EKeys::RightMouseButton && Root && HandleItemInfoClick(InMouseEvent.GetScreenSpacePosition()))
 	{
 		return FReply::Handled(); // botao direito num item: descricao
@@ -1164,7 +1228,17 @@ void UMythRoHUDWidget::UpdateButtons()
 		{
 			Tex = B.Normal.Get();
 		}
-		if (Tex)
+		if (Tex && B.Part == TEXT("text"))
+		{
+			// botao de texto: a imagem do meio mantem o tamanho (so troca a textura); as pontas seguem o estado
+			const TCHAR* State = Want == 2 ? TEXT("press") : (Want == 1 ? TEXT("over") : TEXT("out"));
+			FSlateBrush Brush = Img->GetBrush();
+			Brush.SetResourceObject(Tex);
+			Img->SetBrush(Brush);
+			if (UImage* Lf = B.Left.Get()) { FSlateBrush Bl = Lf->GetBrush(); Bl.SetResourceObject(FMythRoUITextures::Get(FString::Printf(TEXT("basic_interface/btn_%s_left.bmp"), State))); Lf->SetBrush(Bl); }
+			if (UImage* Rt = B.Right.Get()) { FSlateBrush Br = Rt->GetBrush(); Br.SetResourceObject(FMythRoUITextures::Get(FString::Printf(TEXT("basic_interface/btn_%s_right.bmp"), State))); Rt->SetBrush(Br); }
+		}
+		else if (Tex)
 		{
 			Img->SetBrush(TextureBrush(Tex, FVector2D(Tex->GetSizeX(), Tex->GetSizeY()) * UIScale));
 		}

@@ -43,10 +43,8 @@ void UMythRoHUDWidget::BuildMailWindows()
 	const float LinkY = H - 26.f;
 	MailTakeZeny = AddText(MailWindow, 10.f, LinkY, 8, MlLink);
 	MailTakeItems = AddText(MailWindow, 100.f, LinkY, 8, MlLink);
-	MailDelete = AddText(MailWindow, 200.f, LinkY, 8, MlLink);
-	MailDelete->SetText(FText::FromString(TEXT("[Excluir]")));
-	MailWrite = AddText(MailWindow, 280.f, LinkY, 8, MlLink);
-	MailWrite->SetText(FText::FromString(TEXT("[Escrever]")));
+	MailDelete = AddButtonHit(MailWindow, TEXT("del_res"), 200.f, LinkY - 4.f);
+	MailWrite = AddButtonHit(MailWindow, TEXT("write"), 280.f, LinkY - 4.f);
 
 	MailWriteWindow = MakeRoPanel(TEXT("Escrever correio"), FVector2D(340.f, 17.f + 150.f), FVector2D(60.f, -60.f));
 	AddText(MailWriteWindow, 12.f, 26.f, 8, MlText)->SetText(FText::FromString(TEXT("Para")));
@@ -62,10 +60,8 @@ void UMythRoHUDWidget::BuildMailWindows()
 		}
 		(i == 0 ? MailToBox : (i == 1 ? MailTitleBox : MailTextBox)) = Box;
 	}
-	MailSend = AddText(MailWriteWindow, 80.f, 17.f + 120.f, 10, MlLink);
-	MailSend->SetText(FText::FromString(TEXT("Enviar")));
-	MailCancel = AddText(MailWriteWindow, 200.f, 17.f + 120.f, 10, MlLink);
-	MailCancel->SetText(FText::FromString(TEXT("Cancelar")));
+	MailSend = AddTextButton(MailWriteWindow, TEXT("Enviar"), 80.f, 17.f + 116.f, 80.f);
+	MailCancel = AddButtonHit(MailWriteWindow, TEXT("cancel"), 190.f, 17.f + 116.f);
 }
 
 void UMythRoHUDWidget::OpenMailWindow()

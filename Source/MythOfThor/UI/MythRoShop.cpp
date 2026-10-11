@@ -44,12 +44,9 @@ void UMythRoHUDWidget::BuildShopWindows()
 	// Escolha comprar / vender / cancelar (UIChooseSellBuyWnd, 180 x 110)
 	const FVector2D DealSize(180.f, 17.f + 3 * 24.f + 14.f);
 	DealWindow = MakeRoPanel(TEXT("Loja"), DealSize, FVector2D(0.f, -60.f));
-	DealBuyLink = AddText(DealWindow, 18.f, 28.f, 9, ShopLink);
-	DealBuyLink->SetText(FText::FromString(TEXT("Comprar")));
-	DealSellLink = AddText(DealWindow, 18.f, 52.f, 9, ShopLink);
-	DealSellLink->SetText(FText::FromString(TEXT("Vender")));
-	DealCancelLink = AddText(DealWindow, 18.f, 76.f, 9, ShopLink);
-	DealCancelLink->SetText(FText::FromString(TEXT("Cancelar")));
+	DealBuyLink = AddButtonHit(DealWindow, TEXT("buy"), 68.f, 26.f);
+	DealSellLink = AddButtonHit(DealWindow, TEXT("sell"), 68.f, 50.f);
+	DealCancelLink = AddButtonHit(DealWindow, TEXT("cancel"), 68.f, 74.f);
 	DealWindow->SetVisibility(ESlateVisibility::Collapsed);
 
 	// Vitrine (esquerda) e cesta (direita)
@@ -72,9 +69,8 @@ void UMythRoHUDWidget::BuildShopWindows()
 	}
 	ShopTotalText = AddText(ShopWindow, ShopBasketX, H - 50.f, 9, ShopText);
 	ShopHintText = AddText(ShopWindow, 10.f, H - 50.f, 7, ShopGray);
-	ShopConfirmLink = AddText(ShopWindow, ShopBasketX, H - 28.f, 9, ShopLink);
-	ShopCancelLink = AddText(ShopWindow, ShopBasketX + 100.f, H - 28.f, 9, ShopLink);
-	ShopCancelLink->SetText(FText::FromString(TEXT("Cancelar")));
+	ShopConfirmLink = AddTextButton(ShopWindow, TEXT("Confirmar"), ShopBasketX, H - 32.f, 84.f);
+	ShopCancelLink = AddButtonHit(ShopWindow, TEXT("cancel"), ShopBasketX + 100.f, H - 32.f);
 	ShopWindow->SetVisibility(ESlateVisibility::Collapsed);
 }
 

@@ -254,6 +254,10 @@ protected:
 	/** Botao do cliente (btn_<Nome>.bmp, _a ao passar o mouse, _b ao apertar): o rotulo ja vem desenhado na arte. */
 	UImage* AddButton(UCanvasPanel* Parent, const TCHAR* Name, float X, float Y);
 	UImage* AddButtonEx(UCanvasPanel* Parent, const FString& Normal, const FString& Hover, const FString& Pressed, float X, float Y);
+	/** Botao do cliente com o rotulo desenhado na arte; devolve o texto invisivel que cobre o botao (para IsUnder). */
+	UTextBlock* AddButtonHit(UCanvasPanel* Parent, const TCHAR* Name, float X, float Y);
+	/** Botao de texto (btn_out/over/press em 3 partes) com o rotulo no meio; devolve o proprio texto, que cobre o botao. */
+	UTextBlock* AddTextButton(UCanvasPanel* Parent, const FString& Label, float X, float Y, float W);
 	UImage* AddColor(UCanvasPanel* Parent, const FLinearColor& Color, float X, float Y, float W, float H);
 	/** Retangulo de cantos arredondados (RoundedBox do Slate) com borda fina: corpo de janela translucido como nos prints do LATAM. */
 	UImage* AddRounded(UCanvasPanel* Parent, const FLinearColor& Fill, const FLinearColor& Border, float X, float Y, float W, float H, float RadiusTop, float RadiusBottom);
@@ -580,6 +584,10 @@ protected:
 		TWeakObjectPtr<UTexture2D> Hover;
 		TWeakObjectPtr<UTexture2D> Pressed;
 		int32 Shown = 0;
+		// botao de texto de 3 partes: as imagens do meio e das pontas trocam juntas
+		TWeakObjectPtr<UImage> Left;
+		TWeakObjectPtr<UImage> Right;
+		FString Part;
 	};
 	TArray<FRoButton> RoButtons;
 	UPROPERTY() TObjectPtr<UCanvasPanel> QuestWindow;

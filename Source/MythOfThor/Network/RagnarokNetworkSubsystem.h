@@ -250,6 +250,7 @@ struct FRagnarokInventoryItem
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 Refine = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") bool bIdentified = true;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") bool bIsEquipped = false;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") bool bFavorite = false;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 Slot1 = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 Slot2 = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 Slot3 = 0;
@@ -599,6 +600,9 @@ public:
 	bool SendEquipSwitchAdd(int32 ItemIndex, int32 Position);
 	bool SendEquipSwitchRemove(int32 ItemIndex);
 	bool SendEquipSwitchAll();
+
+	/** Aba de favoritos da mochila: CZ_INVENTORY_TAB 0x0907 (o servidor guarda e devolve em 0x0908). */
+	bool SendItemFavorite(int32 ItemIndex, bool bCurrentlyFavorite);
 
 	/** Correio (RODEX): pedidos 0x0ac0 abrir, 0x09ea ler, 0x09f5 excluir, 0x09f1 zeny, 0x09f3 itens. */
 	bool SendMailRequest(uint16 PacketId, int64 MailId, uint8 Tab);
@@ -1081,6 +1085,7 @@ private:
 	void HandleBankPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleAchievementPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleEquipSwitchPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	void HandleItemFavoritePacket(const uint8* PacketData, int32 PacketSize);
 	void HandleMailPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleChatRoomPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleSkillUnitAppear(const uint8* PacketData, int32 PacketSize);

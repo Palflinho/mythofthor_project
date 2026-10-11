@@ -36,11 +36,9 @@ void UMythRoHUDWidget::BuildEmotionWindows()
 		Icon->SetVisibility(ESlateVisibility::Collapsed);
 		EmotionIcons.Add(Icon);
 	}
-	EmotionPrev = AddText(EmotionWindow, 22.f, H - 24.f, 9, EmoLink);
-	EmotionPrev->SetText(FText::FromString(TEXT("Anterior")));
+	EmotionPrev = AddButtonHit(EmotionWindow, TEXT("back"), 22.f, H - 28.f);
 	EmotionPageText = AddText(EmotionWindow, EmoW * 0.5f - 12.f, H - 24.f, 9, EmoText);
-	EmotionNext = AddText(EmotionWindow, EmoW - 70.f, H - 24.f, 9, EmoLink);
-	EmotionNext->SetText(FText::FromString(TEXT("Próxima")));
+	EmotionNext = AddButtonHit(EmotionWindow, TEXT("next"), EmoW - 64.f, H - 28.f);
 
 	MacroWindow = MakeRoPanel(TEXT("Lista de atalhos"), FVector2D(340.f, 17.f + 10 * 20.f + 38.f), FVector2D(-300.f, 0.f));
 	for (int32 i = 0; i < 10; ++i)

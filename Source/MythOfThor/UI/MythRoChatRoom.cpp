@@ -43,10 +43,8 @@ void UMythRoHUDWidget::BuildChatRoomWindows()
 		S->SetPosition(FVector2D(70.f, 84.f) * UIScale);
 		S->SetSize(FVector2D(130.f, 20.f) * UIScale);
 	}
-	RoomOkLink = AddText(ChatRoomCreateWindow, 90.f, 132.f, 11, CrLink);
-	RoomOkLink->SetText(FText::FromString(TEXT("Criar")));
-	RoomCancelLink = AddText(ChatRoomCreateWindow, 200.f, 132.f, 11, CrLink);
-	RoomCancelLink->SetText(FText::FromString(TEXT("Cancelar")));
+	RoomOkLink = AddButtonHit(ChatRoomCreateWindow, TEXT("make"), 70.f, 128.f);
+	RoomCancelLink = AddButtonHit(ChatRoomCreateWindow, TEXT("cancel"), 180.f, 128.f);
 
 	// Sala atual
 	ChatRoomWindow = MakeRoPanel(TEXT("Sala de chat"), FVector2D(280.f, 17.f + 14 * 18.f + 52.f), FVector2D(-200.f, -60.f));
@@ -58,8 +56,7 @@ void UMythRoHUDWidget::BuildChatRoomWindows()
 		Kick->SetText(FText::FromString(TEXT("Expulsar")));
 		RoomKickLinks.Add(Kick);
 	}
-	RoomLeaveLink = AddText(ChatRoomWindow, 14.f, 17.f + 14 * 18.f + 30.f, 10, CrLink);
-	RoomLeaveLink->SetText(FText::FromString(TEXT("Sair da sala")));
+	RoomLeaveLink = AddButtonHit(ChatRoomWindow, TEXT("exit"), 14.f, 17.f + 14 * 18.f + 30.f - 4.f);
 
 	// Senha para entrar
 	ChatRoomEnterWindow = MakeRoPanel(TEXT("Sala privada"), FVector2D(260.f, 17.f + 84.f), FVector2D(0.f, -150.f));
@@ -70,10 +67,8 @@ void UMythRoHUDWidget::BuildChatRoomWindows()
 		S->SetPosition(FVector2D(12.f, 44.f) * UIScale);
 		S->SetSize(FVector2D(236.f, 20.f) * UIScale);
 	}
-	RoomEnterOkLink = AddText(ChatRoomEnterWindow, 60.f, 74.f, 10, CrLink);
-	RoomEnterOkLink->SetText(FText::FromString(TEXT("Entrar")));
-	RoomEnterCancelLink = AddText(ChatRoomEnterWindow, 150.f, 74.f, 10, CrLink);
-	RoomEnterCancelLink->SetText(FText::FromString(TEXT("Cancelar")));
+	RoomEnterOkLink = AddButtonHit(ChatRoomEnterWindow, TEXT("connect"), 50.f, 70.f);
+	RoomEnterCancelLink = AddButtonHit(ChatRoomEnterWindow, TEXT("cancel"), 140.f, 70.f);
 	RoomNewLimit = 10;
 	RoomNewPublic = true;
 }

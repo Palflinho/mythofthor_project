@@ -55,20 +55,15 @@ void UMythRoHUDWidget::BuildTradeWindows()
 	}
 	const float BY = H - 40.f;
 	TradeHint = AddText(TradeWindow, 10.f, BY - 4.f, 7, TrGray);
-	TradeLockLink = AddText(TradeWindow, 60.f, BY + 14.f, 10, TrLink);
-	TradeLockLink->SetText(FText::FromString(TEXT("Travar")));
-	TradeCommitLink = AddText(TradeWindow, 180.f, BY + 14.f, 10, TrLink);
-	TradeCommitLink->SetText(FText::FromString(TEXT("Trocar")));
-	TradeCancelLink = AddText(TradeWindow, 300.f, BY + 14.f, 10, TrLink);
-	TradeCancelLink->SetText(FText::FromString(TEXT("Cancelar")));
+	TradeLockLink = AddTextButton(TradeWindow, TEXT("Travar"), 40.f, BY + 10.f, 80.f);
+	TradeCommitLink = AddButtonHit(TradeWindow, TEXT("exchange"), 170.f, BY + 10.f);
+	TradeCancelLink = AddButtonHit(TradeWindow, TEXT("cancel"), 290.f, BY + 10.f);
 
 	// Pedido recebido
 	TradeAskWindow = MakeRoPanel(TEXT("Pedido de troca"), FVector2D(300.f, 92.f), FVector2D(0.f, -150.f));
 	TradeAskText = AddText(TradeAskWindow, 10.f, 26.f, 9, TrText);
-	TradeAcceptLink = AddText(TradeAskWindow, 60.f, 62.f, 10, TrLink);
-	TradeAcceptLink->SetText(FText::FromString(TEXT("Aceitar")));
-	TradeDeclineLink = AddText(TradeAskWindow, 180.f, 62.f, 10, TrLink);
-	TradeDeclineLink->SetText(FText::FromString(TEXT("Recusar")));
+	TradeAcceptLink = AddButtonHit(TradeAskWindow, TEXT("agree"), 50.f, 58.f);
+	TradeDeclineLink = AddButtonHit(TradeAskWindow, TEXT("disagree"), 170.f, 58.f);
 
 	// Menu do botao direito sobre um jogador
 	PlayerMenuWindow = MakeRoPanel(TEXT("Jogador"), FVector2D(170.f, 17.f + 5 * 20.f + 10.f), FVector2D::ZeroVector);

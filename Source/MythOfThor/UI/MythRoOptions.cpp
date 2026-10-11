@@ -107,8 +107,7 @@ void UMythRoHUDWidget::BuildOptionsWindow()
 		OptRowToggle.Add(AddText(OptionsWindow, 150.f, Y, 8, OptOff));
 		OptRowDesc.Add(AddText(OptionsWindow, 205.f, Y, 7, OptGray));
 	}
-	OptClose = AddText(OptionsWindow, OptW - 60.f, H - 26.f, 9, OptLink);
-	OptClose->SetText(FText::FromString(TEXT("Fechar")));
+	OptClose = AddButtonHit(OptionsWindow, TEXT("close"), OptW - 56.f, H - 30.f);
 	OptionsWindow->SetVisibility(ESlateVisibility::Collapsed);
 	ApplyOptionEffects();
 }

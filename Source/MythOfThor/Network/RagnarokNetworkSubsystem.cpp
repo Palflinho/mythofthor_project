@@ -985,6 +985,9 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x09e7: // ZC_NOTIFY_UNREADMAIL
 				HandleMailPacket(PacketData, ActualLen, PacketID);
 				break;
+			case 0x0908: // ZC_INVENTORY_TAB: <indice>.W <favorito>.B (invertido pelo servidor)
+				HandleItemFavoritePacket(PacketData, ActualLen);
+				break;
 			case 0x0a9b: // ZC_EQUIPWIN_MICROSCOPE... lista da troca rapida
 			case 0x0a98: // ack incluir
 			case 0x0a9a: // ack remover
@@ -2161,6 +2164,7 @@ void URagnarokNetworkSubsystem::HandleInventoryList(const uint8* PacketData, int
 
 			Item.Refine = Ptr[65];
 			Item.bIdentified = (Ptr[67] & 1) != 0;
+			Item.bFavorite = (Ptr[67] & 2) != 0;
 
 			Target.Add(Item);
 		}
@@ -2193,6 +2197,7 @@ void URagnarokNetworkSubsystem::HandleInventoryList(const uint8* PacketData, int
 
 			Item.Refine = 0;
 			Item.bIdentified = (Ptr[33] & 1) != 0;
+			Item.bFavorite = (Ptr[33] & 2) != 0;
 
 			Target.Add(Item);
 		}
@@ -3515,6 +3520,38 @@ void URagnarokNetworkSubsystem::HandleMailPacket(const uint8* PacketData, int32 
 	}
 }
 
+
+bool URagnarokNetworkSubsystem::SendItemFavorite(int32 ItemIndex, bool bCurrentlyFavorite)
+{
+	// CZ_INVENTORY_TAB 0x0907 <indice>.W <favorito>.B: true tira dos favoritos, false poe (como o clif_parse_MoveItem)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	uint8 Packet[5] = { 0x07, 0x09 };
+	*reinterpret_cast<uint16*>(Packet + 2) = static_cast<uint16>(ItemIndex);
+	Packet[4] = bCurrentlyFavorite ? 1 : 0;
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+void URagnarokNetworkSubsystem::HandleItemFavoritePacket(const uint8* PacketData, int32 PacketSize)
+{
+	if (PacketSize < 5)
+	{
+		return;
+	}
+	const int32 Index = *reinterpret_cast<const uint16*>(PacketData + 2);
+	for (FRagnarokInventoryItem& Item : InventoryItems)
+	{
+		if (Item.Index == Index)
+		{
+			Item.bFavorite = PacketData[4] == 0; // o servidor manda o contrario do estado novo
+			OnInventory.Broadcast(InventoryItems);
+			break;
+		}
+	}
+}
 
 void URagnarokNetworkSubsystem::HandleEquipSwitchPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
 {

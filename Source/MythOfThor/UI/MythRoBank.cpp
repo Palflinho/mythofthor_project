@@ -30,10 +30,8 @@ void UMythRoHUDWidget::BuildBankWindow()
 		S->SetPosition(FVector2D(70.f, 72.f) * UIScale);
 		S->SetSize(FVector2D(190.f, 20.f) * UIScale);
 	}
-	BankDepositLink = AddText(BankWindow, 30.f, 110.f, 10, BkLink);
-	BankDepositLink->SetText(FText::FromString(TEXT("Depositar")));
-	BankWithdrawLink = AddText(BankWindow, 130.f, 110.f, 10, BkLink);
-	BankWithdrawLink->SetText(FText::FromString(TEXT("Sacar")));
+	BankDepositLink = AddTextButton(BankWindow, TEXT("Depositar"), 30.f, 106.f, 90.f);
+	BankWithdrawLink = AddTextButton(BankWindow, TEXT("Sacar"), 150.f, 106.f, 90.f);
 }
 
 void UMythRoHUDWidget::OpenBankWindow()

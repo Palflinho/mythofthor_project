@@ -171,8 +171,7 @@ void UMythRoHUDWidget::BuildGameMenu()
 	const float BY = Size.Y - 30.f;
 	GfxApply = AddImage(GraphicsWindow, FMythRoUITextures::Get(TEXT("gamesettingsui/btn_optionapply_out.bmp")), Size.X - 150.f, BY);
 	GfxApply->SetVisibility(ESlateVisibility::Visible);
-	GfxClose = AddText(GraphicsWindow, Size.X - 60.f, BY + 4.f, 9, MenuLink);
-	GfxClose->SetText(FText::FromString(TEXT("Fechar")));
+	GfxClose = AddButtonHit(GraphicsWindow, TEXT("close"), Size.X - 56.f, BY);
 	GfxHint = AddText(GraphicsWindow, 14.f, BY + 4.f, 7, FLinearColor(0.4f, 0.4f, 0.4f));
 	GraphicsWindow->SetVisibility(ESlateVisibility::Collapsed);
 	LoadGraphicsOptions();
@@ -198,8 +197,7 @@ void UMythRoHUDWidget::BuildGameMenu()
 		SndRight.Add(R);
 		SndValues.Add(AddText(SoundWindow, 206.f, Y, 8, MenuLink));
 	}
-	SndClose = AddText(SoundWindow, SSize.X - 60.f, SSize.Y - 26.f, 9, MenuLink);
-	SndClose->SetText(FText::FromString(TEXT("Fechar")));
+	SndClose = AddButtonHit(SoundWindow, TEXT("close"), SSize.X - 56.f, SSize.Y - 30.f);
 	SndHint = AddText(SoundWindow, 14.f, SSize.Y - 26.f, 7, FLinearColor(0.4f, 0.4f, 0.4f));
 	SoundWindow->SetVisibility(ESlateVisibility::Collapsed);
 
