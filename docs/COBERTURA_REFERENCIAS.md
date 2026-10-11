@@ -45,7 +45,7 @@ Originais do cliente clássico (entram na fidelidade):
 - Menu Esc com a lista de opções `/comando` (ON/OFF) e as opções de teclado.
 - Mapa-múndi (Ctrl+`) e quests com rastreador na tela.
 
-Modernos do LATAM, **fora do RO pre-renovação 1:1** (precisam de decisão sua): RODEX (correio), Conquistas, Reputação,
+Modernos do LATAM, **entram adaptados (decisão do usuário), menos JCoins**: RODEX (correio), Conquistas, Reputação,
 Agência de Aventureiros, Banco (Ctrl+B), /navi, troca rápida de equipamento, JCoins.
 
 ## Itens novos no roadmap
