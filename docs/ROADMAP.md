@@ -23,7 +23,7 @@ Ordem do que se vê o tempo todo jogando. Quem: Claude, salvo indicação.
 |---|---|---|
 | 1.1 | Doridori da cabeça parada (03) e direção do corpo no mundo | 🟡 feito, falta teste |
 | 1.2 | Camadas: capa/asas e carrinho feitos e vistos no jogo (03); falta teste do usuário | 🟡 |
-| 1.3 | Posturas pickup, readyfight, stun, 2º golpe (03). A arma guardada já segue o `.act` | ⬜ conferir |
+| 1.3 | Posturas: pegar item feito (2026-10-11); faltam readyfight, stun e 2º golpe (03) | 🟡 |
 | 1.4 | Flechas (05): arco do jogador feito; falta monstros arqueiros e conferir o tempo | 🟡 |
 | 1.5 | Tremor de tela e aura do 99 feitos (05, 13); falta comparar a aura com o cliente real | 🟡 |
 | 1.6 | Efeitos de 2ª classe e transclasse testados jogando (05, 11) | 🟡 receitas prontas, falta testar |
@@ -64,10 +64,10 @@ código GPL, citando a origem). Um doc por tema em `docs/ref/`.
 |---|---|---|---|
 | 3.1 | Lojas (compra feita, falta testar venda), Kafra, morte e reviver (feito) | Claude | 🟡 |
 | 3.2 | Troca de classe pelas quests originais (NPCs mapeados em coord 012) | os dois | 🟡 |
-| 3.3 | Grupo, cochicho, chat completo, emoções | Claude | ⬜ |
+| 3.3 | Grupo (Alt+Z, /organize, /invite, /leave), cochicho, chat, emoções | Claude | 🟡 feito; faltam abas Grupo/Guilda e testar com 2 jogadores reais |
 | 3.4 | Mapas de campos e cidades das classes | Antigravity → Claude | ✅ 40 mapas importados (coord 013) |
 | 3.5 | Troca entre jogadores, montaria e carrinho | Claude | ⬜ |
-| 3.6 | Efeitos de skill ainda faltando | Claude | ⬜ |
+| 3.6 | Efeitos de skill: unidades no chão e skills de área sem alvo feitas; faltam 118 skills (`docs/EFEITOS_PENDENTES.md`), efeitos de buff no corpo, tipo SPR (68 partes), armadilhas e canções | Claude | 🟡 |
 
 ## F4. Auditoria do servidor (Antigravity)
 
