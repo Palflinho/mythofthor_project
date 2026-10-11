@@ -35,6 +35,7 @@ Ordem do que se vê o tempo todo jogando. Quem: Claude, salvo indicação.
 | 1.12 | Barras de HP/SP sob o personagem (12) | 🟡 feito, falta teste |
 | 1.13 | Skills com Apply/Reset e "◀ nível ▶", menu Esc com abas (12) | ⬜ |
 | 1.14 | Porings no chão (corrigido no `f4ca760`, falta testar) | 🟡 |
+| 1.15 | **Acabamento visual da HUD** contra os prints do LATAM (`docs/ref/hud_latam`, 10 e 12): texturas reais com transparência em vez de retângulos chapados, cantos arredondados, fundo translúcido nas janelas, hotbar, chat e minimapa; opção de opacidade | Claude | ⬜ pedido do usuário em 2026-10-11 |
 
 Já conforme o spec e testado: movimento básico, combate e coleta, câmera, cursores, sons, números de dano, diálogo de NPC,
 portais e interiores de Prontera, sentar com Insert, chat em português, árvore de skills.
