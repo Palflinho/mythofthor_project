@@ -510,6 +510,7 @@ void AMythNetWorld::FinishMapEnter(const FString& Map, int32 CellX, int32 CellY)
 	if (UMythRoHUDWidget* EntryHud = GetHud())
 	{
 		EntryHud->HideEntry();
+		EntryHud->SetCurrentMapId(Map);
 	}
 	if (AMythHUD* BannerHud = GetGameHud())
 	{

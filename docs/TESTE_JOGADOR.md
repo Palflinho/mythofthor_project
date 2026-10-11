@@ -94,3 +94,5 @@ NOVO (rodada 13): Banco (Ctrl+B): mostra o saldo guardado no servidor; digite a 
 NOVO (rodada 14): Conquistas (Alt+Y): lista do servidor com pontos, rank, progresso e botao [Receber] para o premio; paginas com Anterior/Proxima. Nomes em ingles (vem do banco do servidor).
 
 NOVO (rodada 15): corrigido o sprite cortado por paredes atras dele (o puxao de profundidade agora acompanha a altura do sprite e a inclinacao da camera). Camera nao entra mais no chao. Esferas espirituais do Monge, vinhetas de veneno e cegueira, postura de congelado/atordoado, terremoto com 3 pulsos.
+
+NOVO (rodada 16): Navegacao (Alt+N ou /navi Nome): digite o nome de um mapa e veja o caminho pelos portais a partir de onde voce esta (dados do cliente LATAM; so vale para mapas que o nosso servidor tem). Troca rapida de equipamento (Alt+W): Ctrl + duplo clique num equipamento da janela de itens o inclui; "Trocar tudo" veste o conjunto.

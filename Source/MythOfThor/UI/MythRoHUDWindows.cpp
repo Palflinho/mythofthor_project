@@ -285,6 +285,9 @@ void UMythRoHUDWidget::ToggleWindow(EMythRoWindow Window)
 	case EMythRoWindow::Bank: OpenBankWindow(); return;
 	case EMythRoWindow::Achievements: OpenAchievementWindow(); return;
 	case EMythRoWindow::EquipSwitch: Target = EquipSwitchWindow; break;
+	case EMythRoWindow::Navi:
+		if (NaviWindow && NaviWindow->IsVisible()) { NaviWindow->SetVisibility(ESlateVisibility::Collapsed); } else { OpenNaviWindow(); }
+		return;
 	case EMythRoWindow::Quests: Target = QuestWindow; break;
 	case EMythRoWindow::Shortcuts: Target = ShortcutWindow; break;
 	}
@@ -709,6 +712,10 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 		return true;
 	}
 	if (HandleEquipSwitchClick(ScreenPos))
+	{
+		return true;
+	}
+	if (HandleNaviClick(ScreenPos))
 	{
 		return true;
 	}

@@ -93,6 +93,12 @@ bool UMythRoHUDWidget::HandleChatCommand(const FString& Msg)
 		if (Type >= 0 && bOnline) { Net->SendEmotion(Type); }
 		return true;
 	}
+	// Navegacao: /navi [nome do mapa]
+	if (Cmd == TEXT("navi"))
+	{
+		OpenNaviWindow(Args);
+		return true;
+	}
 	// Amigos: /friend Nome
 	if (Cmd == TEXT("friend") || Cmd == TEXT("add"))
 	{

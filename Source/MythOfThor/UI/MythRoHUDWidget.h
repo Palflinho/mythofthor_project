@@ -57,7 +57,8 @@ enum class EMythRoWindow : uint8
 	Shortcuts, // F12: tabela de teclas
 	Bank,     // Ctrl+B: banco
 	Achievements, // Alt+Y: conquistas
-	EquipSwitch // Alt+W: troca rapida
+	EquipSwitch, // Alt+W: troca rapida
+	Navi      // Alt+N: navegacao
 };
 
 /** Barra de medidor classica (gze*_left/mid/right sobre gze_bg): o meio estica conforme a fracao. */
@@ -438,6 +439,23 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardName;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo2;
+
+	// Navegacao (MythRoNavi.cpp)
+public:
+	void OpenNaviWindow(const FString& Query = FString());
+	void SetCurrentMapId(const FString& MapId) { CurrentMapId = MapId; }
+protected:
+	void BuildNaviWindow();
+	void SearchNavi(const FString& Query);
+	void ShowNaviRoute(const FString& Destination);
+	bool HandleNaviClick(const FVector2D& ScreenPos);
+	UFUNCTION() void OnNaviCommitted(const FText& Text, ETextCommit::Type CommitMethod);
+	UPROPERTY() TObjectPtr<UCanvasPanel> NaviWindow;
+	UPROPERTY() TObjectPtr<UEditableTextBox> NaviBox;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> NaviRows;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> NaviRoute;
+	TArray<FString> NaviMatches;
+	FString CurrentMapId;
 
 	// Troca rapida (MythRoEquipSwitch.cpp)
 public:

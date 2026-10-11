@@ -379,6 +379,7 @@ private:
 	void OnHotkeyQuests();
 	void OnHotkeyShortcuts();
 	void OnHotkeyBank();
+	void OnHotkeyNavi();
 	void OnHotkeyEquipSwitch();
 	void OnHotkeyAchievements();
 	void OnHotkeyItems();

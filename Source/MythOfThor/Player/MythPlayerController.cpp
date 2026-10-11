@@ -194,6 +194,7 @@ void AMythPlayerController::SetupInputComponent()
 	InputComponent->BindKey(FInputChord(EKeys::C, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyChatRoom);
 	InputComponent->BindKey(FInputChord(EKeys::U, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyQuests);
 	InputComponent->BindKey(EKeys::F12, IE_Pressed, this, &AMythPlayerController::OnHotkeyShortcuts);
+	InputComponent->BindKey(FInputChord(EKeys::N, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyNavi);
 	InputComponent->BindKey(FInputChord(EKeys::W, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyEquipSwitch);
 	InputComponent->BindKey(FInputChord(EKeys::Y, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyAchievements);
 	InputComponent->BindKey(FInputChord(EKeys::B, false, true, false, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyBank);
@@ -584,6 +585,7 @@ void AMythPlayerController::ToggleHudWindow(EMythRoWindow Window)
 void AMythPlayerController::OnHotkeyEmotions() { ToggleHudWindow(EMythRoWindow::Emotions); }
 void AMythPlayerController::OnHotkeyAchievements() { ToggleHudWindow(EMythRoWindow::Achievements); }
 void AMythPlayerController::OnHotkeyEquipSwitch() { ToggleHudWindow(EMythRoWindow::EquipSwitch); }
+void AMythPlayerController::OnHotkeyNavi() { ToggleHudWindow(EMythRoWindow::Navi); }
 void AMythPlayerController::OnHotkeyBank() { ToggleHudWindow(EMythRoWindow::Bank); }
 void AMythPlayerController::OnHotkeyShortcuts() { ToggleHudWindow(EMythRoWindow::Shortcuts); }
 void AMythPlayerController::OnHotkeyQuests() { ToggleHudWindow(EMythRoWindow::Quests); }
