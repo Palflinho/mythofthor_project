@@ -207,7 +207,7 @@ void AMythPlayerController::SetupInputComponent()
 	for (int32 i = 0; i < 9; ++i)
 	{
 		FInputKeyBinding Binding(FInputChord(HotkeyKeys[i]), IE_Pressed);
-		Binding.KeyDelegate.GetDelegateForManualSet().BindWeakLambda(this, [this, i]() { UseHotkey(i); });
+		Binding.KeyDelegate.GetDelegateForManualSet().BindWeakLambda(this, [this, i]() { UseHotkey((HudWidget ? HudWidget->HotbarActiveBase() : 0) + i); });
 		InputComponent->KeyBindings.Add(Binding);
 	}
 }
@@ -1667,7 +1667,7 @@ void AMythPlayerController::MythHotkey(int32 Index, int32 SkillID, int32 Level)
 
 void AMythPlayerController::MythPressF(int32 Number)
 {
-	UseHotkey(Number - 1);
+	UseHotkey((HudWidget ? HudWidget->HotbarActiveBase() : 0) + Number - 1);
 }
 
 void AMythPlayerController::MythPlayStr(const FString& File)

@@ -91,6 +91,8 @@ class MYTHOFTHOR_API UMythRoHUDWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	/** Indice do primeiro atalho da linha ativa da barra (F1 = base + 0). */
+	int32 HotbarActiveBase() const { return HotbarActiveRow * 9; }
 	/** Escala da interface (as artes originais sao pequenas para telas atuais). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|HUD")
 	float UIScale = 1.35f;
@@ -152,6 +154,7 @@ public:
 protected:
 	virtual void NativeOnInitialized() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+	void UpdateButtons();
 	// Arrastar janelas pela barra de titulo, como no cliente original
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 	virtual FReply NativeOnPreviewKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
@@ -194,12 +197,35 @@ protected:
 	UPROPERTY() TObjectPtr<UCanvasPanel> MinimapWindow;
 	UPROPERTY() TObjectPtr<UImage> MinimapImage;
 	UPROPERTY() TObjectPtr<UImage> PlayerDot;
+	UPROPERTY() TObjectPtr<UCanvasPanel> MinimapView;
+	UPROPERTY() TObjectPtr<UImage> MinimapZoomIn;
+	UPROPERTY() TObjectPtr<UImage> MinimapZoomOut;
+	UPROPERTY() TObjectPtr<UImage> MinimapFold;
+	float MinimapZoom = 1.f;
+	float MinimapShownSize = 0.f;
+	FString LoadedMinimapBrush;
+	bool bMinimapFolded = false;
+	bool HandleMinimapClick(const FVector2D& ScreenPos);
 	UPROPERTY() TObjectPtr<UTextBlock> MapTitleText;
 	UPROPERTY() TObjectPtr<UTextBlock> CoordsText;
 	FString LoadedMinimap;
 
 	// Chat
 	UPROPERTY() TObjectPtr<UVerticalBox> ChatLines;
+	/** Historico do chat: as 7 linhas da tela sao uma janela sobre ele (roda do mouse, setas e barra de rolagem). */
+	struct FChatEntry { FString Text; FLinearColor Color; bool bBattle = false; };
+	TArray<FChatEntry> ChatLog;
+	int32 ChatScroll = 0;
+	int32 ChatTab = 0;
+	UPROPERTY() TObjectPtr<UCanvasPanel> ChatWindow;
+	UPROPERTY() TArray<TObjectPtr<UImage>> ChatTabBoxes;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> ChatTabTexts;
+	UPROPERTY() TObjectPtr<UImage> ChatUpArrow;
+	UPROPERTY() TObjectPtr<UImage> ChatDownArrow;
+	UPROPERTY() TObjectPtr<UImage> ChatThumb;
+	void RebuildChatView();
+	bool HandleChatClick(const FVector2D& ScreenPos);
+	bool HandleChatWheel(const FVector2D& ScreenPos, float Delta);
 	UPROPERTY() TObjectPtr<UEditableTextBox> ChatInput;
 
 	// Auto-Battle
@@ -225,6 +251,9 @@ protected:
 	// Construcao (coordenadas em pixels das artes originais; multiplicadas por UIScale)
 	UCanvasPanel* MakeWindow(const FVector2D& Anchor, const FVector2D& Alignment, const FVector2D& Offset, const FVector2D& Size);
 	UImage* AddImage(UCanvasPanel* Parent, UTexture2D* Tex, float X, float Y, float W = -1.f, float H = -1.f);
+	/** Botao do cliente (btn_<Nome>.bmp, _a ao passar o mouse, _b ao apertar): o rotulo ja vem desenhado na arte. */
+	UImage* AddButton(UCanvasPanel* Parent, const TCHAR* Name, float X, float Y);
+	UImage* AddButtonEx(UCanvasPanel* Parent, const FString& Normal, const FString& Hover, const FString& Pressed, float X, float Y);
 	UImage* AddColor(UCanvasPanel* Parent, const FLinearColor& Color, float X, float Y, float W, float H);
 	/** Retangulo de cantos arredondados (RoundedBox do Slate) com borda fina: corpo de janela translucido como nos prints do LATAM. */
 	UImage* AddRounded(UCanvasPanel* Parent, const FLinearColor& Fill, const FLinearColor& Border, float X, float Y, float W, float H, float RadiusTop, float RadiusBottom);
@@ -263,6 +292,8 @@ protected:
 	UPROPERTY() TObjectPtr<UTextBlock> BasicMini1;
 	UPROPERTY() TObjectPtr<UTextBlock> BasicMini2;
 	static constexpr float BasicFullH = 368.f;
+	/** Altura do quadro branco das informacoes (ate a barra de recolher); a grade do menu fica abaixo, sobre o fundo translucido. */
+	static constexpr float BasicInfoH = 134.f;
 	void SetBasicMenuOpen(bool bOpen);
 	bool HandleBasicMenuClick(const FVector2D& ScreenPos);
 	UPROPERTY() TObjectPtr<UCanvasPanel> StatusWindow;
@@ -321,6 +352,14 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UImage>> HotbarSlots;
 	UPROPERTY() TArray<TObjectPtr<UImage>> HotbarIcons;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> HotbarCounts;
+	UPROPERTY() TArray<TObjectPtr<UImage>> HotbarRowBoxes;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> HotbarRowTexts;
+	UPROPERTY() TObjectPtr<UImage> HotbarUp;
+	UPROPERTY() TObjectPtr<UImage> HotbarDown;
+	/** Linhas da barra: 4 de 9 atalhos (F1..F9); 2 aparecem por vez, e a ativa e a que as teclas F usam. */
+	int32 HotbarFirstRow = 0;
+	int32 HotbarActiveRow = 0;
+	bool HandleHotbarClick(const FVector2D& ScreenPos);
 	UPROPERTY() TObjectPtr<UImage> DragIcon;
 	TArray<int32> SkillRowID;
 	TArray<int32> SkillRowLevel;
@@ -534,6 +573,15 @@ public:
 protected:
 	void BuildQuestWindow();
 	bool HandleQuestClick(const FVector2D& ScreenPos);
+	struct FRoButton
+	{
+		TWeakObjectPtr<UImage> Image;
+		TWeakObjectPtr<UTexture2D> Normal;
+		TWeakObjectPtr<UTexture2D> Hover;
+		TWeakObjectPtr<UTexture2D> Pressed;
+		int32 Shown = 0;
+	};
+	TArray<FRoButton> RoButtons;
 	UPROPERTY() TObjectPtr<UCanvasPanel> QuestWindow;
 	UPROPERTY() TObjectPtr<UTextBlock> QuestHeader;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> QuestTitles;

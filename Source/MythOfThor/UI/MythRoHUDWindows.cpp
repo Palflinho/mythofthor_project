@@ -672,6 +672,18 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 
 bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 {
+	if (HandleMinimapClick(ScreenPos))
+	{
+		return true;
+	}
+	if (HandleChatClick(ScreenPos))
+	{
+		return true;
+	}
+	if (HandleHotbarClick(ScreenPos))
+	{
+		return true;
+	}
 	if (HandleShopClick(ScreenPos))
 	{
 		return true;
@@ -933,6 +945,10 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDoubleClick(const FGeometry& InGeome
 
 FReply UMythRoHUDWidget::NativeOnMouseWheel(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
+	if (HandleChatWheel(InMouseEvent.GetScreenSpacePosition(), InMouseEvent.GetWheelDelta()))
+	{
+		return FReply::Handled();
+	}
 	if (HandleShopWheel(InMouseEvent.GetScreenSpacePosition(), InMouseEvent.GetWheelDelta()))
 	{
 		return FReply::Handled();

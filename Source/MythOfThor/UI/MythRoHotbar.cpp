@@ -27,13 +27,33 @@ namespace
 	}
 }
 
+bool UMythRoHUDWidget::HandleHotbarClick(const FVector2D& ScreenPos)
+{
+	if (!HotbarWindow || !HotbarWindow->IsVisible())
+	{
+		return false;
+	}
+	if (IsUnder(HotbarUp, ScreenPos)) { HotbarFirstRow = FMath::Max(0, HotbarFirstRow - 1); RefreshHotbar(); return true; }
+	if (IsUnder(HotbarDown, ScreenPos)) { HotbarFirstRow = FMath::Min(2, HotbarFirstRow + 1); RefreshHotbar(); return true; }
+	for (int32 r = 0; r < HotbarRowBoxes.Num(); ++r)
+	{
+		if (IsUnder(HotbarRowBoxes[r], ScreenPos))
+		{
+			HotbarActiveRow = HotbarFirstRow + r;
+			RefreshHotbar();
+			return true;
+		}
+	}
+	return false;
+}
+
 int32 UMythRoHUDWidget::HotbarSlotAt(const FVector2D& ScreenPos) const
 {
 	for (int32 i = 0; i < HotbarSlots.Num(); ++i)
 	{
 		if (IsUnder(HotbarSlots[i], ScreenPos))
 		{
-			return i;
+			return (HotbarFirstRow + i / 9) * 9 + i % 9; // indice do atalho no servidor (a linha de cima pode ser a 2, 3 ou 4)
 		}
 	}
 	return INDEX_NONE;
@@ -42,13 +62,21 @@ int32 UMythRoHUDWidget::HotbarSlotAt(const FVector2D& ScreenPos) const
 void UMythRoHUDWidget::RefreshHotbar()
 {
 	const URagnarokNetworkSubsystem* Net = GetNet();
+	for (int32 r = 0; r < HotbarRowTexts.Num(); ++r)
+	{
+		const int32 Row = HotbarFirstRow + r;
+		HotbarRowTexts[r]->SetText(FText::AsNumber(Row + 1));
+		HotbarRowBoxes[r]->SetColorAndOpacity(Row == HotbarActiveRow ? FLinearColor(0.35f, 0.55f, 0.9f, 1.f) : FLinearColor(0.93f, 0.85f, 0.9f, 1.f));
+		HotbarRowTexts[r]->SetColorAndOpacity(FSlateColor(Row == HotbarActiveRow ? FLinearColor::White : FLinearColor(0.4f, 0.3f, 0.4f)));
+	}
 	for (int32 i = 0; i < HotbarIcons.Num(); ++i)
 	{
 		UTexture2D* Icon = nullptr;
 		FString Count;
-		if (Net && Net->GetHotkeys().IsValidIndex(i) && Net->GetHotkeys()[i].ID != 0)
+		const int32 SlotIndex = (HotbarFirstRow + i / 9) * 9 + i % 9;
+		if (Net && Net->GetHotkeys().IsValidIndex(SlotIndex) && Net->GetHotkeys()[SlotIndex].ID != 0)
 		{
-			const FRagnarokHotkey& H = Net->GetHotkeys()[i];
+			const FRagnarokHotkey& H = Net->GetHotkeys()[SlotIndex];
 			if (H.bIsSkill)
 			{
 				Icon = FMythRoClientTables::SkillIcon(H.ID);
