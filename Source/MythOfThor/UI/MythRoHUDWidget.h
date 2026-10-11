@@ -47,7 +47,9 @@ enum class EMythRoWindow : uint8
 	Skills,   // Alt+S: habilidades
 	Basic,    // Alt+V: informacoes basicas
 	Minimap,  // Ctrl+Tab: minimapa
-	Party     // Alt+Z: grupo
+	Party,    // Alt+Z: grupo
+	Emotions, // Alt+L: lista de emocoes
+	Macros    // Alt+M: lista de atalhos de emocao
 };
 
 /** Barra de medidor classica (gze*_left/mid/right sobre gze_bg): o meio estica conforme a fracao. */
@@ -369,6 +371,20 @@ protected:
 	void RefreshGraphicsWindow();
 	void StepGraphicsOption(int32 Row, int32 Delta);
 	bool HandleGameMenuClick(const FVector2D& ScreenPos);
+	// Lista de emocoes (Alt+L) e de atalhos (Alt+M) (MythRoEmotionList.cpp)
+protected:
+	void BuildEmotionWindows();
+	void RefreshEmotionList();
+	bool HandleEmotionClick(const FVector2D& ScreenPos);
+	static constexpr int32 EmotionCellCount = 30;
+	UPROPERTY() TObjectPtr<UCanvasPanel> EmotionWindow;
+	UPROPERTY() TObjectPtr<UCanvasPanel> MacroWindow;
+	UPROPERTY() TArray<TObjectPtr<UImage>> EmotionIcons;
+	UPROPERTY() TObjectPtr<UTextBlock> EmotionPrev;
+	UPROPERTY() TObjectPtr<UTextBlock> EmotionNext;
+	UPROPERTY() TObjectPtr<UTextBlock> EmotionPageText;
+	int32 EmotionPage = 0;
+
 	// Janela de opcoes ON/OFF (MythRoOptions.cpp): abas Efeito, Controle e Outros
 public:
 	void ShowOptionsWindow(int32 Tab);

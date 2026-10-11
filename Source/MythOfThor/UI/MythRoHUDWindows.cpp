@@ -278,6 +278,8 @@ void UMythRoHUDWidget::ToggleWindow(EMythRoWindow Window)
 	case EMythRoWindow::Basic:   Target = BasicWindow; break;
 	case EMythRoWindow::Minimap: Target = MinimapWindow; break;
 	case EMythRoWindow::Party:   Target = PartyWindow; break;
+	case EMythRoWindow::Emotions: Target = EmotionWindow; break;
+	case EMythRoWindow::Macros:  Target = MacroWindow; break;
 	}
 	if (!Target)
 	{
@@ -339,6 +341,7 @@ void UMythRoHUDWidget::RefreshWindows()
 	if (SkillsWindow && SkillsWindow->IsVisible()) { RefreshSkillsWindow(); }
 	if (StorageWindow && StorageWindow->IsVisible()) { RefreshStorage(); }
 	if (PartyWindow && PartyWindow->IsVisible()) { RefreshParty(); }
+	if (EmotionWindow && EmotionWindow->IsVisible()) { RefreshEmotionList(); }
 }
 
 void UMythRoHUDWidget::RefreshStatusWindow()
@@ -653,6 +656,10 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 		return true;
 	}
 	if (HandleOptionsClick(ScreenPos))
+	{
+		return true;
+	}
+	if (HandleEmotionClick(ScreenPos))
 	{
 		return true;
 	}

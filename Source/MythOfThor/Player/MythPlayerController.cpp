@@ -188,6 +188,8 @@ void AMythPlayerController::SetupInputComponent()
 	InputComponent->BindKey(FInputChord(EKeys::S, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeySkills);
 	InputComponent->BindKey(FInputChord(EKeys::V, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyBasic);
 	InputComponent->BindKey(FInputChord(EKeys::Z, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyParty);
+	InputComponent->BindKey(FInputChord(EKeys::L, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyEmotions);
+	InputComponent->BindKey(FInputChord(EKeys::M, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyMacros);
 	InputComponent->BindKey(FInputChord(EKeys::Tab, false, true, false, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyMinimap);
 	InputComponent->BindKey(EKeys::Escape, IE_Pressed, this, &AMythPlayerController::OnHotkeyEscape);
 	InputComponent->BindKey(EKeys::Insert, IE_Pressed, this, &AMythPlayerController::OnHotkeySit);
@@ -536,6 +538,8 @@ void AMythPlayerController::ToggleHudWindow(EMythRoWindow Window)
 	}
 }
 
+void AMythPlayerController::OnHotkeyEmotions() { ToggleHudWindow(EMythRoWindow::Emotions); }
+void AMythPlayerController::OnHotkeyMacros() { ToggleHudWindow(EMythRoWindow::Macros); }
 void AMythPlayerController::OnHotkeyParty() { ToggleHudWindow(EMythRoWindow::Party); }
 void AMythPlayerController::OnHotkeyStatus() { ToggleHudWindow(EMythRoWindow::Status); }
 void AMythPlayerController::OnHotkeyItems() { ToggleHudWindow(EMythRoWindow::Items); }

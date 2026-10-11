@@ -350,6 +350,8 @@ private:
 	void ToggleHudWindow(EMythRoWindow Window);
 	void OnHotkeyStatus();
 	void OnHotkeyParty();
+	void OnHotkeyEmotions();
+	void OnHotkeyMacros();
 	void OnHotkeyItems();
 	void OnHotkeyEquip();
 	void OnHotkeySkills();

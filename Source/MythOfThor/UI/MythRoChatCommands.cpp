@@ -5,6 +5,7 @@
 
 #include "Network/RagnarokNetworkSubsystem.h"
 #include "Player/MythPlayerController.h"
+#include "Sprites/MythEmotion.h"
 
 #include "Components/EditableTextBox.h"
 #include "GameFramework/PlayerController.h"
@@ -12,15 +13,6 @@
 
 namespace
 {
-	/** /e1../e64 -> tipo de emocao do rAthena (EMOTION_ORDERLIST do emotionlist.lub do cliente). */
-	int32 EmotionFromOrder(int32 N)
-	{
-		static const int32 Order[65] = { -1, 0, 1, 2, 3, 14, 4, 5, 6, 7, 8, 9, 11, 10, 12, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
-			27, 28, 29, 30, 31, 32, 33, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 52, 53, 54, 55, 56, 57, 65, 68, 69, 71, 72, 73, 74,
-			75, 76, 77, 78, 79, 80 };
-		return N >= 1 && N <= 64 ? Order[N] : -1;
-	}
-
 	/** Apelidos de emocao do cliente (/! /? /love ...) -> numero do /eN. */
 	int32 EmotionAlias(const FString& Cmd)
 	{
@@ -95,7 +87,7 @@ bool UMythRoHUDWidget::HandleChatCommand(const FString& Msg)
 	}
 	if (Order > 0)
 	{
-		const int32 Type = EmotionFromOrder(Order);
+		const int32 Type = AMythEmotion::TypeFromOrder(Order);
 		if (Type >= 0 && bOnline) { Net->SendEmotion(Type); }
 		return true;
 	}

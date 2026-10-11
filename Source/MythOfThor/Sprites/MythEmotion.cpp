@@ -84,6 +84,73 @@ AMythEmotion::AMythEmotion()
 	Mesh->SetCastShadow(false);
 }
 
+int32 AMythEmotion::TypeFromOrder(int32 Order)
+{
+	static const int32 Table[65] = { -1, 0, 1, 2, 3, 14, 4, 5, 6, 7, 8, 9, 11, 10, 12, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
+		27, 28, 29, 30, 31, 32, 33, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 52, 53, 54, 55, 56, 57, 65, 68, 69, 71, 72, 73, 74,
+		75, 76, 77, 78, 79, 80 };
+	return Order >= 1 && Order <= 64 ? Table[Order] : -1;
+}
+
+UTexture2D* AMythEmotion::IconFor(int32 Type)
+{
+	static TMap<int32, TObjectPtr<UTexture2D>> Icons;
+	if (TObjectPtr<UTexture2D>* Found = Icons.Find(Type))
+	{
+		return Found->Get();
+	}
+	FEmotionData& D = EmotionAssets();
+	if (!D.bOk || !D.Act.Actions.IsValidIndex(Type) || D.Act.Actions[Type].Frames.Num() == 0)
+	{
+		Icons.Add(Type, nullptr);
+		return nullptr;
+	}
+	const FRoActAction& Act = D.Act.Actions[Type];
+	const FRoActFrame& Frame = Act.Frames[FMath::Min(Act.Frames.Num() - 1, Act.Frames.Num() / 2)];
+	constexpr int32 N = 48;
+	TArray<FColor> Canvas;
+	Canvas.Init(FColor(0, 0, 0, 0), N * N);
+	for (const FRoActLayer& L : Frame.Layers)
+	{
+		const FRoSprImage* Img = L.SprIndex >= 0 ? D.Spr.Find(L.SprIndex, L.SprType) : nullptr;
+		if (!Img || Img->Width <= 0)
+		{
+			continue;
+		}
+		const int32 X0 = N / 2 + L.Offset.X - Img->Width / 2;
+		const int32 Y0 = N / 2 + L.Offset.Y - Img->Height / 2;
+		for (int32 y = 0; y < Img->Height; ++y)
+		{
+			for (int32 x = 0; x < Img->Width; ++x)
+			{
+				const int32 Dx = X0 + (L.bMirror ? Img->Width - 1 - x : x);
+				const int32 Dy = Y0 + y;
+				const FColor S = Img->Pixels[y * Img->Width + x];
+				if (S.A == 0 || Dx < 0 || Dy < 0 || Dx >= N || Dy >= N)
+				{
+					continue;
+				}
+				Canvas[Dy * N + Dx] = S;
+			}
+		}
+	}
+	UTexture2D* Tex = UTexture2D::CreateTransient(N, N, PF_B8G8R8A8);
+	if (!Tex)
+	{
+		return nullptr;
+	}
+	Tex->AddToRoot();
+	Tex->Filter = TF_Nearest;
+	Tex->SRGB = true;
+	Tex->NeverStream = true;
+	FTexture2DMipMap& Mip = Tex->GetPlatformData()->Mips[0];
+	FMemory::Memcpy(Mip.BulkData.Lock(LOCK_READ_WRITE), Canvas.GetData(), Canvas.Num() * sizeof(FColor));
+	Mip.BulkData.Unlock();
+	Tex->UpdateResource();
+	Icons.Add(Type, Tex);
+	return Tex;
+}
+
 void AMythEmotion::Show(AActor* Owner, int32 Type)
 {
 	FEmotionData& D = EmotionAssets();
