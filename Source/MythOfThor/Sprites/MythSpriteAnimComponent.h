@@ -11,7 +11,7 @@ class UMythSpriteSet;
 UENUM(BlueprintType)
 enum class EMythSpriteState : uint8
 {
-	Idle, Walk, Attack, Hit, Dead, Sit, Pickup, Ready
+	Idle, Walk, Attack, Hit, Dead, Sit, Pickup, Ready, Frozen
 };
 
 /**

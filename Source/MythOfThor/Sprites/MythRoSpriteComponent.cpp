@@ -116,6 +116,7 @@ namespace
 	constexpr float ReadyFightSeconds = 4.f;
 	constexpr int32 GroupAttack = 5;
 	constexpr int32 GroupHurt = 6;
+	constexpr int32 GroupFrozen = 7;
 	constexpr int32 GroupDead = 8;
 	// Monstro: 0 parado, 1 andando, 2 ataque, 3 dano, 4 morte.
 	constexpr int32 MobGroupAttack = 2;
@@ -781,6 +782,7 @@ int32 UMythRoSpriteComponent::GetActionIndex() const
 	case EMythSpriteState::Sit:    Group = bMob ? GroupIdle : GroupSit; break;
 	case EMythSpriteState::Pickup: Group = bMob ? GroupIdle : GroupPickup; break;
 	case EMythSpriteState::Ready:  Group = bMob ? GroupIdle : GroupReady; break;
+	case EMythSpriteState::Frozen: Group = bMob ? GroupIdle : GroupFrozen; break;
 	}
 	const int32 Index = Group * 8 + static_cast<int32>(Direction);
 	// Sprites com poucas acoes (item no chao: 1; varios NPCs: so as 8 de parado) reaproveitam as que existem
@@ -864,6 +866,19 @@ void UMythRoSpriteComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 		if (State == EMythSpriteState::Walk)
 		{
 			WalkDistanceRo += Velocity.Size2D() * DeltaTime / 10.f;
+		}
+		// Congelado (opt1 2) ou atordoado (opt1 3): fica na postura de congelado (grupo 7) ate o estado acabar
+		const bool bFrozenBody = BodyState == 2 || BodyState == 3;
+		if (bFrozenBody)
+		{
+			if (State != EMythSpriteState::Frozen) { SetState(EMythSpriteState::Frozen, false); }
+			UpdateBillboard(CamRot);
+			RebuildMesh(CamRot);
+			return;
+		}
+		if (State == EMythSpriteState::Frozen)
+		{
+			SetState(EMythSpriteState::Idle, false);
 		}
 		if (bOneShotPlaying)
 		{
