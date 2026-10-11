@@ -211,6 +211,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnSkillUnitAppear.AddDynamic(this, &AMythNetWorld::HandleSkillUnitAppear);
 	Net->OnSkillUnitDisappear.AddDynamic(this, &AMythNetWorld::HandleSkillUnitDisappear);
 	Net->OnMonsterHp.AddDynamic(this, &AMythNetWorld::HandleMonsterHp);
+	Net->OnUnitBodyState.AddDynamic(this, &AMythNetWorld::HandleUnitBodyState);
 	Net->OnPartyInvite.AddDynamic(this, &AMythNetWorld::HandlePartyInvite);
 	Net->OnStorageClose.AddDynamic(this, &AMythNetWorld::HandleStorageClose);
 	Net->OnSpeech.AddDynamic(this, &AMythNetWorld::HandleSpeech);
@@ -281,6 +282,7 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnSkillUnitAppear.RemoveAll(this);
 		Net->OnSkillUnitDisappear.RemoveAll(this);
 		Net->OnMonsterHp.RemoveAll(this);
+		Net->OnUnitBodyState.RemoveAll(this);
 		Net->OnPartyInvite.RemoveAll(this);
 		Net->OnStorageChanged.RemoveAll(this);
 		Net->OnStorageClose.RemoveAll(this);
@@ -588,6 +590,9 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 			S->Shield = Info.Shield & 0xFFFF;
 			S->Robe = Info.Robe;
 			S->CartType = UMythRoSpriteComponent::CartTypeFromOption(Info.Option);
+			S->SetBodyState(Info.BodyState);
+			S->SetHealthState(Info.HealthState);
+			S->SetEffectOption(Info.Option, GetNet() && Info.GID == static_cast<uint32>(GetNet()->GetSelfID()));
 			bAuraWanted = Info.BaseLevel >= 99;
 			S->HairStyle = FMath::Max(Info.Head, 1);
 			S->HairColor = Info.HeadPalette;
@@ -689,6 +694,13 @@ void AMythNetWorld::HandleUnitDirection(int64 ID, uint8 HeadTurnValue, uint8 Bod
 
 void AMythNetWorld::HandleUnitOption(int64 ID, int32 Option)
 {
+	if (const AActor* A = ResolveActor(ID))
+	{
+		if (UMythRoSpriteComponent* Vis = A->FindComponentByClass<UMythRoSpriteComponent>(); Vis && Vis->MonsterSpriteName.IsEmpty())
+		{
+			Vis->SetEffectOption(Option, GetNet() && ID == GetNet()->GetSelfID());
+		}
+	}
 	// ZC_STATE_CHANGE: carrinho (e depois montaria, falcao...) liga e desliga
 	const AActor* Actor = ResolveActor(ID);
 	UMythRoSpriteComponent* S = Actor ? Actor->FindComponentByClass<UMythRoSpriteComponent>() : nullptr;
@@ -697,6 +709,18 @@ void AMythNetWorld::HandleUnitOption(int64 ID, int32 Option)
 	{
 		S->CartType = Cart;
 		S->ReloadSprites();
+	}
+}
+
+void AMythNetWorld::HandleUnitBodyState(int64 UnitID, int32 BodyState, int32 HealthState)
+{
+	if (const AActor* A = ResolveActor(UnitID))
+	{
+		if (UMythRoSpriteComponent* S = A->FindComponentByClass<UMythRoSpriteComponent>())
+		{
+			S->SetBodyState(BodyState);
+			S->SetHealthState(HealthState);
+		}
 	}
 }
 
@@ -1336,6 +1360,13 @@ void AMythNetWorld::ApplySelfAppearance()
 
 void AMythNetWorld::HandleStatusChange(int64 UnitID, int32 EfstID, bool bActive, int32 TotalMs, int32 RemainMs)
 {
+	if (const AActor* A = ResolveActor(UnitID))
+	{
+		if (UMythRoSpriteComponent* S = A->FindComponentByClass<UMythRoSpriteComponent>())
+		{
+			S->SetEfstVirtue(EfstID, bActive);
+		}
+	}
 	// Icones de estado so do proprio personagem, na coluna da direita (como no cliente original)
 	const URagnarokNetworkSubsystem* Net = GetNet();
 	if (Net && UnitID == Net->GetSelfID())

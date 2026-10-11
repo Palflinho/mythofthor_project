@@ -113,6 +113,13 @@ public:
 	/** Converte o campo option dos pacotes (OPTION_*) no tipo de carrinho. */
 	static int32 CartTypeFromOption(int32 Option);
 
+	/** Estados visuais do EntityState do cliente: opt1 (pedra, gelo, atordoar, sono), opt2 (veneno, maldicao...) e as skills
+	 * de opt3 (Aceleracao, Escudo, Berserk...) tingem o sprite; esconder/camuflar some com ele (ou o escurece em quem e voce). */
+	void SetBodyState(int32 Value);
+	void SetHealthState(int32 Value);
+	void SetEfstVirtue(int32 EfstId, bool bOn);
+	void SetEffectOption(int32 Option, bool bSelf);
+
 	/** Filtro bilinear como o cliente original (falso = pixel duro, "nearest"). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
 	bool bSmoothSprites = true;
@@ -284,6 +291,15 @@ private:
 
 	/** Luz calculada atual (suavizada) aplicada na cor dos vertices quando bTintLighting. */
 	FLinearColor CurrentTint = FLinearColor::White;
+
+	/** Cor dos estados (corpo x saude x opt3 x camuflagem), multiplicada na cor dos vertices. */
+	FLinearColor StatusTint = FLinearColor::White;
+	int32 BodyState = 0;
+	int32 HealthState = 0;
+	int32 Virtue = 0;
+	bool bStatusDim = false;
+	bool bStatusHidden = false;
+	void RecomputeStatusTint();
 	float SunVisibility = 1.f;
 	float SunTraceTimer = 0.f;
 	TArray<TWeakObjectPtr<class AMythNightLight>> NearbyLamps;

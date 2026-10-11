@@ -113,6 +113,13 @@ struct FRagnarokUnitVisualInfo
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Unit")
 	int32 Option = 0;
 
+	/** opt1 (pedra, gelo, atordoar, sono) e opt2 (veneno, maldicao, silencio...) do pacote. */
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Unit")
+	int32 BodyState = 0;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Unit")
+	int32 HealthState = 0;
+
 	/** clevel do pacote (nivel de base da unidade; 0 se o pacote nao traz). */
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Unit")
 	int32 BaseLevel = 0;
@@ -348,6 +355,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnUnitStop, int64, UnitID, int32
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnUnitDirection, int64, UnitID, uint8, HeadDir, uint8, BodyDir);
 /** ZC_STATE_CHANGE (0x0229 / 0x0119): opcoes de uma unidade (OPTION_CART1..5 0x08/0x80/0x100/0x200/0x400, riding 0x20, falcon...). */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnUnitOption, int64, UnitID, int32, Option);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnUnitBodyState, int64, UnitID, int32, BodyState, int32, HealthState);
 /** ZC_RESURRECTION (0x0148): a unidade voltou a vida. */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUnitRevive, int64, UnitID);
 
@@ -679,6 +687,7 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Movement")
 	FOnUnitOption OnUnitOption;
+	FOnUnitBodyState OnUnitBodyState;
 
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Movement")
 	FOnUnitRevive OnUnitRevive;

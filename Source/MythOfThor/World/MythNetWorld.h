@@ -72,6 +72,7 @@ private:
 	UFUNCTION() void HandleSkillUnitAppear(int64 UnitID, int64 OwnerID, int32 UnitType, int32 X, int32 Y);
 	UFUNCTION() void HandleSkillUnitDisappear(int64 UnitID);
 	UFUNCTION() void HandleMonsterHp(int64 UnitID, int32 Hp, int32 MaxHp);
+	UFUNCTION() void HandleUnitBodyState(int64 UnitID, int32 BodyState, int32 HealthState);
 	UFUNCTION() void HandlePartyInvite(int32 PartyId, const FString& PartyName);
 	UFUNCTION() void HandleStorageClose();
 	UFUNCTION() void HandleSpeech(int64 UnitID, const FString& Text);

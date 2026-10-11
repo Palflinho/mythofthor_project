@@ -542,6 +542,89 @@ void UMythRoSpriteComponent::BuildAtlas(FMythRoSpriteSource& Source)
 
 // ------------------------------------------------------------------------------------------- estado
 
+namespace
+{
+	// OPT3 do rAthena (StatusState.js do roBrowser, EntityState.js): o bit de cada skill e a cor que ela da ao sprite
+	int32 VirtueBitFromEfst(int32 Efst)
+	{
+		switch (Efst)
+		{
+		case 2: case 68: case 105: case 161: return 0x1;          // Aceleracao (QUICKEN)
+		case 25: case 188: case 154: return 0x2;                  // Overthrust, Overthrust Max, SWOO
+		case 31: return 0x4;                                      // Energy Coat
+		case 86: return 0x8;                                      // Explosao Espiritual
+		case 87: return 0x10;                                     // Corpo de Aco
+		case 85: return 0x20;                                     // Parar Lamina
+		case 103: return 0x40;                                    // Aura de Lamina
+		case 107: return 0x80;                                    // Berserk
+		case 121: case 122: return 0x400;                         // Marionete
+		case 110: case 473: return 0x800;                         // Assumptio
+		case 164: case 165: case 166: case 167: return 0x1000;    // Calor de Sol, Lua, Estrela
+		case 153: return 0x2000;                                  // Kaite
+		case 207: return 0x4000;                                  // Bunshin
+		case 149: return 0x8000;                                  // Soul Link
+		case 97: return 0x10000;                                  // Propriedade morto-vivo
+		case 263: return 0x20000;                                 // Contrato
+		case 334: return 0x40000;                                 // Hallucination Walk
+		default: return 0;
+		}
+	}
+}
+
+void UMythRoSpriteComponent::SetBodyState(int32 Value) { BodyState = Value; RecomputeStatusTint(); }
+void UMythRoSpriteComponent::SetHealthState(int32 Value) { HealthState = Value; RecomputeStatusTint(); }
+
+void UMythRoSpriteComponent::SetEfstVirtue(int32 EfstId, bool bOn)
+{
+	const int32 Bit = VirtueBitFromEfst(EfstId);
+	if (Bit == 0)
+	{
+		return;
+	}
+	Virtue = bOn ? (Virtue | Bit) : (Virtue & ~Bit);
+	RecomputeStatusTint();
+}
+
+void UMythRoSpriteComponent::SetEffectOption(int32 Option, bool bSelf)
+{
+	// HIDE 0x2, CLOAK 0x4, CHASEWALK 0x4000, INVISIBLE 0x40: os outros jogadores nao veem; voce se ve escurecido
+	const bool bConcealed = (Option & (0x2 | 0x4 | 0x4000 | 0x40)) != 0;
+	bStatusHidden = bConcealed && !bSelf;
+	bStatusDim = bConcealed && bSelf;
+	SetVisibility(!bStatusHidden, true);
+	RecomputeStatusTint();
+}
+
+void UMythRoSpriteComponent::RecomputeStatusTint()
+{
+	FLinearColor C = FLinearColor::White;
+	auto Mul = [&C](float R, float G, float B) { C.R *= R; C.G *= G; C.B *= B; };
+	// opt1 (BodyState): 1 pedra, 2 gelo, 3 atordoado, 4 sono, 6 pedra chegando
+	switch (BodyState)
+	{
+	case 1: Mul(0.1f, 0.1f, 0.1f); break;
+	case 6: Mul(0.3f, 0.3f, 0.3f); break;
+	case 2: Mul(0.f, 0.4f, 0.8f); break;
+	default: break;
+	}
+	// opt2 (HealthState): 0x1 veneno, 0x2 maldicao
+	if (HealthState & 0x2) { Mul(0.5f, 0.15f, 0.1f); }
+	if (HealthState & 0x1) { Mul(0.9f, 0.4f, 0.8f); }
+	// opt3 (Virtue), na ordem do updateVirtue do cliente
+	if (Virtue & 0x1) { C.B = 0.f; }
+	if (Virtue & 0x8) { C.G = FMath::Min(C.G, 0.75f); C.B = FMath::Min(C.B, 0.75f); }
+	if (Virtue & 0x20) { Mul(0.25f, 0.25f, 0.25f); }
+	if (Virtue & (0x4 | 0x4000)) { Mul(0.5f, 0.5f, 0.85f); }
+	if (Virtue & 0x2) { C.G *= 0.75f; C.B *= 0.75f; }
+	if (Virtue & 0x1000) { C.G *= 0.4f; C.B *= 0.4f; }
+	if (Virtue & 0x8000) { Mul(0.35f, 0.35f, 0.9f); }
+	if (Virtue & 0x10000) { C.R *= 0.7f; C.B *= 0.65f; }
+	if (Virtue & 0x400) { Mul(1.f, 0.34f, 0.71f); }
+	if (Virtue & 0x80) { Mul(1.f, 0.4f, 0.4f); }
+	if (bStatusDim) { Mul(0.55f, 0.55f, 0.55f); }
+	StatusTint = C;
+}
+
 void UMythRoSpriteComponent::SetState(EMythSpriteState NewState, bool bOneShot)
 {
 	if (State == EMythSpriteState::Dead && NewState != EMythSpriteState::Idle)
@@ -992,7 +1075,7 @@ void UMythRoSpriteComponent::AddLayerQuads(const FMythRoSpriteSource& Source, co
 			FrameLocalBounds += Verts.Last();
 			Tex.Add(CornerUV[k]);
 			// Cor da camada (.act) x luz calculada (dia/noite, postes, sombra de predio); o alpha fica o da camada.
-			FColor Tinted = (FLinearColor(L.Color) * CurrentTint).ToFColor(false);
+			FColor Tinted = (FLinearColor(L.Color) * CurrentTint * StatusTint).ToFColor(false);
 			Tinted.A = L.Color.A;
 			Colors.Add(Tinted);
 			// Normal inclinada para cima e para a camera: o sprite iluminado recebe sol/ceu como o chao

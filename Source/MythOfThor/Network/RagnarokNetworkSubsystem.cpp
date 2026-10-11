@@ -1345,6 +1345,8 @@ void URagnarokNetworkSubsystem::HandleUnitAppear(const uint8* PacketData, int32 
 	Unit.BodyPalette = I16(43 + Shift);
 	Unit.HeadDir = static_cast<uint8>(FMath::Clamp(U16(45 + Shift), 0, 2));
 	Unit.Option = I32(19); // effectState, antes do job (igual nos tres pacotes)
+	Unit.BodyState = U16(15);   // opt1 e opt2 vem logo apos a velocidade
+	Unit.HealthState = U16(17);
 	Unit.Robe = U16(47 + Shift);
 	Unit.Sex = PacketData[bWalking ? 66 : 62]; // logo antes de MoveData (walking) / PosDir
 
@@ -2544,6 +2546,7 @@ void URagnarokNetworkSubsystem::HandleOptionChange(const uint8* PacketData, int3
 		UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] [OnUnitOption] AID=%u option=0x%X"), AID, Option);
 	}
 	OnUnitOption.Broadcast(AID, Option);
+	OnUnitBodyState.Broadcast(AID, static_cast<int32>(*reinterpret_cast<const uint16*>(PacketData + 6)), static_cast<int32>(*reinterpret_cast<const uint16*>(PacketData + 8)));
 }
 
 void URagnarokNetworkSubsystem::HandleResurrection(const uint8* PacketData, int32 PacketSize)
