@@ -308,6 +308,7 @@ void UMythRoHUDWidget::BuildLayout()
 	BuildPartyWindow();
 	BuildOptionsWindow();
 	BuildEmotionWindows();
+	BuildTradeWindows();
 	BuildNpcDialog();
 	AddChatLine(TEXT("Bem-vindo a Rune-Midgard."), ColSystem);
 }

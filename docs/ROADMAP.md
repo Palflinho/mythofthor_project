@@ -76,7 +76,7 @@ código GPL, citando a origem). Um doc por tema em `docs/ref/`.
 | 3.2 | Troca de classe pelas quests originais (NPCs mapeados em coord 012) | os dois | 🟡 |
 | 3.3 | Grupo (Alt+Z, /organize, /invite, /leave), cochicho, chat, emoções | Claude | 🟡 feito; faltam abas Grupo/Guilda e testar com 2 jogadores reais |
 | 3.4 | Mapas de campos e cidades das classes | Antigravity → Claude | ✅ 40 mapas importados (coord 013) |
-| 3.5 | Troca entre jogadores, montaria e carrinho | Claude | ⬜ |
+| 3.5 | Troca entre jogadores (feita e testada com 2 clientes em 2026-10-11: pedido, aceitar, oferta, travar, confirmar; menu do botão direito sobre jogador; `/exchange`); montaria, falcão e carrinho (visual) | Claude | 🟡 |
 | 3.6 | Efeitos de skill: mapa completado do roBrowser (575 skills a mais), unidades no chão, skills de área sem alvo e tintas de estado (veneno, gelo, Berserk, Aceleração...) feitos em 2026-10-11. Faltam só os tipos SPR/QuadHorn/TRAIL (8 skills), os visuais anexos (sono, atordoar, maldição, silêncio) e armadilhas/canções (arquivos ausentes no GRF). Lista: `docs/EFEITOS_PENDENTES.md` | Claude | 🟡 |
 
 ## F4. Auditoria do servidor (Antigravity)

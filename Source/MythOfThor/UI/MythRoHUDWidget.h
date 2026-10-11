@@ -371,6 +371,34 @@ protected:
 	void RefreshGraphicsWindow();
 	void StepGraphicsOption(int32 Row, int32 Delta);
 	bool HandleGameMenuClick(const FVector2D& ScreenPos);
+	// Troca entre jogadores e menu do botao direito sobre um jogador (MythRoTrade.cpp)
+public:
+	void OnTradeRequestReceived(const FString& FromName);
+	void RefreshTrade();
+	bool TryTradeAddFromInventory(int32 InventoryIndex, int32 Amount);
+	void ShowPlayerMenu(int64 AccountId, const FString& Name, const FVector2D& ScreenPos);
+protected:
+	void BuildTradeWindows();
+	bool HandleTradeClick(const FVector2D& ScreenPos);
+	static constexpr int32 TradeRowCount = 10;
+	UPROPERTY() TObjectPtr<UCanvasPanel> TradeWindow;
+	UPROPERTY() TObjectPtr<UCanvasPanel> TradeAskWindow;
+	UPROPERTY() TObjectPtr<UCanvasPanel> PlayerMenuWindow;
+	UPROPERTY() TObjectPtr<UTextBlock> TradeMineTitle;
+	UPROPERTY() TObjectPtr<UTextBlock> TradeTheirTitle;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> TradeMineRows;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> TradeTheirRows;
+	UPROPERTY() TObjectPtr<UTextBlock> TradeHint;
+	UPROPERTY() TObjectPtr<UTextBlock> TradeLockLink;
+	UPROPERTY() TObjectPtr<UTextBlock> TradeCommitLink;
+	UPROPERTY() TObjectPtr<UTextBlock> TradeCancelLink;
+	UPROPERTY() TObjectPtr<UTextBlock> TradeAskText;
+	UPROPERTY() TObjectPtr<UTextBlock> TradeAcceptLink;
+	UPROPERTY() TObjectPtr<UTextBlock> TradeDeclineLink;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> PlayerMenuItems;
+	int64 MenuTargetAid = 0;
+	FString MenuTargetName;
+
 	// Lista de emocoes (Alt+L) e de atalhos (Alt+M) (MythRoEmotionList.cpp)
 protected:
 	void BuildEmotionWindows();

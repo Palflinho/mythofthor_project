@@ -208,6 +208,8 @@ void AMythNetWorld::BeginPlay()
 	Net->OnStorageOpen.AddDynamic(this, &AMythNetWorld::HandleStorageOpen);
 	Net->OnStorageChanged.AddDynamic(this, &AMythNetWorld::HandleStorageChanged);
 	Net->OnPartyChanged.AddDynamic(this, &AMythNetWorld::HandlePartyChanged);
+	Net->OnTradeRequest.AddDynamic(this, &AMythNetWorld::HandleTradeRequest);
+	Net->OnTradeChanged.AddDynamic(this, &AMythNetWorld::HandleTradeChanged);
 	Net->OnSkillUnitAppear.AddDynamic(this, &AMythNetWorld::HandleSkillUnitAppear);
 	Net->OnSkillUnitDisappear.AddDynamic(this, &AMythNetWorld::HandleSkillUnitDisappear);
 	Net->OnMonsterHp.AddDynamic(this, &AMythNetWorld::HandleMonsterHp);
@@ -279,6 +281,8 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnShopResult.RemoveAll(this);
 		Net->OnStorageOpen.RemoveAll(this);
 		Net->OnPartyChanged.RemoveAll(this);
+		Net->OnTradeRequest.RemoveAll(this);
+		Net->OnTradeChanged.RemoveAll(this);
 		Net->OnSkillUnitAppear.RemoveAll(this);
 		Net->OnSkillUnitDisappear.RemoveAll(this);
 		Net->OnMonsterHp.RemoveAll(this);
@@ -852,6 +856,22 @@ void AMythNetWorld::HandleSkillUnitDisappear(int64 UnitID)
 	if (SkillUnitTimers.RemoveAndCopyValue(UnitID, Handle))
 	{
 		GetWorldTimerManager().ClearTimer(Handle);
+	}
+}
+
+void AMythNetWorld::HandleTradeRequest(const FString& FromName)
+{
+	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
+	{
+		PC->GetHud()->OnTradeRequestReceived(FromName);
+	}
+}
+
+void AMythNetWorld::HandleTradeChanged()
+{
+	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
+	{
+		PC->GetHud()->RefreshTrade();
 	}
 }
 

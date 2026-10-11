@@ -954,6 +954,15 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x00f8: // ZC_CLOSE_STORE
 				HandleStoragePacket(PacketData, ActualLen, PacketID);
 				break;
+			case 0x01f4: // ZC_REQ_EXCHANGE_ITEM2
+			case 0x01f5: // ZC_ACK_EXCHANGE_ITEM2
+			case 0x0b42: // ZC_ADD_EXCHANGE_ITEM (PACKETVER >= 20200916)
+			case 0x00ea: // ZC_ACK_ADD_EXCHANGE_ITEM
+			case 0x00ec: // ZC_CONCLUDE_EXCHANGE_ITEM
+			case 0x00ee: // ZC_CANCEL_EXCHANGE_ITEM
+			case 0x00f0: // ZC_EXEC_EXCHANGE_ITEM
+				HandleTradePacket(PacketData, ActualLen, PacketID);
+				break;
 			case 0x00fa: // ZC_ACK_MAKE_GROUP
 			case 0x0ae4: // ZC_ADD_MEMBER_TO_GROUP (PACKETVER >= 20171207)
 			case 0x0ae5: // ZC_GROUP_LIST
@@ -2875,6 +2884,208 @@ void URagnarokNetworkSubsystem::HandlePartyPacket(const uint8* PacketData, int32
 				OnPartyChanged.Broadcast();
 			}
 		}
+		break;
+	default:
+		break;
+	}
+}
+
+
+// ---- Troca entre jogadores (clif_trade*, packets_struct.hpp) ----
+
+bool URagnarokNetworkSubsystem::SendTradeRequest(int32 AccountId)
+{
+	// CZ_REQ_EXCHANGE_ITEM 0x00e4 <aid>.L (6 bytes)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	uint8 Packet[6] = { 0xe4, 0x00 };
+	*reinterpret_cast<uint32*>(Packet + 2) = static_cast<uint32>(AccountId);
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendTradeReply(bool bAccept)
+{
+	// CZ_ACK_EXCHANGE_ITEM 0x00e6 <resultado>.B (3 bytes): 3 aceita, 4 recusa
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	const uint8 Packet[3] = { 0xe6, 0x00, static_cast<uint8>(bAccept ? 3 : 4) };
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendTradeAddItem(int32 InventoryIndex, int32 Amount)
+{
+	// CZ_ADD_EXCHANGE_ITEM 0x00e8 <indice>.W <quantidade>.L (8 bytes); indice 0 = zeny
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap || Amount <= 0)
+	{
+		return false;
+	}
+	uint8 Packet[8] = { 0xe8, 0x00 };
+	*reinterpret_cast<uint16*>(Packet + 2) = static_cast<uint16>(InventoryIndex);
+	*reinterpret_cast<int32*>(Packet + 4) = Amount;
+	TradePendingAmount.Add(InventoryIndex, Amount);
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendTradeLock()
+{
+	// CZ_CONCLUDE_EXCHANGE_ITEM 0x00eb (2 bytes)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	const uint8 Packet[2] = { 0xeb, 0x00 };
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendTradeCommit()
+{
+	// CZ_EXEC_EXCHANGE_ITEM 0x00ef (2 bytes)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	const uint8 Packet[2] = { 0xef, 0x00 };
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendTradeCancel()
+{
+	// CZ_CANCEL_EXCHANGE_ITEM 0x00ed (2 bytes)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	const uint8 Packet[2] = { 0xed, 0x00 };
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+void URagnarokNetworkSubsystem::HandleTradePacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
+{
+	auto Say = [this](const FString& Text) { OnChatMessage.Broadcast(TEXT(""), Text, TEXT("#FFFF00")); };
+	auto Close = [this]()
+	{
+		bTradeOpen = false;
+		bTradeLockMine = bTradeLockTheirs = false;
+		TradeMine.Reset();
+		TradeTheirs.Reset();
+		TradePendingAmount.Reset();
+		OnTradeChanged.Broadcast();
+	};
+	switch (PacketID)
+	{
+	case 0x01f4: // <nome>.24B <aid>.L <nivel>.W: outro jogador quer trocar
+		if (PacketSize >= 32)
+		{
+			TradePartner = PartyFixed(PacketData + 2, 24);
+			OnTradeRequest.Broadcast(TradePartner);
+		}
+		break;
+	case 0x01f5: // <resultado>.B <aid>.L <nivel>.W
+		if (PacketSize >= 9)
+		{
+			switch (PacketData[2])
+			{
+			case 0: Say(TEXT("O jogador está longe demais para trocar.")); break;
+			case 1: Say(TEXT("Esse jogador não existe.")); break;
+			case 2: Say(TEXT("A troca falhou.")); break;
+			case 3:
+				bTradeOpen = true;
+				bTradeLockMine = bTradeLockTheirs = false;
+				TradeMine.Reset();
+				TradeTheirs.Reset();
+				OnTradeChanged.Broadcast();
+				break;
+			case 4: Say(TEXT("A troca foi recusada.")); Close(); break;
+			case 5: Say(TEXT("O outro jogador está ocupado.")); break;
+			default: break;
+			}
+		}
+		break;
+	case 0x0b42: // <item>.L <tipo>.B <qtd>.L <identificado>.B <danificado>.B <cartas>.16B <opcoes>.25B <local>.L <look>.W <refino>.B <grade>.B
+		if (PacketSize >= 62)
+		{
+			FRoTradeItem I;
+			I.ItemId = *reinterpret_cast<const int32*>(PacketData + 2);
+			I.Amount = *reinterpret_cast<const int32*>(PacketData + 7);
+			if (I.ItemId == 0)
+			{
+				// zeny do outro lado: soma numa linha propria (ItemId 0)
+				TradeTheirs.RemoveAll([](const FRoTradeItem& T) { return T.ItemId == 0; });
+			}
+			TradeTheirs.Add(I);
+			OnTradeChanged.Broadcast();
+		}
+		break;
+	case 0x00ea: // <indice>.W <resultado>.B: o meu item foi aceito na troca (0 = sim)
+		if (PacketSize >= 5)
+		{
+			const int32 Index = *reinterpret_cast<const uint16*>(PacketData + 2);
+			const int32 Amount = TradePendingAmount.FindRef(Index);
+			TradePendingAmount.Remove(Index);
+			if (PacketData[4] == 0 && Amount > 0)
+			{
+				FRoTradeItem I;
+				I.Index = Index;
+				I.Amount = Amount;
+				if (Index != 0)
+				{
+					for (const FRagnarokInventoryItem& Inv : InventoryItems)
+					{
+						if (Inv.Index == Index)
+						{
+							I.ItemId = Inv.ItemID;
+						}
+					}
+				}
+				else
+				{
+					TradeMine.RemoveAll([](const FRoTradeItem& T) { return T.Index == 0; });
+				}
+				if (FRoTradeItem* Existing = Index != 0 ? TradeMine.FindByPredicate([Index](const FRoTradeItem& T) { return T.Index == Index; }) : nullptr)
+				{
+					Existing->Amount += Amount;
+				}
+				else
+				{
+					TradeMine.Add(I);
+				}
+				OnTradeChanged.Broadcast();
+			}
+			else
+			{
+				static const TCHAR* Reasons[5] = { TEXT(""), TEXT("Peso excedido."), TEXT("A troca foi cancelada."), TEXT("Inventário cheio."), TEXT("Quantidade máxima da pilha excedida.") };
+				const uint8 R = PacketData[4];
+				if (R > 0 && R < 5)
+				{
+					Say(Reasons[R]);
+				}
+			}
+		}
+		break;
+	case 0x00ec: // <quem>.B (0 = eu, 1 = o outro)
+		if (PacketSize >= 3)
+		{
+			(PacketData[2] == 0 ? bTradeLockMine : bTradeLockTheirs) = true;
+			OnTradeChanged.Broadcast();
+		}
+		break;
+	case 0x00ee:
+		Say(TEXT("A troca foi cancelada."));
+		Close();
+		break;
+	case 0x00f0: // <resultado>.B (0 = sucesso)
+		Say(PacketSize >= 3 && PacketData[2] == 0 ? TEXT("Troca concluída.") : TEXT("A troca falhou."));
+		Close();
 		break;
 	default:
 		break;

@@ -323,6 +323,18 @@ bool UMythRoHUDWidget::CloseTopWindow()
 				AnswerPartyInvite(false);
 				return true;
 			}
+			if (Win == TradeAskWindow)
+			{
+				if (URagnarokNetworkSubsystem* TNet = GetNet()) { TNet->SendTradeReply(false); }
+				Win->SetVisibility(ESlateVisibility::Collapsed);
+				OpenOrder.Remove(Win);
+				return true;
+			}
+			if (Win == TradeWindow)
+			{
+				if (URagnarokNetworkSubsystem* TNet = GetNet()) { TNet->SendTradeCancel(); }
+				return true;
+			}
 			Win->SetVisibility(ESlateVisibility::Collapsed);
 			return true;
 		}
@@ -659,6 +671,10 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 	{
 		return true;
 	}
+	if (HandleTradeClick(ScreenPos))
+	{
+		return true;
+	}
 	if (HandleEmotionClick(ScreenPos))
 	{
 		return true;
@@ -685,6 +701,18 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 			if (Win == PartyInviteWindow)
 			{
 				AnswerPartyInvite(false);
+				return true;
+			}
+			if (Win == TradeAskWindow)
+			{
+				if (URagnarokNetworkSubsystem* TNet = GetNet()) { TNet->SendTradeReply(false); }
+				Win->SetVisibility(ESlateVisibility::Collapsed);
+				OpenOrder.Remove(Win);
+				return true;
+			}
+			if (Win == TradeWindow)
+			{
+				if (URagnarokNetworkSubsystem* TNet = GetNet()) { TNet->SendTradeCancel(); }
 				return true;
 			}
 			Win->SetVisibility(ESlateVisibility::Collapsed);
@@ -766,6 +794,19 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDoubleClick(const FGeometry& InGeome
 			if (ItemCellIndex[i] < 0 || !IsUnder(ItemCells[i], Screen))
 			{
 				continue;
+			}
+			if (Net->IsTradeOpen())
+			{
+				// Com a troca aberta, o duplo clique oferece o item (Shift: a pilha toda)
+				const bool bAll = GetOwningPlayer() && (GetOwningPlayer()->IsInputKeyDown(EKeys::LeftShift) || GetOwningPlayer()->IsInputKeyDown(EKeys::RightShift));
+				for (const FRagnarokInventoryItem& Offered : Net->GetInventoryItems())
+				{
+					if (Offered.Index == ItemCellIndex[i] && !Offered.bIsEquipped)
+					{
+						TryTradeAddFromInventory(Offered.Index, bAll ? Offered.Amount : 1);
+					}
+				}
+				return FReply::Handled();
 			}
 			// Duplo clique: usa o consumivel ou veste o equipamento (como no cliente original)
 			for (const FRagnarokInventoryItem& Item : Net->GetInventoryItems())

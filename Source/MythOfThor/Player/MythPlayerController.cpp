@@ -411,6 +411,24 @@ void AMythPlayerController::PlayerTick(float DeltaTime)
 	{
 		CancelSkillTargeting(); // botao direito cancela a mira, como no cliente original
 	}
+	// Botao direito rapido (sem arrastar a camera) sobre outro jogador: menu Trocar / Convidar / Cochichar
+	if (WasInputKeyJustPressed(EKeys::RightMouseButton))
+	{
+		RightClickHeldSince = GetWorld()->GetTimeSeconds();
+	}
+	if (WasInputKeyJustReleased(EKeys::RightMouseButton) && GetWorld()->GetTimeSeconds() - RightClickHeldSince < 0.25 && PendingSkillID == 0
+		&& HudWidget && !HudWidget->IsPointerOverUi())
+	{
+		FHitResult RightHit;
+		if (GetHitResultUnderCursor(ECC_Visibility, false, RightHit) && RightHit.bBlockingHit)
+		{
+			const URagnarokNetworkSubsystem* RNet = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr;
+			if (const AMythMonster* Other = Cast<AMythMonster>(RightHit.GetActor()); Other && RNet && Other->IsNetUnit() && Other->NetObjectType == 0 && Other->NetID != RNet->GetSelfID())
+			{
+				HudWidget->ShowPlayerMenu(Other->NetID, Other->GetDisplayName(), FSlateApplication::Get().GetCursorPos());
+			}
+		}
+	}
 	UpdateCameraReset();
 	// Enter: com dialogo de NPC aberto avanca/escolhe/fecha; senao abre o chat (como no cliente original).
 	if (HudWidget && WasInputKeyJustPressed(EKeys::Enter) && !HudWidget->IsChatFocused() && !HudWidget->NpcDialogConfirm())
@@ -1791,6 +1809,31 @@ void AMythPlayerController::MythDropFirst(int32 Amount)
 	}
 }
 
+void AMythPlayerController::MythTradeReply(int32 Accept) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendTradeReply(Accept != 0); } }
+void AMythPlayerController::MythTradeAdd(int32 Index, int32 Amount)
+{
+	if (Index < 0)
+	{
+		// -1: o primeiro item da mochila que nao esta equipado (teste)
+		if (const URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>())
+		{
+			for (const FRagnarokInventoryItem& I : N->GetInventoryItems())
+			{
+				if (!I.bIsEquipped && I.Amount >= Amount)
+				{
+					Index = I.Index;
+					break;
+				}
+			}
+		}
+	}
+	if (HudWidget)
+	{
+		HudWidget->TryTradeAddFromInventory(Index, Amount);
+	}
+}
+void AMythPlayerController::MythTradeLock() { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendTradeLock(); } }
+void AMythPlayerController::MythTradeCommit() { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendTradeCommit(); } }
 void AMythPlayerController::MythOptions(int32 Tab) { if (HudWidget) { HudWidget->ShowOptionsWindow(Tab); } }
 void AMythPlayerController::MythPartyAnswer(int32 Accept) { if (HudWidget) { HudWidget->AnswerPartyInvite(Accept != 0); } }
 void AMythPlayerController::MythStore(int32 ToStorage, int32 Row, int32 Qty) { if (HudWidget) { HudWidget->StorageMove(ToStorage != 0, Row, Qty); } }

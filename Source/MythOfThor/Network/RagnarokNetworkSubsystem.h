@@ -359,6 +359,14 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnUnitBodyState, int64, UnitID, 
 /** ZC_RESURRECTION (0x0148): a unidade voltou a vida. */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUnitRevive, int64, UnitID);
 
+/** Item (ou zeny, quando ItemId = 0) de um dos lados da troca entre jogadores. */
+struct FRoTradeItem
+{
+	int32 Index = 0;
+	int32 ItemId = 0;
+	int32 Amount = 0;
+};
+
 /** Membro do grupo como o servidor informa (0x0ae5 lista, 0x0ae4 entrada, 0x080e PV, 0x0107 posicao, 0x0ab2 morte). */
 struct FRoPartyMember
 {
@@ -395,6 +403,9 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnShopResult, bool, bSell, int32, 
 
 /** Grupo (clif.cpp party): a lista mudou (membros, PV, posicao, lider) ou o convite chegou / o resultado do convite. */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPartyChanged);
+/** Troca (clif.cpp trade): pedido de outro jogador e mudancas na janela (itens, travas, fim). */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTradeRequest, const FString&, FromName);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTradeChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPartyInvite, int32, PartyId, const FString&, PartyName);
 
 // Delegates de compatibilidade anterior
@@ -486,6 +497,14 @@ public:
 	bool SendLeaveParty();
 	bool SendPartyExpel(int32 AccountId, const FString& CharName);
 	bool SendPartyChangeLeader(int32 AccountId);
+
+	/** Troca: pedir (0x00e4), responder (0x00e6), por item ou zeny (0x00e8), travar (0x00eb), confirmar (0x00ef), cancelar (0x00ed). */
+	bool SendTradeRequest(int32 AccountId);
+	bool SendTradeReply(bool bAccept);
+	bool SendTradeAddItem(int32 InventoryIndex, int32 Amount);
+	bool SendTradeLock();
+	bool SendTradeCommit();
+	bool SendTradeCancel();
 
 	/**
 	 * Envia requisição de ação/ataque básico para o Map-Server (CZ_REQUEST_ACT 0x088E / 0x0360).
@@ -607,6 +626,12 @@ public:
 	int32 GetStorageMax() const { return StorageMax; }
 
 	bool IsInParty() const { return !PartyName.IsEmpty(); }
+	bool IsTradeOpen() const { return bTradeOpen; }
+	const FString& GetTradePartner() const { return TradePartner; }
+	const TArray<FRoTradeItem>& GetTradeMine() const { return TradeMine; }
+	const TArray<FRoTradeItem>& GetTradeTheirs() const { return TradeTheirs; }
+	bool IsTradeLockedMine() const { return bTradeLockMine; }
+	bool IsTradeLockedTheirs() const { return bTradeLockTheirs; }
 	const FString& GetPartyName() const { return PartyName; }
 	const TArray<FRoPartyMember>& GetPartyMembers() const { return PartyMembers; }
 
@@ -704,6 +729,8 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Storage") FOnStorageClose OnStorageClose;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Party") FOnPartyChanged OnPartyChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Party") FOnPartyInvite OnPartyInvite;
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Trade") FOnTradeRequest OnTradeRequest;
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Trade") FOnTradeChanged OnTradeChanged;
 
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
 	FOnUnitVanish OnUnitVanish;
@@ -825,6 +852,14 @@ private:
 	int32 StorageMax = 300;
 
 	FString PartyName;
+	bool bTradeOpen = false;
+	bool bTradeLockMine = false;
+	bool bTradeLockTheirs = false;
+	FString TradePartner;
+	int32 TradeRequesterId = 0;
+	TArray<FRoTradeItem> TradeMine;
+	TArray<FRoTradeItem> TradeTheirs;
+	TMap<int32, int32> TradePendingAmount; // indice -> quantidade pedida, confirmada pelo 0x00ea
 	TArray<FRoPartyMember> PartyMembers;
 	TArray<FRagnarokSkillInfo> SkillList;
 
@@ -884,6 +919,7 @@ private:
 	void HandleStoragePacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleShopPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandlePartyPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	void HandleTradePacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleSkillUnitAppear(const uint8* PacketData, int32 PacketSize);
 	void HandleSkillUnitDisappear(const uint8* PacketData, int32 PacketSize);
 	void HandleNotifyEffect(const uint8* PacketData, int32 PacketSize);

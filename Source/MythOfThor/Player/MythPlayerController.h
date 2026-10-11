@@ -149,6 +149,12 @@ public:
 	UFUNCTION(Exec)
 	void MythOptions(int32 Tab);
 
+	/** Teste da troca: MythTradeReply 1 aceita o pedido, MythTradeAdd <indice> <qtd>, MythTradeLock, MythTradeCommit. */
+	UFUNCTION(Exec) void MythTradeReply(int32 Accept);
+	UFUNCTION(Exec) void MythTradeAdd(int32 Index, int32 Amount);
+	UFUNCTION(Exec) void MythTradeLock();
+	UFUNCTION(Exec) void MythTradeCommit();
+
 	/** Teste: MythDropFirst [quantidade] -> joga no chao o primeiro item nao equipado da mochila (CZ_ITEM_THROW). */
 	UFUNCTION(Exec)
 	void MythDropFirst(int32 Amount = 1);
@@ -369,6 +375,7 @@ private:
 	void MoveToLocation(const FVector& Destination, bool bForceSend = true);
 	void UpdateCombat(float DeltaTime);
 	void UpdatePickup();
+	double RightClickHeldSince = 0.0;
 	int32 PendingSkillID = 0;
 	int32 PendingSkillLevel = 0;
 	int32 PendingSkillInf = 0;

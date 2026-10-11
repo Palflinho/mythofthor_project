@@ -5,6 +5,8 @@
 
 #include "Network/RagnarokNetworkSubsystem.h"
 #include "Player/MythPlayerController.h"
+#include "Sprites/MythMonster.h"
+#include "EngineUtils.h"
 #include "Sprites/MythEmotion.h"
 
 #include "Components/EditableTextBox.h"
@@ -89,6 +91,40 @@ bool UMythRoHUDWidget::HandleChatCommand(const FString& Msg)
 	{
 		const int32 Type = AMythEmotion::TypeFromOrder(Order);
 		if (Type >= 0 && bOnline) { Net->SendEmotion(Type); }
+		return true;
+	}
+	// Troca: /exchange NomeDoJogador (o jogador precisa estar perto, na tela)
+	if (Cmd == TEXT("exchange") || Cmd == TEXT("trade"))
+	{
+		if (!bOnline) { Offline(); return true; }
+		const AMythMonster* Found = nullptr;
+		if (PC && PC->GetPawn())
+		{
+			// Pelo nome; sem nome (ou nome ainda nao recebido), o jogador mais perto
+			float Best = TNumericLimits<float>::Max();
+			for (TActorIterator<AMythMonster> It(PC->GetWorld()); It; ++It)
+			{
+				if (!It->IsNetUnit() || It->NetObjectType != 0 || It->NetID == Net->GetSelfID())
+				{
+					continue;
+				}
+				const bool bNamed = !Args.IsEmpty() && It->GetDisplayName().Equals(Args, ESearchCase::IgnoreCase);
+				const float D = FVector::DistSquared(It->GetActorLocation(), PC->GetPawn()->GetActorLocation()) * (bNamed ? 0.001f : 1.f);
+				if (D < Best)
+				{
+					Best = D;
+					Found = *It;
+				}
+			}
+		}
+		if (Found)
+		{
+			Net->SendTradeRequest(static_cast<int32>(Found->NetID));
+		}
+		else
+		{
+			AddChatLine(TEXT("Uso: /exchange NomeDoJogador (o jogador precisa estar por perto)."), FLinearColor(1.f, 0.4f, 0.4f));
+		}
 		return true;
 	}
 	// Grupo: /organize "nome", /invite nome, /leave, /expulsar nome
