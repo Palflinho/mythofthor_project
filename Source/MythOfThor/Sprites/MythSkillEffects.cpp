@@ -219,6 +219,44 @@ bool FMythSkillEffects::PlayEffectId(UObject* WorldContext, int32 EffectID, AAct
 	return bAny;
 }
 
+float FMythSkillEffects::StrLength(const FString& StrFile)
+{
+	static TMap<FString, float> Cache;
+	if (const float* Found = Cache.Find(StrFile))
+	{
+		return *Found;
+	}
+	FRoStr Str;
+	const float Length = Str.Load(FPaths::Combine(EffectDir(), StrFile + TEXT(".str"))) && Str.Fps > 0 ? static_cast<float>(Str.MaxKey) / Str.Fps : 0.f;
+	Cache.Add(StrFile, Length);
+	return Length;
+}
+
+float FMythSkillEffects::EffectLength(int32 EffectID)
+{
+	const TArray<FEffectPart>* Parts = Tables().Effects.Find(EffectID);
+	float Longest = 0.f;
+	if (Parts)
+	{
+		for (const FEffectPart& P : *Parts)
+		{
+			if (P.Type == TEXT("STR"))
+			{
+				Longest = FMath::Max(Longest, StrLength(ResolveVariant(P.File)));
+			}
+			else if (P.Raw.IsValid() && (P.Type == TEXT("CYLINDER") || P.Type == TEXT("3D") || P.Type == TEXT("2D")))
+			{
+				double Ms = 1000.0, Between = 0.0, Count = 1.0;
+				P.Raw->TryGetNumberField(TEXT("duration"), Ms);
+				P.Raw->TryGetNumberField(TEXT("timeBetweenDupli"), Between);
+				P.Raw->TryGetNumberField(TEXT("duplicate"), Count);
+				Longest = FMath::Max(Longest, static_cast<float>(Ms + Between * FMath::Max(0.0, Count - 1.0)) / 1000.f);
+			}
+		}
+	}
+	return Longest;
+}
+
 int32 FMythSkillEffects::EffectIdFor(int32 SkillID, EMythSkillEffectStage Stage)
 {
 	const FSkillEntry* S = Tables().Skills.Find(SkillID);

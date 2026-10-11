@@ -68,6 +68,8 @@ private:
 	UFUNCTION() void HandleStorageOpen(const TArray<FRagnarokInventoryItem>& Items);
 	UFUNCTION() void HandleStorageChanged(const TArray<FRagnarokInventoryItem>& Items);
 	UFUNCTION() void HandlePartyChanged();
+	UFUNCTION() void HandleSkillUnitAppear(int64 UnitID, int64 OwnerID, int32 UnitType, int32 X, int32 Y);
+	UFUNCTION() void HandleSkillUnitDisappear(int64 UnitID);
 	UFUNCTION() void HandleMonsterHp(int64 UnitID, int32 Hp, int32 MaxHp);
 	UFUNCTION() void HandlePartyInvite(int32 PartyId, const FString& PartyName);
 	UFUNCTION() void HandleStorageClose();
@@ -92,6 +94,8 @@ private:
 	UFUNCTION() void HandleNotifyEffect(int64 UnitID, int32 Type);
 	/** Ultimo efeito "no conjurador" por (unidade, skill): uma skill em area acerta varios alvos mas explode uma vez. */
 	TMap<TPair<int64, int32>, double> LastCasterFx;
+	/** Unidades de skill no chao (Muralha de Fogo, Santuario, Portal...): o efeito se repete enquanto a unidade existir. */
+	TMap<int64, FTimerHandle> SkillUnitTimers;
 	UFUNCTION() void HandleEquipChanged(int64 UnitID, uint8 Look, int32 Value);
 	UFUNCTION() void HandleStatusChange(int64 UnitID, int32 EfstID, bool bActive, int32 TotalMs, int32 RemainMs);
 

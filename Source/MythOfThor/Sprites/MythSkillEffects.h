@@ -31,4 +31,9 @@ struct MYTHOFTHOR_API FMythSkillEffects
 
 	/** Cor da luz do elemento da skill (branco morno para skills sem elemento). */
 	static FLinearColor ElementColor(int32 SkillID);
+
+	/** Duracao (s) de um efeito da tabela: o maior .str ou efeito procedural dele. Serve para repetir os efeitos de unidades de skill no chao. */
+	static float EffectLength(int32 EffectID);
+	/** Duracao (s) de data/texture/effect/<StrFile>.str; 0 se nao existir. */
+	static float StrLength(const FString& StrFile);
 };

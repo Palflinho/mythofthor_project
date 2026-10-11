@@ -1,0 +1,382 @@
+{
+ "126": {
+  "name": "UNT_SAFETYWALL",
+  "effect": 315,
+  "has": true
+ },
+ "127": {
+  "name": "UNT_FIREWALL",
+  "effect": 25,
+  "has": true
+ },
+ "128": {
+  "name": "UNT_WARPPORTAL",
+  "effect": 317,
+  "has": true
+ },
+ "129": {
+  "name": "UNT_PRE_WARPPORTAL",
+  "effect": 316,
+  "has": true
+ },
+ "131": {
+  "name": "UNT_SANCTUARY",
+  "effect": 319,
+  "has": true
+ },
+ "132": {
+  "name": "UNT_MAGNUS",
+  "effect": 318,
+  "has": true
+ },
+ "133": {
+  "name": "UNT_PNEUMA",
+  "effect": 141,
+  "has": true
+ },
+ "135": {
+  "name": "UNT_FIREPILLAR_WAITING",
+  "effect": 138,
+  "has": true
+ },
+ "141": {
+  "name": "UNT_ICEWALL",
+  "effect": 74,
+  "has": true
+ },
+ "142": {
+  "name": "UNT_QUAGMIRE",
+  "effect": 95,
+  "has": true
+ },
+ "143": {
+  "name": "UNT_BLASTMINE",
+  "str": "ef_trap_03_3",
+  "exists": false
+ },
+ "144": {
+  "name": "UNT_SKIDTRAP",
+  "str": "ef_trap_02",
+  "exists": false
+ },
+ "145": {
+  "name": "UNT_ANKLESNARE",
+  "str": "ef_trap_01",
+  "exists": false
+ },
+ "146": {
+  "name": "UNT_VENOMDUST",
+  "effect": 171,
+  "has": true
+ },
+ "147": {
+  "name": "UNT_LANDMINE",
+  "str": "ef_trap_03",
+  "exists": false
+ },
+ "148": {
+  "name": "UNT_SHOCKWAVE",
+  "str": "ef_trap_03_6",
+  "exists": false
+ },
+ "149": {
+  "name": "UNT_SANDMAN",
+  "str": "ef_trap_03_4",
+  "exists": false
+ },
+ "150": {
+  "name": "UNT_FLASHER",
+  "str": "ef_trap_03_5",
+  "exists": false
+ },
+ "151": {
+  "name": "UNT_FREEZINGTRAP",
+  "str": "ef_trap_03_2",
+  "exists": false
+ },
+ "152": {
+  "name": "UNT_CLAYMORETRAP",
+  "str": "ef_trap_04",
+  "exists": false
+ },
+ "153": {
+  "name": "UNT_TALKIEBOX",
+  "str": "ef_trap_05",
+  "exists": false
+ },
+ "154": {
+  "name": "UNT_VOLCANO",
+  "effect": 239,
+  "has": true
+ },
+ "155": {
+  "name": "UNT_DELUGE",
+  "effect": 240,
+  "has": true
+ },
+ "156": {
+  "name": "UNT_VIOLENTGALE",
+  "effect": 241,
+  "has": true
+ },
+ "157": {
+  "name": "UNT_LANDPROTECTOR",
+  "effect": 242,
+  "has": true
+ },
+ "158": {
+  "name": "UNT_LULLABY",
+  "str": "278_ground",
+  "exists": false
+ },
+ "159": {
+  "name": "UNT_RICHMANKIM",
+  "str": "279_ground",
+  "exists": false
+ },
+ "160": {
+  "name": "UNT_ETERNALCHAOS",
+  "str": "280_ground",
+  "exists": false
+ },
+ "161": {
+  "name": "UNT_DRUMBATTLEFIELD",
+  "str": "281_ground",
+  "exists": false
+ },
+ "162": {
+  "name": "UNT_RINGNIBELUNGEN",
+  "str": "282_ground",
+  "exists": false
+ },
+ "163": {
+  "name": "UNT_ROKISWEIL",
+  "str": "283_ground",
+  "exists": false
+ },
+ "164": {
+  "name": "UNT_INTOABYSS",
+  "str": "284_ground",
+  "exists": false
+ },
+ "165": {
+  "name": "UNT_SIEGFRIED",
+  "str": "285_ground",
+  "exists": false
+ },
+ "166": {
+  "name": "UNT_DISSONANCE",
+  "str": "277_ground",
+  "exists": false
+ },
+ "167": {
+  "name": "UNT_WHISTLE",
+  "str": "286_ground",
+  "exists": false
+ },
+ "168": {
+  "name": "UNT_ASSASSINCROSS",
+  "str": "287_ground",
+  "exists": false
+ },
+ "169": {
+  "name": "UNT_POEMBRAGI",
+  "str": "288_ground",
+  "exists": false
+ },
+ "170": {
+  "name": "UNT_APPLEIDUN",
+  "str": "289_ground",
+  "exists": false
+ },
+ "171": {
+  "name": "UNT_UGLYDANCE",
+  "str": "290_ground",
+  "exists": false
+ },
+ "172": {
+  "name": "UNT_HUMMING",
+  "str": "291_ground",
+  "exists": false
+ },
+ "173": {
+  "name": "UNT_DONTFORGETME",
+  "str": "292_ground",
+  "exists": false
+ },
+ "174": {
+  "name": "UNT_FORTUNEKISS",
+  "str": "293_ground",
+  "exists": false
+ },
+ "175": {
+  "name": "UNT_SERVICEFORYOU",
+  "str": "294_ground",
+  "exists": false
+ },
+ "177": {
+  "name": "UNT_DEMONSTRATION",
+  "effect": 302,
+  "has": true
+ },
+ "179": {
+  "name": "UNT_GOSPEL",
+  "str": "370_ground",
+  "exists": false
+ },
+ "180": {
+  "name": "UNT_BASILICA",
+  "effect": 374,
+  "has": true
+ },
+ "181": {
+  "name": "UNT_MOONLIT",
+  "str": "394_ground",
+  "exists": false
+ },
+ "182": {
+  "name": "UNT_FOGWALL",
+  "str": "405_ground",
+  "exists": false
+ },
+ "183": {
+  "name": "UNT_SPIDERWEB",
+  "effect": 404,
+  "has": true
+ },
+ "184": {
+  "name": "UNT_GRAVITATION",
+  "str": "522_ground",
+  "exists": false
+ },
+ "185": {
+  "name": "UNT_HERMODE",
+  "effect": 517,
+  "has": true
+ },
+ "187": {
+  "name": "UNT_SUITON",
+  "effect": 620,
+  "has": false
+ },
+ "188": {
+  "name": "UNT_TATAMIGAESHI",
+  "effect": 631,
+  "has": true
+ },
+ "189": {
+  "name": "UNT_KAEN",
+  "effect": 634,
+  "has": true
+ },
+ "199": {
+  "name": "UNT_EVILLAND",
+  "effect": 674,
+  "has": true
+ },
+ "202": {
+  "name": "UNT_EPICLESIS",
+  "effect": 754,
+  "has": true
+ },
+ "203": {
+  "name": "UNT_EARTHSTRAIN",
+  "effect": 732,
+  "has": true
+ },
+ "204": {
+  "name": "UNT_MANHOLE",
+  "effect": 822,
+  "has": true
+ },
+ "205": {
+  "name": "UNT_DIMENSIONDOOR",
+  "effect": 825,
+  "has": true
+ },
+ "206": {
+  "name": "UNT_CHAOSPANIC",
+  "effect": 827,
+  "has": true
+ },
+ "207": {
+  "name": "UNT_MAELSTROM",
+  "effect": 828,
+  "has": true
+ },
+ "208": {
+  "name": "UNT_BLOODYLUST",
+  "effect": 829,
+  "has": true
+ },
+ "210": {
+  "name": "UNT_MAGENTATRAP",
+  "str": "ef_trap_3_magenta",
+  "exists": false
+ },
+ "211": {
+  "name": "UNT_COBALTTRAP",
+  "str": "ef_trap_3_cobalt",
+  "exists": false
+ },
+ "212": {
+  "name": "UNT_MAIZETRAP",
+  "str": "ef_trap_3_maze",
+  "exists": false
+ },
+ "213": {
+  "name": "UNT_VERDURETRAP",
+  "str": "ef_trap_3_verdure",
+  "exists": false
+ },
+ "214": {
+  "name": "UNT_FIRINGTRAP",
+  "str": "ef_trap_3_fire",
+  "exists": false
+ },
+ "215": {
+  "name": "UNT_ICEBOUNDTRAP",
+  "str": "ef_trap_3_ice",
+  "exists": false
+ },
+ "216": {
+  "name": "UNT_ELECTRICSHOCKER",
+  "str": "ef_trap_3_shock",
+  "exists": false
+ },
+ "217": {
+  "name": "UNT_CLUSTERBOMB",
+  "str": "ef_trap_3_cluster",
+  "exists": false
+ },
+ "218": {
+  "name": "UNT_REVERBERATION",
+  "effect": 856,
+  "has": true
+ },
+ "220": {
+  "name": "UNT_FIREWALK",
+  "effect": 920,
+  "has": true
+ },
+ "221": {
+  "name": "UNT_ELECTRICWALK",
+  "effect": 926,
+  "has": true
+ },
+ "222": {
+  "name": "UNT_NETHERWORLD",
+  "effect": 860,
+  "has": true
+ },
+ "229": {
+  "name": "UNT_THORNS_TRAP",
+  "str": "ef_trap_3_thorn",
+  "exists": false
+ },
+ "230": {
+  "name": "UNT_WALLOFTHORN",
+  "effect": 912,
+  "has": false
+ }
+}

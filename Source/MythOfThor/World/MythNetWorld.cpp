@@ -7,6 +7,7 @@
 #include "Sprites/MythMonster.h"
 #include "Sprites/MythRoSpriteComponent.h"
 #include "Sprites/MythSkillEffects.h"
+#include "Sprites/MythStrEffect.h"
 #include "Sprites/MythAura99.h"
 #include "Sprites/MythEmotion.h"
 #include "World/MythGroundItem.h"
@@ -207,6 +208,8 @@ void AMythNetWorld::BeginPlay()
 	Net->OnStorageOpen.AddDynamic(this, &AMythNetWorld::HandleStorageOpen);
 	Net->OnStorageChanged.AddDynamic(this, &AMythNetWorld::HandleStorageChanged);
 	Net->OnPartyChanged.AddDynamic(this, &AMythNetWorld::HandlePartyChanged);
+	Net->OnSkillUnitAppear.AddDynamic(this, &AMythNetWorld::HandleSkillUnitAppear);
+	Net->OnSkillUnitDisappear.AddDynamic(this, &AMythNetWorld::HandleSkillUnitDisappear);
 	Net->OnMonsterHp.AddDynamic(this, &AMythNetWorld::HandleMonsterHp);
 	Net->OnPartyInvite.AddDynamic(this, &AMythNetWorld::HandlePartyInvite);
 	Net->OnStorageClose.AddDynamic(this, &AMythNetWorld::HandleStorageClose);
@@ -274,6 +277,8 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnShopResult.RemoveAll(this);
 		Net->OnStorageOpen.RemoveAll(this);
 		Net->OnPartyChanged.RemoveAll(this);
+		Net->OnSkillUnitAppear.RemoveAll(this);
+		Net->OnSkillUnitDisappear.RemoveAll(this);
 		Net->OnMonsterHp.RemoveAll(this);
 		Net->OnPartyInvite.RemoveAll(this);
 		Net->OnStorageChanged.RemoveAll(this);
@@ -733,6 +738,90 @@ void AMythNetWorld::HandleMonsterHp(int64 UnitID, int32 Hp, int32 MaxHp)
 	{
 		(*Mob)->MaxHP = FMath::Max(1, MaxHp);
 		(*Mob)->HP = FMath::Clamp(Hp, 0, MaxHp);
+	}
+}
+
+namespace
+{
+	struct FSkillUnitVisual
+	{
+		int32 Effect = 0;
+		FString Str;
+	};
+
+	/** Config/skill_units.json (roBrowser SkillUnit.js): tipo da unidade -> efeito da tabela ou .str direto. */
+	const TMap<int32, FSkillUnitVisual>& SkillUnitVisuals()
+	{
+		static TMap<int32, FSkillUnitVisual> Table;
+		static bool bLoaded = false;
+		if (!bLoaded)
+		{
+			bLoaded = true;
+			FString Text;
+			TSharedPtr<FJsonObject> Root;
+			if (FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("skill_units.json"))) && FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) && Root.IsValid())
+			{
+				for (const auto& Pair : Root->Values)
+				{
+					const TSharedPtr<FJsonObject>* Obj = nullptr;
+					if (!Pair.Value->TryGetObject(Obj))
+					{
+						continue;
+					}
+					FSkillUnitVisual V;
+					double Effect = 0;
+					if ((*Obj)->TryGetNumberField(TEXT("effect"), Effect))
+					{
+						V.Effect = static_cast<int32>(Effect);
+					}
+					(*Obj)->TryGetStringField(TEXT("str"), V.Str);
+					bool bExists = true;
+					if (!(*Obj)->TryGetBoolField(TEXT("exists"), bExists) || bExists)
+					{
+						Table.Add(FCString::Atoi(*Pair.Key), V);
+					}
+				}
+			}
+		}
+		return Table;
+	}
+}
+
+void AMythNetWorld::HandleSkillUnitAppear(int64 UnitID, int64 OwnerID, int32 UnitType, int32 X, int32 Y)
+{
+	const FSkillUnitVisual* V = SkillUnitVisuals().Find(UnitType);
+	UE_LOG(LogTemp, Log, TEXT("MythNetWorld: unidade de skill %lld tipo %d em (%d,%d): %s"), UnitID, UnitType, X, Y, V ? TEXT("tem efeito") : TEXT("sem efeito"));
+	if (!V)
+	{
+		return;
+	}
+	const FVector At = CellToGround(X, Y);
+	const int32 EffectId = V->Effect;
+	const FString StrName = V->Str;
+	auto Spawn = [this, At, EffectId, StrName]()
+	{
+		if (EffectId > 0)
+		{
+			FMythSkillEffects::PlayEffectId(this, EffectId, nullptr, At);
+		}
+		else if (!StrName.IsEmpty())
+		{
+			AMythStrEffect::Play(this, StrName, At);
+		}
+	};
+	Spawn();
+	const float Length = EffectId > 0 ? FMythSkillEffects::EffectLength(EffectId) : FMythSkillEffects::StrLength(StrName);
+	FTimerHandle& Handle = SkillUnitTimers.FindOrAdd(UnitID);
+	GetWorldTimerManager().ClearTimer(Handle);
+	GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateLambda(Spawn), FMath::Max(Length * 0.95f, 0.6f), true);
+}
+
+void AMythNetWorld::HandleSkillUnitDisappear(int64 UnitID)
+{
+	FTimerHandle Handle;
+	if (SkillUnitTimers.RemoveAndCopyValue(UnitID, Handle))
+	{
+		GetWorldTimerManager().ClearTimer(Handle);
 	}
 }
 
