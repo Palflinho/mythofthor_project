@@ -363,7 +363,7 @@ void UMythRoHUDWidget::RefreshStatusWindow()
 	const int32 Base[6] = { Ps.Str, Ps.Agi, Ps.Vit, Ps.Int, Ps.Dex, Ps.Luk };
 	for (int32 i = 0; i < 6 && i < StatTexts.Num(); ++i)
 	{
-		StatTexts[i]->SetText(FText::AsNumber(Base[i]));
+		StatTexts[i]->SetText(Ps.StatBonus[i] != 0 ? FText::FromString(FString::Printf(TEXT("%d + %d"), Base[i], Ps.StatBonus[i])) : FText::AsNumber(Base[i]));
 		// A seta so aparece com pontos livres (o custo real e validado pelo servidor)
 		StatUpArrows[i]->SetVisibility(Ps.StatusPoints > 0 ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
 	}

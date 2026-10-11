@@ -182,6 +182,8 @@ struct FRagnarokPlayerStats
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Int = 1;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Dex = 1;
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 Luk = 1;
+	/** Bonus (+) de cada atributo vindo do ZC_COUPLESTATUS 0x0141 (equipamento, buffs); ordem Str, Agi, Vit, Int, Dex, Luk. */
+	int32 StatBonus[6] = { 0, 0, 0, 0, 0, 0 };
 
 	// Custos de ponto para aumentar cada atributo (pelo ZC_STATUS need_str ou SP_U*)
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Status") int32 StrNeed = 2;

@@ -1510,6 +1510,10 @@ void URagnarokNetworkSubsystem::HandleParamChange(const uint8* PacketData, int32
 		return;
 	}
 
+	if (PacketID == RagnarokPackets::HEADER_ZC_COUPLESTATUS && ParamType >= 13 && ParamType <= 18)
+	{
+		CurrentStats.StatBonus[ParamType - 13] = *reinterpret_cast<const int32*>(PacketData + 10); // <tipo>.L <base>.L <bonus>.L
+	}
 	// Atualiza cache de status
 	switch (ParamType)
 	{
