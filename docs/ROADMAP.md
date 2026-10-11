@@ -31,7 +31,7 @@ Ordem do que se vê o tempo todo jogando. Quem: Claude, salvo indicação.
 | 1.8 | Câmera: memória entre mapas feita; falta o clamp do terreno (precisa só da altura do GND, não dos prédios) e o `viewpointtable` (02) | 🟡 clamp do terreno feito; `viewpointtable` só tem mapas que não importamos ainda (torres, naves, Juperos) |
 | 1.9 | Movimento: tempo do servidor (`FixPathTime`), bloqueio de clique ao carregar mapa (01) | 🟡 clique fica com o servidor; `FixPathTime` só faz diferença com ping alto (entra no teste fechado) |
 | 1.10 | Mira de skill em área (04) + cursor da imagem 24: anel branco no chão, ▼ e o nível da skill ao lado | 🟡 feito (anel, ▼ e nível); falta teste do usuário |
-| 1.11 | Inventário, equipamento e status completos (06, 12): descarte, arrastar ao atalho, "Base + Bônus", slots | 🟡 |
+| 1.11 | Inventário, equipamento e status completos (06, 12): descarte, arrastar ao atalho, "Base + Bônus", slots | 🟡 descarte (arrastar para fora), arrastar ao atalho e "Base + Bônus" feitos; falta conferir slots e cartas na dica |
 | 1.12 | Barras de HP/SP sob o personagem (12) | 🟡 feito, falta teste |
 | 1.13 | Skills com Apply/Reset e "◀ nível ▶", menu Esc com abas (12) | 🟡 menu Esc com 5 itens e seletor de nível feitos; Apply/Reset é do cliente moderno e fica a decidir |
 | 1.14 | Porings no chão (corrigido no `f4ca760`, falta testar) | 🟡 |
