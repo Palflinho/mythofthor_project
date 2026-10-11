@@ -61,6 +61,10 @@ private:
 	UFUNCTION() void HandleUnitDirection(int64 ID, uint8 HeadDir, uint8 BodyDir);
 	UFUNCTION() void HandleUnitOption(int64 ID, int32 Option);
 	UFUNCTION() void HandleUnitRevive(int64 ID);
+	UFUNCTION() void HandleShopDealType(int64 NpcID);
+	UFUNCTION() void HandleShopBuyList(const TArray<FRagnarokShopItem>& Items);
+	UFUNCTION() void HandleShopSellList(const TArray<FRagnarokShopItem>& Items);
+	UFUNCTION() void HandleShopResult(bool bSell, int32 Result);
 	UFUNCTION() void HandleUnitVanish(int64 ID, uint8 Reason);
 	UFUNCTION() void HandleDamage(int64 SourceID, int64 TargetID, int32 Damage, uint8 DamageType, int32 DelayMs);
 	/** Numero de dano, sons e reacao do alvo (adiado ate a flecha chegar no caso do arco). */

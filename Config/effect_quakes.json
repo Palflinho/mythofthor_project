@@ -1,0 +1,6 @@
+{
+  "_nota": "Tremores de tela que a EffectTable do cliente tem e o skill_effects_full.json nao trouxe (docs/ref/11): efeito -> duracao em ms e amplitude em uu. 17 Magnum Break 50 ms (linha 158), 266 Asura 150 ms 'forte oscilacao vertical' (linha 498), 518 Cart Termination 80 ms (linha 848). 261, 368 e 537 tambem tremem, mas o doc nao da numeros: ficam de fora ate a pesquisa trazer.",
+  "17": { "ms": 50, "amp": 15 },
+  "266": { "ms": 150, "amp": 30 },
+  "518": { "ms": 80, "amp": 15 }
+}

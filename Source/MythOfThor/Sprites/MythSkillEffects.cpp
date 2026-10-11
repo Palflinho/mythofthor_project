@@ -147,6 +147,35 @@ FLinearColor FMythSkillEffects::ElementColor(int32 SkillID)
 
 bool FMythSkillEffects::PlayEffectId(UObject* WorldContext, int32 EffectID, AActor* Target, const FVector& Location, AActor* Source)
 {
+	// Tremores que a tabela de efeitos nao traz (Config/effect_quakes.json, docs/ref/11): Magnum Break, Asura, Cart Termination
+	static TMap<int32, TPair<float, float>> ExtraQuakes;
+	static bool bQuakesLoaded = false;
+	if (!bQuakesLoaded)
+	{
+		bQuakesLoaded = true;
+		FString QuakeText;
+		TSharedPtr<FJsonObject> QuakeRoot;
+		if (FFileHelper::LoadFileToString(QuakeText, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("effect_quakes.json"))) && FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(QuakeText), QuakeRoot) && QuakeRoot.IsValid())
+		{
+			for (const auto& Pair : QuakeRoot->Values)
+			{
+				const TSharedPtr<FJsonObject>* Obj = nullptr;
+				if (Pair.Value->TryGetObject(Obj))
+				{
+					ExtraQuakes.Add(FCString::Atoi(*Pair.Key), TPair<float, float>(static_cast<float>((*Obj)->GetNumberField(TEXT("ms"))) / 1000.f, static_cast<float>((*Obj)->GetNumberField(TEXT("amp")))));
+				}
+			}
+		}
+	}
+	if (const TPair<float, float>* Quake = ExtraQuakes.Find(EffectID))
+	{
+		const APlayerController* QuakePC = WorldContext && WorldContext->GetWorld() ? WorldContext->GetWorld()->GetFirstPlayerController() : nullptr;
+		const FVector At = FeetOf(Target, Location);
+		if (AMythPlayerCharacter* QuakeChar = QuakePC ? Cast<AMythPlayerCharacter>(QuakePC->GetPawn()) : nullptr; QuakeChar && FVector::Dist2D(QuakeChar->GetActorLocation(), At) < 1500.f)
+		{
+			QuakeChar->StartQuake(Quake->Key, Quake->Value);
+		}
+	}
 	const TArray<FEffectPart>* Parts = Tables().Effects.Find(EffectID);
 	if (!Parts)
 	{

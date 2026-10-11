@@ -305,6 +305,11 @@ bool UMythRoHUDWidget::CloseTopWindow()
 		// Informacoes basicas e minimapa ficam abertos por padrao: o Esc fecha so as janelas de Alt+A/E/Q/S
 		if (Win && Win != BasicWindow && Win != MinimapWindow && Win->GetVisibility() != ESlateVisibility::Collapsed)
 		{
+			if (Win == ShopWindow || Win == DealWindow)
+			{
+				CloseShop(true);
+				return true;
+			}
 			Win->SetVisibility(ESlateVisibility::Collapsed);
 			return true;
 		}
@@ -622,6 +627,10 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 
 bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 {
+	if (HandleShopClick(ScreenPos))
+	{
+		return true;
+	}
 	if (HandleGameMenuClick(ScreenPos) || HandleBasicMenuClick(ScreenPos))
 	{
 		return true;
@@ -631,6 +640,11 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 		UCanvasPanel* Win = Pair.Value.Get();
 		if (Win && Win->IsVisible() && IsUnder(Pair.Key.Get(), ScreenPos))
 		{
+			if (Win == ShopWindow || Win == DealWindow)
+			{
+				CloseShop(true); // fechar a loja libera o NPC no servidor
+				return true;
+			}
 			Win->SetVisibility(ESlateVisibility::Collapsed);
 			OpenOrder.Remove(Win);
 			return true;
@@ -760,6 +774,10 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDoubleClick(const FGeometry& InGeome
 
 FReply UMythRoHUDWidget::NativeOnMouseWheel(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
+	if (HandleShopWheel(InMouseEvent.GetScreenSpacePosition(), InMouseEvent.GetWheelDelta()))
+	{
+		return FReply::Handled();
+	}
 	// Roda do mouse sobre a arvore de habilidades: troca de aba (a grade inteira cabe na janela)
 	if (SkillsWindow && SkillsWindow->IsVisible() && IsUnder(SkillsWindow, InMouseEvent.GetScreenSpacePosition()))
 	{

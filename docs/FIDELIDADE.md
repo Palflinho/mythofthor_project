@@ -129,7 +129,7 @@ O HUD LATAM tem prioridade sobre o 06 (cliente 2008), por decisão sua. Listo as
 | Menu Esc e Configurações (abas, ON/OFF) | ⚠️ P2 | ⬜ | `MythRoGameMenu.cpp` existe; faltam as abas do print |
 | Barras de HP/SP sob o personagem | ✅ P1 | ⬜ | Feito em 2026-10-10 (`DrawSelfBars`): 60×4 sob os pés, HP verde/amarela/vermelha, SP azul. A barra do monstro atingido também foi para baixo dos pés (verde sobre roxo escuro), sem a porcentagem. |
 | Armazém Kafra | ❌ P1 | ⬜ | |
-| Loja de NPC (comprar/vender) | ❌ P1 | ⬜ | |
+| Loja de NPC (comprar/vender) | 🟡 P1 | ⬜ | Feita em 2026-10-10 (`MythRoShop.cpp`, pacotes 0x00c4, 0x0b77, 0x00c7, 0x00c8, 0x00c9, 0x00ca, 0x00cb e 0x09d4 **conferidos no `clif.cpp`**; o `docs/ref/14` tinha IDs trocados): escolher Comprar/Vender, vitrine com ícone, nome e preço com desconto do servidor, cesta, total, mensagens de erro do servidor. Testada comprando no Chef Assistant (zeny e peso corretos). Falta testar a **venda** e o desconto do Mercador; o clique soma 1 (Shift 10) em vez da caixa de quantidade do original; sem a caixa "Max". |
 | Janela de grupo, amigos, troca | ❌ P2 | ⬜ | |
 | Janela de reviver | 🟡 P1 | ⬜ | Feito em 2026-10-10: ao morrer (`ZC_NOTIFY_VANISH` tipo 1 para o próprio jogador) o sprite deita e abre a janela "Você morreu" com "Voltar ao ponto de salvamento" (`CZ_RESTART` 0) e "Aguardar socorro"; `ZC_RESURRECTION` (0x0148) e a entrada no mapa tiram do estado de morte; morto não anda nem ataca. Testado com `@die` + respawn. Falta: item Token de Siegfried (só o roBrowser mostra o botão), penalidade de EXP, texto original em português (R2.3). **Servidor:** o respawn deixou HP 2/3059, conferir `restart_hp_rate` na auditoria F4. |
 | Navegação `/navi`, quests (Alt+U), banco | ❌ P3 | ⬜ | Ver `docs/ref/08` |
@@ -200,3 +200,8 @@ Conferência a ser feita pelo Antigravity (F4). Itens:
 12. Mira de skill em área
 
 **Pesquisa R2 (Antigravity, em paralelo):** lojas, Kafra, morte, grupo, chat, troca, emoções, cast, buffs, itens, atributos, login, montaria.
+
+## Correções de 2026-10-11
+
+- **"Todo mundo flutuando":** o chão medido para assentar NPCs, monstros e jogadores acertava as caixas de clique (`ClickBox`) das próprias unidades, porque o filtro de mobilidade da Unreal não as exclui. Agora `TraceStaticGround` e `CellToGround` ignoram o que não é estático. Medido com `MythFloatCheck`: antes 16 de 18 unidades fora do chão, depois 0 de 19.
+- **Tremor do Asura (e do Magnum Break, Cart Termination):** a tabela de efeitos não trazia esses tremores. `Config/effect_quakes.json` os acrescenta (efeitos 17, 266, 518). Os efeitos 261, 368 e 537 também tremem, mas o doc não dá números: pendente.

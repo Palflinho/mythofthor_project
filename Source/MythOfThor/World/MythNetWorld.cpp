@@ -199,6 +199,10 @@ void AMythNetWorld::BeginPlay()
 	Net->OnUnitDirection.AddDynamic(this, &AMythNetWorld::HandleUnitDirection);
 	Net->OnUnitOption.AddDynamic(this, &AMythNetWorld::HandleUnitOption);
 	Net->OnUnitRevive.AddDynamic(this, &AMythNetWorld::HandleUnitRevive);
+	Net->OnShopDealType.AddDynamic(this, &AMythNetWorld::HandleShopDealType);
+	Net->OnShopBuyList.AddDynamic(this, &AMythNetWorld::HandleShopBuyList);
+	Net->OnShopSellList.AddDynamic(this, &AMythNetWorld::HandleShopSellList);
+	Net->OnShopResult.AddDynamic(this, &AMythNetWorld::HandleShopResult);
 	Net->OnUnitVanish.AddDynamic(this, &AMythNetWorld::HandleUnitVanish);
 	Net->OnDamage.AddDynamic(this, &AMythNetWorld::HandleDamage);
 	Net->OnChatMessage.AddDynamic(this, &AMythNetWorld::HandleChat);
@@ -253,6 +257,10 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnUnitDirection.RemoveAll(this);
 		Net->OnUnitOption.RemoveAll(this);
 		Net->OnUnitRevive.RemoveAll(this);
+		Net->OnShopDealType.RemoveAll(this);
+		Net->OnShopBuyList.RemoveAll(this);
+		Net->OnShopSellList.RemoveAll(this);
+		Net->OnShopResult.RemoveAll(this);
 		Net->OnUnitVanish.RemoveAll(this);
 		Net->OnDamage.RemoveAll(this);
 		Net->OnChatMessage.RemoveAll(this);
@@ -330,7 +338,18 @@ FVector AMythNetWorld::CellToGround(int32 X, int32 Y, bool* bOutFound) const
 	FVector Top = Info ? Info->CellToWorld(FIntPoint(X, Y), 20000.f) : FVector(X * 50.f, Y * 50.f, 20000.f);
 	FHitResult Hit;
 	// O chao do GAT bloqueia Visibility; a malha visual do mapa nao (ver ue_import_map.py)
-	const bool bHit = GetWorld()->LineTraceSingleByChannel(Hit, Top, Top - FVector(0.f, 0.f, 40000.f), ECC_Visibility, FCollisionQueryParams(TEXT("MythNetCell"), false));
+	// Ignora as caixas de clique das unidades (so o cenario fixo e chao)
+	FCollisionQueryParams CellParams(TEXT("MythNetCell"), false);
+	bool bHit = false;
+	for (int32 Guard = 0; Guard < 12; ++Guard)
+	{
+		bHit = GetWorld()->LineTraceSingleByChannel(Hit, Top, Top - FVector(0.f, 0.f, 40000.f), ECC_Visibility, CellParams);
+		if (!bHit || !Hit.GetComponent() || Hit.GetComponent()->Mobility == EComponentMobility::Static)
+		{
+			break;
+		}
+		CellParams.AddIgnoredActor(Hit.GetActor());
+	}
 	if (bOutFound)
 	{
 		*bOutFound = bHit;
@@ -652,6 +671,38 @@ void AMythNetWorld::HandleUnitOption(int64 ID, int32 Option)
 	{
 		S->CartType = Cart;
 		S->ReloadSprites();
+	}
+}
+
+void AMythNetWorld::HandleShopDealType(int64 NpcID)
+{
+	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
+	{
+		PC->GetHud()->ShowShopDealType(NpcID);
+	}
+}
+
+void AMythNetWorld::HandleShopBuyList(const TArray<FRagnarokShopItem>& Items)
+{
+	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
+	{
+		PC->GetHud()->ShowShopItems(false, Items);
+	}
+}
+
+void AMythNetWorld::HandleShopSellList(const TArray<FRagnarokShopItem>& Items)
+{
+	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
+	{
+		PC->GetHud()->ShowShopItems(true, Items);
+	}
+}
+
+void AMythNetWorld::HandleShopResult(bool bSell, int32 Result)
+{
+	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
+	{
+		PC->GetHud()->ShopResult(bSell, Result);
 	}
 }
 

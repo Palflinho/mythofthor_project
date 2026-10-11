@@ -62,7 +62,7 @@ código GPL, citando a origem). Um doc por tema em `docs/ref/`.
 
 | # | Item | Quem | Estado |
 |---|---|---|---|
-| 3.1 | Lojas, Kafra, morte e reviver (reviver feito, falta lojas e Kafra) | Claude | 🟡 |
+| 3.1 | Lojas (compra feita, falta testar venda), Kafra, morte e reviver (feito) | Claude | 🟡 |
 | 3.2 | Troca de classe pelas quests originais (NPCs mapeados em coord 012) | os dois | 🟡 |
 | 3.3 | Grupo, cochicho, chat completo, emoções | Claude | ⬜ |
 | 3.4 | Mapas de campos e cidades das classes | Antigravity → Claude | ✅ 40 mapas importados (coord 013) |

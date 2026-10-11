@@ -58,6 +58,36 @@ UMythCellMoverComponent::UMythCellMoverComponent()
 	PrimaryComponentTick.TickGroup = TG_PrePhysics;
 }
 
+namespace
+{
+	/** Traco de chao que ignora tudo que nao e cenario fixo (caixas de clique das unidades, itens...): os filtros de mobilidade
+	 *  da Unreal nao as excluem, e o "chao" virava a cabeca de um NPC. */
+	bool TraceStaticGround(const UWorld* World, const FVector& From, const FVector& To, FCollisionQueryParams Params, FHitResult& OutHit)
+	{
+		for (int32 Guard = 0; Guard < 12; ++Guard)
+		{
+			if (!World->LineTraceSingleByChannel(OutHit, From, To, ECC_Visibility, Params))
+			{
+				return false;
+			}
+			const UPrimitiveComponent* Comp = OutHit.GetComponent();
+			if (!Comp || Comp->Mobility == EComponentMobility::Static)
+			{
+				return true;
+			}
+			if (AActor* Owner = OutHit.GetActor())
+			{
+				Params.AddIgnoredActor(Owner);
+			}
+			else
+			{
+				Params.AddIgnoredComponent(Comp);
+			}
+		}
+		return false;
+	}
+}
+
 bool UMythCellMoverComponent::GroundZ(const UWorld* World, const FVector& At, float& OutZ, const float* NearZ)
 {
 	// O chao do .gat so existe nas celulas livres e so responde ao canal Visibility (a malha visual nao)
@@ -69,14 +99,14 @@ bool UMythCellMoverComponent::GroundZ(const UWorld* World, const FVector& At, fl
 	{
 		// Perto dos pes primeiro: copas de arvore, postes e telhados acima nao viram chao
 		const FVector From(At.X, At.Y, *NearZ + StepUp);
-		if (World->LineTraceSingleByChannel(Hit, From, From - FVector(0.f, 0.f, StepUp + 2000.f), ECC_Visibility, Params))
+		if (TraceStaticGround(World, From, From - FVector(0.f, 0.f, StepUp + 2000.f), Params, Hit))
 		{
 			OutZ = Hit.ImpactPoint.Z;
 			return true;
 		}
 	}
 	const FVector Top(At.X, At.Y, 20000.f);
-	if (World && World->LineTraceSingleByChannel(Hit, Top, Top - FVector(0.f, 0.f, 40000.f), ECC_Visibility, Params))
+	if (World && TraceStaticGround(World, Top, Top - FVector(0.f, 0.f, 40000.f), Params, Hit))
 	{
 		OutZ = Hit.ImpactPoint.Z;
 		return true;

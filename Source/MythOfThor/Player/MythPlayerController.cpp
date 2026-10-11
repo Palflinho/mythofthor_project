@@ -1691,3 +1691,50 @@ void AMythPlayerController::MythAura(int32 Mode)
 {
 	AMythAura99::SetMode(Mode);
 }
+
+void AMythPlayerController::MythFloatCheck()
+{
+	// Pes da capsula (centro - meia altura) contra o chao do .gat sob a unidade; diferenca > 5 uu = flutuando/afundado
+	int32 Count = 0, Off = 0;
+	auto Check = [&](const AActor* A, float HalfHeight, const TCHAR* Kind)
+	{
+		const float Feet = A->GetActorLocation().Z - HalfHeight;
+		float Near = 0.f, Top = 0.f;
+		const bool bNear = UMythCellMoverComponent::GroundZ(GetWorld(), A->GetActorLocation(), Near, &Feet);
+		const bool bTop = UMythCellMoverComponent::GroundZ(GetWorld(), A->GetActorLocation(), Top);
+		++Count;
+		if (!bNear || FMath::Abs(Feet - Near) > 5.f)
+		{
+			++Off;
+			UE_LOG(LogTemp, Log, TEXT("MythFloat: %s '%s' em (%.0f,%.0f) pes %.0f | chao perto dos pes %s%.0f | chao mais alto %s%.0f"), Kind, *A->GetName(), A->GetActorLocation().X, A->GetActorLocation().Y, Feet, bNear ? TEXT("") : TEXT("(nenhum) "), Near, bTop ? TEXT("") : TEXT("(nenhum) "), Top);
+		}
+	};
+	if (const APawn* P = GetPawn())
+	{
+		const UCapsuleComponent* Cap = P->FindComponentByClass<UCapsuleComponent>();
+		Check(P, Cap ? Cap->GetScaledCapsuleHalfHeight() : 90.f, TEXT("jogador"));
+	}
+	for (TActorIterator<AMythMonster> It(GetWorld()); It; ++It)
+	{
+		Check(*It, It->GetCapsuleComponent()->GetScaledCapsuleHalfHeight(), It->IsNpc() ? TEXT("npc") : TEXT("unidade"));
+	}
+	UE_LOG(LogTemp, Log, TEXT("MythFloat: %d unidades medidas, %d fora do chao"), Count, Off);
+	// Quem responde ao canal Visibility na vertical do jogador e do primeiro NPC (para achar o "chao" que o mover usa)
+	TArray<const AActor*> Probes;
+	if (GetPawn()) { Probes.Add(GetPawn()); }
+	for (TActorIterator<AMythMonster> It(GetWorld()); It && Probes.Num() < 3; ++It) { if (It->IsNpc()) { Probes.Add(*It); } }
+	for (const AActor* A : Probes)
+	{
+		TArray<FHitResult> Hits;
+		FCollisionQueryParams Q(TEXT("MythFloatProbe"), true); // complexa: o chao do .gat pode so ter colisao complexa
+		GetWorld()->LineTraceMultiByChannel(Hits, FVector(A->GetActorLocation().X, A->GetActorLocation().Y, 20000.f), FVector(A->GetActorLocation().X, A->GetActorLocation().Y, -3000.f), ECC_Visibility, Q);
+		for (const FHitResult& H : Hits)
+		{
+			UE_LOG(LogTemp, Log, TEXT("MythFloat: sonda de '%s' (z %.0f): z %.0f ator '%s' comp '%s' mobilidade %d"), *A->GetName(), A->GetActorLocation().Z, H.ImpactPoint.Z, *GetNameSafe(H.GetActor()), *GetNameSafe(H.GetComponent()), H.GetComponent() ? static_cast<int32>(H.GetComponent()->Mobility) : -1);
+		}
+	}
+}
+
+void AMythPlayerController::MythShop(int32 Type) { if (HudWidget) { HudWidget->ShopChooseDeal(Type); } }
+void AMythPlayerController::MythShopAdd(int32 Row, int32 Qty) { if (HudWidget) { HudWidget->ShopAddToBasket(Row, Qty); } }
+void AMythPlayerController::MythShopConfirm() { if (HudWidget) { HudWidget->ShopConfirm(); } }

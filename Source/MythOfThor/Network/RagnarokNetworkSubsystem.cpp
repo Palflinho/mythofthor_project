@@ -936,6 +936,13 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x009c: // ZC_CHANGE_DIRECTION
 				HandleChangeDirection(PacketData, ActualLen);
 				break;
+			case 0x00c4: // ZC_SELECT_DEALTYPE
+			case 0x0b77: // ZC_PC_PURCHASE_ITEMLIST (PACKETVER >= 20210203)
+			case 0x00c7: // ZC_PC_SELL_ITEMLIST
+			case 0x00ca: // ZC_PC_PURCHASE_RESULT
+			case 0x00cb: // ZC_PC_SELL_RESULT
+				HandleShopPacket(PacketData, ActualLen, PacketID);
+				break;
 			case 0x0148: // ZC_RESURRECTION
 				HandleResurrection(PacketData, ActualLen);
 				break;
@@ -2490,4 +2497,129 @@ void URagnarokNetworkSubsystem::HandleResurrection(const uint8* PacketData, int3
 		return;
 	}
 	OnUnitRevive.Broadcast(*reinterpret_cast<const uint32*>(PacketData + 2));
+}
+
+bool URagnarokNetworkSubsystem::SendShopDealType(int64 NpcID, uint8 Type)
+{
+	// CZ_ACK_SELECT_DEALTYPE 0x00c5 <npc id>.L <type>.B (7 bytes): 0 comprar, 1 vender
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	uint8 Packet[7] = { 0xc5, 0x00 };
+	*reinterpret_cast<uint32*>(Packet + 2) = static_cast<uint32>(NpcID);
+	Packet[6] = Type;
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendShopBuy(const TArray<TPair<int32, int32>>& ItemIdAmount)
+{
+	// CZ_PC_PURCHASE_ITEMLIST 0x00c8 <len>.W { <amount>.W <item id>.L }* (PACKETVER >= 20181121: id de 4 bytes)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap || ItemIdAmount.Num() == 0)
+	{
+		return false;
+	}
+	TArray<uint8> Packet;
+	Packet.SetNumZeroed(4 + 6 * ItemIdAmount.Num());
+	Packet[0] = 0xc8;
+	*reinterpret_cast<uint16*>(Packet.GetData() + 2) = static_cast<uint16>(Packet.Num());
+	for (int32 i = 0; i < ItemIdAmount.Num(); ++i)
+	{
+		*reinterpret_cast<uint16*>(Packet.GetData() + 4 + 6 * i) = static_cast<uint16>(ItemIdAmount[i].Value);
+		*reinterpret_cast<uint32*>(Packet.GetData() + 6 + 6 * i) = static_cast<uint32>(ItemIdAmount[i].Key);
+	}
+	SendData(Packet.GetData(), Packet.Num());
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendShopSell(const TArray<TPair<int32, int32>>& IndexAmount)
+{
+	// CZ_PC_SELL_ITEMLIST 0x00c9 <len>.W { <index>.W <amount>.W }*
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap || IndexAmount.Num() == 0)
+	{
+		return false;
+	}
+	TArray<uint8> Packet;
+	Packet.SetNumZeroed(4 + 4 * IndexAmount.Num());
+	Packet[0] = 0xc9;
+	*reinterpret_cast<uint16*>(Packet.GetData() + 2) = static_cast<uint16>(Packet.Num());
+	for (int32 i = 0; i < IndexAmount.Num(); ++i)
+	{
+		*reinterpret_cast<uint16*>(Packet.GetData() + 4 + 4 * i) = static_cast<uint16>(IndexAmount[i].Key);
+		*reinterpret_cast<uint16*>(Packet.GetData() + 6 + 4 * i) = static_cast<uint16>(IndexAmount[i].Value);
+	}
+	SendData(Packet.GetData(), Packet.Num());
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendShopClose()
+{
+	// CZ_NPC_SHOP_CLOSED 0x09d4 (2 bytes): libera o NPC (o servidor zera npc_shopid)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	const uint8 Packet[2] = { 0xd4, 0x09 };
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+void URagnarokNetworkSubsystem::HandleShopPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
+{
+	switch (PacketID)
+	{
+	case 0x00c4: // <npc id>.L
+		if (PacketSize >= 6)
+		{
+			OnShopDealType.Broadcast(*reinterpret_cast<const uint32*>(PacketData + 2));
+		}
+		break;
+	case 0x0b77: // <len>.W { <item id>.L <price>.L <discount price>.L <type>.B <view sprite>.W <location>.L }* (19 bytes cada)
+	{
+		TArray<FRagnarokShopItem> Items;
+		for (int32 Off = 4; Off + 19 <= PacketSize; Off += 19)
+		{
+			FRagnarokShopItem I;
+			I.ItemID = *reinterpret_cast<const int32*>(PacketData + Off);
+			I.Price = *reinterpret_cast<const int32*>(PacketData + Off + 4);
+			I.DiscountPrice = *reinterpret_cast<const int32*>(PacketData + Off + 8);
+			I.ItemType = PacketData[Off + 12];
+			Items.Add(I);
+		}
+		OnShopBuyList.Broadcast(Items);
+		break;
+	}
+	case 0x00c7: // <len>.W { <index>.W <price>.L <overcharge price>.L }* (10 bytes cada)
+	{
+		TArray<FRagnarokShopItem> Items;
+		for (int32 Off = 4; Off + 10 <= PacketSize; Off += 10)
+		{
+			FRagnarokShopItem I;
+			I.Index = *reinterpret_cast<const uint16*>(PacketData + Off);
+			I.Price = *reinterpret_cast<const int32*>(PacketData + Off + 2);
+			I.DiscountPrice = *reinterpret_cast<const int32*>(PacketData + Off + 6);
+			for (const FRagnarokInventoryItem& Inv : InventoryItems)
+			{
+				if (Inv.Index == I.Index)
+				{
+					I.ItemID = Inv.ItemID;
+					I.ItemType = Inv.Type;
+					break;
+				}
+			}
+			Items.Add(I);
+		}
+		OnShopSellList.Broadcast(Items);
+		break;
+	}
+	case 0x00ca: // <result>.B (compra)
+		OnShopResult.Broadcast(false, PacketSize >= 3 ? PacketData[2] : 11);
+		break;
+	case 0x00cb: // <result>.B (venda)
+		OnShopResult.Broadcast(true, PacketSize >= 3 ? PacketData[2] : 1);
+		break;
+	default:
+		break;
+	}
 }

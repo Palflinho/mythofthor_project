@@ -127,6 +127,18 @@ public:
 	UFUNCTION(Exec)
 	void MythAttackNearest();
 
+	/** Teste da loja: MythShop 0 (comprar) ou 1 (vender); MythShopAdd <linha> <quantidade>; MythShopConfirm. */
+	UFUNCTION(Exec)
+	void MythShop(int32 Type);
+	UFUNCTION(Exec)
+	void MythShopAdd(int32 Row, int32 Qty);
+	UFUNCTION(Exec)
+	void MythShopConfirm();
+
+	/** Teste: MythFloatCheck -> no log, a altura dos pes de cada unidade contra o chao do .gat embaixo dela. */
+	UFUNCTION(Exec)
+	void MythFloatCheck();
+
 	/** /aura do cliente: MythAura 0 desligada, 1 so particulas, 2 completa. */
 	UFUNCTION(Exec)
 	void MythAura(int32 Mode);

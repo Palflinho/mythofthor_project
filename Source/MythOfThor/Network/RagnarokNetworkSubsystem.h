@@ -245,6 +245,19 @@ struct FRagnarokInventoryItem
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Inventory") int32 Slot4 = 0;
 };
 
+/** Item de loja de NPC: compra (ItemID, Price, DiscountPrice) ou venda (Index do inventario, Price, DiscountPrice = overcharge). */
+USTRUCT(BlueprintType)
+struct FRagnarokShopItem
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Shop") int32 ItemID = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Shop") int32 Index = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Shop") int32 Price = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Shop") int32 DiscountPrice = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Shop") int32 ItemType = 0;
+};
+
 /**
  * Informação de habilidade na lista de skills do jogador.
  */
@@ -336,6 +349,12 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnUnitOption, int64, UnitID, int32
 /** ZC_RESURRECTION (0x0148): a unidade voltou a vida. */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUnitRevive, int64, UnitID);
 
+/** Lojas de NPC (clif.cpp): 0x00c4 escolher comprar/vender, 0x0b77 lista de compra, 0x00c7 lista de venda, 0x00ca/0x00cb resultado. */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnShopDealType, int64, NpcID);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnShopBuyList, const TArray<FRagnarokShopItem>&, Items);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnShopSellList, const TArray<FRagnarokShopItem>&, Items);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnShopResult, bool, bSell, int32, Result);
+
 // Delegates de compatibilidade anterior
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerMoveConfirmed, int32, TargetX, int32, TargetY);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnDamageReceived, int64, TargetID, int32, Damage, bool, bIsCritical, bool, bIsMiss);
@@ -404,6 +423,12 @@ public:
 
 	/** CZ_RESTART (0x00b2): 0 = voltar ao ponto de salvamento (reviver), 1 = tela de selecao de personagem. */
 	bool SendRestart(uint8 Type);
+
+	/** Loja de NPC: escolher comprar (0) ou vender (1) / comprar / vender / fechar. IDs e layouts conferidos no clif.cpp do rAthena. */
+	bool SendShopDealType(int64 NpcID, uint8 Type);
+	bool SendShopBuy(const TArray<TPair<int32, int32>>& ItemIdAmount);
+	bool SendShopSell(const TArray<TPair<int32, int32>>& IndexAmount);
+	bool SendShopClose();
 
 	/**
 	 * Envia requisição de ação/ataque básico para o Map-Server (CZ_REQUEST_ACT 0x088E / 0x0360).
@@ -598,6 +623,11 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Movement")
 	FOnUnitRevive OnUnitRevive;
 
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Shop") FOnShopDealType OnShopDealType;
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Shop") FOnShopBuyList OnShopBuyList;
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Shop") FOnShopSellList OnShopSellList;
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Shop") FOnShopResult OnShopResult;
+
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
 	FOnUnitVanish OnUnitVanish;
 
@@ -766,6 +796,7 @@ private:
 	void HandleEffect(const uint8* PacketData, int32 PacketSize);
 	void HandleOptionChange(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleResurrection(const uint8* PacketData, int32 PacketSize);
+	void HandleShopPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleSkillUnitAppear(const uint8* PacketData, int32 PacketSize);
 	void HandleSkillUnitDisappear(const uint8* PacketData, int32 PacketSize);
 	void HandleNotifyEffect(const uint8* PacketData, int32 PacketSize);

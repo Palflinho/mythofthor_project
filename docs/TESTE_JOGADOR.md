@@ -24,6 +24,14 @@ Teclas e comandos uteis
 
 O que ja da para testar (e o que deve acontecer)
 ------------------------------------------------
+
+NOVO nesta versao
+- Loja de NPC: va ate o Chef Assistant de Prontera (156,212), clique nele. Abre "Comprar / Vender / Cancelar". Comprar:
+  clique num item da vitrine (soma 1; Shift soma 10), clique na cesta para tirar, "Comprar" confirma. O zeny e o peso
+  mudam. Dica: @zeny 5000. Vender: o mesmo, com os itens do seu inventario. Esc ou Cancelar fecha.
+- Corrigido: personagens, NPCs e monstros flutuando (o chao agora ignora as caixas de clique).
+- Tremor de tela agora tambem no Punho Supremo de Asura (150 ms, mais forte).
+
 1. Camera: ao arrastar com o botao direito o giro deve ser rapido (0,4 grau por pixel). Gire parado: o personagem
    e os NPCs devem mostrar outros lados. Mude o zoom, entre num interior e volte: o zoom e a inclinacao ficam guardados
    (separados para dentro e fora).

@@ -22,6 +22,8 @@ struct FMythGfxOptions
 
 #include "MythRoHUDWidget.generated.h"
 
+struct FRagnarokShopItem;
+
 class UButton;
 class UCanvasPanel;
 class UCanvasPanelSlot;
@@ -352,6 +354,45 @@ protected:
 	void RefreshGraphicsWindow();
 	void StepGraphicsOption(int32 Row, int32 Delta);
 	bool HandleGameMenuClick(const FVector2D& ScreenPos);
+	// Loja de NPC (MythRoShop.cpp, docs/ref/14): escolher comprar/vender, vitrine e cesta
+public:
+	void ShowShopDealType(int64 NpcID);
+	void ShowShopItems(bool bSell, const TArray<FRagnarokShopItem>& Items);
+	void ShopResult(bool bSell, int32 Result);
+	void CloseShop(bool bNotifyServer);
+	bool IsShopOpen() const;
+	/** Acoes da janela (usadas pelos cliques e pelos comandos de teste). */
+	void ShopChooseDeal(int32 Type);
+	void ShopAddToBasket(int32 Row, int32 Qty);
+	void ShopConfirm();
+protected:
+	void BuildShopWindows();
+	bool HandleShopClick(const FVector2D& ScreenPos);
+	bool HandleShopWheel(const FVector2D& ScreenPos, float Delta);
+	void RefreshShop();
+	static constexpr int32 ShopRowCount = 12;
+	struct FShopRow { int32 ItemID = 0; int32 Index = 0; int32 Price = 0; int32 Discount = 0; int32 MaxAmount = 30000; };
+	TArray<FShopRow> ShopRows;
+	TMap<int32, int32> ShopBasket; // linha da vitrine -> quantidade
+	bool bShopSell = false;
+	int64 ShopNpcID = 0;
+	int32 ShopScroll = 0;
+	UPROPERTY() TObjectPtr<UCanvasPanel> DealWindow;
+	UPROPERTY() TObjectPtr<UTextBlock> DealBuyLink;
+	UPROPERTY() TObjectPtr<UTextBlock> DealSellLink;
+	UPROPERTY() TObjectPtr<UTextBlock> DealCancelLink;
+	UPROPERTY() TObjectPtr<UCanvasPanel> ShopWindow;
+	UPROPERTY() TArray<TObjectPtr<UImage>> ShopRowHit;
+	UPROPERTY() TArray<TObjectPtr<UImage>> ShopRowIcons;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> ShopRowNames;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> ShopRowPrices;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> BasketRowTexts;
+	UPROPERTY() TObjectPtr<UTextBlock> ShopHeaderText;
+	UPROPERTY() TObjectPtr<UTextBlock> ShopTotalText;
+	UPROPERTY() TObjectPtr<UTextBlock> ShopHintText;
+	UPROPERTY() TObjectPtr<UTextBlock> ShopConfirmLink;
+	UPROPERTY() TObjectPtr<UTextBlock> ShopCancelLink;
+
 	/** Janela de morte (docs/ref: Escape em modo morte): voltar ao ponto de salvamento ou aguardar socorro. */
 public:
 	void ShowDeathWindow();
