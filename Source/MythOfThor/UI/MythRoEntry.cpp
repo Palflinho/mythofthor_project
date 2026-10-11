@@ -76,7 +76,7 @@ void UMythRoHUDWidget::BuildEntryScreens()
 
 	// ---- Login
 	{
-		const FVector2D Size(320.f, 17.f + 150.f);
+		const FVector2D Size(340.f, 17.f + 170.f);
 		EntryLoginPanel = WidgetTree->ConstructWidget<UCanvasPanel>();
 		EntryLoginPanel->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 		if (UCanvasPanelSlot* S = EntryBackdrop->AddChildToCanvas(EntryLoginPanel))
@@ -105,9 +105,10 @@ void UMythRoHUDWidget::BuildEntryScreens()
 			S->SetSize(FVector2D(Size.X - 36.f, 20.f) * UIScale);
 		}
 		EntryStatus = AddText(EntryLoginPanel, 18.f, 108.f, 8, EnGray);
-		EntryLoginLink = AddText(EntryLoginPanel, 60.f, 134.f, 11, EnLink);
+		AddText(EntryLoginPanel, 18.f, 122.f, 7, EnGray)->SetText(FText::FromString(TEXT("Conta nova: usuário terminando em _M ou _F (se o servidor permitir).")));
+		EntryLoginLink = AddText(EntryLoginPanel, 60.f, 148.f, 11, EnLink);
 		EntryLoginLink->SetText(FText::FromString(TEXT("Entrar")));
-		EntryQuitLink = AddText(EntryLoginPanel, 200.f, 134.f, 11, EnLink);
+		EntryQuitLink = AddText(EntryLoginPanel, 210.f, 148.f, 11, EnLink);
 		EntryQuitLink->SetText(FText::FromString(TEXT("Sair")));
 	}
 
