@@ -18,6 +18,8 @@ struct FRagnarokCharacterSlotInfo
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Character")
 	int32 Slot = 0;
 
+	int32 Zeny = 0;
+
 	UPROPERTY(BlueprintReadOnly, Category = "Ragnarok|Character")
 	int64 GID = 0;
 

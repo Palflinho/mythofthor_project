@@ -223,7 +223,7 @@ public:
 
 	/** Teste: MythHead 1 -> vira a cabeca como a seta (0 frente, 1 direita, 2 esquerda); doridori. */
 	UFUNCTION(Exec)
-	void MythHead(int32 HeadDir) { SetHeadTurn(static_cast<uint8>(FMath::Clamp(HeadDir, 0, 2))); }
+	void MythHead(int32 Turn) { SetHeadTurn(static_cast<uint8>(FMath::Clamp(Turn, 0, 2))); }
 
 	/** Teste: MythPointAt 160 185 -> poe o mouse sobre a celula e registra no log o cursor do RO escolhido. */
 	UFUNCTION(Exec)

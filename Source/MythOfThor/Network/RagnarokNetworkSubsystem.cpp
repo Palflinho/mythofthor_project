@@ -201,6 +201,7 @@ bool URagnarokNetworkSubsystem::SelectCharacter(int32 SlotIndex)
 		{
 			SelectedCharName = Slot.Name;
 			SelectedSlotInfo = Slot;
+			CurrentStats.Zeny = Slot.Zeny;
 			CurrentStats.JobClass = Slot.JobClass;
 			CurrentStats.JobName = GetJobNameFromClass(Slot.JobClass);
 			CurrentStats.BaseLevel = Slot.BaseLevel;
@@ -217,6 +218,7 @@ bool URagnarokNetworkSubsystem::SelectCharacter(int32 SlotIndex)
 		const FRagnarokCharacterSlotInfo& Slot = CachedCharacterSlots[SlotIndex];
 		SelectedCharName = Slot.Name;
 		SelectedSlotInfo = Slot;
+		CurrentStats.Zeny = Slot.Zeny;
 		CurrentStats.JobClass = Slot.JobClass;
 		CurrentStats.JobName = GetJobNameFromClass(Slot.JobClass);
 		CurrentStats.BaseLevel = Slot.BaseLevel;
@@ -1228,6 +1230,7 @@ void URagnarokNetworkSubsystem::HandleCharacterList(const uint8* PacketData, int
 		const uint8* Ptr = PacketData + HEADER_SIZE + (i * CHAR_INFO_SIZE);
 		FRagnarokCharacterSlotInfo Info;
 		Info.GID = *reinterpret_cast<const uint32*>(Ptr + 0);
+		Info.Zeny = *reinterpret_cast<const int32*>(Ptr + 12);
 		Info.JobLevel = *reinterpret_cast<const int32*>(Ptr + 24);
 		Info.HP = *reinterpret_cast<const int64*>(Ptr + 50);
 		Info.MaxHP = *reinterpret_cast<const int64*>(Ptr + 58);
