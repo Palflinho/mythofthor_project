@@ -1834,6 +1834,8 @@ void AMythPlayerController::MythTradeAdd(int32 Index, int32 Amount)
 }
 void AMythPlayerController::MythTradeLock() { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendTradeLock(); } }
 void AMythPlayerController::MythTradeCommit() { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendTradeCommit(); } }
+void AMythPlayerController::MythEntryLogin(const FString& User, const FString& Pass) { if (HudWidget) { HudWidget->EntryFillAndLogin(User, Pass); } }
+void AMythPlayerController::MythEntryAction(int32 Action, const FString& Name) { if (HudWidget) { HudWidget->EntryTestAction(Action, Name); } }
 void AMythPlayerController::MythOptions(int32 Tab) { if (HudWidget) { HudWidget->ShowOptionsWindow(Tab); } }
 void AMythPlayerController::MythPartyAnswer(int32 Accept) { if (HudWidget) { HudWidget->AnswerPartyInvite(Accept != 0); } }
 void AMythPlayerController::MythStore(int32 ToStorage, int32 Row, int32 Qty) { if (HudWidget) { HudWidget->StorageMove(ToStorage != 0, Row, Qty); } }

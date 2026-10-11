@@ -51,3 +51,6 @@ Agência de Aventureiros, Banco (Ctrl+B), /navi, troca rápida de equipamento. J
 ## Itens novos no roadmap
 
 Ver `docs/ROADMAP.md`, F1 itens 1.15 a 1.21.
+
+## Atualizacao 2026-10-11
+Entrada do jogo (login, lista, criacao) feita sem arte do LATAM (fundo liso e titulo); falta previa do sprite, excluir personagem e seguranca extra (PIN).

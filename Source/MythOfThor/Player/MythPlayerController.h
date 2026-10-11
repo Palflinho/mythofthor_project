@@ -148,6 +148,8 @@ public:
 	/** Teste: abre a janela de opcoes na aba 0 Efeito, 1 Controle, 2 Outros. */
 	UFUNCTION(Exec)
 	void MythOptions(int32 Tab);
+	UFUNCTION(Exec) void MythEntryLogin(const FString& User, const FString& Pass);
+	UFUNCTION(Exec) void MythEntryAction(int32 Action, const FString& Name);
 
 	/** Teste da troca: MythTradeReply 1 aceita o pedido, MythTradeAdd <indice> <qtd>, MythTradeLock, MythTradeCommit. */
 	UFUNCTION(Exec) void MythTradeReply(int32 Accept);

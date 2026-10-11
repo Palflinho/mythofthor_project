@@ -208,6 +208,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnStorageOpen.AddDynamic(this, &AMythNetWorld::HandleStorageOpen);
 	Net->OnStorageChanged.AddDynamic(this, &AMythNetWorld::HandleStorageChanged);
 	Net->OnPartyChanged.AddDynamic(this, &AMythNetWorld::HandlePartyChanged);
+	Net->OnCharCreateResult.AddDynamic(this, &AMythNetWorld::HandleCharCreateResult);
 	Net->OnTradeRequest.AddDynamic(this, &AMythNetWorld::HandleTradeRequest);
 	Net->OnTradeChanged.AddDynamic(this, &AMythNetWorld::HandleTradeChanged);
 	Net->OnSkillUnitAppear.AddDynamic(this, &AMythNetWorld::HandleSkillUnitAppear);
@@ -260,6 +261,12 @@ void AMythNetWorld::BeginPlay()
 		FTimerHandle LoginTimer;
 		GetWorldTimerManager().SetTimer(LoginTimer, [this]() { Login(); }, 4.f, false);
 	}
+	else if (Net->GetNetworkState() == ERagnarokNetworkState::Disconnected)
+	{
+		// Sem login automatico: tela de entrada (o HUD nasce junto com o controlador, entao espera um instante)
+		FTimerHandle EntryTimer;
+		GetWorldTimerManager().SetTimer(EntryTimer, [this]() { if (UMythRoHUDWidget* StartHud = GetHud()) { StartHud->ShowEntryLogin(); } }, 0.6f, false);
+	}
 }
 
 void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -281,6 +288,7 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnShopResult.RemoveAll(this);
 		Net->OnStorageOpen.RemoveAll(this);
 		Net->OnPartyChanged.RemoveAll(this);
+		Net->OnCharCreateResult.RemoveAll(this);
 		Net->OnTradeRequest.RemoveAll(this);
 		Net->OnTradeChanged.RemoveAll(this);
 		Net->OnSkillUnitAppear.RemoveAll(this);
@@ -343,11 +351,32 @@ void AMythNetWorld::Login(const FString& User, const FString& Password)
 
 void AMythNetWorld::HandleLoginResult(bool bSuccess, const FString& Message)
 {
+	if (UMythRoHUDWidget* EntryHud = GetHud(); EntryHud && EntryHud->IsEntryActive())
+	{
+		if (!bSuccess)
+		{
+			EntryHud->EntryLoginFailed(Message);
+		}
+		return;
+	}
 	Chat(bSuccess ? TEXT("Login aceito.") : FString::Printf(TEXT("Login recusado: %s"), *Message), bSuccess ? NetSystemColor : NetErrorColor);
+}
+
+void AMythNetWorld::HandleCharCreateResult(bool bSuccess, const FString& Message)
+{
+	if (UMythRoHUDWidget* EntryHud = GetHud())
+	{
+		EntryHud->EntryCharCreateResult(bSuccess, Message);
+	}
 }
 
 void AMythNetWorld::HandleCharacterList(const TArray<FRagnarokCharacterSlotInfo>& Characters)
 {
+	if (UMythRoHUDWidget* EntryHud = GetHud(); EntryHud && EntryHud->IsEntryActive())
+	{
+		EntryHud->ShowEntryCharacters(Characters);
+		return;
+	}
 	if (Characters.IsEmpty())
 	{
 		Chat(TEXT("Conta sem personagens (crie um no servidor)."), NetErrorColor);
@@ -459,6 +488,10 @@ void AMythNetWorld::HandleMapEnter(const FString& MapName, int32 CellX, int32 Ce
 
 void AMythNetWorld::FinishMapEnter(const FString& Map, int32 CellX, int32 CellY)
 {
+	if (UMythRoHUDWidget* EntryHud = GetHud())
+	{
+		EntryHud->HideEntry();
+	}
 	if (AMythHUD* BannerHud = GetGameHud())
 	{
 		BannerHud->ShowMapBanner(Map);
@@ -1138,6 +1171,13 @@ void AMythNetWorld::HandleStats(const FRagnarokPlayerStats& S)
 void AMythNetWorld::HandleDisconnected(const FString& Reason)
 {
 	bInMap = false;
+	if (UMythRoHUDWidget* EntryHud = GetHud())
+	{
+		if (EntryHud->IsEntryActive())
+		{
+			EntryHud->ShowEntryLogin(FString::Printf(TEXT("Desconectado: %s"), *Reason));
+		}
+	}
 	Chat(FString::Printf(TEXT("Desconectado do servidor: %s"), *Reason), NetErrorColor);
 }
 

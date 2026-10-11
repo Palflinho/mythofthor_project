@@ -306,6 +306,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnNetworkDisconnected, const FStrin
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnLoginResult, bool, bSuccess, const FString&, Message);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterList, const TArray<FRagnarokCharacterSlotInfo>&, CharacterList);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCharCreateResult, bool, bSuccess, const FString&, Message);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnMapEnter, const FString&, MapName, int32, CellX, int32, CellY, uint8, Direction);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUnitAppear, const FRagnarokUnitVisualInfo&, UnitInfo);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnUnitMove, int64, GID, int32, TargetX, int32, TargetY, int32, StartTick);
@@ -691,6 +692,7 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
 	FOnCharacterList OnCharacterList;
+	FOnCharCreateResult OnCharCreateResult;
 
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
 	FOnMapEnter OnMapEnter;
@@ -874,6 +876,7 @@ private:
 	/** Motivo da proxima desconexao (vazio = encerrada pelo cliente) */
 	FString DisconnectReason;
 	void HandleCharacterList(const uint8* PacketData, int32 PacketSize);
+	void HandleCharMakeResult(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleZoneServerNotify(const uint8* PacketData, int32 PacketSize);
 	void HandleMapAcceptEnter(const uint8* PacketData, int32 PacketSize);
 	void HandleUnitAppear(const uint8* PacketData, int32 PacketSize, uint16 PacketID);

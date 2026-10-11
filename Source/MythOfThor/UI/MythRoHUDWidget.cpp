@@ -309,6 +309,7 @@ void UMythRoHUDWidget::BuildLayout()
 	BuildOptionsWindow();
 	BuildEmotionWindows();
 	BuildTradeWindows();
+	BuildEntryScreens();
 	BuildNpcDialog();
 	AddChatLine(TEXT("Bem-vindo a Rune-Midgard."), ColSystem);
 }
@@ -834,6 +835,14 @@ void UMythRoHUDWidget::MakeDraggable(UCanvasPanel* Window, float Width, float Ha
 
 FReply UMythRoHUDWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
+	if (EntryState != 0)
+	{
+		if (InMouseEvent.GetEffectingButton() == EKeys::LeftMouseButton)
+		{
+			HandleEntryClick(InMouseEvent.GetScreenSpacePosition());
+		}
+		return FReply::Handled();
+	}
 	if (InMouseEvent.GetEffectingButton() == EKeys::RightMouseButton && Root && HandleItemInfoClick(InMouseEvent.GetScreenSpacePosition()))
 	{
 		return FReply::Handled(); // botao direito num item: descricao

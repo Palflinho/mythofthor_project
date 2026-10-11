@@ -910,6 +910,10 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case RagnarokPackets::HEADER_SC_NOTIFY_BAN:
 				HandleNotifyBan(PacketData, ActualLen);
 				break;
+			case 0x0b6f: // HC_ACCEPT_MAKECHAR (PACKETVER >= 20201007)
+			case 0x006e: // HC_REFUSE_MAKECHAR
+				HandleCharMakeResult(PacketData, ActualLen, PacketID);
+				break;
 			case RagnarokPackets::HEADER_HC_ACCEPT_ENTER:
 				HandleCharacterList(PacketData, ActualLen);
 				break;
@@ -1236,6 +1240,45 @@ void URagnarokNetworkSubsystem::HandleCharacterList(const uint8* PacketData, int
 
 	CachedCharacterSlots = Slots;
 	OnCharacterList.Broadcast(Slots);
+}
+
+void URagnarokNetworkSubsystem::HandleCharMakeResult(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
+{
+	if (PacketID == 0x006e)
+	{
+		// rAthena (chclif_refuse_makechar): 0 nome ja existe, 1 recusado (conta cheia ou nome invalido), 2 menor de idade,
+		// 3 simbolos no nome, 0xff nome invalido
+		const uint8 Err = PacketSize >= 3 ? PacketData[2] : 1;
+		const TCHAR* Msg = TEXT("O servidor recusou a criação do personagem.");
+		switch (Err)
+		{
+		case 0: Msg = TEXT("Esse nome já existe."); break;
+		case 2: Msg = TEXT("Você não tem idade para criar personagens."); break;
+		case 3: Msg = TEXT("O nome tem símbolos que não são permitidos."); break;
+		case 0xff: Msg = TEXT("Nome inválido."); break;
+		default: break;
+		}
+		OnCharCreateResult.Broadcast(false, Msg);
+		return;
+	}
+	if (PacketSize >= 2 + 175)
+	{
+		// O personagem novo vem no mesmo formato de uma entrada da lista (175 bytes): refaz a lista com ele
+		TArray<uint8> Fake;
+		Fake.SetNumZeroed(27 + 175);
+		FMemory::Memcpy(Fake.GetData() + 27, PacketData + 2, 175);
+		TArray<FRagnarokCharacterSlotInfo> Old = CachedCharacterSlots;
+		HandleCharacterList(Fake.GetData(), Fake.Num()); // so o novo; junta com os antigos abaixo
+		if (CachedCharacterSlots.Num() == 1)
+		{
+			FRagnarokCharacterSlotInfo NewChar = CachedCharacterSlots[0];
+			Old.RemoveAll([&NewChar](const FRagnarokCharacterSlotInfo& S) { return S.Slot == NewChar.Slot; });
+			Old.Add(NewChar);
+			CachedCharacterSlots = Old;
+			OnCharacterList.Broadcast(CachedCharacterSlots);
+		}
+	}
+	OnCharCreateResult.Broadcast(true, FString());
 }
 
 void URagnarokNetworkSubsystem::HandleZoneServerNotify(const uint8* PacketData, int32 PacketSize)

@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Types/SlateEnums.h"
+#include "Network/RagnarokNetworkSubsystem.h"
 
 /** Opcoes graficas do menu Esc (valores da tela; aplicadas pelo UGameUserSettings). */
 struct FMythGfxOptions
@@ -371,6 +372,62 @@ protected:
 	void RefreshGraphicsWindow();
 	void StepGraphicsOption(int32 Row, int32 Delta);
 	bool HandleGameMenuClick(const FVector2D& ScreenPos);
+	// Entrada do jogo: login, escolha e criacao de personagem (MythRoEntry.cpp)
+public:
+	void ShowEntryLogin(const FString& Message = FString());
+	void ShowEntryCharacters(const TArray<FRagnarokCharacterSlotInfo>& Chars);
+	void HideEntry();
+	/** Teste: preenche usuario e senha e entra. */
+	void EntryFillAndLogin(const FString& User, const FString& Pass);
+	/** Teste: age sobre a tela de personagens (0 jogar, 1 criar com Nome, 2 so mostra). */
+	void EntryTestAction(int32 Action, const FString& Name);
+	bool IsEntryActive() const { return EntryState != 0; }
+	void EntryLoginFailed(const FString& Message);
+	void EntryCharCreateResult(bool bOk, const FString& Message);
+protected:
+	void BuildEntryScreens();
+	void SetEntryPanel(int32 State);
+	void SubmitEntryLogin();
+	void RefreshEntryCharacters();
+	void ShowEntryCreate(int32 Slot);
+	const FRagnarokCharacterSlotInfo* EntrySlotChar(int32 Slot) const;
+	bool HandleEntryClick(const FVector2D& ScreenPos);
+	UFUNCTION() void OnEntryCommitted(const FText& Text, ETextCommit::Type CommitMethod);
+	static constexpr int32 EntryCardCount = 9;
+	int32 EntryState = 0; // 0 fora, 1 login, 2 conectando, 3 personagens, 4 criar
+	TArray<FRagnarokCharacterSlotInfo> EntryChars;
+	int32 EntrySelected = -1;
+	int32 EntryCreateSlot = 0;
+	int32 EntryHair = 1;
+	int32 EntryColor = 0;
+	UPROPERTY() TObjectPtr<UCanvasPanel> EntryBackdrop;
+	UPROPERTY() TObjectPtr<UCanvasPanel> EntryLoginPanel;
+	UPROPERTY() TObjectPtr<UCanvasPanel> EntryCharPanel;
+	UPROPERTY() TObjectPtr<UCanvasPanel> EntryCreatePanel;
+	UPROPERTY() TObjectPtr<UEditableTextBox> EntryUserBox;
+	UPROPERTY() TObjectPtr<UEditableTextBox> EntryPassBox;
+	UPROPERTY() TObjectPtr<UEditableTextBox> EntryNameBox;
+	UPROPERTY() TObjectPtr<UTextBlock> EntryStatus;
+	UPROPERTY() TObjectPtr<UTextBlock> EntryLoginLink;
+	UPROPERTY() TObjectPtr<UTextBlock> EntryQuitLink;
+	UPROPERTY() TObjectPtr<UTextBlock> EntryPlayLink;
+	UPROPERTY() TObjectPtr<UTextBlock> EntryCreateLink;
+	UPROPERTY() TObjectPtr<UTextBlock> EntryBackLink;
+	UPROPERTY() TObjectPtr<UTextBlock> EntryCharStatus;
+	UPROPERTY() TObjectPtr<UTextBlock> EntryHairLeft;
+	UPROPERTY() TObjectPtr<UTextBlock> EntryHairText;
+	UPROPERTY() TObjectPtr<UTextBlock> EntryHairRight;
+	UPROPERTY() TObjectPtr<UTextBlock> EntryColorLeft;
+	UPROPERTY() TObjectPtr<UTextBlock> EntryColorText;
+	UPROPERTY() TObjectPtr<UTextBlock> EntryColorRight;
+	UPROPERTY() TObjectPtr<UTextBlock> EntryCreateStatus;
+	UPROPERTY() TObjectPtr<UTextBlock> EntryDoCreateLink;
+	UPROPERTY() TObjectPtr<UTextBlock> EntryCancelCreateLink;
+	UPROPERTY() TArray<TObjectPtr<UImage>> EntryCardBack;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardName;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo2;
+
 	// Troca entre jogadores e menu do botao direito sobre um jogador (MythRoTrade.cpp)
 public:
 	void OnTradeRequestReceived(const FString& FromName);

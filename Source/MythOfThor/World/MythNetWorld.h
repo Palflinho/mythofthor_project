@@ -68,6 +68,7 @@ private:
 	UFUNCTION() void HandleStorageOpen(const TArray<FRagnarokInventoryItem>& Items);
 	UFUNCTION() void HandleStorageChanged(const TArray<FRagnarokInventoryItem>& Items);
 	UFUNCTION() void HandlePartyChanged();
+	UFUNCTION() void HandleCharCreateResult(bool bSuccess, const FString& Message);
 	UFUNCTION() void HandleTradeRequest(const FString& FromName);
 	UFUNCTION() void HandleTradeChanged();
 	UFUNCTION() void HandleSkillGround(int64 SourceID, int32 SkillID, int32 Level, int32 CellX, int32 CellY);

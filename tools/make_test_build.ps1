@@ -25,5 +25,12 @@ set UE="C:\Program Files\Epic Games\UE_5.8\Engine\Binaries\Win64\UnrealEditor.ex
 set PROJ="E:\Dev\MythTeste\mythofthor.uproject"
 start "" %UE% %PROJ% /Game/Maps/Prontera/Lvl_Prontera -game -windowed -ResX=1600 -ResY=900 -log -NoLiveCoding -MythOnline
 '@ | Set-Content (Join-Path $dst 'Jogar_Myth_Teste.bat') -Encoding ASCII
+@'
+@echo off
+rem Myth of Thor - VERSAO DE TESTE com a tela de login (nao entra sozinho). Use uma conta criada no servidor.
+set UE="C:\Program Files\Epic Games\UE_5.8\Engine\Binaries\Win64\UnrealEditor.exe"
+set PROJ="E:\Dev\MythTeste\mythofthor.uproject"
+start "" %UE% %PROJ% /Game/Maps/Prontera/Lvl_Prontera -game -windowed -ResX=1600 -ResY=900 -log -NoLiveCoding
+'@ | Set-Content (Join-Path $dst 'Jogar_Myth_Teste_Com_Login.bat') -Encoding ASCII
 Copy-Item (Join-Path $src 'docs\TESTE_JOGADOR.md') (Join-Path $dst 'COMO_TESTAR.txt') -Force -ErrorAction SilentlyContinue
 "Pronto: $dst (commit $commit). Abra Jogar_Myth_Teste.bat."
