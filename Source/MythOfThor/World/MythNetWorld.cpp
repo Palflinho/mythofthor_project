@@ -9,6 +9,7 @@
 #include "Sprites/MythSkillEffects.h"
 #include "Sprites/MythStrEffect.h"
 #include "Sprites/MythAura99.h"
+#include "Sprites/MythSpiritBalls.h"
 #include "Sprites/MythEmotion.h"
 #include "World/MythGroundItem.h"
 #include "World/MythCellMoverComponent.h"
@@ -215,6 +216,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnChatRoomChanged.AddDynamic(this, &AMythNetWorld::HandleChatRoomChanged);
 	Net->OnQuestsChanged.AddDynamic(this, &AMythNetWorld::HandleQuestsChanged);
 	Net->OnBankChanged.AddDynamic(this, &AMythNetWorld::HandleBankChanged);
+	Net->OnSpiritBalls.AddDynamic(this, &AMythNetWorld::HandleSpiritBalls);
 	Net->OnAchievementsChanged.AddDynamic(this, &AMythNetWorld::HandleAchievementsChanged);
 	Net->OnFriendRequest.AddDynamic(this, &AMythNetWorld::HandleFriendRequest);
 	Net->OnSkillUnitAppear.AddDynamic(this, &AMythNetWorld::HandleSkillUnitAppear);
@@ -302,6 +304,7 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnChatRoomChanged.RemoveAll(this);
 		Net->OnQuestsChanged.RemoveAll(this);
 		Net->OnBankChanged.RemoveAll(this);
+		Net->OnSpiritBalls.RemoveAll(this);
 		Net->OnAchievementsChanged.RemoveAll(this);
 		Net->OnFriendRequest.RemoveAll(this);
 		Net->OnSkillUnitAppear.RemoveAll(this);
@@ -664,6 +667,11 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 	{
 		AMythAura99::Ensure(Unit, true); // outros jogadores nivel 99 tambem brilham (docs/ref/13 2.1)
 	}
+	if (const int32* Pending = PendingSpirits.Find(Info.GID))
+	{
+		AMythSpiritBalls::Ensure(Unit, *Pending);
+		PendingSpirits.Remove(Info.GID);
+	}
 	if (UCharacterMovementComponent* Move = Unit->GetCharacterMovement())
 	{
 		// Velocidade do RO: ms por celula (150 = padrao) -> cm/s com celula de 50 cm
@@ -919,6 +927,18 @@ void AMythNetWorld::HandleAchievementsChanged()
 	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
 	{
 		PC->GetHud()->RefreshAchievements();
+	}
+}
+
+void AMythNetWorld::HandleSpiritBalls(int64 UnitID, int32 Count)
+{
+	if (AActor* A = ResolveActor(UnitID))
+	{
+		AMythSpiritBalls::Ensure(A, Count);
+	}
+	else
+	{
+		PendingSpirits.Add(UnitID, Count);
 	}
 }
 

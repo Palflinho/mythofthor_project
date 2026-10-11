@@ -41,6 +41,7 @@ protected:
 
 private:
 	UPROPERTY() TMap<int64, TObjectPtr<AMythMonster>> Units;
+	TMap<int64, int32> PendingSpirits; // esferas anunciadas antes de a unidade aparecer
 	bool bInMap = false;
 	FVector LastSelfDestination = FVector(TNumericLimits<float>::Max());
 
@@ -75,6 +76,7 @@ private:
 	UFUNCTION() void HandleChatRoomChanged();
 	UFUNCTION() void HandleQuestsChanged();
 	UFUNCTION() void HandleBankChanged();
+	UFUNCTION() void HandleSpiritBalls(int64 UnitID, int32 Count);
 	UFUNCTION() void HandleAchievementsChanged();
 	UFUNCTION() void HandleFriendRequest(int32 AccountId, int32 CharId, const FString& Name);
 	UFUNCTION() void HandleSkillGround(int64 SourceID, int32 SkillID, int32 Level, int32 CellX, int32 CellY);

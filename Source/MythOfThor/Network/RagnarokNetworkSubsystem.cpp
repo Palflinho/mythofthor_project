@@ -1034,6 +1034,13 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x0148: // ZC_RESURRECTION
 				HandleResurrection(PacketData, ActualLen);
 				break;
+			case 0x01d0: // ZC_SPIRITS: <aid>.L <quantidade>.W
+			case 0x01e1: // ZC_SPIRITS2
+				if (ActualLen >= 8)
+				{
+					OnSpiritBalls.Broadcast(*reinterpret_cast<const int32*>(PacketData + 2), *reinterpret_cast<const uint16*>(PacketData + 6));
+				}
+				break;
 			case 0x0229: // ZC_STATE_CHANGE (effectState de 4 bytes)
 			case 0x0119: // ZC_STATE_CHANGE (versao antiga, 2 bytes)
 				HandleOptionChange(PacketData, ActualLen, PacketID);
