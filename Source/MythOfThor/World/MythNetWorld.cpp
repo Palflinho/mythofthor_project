@@ -1087,7 +1087,10 @@ void AMythNetWorld::HandleDamage(int64 SourceID, int64 TargetID, int32 Damage, u
 	// Arco (view 11 da arma): a flecha sai ao fim do golpe e leva ~190 ms; o numero de dano e a reacao do alvo so
 	// aparecem quando ela chega (docs/ref/03; roBrowser soma 8 quadros de 24 ms ao attackMT para o arco)
 	const UMythRoSpriteComponent* SrcSprite = Source ? Source->FindComponentByClass<UMythRoSpriteComponent>() : nullptr;
-	if (SrcSprite && SrcSprite->MonsterSpriteName.IsEmpty() && SrcSprite->Weapon == 11)
+	// Monstros arqueiros (AttackEffectTable do roBrowser: PROJECTILE ef_arrow_projectile) tambem atiram flechas
+	static const TSet<FString> ArcherMobs = { TEXT("archer_skeleton"), TEXT("orc_archer"), TEXT("goblin_archer"), TEXT("raydric_archer"), TEXT("kobold_archer"), TEXT("gargoyle"), TEXT("archer_guardian") };
+	const bool bArcherMob = SrcSprite && !SrcSprite->MonsterSpriteName.IsEmpty() && ArcherMobs.Contains(SrcSprite->MonsterSpriteName.ToLower());
+	if (SrcSprite && ((SrcSprite->MonsterSpriteName.IsEmpty() && SrcSprite->Weapon == 11) || bArcherMob))
 	{
 		const float Attack = FMath::Max(DelayMs, 1) / 1000.f;
 		TWeakObjectPtr<AActor> WSource(Source);
