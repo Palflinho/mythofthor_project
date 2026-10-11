@@ -66,3 +66,22 @@ Leia isto primeiro. Resume o projeto sem precisar do histórico.
 Conexão estável, movimento e câmera do RO, combate e coleta, animações, números de dano, sons, level up, portais e
 interiores de Prontera, diálogo de NPC, chat em português, árvore de skills, efeitos procedurais (desenhador
 `AMythProcEffect` + `Config/skill_effects_full.json`), 40 mapas importados, mapeamento das quests de troca de classe.
+
+## Atualização de 2026-10-11 (sessão longa, o usuário testa depois)
+
+- **Feito e commitado nesta rodada:** grupo (Alt+Z, `/organize /invite /leave /expel`), troca entre jogadores (menu do botão direito, `/exchange`),
+  HP do monstro (0x0977), clique em janela não anda mais, skills de área sem alvo (0x0117), unidades de skill no chão
+  (`Config/skill_units.json`), mapa skill→efeito completado do roBrowser (`tools/gen_skill_map_from_rb.py`), tintas de estado
+  e adereços (sono, atordoado, maldição), efeitos de sprite (`AMythSprEffect`), falcão, postura de combate (readyfight),
+  pegar item, cursor do tile e anel da skill de área (`Config/skill_area.json`), nome do mapa ao entrar, janela de opções
+  (Esc > Opções do jogo, `FMythOptions`), lista de emoções (Alt+L) e de atalhos (Alt+M), cantos arredondados nas janelas,
+  `/resetchar` (GM), conta `mythclaude2` para testes com 2 jogadores (`server/init_claude_account2.sql`).
+- **Servidor:** o WSL desliga quando fica sem sessão aberta e derruba o Docker. Mantenha um terminal Ubuntu aberto
+  (ou rode `wsl -d Ubuntu -- sleep infinity` em segundo plano) e suba com
+  `cd "/mnt/e/Documentos/Repositórios/mythofthor_project/server" && docker compose up -d`. Se o login recusar com a
+  conexão encerrada, reinicie `mythofthor-login mythofthor-char mythofthor-map` depois que o `db` estiver pronto.
+- **Próximos itens do ROADMAP (ordem sugerida):** efeitos de skill restantes (`docs/EFEITOS_PENDENTES.md`), acabamento da
+  HUD (1.15, janela por janela contra `docs/ref/hud_latam/INDICE.md`), janelas que faltam (1.16: sala de chat, F12;
+  1.17: quests, mapa-múndi, /navi), Game settings aba Gráficos/Som dentro da mesma janela (1.22), login e seleção de
+  personagem, depois sistemas próprios e HD-2D. Cobertura das referências: `docs/COBERTURA_REFERENCIAS.md`.
+- **Teste do usuário pendente:** tudo acima (ver `docs/TESTE_JOGADOR.md`, seções "NOVO").
