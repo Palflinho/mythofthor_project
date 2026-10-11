@@ -78,3 +78,5 @@ NOVO (rodada 5): Troca entre jogadores: clique direito rapido (sem arrastar a ca
 NOVO (rodada 6): TELA DE ENTRADA. Abra Jogar_Myth_Teste_Com_Login.bat (o Jogar_Myth_Teste.bat antigo continua entrando sozinho com a mythtest). Login (usuario e senha; lembra o ultimo usuario), lista de ate 9 personagens (cartoes com classe e nivel), criar personagem (nome, cabelo e cor; sempre Aprendiz) e Jogar. Excluir personagem ainda nao existe. Sem previa do personagem ainda.
 
 NOVO (rodada 7): Amigos (Alt+H): /friend Nome ou botao direito no jogador > Adicionar amigo; o outro ve um pedido (Aceitar/Recusar); a lista mostra quem esta online e avisa no chat quando um amigo entra ou sai. Atributos mostram "base + bonus" quando ha bonus.
+
+NOVO (rodada 8): arqueiros inimigos (Orc Archer, Skeleton Archer etc.) atiram flechas visiveis. Na arvore de skills (Alt+S) as skills com mais de um nivel mostram '< n/max >': clique no lado esquerdo ou direito escolhe o nivel usado ao arrastar para o atalho ou dar duplo clique.
