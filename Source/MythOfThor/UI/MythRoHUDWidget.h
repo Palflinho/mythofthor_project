@@ -316,6 +316,8 @@ protected:
 	UPROPERTY() TObjectPtr<UImage> DragIcon;
 	TArray<int32> SkillRowID;
 	TArray<int32> SkillRowLevel;
+	/** Nivel escolhido para usar cada skill (setas ao lado do nivel na arvore); vai para o atalho e para o duplo clique. */
+	TMap<int32, int32> SkillSelLevel;
 	/** Botao "Lv Up" de cada linha (lv_up_on.bmp do cliente), visivel com pontos e skill que ainda sobe. */
 	UPROPERTY() TArray<TObjectPtr<UImage>> SkillUpButtons;
 	/** Primeira skill mostrada (a roda do mouse rola a lista, que tem mais skills que linhas). */

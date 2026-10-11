@@ -563,13 +563,14 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 		const FMythTreeSkill* Tree = FMythRoSkillTree::Skill(*SkillID);
 		const int32 Level = Info ? Info->Level : 0;
 		SkillRowID[i] = *SkillID;
-		SkillRowLevel[i] = Level;
+		const int32 Sel = Level > 0 ? FMath::Clamp(SkillSelLevel.Contains(*SkillID) ? SkillSelLevel[*SkillID] : Level, 1, Level) : 0;
+		SkillRowLevel[i] = Sel;
 		UTexture2D* Icon = FMythRoClientTables::SkillIcon(*SkillID);
 		SkillIcons[i]->SetBrush(RoWinBrush(Icon, FVector2D(24.f, 24.f) * UIScale));
 		SkillIcons[i]->SetVisibility(Icon ? ESlateVisibility::Visible : ESlateVisibility::Collapsed); // Visible: arrastavel
 		// Aprendida: cor cheia; liberada (o servidor mandou com nivel 0): um pouco apagada; bloqueada: cinza
 		SkillIcons[i]->SetColorAndOpacity(Level > 0 ? FLinearColor::White : (Info ? FLinearColor(1.f, 1.f, 1.f, 0.7f) : FLinearColor(0.35f, 0.35f, 0.38f, 0.55f)));
-		SkillNames[i]->SetText(FText::FromString(FString::Printf(TEXT("%d/%d"), Level, Tree ? Tree->MaxLevel : Level)));
+		SkillNames[i]->SetText(FText::FromString(Level > 1 ? FString::Printf(TEXT("< %d/%d >"), Sel, Level) : FString::Printf(TEXT("%d/%d"), Level, Tree ? Tree->MaxLevel : Level)));
 		SkillNames[i]->SetColorAndOpacity(FSlateColor(Level > 0 ? RoWinText : RoWinLabel));
 		SkillUpButtons[i]->SetVisibility(Points > 0 && Info && Info->bUpgradable ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
 	}
@@ -749,6 +750,26 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 			{
 				SkillTab = t; // aba de outra etapa da classe
 				SkillScroll = -1;
+				RefreshSkillsWindow();
+				return true;
+			}
+		}
+		for (int32 r = 0; r < SkillNames.Num() && r < SkillRowID.Num(); ++r)
+		{
+			// Setas "< n/max >": esquerda diminui, direita aumenta o nivel usado (cliente LATAM, print da arvore de skills)
+			const FRagnarokSkillInfo* Learned = nullptr;
+			if (Net)
+			{
+				for (const FRagnarokSkillInfo& S : Net->GetSkillList())
+				{
+					if (S.SkillID == SkillRowID[r]) { Learned = &S; break; }
+				}
+			}
+			if (SkillRowID[r] != 0 && Learned && Learned->Level > 1 && IsUnder(SkillNames[r], ScreenPos))
+			{
+				const FGeometry& NGeo = SkillNames[r]->GetCachedGeometry();
+				const bool bLeft = NGeo.AbsoluteToLocal(ScreenPos).X < NGeo.GetLocalSize().X * 0.5f;
+				SkillSelLevel.Add(SkillRowID[r], FMath::Clamp(SkillRowLevel[r] + (bLeft ? -1 : 1), 1, Learned->Level));
 				RefreshSkillsWindow();
 				return true;
 			}
