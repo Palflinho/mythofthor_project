@@ -3,11 +3,13 @@
 // o mais curto em numero de portais. Mapas que o servidor nao tem ainda aparecem na lista mas sem rota.
 
 #include "UI/MythRoHUDWidget.h"
+#include "UI/MythRoUITextures.h"
 
 #include "Blueprint/WidgetTree.h"
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
 #include "Components/EditableTextBox.h"
+#include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "Dom/JsonObject.h"
 #include "Misc/FileHelper.h"
@@ -20,10 +22,10 @@ namespace
 	const FLinearColor NvText(0.12f, 0.12f, 0.12f);
 	const FLinearColor NvLink(0.12f, 0.3f, 0.65f);
 	const FLinearColor NvGray(0.55f, 0.55f, 0.55f);
-	constexpr float NvW = 360.f;
+	constexpr float NvW = 292.f;
 	constexpr float NvRowH = 17.f;
-	constexpr int32 NvResults = 8;
-	constexpr int32 NvRouteLines = 10;
+	constexpr int32 NvResults = 12;
+	constexpr int32 NvRouteLines = 7;
 
 	struct FNaviLink { FString To; int32 X = 0, Y = 0; };
 	struct FNaviData
@@ -77,28 +79,45 @@ namespace
 		const FString* Name = Navi().Names.Find(Id);
 		return Name && !Name->IsEmpty() ? FString::Printf(TEXT("%s (%s)"), **Name, *Id) : Id;
 	}
+
+	FString NaviLabelShort(const FString& Id)
+	{
+		const FString* Name = Navi().Names.Find(Id);
+		const FString Label = Name && !Name->IsEmpty() ? *Name : Id;
+		return Label.Len() > 24 ? Label.Left(23) + TEXT("…") : Label;
+	}
 }
 
 void UMythRoHUDWidget::BuildNaviWindow()
 {
-	const float H = 22.f + 30.f + NvResults * NvRowH + 12.f + NvRouteLines * NvRowH + 12.f;
+	// Navegacao (print do /navi): a esquerda a lista de resultados com a busca em cima; a direita o mapa escolhido, o nome e a rota
+	// pelos portais; botoes Procurar e Rota do cliente (navigation_interface3)
+	const float H = 17.f + 330.f;
 	NaviWindow = MakeRoPanel(TEXT("Navegação"), FVector2D(NvW, H), FVector2D(-120.f, -40.f));
-	AddText(NaviWindow, 10.f, 24.f, 8, NvGray)->SetText(FText::FromString(TEXT("Digite o nome do mapa e aperte Enter:")));
+	AddImage(NaviWindow, FMythRoUITextures::Get(TEXT("navigation_interface3/bg_search.bmp")), 36.f, 22.f);
 	NaviBox = WidgetTree->ConstructWidget<UEditableTextBox>();
 	NaviBox->OnTextCommitted.AddDynamic(this, &UMythRoHUDWidget::OnNaviCommitted);
 	if (UCanvasPanelSlot* S = NaviWindow->AddChildToCanvas(NaviBox))
 	{
-		S->SetPosition(FVector2D(10.f, 40.f) * UIScale);
-		S->SetSize(FVector2D(NvW - 20.f, 20.f) * UIScale);
+		S->SetPosition(FVector2D(38.f, 22.f) * UIScale);
+		S->SetSize(FVector2D(110.f, 18.f) * UIScale);
 	}
+	NaviFind = AddButtonHit(NaviWindow, TEXT("find"), 150.f, 21.f);
+	NaviCount = AddText(NaviWindow, 8.f, 46.f, 7, NvGray);
 	for (int32 i = 0; i < NvResults; ++i)
 	{
-		NaviRows.Add(AddText(NaviWindow, 12.f, 68.f + i * NvRowH, 8, NvLink));
+		const float Y = 62.f + i * NvRowH;
+		AddImage(NaviWindow, FMythRoUITextures::Get(TEXT("navigation_interface3/icon_list_map.bmp")), 8.f, Y + 3.f, 11.f, 11.f);
+		NaviRows.Add(AddText(NaviWindow, 22.f, Y, 7, NvLink));
 	}
+	NaviTitle = AddText(NaviWindow, 8.f, 62.f + NvResults * NvRowH + 6.f, 8, NvLink);
+	NaviPreview = AddImage(NaviWindow, nullptr, 170.f, 56.f, 108.f, 108.f);
+	NaviPreview->SetColorAndOpacity(FLinearColor::Transparent);
 	for (int32 i = 0; i < NvRouteLines; ++i)
 	{
-		NaviRoute.Add(AddText(NaviWindow, 12.f, 68.f + NvResults * NvRowH + 12.f + i * NvRowH, 8, NvText));
+		NaviRoute.Add(AddText(NaviWindow, 8.f, 62.f + NvResults * NvRowH + 28.f + i * NvRowH, 7, NvText));
 	}
+	NaviGo = AddButtonHit(NaviWindow, TEXT("view"), 170.f, 172.f);
 }
 
 void UMythRoHUDWidget::OpenNaviWindow(const FString& Query)
@@ -152,8 +171,9 @@ void UMythRoHUDWidget::SearchNavi(const FString& Query)
 	}
 	for (int32 i = 0; i < NvResults; ++i)
 	{
-		NaviRows[i]->SetText(FText::FromString(NaviMatches.IsValidIndex(i) ? MapLabel(NaviMatches[i]) : (i == 0 && !Needle.IsEmpty() ? FString(TEXT("Nenhum mapa encontrado.")) : FString())));
+		NaviRows[i]->SetText(FText::FromString(NaviMatches.IsValidIndex(i) ? NaviLabelShort(NaviMatches[i]) : FString()));
 	}
+	NaviCount->SetText(FText::FromString(Needle.IsEmpty() ? FString() : FString::Printf(TEXT("Resultados [%d]"), NaviMatches.Num())));
 	for (UTextBlock* L : NaviRoute) { L->SetText(FText::GetEmpty()); }
 	if (NaviMatches.Num() == 1 || (NaviMatches.Num() > 0 && Navi().Names[NaviMatches[0]].ToLower() == Needle))
 	{
@@ -163,6 +183,24 @@ void UMythRoHUDWidget::SearchNavi(const FString& Query)
 
 void UMythRoHUDWidget::ShowNaviRoute(const FString& Destination)
 {
+	NaviSelected = Destination;
+	if (const FString* DestName = Navi().Names.Find(Destination))
+	{
+		NaviTitle->SetText(FText::FromString(FString::Printf(TEXT("[%s]"), **DestName)));
+	}
+	if (UTexture2D* Tex = FMythRoUITextures::Get(FString::Printf(TEXT("map/%s.bmp"), *Destination)))
+	{
+		FSlateBrush B;
+		B.SetResourceObject(Tex);
+		B.ImageSize = FVector2D(108.f, 108.f) * UIScale;
+		B.DrawAs = ESlateBrushDrawType::Image;
+		NaviPreview->SetBrush(B);
+		NaviPreview->SetColorAndOpacity(FLinearColor::White);
+	}
+	else
+	{
+		NaviPreview->SetColorAndOpacity(FLinearColor::Transparent);
+	}
 	for (UTextBlock* L : NaviRoute) { L->SetText(FText::GetEmpty()); }
 	const FNaviData& Data = Navi();
 	const FString From = CurrentMapId.ToLower();
@@ -221,6 +259,8 @@ bool UMythRoHUDWidget::HandleNaviClick(const FVector2D& ScreenPos)
 	{
 		return false;
 	}
+	if (IsUnder(NaviFind, ScreenPos)) { SearchNavi(NaviBox->GetText().ToString()); return true; }
+	if (IsUnder(NaviGo, ScreenPos) && !NaviSelected.IsEmpty()) { ShowNaviRoute(NaviSelected); return true; }
 	for (int32 i = 0; i < NvResults && i < NaviMatches.Num(); ++i)
 	{
 		if (IsUnder(NaviRows[i], ScreenPos))

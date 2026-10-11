@@ -524,6 +524,12 @@ protected:
 	UPROPERTY() TObjectPtr<UEditableTextBox> NaviBox;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> NaviRows;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> NaviRoute;
+	UPROPERTY() TObjectPtr<UImage> NaviPreview;
+	UPROPERTY() TObjectPtr<UTextBlock> NaviTitle;
+	UPROPERTY() TObjectPtr<UTextBlock> NaviCount;
+	UPROPERTY() TObjectPtr<UTextBlock> NaviFind;
+	UPROPERTY() TObjectPtr<UTextBlock> NaviGo;
+	FString NaviSelected;
 	TArray<FString> NaviMatches;
 	FString CurrentMapId;
 
