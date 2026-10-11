@@ -968,17 +968,21 @@ void UMythRoSpriteComponent::UpdateBillboard(const FRotator& CamRot)
 		// chao na tela, alinhado com a sombra redonda e com a area de clique, tambem nas bordas da tela.
 		float Scale = 1.f;
 		FVector PullDir = CamForward;
+		// O quad e paralelo a tela, entao a parte de cima fica ATRAS dos pes (altura x sen da inclinacao): o puxao precisa cobrir isso,
+		// senao uma parede logo atras do personagem corta o corpo (o sprite entra nela)
+		const float SpriteHeight = FrameLocalBounds.IsValid ? FMath::Clamp(FrameLocalBounds.Max.Z, 60.f, 500.f) : 190.f;
+		const float DepthPull = FMath::Max(CameraDepthOffset, SpriteHeight * FMath::Abs(FMath::Sin(FMath::DegreesToRadians(CamRot.Pitch))) + 10.f);
 		if (const APlayerController* PC = GetWorld() ? GetWorld()->GetFirstPlayerController() : nullptr)
 		{
 			if (PC->PlayerCameraManager)
 			{
 				const FVector ToFeet = Feet - PC->PlayerCameraManager->GetCameraLocation();
 				const float Dist = ToFeet.Size();
-				Scale = Dist > CameraDepthOffset + 1.f ? (Dist - CameraDepthOffset) / Dist : 1.f;
+				Scale = Dist > DepthPull + 1.f ? (Dist - DepthPull) / Dist : 1.f;
 				PullDir = Dist > KINDA_SMALL_NUMBER ? ToFeet / Dist : CamForward;
 			}
 		}
-		SetWorldLocation(Feet - PullDir * CameraDepthOffset);
+		SetWorldLocation(Feet - PullDir * DepthPull);
 		SetWorldScale3D(FVector(Scale));
 		UpdateShadowTransform(Feet);
 		UpdateTint(Feet, Dt);

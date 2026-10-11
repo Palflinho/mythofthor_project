@@ -92,3 +92,5 @@ NOVO (rodada 12): menu Esc agora tem "Selecao de personagem" (primeiro item): sa
 NOVO (rodada 13): Banco (Ctrl+B): mostra o saldo guardado no servidor; digite a quantia e clique Depositar ou Sacar. Janela de atalhos de teclado (F12). Menu Esc: Selecao de personagem, Configuracoes do jogo, Atalhos, Sair, Voltar.
 
 NOVO (rodada 14): Conquistas (Alt+Y): lista do servidor com pontos, rank, progresso e botao [Receber] para o premio; paginas com Anterior/Proxima. Nomes em ingles (vem do banco do servidor).
+
+NOVO (rodada 15): corrigido o sprite cortado por paredes atras dele (o puxao de profundidade agora acompanha a altura do sprite e a inclinacao da camera). Camera nao entra mais no chao. Esferas espirituais do Monge, vinhetas de veneno e cegueira, postura de congelado/atordoado, terremoto com 3 pulsos.
