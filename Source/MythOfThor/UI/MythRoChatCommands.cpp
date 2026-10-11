@@ -93,6 +93,14 @@ bool UMythRoHUDWidget::HandleChatCommand(const FString& Msg)
 		if (Type >= 0 && bOnline) { Net->SendEmotion(Type); }
 		return true;
 	}
+	// Amigos: /friend Nome
+	if (Cmd == TEXT("friend") || Cmd == TEXT("add"))
+	{
+		if (!bOnline) { Offline(); return true; }
+		if (Args.IsEmpty()) { AddChatLine(TEXT("Uso: /friend NomeDoJogador"), FLinearColor(1.f, 0.4f, 0.4f)); }
+		else { Net->SendFriendAdd(Args); }
+		return true;
+	}
 	// Troca: /exchange NomeDoJogador (o jogador precisa estar perto, na tela)
 	if (Cmd == TEXT("exchange") || Cmd == TEXT("trade"))
 	{

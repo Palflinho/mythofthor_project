@@ -71,9 +71,9 @@ void UMythRoHUDWidget::BuildTradeWindows()
 	TradeDeclineLink->SetText(FText::FromString(TEXT("Recusar")));
 
 	// Menu do botao direito sobre um jogador
-	PlayerMenuWindow = MakeRoPanel(TEXT("Jogador"), FVector2D(170.f, 17.f + 4 * 20.f + 10.f), FVector2D::ZeroVector);
-	const TCHAR* Labels[4] = { TEXT("Trocar"), TEXT("Convidar para o grupo"), TEXT("Cochichar"), TEXT("Cancelar") };
-	for (int32 i = 0; i < 4; ++i)
+	PlayerMenuWindow = MakeRoPanel(TEXT("Jogador"), FVector2D(170.f, 17.f + 5 * 20.f + 10.f), FVector2D::ZeroVector);
+	const TCHAR* Labels[5] = { TEXT("Trocar"), TEXT("Convidar para o grupo"), TEXT("Cochichar"), TEXT("Adicionar amigo"), TEXT("Cancelar") };
+	for (int32 i = 0; i < 5; ++i)
 	{
 		UTextBlock* T = AddText(PlayerMenuWindow, 14.f, 24.f + i * 20.f, 9, TrLink);
 		T->SetText(FText::FromString(Labels[i]));
@@ -187,6 +187,7 @@ bool UMythRoHUDWidget::HandleTradeClick(const FVector2D& ScreenPos)
 					ChatInput->SetKeyboardFocus();
 				}
 				break;
+			case 3: Net->SendFriendAdd(MenuTargetName); break;
 			default: break;
 			}
 			return true;

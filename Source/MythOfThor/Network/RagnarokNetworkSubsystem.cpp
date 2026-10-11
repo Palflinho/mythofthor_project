@@ -958,6 +958,13 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x00f8: // ZC_CLOSE_STORE
 				HandleStoragePacket(PacketData, ActualLen, PacketID);
 				break;
+			case 0x0201: // ZC_FRIENDS_LIST
+			case 0x0206: // ZC_FRIENDS_STATE
+			case 0x0207: // ZC_REQ_ADD_FRIENDS
+			case 0x0209: // ZC_ADD_FRIENDS_LIST
+			case 0x020a: // ZC_DELETE_FRIENDS
+				HandleFriendsPacket(PacketData, ActualLen, PacketID);
+				break;
 			case 0x01f4: // ZC_REQ_EXCHANGE_ITEM2
 			case 0x01f5: // ZC_ACK_EXCHANGE_ITEM2
 			case 0x0b42: // ZC_ADD_EXCHANGE_ITEM (PACKETVER >= 20200916)
@@ -3133,6 +3140,129 @@ void URagnarokNetworkSubsystem::HandleTradePacket(const uint8* PacketData, int32
 	case 0x00f0: // <resultado>.B (0 = sucesso)
 		Say(PacketSize >= 3 && PacketData[2] == 0 ? TEXT("Troca concluída.") : TEXT("A troca falhou."));
 		Close();
+		break;
+	default:
+		break;
+	}
+}
+
+
+// ---- Amigos (clif_friendslist_*, PACKETVER >= 20200902: a lista e o estado trazem o nome) ----
+
+bool URagnarokNetworkSubsystem::SendFriendAdd(const FString& Name)
+{
+	// CZ_ADD_FRIENDS 0x0202 <nome>.24B (26 bytes)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap || Name.IsEmpty())
+	{
+		return false;
+	}
+	uint8 Packet[26] = { 0x02, 0x02 };
+	FTCHARToUTF8 Utf8(*Name);
+	FMemory::Memcpy(Packet + 2, Utf8.Get(), FMath::Min<int32>(Utf8.Length(), 23));
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendFriendDelete(int32 AccountId, int32 CharId)
+{
+	// CZ_DELETE_FRIENDS 0x0203 <aid>.L <cid>.L (10 bytes)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	uint8 Packet[10] = { 0x03, 0x02 };
+	*reinterpret_cast<uint32*>(Packet + 2) = static_cast<uint32>(AccountId);
+	*reinterpret_cast<uint32*>(Packet + 6) = static_cast<uint32>(CharId);
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendFriendReply(int32 AccountId, int32 CharId, bool bAccept)
+{
+	// CZ_ACK_REQ_ADD_FRIENDS 0x0208 <aid>.L <cid>.L <resultado>.L (14 bytes): 1 aceita, 0 recusa
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	uint8 Packet[14] = { 0x08, 0x02 };
+	*reinterpret_cast<uint32*>(Packet + 2) = static_cast<uint32>(AccountId);
+	*reinterpret_cast<uint32*>(Packet + 6) = static_cast<uint32>(CharId);
+	*reinterpret_cast<uint32*>(Packet + 10) = bAccept ? 1 : 0;
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+void URagnarokNetworkSubsystem::HandleFriendsPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
+{
+	auto Say = [this](const FString& Text) { OnChatMessage.Broadcast(TEXT(""), Text, TEXT("#FFFF00")); };
+	switch (PacketID)
+	{
+	case 0x0201: // <len>.W { <aid>.L <cid>.L <nome>.24B }*
+		Friends.Reset();
+		for (int32 Off = 4; Off + 32 <= PacketSize; Off += 32)
+		{
+			FRoFriend F;
+			F.AccountId = *reinterpret_cast<const int32*>(PacketData + Off);
+			F.CharId = *reinterpret_cast<const int32*>(PacketData + Off + 4);
+			F.Name = PartyFixed(PacketData + Off + 8, 24);
+			Friends.Add(F);
+		}
+		OnFriendsChanged.Broadcast();
+		break;
+	case 0x0206: // <aid>.L <cid>.L <estado>.B (0 online, 1 offline) <nome>.24B
+		if (PacketSize >= 35)
+		{
+			const int32 Cid = *reinterpret_cast<const int32*>(PacketData + 6);
+			const bool bOnline = PacketData[10] == 0;
+			FString Name = PartyFixed(PacketData + 11, 24);
+			if (FRoFriend* F = Friends.FindByPredicate([Cid](const FRoFriend& X) { return X.CharId == Cid; }))
+			{
+				F->bOnline = bOnline;
+				Name = F->Name;
+			}
+			Say(bOnline ? FString::Printf(TEXT("%s entrou no jogo."), *Name) : FString::Printf(TEXT("%s saiu do jogo."), *Name));
+			OnFriendsChanged.Broadcast();
+		}
+		break;
+	case 0x0207: // <aid>.L <cid>.L <nome>.24B: alguem quer ser seu amigo
+		if (PacketSize >= 34)
+		{
+			OnFriendRequest.Broadcast(*reinterpret_cast<const int32*>(PacketData + 2), *reinterpret_cast<const int32*>(PacketData + 6), PartyFixed(PacketData + 10, 24));
+		}
+		break;
+	case 0x0209: // <resultado>.W <aid>.L <cid>.L <nome>.24B
+		if (PacketSize >= 36)
+		{
+			const FString Name = PartyFixed(PacketData + 12, 24);
+			switch (*reinterpret_cast<const uint16*>(PacketData + 2))
+			{
+			case 0:
+			{
+				FRoFriend F;
+				F.AccountId = *reinterpret_cast<const int32*>(PacketData + 4);
+				F.CharId = *reinterpret_cast<const int32*>(PacketData + 8);
+				F.Name = Name;
+				F.bOnline = true;
+				Friends.RemoveAll([&F](const FRoFriend& X) { return X.CharId == F.CharId; });
+				Friends.Add(F);
+				Say(FString::Printf(TEXT("Você agora é amigo de %s."), *Name));
+				OnFriendsChanged.Broadcast();
+				break;
+			}
+			case 1: Say(FString::Printf(TEXT("%s não quer ser seu amigo."), *Name)); break;
+			case 2: Say(TEXT("Sua lista de amigos está cheia.")); break;
+			case 3: Say(FString::Printf(TEXT("A lista de amigos de %s está cheia."), *Name)); break;
+			default: break;
+			}
+		}
+		break;
+	case 0x020a: // <aid>.L <cid>.L: amigo removido
+		if (PacketSize >= 10)
+		{
+			const int32 Cid = *reinterpret_cast<const int32*>(PacketData + 6);
+			Friends.RemoveAll([Cid](const FRoFriend& X) { return X.CharId == Cid; });
+			OnFriendsChanged.Broadcast();
+		}
 		break;
 	default:
 		break;

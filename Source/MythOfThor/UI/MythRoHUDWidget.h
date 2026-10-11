@@ -50,7 +50,8 @@ enum class EMythRoWindow : uint8
 	Minimap,  // Ctrl+Tab: minimapa
 	Party,    // Alt+Z: grupo
 	Emotions, // Alt+L: lista de emocoes
-	Macros    // Alt+M: lista de atalhos de emocao
+	Macros,   // Alt+M: lista de atalhos de emocao
+	Friends   // Alt+H: amigos
 };
 
 /** Barra de medidor classica (gze*_left/mid/right sobre gze_bg): o meio estica conforme a fracao. */
@@ -427,6 +428,27 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardName;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo2;
+
+	// Amigos (MythRoFriends.cpp)
+public:
+	void RefreshFriends();
+	void OnFriendRequestReceived(int32 AccountId, int32 CharId, const FString& Name);
+	void AnswerFriendRequest(bool bAccept);
+protected:
+	void BuildFriendsWindow();
+	bool HandleFriendsClick(const FVector2D& ScreenPos);
+	static constexpr int32 FriendRowCount = 14;
+	UPROPERTY() TObjectPtr<UCanvasPanel> FriendsWindow;
+	UPROPERTY() TObjectPtr<UCanvasPanel> FriendAskWindow;
+	UPROPERTY() TObjectPtr<UTextBlock> FriendsTitle;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> FriendNames;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> FriendStates;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> FriendDelete;
+	UPROPERTY() TObjectPtr<UTextBlock> FriendAskText;
+	UPROPERTY() TObjectPtr<UTextBlock> FriendAcceptLink;
+	UPROPERTY() TObjectPtr<UTextBlock> FriendDeclineLink;
+	int32 PendingFriendAid = 0;
+	int32 PendingFriendCid = 0;
 
 	// Troca entre jogadores e menu do botao direito sobre um jogador (MythRoTrade.cpp)
 public:

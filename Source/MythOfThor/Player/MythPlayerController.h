@@ -148,6 +148,7 @@ public:
 	/** Teste: abre a janela de opcoes na aba 0 Efeito, 1 Controle, 2 Outros. */
 	UFUNCTION(Exec)
 	void MythOptions(int32 Tab);
+	UFUNCTION(Exec) void MythFriendReply(int32 Accept);
 	UFUNCTION(Exec) void MythEntryLogin(const FString& User, const FString& Pass);
 	UFUNCTION(Exec) void MythEntryAction(int32 Action, const FString& Name);
 
@@ -360,6 +361,7 @@ private:
 	void OnHotkeyParty();
 	void OnHotkeyEmotions();
 	void OnHotkeyMacros();
+	void OnHotkeyFriends();
 	void OnHotkeyItems();
 	void OnHotkeyEquip();
 	void OnHotkeySkills();

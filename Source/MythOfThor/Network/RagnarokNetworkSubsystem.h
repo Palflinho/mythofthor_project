@@ -362,6 +362,15 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnUnitBodyState, int64, UnitID, 
 /** ZC_RESURRECTION (0x0148): a unidade voltou a vida. */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUnitRevive, int64, UnitID);
 
+/** Amigo da lista (0x0201): o estado online vem do 0x0206. */
+struct FRoFriend
+{
+	int32 AccountId = 0;
+	int32 CharId = 0;
+	FString Name;
+	bool bOnline = false;
+};
+
 /** Item (ou zeny, quando ItemId = 0) de um dos lados da troca entre jogadores. */
 struct FRoTradeItem
 {
@@ -409,6 +418,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPartyChanged);
 /** Troca (clif.cpp trade): pedido de outro jogador e mudancas na janela (itens, travas, fim). */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTradeRequest, const FString&, FromName);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTradeChanged);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFriendsChanged);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnFriendRequest, int32, AccountId, int32, CharId, const FString&, Name);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPartyInvite, int32, PartyId, const FString&, PartyName);
 
 // Delegates de compatibilidade anterior
@@ -508,6 +519,11 @@ public:
 	bool SendTradeLock();
 	bool SendTradeCommit();
 	bool SendTradeCancel();
+
+	/** Amigos: adicionar pelo nome (0x0202), remover (0x0203), responder ao pedido (0x0208). */
+	bool SendFriendAdd(const FString& Name);
+	bool SendFriendDelete(int32 AccountId, int32 CharId);
+	bool SendFriendReply(int32 AccountId, int32 CharId, bool bAccept);
 
 	/**
 	 * Envia requisição de ação/ataque básico para o Map-Server (CZ_REQUEST_ACT 0x088E / 0x0360).
@@ -630,6 +646,7 @@ public:
 
 	bool IsInParty() const { return !PartyName.IsEmpty(); }
 	bool IsTradeOpen() const { return bTradeOpen; }
+	const TArray<FRoFriend>& GetFriends() const { return Friends; }
 	const FString& GetTradePartner() const { return TradePartner; }
 	const TArray<FRoTradeItem>& GetTradeMine() const { return TradeMine; }
 	const TArray<FRoTradeItem>& GetTradeTheirs() const { return TradeTheirs; }
@@ -735,6 +752,8 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Party") FOnPartyInvite OnPartyInvite;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Trade") FOnTradeRequest OnTradeRequest;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Trade") FOnTradeChanged OnTradeChanged;
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Friends") FOnFriendsChanged OnFriendsChanged;
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Friends") FOnFriendRequest OnFriendRequest;
 
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
 	FOnUnitVanish OnUnitVanish;
@@ -856,6 +875,7 @@ private:
 	int32 StorageMax = 300;
 
 	FString PartyName;
+	TArray<FRoFriend> Friends;
 	bool bTradeOpen = false;
 	bool bTradeLockMine = false;
 	bool bTradeLockTheirs = false;
@@ -925,6 +945,7 @@ private:
 	void HandleShopPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandlePartyPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleTradePacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	void HandleFriendsPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleSkillUnitAppear(const uint8* PacketData, int32 PacketSize);
 	void HandleSkillUnitDisappear(const uint8* PacketData, int32 PacketSize);
 	void HandleNotifyEffect(const uint8* PacketData, int32 PacketSize);

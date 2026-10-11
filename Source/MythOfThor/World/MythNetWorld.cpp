@@ -211,6 +211,8 @@ void AMythNetWorld::BeginPlay()
 	Net->OnCharCreateResult.AddDynamic(this, &AMythNetWorld::HandleCharCreateResult);
 	Net->OnTradeRequest.AddDynamic(this, &AMythNetWorld::HandleTradeRequest);
 	Net->OnTradeChanged.AddDynamic(this, &AMythNetWorld::HandleTradeChanged);
+	Net->OnFriendsChanged.AddDynamic(this, &AMythNetWorld::HandleFriendsChanged);
+	Net->OnFriendRequest.AddDynamic(this, &AMythNetWorld::HandleFriendRequest);
 	Net->OnSkillUnitAppear.AddDynamic(this, &AMythNetWorld::HandleSkillUnitAppear);
 	Net->OnSkillUnitDisappear.AddDynamic(this, &AMythNetWorld::HandleSkillUnitDisappear);
 	Net->OnMonsterHp.AddDynamic(this, &AMythNetWorld::HandleMonsterHp);
@@ -291,6 +293,8 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnCharCreateResult.RemoveAll(this);
 		Net->OnTradeRequest.RemoveAll(this);
 		Net->OnTradeChanged.RemoveAll(this);
+		Net->OnFriendsChanged.RemoveAll(this);
+		Net->OnFriendRequest.RemoveAll(this);
 		Net->OnSkillUnitAppear.RemoveAll(this);
 		Net->OnSkillUnitDisappear.RemoveAll(this);
 		Net->OnMonsterHp.RemoveAll(this);
@@ -897,6 +901,22 @@ void AMythNetWorld::HandleTradeRequest(const FString& FromName)
 	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
 	{
 		PC->GetHud()->OnTradeRequestReceived(FromName);
+	}
+}
+
+void AMythNetWorld::HandleFriendsChanged()
+{
+	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
+	{
+		PC->GetHud()->RefreshFriends();
+	}
+}
+
+void AMythNetWorld::HandleFriendRequest(int32 AccountId, int32 CharId, const FString& Name)
+{
+	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
+	{
+		PC->GetHud()->OnFriendRequestReceived(AccountId, CharId, Name);
 	}
 }
 

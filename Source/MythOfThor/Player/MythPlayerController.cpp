@@ -190,6 +190,7 @@ void AMythPlayerController::SetupInputComponent()
 	InputComponent->BindKey(FInputChord(EKeys::Z, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyParty);
 	InputComponent->BindKey(FInputChord(EKeys::L, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyEmotions);
 	InputComponent->BindKey(FInputChord(EKeys::M, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyMacros);
+	InputComponent->BindKey(FInputChord(EKeys::H, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyFriends);
 	InputComponent->BindKey(FInputChord(EKeys::Tab, false, true, false, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyMinimap);
 	InputComponent->BindKey(EKeys::Escape, IE_Pressed, this, &AMythPlayerController::OnHotkeyEscape);
 	InputComponent->BindKey(EKeys::Insert, IE_Pressed, this, &AMythPlayerController::OnHotkeySit);
@@ -557,6 +558,7 @@ void AMythPlayerController::ToggleHudWindow(EMythRoWindow Window)
 }
 
 void AMythPlayerController::OnHotkeyEmotions() { ToggleHudWindow(EMythRoWindow::Emotions); }
+void AMythPlayerController::OnHotkeyFriends() { ToggleHudWindow(EMythRoWindow::Friends); }
 void AMythPlayerController::OnHotkeyMacros() { ToggleHudWindow(EMythRoWindow::Macros); }
 void AMythPlayerController::OnHotkeyParty() { ToggleHudWindow(EMythRoWindow::Party); }
 void AMythPlayerController::OnHotkeyStatus() { ToggleHudWindow(EMythRoWindow::Status); }
@@ -1317,6 +1319,10 @@ void AMythPlayerController::MythGoto(int32 X, int32 Y)
 
 void AMythPlayerController::MythLogin(const FString& User, const FString& Password)
 {
+	if (HudWidget)
+	{
+		HudWidget->HideEntry(); // login de teste direto: sem a tela de entrada (entra com o primeiro personagem)
+	}
 	if (AMythNetWorld* NetWorld = AMythNetWorld::FindOrSpawn(GetWorld()))
 	{
 		NetWorld->Login(User, Password);
@@ -1836,6 +1842,7 @@ void AMythPlayerController::MythTradeLock() { if (URagnarokNetworkSubsystem* N =
 void AMythPlayerController::MythTradeCommit() { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendTradeCommit(); } }
 void AMythPlayerController::MythEntryLogin(const FString& User, const FString& Pass) { if (HudWidget) { HudWidget->EntryFillAndLogin(User, Pass); } }
 void AMythPlayerController::MythEntryAction(int32 Action, const FString& Name) { if (HudWidget) { HudWidget->EntryTestAction(Action, Name); } }
+void AMythPlayerController::MythFriendReply(int32 Accept) { if (HudWidget) { HudWidget->AnswerFriendRequest(Accept != 0); } }
 void AMythPlayerController::MythOptions(int32 Tab) { if (HudWidget) { HudWidget->ShowOptionsWindow(Tab); } }
 void AMythPlayerController::MythPartyAnswer(int32 Accept) { if (HudWidget) { HudWidget->AnswerPartyInvite(Accept != 0); } }
 void AMythPlayerController::MythStore(int32 ToStorage, int32 Row, int32 Qty) { if (HudWidget) { HudWidget->StorageMove(ToStorage != 0, Row, Qty); } }

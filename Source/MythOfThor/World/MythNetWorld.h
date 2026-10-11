@@ -71,6 +71,8 @@ private:
 	UFUNCTION() void HandleCharCreateResult(bool bSuccess, const FString& Message);
 	UFUNCTION() void HandleTradeRequest(const FString& FromName);
 	UFUNCTION() void HandleTradeChanged();
+	UFUNCTION() void HandleFriendsChanged();
+	UFUNCTION() void HandleFriendRequest(int32 AccountId, int32 CharId, const FString& Name);
 	UFUNCTION() void HandleSkillGround(int64 SourceID, int32 SkillID, int32 Level, int32 CellX, int32 CellY);
 	UFUNCTION() void HandleSkillUnitAppear(int64 UnitID, int64 OwnerID, int32 UnitType, int32 X, int32 Y);
 	UFUNCTION() void HandleSkillUnitDisappear(int64 UnitID);
