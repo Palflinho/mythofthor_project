@@ -206,7 +206,16 @@ bool FMythSkillEffects::PlayEffectId(UObject* WorldContext, int32 EffectID, AAct
 			{
 				double Ms = 100.0;
 				P.Raw->TryGetNumberField(TEXT("duration"), Ms);
+				double Copies = 1.0, Between = 0.0; // Earthquake (666): 3 pulsos de 50 ms, 35 ms entre eles (docs/ref/13 5.2)
+				P.Raw->TryGetNumberField(TEXT("duplicate"), Copies);
+				P.Raw->TryGetNumberField(TEXT("timeBetweenDupli"), Between);
 				Char->StartQuake(static_cast<float>(Ms) / 1000.f);
+				for (int32 k = 1; k < static_cast<int32>(Copies); ++k)
+				{
+					FTimerHandle Handle;
+					const float Pulse = static_cast<float>(Ms) / 1000.f;
+					Char->GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateWeakLambda(Char, [Char, Pulse]() { Char->StartQuake(Pulse); }), FMath::Max(0.001f, static_cast<float>(Between * k) / 1000.f), false);
+				}
 				bAny = true;
 			}
 		}

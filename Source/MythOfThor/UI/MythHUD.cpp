@@ -1,4 +1,5 @@
 #include "UI/MythHUD.h"
+#include "Sprites/MythRoSpriteComponent.h"
 #include "UI/MythQuestTitles.h"
 
 #include "Engine/Canvas.h"
@@ -61,6 +62,7 @@ void AMythHUD::DrawHUD()
 	DrawMapBanner();
 	DrawChatRoomTitles();
 	DrawQuestTracker();
+	DrawStatusVignette();
 	DrawTargetRing();
 	DrawSelfBars();
 	DrawGroundItemLabels();
@@ -369,6 +371,72 @@ void AMythHUD::DrawMapBanner()
 	DrawRect(FLinearColor(0.f, 0.f, 0.f, 0.35f * Alpha), Canvas->SizeX * 0.5f - TW * 0.5f - 40.f, 70.f, TW + 80.f, TH + 14.f);
 	Canvas->SetDrawColor(FColor(255, 255, 255, static_cast<uint8>(255.f * Alpha)));
 	Canvas->DrawText(Font, BannerText, Canvas->SizeX * 0.5f - TW * 0.5f, 76.f, Scale, Scale, Info);
+}
+
+void AMythHUD::DrawStatusVignette()
+{
+	// Pos-processamento de estado do cliente (docs/ref/13 4): Cegueira (EF_BLIND 334) fecha a tela num circulo pequeno;
+	// Envenenamento (EF_POISON 335) pulsa uma vinheta verde-roxa nas bordas. So para o proprio personagem.
+	const APawn* Self = PlayerOwner ? PlayerOwner->GetPawn() : nullptr;
+	const UMythRoSpriteComponent* Sprite = Self ? Self->FindComponentByClass<UMythRoSpriteComponent>() : nullptr;
+	if (!Canvas || !Sprite)
+	{
+		return;
+	}
+	const int32 Health = Sprite->GetHealthState();
+	const bool bBlind = (Health & 0x10) != 0;
+	const bool bPoison = (Health & 0x1) != 0;
+	if (!bBlind && !bPoison)
+	{
+		return;
+	}
+	// Textura radial: transparente no centro, opaca nas bordas (r0 = onde comeca a escurecer)
+	auto MakeRadial = [](float R0) -> UTexture2D*
+	{
+		constexpr int32 Size = 128;
+		UTexture2D* Tex = UTexture2D::CreateTransient(Size, Size, PF_B8G8R8A8);
+		TArray<FColor> Pixels;
+		Pixels.SetNumUninitialized(Size * Size);
+		for (int32 y = 0; y < Size; ++y)
+		{
+			for (int32 x = 0; x < Size; ++x)
+			{
+				const float Dx = (x + 0.5f) / Size * 2.f - 1.f, Dy = (y + 0.5f) / Size * 2.f - 1.f;
+				const float R = FMath::Sqrt(Dx * Dx + Dy * Dy) / 1.4142f;
+				const float A = FMath::SmoothStep(R0, 1.f, R);
+				Pixels[y * Size + x] = FColor(255, 255, 255, static_cast<uint8>(A * 255.f));
+			}
+		}
+		FTexture2DMipMap& Mip = Tex->GetPlatformData()->Mips[0];
+		FMemory::Memcpy(Mip.BulkData.Lock(LOCK_READ_WRITE), Pixels.GetData(), Pixels.Num() * sizeof(FColor));
+		Mip.BulkData.Unlock();
+		Tex->Filter = TF_Bilinear;
+		Tex->AddressX = TA_Clamp;
+		Tex->AddressY = TA_Clamp;
+		Tex->UpdateResource();
+		return Tex;
+	};
+	static TWeakObjectPtr<UTexture2D> BlindTex, PoisonTex;
+	auto Draw = [this](UTexture2D* Tex, const FLinearColor& Color)
+	{
+		if (Tex && Tex->GetResource())
+		{
+			FCanvasTileItem Tile(FVector2D::ZeroVector, Tex->GetResource(), FVector2D(Canvas->SizeX, Canvas->SizeY), Color);
+			Tile.BlendMode = SE_BLEND_Translucent;
+			Canvas->DrawItem(Tile);
+		}
+	};
+	if (bPoison)
+	{
+		if (!PoisonTex.IsValid()) { PoisonTex = MakeRadial(0.35f); PoisonTex->AddToRoot(); }
+		const float Pulse = 0.5f + 0.5f * FMath::Sin(GetWorld()->GetTimeSeconds() * 3.f);
+		Draw(PoisonTex.Get(), FLinearColor(0.45f, 0.1f, 0.6f, 0.35f + 0.3f * Pulse));
+	}
+	if (bBlind)
+	{
+		if (!BlindTex.IsValid()) { BlindTex = MakeRadial(0.08f); BlindTex->AddToRoot(); }
+		Draw(BlindTex.Get(), FLinearColor(0.f, 0.f, 0.f, 1.f));
+	}
 }
 
 void AMythHUD::DrawQuestTracker()

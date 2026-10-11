@@ -12,11 +12,11 @@
 
 namespace
 {
-	constexpr float Cell = 50.f;          // 1 unidade do RO = 1 celula = 50 uu
-	constexpr float OrbitRadius = 1.f * Cell;
-	constexpr float OrbitHeight = 2.f * Cell;
-	constexpr float DegreesPerSecond = 1000.f / 64.f; // o cliente soma tick/64 graus
-	FColor Rgba(float R, float G, float B, float A) { return FLinearColor(R, G, B, A).ToFColor(false); }
+	constexpr float SbCell = 50.f;          // 1 unidade do RO = 1 celula = 50 uu
+	constexpr float SbOrbitRadius = 1.f * SbCell;
+	constexpr float SbOrbitHeight = 2.f * SbCell;
+	constexpr float SbDegreesPerSecond = 1000.f / 64.f; // o cliente soma tick/64 graus
+	FColor SbRgba(float R, float G, float B, float A) { return FLinearColor(R, G, B, A).ToFColor(false); }
 }
 
 AMythSpiritBalls::AMythSpiritBalls()
@@ -111,20 +111,20 @@ void AMythSpiritBalls::Tick(float DeltaSeconds)
 	// Como o cliente: i de Count ate 1; a esfera i fica no angulo (i mod 5) * 72 graus; i > 10 so halo largo, i > 5 halo medio
 	for (int32 i = Count; i > 0; --i)
 	{
-		const float Angle = FMath::DegreesToRadians((i % 5) * 72.f - Age * DegreesPerSecond);
-		const FVector Center(FMath::Cos(Angle) * OrbitRadius, FMath::Sin(Angle) * OrbitRadius, OrbitHeight);
+		const float Angle = FMath::DegreesToRadians((i % 5) * 72.f - Age * SbDegreesPerSecond);
+		const FVector Center(FMath::Cos(Angle) * SbOrbitRadius, FMath::Sin(Angle) * SbOrbitRadius, SbOrbitHeight);
 		if (i > 10)
 		{
-			Quad(Center, 0.55f * Cell, Rgba(0.f, 0.f, 1.f, 0.2f * Fade));
+			Quad(Center, 0.55f * SbCell, SbRgba(0.f, 0.f, 1.f, 0.2f * Fade));
 		}
 		else if (i > 5)
 		{
-			Quad(Center, 0.35f * Cell, Rgba(0.f, 0.f, 1.f, 0.6f * Fade));
+			Quad(Center, 0.35f * SbCell, SbRgba(0.f, 0.f, 1.f, 0.6f * Fade));
 		}
 		else
 		{
-			Quad(Center, 0.25f * Cell, Rgba(0.f, 0.f, 1.f, 1.f * Fade));
-			Quad(Center, 0.15f * Cell, Rgba(0.8f, 0.8f, 1.f, 1.f * Fade));
+			Quad(Center, 0.25f * SbCell, SbRgba(0.f, 0.f, 1.f, 1.f * Fade));
+			Quad(Center, 0.15f * SbCell, SbRgba(0.8f, 0.8f, 1.f, 1.f * Fade));
 		}
 	}
 	Mesh->ClearMeshSection(0);

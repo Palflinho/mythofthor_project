@@ -296,6 +296,9 @@ private:
 	FLinearColor StatusTint = FLinearColor::White;
 	int32 BodyState = 0;
 	int32 HealthState = 0;
+public:
+	int32 GetHealthState() const { return HealthState; }
+private:
 	int32 Virtue = 0;
 	bool bStatusDim = false;
 	bool bStatusHidden = false;
