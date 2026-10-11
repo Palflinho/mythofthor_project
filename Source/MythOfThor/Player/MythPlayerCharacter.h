@@ -134,6 +134,8 @@ private:
 	float CameraYaw = -90.f;
 	float CurrentPitch = -45.f;
 	float CurrentArm = 5000.f;
+	/** Distancia da camera depois do clamp do terreno (docs/ref/02 3.3): encurta o braco se a camera entraria no chao. */
+	float ClampedArm = 5000.f;
 	float DestYaw = -90.f;
 	float DestPitch = -45.f;
 	float DestArm = 5000.f;

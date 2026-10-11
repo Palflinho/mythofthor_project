@@ -193,6 +193,29 @@ void AMythPlayerCharacter::ApplyCamera()
 	{
 		CameraBoom->SocketOffset = FVector::ZeroVector;
 	}
-	CameraBoom->TargetArmLength = CurrentArm;
-	CameraBoom->SetWorldRotation(FRotator(CurrentPitch, CameraYaw, 0.f));
+	// Colisao com o terreno: se o chao andavel (.gat) fica acima da posicao da camera, aproxima a camera ate sair dele
+	const FRotator ViewRot(CurrentPitch, CameraYaw, 0.f);
+	const FVector Pivot = CameraBoom->GetComponentLocation();
+	float AllowedArm = CurrentArm;
+	for (int32 Try = 0; Try < 10; ++Try)
+	{
+		const FVector CamPos = Pivot - ViewRot.Vector() * AllowedArm;
+		float Ground = 0.f;
+		if (!UMythCellMoverComponent::GroundZ(GetWorld(), CamPos, Ground) || Ground < CamPos.Z - 30.f)
+		{
+			break;
+		}
+		AllowedArm *= 0.9f;
+	}
+	if (AllowedArm < CurrentArm - 1.f)
+	{
+		ClampedArm = FMath::Min(ClampedArm, CurrentArm);
+		ClampedArm += (AllowedArm - ClampedArm) * FMath::Clamp((GetWorld() ? GetWorld()->GetDeltaSeconds() : 0.016f) * 8.f, 0.f, 1.f);
+	}
+	else
+	{
+		ClampedArm = CurrentArm;
+	}
+	CameraBoom->TargetArmLength = ClampedArm;
+	CameraBoom->SetWorldRotation(ViewRot);
 }
