@@ -9,6 +9,7 @@
 
 #include "Blueprint/WidgetTree.h"
 #include "Components/Button.h"
+#include "Engine/Texture2D.h"
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
 #include "Components/EditableTextBox.h"
@@ -141,18 +142,60 @@ UImage* UMythRoHUDWidget::AddColor(UCanvasPanel* Parent, const FLinearColor& Col
 	return Img;
 }
 
+namespace
+{
+	/** Retangulo arredondado 32x32 de 9 fatias: miolo branco, borda de 1 px a 62% e cantos antialiasados (raio 7). */
+	UTexture2D* RoundedPanelTexture()
+	{
+		static TObjectPtr<UTexture2D> Tex;
+		if (Tex)
+		{
+			return Tex;
+		}
+		constexpr int32 N = 32;
+		constexpr float R = 7.f;
+		TArray<FColor> Px;
+		Px.SetNumUninitialized(N * N);
+		for (int32 y = 0; y < N; ++y)
+		{
+			for (int32 x = 0; x < N; ++x)
+			{
+				// distancia ao retangulo arredondado (negativa dentro)
+				const float Qx = FMath::Abs(x + 0.5f - N * 0.5f) - (N * 0.5f - R);
+				const float Qy = FMath::Abs(y + 0.5f - N * 0.5f) - (N * 0.5f - R);
+				const float D = FVector2D(FMath::Max(Qx, 0.f), FMath::Max(Qy, 0.f)).Size() + FMath::Min(FMath::Max(Qx, Qy), 0.f) - R;
+				const float A = FMath::Clamp(0.5f - D, 0.f, 1.f);
+				const float Edge = FMath::Clamp(1.2f + D, 0.f, 1.f); // 1 perto da borda
+				const uint8 V = static_cast<uint8>(255.f * FMath::Lerp(1.f, 0.62f, Edge));
+				Px[y * N + x] = FColor(V, V, V, static_cast<uint8>(255.f * A));
+			}
+		}
+		UTexture2D* T = UTexture2D::CreateTransient(N, N, PF_B8G8R8A8);
+		T->Filter = TF_Bilinear;
+		T->SRGB = true;
+		T->NeverStream = true;
+		T->AddToRoot();
+		FTexture2DMipMap& Mip = T->GetPlatformData()->Mips[0];
+		FMemory::Memcpy(Mip.BulkData.Lock(LOCK_READ_WRITE), Px.GetData(), Px.Num() * sizeof(FColor));
+		Mip.BulkData.Unlock();
+		T->UpdateResource();
+		Tex = T;
+		return T;
+	}
+}
+
 UImage* UMythRoHUDWidget::AddRounded(UCanvasPanel* Parent, const FLinearColor& Fill, const FLinearColor& Border, float X, float Y, float W, float H, float RadiusTop, float RadiusBottom)
 {
 	UImage* Img = WidgetTree->ConstructWidget<UImage>();
 	FSlateBrush Brush;
-	Brush.DrawAs = ESlateBrushDrawType::RoundedBox;
-	Brush.TintColor = FSlateColor(FLinearColor::White);
-	Brush.OutlineSettings.RoundingType = ESlateBrushRoundingType::FixedRadius;
-	Brush.OutlineSettings.CornerRadii = FVector4(RadiusTop * UIScale, RadiusTop * UIScale, RadiusBottom * UIScale, RadiusBottom * UIScale);
-	Brush.OutlineSettings.Color = FSlateColor(Border);
-	Brush.OutlineSettings.Width = FMath::Max(1.f, UIScale);
-	Brush.ImageSize = FVector2D(W, H) * UIScale;
+	Brush.SetResourceObject(RoundedPanelTexture());
+	Brush.DrawAs = ESlateBrushDrawType::Box;
+	Brush.Margin = FMargin(0.3f);
+	Brush.ImageSize = FVector2D(32.f, 32.f);
 	Img->SetBrush(Brush);
+	// A borda vem gravada na textura (mais escura que o miolo): o miolo leva a cor Fill, a borda a cor Fill x 0,62
+	const float Mix = Border.A > 0.f ? 1.f : 1.f;
+	(void)Mix;
 	Img->SetColorAndOpacity(Fill);
 	Img->SetVisibility(ESlateVisibility::HitTestInvisible);
 	if (UCanvasPanelSlot* S = Parent->AddChildToCanvas(Img))
@@ -263,6 +306,7 @@ void UMythRoHUDWidget::BuildLayout()
 	BuildShopWindows();
 	BuildStorageWindow();
 	BuildPartyWindow();
+	BuildOptionsWindow();
 	BuildNpcDialog();
 	AddChatLine(TEXT("Bem-vindo a Rune-Midgard."), ColSystem);
 }
@@ -274,7 +318,7 @@ void UMythRoHUDWidget::BuildBasicInfo()
 	constexpr float W = 232.f;
 	UCanvasPanel* Win = MakeWindow(FVector2D(0.f, 0.f), FVector2D(0.f, 0.f), FVector2D(0.f, 0.f), FVector2D(W, BasicFullH));
 	BasicWindow = Win;
-	BasicBody = AddRounded(Win, ColWindow, ColWindowEdge, 0.f, 16.f, W, BasicFullH - 16.f, 0.f, 7.f);
+	BasicBody = AddRounded(Win, ColWindow, ColWindowEdge, 0.f, 8.f, W, BasicFullH - 8.f, 0.f, 7.f);
 	BasicBody->SetVisibility(ESlateVisibility::Visible); // o clique na janela nao atravessa para o jogo
 	AddTitleBar(Win, W, TEXT("Informações Básicas"));
 	BasicDetailStart = Win->GetChildrenCount(); // daqui para baixo: detalhes que somem na versao recolhida
@@ -489,7 +533,7 @@ void UMythRoHUDWidget::BuildAutoBattle()
 	// Janela do Auto-Battle (baixo-direita): botao liga/desliga, vigor de 3h e peso
 	const float W = 170.f, H = 17.f + 52.f;
 	UCanvasPanel* Win = MakeWindow(FVector2D(1.f, 1.f), FVector2D(1.f, 1.f), FVector2D(-8.f, -8.f), FVector2D(W, H));
-	AddRounded(Win, ColWindow, ColWindowEdge, 0.f, 16.f, W, H - 16.f, 0.f, 7.f);
+	AddRounded(Win, ColWindow, ColWindowEdge, 0.f, 8.f, W, H - 8.f, 0.f, 7.f);
 	AddTitleBar(Win, W, TEXT("Auto-Battle"));
 
 	AutoButton = WidgetTree->ConstructWidget<UButton>();

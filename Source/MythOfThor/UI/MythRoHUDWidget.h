@@ -369,6 +369,26 @@ protected:
 	void RefreshGraphicsWindow();
 	void StepGraphicsOption(int32 Row, int32 Delta);
 	bool HandleGameMenuClick(const FVector2D& ScreenPos);
+	// Janela de opcoes ON/OFF (MythRoOptions.cpp): abas Efeito, Controle e Outros
+public:
+	void ShowOptionsWindow(int32 Tab);
+	void ApplyOptionEffects();
+protected:
+	void BuildOptionsWindow();
+	void RefreshOptions();
+	bool HandleOptionsClick(const FVector2D& ScreenPos);
+	bool HandleOptionsWheel(const FVector2D& ScreenPos, float Delta);
+	static constexpr int32 OptRowCount = 12;
+	UPROPERTY() TObjectPtr<UCanvasPanel> OptionsWindow;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> OptTabTexts;
+	UPROPERTY() TObjectPtr<UTextBlock> OptTabGraphics;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> OptRowName;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> OptRowToggle;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> OptRowDesc;
+	UPROPERTY() TObjectPtr<UTextBlock> OptClose;
+	int32 OptTab = 0;
+	int32 OptScroll = 0;
+
 	// Grupo (MythRoParty.cpp)
 public:
 	/** O cursor esta sobre janela, atalhos ou dialogo: o clique e da interface, nunca do mundo. */
@@ -470,6 +490,8 @@ protected:
 	UPROPERTY() TObjectPtr<UCanvasPanel> GameMenuWindow;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> GameMenuItems;
 	UPROPERTY() TObjectPtr<UCanvasPanel> GraphicsWindow;
+	UPROPERTY() TObjectPtr<UTextBlock> GfxTabOptions;
+	UPROPERTY() TObjectPtr<UTextBlock> SndTabOptions;
 	UPROPERTY() TArray<TObjectPtr<UImage>> GfxLeft;
 	UPROPERTY() TArray<TObjectPtr<UImage>> GfxRight;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> GfxValues;

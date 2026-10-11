@@ -132,10 +132,10 @@ void UMythRoHUDWidget::ApplyGraphicsOptions()
 void UMythRoHUDWidget::BuildGameMenu()
 {
 	// Menu principal (como a janela de "Sair" do RO, com as opcoes de hoje)
-	const FVector2D MenuSize(200.f, 17.f + 3 * 24.f + 12.f);
+	const FVector2D MenuSize(200.f, 17.f + 4 * 24.f + 12.f);
 	GameMenuWindow = MakeRoPanel(TEXT("Menu"), MenuSize, FVector2D::ZeroVector);
-	const TCHAR* Items[3] = { TEXT("Voltar ao jogo"), TEXT("Configurações"), TEXT("Sair do jogo") };
-	for (int32 i = 0; i < 3; ++i)
+	const TCHAR* Items[4] = { TEXT("Voltar ao jogo"), TEXT("Configurações"), TEXT("Opções do jogo"), TEXT("Sair do jogo") };
+	for (int32 i = 0; i < 4; ++i)
 	{
 		UTextBlock* T = AddText(GameMenuWindow, 18.f, 26.f + i * 24.f, 9, MenuLink);
 		T->SetText(FText::FromString(Items[i]));
@@ -152,6 +152,8 @@ void UMythRoHUDWidget::BuildGameMenu()
 	GfxTabOther = AddText(GraphicsWindow, 110.f, 22.f, 8, MenuLink);
 	GfxTabOther->SetText(FText::FromString(TEXT("Som e interface")));
 	AddText(GraphicsWindow, 14.f, 22.f, 8, MenuText)->SetText(FText::FromString(TEXT("[ Gráficos ]")));
+	GfxTabOptions = AddText(GraphicsWindow, 250.f, 22.f, 8, MenuLink);
+	GfxTabOptions->SetText(FText::FromString(TEXT("Opções")));
 	UTexture2D* Left = FMythRoUITextures::Get(MenuBasic(TEXT("arw_left")));
 	UTexture2D* Right = FMythRoUITextures::Get(MenuBasic(TEXT("arw_right")));
 	for (int32 i = 0; i < GfxRowCount; ++i)
@@ -182,6 +184,8 @@ void UMythRoHUDWidget::BuildGameMenu()
 	SndTabOther = AddText(SoundWindow, 14.f, 22.f, 8, MenuLink);
 	SndTabOther->SetText(FText::FromString(TEXT("Gráficos")));
 	AddText(SoundWindow, 110.f, 22.f, 8, MenuText)->SetText(FText::FromString(TEXT("[ Som e interface ]")));
+	SndTabOptions = AddText(SoundWindow, 250.f, 22.f, 8, MenuLink);
+	SndTabOptions->SetText(FText::FromString(TEXT("Opções")));
 	for (int32 i = 0; i < SndRowCount; ++i)
 	{
 		const float Y = 48.f + i * 24.f;
@@ -370,6 +374,9 @@ bool UMythRoHUDWidget::HandleGameMenuClick(const FVector2D& ScreenPos)
 				OpenOrder.Add(GraphicsWindow);
 				break;
 			case 2:
+				ShowOptionsWindow(0);
+				break;
+			case 3:
 				UKismetSystemLibrary::QuitGame(this, GetOwningPlayer(), EQuitPreference::Quit, false);
 				break;
 			default:
@@ -397,6 +404,11 @@ bool UMythRoHUDWidget::HandleGameMenuClick(const FVector2D& ScreenPos)
 			GraphicsWindow->SetVisibility(ESlateVisibility::Collapsed);
 			return true;
 		}
+		if (GfxTabOptions && IsUnder(GfxTabOptions, ScreenPos))
+		{
+			ShowOptionsWindow(0);
+			return true;
+		}
 		if (IsUnder(GfxTabOther, ScreenPos))
 		{
 			GraphicsWindow->SetVisibility(ESlateVisibility::Collapsed);
@@ -417,6 +429,11 @@ bool UMythRoHUDWidget::HandleGameMenuClick(const FVector2D& ScreenPos)
 		if (IsUnder(SndClose, ScreenPos))
 		{
 			SoundWindow->SetVisibility(ESlateVisibility::Collapsed);
+			return true;
+		}
+		if (SndTabOptions && IsUnder(SndTabOptions, ScreenPos))
+		{
+			ShowOptionsWindow(0);
 			return true;
 		}
 		if (IsUnder(SndTabOther, ScreenPos))

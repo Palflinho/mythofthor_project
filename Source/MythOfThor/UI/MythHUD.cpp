@@ -12,6 +12,7 @@
 #include "World/MythGroundItem.h"
 #include "World/MythMapInfo.h"
 #include "UI/MythRoHUDWidget.h"
+#include "UI/MythOptions.h"
 #include "EngineUtils.h"
 #include "Camera/PlayerCameraManager.h"
 #include "CanvasItem.h"
@@ -198,6 +199,10 @@ void UMythCombatText::ShowDamage(const UObject* WorldContextObject, const FVecto
 
 void UMythCombatText::ShowMiss(const UObject* WorldContextObject, const FVector& WorldLocation)
 {
+	if (!FMythOptions::Get(TEXT("Miss")))
+	{
+		return;
+	}
 	ShowDamage(WorldContextObject, WorldLocation, 0, ECombatTextType::Miss);
 }
 

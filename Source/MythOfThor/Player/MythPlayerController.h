@@ -145,6 +145,10 @@ public:
 	UFUNCTION(Exec)
 	void MythPartyAnswer(int32 Accept);
 
+	/** Teste: abre a janela de opcoes na aba 0 Efeito, 1 Controle, 2 Outros. */
+	UFUNCTION(Exec)
+	void MythOptions(int32 Tab);
+
 	/** Teste: MythDropFirst [quantidade] -> joga no chao o primeiro item nao equipado da mochila (CZ_ITEM_THROW). */
 	UFUNCTION(Exec)
 	void MythDropFirst(int32 Amount = 1);

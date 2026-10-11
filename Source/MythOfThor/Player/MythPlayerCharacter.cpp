@@ -1,4 +1,5 @@
 #include "Player/MythPlayerCharacter.h"
+#include "UI/MythOptions.h"
 #include "World/MythCellMoverComponent.h"
 #include "World/MythMapInfo.h"
 #include "World/MythVisionLightComponent.h"
@@ -170,6 +171,10 @@ void AMythPlayerCharacter::Tick(float DeltaSeconds)
 
 void AMythPlayerCharacter::StartQuake(float Seconds, float AmplitudeUU)
 {
+	if (!FMythOptions::Get(TEXT("ScreenShake")))
+	{
+		return;
+	}
 	QuakeLeft = QuakeTotal = FMath::Max(Seconds, 0.03f);
 	QuakeAmplitude = AmplitudeUU;
 	UE_LOG(LogTemp, Verbose, TEXT("MythQuake: %.0f ms, %.0f uu"), Seconds * 1000.f, AmplitudeUU);

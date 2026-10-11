@@ -1,6 +1,7 @@
 #include "Sprites/MythSkillEffects.h"
 
 #include "Sprites/MythRoSound.h"
+#include "UI/MythOptions.h"
 #include "Sprites/MythRoSpriteComponent.h"
 #include "Sprites/MythStrEffect.h"
 #include "Sprites/MythSprEffect.h"
@@ -148,6 +149,10 @@ FLinearColor FMythSkillEffects::ElementColor(int32 SkillID)
 
 bool FMythSkillEffects::PlayEffectId(UObject* WorldContext, int32 EffectID, AActor* Target, const FVector& Location, AActor* Source)
 {
+	if (!FMythOptions::Get(TEXT("ShowEffects")))
+	{
+		return false;
+	}
 	// Tremores que a tabela de efeitos nao traz (Config/effect_quakes.json, docs/ref/11): Magnum Break, Asura, Cart Termination
 	static TMap<int32, TPair<float, float>> ExtraQuakes;
 	static bool bQuakesLoaded = false;
