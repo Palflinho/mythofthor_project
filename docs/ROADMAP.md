@@ -95,7 +95,7 @@ Saída: `docs/FIDELIDADE_SERVIDOR.md`.
 
 | Fase | Conteúdo | Quem |
 |---|---|---|
-| **Entrada do jogo** | Login, seleção e criação de personagem (assets ver2/ver3 do LATAM) | Claude |
+| **Entrada do jogo** | 🟡 Feita em 2026-10-11 (`MythRoEntry.cpp`): login, lista de 9 personagens e criação, com fundo liso. Falta: arte, prévia do sprite, excluir personagem (o rAthena usa exclusão com prazo), PIN, criar conta | Claude |
 | **Teste fechado** (~20 amigos, no seu PC) | Pacote do cliente sem editor; VPN (CGNAT da Vero), contas, backup do banco; checklist de abertura | os dois |
 | **Sistemas próprios do Myth** | **Silhueta de unidades atrás de parede/árvore/prédio** (opção na aba Effect do Game settings; contorno por tipo: jogador, aliado, inimigo; pass extra com profundidade invertida ou Custom Depth; ideia do usuário 2026-10-11, **fica por último**);  Síntese, Grade, Monstro raro ★, Códice de Mímir, HUD sem comandos (o servidor já está pronto, `docs/sistemas/`); **opção a decidir:** bloqueio/aparar para escudo e duas mãos, papel de tank (`docs/sistemas/07_bloqueio_aparar.md`) | Claude |
 | **Visual HD-2D** | Normais cilíndricas nos sprites (`docs/ref/09`), clima e dia/noite por mapa, poças, chuva nas unidades, **a aura do 99 (e os efeitos brilhantes em geral) precisam emitir luz no Lumen** (ponto de luz azul seguindo o personagem, como o `AMythLightFlash` dos efeitos de skill) | Claude |
