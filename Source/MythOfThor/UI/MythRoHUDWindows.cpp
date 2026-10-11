@@ -283,6 +283,7 @@ void UMythRoHUDWidget::ToggleWindow(EMythRoWindow Window)
 	case EMythRoWindow::Friends: Target = FriendsWindow; break;
 	case EMythRoWindow::ChatRoom: OpenChatRoomWindow(); return;
 	case EMythRoWindow::Bank: OpenBankWindow(); return;
+	case EMythRoWindow::Achievements: OpenAchievementWindow(); return;
 	case EMythRoWindow::Quests: Target = QuestWindow; break;
 	case EMythRoWindow::Shortcuts: Target = ShortcutWindow; break;
 	}
@@ -362,6 +363,7 @@ void UMythRoHUDWidget::RefreshWindows()
 	if (FriendsWindow && FriendsWindow->IsVisible()) { RefreshFriends(); }
 	if (QuestWindow && QuestWindow->IsVisible()) { RefreshQuests(); }
 	if (BankWindow && BankWindow->IsVisible()) { RefreshBank(); }
+	if (AchievementWindow && AchievementWindow->IsVisible()) { RefreshAchievements(); }
 }
 
 void UMythRoHUDWidget::RefreshStatusWindow()
@@ -697,6 +699,10 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 		return true;
 	}
 	if (HandleBankClick(ScreenPos))
+	{
+		return true;
+	}
+	if (HandleAchievementClick(ScreenPos))
 	{
 		return true;
 	}

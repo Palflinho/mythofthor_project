@@ -55,7 +55,8 @@ enum class EMythRoWindow : uint8
 	ChatRoom, // Alt+C: sala de chat
 	Quests,   // Alt+U: missoes
 	Shortcuts, // F12: tabela de teclas
-	Bank      // Ctrl+B: banco
+	Bank,     // Ctrl+B: banco
+	Achievements // Alt+Y: conquistas
 };
 
 /** Barra de medidor classica (gze*_left/mid/right sobre gze_bg): o meio estica conforme a fracao. */
@@ -436,6 +437,24 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardName;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo2;
+
+	// Conquistas (MythRoAchievements.cpp)
+public:
+	void OpenAchievementWindow();
+	void RefreshAchievements();
+protected:
+	void BuildAchievementWindow();
+	bool HandleAchievementClick(const FVector2D& ScreenPos);
+	static constexpr int32 AchRowCount = 12;
+	UPROPERTY() TObjectPtr<UCanvasPanel> AchievementWindow;
+	UPROPERTY() TObjectPtr<UTextBlock> AchHeader;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> AchNames;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> AchProgress;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> AchClaim;
+	UPROPERTY() TObjectPtr<UTextBlock> AchPrev;
+	UPROPERTY() TObjectPtr<UTextBlock> AchNext;
+	UPROPERTY() TObjectPtr<UTextBlock> AchPage;
+	int32 AchPageIndex = 0;
 
 	// Banco (MythRoBank.cpp)
 public:

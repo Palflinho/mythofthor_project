@@ -972,6 +972,11 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x00df: // ZC_CHANGE_CHATROOM
 				HandleChatRoomPacket(PacketData, ActualLen, PacketID);
 				break;
+			case 0x0a23: // ZC_ALL_ACH_LIST
+			case 0x0a24: // ZC_ACH_UPDATE
+			case 0x0a26: // ZC_REQ_ACH_REWARD_ACK
+				HandleAchievementPacket(PacketData, ActualLen, PacketID);
+				break;
 			case 0x09b7: // ZC_ACK_OPEN_BANKING
 			case 0x09b9: // ZC_ACK_CLOSE_BANKING
 			case 0x09a6: // ZC_BANKING_CHECK
@@ -3254,6 +3259,78 @@ bool URagnarokNetworkSubsystem::SendBankCommand(uint16 PacketId, int32 Money)
 	SendData(Packet, (PacketId == 0x09a7 || PacketId == 0x09a9) ? 10 : 6);
 	return true;
 }
+
+// ---- Conquistas (clif_achievement_list_all, clif_achievement_update, clif_achievement_reward_ack) ----
+
+bool URagnarokNetworkSubsystem::SendAchievementReward(int32 AchievementId)
+{
+	// CZ_REQ_ACH_REWARD 0x0a25 <id>.L (6 bytes)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	uint8 Packet[6] = { 0x25, 0x0a };
+	*reinterpret_cast<int32*>(Packet + 2) = AchievementId;
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+void URagnarokNetworkSubsystem::HandleAchievementPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
+{
+	auto Parse = [](const uint8* P) -> FRoAchievement
+	{
+		FRoAchievement A;
+		A.Id = *reinterpret_cast<const int32*>(P);
+		A.bCompleted = P[4] != 0;
+		for (int32 i = 0; i < 10; ++i)
+		{
+			A.Objective[i] = *reinterpret_cast<const int32*>(P + 5 + i * 4);
+		}
+		A.CompletedAt = *reinterpret_cast<const int32*>(P + 45);
+		A.bRewardTaken = P[49] != 0;
+		return A;
+	};
+	switch (PacketID)
+	{
+	case 0x0a23: // <len>.W <total>.L <pontos>.L <rank>.W <pts rank>.L <prox>.L { 50 bytes }*
+		if (PacketSize >= 22)
+		{
+			AchievementPoints = *reinterpret_cast<const int32*>(PacketData + 8);
+			AchievementRank = *reinterpret_cast<const uint16*>(PacketData + 12);
+			Achievements.Reset();
+			for (int32 Off = 22; Off + 50 <= PacketSize; Off += 50)
+			{
+				Achievements.Add(Parse(PacketData + Off));
+			}
+			OnAchievementsChanged.Broadcast();
+		}
+		break;
+	case 0x0a24: // <pontos>.L <rank>.W <pts rank>.L <prox>.L { 50 bytes }
+		if (PacketSize >= 66)
+		{
+			AchievementPoints = *reinterpret_cast<const int32*>(PacketData + 2);
+			AchievementRank = *reinterpret_cast<const uint16*>(PacketData + 6);
+			const FRoAchievement A = Parse(PacketData + 16);
+			if (FRoAchievement* Old = Achievements.FindByPredicate([&A](const FRoAchievement& X) { return X.Id == A.Id; })) { *Old = A; } else { Achievements.Add(A); }
+			OnAchievementsChanged.Broadcast();
+		}
+		break;
+	case 0x0a26: // <falhou>.B <id>.L
+		if (PacketSize >= 7)
+		{
+			if (PacketData[2] == 0)
+			{
+				const int32 Id = *reinterpret_cast<const int32*>(PacketData + 3);
+				if (FRoAchievement* Old = Achievements.FindByPredicate([Id](const FRoAchievement& X) { return X.Id == Id; })) { Old->bRewardTaken = true; }
+			}
+			OnAchievementsChanged.Broadcast();
+		}
+		break;
+	default:
+		break;
+	}
+}
+
 
 void URagnarokNetworkSubsystem::HandleBankPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
 {

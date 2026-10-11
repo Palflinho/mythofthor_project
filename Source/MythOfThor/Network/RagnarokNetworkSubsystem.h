@@ -364,6 +364,16 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnUnitBodyState, int64, UnitID, 
 /** ZC_RESURRECTION (0x0148): a unidade voltou a vida. */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUnitRevive, int64, UnitID);
 
+/** Conquista (0x0a23, 0x0a24): progresso por objetivo, concluida e premio recebido; o servidor decide tudo. */
+struct FRoAchievement
+{
+	int32 Id = 0;
+	bool bCompleted = false;
+	int32 Objective[10] = {};
+	int32 CompletedAt = 0;
+	bool bRewardTaken = false;
+};
+
 /** Objetivo de uma quest (cacar monstros): contagem atual e total vindos do servidor. */
 struct FRoQuestObjective
 {
@@ -451,6 +461,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTradeChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFriendsChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnQuestsChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBankChanged);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAchievementsChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnChatRoomChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnFriendRequest, int32, AccountId, int32, CharId, const FString&, Name);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPartyInvite, int32, PartyId, const FString&, PartyName);
@@ -566,6 +577,9 @@ public:
 
 	/** Banco: 0x09b6 abrir, 0x09ab consultar, 0x09b8 fechar, 0x09a7 depositar, 0x09a9 sacar. */
 	bool SendBankCommand(uint16 PacketId, int32 Money);
+
+	/** CZ_REQ_ACH_REWARD 0x0a25: pede o premio de uma conquista concluida. */
+	bool SendAchievementReward(int32 AchievementId);
 
 	/** Sala de chat: criar (0x00d5), entrar (0x00d9), sair (0x00e3), expulsar (0x00e2). */
 	bool SendCreateChatRoom(const FString& Title, int32 Limit, bool bPublic, const FString& Password);
@@ -697,6 +711,9 @@ public:
 	const TArray<FRoFriend>& GetFriends() const { return Friends; }
 	const TArray<FRoQuest>& GetQuests() const { return Quests; }
 	int64 GetBankBalance() const { return BankBalance; }
+	const TArray<FRoAchievement>& GetAchievements() const { return Achievements; }
+	int32 GetAchievementPoints() const { return AchievementPoints; }
+	int32 GetAchievementRank() const { return AchievementRank; }
 	bool IsInChatRoom() const { return bInChatRoom; }
 	const FString& GetChatRoomTitle() const { return CurrentChatRoomTitle; }
 	const TArray<FString>& GetChatRoomMembers() const { return ChatRoomMembers; }
@@ -809,6 +826,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Friends") FOnFriendsChanged OnFriendsChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Quests") FOnQuestsChanged OnQuestsChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Bank") FOnBankChanged OnBankChanged;
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Achievements") FOnAchievementsChanged OnAchievementsChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|ChatRoom") FOnChatRoomChanged OnChatRoomChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Friends") FOnFriendRequest OnFriendRequest;
 
@@ -937,6 +955,9 @@ private:
 	TArray<FRoFriend> Friends;
 	TArray<FRoQuest> Quests;
 	int64 BankBalance = 0;
+	TArray<FRoAchievement> Achievements;
+	int32 AchievementPoints = 0;
+	int32 AchievementRank = 0;
 	bool bBankOpen = false;
 	TMap<int32, FRoChatRoom> ChatRooms;
 	bool bInChatRoom = false;
@@ -1017,6 +1038,7 @@ private:
 	void HandleFriendsPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleQuestPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleBankPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	void HandleAchievementPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleChatRoomPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleSkillUnitAppear(const uint8* PacketData, int32 PacketSize);
 	void HandleSkillUnitDisappear(const uint8* PacketData, int32 PacketSize);
