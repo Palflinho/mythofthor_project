@@ -112,6 +112,8 @@ namespace
 	constexpr int32 GroupWalk = 1;
 	constexpr int32 GroupSit = 2;
 	constexpr int32 GroupPickup = 3;
+	constexpr int32 GroupReady = 4;
+	constexpr float ReadyFightSeconds = 4.f;
 	constexpr int32 GroupAttack = 5;
 	constexpr int32 GroupHurt = 6;
 	constexpr int32 GroupDead = 8;
@@ -777,6 +779,7 @@ int32 UMythRoSpriteComponent::GetActionIndex() const
 	case EMythSpriteState::Dead:   Group = bMob ? MobGroupDead : GroupDead; break;
 	case EMythSpriteState::Sit:    Group = bMob ? GroupIdle : GroupSit; break;
 	case EMythSpriteState::Pickup: Group = bMob ? GroupIdle : GroupPickup; break;
+	case EMythSpriteState::Ready:  Group = bMob ? GroupIdle : GroupReady; break;
 	}
 	const int32 Index = Group * 8 + static_cast<int32>(Direction);
 	// Sprites com poucas acoes (item no chao: 1; varios NPCs: so as 8 de parado) reaproveitam as que existem
@@ -872,7 +875,9 @@ void UMythRoSpriteComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 			bFinished |= State == EMythSpriteState::Hit && StateTime >= 0.2f;
 			if (bFinished)
 			{
-				SetState(EMythSpriteState::Idle, false);
+				const bool bFought = !IsMonster() && (State == EMythSpriteState::Attack || State == EMythSpriteState::Hit);
+				ReadyTimeLeft = bFought ? ReadyFightSeconds : 0.f;
+				SetState(bFought ? EMythSpriteState::Ready : EMythSpriteState::Idle, false);
 			}
 		}
 		else
@@ -885,8 +890,14 @@ void UMythRoSpriteComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 				return; // sentado fica sentado ate o servidor mandar levantar (ou andar)
 			}
 			StillTime = bMoving ? 0.f : StillTime + DeltaTime;
+			if (bMoving) { ReadyTimeLeft = 0.f; }
+			ReadyTimeLeft = FMath::Max(0.f, ReadyTimeLeft - DeltaTime);
 			// So volta ao Idle depois de IdleDelay parado: quinas do caminho nao reiniciam o ciclo de caminhada.
-			const EMythSpriteState NewState = bMoving ? EMythSpriteState::Walk : (StillTime >= IdleDelay ? EMythSpriteState::Idle : State);
+			EMythSpriteState NewState = bMoving ? EMythSpriteState::Walk : (StillTime >= IdleDelay ? EMythSpriteState::Idle : State);
+			if (State == EMythSpriteState::Ready && !bMoving)
+			{
+				NewState = ReadyTimeLeft > 0.f ? EMythSpriteState::Ready : EMythSpriteState::Idle; // a postura de combate dura alguns segundos
+			}
 			if (NewState != State)
 			{
 				SetState(NewState, false);

@@ -300,6 +300,8 @@ private:
 	bool bStatusDim = false;
 	bool bStatusHidden = false;
 	void RecomputeStatusTint();
+	/** Segundos que o jogador ainda fica em postura de combate (acao 4 do .act) depois de bater ou apanhar. */
+	float ReadyTimeLeft = 0.f;
 	TMap<FName, TWeakObjectPtr<AActor>> StatusAttachments;
 	void SetStatusAttachment(FName Name, const TCHAR* SprFile, bool bOn);
 	float SunVisibility = 1.f;
