@@ -43,7 +43,6 @@ Ordem do que se vê o tempo todo jogando. Quem: Claude, salvo indicação.
 | 1.20 | Sons de interface e o campo `wav` dos efeitos de skill (doc 07) | Claude | ⬜ |
 | 1.21 | Os 33 efeitos FUNC vazios e o terremoto (ID 666) (doc 13) | Claude | ⬜ |
 | 1.22 | Menu Esc com os 5 botões (Seleção de personagem, Game settings, Set hotkeys, Sair, Voltar) e a janela **Game settings** com 5 abas (Default, Effect, Control, Graphics, Other com ON/OFF e "apply"), como em `hud_latam/INDICE.md` | Claude | ⬜ |
-| 1.23 | **Extra do Myth (não existe no RO original):** silhueta de personagens, monstros e NPCs atrás de parede, árvore ou prédio (contorno ou sombra colorida por tipo: jogador, aliado, inimigo). Ligar/desligar na aba Effect do Game settings (1.22). Técnica: pass extra do sprite com teste de profundidade invertido (material translúcido) ou Custom Depth + pós-processo | Claude | ⬜ ideia do usuário 2026-10-11 |
 
 Conferência de cobertura das referências: `docs/COBERTURA_REFERENCIAS.md`.
 
@@ -98,7 +97,7 @@ Saída: `docs/FIDELIDADE_SERVIDOR.md`.
 |---|---|---|
 | **Entrada do jogo** | Login, seleção e criação de personagem (assets ver2/ver3 do LATAM) | Claude |
 | **Teste fechado** (~20 amigos, no seu PC) | Pacote do cliente sem editor; VPN (CGNAT da Vero), contas, backup do banco; checklist de abertura | os dois |
-| **Sistemas próprios do Myth** | Síntese, Grade, Monstro raro ★, Códice de Mímir, HUD sem comandos (o servidor já está pronto, `docs/sistemas/`); **opção a decidir:** bloqueio/aparar para escudo e duas mãos, papel de tank (`docs/sistemas/07_bloqueio_aparar.md`) | Claude |
+| **Sistemas próprios do Myth** | **Silhueta de unidades atrás de parede/árvore/prédio** (opção na aba Effect do Game settings; contorno por tipo: jogador, aliado, inimigo; pass extra com profundidade invertida ou Custom Depth; ideia do usuário 2026-10-11, **fica por último**);  Síntese, Grade, Monstro raro ★, Códice de Mímir, HUD sem comandos (o servidor já está pronto, `docs/sistemas/`); **opção a decidir:** bloqueio/aparar para escudo e duas mãos, papel de tank (`docs/sistemas/07_bloqueio_aparar.md`) | Claude |
 | **Visual HD-2D** | Normais cilíndricas nos sprites (`docs/ref/09`), clima e dia/noite por mapa, poças, chuva nas unidades, **a aura do 99 (e os efeitos brilhantes em geral) precisam emitir luz no Lumen** (ponto de luz azul seguindo o personagem, como o `AMythLightFlash` dos efeitos de skill) | Claude |
 | **Conteúdo** | Sprites, skills e efeitos de todas as classes até a transclasse; quests de habilidade; skills de 3ª classe adaptadas | os dois |
 
