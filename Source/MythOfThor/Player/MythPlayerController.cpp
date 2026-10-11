@@ -194,6 +194,7 @@ void AMythPlayerController::SetupInputComponent()
 	InputComponent->BindKey(FInputChord(EKeys::C, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyChatRoom);
 	InputComponent->BindKey(FInputChord(EKeys::U, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyQuests);
 	InputComponent->BindKey(EKeys::F12, IE_Pressed, this, &AMythPlayerController::OnHotkeyShortcuts);
+	InputComponent->BindKey(FInputChord(EKeys::R, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyMail);
 	InputComponent->BindKey(FInputChord(EKeys::N, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyNavi);
 	InputComponent->BindKey(FInputChord(EKeys::W, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyEquipSwitch);
 	InputComponent->BindKey(FInputChord(EKeys::Y, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyAchievements);
@@ -586,6 +587,7 @@ void AMythPlayerController::OnHotkeyEmotions() { ToggleHudWindow(EMythRoWindow::
 void AMythPlayerController::OnHotkeyAchievements() { ToggleHudWindow(EMythRoWindow::Achievements); }
 void AMythPlayerController::OnHotkeyEquipSwitch() { ToggleHudWindow(EMythRoWindow::EquipSwitch); }
 void AMythPlayerController::OnHotkeyNavi() { ToggleHudWindow(EMythRoWindow::Navi); }
+void AMythPlayerController::OnHotkeyMail() { ToggleHudWindow(EMythRoWindow::Mail); }
 void AMythPlayerController::OnHotkeyBank() { ToggleHudWindow(EMythRoWindow::Bank); }
 void AMythPlayerController::OnHotkeyShortcuts() { ToggleHudWindow(EMythRoWindow::Shortcuts); }
 void AMythPlayerController::OnHotkeyQuests() { ToggleHudWindow(EMythRoWindow::Quests); }
@@ -1909,4 +1911,13 @@ void AMythPlayerController::MythSwitch(int32 Op)
 			break;
 		}
 	}
+}
+
+void AMythPlayerController::MythMail(int32 Op, const FString& To, const FString& Title, const FString& Body)
+{
+	URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>();
+	if (!N) { return; }
+	if (Op == 0) { N->SendMailBeginWrite(To); return; }
+	if (Op == 2) { if (N->GetMails().Num() > 0) { N->SendMailRequest(0x09ea, N->GetMails()[0].Id, N->GetMails()[0].Tab); } return; }
+	N->SendMailWrite(To, Title.Replace(TEXT("+"), TEXT(" ")), Body.Replace(TEXT("+"), TEXT(" ")));
 }

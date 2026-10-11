@@ -28,6 +28,7 @@ namespace
 		{ TEXT("Conquistas"), TEXT("Alt+Y") },
 		{ TEXT("Troca rápida de equipamento"), TEXT("Alt+W") },
 		{ TEXT("Banco"), TEXT("Ctrl+B") },
+		{ TEXT("Correio"), TEXT("Alt+R") },
 		{ TEXT("Navegação (também /navi)"), TEXT("Alt+N") },
 		{ TEXT("Minimapa"), TEXT("Ctrl+Tab") },
 		{ TEXT("Sentar / levantar"), TEXT("Insert") },

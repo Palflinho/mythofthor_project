@@ -285,6 +285,7 @@ void UMythRoHUDWidget::ToggleWindow(EMythRoWindow Window)
 	case EMythRoWindow::Bank: OpenBankWindow(); return;
 	case EMythRoWindow::Achievements: OpenAchievementWindow(); return;
 	case EMythRoWindow::EquipSwitch: Target = EquipSwitchWindow; break;
+	case EMythRoWindow::Mail: OpenMailWindow(); return;
 	case EMythRoWindow::Navi:
 		if (NaviWindow && NaviWindow->IsVisible()) { NaviWindow->SetVisibility(ESlateVisibility::Collapsed); } else { OpenNaviWindow(); }
 		return;
@@ -716,6 +717,10 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 		return true;
 	}
 	if (HandleNaviClick(ScreenPos))
+	{
+		return true;
+	}
+	if (HandleMailClick(ScreenPos))
 	{
 		return true;
 	}

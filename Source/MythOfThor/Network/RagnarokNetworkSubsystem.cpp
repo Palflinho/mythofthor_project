@@ -35,6 +35,9 @@ void URagnarokNetworkSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	}
 	// Grupo (PACKETVER >= 20171207): ZC_ADD_MEMBER_TO_GROUP 0x0ae4 e ZC_GROUP_LIST 0x0ae5 (packets_struct.hpp) nao estao no JSON
 	PacketLengths.FindOrAdd(0x0ae4) = 89;
+	// Correio (RODEX): lista 0x0ac2 e leitura 0x0b63 tambem tem tamanho variavel e faltam no JSON
+	PacketLengths.FindOrAdd(0x0ac2) = -1;
+	PacketLengths.FindOrAdd(0x0b63) = -1;
 	PacketLengths.FindOrAdd(0x0ae5) = -1;
 	UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] %d tamanhos de pacote carregados de %s"), PacketLengths.Num(), *Path);
 	bLogPackets = FParse::Param(FCommandLine::Get(), TEXT("MythNetLog"));
@@ -971,6 +974,16 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x00dd: // ZC_MEMBER_EXIT
 			case 0x00df: // ZC_CHANGE_CHATROOM
 				HandleChatRoomPacket(PacketData, ActualLen, PacketID);
+				break;
+			case 0x0ac2: // ZC_ACK_MAIL_LIST3
+			case 0x0b63: // ZC_ACK_READ_MAIL
+			case 0x09ed: // ZC_ACK_WRITE_MAIL
+			case 0x0a12: // ZC_ACK_OPEN_WRITE_MAIL
+			case 0x09f6: // ZC_ACK_DELETE_MAIL
+			case 0x09f2: // ZC_ACK_ZENY_FROM_MAIL
+			case 0x09f4: // ZC_ACK_ITEM_FROM_MAIL
+			case 0x09e7: // ZC_NOTIFY_UNREADMAIL
+				HandleMailPacket(PacketData, ActualLen, PacketID);
 				break;
 			case 0x0a9b: // ZC_EQUIPWIN_MICROSCOPE... lista da troca rapida
 			case 0x0a98: // ack incluir
@@ -3325,6 +3338,183 @@ bool URagnarokNetworkSubsystem::SendEquipSwitchAll()
 	SendData(Packet, sizeof(Packet));
 	return true;
 }
+
+// ---- RODEX / correio (clif_Mail_*; 0x0ac0 abrir, 0x09ea ler, 0x0a08 escrever, 0x0a6e enviar, 0x09f5 excluir) ----
+
+bool URagnarokNetworkSubsystem::SendMailRequest(uint16 PacketId, int64 MailId, uint8 Tab)
+{
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	uint8 Packet[26] = {};
+	*reinterpret_cast<uint16*>(Packet) = PacketId;
+	int32 Len = 0;
+	switch (PacketId)
+	{
+	case 0x0ac0: // abrir a caixa (mail id 0 + 16 bytes)
+	case 0x0ac1: // atualizar
+		*reinterpret_cast<int64*>(Packet + 2) = MailId;
+		Len = 26;
+		break;
+	case 0x09ea: // ler: <aba>.B <mail id>.Q
+	case 0x09f5: // excluir
+		Packet[2] = Tab;
+		*reinterpret_cast<int64*>(Packet + 3) = MailId;
+		Len = 11;
+		break;
+	case 0x09f1: // pegar zeny: <mail id>.Q <aba>.B
+	case 0x09f3: // pegar itens
+		*reinterpret_cast<int64*>(Packet + 2) = MailId;
+		Packet[10] = Tab;
+		Len = 11;
+		break;
+	default:
+		return false;
+	}
+	SendData(Packet, Len);
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendMailBeginWrite(const FString& Receiver)
+{
+	// CZ_REQ_OPEN_WRITE_MAIL 0x0a08 <destinatario>.24B (26 bytes); CZ_REQ_CANCEL_WRITE_MAIL 0x0a03 (2 bytes) quando Receiver vazio
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	if (Receiver.IsEmpty())
+	{
+		const uint8 Cancel[2] = { 0x03, 0x0a };
+		SendData(Cancel, sizeof(Cancel));
+		return true;
+	}
+	uint8 Packet[26] = { 0x08, 0x0a };
+	FTCHARToUTF8 Utf8(*Receiver);
+	FMemory::Memcpy(Packet + 2, Utf8.Get(), FMath::Min<int32>(Utf8.Length(), 23));
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendMailWrite(const FString& Receiver, const FString& Title, const FString& Body)
+{
+	// CZ_REQ_WRITE_MAIL2 0x0a6e <len>.W <destinatario>.24B <remetente>.24B <zeny>.Q <tam titulo>.W <tam texto>.W <char id>.L <titulo> <texto>
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	FTCHARToUTF8 TitleUtf8(*Title.Left(38));
+	FTCHARToUTF8 BodyUtf8(*Body.Left(500));
+	const int32 TitleLen = TitleUtf8.Length() + 1;
+	const int32 BodyLen = BodyUtf8.Length() + 1;
+	TArray<uint8> Pkt;
+	Pkt.SetNumZeroed(68 + TitleLen + BodyLen);
+	*reinterpret_cast<uint16*>(Pkt.GetData()) = 0x0a6e;
+	*reinterpret_cast<uint16*>(Pkt.GetData() + 2) = static_cast<uint16>(Pkt.Num());
+	FTCHARToUTF8 ToUtf8(*Receiver);
+	FMemory::Memcpy(Pkt.GetData() + 4, ToUtf8.Get(), FMath::Min<int32>(ToUtf8.Length(), 23));
+	FTCHARToUTF8 FromUtf8(*SelectedCharName);
+	FMemory::Memcpy(Pkt.GetData() + 28, FromUtf8.Get(), FMath::Min<int32>(FromUtf8.Length(), 23));
+	*reinterpret_cast<uint16*>(Pkt.GetData() + 60) = static_cast<uint16>(TitleLen);
+	*reinterpret_cast<uint16*>(Pkt.GetData() + 62) = static_cast<uint16>(BodyLen);
+	FMemory::Memcpy(Pkt.GetData() + 68, TitleUtf8.Get(), TitleUtf8.Length());
+	FMemory::Memcpy(Pkt.GetData() + 68 + TitleLen, BodyUtf8.Get(), BodyUtf8.Length());
+	SendData(Pkt.GetData(), Pkt.Num());
+	return true;
+}
+
+void URagnarokNetworkSubsystem::HandleMailPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
+{
+	auto Say = [this](const FString& Text) { OnChatMessage.Broadcast(TEXT(""), Text, TEXT("#FFFF00")); };
+	auto Utf = [](const uint8* P, int32 Max) -> FString
+	{
+		TArray<uint8> Buf;
+		Buf.Append(P, Max);
+		Buf.Add(0);
+		return UTF8_TO_TCHAR(reinterpret_cast<const char*>(Buf.GetData()));
+	};
+	switch (PacketID)
+	{
+	case 0x0ac2: // <len>.W <?>.B { <aba>.B <id>.Q <lido>.B <tipo>.B <remetente>.24B <expira>.L <tam titulo>.W <titulo> }*
+		Mails.Reset();
+		for (int32 Off = 5; Off + 41 <= PacketSize;)
+		{
+			FRoMail M;
+			M.Tab = PacketData[Off];
+			M.Id = *reinterpret_cast<const int64*>(PacketData + Off + 1);
+			M.bRead = PacketData[Off + 9] != 0;
+			M.Kind = PacketData[Off + 10];
+			M.Sender = PartyFixed(PacketData + Off + 11, 24);
+			const int32 TitleLen = *reinterpret_cast<const uint16*>(PacketData + Off + 39);
+			M.Title = Utf(PacketData + Off + 41, FMath::Clamp(TitleLen, 0, PacketSize - Off - 41));
+			Mails.Add(M);
+			Off += 41 + TitleLen;
+		}
+		OnMailChanged.Broadcast();
+		break;
+	case 0x0b63: // <len>.W <aba>.B <id>.Q <tam texto>.W <zeny>.Q <itens>.B <texto> ...
+		if (PacketSize >= 24)
+		{
+			OpenMailId = *reinterpret_cast<const int64*>(PacketData + 5);
+			const int32 TextLen = *reinterpret_cast<const uint16*>(PacketData + 13);
+			OpenMailZeny = *reinterpret_cast<const int64*>(PacketData + 15);
+			OpenMailItems = PacketData[23];
+			OpenMailText = Utf(PacketData + 24, FMath::Clamp(TextLen, 0, PacketSize - 24));
+			for (FRoMail& M : Mails) { if (M.Id == OpenMailId) { M.bRead = true; } }
+			OnMailChanged.Broadcast();
+		}
+		break;
+	case 0x09ed: // <resultado>.B (0 = enviado)
+		if (PacketSize >= 3)
+		{
+			Say(PacketData[2] == 0 ? TEXT("Correio enviado.") : (PacketData[2] == 1 ? TEXT("O destinatário não existe.") : TEXT("Não foi possível enviar o correio.")));
+			OnMailChanged.Broadcast();
+		}
+		break;
+	case 0x0a12: // <destinatario>.24B <ok>.B
+		bMailWriting = PacketSize >= 27 && PacketData[26] != 0;
+		if (!bMailWriting)
+		{
+			Say(TEXT("Não é possível escrever um correio agora."));
+		}
+		OnMailChanged.Broadcast();
+		break;
+	case 0x09f6: // excluido: <aba>.B <id>.Q
+		if (PacketSize >= 11)
+		{
+			const int64 Id = *reinterpret_cast<const int64*>(PacketData + 3);
+			Mails.RemoveAll([Id](const FRoMail& M) { return M.Id == Id; });
+			if (OpenMailId == Id) { OpenMailId = 0; OpenMailText.Reset(); }
+			OnMailChanged.Broadcast();
+		}
+		break;
+	case 0x09f2: // pegou o zeny: <id>.Q <aba>.B <resultado>.B
+	case 0x09f4: // pegou os itens
+		if (PacketSize >= 12)
+		{
+			Say(PacketData[11] == 0 ? (PacketID == 0x09f2 ? TEXT("Zeny recebido do correio.") : TEXT("Itens recebidos do correio.")) : TEXT("Não foi possível receber do correio."));
+			if (PacketData[11] == 0)
+			{
+				const int64 Id = *reinterpret_cast<const int64*>(PacketData + 2);
+				if (Id == OpenMailId)
+				{
+					if (PacketID == 0x09f2) { OpenMailZeny = 0; } else { OpenMailItems = 0; }
+				}
+			}
+			OnMailChanged.Broadcast();
+		}
+		break;
+	case 0x09e7: // <ha correio novo>.B
+		if (PacketSize >= 3 && PacketData[2] != 0)
+		{
+			Say(TEXT("Você tem correio novo (Alt+R)."));
+		}
+		break;
+	default:
+		break;
+	}
+}
+
 
 void URagnarokNetworkSubsystem::HandleEquipSwitchPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
 {

@@ -365,6 +365,17 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSpiritBalls, int64, UnitID, int3
 /** ZC_RESURRECTION (0x0148): a unidade voltou a vida. */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUnitRevive, int64, UnitID);
 
+/** Carta da caixa de entrada do correio (0x0ac2). */
+struct FRoMail
+{
+	int64 Id = 0;
+	uint8 Tab = 0;
+	bool bRead = false;
+	uint8 Kind = 0;
+	FString Sender;
+	FString Title;
+};
+
 /** Conquista (0x0a23, 0x0a24): progresso por objetivo, concluida e premio recebido; o servidor decide tudo. */
 struct FRoAchievement
 {
@@ -464,6 +475,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnQuestsChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBankChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAchievementsChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEquipSwitchChanged);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMailChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnChatRoomChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnFriendRequest, int32, AccountId, int32, CharId, const FString&, Name);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPartyInvite, int32, PartyId, const FString&, PartyName);
@@ -587,6 +599,11 @@ public:
 	bool SendEquipSwitchAdd(int32 ItemIndex, int32 Position);
 	bool SendEquipSwitchRemove(int32 ItemIndex);
 	bool SendEquipSwitchAll();
+
+	/** Correio (RODEX): pedidos 0x0ac0 abrir, 0x09ea ler, 0x09f5 excluir, 0x09f1 zeny, 0x09f3 itens. */
+	bool SendMailRequest(uint16 PacketId, int64 MailId, uint8 Tab);
+	bool SendMailBeginWrite(const FString& Receiver);
+	bool SendMailWrite(const FString& Receiver, const FString& Title, const FString& Body);
 
 	/** Sala de chat: criar (0x00d5), entrar (0x00d9), sair (0x00e3), expulsar (0x00e2). */
 	bool SendCreateChatRoom(const FString& Title, int32 Limit, bool bPublic, const FString& Password);
@@ -723,6 +740,11 @@ public:
 	int32 GetAchievementRank() const { return AchievementRank; }
 	/** Itens do segundo conjunto: X = indice (como no pacote), Y = posicao de equipar. */
 	const TArray<FIntPoint>& GetEquipSwitch() const { return EquipSwitch; }
+	const TArray<FRoMail>& GetMails() const { return Mails; }
+	int64 GetOpenMailId() const { return OpenMailId; }
+	const FString& GetOpenMailText() const { return OpenMailText; }
+	int64 GetOpenMailZeny() const { return OpenMailZeny; }
+	int32 GetOpenMailItems() const { return OpenMailItems; }
 	bool IsInChatRoom() const { return bInChatRoom; }
 	const FString& GetChatRoomTitle() const { return CurrentChatRoomTitle; }
 	const TArray<FString>& GetChatRoomMembers() const { return ChatRoomMembers; }
@@ -838,6 +860,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Bank") FOnBankChanged OnBankChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Achievements") FOnAchievementsChanged OnAchievementsChanged;
 	FOnEquipSwitchChanged OnEquipSwitchChanged;
+	FOnMailChanged OnMailChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|ChatRoom") FOnChatRoomChanged OnChatRoomChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Friends") FOnFriendRequest OnFriendRequest;
 
@@ -968,6 +991,12 @@ private:
 	int64 BankBalance = 0;
 	TArray<FRoAchievement> Achievements;
 	TArray<FIntPoint> EquipSwitch;
+	TArray<FRoMail> Mails;
+	int64 OpenMailId = 0;
+	FString OpenMailText;
+	int64 OpenMailZeny = 0;
+	int32 OpenMailItems = 0;
+	bool bMailWriting = false;
 	int32 AchievementPoints = 0;
 	int32 AchievementRank = 0;
 	bool bBankOpen = false;
@@ -1052,6 +1081,7 @@ private:
 	void HandleBankPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleAchievementPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleEquipSwitchPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	void HandleMailPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleChatRoomPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleSkillUnitAppear(const uint8* PacketData, int32 PacketSize);
 	void HandleSkillUnitDisappear(const uint8* PacketData, int32 PacketSize);

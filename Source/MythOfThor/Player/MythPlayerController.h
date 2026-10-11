@@ -202,6 +202,10 @@ public:
 	UFUNCTION(Exec)
 	void MythSwitch(int32 Op);
 
+	/** Teste: MythMail 0 Nome prepara a carta; MythMail 1 Nome Titulo Texto (+ no lugar de espacos) envia. */
+	UFUNCTION(Exec)
+	void MythMail(int32 Op, const FString& To, const FString& Title = TEXT(""), const FString& Body = TEXT(""));
+
 	/** Teste: MythBank 1 500 deposita, MythBank 2 200 saca. */
 	UFUNCTION(Exec)
 	void MythBank(int32 Op, int32 Amount);
@@ -379,6 +383,7 @@ private:
 	void OnHotkeyQuests();
 	void OnHotkeyShortcuts();
 	void OnHotkeyBank();
+	void OnHotkeyMail();
 	void OnHotkeyNavi();
 	void OnHotkeyEquipSwitch();
 	void OnHotkeyAchievements();

@@ -216,6 +216,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnChatRoomChanged.AddDynamic(this, &AMythNetWorld::HandleChatRoomChanged);
 	Net->OnQuestsChanged.AddDynamic(this, &AMythNetWorld::HandleQuestsChanged);
 	Net->OnBankChanged.AddDynamic(this, &AMythNetWorld::HandleBankChanged);
+	Net->OnMailChanged.AddDynamic(this, &AMythNetWorld::HandleMailChanged);
 	Net->OnEquipSwitchChanged.AddDynamic(this, &AMythNetWorld::HandleEquipSwitchChanged);
 	Net->OnSpiritBalls.AddDynamic(this, &AMythNetWorld::HandleSpiritBalls);
 	Net->OnAchievementsChanged.AddDynamic(this, &AMythNetWorld::HandleAchievementsChanged);
@@ -305,6 +306,7 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnChatRoomChanged.RemoveAll(this);
 		Net->OnQuestsChanged.RemoveAll(this);
 		Net->OnBankChanged.RemoveAll(this);
+		Net->OnMailChanged.RemoveAll(this);
 		Net->OnEquipSwitchChanged.RemoveAll(this);
 		Net->OnSpiritBalls.RemoveAll(this);
 		Net->OnAchievementsChanged.RemoveAll(this);
@@ -950,6 +952,14 @@ void AMythNetWorld::HandleEquipSwitchChanged()
 	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
 	{
 		PC->GetHud()->RefreshEquipSwitch();
+	}
+}
+
+void AMythNetWorld::HandleMailChanged()
+{
+	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
+	{
+		PC->GetHud()->RefreshMail();
 	}
 }
 

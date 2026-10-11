@@ -58,7 +58,8 @@ enum class EMythRoWindow : uint8
 	Bank,     // Ctrl+B: banco
 	Achievements, // Alt+Y: conquistas
 	EquipSwitch, // Alt+W: troca rapida
-	Navi      // Alt+N: navegacao
+	Navi,     // Alt+N: navegacao
+	Mail      // Alt+R: correio
 };
 
 /** Barra de medidor classica (gze*_left/mid/right sobre gze_bg): o meio estica conforme a fracao. */
@@ -439,6 +440,29 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardName;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo2;
+
+	// Correio (MythRoMail.cpp)
+public:
+	void OpenMailWindow();
+	void RefreshMail();
+protected:
+	void BuildMailWindows();
+	bool HandleMailClick(const FVector2D& ScreenPos);
+	UPROPERTY() TObjectPtr<UCanvasPanel> MailWindow;
+	UPROPERTY() TObjectPtr<UCanvasPanel> MailWriteWindow;
+	UPROPERTY() TObjectPtr<UTextBlock> MailHeader;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> MailRows;
+	UPROPERTY() TObjectPtr<UTextBlock> MailFrom;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> MailBody;
+	UPROPERTY() TObjectPtr<UTextBlock> MailTakeZeny;
+	UPROPERTY() TObjectPtr<UTextBlock> MailTakeItems;
+	UPROPERTY() TObjectPtr<UTextBlock> MailDelete;
+	UPROPERTY() TObjectPtr<UTextBlock> MailWrite;
+	UPROPERTY() TObjectPtr<UEditableTextBox> MailToBox;
+	UPROPERTY() TObjectPtr<UEditableTextBox> MailTitleBox;
+	UPROPERTY() TObjectPtr<UEditableTextBox> MailTextBox;
+	UPROPERTY() TObjectPtr<UTextBlock> MailSend;
+	UPROPERTY() TObjectPtr<UTextBlock> MailCancel;
 
 	// Navegacao (MythRoNavi.cpp)
 public:
