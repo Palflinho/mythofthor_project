@@ -273,5 +273,5 @@ skills do Myth of Thor segue este layout, em árvore (decisão do usuário).
 - Embaixo: lupa, coordenadas "354 187", e os botões de zoom ±, lista e opções.
 
 ### Chão (`23`, `24`)
-- Pegadas verdes de outros jogadores.
-- Item no chão: ▼ acima dele e o número da quantidade ao lado.
+- `23_pegadas.png` (corrigido pelo usuário em 2026-10-11): **não são pegadas**; é o quadrado do tile sob o mouse, com os cantos verdes.
+- `24_item_no_chao.png` (corrigido): **não é item**; é o cursor de skill de área: anel branco (elipse) no chão, ▼ acima e o **nível da skill** ao lado (aqui "3"). (Pegadas de outros jogadores existem no cliente, ver a chave "Footprint Effect" da aba Effect, mas não há print delas.)

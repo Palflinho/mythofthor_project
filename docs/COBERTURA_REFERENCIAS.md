@@ -41,7 +41,7 @@ Originais do cliente clássico (entram na fidelidade):
 - Sala de chat (**Make a Room**, Alt+C): título, limite, tipo, senha.
 - Lista de emoções (Alt+L) e lista de atalhos (Alt+M, F12 com o teclado desenhado).
 - Nome do mapa ao entrar (nome pequeno + nome grande), ícone de "proibido teleportar".
-- Info básica recolhida (232×44), minimapa com zoom ± e coordenadas, pegadas de outros jogadores, quantidade ao lado do item no chão.
+- Info básica recolhida (232×44), minimapa com zoom ± e coordenadas, o quadrado do tile sob o mouse (cantos verdes), o cursor de skill de área com anel e nível da skill.
 - Menu Esc com a lista de opções `/comando` (ON/OFF) e as opções de teclado.
 - Mapa-múndi (Ctrl+`) e quests com rastreador na tela.
 

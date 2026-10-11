@@ -32,3 +32,5 @@ Os 24 primeiros têm nome (`01_` a `24_`, descritos no doc 12). Os 28 `image-*` 
 | 61032553 | **Reputation** | 1.19 |
 | 61034761 | **No mundo**: nome do mapa ao entrar, ícone proibido, portal do LATAM, rastreador de quests, montaria | 1.16 |
 | 61037150 | No mundo: anel no chão, barras sob o personagem, dano 524 / 428, barra do monstro, seta no alvo | já feito |
+
+Correção do usuário: `23_pegadas.png` é o **quadrado do tile sob o mouse** e `24_item_no_chao.png` é o **cursor de skill de área** (anel, ▼ e o nível da skill).
