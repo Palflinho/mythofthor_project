@@ -43,6 +43,7 @@ Ordem do que se vê o tempo todo jogando. Quem: Claude, salvo indicação.
 | 1.20 | Sons de interface e o campo `wav` dos efeitos de skill (doc 07) | Claude | ⬜ |
 | 1.21 | Os 33 efeitos FUNC vazios e o terremoto (ID 666) (doc 13) | Claude | ⬜ |
 | 1.22 | Menu Esc com os 5 botões (Seleção de personagem, Game settings, Set hotkeys, Sair, Voltar) e a janela **Game settings** com 5 abas (Default, Effect, Control, Graphics, Other com ON/OFF e "apply"), como em `hud_latam/INDICE.md` | Claude | ⬜ |
+| 1.23 | **Extra do Myth (não existe no RO original):** silhueta de personagens, monstros e NPCs atrás de parede, árvore ou prédio (contorno ou sombra colorida por tipo: jogador, aliado, inimigo). Ligar/desligar na aba Effect do Game settings (1.22). Técnica: pass extra do sprite com teste de profundidade invertido (material translúcido) ou Custom Depth + pós-processo | Claude | ⬜ ideia do usuário 2026-10-11 |
 
 Conferência de cobertura das referências: `docs/COBERTURA_REFERENCIAS.md`.
 
