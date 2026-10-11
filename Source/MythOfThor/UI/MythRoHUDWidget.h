@@ -311,6 +311,7 @@ protected:
 
 	// Atributos: valores de Str..Luk, setas de aumentar e os derivados (Atk, Matk, Hit, Crit, Def, Mdef, Flee, Aspd, pontos)
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> StatTexts;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> StatCostTexts;
 	UPROPERTY() TArray<TObjectPtr<UImage>> StatUpArrows;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> DerivedTexts;
 

@@ -117,16 +117,35 @@ UCanvasPanel* UMythRoHUDWidget::MakeRoPanel(const FString& Title, const FVector2
 
 void UMythRoHUDWidget::BuildStatusWindow()
 {
-	// Janela de atributos (Alt+A): titulo + statwin_bg (280x103)
-	StatusWindow = MakeRoPanel(TEXT("Atributos"), FVector2D(280.f, 120.f), FVector2D(-340.f, -170.f));
-	AddImage(StatusWindow, FMythRoUITextures::Get(RoWinArt(TEXT("statwin_bg"))), 0.f, 17.f);
-	UTexture2D* Arrow = FMythRoUITextures::Get(RoWinArt(TEXT("arw_up")));
+	// Janela de atributos (Alt+A, print 12): arte w_statwin_bg (280 x 124) do cliente moderno; seis linhas Str..Luk com o valor
+	// "base+bonus", a seta e o custo do ponto; ao lado Atk/Def, Matk/Mdef, Hit/Flee, Critical/Aspd, pontos e clã
+	StatusWindow = MakeRoPanel(TEXT("Status"), FVector2D(280.f, 17.f + 124.f), FVector2D(-340.f, -170.f));
+	AddImage(StatusWindow, FMythRoUITextures::Get(TEXT("statuswnd/w_statwin_bg.bmp")), 0.f, 17.f);
+	UTexture2D* Arrow = FMythRoUITextures::Get(RoWinArt(TEXT("arw_right_on")));
+	auto Label = [this](float X, float Y, const TCHAR* Text)
+	{
+		UTextBlock* T = AddText(StatusWindow, X, Y, 8, RoWinLabel);
+		T->SetFont(FMythRoUITextures::RoFont(FMath::RoundToInt(8 * UIScale), true));
+		T->SetText(FText::FromString(Text));
+	};
+	auto Box = [this](float X, float Y, float W, ETextJustify::Type J) -> UTextBlock*
+	{
+		UTextBlock* T = AddText(StatusWindow, X, Y, 7, RoWinText);
+		T->SetJustification(J);
+		if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(T->Slot))
+		{
+			S->SetAutoSize(false);
+			S->SetSize(FVector2D(W, 14.f) * UIScale);
+		}
+		return T;
+	};
 	for (int32 i = 0; i < 6; ++i)
 	{
-		const float Y = 17.f + 4.f + 16.f * i;
-		AddText(StatusWindow, 8.f, Y, 8, RoWinLabel)->SetText(FText::FromString(RoStatNames[i]));
-		StatTexts.Add(AddText(StatusWindow, 40.f, Y, 8, RoWinText));
-		StatUpArrows.Add(AddImage(StatusWindow, Arrow, 91.f, Y + 1.f, 11.f, 11.f));
+		const float Y = 17.f + 5.f + 16.f * i;
+		Label(8.f, Y, ToCStr(FString(RoStatNames[i])));
+		StatTexts.Add(Box(38.f, Y, 38.f, ETextJustify::Left));
+		StatUpArrows.Add(AddImage(StatusWindow, Arrow, 76.f, Y + 2.f, 8.f, 9.f));
+		StatCostTexts.Add(Box(84.f, Y, 16.f, ETextJustify::Right));
 	}
 	// Derivados (duas colunas) e as duas linhas longas de baixo, sobre as linhas da arte
 	const TCHAR* Left[4] = { TEXT("Atk"), TEXT("Matk"), TEXT("Hit"), TEXT("Critical") };
@@ -134,15 +153,15 @@ void UMythRoHUDWidget::BuildStatusWindow()
 	for (int32 i = 0; i < 4; ++i)
 	{
 		const float Y = 17.f + 5.f + 16.f * i;
-		AddText(StatusWindow, 120.f, Y, 7, RoWinLabel)->SetText(FText::FromString(Left[i]));
-		DerivedTexts.Add(AddText(StatusWindow, 152.f, Y, 7, RoWinText));
-		AddText(StatusWindow, 202.f, Y, 7, RoWinLabel)->SetText(FText::FromString(Right[i]));
-		DerivedTexts.Add(AddText(StatusWindow, 232.f, Y, 7, RoWinText));
+		Label(110.f, Y, Left[i]);
+		DerivedTexts.Add(Box(110.f, Y, 78.f, ETextJustify::Right));
+		Label(196.f, Y, Right[i]);
+		DerivedTexts.Add(Box(196.f, Y, 78.f, ETextJustify::Right));
 	}
-	AddText(StatusWindow, 120.f, 17.f + 5.f + 64.f, 7, RoWinLabel)->SetText(FText::FromString(TEXT("Pontos de Atributo")));
-	DerivedTexts.Add(AddText(StatusWindow, 232.f, 17.f + 5.f + 64.f, 7, RoWinText));
-	AddText(StatusWindow, 120.f, 17.f + 5.f + 80.f, 7, RoWinLabel)->SetText(FText::FromString(TEXT("Cla")));
-	DerivedTexts.Add(AddText(StatusWindow, 232.f, 17.f + 5.f + 80.f, 7, RoWinText));
+	Label(110.f, 17.f + 5.f + 64.f, TEXT("Pontos de Atributo"));
+	DerivedTexts.Add(Box(110.f, 17.f + 5.f + 64.f, 164.f, ETextJustify::Right));
+	Label(110.f, 17.f + 5.f + 80.f, TEXT("Clã"));
+	DerivedTexts.Add(Box(110.f, 17.f + 5.f + 80.f, 164.f, ETextJustify::Right));
 }
 
 void UMythRoHUDWidget::BuildItemsWindow()
@@ -391,7 +410,8 @@ void UMythRoHUDWidget::RefreshStatusWindow()
 	const int32 Base[6] = { Ps.Str, Ps.Agi, Ps.Vit, Ps.Int, Ps.Dex, Ps.Luk };
 	for (int32 i = 0; i < 6 && i < StatTexts.Num(); ++i)
 	{
-		StatTexts[i]->SetText(Ps.StatBonus[i] != 0 ? FText::FromString(FString::Printf(TEXT("%d + %d"), Base[i], Ps.StatBonus[i])) : FText::AsNumber(Base[i]));
+		StatTexts[i]->SetText(Ps.StatBonus[i] != 0 ? FText::FromString(FString::Printf(TEXT("%d+%d"), Base[i], Ps.StatBonus[i])) : FText::AsNumber(Base[i]));
+		StatCostTexts[i]->SetText(FText::AsNumber((FMath::Max(Base[i], 1) - 1) / 10 + 2)); // custo do proximo ponto (pre-renovacao)
 		// A seta so aparece com pontos livres (o custo real e validado pelo servidor)
 		StatUpArrows[i]->SetVisibility(Ps.StatusPoints > 0 ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
 	}
