@@ -108,6 +108,7 @@ private:
 	/** Quando cada skill de area foi usada no chao: o efeito do chao ja cobre o alvo, entao o do alvo nao repete. */
 	TMap<int32, double> LastGroundSkill;
 	UFUNCTION() void HandleEquipChanged(int64 UnitID, uint8 Look, int32 Value);
+	UFUNCTION() void HandleEquipResult(int32 Index, int32 WearLocation, bool bSuccess);
 	UFUNCTION() void HandleStatusChange(int64 UnitID, int32 EfstID, bool bActive, int32 TotalMs, int32 RemainMs);
 
 	/** Classe, sexo e cabelo do proprio personagem a partir do login/selecao (o sprite padrao e Aprendiz). */

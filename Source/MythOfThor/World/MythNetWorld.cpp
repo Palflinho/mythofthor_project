@@ -240,6 +240,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnSpecialEffect.AddDynamic(this, &AMythNetWorld::HandleSpecialEffect);
 	Net->OnNotifyEffect.AddDynamic(this, &AMythNetWorld::HandleNotifyEffect);
 	Net->OnEquipChanged.AddDynamic(this, &AMythNetWorld::HandleEquipChanged);
+	Net->OnEquipResult.AddDynamic(this, &AMythNetWorld::HandleEquipResult);
 	Net->OnStatusChange.AddDynamic(this, &AMythNetWorld::HandleStatusChange);
 
 	// Chegou num mapa novo por ordem do servidor (portal/warp): termina a entrada no proximo quadro, com o
@@ -325,6 +326,7 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnSpecialEffect.RemoveAll(this);
 		Net->OnNotifyEffect.RemoveAll(this);
 		Net->OnEquipChanged.RemoveAll(this);
+		Net->OnEquipResult.RemoveAll(this);
 		Net->OnStatusChange.RemoveAll(this);
 	}
 	Super::EndPlay(EndPlayReason);
@@ -1082,6 +1084,7 @@ void AMythNetWorld::HandleDamage(int64 SourceID, int64 TargetID, int32 Damage, u
 		else if (UMythRoSpriteComponent* Picker = Source ? Source->FindComponentByClass<UMythRoSpriteComponent>() : nullptr; Picker && DamageType == 1)
 		{
 			Picker->PlayPickup();
+			UMythRoSound::PlayWavAtLocation(this, TEXT("effect/itempokjuk.wav"), Source->GetActorLocation());
 		}
 		return;
 	}
@@ -1482,6 +1485,16 @@ void AMythNetWorld::HandleStatusChange(int64 UnitID, int32 EfstID, bool bActive,
 		{
 			Hud->SetStatusIcon(EfstID, bActive, TotalMs, RemainMs);
 		}
+	}
+}
+
+void AMythNetWorld::HandleEquipResult(int32 Index, int32 WearLocation, bool bSuccess)
+{
+	// Como o cliente: som ao vestir ou tirar um equipamento (se_equip_item_NN)
+	const APawn* Self = GetWorld() ? GetWorld()->GetFirstPlayerController() ? GetWorld()->GetFirstPlayerController()->GetPawn() : nullptr : nullptr;
+	if (bSuccess && Self)
+	{
+		UMythRoSound::PlayWavAtLocation(this, TEXT("se_equip_item_01.wav"), Self->GetActorLocation(), 0.6f);
 	}
 }
 

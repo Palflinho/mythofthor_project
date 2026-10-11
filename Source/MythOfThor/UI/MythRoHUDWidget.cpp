@@ -631,6 +631,8 @@ void UMythRoHUDWidget::RefreshStats()
 	if (NetStats && NetStats->MaxWeight > 0)
 	{
 		WeightZenyText->SetText(FText::FromString(FString::Printf(TEXT("Peso : %d / %d     Zeny : %s"), NetStats->Weight / 10, NetStats->MaxWeight / 10, *Zeny)));
+		// Como o cliente: passou de 50% o peso fica vermelho (o servidor decide o efeito: regeneracao parada, 90% sem combate)
+		WeightZenyText->SetColorAndOpacity(FSlateColor(NetStats->Weight * 2 >= NetStats->MaxWeight ? FLinearColor(0.85f, 0.1f, 0.1f) : ColText));
 	}
 	else
 	{
