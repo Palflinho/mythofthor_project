@@ -42,6 +42,7 @@ Ordem do que se vê o tempo todo jogando. Quem: Claude, salvo indicação.
 | 1.19 | Sistemas modernos do LATAM, **todos entram, adaptados depois ao pre-renovação** (decisão do usuário 2026-10-11): RODEX, Conquistas, Reputação, Agência de Aventureiros, Banco, `/navi`, troca rápida de equipamento. **JCoins fica de fora** (não haverá RO Premium/ROPs) | Claude | ⬜ |
 | 1.20 | Sons de interface e o campo `wav` dos efeitos de skill (doc 07) | Claude | ⬜ |
 | 1.21 | Os 33 efeitos FUNC vazios e o terremoto (ID 666) (doc 13) | Claude | ⬜ |
+| 1.22 | Menu Esc com os 5 botões (Seleção de personagem, Game settings, Set hotkeys, Sair, Voltar) e a janela **Game settings** com 5 abas (Default, Effect, Control, Graphics, Other com ON/OFF e "apply"), como em `hud_latam/INDICE.md` | Claude | ⬜ |
 
 Conferência de cobertura das referências: `docs/COBERTURA_REFERENCIAS.md`.
 

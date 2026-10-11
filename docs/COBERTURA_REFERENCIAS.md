@@ -46,7 +46,7 @@ Originais do cliente clássico (entram na fidelidade):
 - Mapa-múndi (Ctrl+`) e quests com rastreador na tela.
 
 Modernos do LATAM, **entram adaptados (decisão do usuário), menos JCoins**: RODEX (correio), Conquistas, Reputação,
-Agência de Aventureiros, Banco (Ctrl+B), /navi, troca rápida de equipamento, JCoins.
+Agência de Aventureiros, Banco (Ctrl+B), /navi, troca rápida de equipamento. JCoins fica de fora.
 
 ## Itens novos no roadmap
 
