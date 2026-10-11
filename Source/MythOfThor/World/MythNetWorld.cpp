@@ -203,6 +203,9 @@ void AMythNetWorld::BeginPlay()
 	Net->OnShopBuyList.AddDynamic(this, &AMythNetWorld::HandleShopBuyList);
 	Net->OnShopSellList.AddDynamic(this, &AMythNetWorld::HandleShopSellList);
 	Net->OnShopResult.AddDynamic(this, &AMythNetWorld::HandleShopResult);
+	Net->OnStorageOpen.AddDynamic(this, &AMythNetWorld::HandleStorageOpen);
+	Net->OnStorageChanged.AddDynamic(this, &AMythNetWorld::HandleStorageChanged);
+	Net->OnStorageClose.AddDynamic(this, &AMythNetWorld::HandleStorageClose);
 	Net->OnUnitVanish.AddDynamic(this, &AMythNetWorld::HandleUnitVanish);
 	Net->OnDamage.AddDynamic(this, &AMythNetWorld::HandleDamage);
 	Net->OnChatMessage.AddDynamic(this, &AMythNetWorld::HandleChat);
@@ -261,6 +264,9 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnShopBuyList.RemoveAll(this);
 		Net->OnShopSellList.RemoveAll(this);
 		Net->OnShopResult.RemoveAll(this);
+		Net->OnStorageOpen.RemoveAll(this);
+		Net->OnStorageChanged.RemoveAll(this);
+		Net->OnStorageClose.RemoveAll(this);
 		Net->OnUnitVanish.RemoveAll(this);
 		Net->OnDamage.RemoveAll(this);
 		Net->OnChatMessage.RemoveAll(this);
@@ -671,6 +677,30 @@ void AMythNetWorld::HandleUnitOption(int64 ID, int32 Option)
 	{
 		S->CartType = Cart;
 		S->ReloadSprites();
+	}
+}
+
+void AMythNetWorld::HandleStorageOpen(const TArray<FRagnarokInventoryItem>&)
+{
+	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
+	{
+		PC->GetHud()->OpenStorage();
+	}
+}
+
+void AMythNetWorld::HandleStorageChanged(const TArray<FRagnarokInventoryItem>&)
+{
+	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
+	{
+		PC->GetHud()->RefreshStorage();
+	}
+}
+
+void AMythNetWorld::HandleStorageClose()
+{
+	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
+	{
+		PC->GetHud()->CloseStorage(false);
 	}
 }
 

@@ -26,6 +26,8 @@ O que ja da para testar (e o que deve acontecer)
 ------------------------------------------------
 
 NOVO nesta versao
+- Armazem: @storage abre o armazem (ou fale com uma Kafra e escolha o armazem). Esquerda: o que esta guardado;
+  direita: sua mochila. Clique num item para mover 1 (Shift: 10). Fechar ou Esc fecha. O peso muda ao mover.
 - Jogar item no chao: arraste um item da mochila (Alt+E) e solte fora das janelas. Joga 1; com Shift, a pilha toda.
 - Loja de NPC: va ate o Chef Assistant de Prontera (156,212), clique nele. Abre "Comprar / Vender / Cancelar". Comprar:
   clique num item da vitrine (soma 1; Shift soma 10), clique na cesta para tirar, "Comprar" confirma. O zeny e o peso

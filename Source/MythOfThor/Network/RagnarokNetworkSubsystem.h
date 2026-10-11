@@ -349,6 +349,11 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnUnitOption, int64, UnitID, int32
 /** ZC_RESURRECTION (0x0148): a unidade voltou a vida. */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUnitRevive, int64, UnitID);
 
+/** Armazem da Kafra (clif.cpp): lista completa (0x0b08 inicio, 0x0b09/0x0b39 invType 2, 0x0b0b fim), 0x0b44 item entrou, 0x00f6 saiu, 0x00f2 contagem, 0x00f8 fechou. */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStorageOpen, const TArray<FRagnarokInventoryItem>&, Items);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStorageChanged, const TArray<FRagnarokInventoryItem>&, Items);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnStorageClose);
+
 /** Lojas de NPC (clif.cpp): 0x00c4 escolher comprar/vender, 0x0b77 lista de compra, 0x00c7 lista de venda, 0x00ca/0x00cb resultado. */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnShopDealType, int64, NpcID);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnShopBuyList, const TArray<FRagnarokShopItem>&, Items);
@@ -423,6 +428,10 @@ public:
 
 	/** CZ_RESTART (0x00b2): 0 = voltar ao ponto de salvamento (reviver), 1 = tela de selecao de personagem. */
 	bool SendRestart(uint8 Type);
+
+	/** Armazem: mover item da mochila (bToStorage) ou do armazem para a mochila; fechar. IDs da tabela embaralhada (0x0364, 0x0365) e 0x0193. */
+	bool SendStorageMove(bool bToStorage, int32 Index, int32 Amount);
+	bool SendStorageClose();
 
 	/** CZ_ITEM_THROW / DropItem (0x0363 neste PACKETVER: tabela embaralhada de clif_shuffle.hpp, bloco PACKETVER > 20180307): joga o item do indice no chao. */
 	bool SendDropItem(int32 Index, int32 Amount);
@@ -544,6 +553,9 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Ragnarok|Network")
 	const TArray<FRagnarokInventoryItem>& GetInventoryItems() const { return InventoryItems; }
+	const TArray<FRagnarokInventoryItem>& GetStorageItems() const { return StorageItems; }
+	int32 GetStorageCount() const { return StorageCount; }
+	int32 GetStorageMax() const { return StorageMax; }
 
 	UFUNCTION(BlueprintPure, Category = "Ragnarok|Network")
 	const TArray<FRagnarokSkillInfo>& GetSkillList() const { return SkillList; }
@@ -630,6 +642,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Shop") FOnShopBuyList OnShopBuyList;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Shop") FOnShopSellList OnShopSellList;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Shop") FOnShopResult OnShopResult;
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Storage") FOnStorageOpen OnStorageOpen;
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Storage") FOnStorageChanged OnStorageChanged;
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Storage") FOnStorageClose OnStorageClose;
 
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
 	FOnUnitVanish OnUnitVanish;
@@ -745,6 +760,9 @@ private:
 
 	FRagnarokPlayerStats CurrentStats;
 	TArray<FRagnarokInventoryItem> InventoryItems;
+	TArray<FRagnarokInventoryItem> StorageItems;
+	int32 StorageCount = 0;
+	int32 StorageMax = 300;
 	TArray<FRagnarokSkillInfo> SkillList;
 
 	bool ConnectToPort(const FString& Host, int32 Port, ERagnarokNetworkState NewState);
@@ -799,6 +817,7 @@ private:
 	void HandleEffect(const uint8* PacketData, int32 PacketSize);
 	void HandleOptionChange(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleResurrection(const uint8* PacketData, int32 PacketSize);
+	void HandleStoragePacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleShopPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleSkillUnitAppear(const uint8* PacketData, int32 PacketSize);
 	void HandleSkillUnitDisappear(const uint8* PacketData, int32 PacketSize);

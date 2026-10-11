@@ -356,6 +356,30 @@ protected:
 	void RefreshGraphicsWindow();
 	void StepGraphicsOption(int32 Row, int32 Delta);
 	bool HandleGameMenuClick(const FVector2D& ScreenPos);
+	// Armazem da Kafra (MythRoStorage.cpp, docs/ref/15; pacotes conferidos no clif.cpp)
+public:
+	void OpenStorage();
+	void RefreshStorage();
+	void CloseStorage(bool bNotifyServer);
+	bool IsStorageOpen() const;
+	void StorageMove(bool bToStorage, int32 Row, int32 Amount);
+protected:
+	void BuildStorageWindow();
+	bool HandleStorageClick(const FVector2D& ScreenPos);
+	bool HandleStorageWheel(const FVector2D& ScreenPos, float Delta);
+	static constexpr int32 StorageRowCount = 12;
+	UPROPERTY() TObjectPtr<UCanvasPanel> StorageWindow;
+	UPROPERTY() TArray<TObjectPtr<UImage>> StoreHit;
+	UPROPERTY() TArray<TObjectPtr<UImage>> StoreIcons;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> StoreNames;
+	UPROPERTY() TArray<TObjectPtr<UImage>> BagHit;
+	UPROPERTY() TArray<TObjectPtr<UImage>> BagIcons;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> BagNames;
+	UPROPERTY() TObjectPtr<UTextBlock> StorageCountText;
+	UPROPERTY() TObjectPtr<UTextBlock> StorageCloseLink;
+	int32 StoreScroll = 0;
+	int32 BagScroll = 0;
+
 	// Loja de NPC (MythRoShop.cpp, docs/ref/14): escolher comprar/vender, vitrine e cesta
 public:
 	void ShowShopDealType(int64 NpcID);

@@ -943,6 +943,14 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x00cb: // ZC_PC_SELL_RESULT
 				HandleShopPacket(PacketData, ActualLen, PacketID);
 				break;
+			case 0x0b08: // ZC_INVENTORY_START
+			case 0x0b0b: // ZC_INVENTORY_END
+			case 0x0b44: // ZC_ADD_ITEM_TO_STORE (PACKETVER >= 20200916)
+			case 0x00f6: // ZC_DELETE_ITEM_FROM_STORE
+			case 0x00f2: // ZC_NOTIFY_STOREITEM_COUNTINFO
+			case 0x00f8: // ZC_CLOSE_STORE
+				HandleStoragePacket(PacketData, ActualLen, PacketID);
+				break;
 			case 0x0148: // ZC_RESURRECTION
 				HandleResurrection(PacketData, ActualLen);
 				break;
@@ -1955,6 +1963,15 @@ void URagnarokNetworkSubsystem::HandleSkillList(const uint8* PacketData, int32 P
 
 void URagnarokNetworkSubsystem::HandleInventoryList(const uint8* PacketData, int32 PacketSize, bool bIsEquip)
 {
+	// IDs 0x0b09 / 0x0b39 (PACKETVER >= 20181002) trazem o tipo da lista no byte 4 (e_inventory_type: 0 mochila, 1 carrinho,
+	// 2 armazem, 3 armazem do cla). So a mochila mexe em InventoryItems; antes o armazem e o carrinho sobrescreviam a mochila.
+	const uint16 ListId = *reinterpret_cast<const uint16*>(PacketData);
+	const uint8 InvType = (ListId == 0x0b09 || ListId == 0x0b39) ? PacketData[4] : 0;
+	if (InvType == 1 || InvType == 3)
+	{
+		return; // carrinho e armazem do cla: ainda sem janela
+	}
+	TArray<FRagnarokInventoryItem>& Target = InvType == 2 ? StorageItems : InventoryItems;
 	if (bIsEquip)
 	{
 		static constexpr int32 HEADER_SIZE = 5;
@@ -1963,7 +1980,7 @@ void URagnarokNetworkSubsystem::HandleInventoryList(const uint8* PacketData, int
 		int32 Available = PacketSize - HEADER_SIZE;
 		int32 Count = Available / EQUIP_INFO_SIZE;
 
-		InventoryItems.RemoveAll([](const FRagnarokInventoryItem& Item) { return Item.bIsEquipped; });
+		if (InvType == 0) { InventoryItems.RemoveAll([](const FRagnarokInventoryItem& Item) { return Item.bIsEquipped; }); }
 
 		for (int32 i = 0; i < Count; ++i)
 		{
@@ -1988,7 +2005,7 @@ void URagnarokNetworkSubsystem::HandleInventoryList(const uint8* PacketData, int
 			Item.Refine = Ptr[65];
 			Item.bIdentified = (Ptr[67] & 1) != 0;
 
-			InventoryItems.Add(Item);
+			Target.Add(Item);
 		}
 	}
 	else
@@ -1999,7 +2016,7 @@ void URagnarokNetworkSubsystem::HandleInventoryList(const uint8* PacketData, int
 		int32 Available = PacketSize - HEADER_SIZE;
 		int32 Count = Available / NORMAL_INFO_SIZE;
 
-		InventoryItems.RemoveAll([](const FRagnarokInventoryItem& Item) { return !Item.bIsEquipped; });
+		if (InvType == 0) { InventoryItems.RemoveAll([](const FRagnarokInventoryItem& Item) { return !Item.bIsEquipped; }); }
 
 		for (int32 i = 0; i < Count; ++i)
 		{
@@ -2020,11 +2037,14 @@ void URagnarokNetworkSubsystem::HandleInventoryList(const uint8* PacketData, int
 			Item.Refine = 0;
 			Item.bIdentified = (Ptr[33] & 1) != 0;
 
-			InventoryItems.Add(Item);
+			Target.Add(Item);
 		}
 	}
 
-	OnInventory.Broadcast(InventoryItems);
+	if (InvType == 0)
+	{
+		OnInventory.Broadcast(InventoryItems);
+	}
 }
 
 void URagnarokNetworkSubsystem::HandleEffect(const uint8* PacketData, int32 PacketSize)
@@ -2636,4 +2656,111 @@ bool URagnarokNetworkSubsystem::SendDropItem(int32 Index, int32 Amount)
 	*reinterpret_cast<uint16*>(Packet + 4) = static_cast<uint16>(Amount);
 	SendData(Packet, sizeof(Packet));
 	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendStorageMove(bool bToStorage, int32 Index, int32 Amount)
+{
+	// clif_parse_MoveToKafra 0x0364 / clif_parse_MoveFromKafra 0x0365 (8 bytes, clif_shuffle.hpp): indice W no byte 2, quantidade L no 4
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap || Amount <= 0)
+	{
+		return false;
+	}
+	uint8 Packet[8] = { static_cast<uint8>(bToStorage ? 0x64 : 0x65), 0x03 };
+	*reinterpret_cast<uint16*>(Packet + 2) = static_cast<uint16>(Index);
+	*reinterpret_cast<uint32*>(Packet + 4) = static_cast<uint32>(Amount);
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendStorageClose()
+{
+	// clif_parse_CloseKafra 0x0193 (2 bytes)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	const uint8 Packet[2] = { 0x93, 0x01 };
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+void URagnarokNetworkSubsystem::HandleStoragePacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
+{
+	switch (PacketID)
+	{
+	case 0x0b08: // <len>.W <invType>.B <name>: lista nova do armazem (invType 2) comeca
+		if (PacketSize >= 5 && PacketData[4] == 2)
+		{
+			StorageItems.Reset();
+		}
+		break;
+	case 0x0b0b: // <invType>.B <flag>.B: fim da lista
+		if (PacketSize >= 3 && PacketData[2] == 2)
+		{
+			OnStorageOpen.Broadcast(StorageItems);
+		}
+		break;
+	case 0x0b44: // <index>.W <amount>.L <item id>.L <type>.B <identified>.B <damaged>.B <slots 16> <options 25> <refine>.B <grade>.B
+	{
+		if (PacketSize < 58)
+		{
+			break;
+		}
+		const int32 Index = *reinterpret_cast<const int16*>(PacketData + 2);
+		const int32 Amount = *reinterpret_cast<const int32*>(PacketData + 4);
+		FRagnarokInventoryItem* Found = StorageItems.FindByPredicate([Index](const FRagnarokInventoryItem& I) { return I.Index == Index; });
+		if (Found)
+		{
+			Found->Amount += Amount;
+		}
+		else
+		{
+			FRagnarokInventoryItem Item;
+			Item.Index = Index;
+			Item.Amount = Amount;
+			Item.ItemID = *reinterpret_cast<const uint32*>(PacketData + 8);
+			Item.Type = PacketData[12];
+			Item.bIdentified = PacketData[13] != 0;
+			Item.Refine = PacketData[56];
+			StorageItems.Add(Item);
+		}
+		OnStorageChanged.Broadcast(StorageItems);
+		break;
+	}
+	case 0x00f6: // <index>.W <amount>.L
+	{
+		if (PacketSize < 8)
+		{
+			break;
+		}
+		const int32 Index = *reinterpret_cast<const int16*>(PacketData + 2);
+		const int32 Amount = *reinterpret_cast<const int32*>(PacketData + 4);
+		for (int32 i = 0; i < StorageItems.Num(); ++i)
+		{
+			if (StorageItems[i].Index == Index)
+			{
+				StorageItems[i].Amount -= Amount;
+				if (StorageItems[i].Amount <= 0)
+				{
+					StorageItems.RemoveAt(i);
+				}
+				break;
+			}
+		}
+		OnStorageChanged.Broadcast(StorageItems);
+		break;
+	}
+	case 0x00f2: // <atual>.W <maximo>.W
+		if (PacketSize >= 6)
+		{
+			StorageCount = *reinterpret_cast<const uint16*>(PacketData + 2);
+			StorageMax = *reinterpret_cast<const uint16*>(PacketData + 4);
+		}
+		break;
+	case 0x00f8: // armazem fechado
+		OnStorageClose.Broadcast();
+		break;
+	default:
+		break;
+	}
 }

@@ -1753,3 +1753,5 @@ void AMythPlayerController::MythDropFirst(int32 Amount)
 		}
 	}
 }
+
+void AMythPlayerController::MythStore(int32 ToStorage, int32 Row, int32 Qty) { if (HudWidget) { HudWidget->StorageMove(ToStorage != 0, Row, Qty); } }

@@ -127,6 +127,10 @@ public:
 	UFUNCTION(Exec)
 	void MythAttackNearest();
 
+	/** Teste do armazem (abra com @storage): MythStore 1 <linha> <qtd> guarda; MythStore 0 <linha> <qtd> pega. */
+	UFUNCTION(Exec)
+	void MythStore(int32 ToStorage, int32 Row, int32 Qty);
+
 	/** Teste: MythDropFirst [quantidade] -> joga no chao o primeiro item nao equipado da mochila (CZ_ITEM_THROW). */
 	UFUNCTION(Exec)
 	void MythDropFirst(int32 Amount = 1);

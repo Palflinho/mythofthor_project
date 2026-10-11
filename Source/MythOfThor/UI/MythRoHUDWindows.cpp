@@ -310,6 +310,11 @@ bool UMythRoHUDWidget::CloseTopWindow()
 				CloseShop(true);
 				return true;
 			}
+			if (Win == StorageWindow)
+			{
+				CloseStorage(true);
+				return true;
+			}
 			Win->SetVisibility(ESlateVisibility::Collapsed);
 			return true;
 		}
@@ -326,6 +331,7 @@ void UMythRoHUDWidget::RefreshWindows()
 	if (ItemsWindow && ItemsWindow->IsVisible()) { RefreshItemsWindow(); }
 	if (EquipWindow && EquipWindow->IsVisible()) { RefreshEquipWindow(); }
 	if (SkillsWindow && SkillsWindow->IsVisible()) { RefreshSkillsWindow(); }
+	if (StorageWindow && StorageWindow->IsVisible()) { RefreshStorage(); }
 }
 
 void UMythRoHUDWidget::RefreshStatusWindow()
@@ -631,6 +637,10 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 	{
 		return true;
 	}
+	if (HandleStorageClick(ScreenPos))
+	{
+		return true;
+	}
 	if (HandleGameMenuClick(ScreenPos) || HandleBasicMenuClick(ScreenPos))
 	{
 		return true;
@@ -643,6 +653,11 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 			if (Win == ShopWindow || Win == DealWindow)
 			{
 				CloseShop(true); // fechar a loja libera o NPC no servidor
+				return true;
+			}
+			if (Win == StorageWindow)
+			{
+				CloseStorage(true);
 				return true;
 			}
 			Win->SetVisibility(ESlateVisibility::Collapsed);
@@ -775,6 +790,10 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDoubleClick(const FGeometry& InGeome
 FReply UMythRoHUDWidget::NativeOnMouseWheel(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
 	if (HandleShopWheel(InMouseEvent.GetScreenSpacePosition(), InMouseEvent.GetWheelDelta()))
+	{
+		return FReply::Handled();
+	}
+	if (HandleStorageWheel(InMouseEvent.GetScreenSpacePosition(), InMouseEvent.GetWheelDelta()))
 	{
 		return FReply::Handled();
 	}
