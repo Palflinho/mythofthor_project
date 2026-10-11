@@ -369,6 +369,7 @@ private:
 	void OnHotkeyFriends();
 	void OnHotkeyChatRoom();
 	void OnHotkeyQuests();
+	void OnHotkeyShortcuts();
 	void OnHotkeyItems();
 	void OnHotkeyEquip();
 	void OnHotkeySkills();

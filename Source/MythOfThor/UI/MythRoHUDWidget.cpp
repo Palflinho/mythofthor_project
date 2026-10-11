@@ -312,6 +312,7 @@ void UMythRoHUDWidget::BuildLayout()
 	BuildFriendsWindow();
 	BuildChatRoomWindows();
 	BuildQuestWindow();
+	BuildShortcutWindow();
 	BuildEntryScreens();
 	BuildNpcDialog();
 	AddChatLine(TEXT("Bem-vindo a Rune-Midgard."), ColSystem);

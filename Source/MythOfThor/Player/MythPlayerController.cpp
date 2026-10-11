@@ -193,6 +193,7 @@ void AMythPlayerController::SetupInputComponent()
 	InputComponent->BindKey(FInputChord(EKeys::H, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyFriends);
 	InputComponent->BindKey(FInputChord(EKeys::C, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyChatRoom);
 	InputComponent->BindKey(FInputChord(EKeys::U, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyQuests);
+	InputComponent->BindKey(EKeys::F12, IE_Pressed, this, &AMythPlayerController::OnHotkeyShortcuts);
 	InputComponent->BindKey(FInputChord(EKeys::Tab, false, true, false, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyMinimap);
 	InputComponent->BindKey(EKeys::Escape, IE_Pressed, this, &AMythPlayerController::OnHotkeyEscape);
 	InputComponent->BindKey(EKeys::Insert, IE_Pressed, this, &AMythPlayerController::OnHotkeySit);
@@ -578,6 +579,7 @@ void AMythPlayerController::ToggleHudWindow(EMythRoWindow Window)
 }
 
 void AMythPlayerController::OnHotkeyEmotions() { ToggleHudWindow(EMythRoWindow::Emotions); }
+void AMythPlayerController::OnHotkeyShortcuts() { ToggleHudWindow(EMythRoWindow::Shortcuts); }
 void AMythPlayerController::OnHotkeyQuests() { ToggleHudWindow(EMythRoWindow::Quests); }
 void AMythPlayerController::OnHotkeyChatRoom() { ToggleHudWindow(EMythRoWindow::ChatRoom); }
 void AMythPlayerController::OnHotkeyFriends() { ToggleHudWindow(EMythRoWindow::Friends); }

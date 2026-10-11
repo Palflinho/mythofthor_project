@@ -53,7 +53,8 @@ enum class EMythRoWindow : uint8
 	Macros,   // Alt+M: lista de atalhos de emocao
 	Friends,  // Alt+H: amigos
 	ChatRoom, // Alt+C: sala de chat
-	Quests    // Alt+U: missoes
+	Quests,   // Alt+U: missoes
+	Shortcuts // F12: tabela de teclas
 };
 
 /** Barra de medidor classica (gze*_left/mid/right sobre gze_bg): o meio estica conforme a fracao. */
@@ -434,6 +435,10 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardName;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo2;
+
+	// Atalhos de teclado (MythRoShortcuts.cpp)
+	void BuildShortcutWindow();
+	UPROPERTY() TObjectPtr<UCanvasPanel> ShortcutWindow;
 
 	// Missoes (MythRoQuests.cpp)
 public:

@@ -283,6 +283,7 @@ void UMythRoHUDWidget::ToggleWindow(EMythRoWindow Window)
 	case EMythRoWindow::Friends: Target = FriendsWindow; break;
 	case EMythRoWindow::ChatRoom: OpenChatRoomWindow(); return;
 	case EMythRoWindow::Quests: Target = QuestWindow; break;
+	case EMythRoWindow::Shortcuts: Target = ShortcutWindow; break;
 	}
 	if (!Target)
 	{

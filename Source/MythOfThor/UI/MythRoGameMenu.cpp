@@ -134,7 +134,7 @@ void UMythRoHUDWidget::BuildGameMenu()
 	// Menu principal (como a janela de "Sair" do RO, com as opcoes de hoje)
 	const FVector2D MenuSize(200.f, 17.f + 5 * 24.f + 12.f);
 	GameMenuWindow = MakeRoPanel(TEXT("Menu"), MenuSize, FVector2D::ZeroVector);
-	const TCHAR* Items[5] = { TEXT("Seleção de personagem"), TEXT("Configurações"), TEXT("Opções do jogo"), TEXT("Sair do jogo"), TEXT("Voltar ao jogo") };
+	const TCHAR* Items[5] = { TEXT("Seleção de personagem"), TEXT("Configurações do jogo"), TEXT("Atalhos"), TEXT("Sair do jogo"), TEXT("Voltar ao jogo") };
 	for (int32 i = 0; i < 5; ++i)
 	{
 		UTextBlock* T = AddText(GameMenuWindow, 18.f, 26.f + i * 24.f, 9, MenuLink);
@@ -368,16 +368,11 @@ bool UMythRoHUDWidget::HandleGameMenuClick(const FVector2D& ScreenPos)
 			case 0:
 				ReturnToCharacterSelect();
 				break;
-			case 1:
-				LoadGraphicsOptions();
-				bGfxDirty = false;
-				RefreshGraphicsWindow();
-				GraphicsWindow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
-				OpenOrder.Remove(GraphicsWindow);
-				OpenOrder.Add(GraphicsWindow);
-				break;
-			case 2:
+			case 1: // Game settings: abas Efeito, Controle, Outros e o link para graficos e som
 				ShowOptionsWindow(0);
+				break;
+			case 2: // Set hotkeys: a lista de atalhos (Alt+M)
+				ToggleWindow(EMythRoWindow::Macros);
 				break;
 			case 3:
 				UKismetSystemLibrary::QuitGame(this, GetOwningPlayer(), EQuitPreference::Quit, false);
