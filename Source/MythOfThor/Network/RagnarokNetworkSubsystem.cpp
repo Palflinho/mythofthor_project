@@ -951,6 +951,12 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x00f8: // ZC_CLOSE_STORE
 				HandleStoragePacket(PacketData, ActualLen, PacketID);
 				break;
+			case 0x008d: // ZC_NOTIFY_CHAT (fala publica de outro jogador)
+			case 0x0109: // ZC_NOTIFY_CHAT_PARTY
+			case 0x09df: // ZC_ACK_WHISPER (resultado do cochicho)
+			case 0x00c0: // ZC_EMOTION
+				HandleChatExtras(PacketData, ActualLen, PacketID);
+				break;
 			case 0x0148: // ZC_RESURRECTION
 				HandleResurrection(PacketData, ActualLen);
 				break;
@@ -1581,6 +1587,10 @@ void URagnarokNetworkSubsystem::HandleChatMessage(const uint8* PacketData, int32
 		}
 	}
 
+	if (PacketID == RagnarokPackets::HEADER_ZC_NOTIFY_CHAT && !Text.IsEmpty())
+	{
+		OnSpeech.Broadcast(static_cast<int64>(SavedAccountID), Text); // propria fala: balao sobre o proprio personagem
+	}
 	OnChatMessage.Broadcast(Sender, Text, ColorHex);
 }
 
@@ -2759,6 +2769,123 @@ void URagnarokNetworkSubsystem::HandleStoragePacket(const uint8* PacketData, int
 		break;
 	case 0x00f8: // armazem fechado
 		OnStorageClose.Broadcast();
+		break;
+	default:
+		break;
+	}
+}
+
+bool URagnarokNetworkSubsystem::SendWhisper(const FString& TargetName, const FString& Message)
+{
+	// CZ_WHISPER 0x0096 <len>.W <nick>.24B <mensagem>.?B (clif_process_message com whisper: o texto vai com o terminador)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap || TargetName.IsEmpty() || Message.IsEmpty())
+	{
+		return false;
+	}
+	FTCHARToUTF8 Name(*TargetName);
+	FTCHARToUTF8 Text(*Message);
+	const int32 TextLen = Text.Length() + 1;
+	TArray<uint8> Pkt;
+	Pkt.SetNumZeroed(4 + 24 + TextLen);
+	*reinterpret_cast<uint16*>(Pkt.GetData()) = 0x0096;
+	*reinterpret_cast<uint16*>(Pkt.GetData() + 2) = static_cast<uint16>(Pkt.Num());
+	FMemory::Memcpy(Pkt.GetData() + 4, Name.Get(), FMath::Min(Name.Length(), 23));
+	FMemory::Memcpy(Pkt.GetData() + 28, Text.Get(), TextLen);
+	SendData(Pkt.GetData(), Pkt.Num());
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendPartyMessage(const FString& Message)
+{
+	// CZ_REQUEST_CHAT_PARTY 0x0108 <len>.W "<nome> : <mensagem>" 00
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap || Message.IsEmpty())
+	{
+		return false;
+	}
+	const FString Speaker = SelectedCharName.IsEmpty() ? TEXT("ThorTester") : SelectedCharName;
+	FTCHARToUTF8 Text(*FString::Printf(TEXT("%s : %s"), *Speaker, *Message));
+	const int32 TextLen = Text.Length() + 1;
+	TArray<uint8> Pkt;
+	Pkt.SetNumZeroed(4 + TextLen);
+	*reinterpret_cast<uint16*>(Pkt.GetData()) = 0x0108;
+	*reinterpret_cast<uint16*>(Pkt.GetData() + 2) = static_cast<uint16>(Pkt.Num());
+	FMemory::Memcpy(Pkt.GetData() + 4, Text.Get(), TextLen);
+	SendData(Pkt.GetData(), Pkt.Num());
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendEmotion(int32 EmotionType)
+{
+	// CZ_REQ_EMOTION 0x00bf <tipo>.B (3 bytes)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	const uint8 Packet[3] = { 0xbf, 0x00, static_cast<uint8>(EmotionType) };
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+void URagnarokNetworkSubsystem::HandleChatExtras(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
+{
+	auto ReadText = [&](int32 Offset)
+	{
+		if (PacketSize <= Offset)
+		{
+			return FString();
+		}
+		TArray<uint8> Buf;
+		Buf.Append(PacketData + Offset, PacketSize - Offset);
+		Buf.Add(0);
+		return FString(UTF8_TO_TCHAR(reinterpret_cast<const char*>(Buf.GetData())));
+	};
+	switch (PacketID)
+	{
+	case 0x008d: // <len>.W <gid>.L "<nome> : <mensagem>"
+	{
+		if (PacketSize < 9)
+		{
+			break;
+		}
+		const int64 Gid = *reinterpret_cast<const uint32*>(PacketData + 4);
+		const FString Full = ReadText(8);
+		FString Sender, Text = Full;
+		int32 Colon = INDEX_NONE;
+		if (Full.FindChar(TEXT(':'), Colon) && Colon > 0)
+		{
+			Sender = Full.Left(Colon).TrimStartAndEnd();
+			Text = Full.Mid(Colon + 1).TrimStartAndEnd();
+		}
+		OnChatMessage.Broadcast(Sender, Text, TEXT("#FFFFFF"));
+		OnSpeech.Broadcast(Gid, Text);
+		break;
+	}
+	case 0x0109: // <len>.W <aid>.L "<nome> : <mensagem>" (canal do grupo, ciano)
+	{
+		FString Full = ReadText(8);
+		FString Sender, Text = Full;
+		int32 Colon = INDEX_NONE;
+		if (Full.FindChar(TEXT(':'), Colon) && Colon > 0)
+		{
+			Sender = FString::Printf(TEXT("[Grupo] %s"), *Full.Left(Colon).TrimStartAndEnd());
+			Text = Full.Mid(Colon + 1).TrimStartAndEnd();
+		}
+		OnChatMessage.Broadcast(Sender, Text, TEXT("#33CCFF"));
+		break;
+	}
+	case 0x09df: // <resultado>.B <cid>.L (e_ack_whisper: 0 ok, 1 nao esta conectado, 2 ignorado, 3 todos ignorados)
+	{
+		const uint8 Result = PacketSize >= 3 ? PacketData[2] : 0;
+		if (Result == 1) { OnChatMessage.Broadcast(TEXT(""), TEXT("Esse jogador não está conectado."), TEXT("#FF3333")); }
+		else if (Result == 2) { OnChatMessage.Broadcast(TEXT(""), TEXT("Esse jogador está ignorando você."), TEXT("#FF3333")); }
+		else if (Result == 3) { OnChatMessage.Broadcast(TEXT(""), TEXT("Esse jogador está ignorando todos os cochichos."), TEXT("#FF3333")); }
+		break;
+	}
+	case 0x00c0: // <gid>.L <tipo>.B
+		if (PacketSize >= 7)
+		{
+			OnEmotion.Broadcast(*reinterpret_cast<const uint32*>(PacketData + 2), PacketData[6]);
+		}
 		break;
 	default:
 		break;

@@ -206,6 +206,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnStorageOpen.AddDynamic(this, &AMythNetWorld::HandleStorageOpen);
 	Net->OnStorageChanged.AddDynamic(this, &AMythNetWorld::HandleStorageChanged);
 	Net->OnStorageClose.AddDynamic(this, &AMythNetWorld::HandleStorageClose);
+	Net->OnSpeech.AddDynamic(this, &AMythNetWorld::HandleSpeech);
 	Net->OnUnitVanish.AddDynamic(this, &AMythNetWorld::HandleUnitVanish);
 	Net->OnDamage.AddDynamic(this, &AMythNetWorld::HandleDamage);
 	Net->OnChatMessage.AddDynamic(this, &AMythNetWorld::HandleChat);
@@ -267,6 +268,7 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnStorageOpen.RemoveAll(this);
 		Net->OnStorageChanged.RemoveAll(this);
 		Net->OnStorageClose.RemoveAll(this);
+		Net->OnSpeech.RemoveAll(this);
 		Net->OnUnitVanish.RemoveAll(this);
 		Net->OnDamage.RemoveAll(this);
 		Net->OnChatMessage.RemoveAll(this);
@@ -680,6 +682,18 @@ void AMythNetWorld::HandleUnitOption(int64 ID, int32 Option)
 	}
 }
 
+void AMythNetWorld::HandleSpeech(int64 UnitID, const FString& Text)
+{
+	// Fala publica: balao sobre a cabeca de quem falou (4,5 s)
+	if (AActor* Speaker = ResolveActor(UnitID))
+	{
+		if (AMythHUD* Hud = GetGameHud())
+		{
+			Hud->AddSpeechBubble(Speaker, Text);
+		}
+	}
+}
+
 void AMythNetWorld::HandleStorageOpen(const TArray<FRagnarokInventoryItem>&)
 {
 	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
@@ -904,6 +918,13 @@ void AMythNetWorld::ShowImpact(int64 TargetID, AActor* Source, AActor* Target, i
 
 void AMythNetWorld::HandleChat(const FString& Sender, const FString& Text, const FString& ColorHex)
 {
+	if (ColorHex == TEXT("#FFFF00") && !Sender.IsEmpty())
+	{
+		if (AMythPlayerController* WhisperPC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); WhisperPC && WhisperPC->GetHud())
+		{
+			WhisperPC->GetHud()->SetLastWhisperFrom(Sender); // para o /r
+		}
+	}
 	const FString Line = Sender.IsEmpty() ? Text : FString::Printf(TEXT("%s : %s"), *Sender, *Text);
 	Chat(Line, NetParseColor(ColorHex, FLinearColor::White));
 }

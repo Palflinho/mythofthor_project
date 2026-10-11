@@ -687,7 +687,23 @@ void UMythRoHUDWidget::OnChatCommitted(const FText& Text, ETextCommit::Type Comm
 	{
 		FSlateApplication::Get().SetAllUserFocusToGameViewport(); // devolve o teclado ao jogo (WASD)
 	}
+	SubmitChat(Msg);
+}
+
+void UMythRoHUDWidget::SubmitChat(const FString& Msg)
+{
 	if (Msg.IsEmpty())
+	{
+		return;
+	}
+	ChatHistory.Remove(Msg);
+	ChatHistory.Add(Msg);
+	if (ChatHistory.Num() > 20)
+	{
+		ChatHistory.RemoveAt(0);
+	}
+	ChatHistoryPos = INDEX_NONE;
+	if (HandleChatCommand(Msg))
 	{
 		return;
 	}

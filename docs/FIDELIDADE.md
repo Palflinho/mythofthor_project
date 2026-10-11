@@ -160,6 +160,7 @@ Nenhum destes tem pesquisa nos repositórios de referência. A rede do rAthena j
 | Morte e reviver (janela, ponto de save, penalidade) | ❌ | P1 |
 | Grupo (criar, convidar, divisão de EXP, HP dos membros) | ❌ | P1 |
 | Chat completo (abas, cochicho, grupo, guilda, comandos `/`) | ⚠️ | P1 |
+| Chat completo (cochicho, grupo, comandos de barra, histórico, balão de fala) | 🟡 P1 | ⬜ | Feito em 2026-10-11 (`MythRoChatCommands.cpp`, `MythChatCommands.cpp`): `/w`, `"` e `/r` (cochicho 0x0096), `%` grupo (0x0108), `/sit /where /who /noctrl /doridori /bangbang /bingbing /aura /aura2 /sound /bgm`, emoção `/eN` e `/!` `/?` `/love` (0x00bf, tabela do `emotionlist.lub`), histórico de 20 mensagens com Cima e Baixo, balão de fala de 4,5 s (0x008d de outros e 0x008e próprio, que o cliente nem lia), canal do grupo em ciano (0x0109), erros de cochicho (0x09df). Testado: fala com balão, /where, /aura, cochicho para quem está offline, comando desconhecido. **Falta:** desenhar a emoção (sprite `emotion.spr`), Alt+0..9, abas Grupo e Guilda, `/mineffect /effect /snap /itemsnap`, guilda. **Atenção:** o servidor exige a skill Habilidades Básicas para emoções e canal de grupo (testado com Arqueiro sem ela). |
 | Troca entre jogadores | ❌ | P2 |
 | Emoções (Alt+0–9, `/e`) | ❌ | P2 |
 | Barra de cast e interrupção | ❓ | P1 |

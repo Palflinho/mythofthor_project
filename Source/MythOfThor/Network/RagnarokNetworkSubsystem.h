@@ -349,6 +349,10 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnUnitOption, int64, UnitID, int32
 /** ZC_RESURRECTION (0x0148): a unidade voltou a vida. */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUnitRevive, int64, UnitID);
 
+/** Fala publica (0x008d de outros, 0x008e propria) para o balao sobre a cabeca, e emocao (0x00c0). */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSpeech, int64, UnitID, const FString&, Text);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnEmotion, int64, UnitID, int32, EmotionType);
+
 /** Armazem da Kafra (clif.cpp): lista completa (0x0b08 inicio, 0x0b09/0x0b39 invType 2, 0x0b0b fim), 0x0b44 item entrou, 0x00f6 saiu, 0x00f2 contagem, 0x00f8 fechou. */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStorageOpen, const TArray<FRagnarokInventoryItem>&, Items);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStorageChanged, const TArray<FRagnarokInventoryItem>&, Items);
@@ -472,6 +476,10 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
 	bool SendGlobalMessage(const FString& Message);
+	/** Cochicho (CZ_WHISPER 0x0096), grupo (CZ_REQUEST_CHAT_PARTY 0x0108) e emocao (CZ_REQ_EMOTION 0x00bf), do clif.cpp. */
+	bool SendWhisper(const FString& TargetName, const FString& Message);
+	bool SendPartyMessage(const FString& Message);
+	bool SendEmotion(int32 EmotionType);
 
 	/**
 	 * Distribui pontos de atributo (STR, AGI, VIT, INT, DEX, LUK) (CZ_STATUS_CHANGE 0x00bb).
@@ -642,6 +650,8 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Shop") FOnShopBuyList OnShopBuyList;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Shop") FOnShopSellList OnShopSellList;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Shop") FOnShopResult OnShopResult;
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Chat") FOnSpeech OnSpeech;
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Chat") FOnEmotion OnEmotion;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Storage") FOnStorageOpen OnStorageOpen;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Storage") FOnStorageChanged OnStorageChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Storage") FOnStorageClose OnStorageClose;
@@ -817,6 +827,7 @@ private:
 	void HandleEffect(const uint8* PacketData, int32 PacketSize);
 	void HandleOptionChange(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleResurrection(const uint8* PacketData, int32 PacketSize);
+	void HandleChatExtras(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleStoragePacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleShopPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleSkillUnitAppear(const uint8* PacketData, int32 PacketSize);

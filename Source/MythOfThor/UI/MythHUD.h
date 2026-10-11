@@ -55,6 +55,8 @@ public:
 
 	/** Nome da skill sobre quem a usou, por um instante (o RO mostra o grito da skill). */
 	void AddSkillShout(AActor* Caster, const FString& SkillName);
+	/** Balao de fala sobre a cabeca (fala publica; dura 4,5 s, docs/ref/18 2.3). */
+	void AddSpeechBubble(AActor* Speaker, const FString& Text);
 
 	/**
 	 * Icone de estado (buff/debuff) na coluna da direita, como no cliente original, com uma barra de duracao ao lado.
@@ -76,6 +78,8 @@ private:
 	void DrawCastBarsAndShouts();
 	struct FCastBar { TWeakObjectPtr<AActor> Actor; float Start = 0.f; float Duration = 0.f; };
 	struct FShout { TWeakObjectPtr<AActor> Actor; FString Text; float Start = 0.f; };
+	struct FBubble { TWeakObjectPtr<AActor> Actor; FString Text; float Start = 0.f; };
+	TArray<FBubble> Bubbles;
 	TArray<FCastBar> CastBars;
 	TArray<FShout> Shouts;
 

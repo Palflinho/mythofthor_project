@@ -31,6 +31,12 @@ class MYTHOFTHOR_API AMythPlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
+	/** Comandos de barra do cliente que mexem no mundo (/sit /where /doridori /bangbang /bingbing /noctrl /aura /sound /bgm); true se tratou. */
+	bool RunSlashCommand(const FString& Command, const FString& Args);
+	bool bContinuousAttack = true;   // /noctrl: ataque continuo (acao 7) ou golpe unico (0)
+	bool bAutoDoridori = false;      // /doridori: a cabeca vira de um lado para o outro sozinha
+	float DoridoriTimer = 0.f;
+
 	AMythPlayerController();
 
 	/** Tamanho de uma celula do grid do Ragnarok em unidades da Unreal. Ajustar conforme a escala dos mapas importados. */
@@ -126,6 +132,10 @@ public:
 	/** Console: MythAttackNearest -> ataca o monstro do servidor mais proximo (testes automaticos). */
 	UFUNCTION(Exec)
 	void MythAttackNearest();
+
+	/** Teste: MythChat <texto> -> digita o texto no chat (comandos de barra, grupo e cochicho). */
+	UFUNCTION(Exec)
+	void MythChat(const FString& Text);
 
 	/** Teste do armazem (abra com @storage): MythStore 1 <linha> <qtd> guarda; MythStore 0 <linha> <qtd> pega. */
 	UFUNCTION(Exec)

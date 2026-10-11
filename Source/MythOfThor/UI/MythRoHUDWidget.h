@@ -92,6 +92,15 @@ public:
 	/** Enter: foca o campo do chat (ou envia, se ja estiver focado). */
 	UFUNCTION(BlueprintCallable, Category = "Myth|HUD")
 	void FocusChat();
+	/** Trata o texto do chat: comandos de barra, cochicho, grupo, emocao; false = fala publica normal. */
+	bool HandleChatCommand(const FString& Msg);
+	/** Envia um texto como se tivesse sido digitado e confirmado no chat (comandos, cochicho, fala). */
+	void SubmitChat(const FString& Msg);
+	/** Historico de entrada: ultimas 20 mensagens, navegadas por Cima e Baixo (docs/ref/18 2.1). */
+	TArray<FString> ChatHistory;
+	int32 ChatHistoryPos = INDEX_NONE;
+	FString LastWhisperFrom;
+	void SetLastWhisperFrom(const FString& Name) { LastWhisperFrom = Name; }
 
 	UFUNCTION(BlueprintPure, Category = "Myth|HUD")
 	bool IsChatFocused() const;
@@ -132,6 +141,7 @@ protected:
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	// Arrastar janelas pela barra de titulo, como no cliente original
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+	virtual FReply NativeOnPreviewKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
 	virtual FReply NativeOnMouseWheel(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 	virtual FReply NativeOnMouseMove(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 	virtual FReply NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;

@@ -431,6 +431,19 @@ void AMythPlayerController::PlayerTick(float DeltaTime)
 	}
 
 	UpdateHeadTurn();
+	if (bAutoDoridori)
+	{
+		DoridoriTimer -= DeltaTime;
+		const AMythPlayerCharacter* DoriChar = GetMythCharacter();
+		if (DoriChar && DoriChar->Sprite && (DoriChar->Sprite->GetState() == EMythSpriteState::Idle || DoriChar->Sprite->GetState() == EMythSpriteState::Sit))
+		{
+			if (DoridoriTimer <= 0.f)
+			{
+				DoridoriTimer = 0.2f;
+				SetHeadTurn(DoriChar->Sprite->GetHeadDir() == 1 ? 2 : 1);
+			}
+		}
+	}
 	FlushPendingMove();
 	UpdateNetChase(DeltaTime);
 	UpdateRoCursor();
@@ -755,7 +768,7 @@ void AMythPlayerController::SetFocusedTarget(AMythMonster* NewTarget)
 				return;
 			}
 			UE_LOG(LogTemp, Log, TEXT("MythNet: atacando %s (%lld)"), *NewTarget->MonsterName, NewTarget->NetID);
-			Net->SendActionRequest(NewTarget->NetID, 7);
+			Net->SendActionRequest(NewTarget->NetID, bContinuousAttack ? 7 : 0);
 		}
 	}
 	FocusedTarget = NewTarget;
@@ -1755,3 +1768,5 @@ void AMythPlayerController::MythDropFirst(int32 Amount)
 }
 
 void AMythPlayerController::MythStore(int32 ToStorage, int32 Row, int32 Qty) { if (HudWidget) { HudWidget->StorageMove(ToStorage != 0, Row, Qty); } }
+
+void AMythPlayerController::MythChat(const FString& Text) { if (HudWidget) { HudWidget->SubmitChat(Text.Replace(TEXT("+"), TEXT(" "))); } }

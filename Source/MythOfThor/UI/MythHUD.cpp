@@ -344,6 +344,15 @@ void AMythHUD::AddCastBar(AActor* Caster, float Seconds)
 	CastBars.Add({ Caster, static_cast<float>(GetWorld()->GetTimeSeconds()), Seconds });
 }
 
+void AMythHUD::AddSpeechBubble(AActor* Speaker, const FString& Text)
+{
+	if (Speaker && !Text.IsEmpty())
+	{
+		Bubbles.RemoveAll([Speaker](const FBubble& B) { return B.Actor.Get() == Speaker; });
+		Bubbles.Add({ Speaker, Text, static_cast<float>(GetWorld()->GetTimeSeconds()) });
+	}
+}
+
 void AMythHUD::AddSkillShout(AActor* Caster, const FString& SkillName)
 {
 	if (Caster && !SkillName.IsEmpty())
@@ -377,6 +386,48 @@ void AMythHUD::DrawCastBarsAndShouts()
 		Canvas->DrawItem(Back);
 		FCanvasTileItem Fill(Pos, FVector2D(W * Frac, H), FLinearColor(0.35f, 0.85f, 0.35f, 1.f));
 		Canvas->DrawItem(Fill);
+	}
+	// Baloes de fala: caixa branca com borda escura e texto preto, 4,5 s, seguem quem falou
+	Bubbles.RemoveAll([Now](const FBubble& B) { return !B.Actor.IsValid() || Now - B.Start > 4.5f; });
+	UFont* BubbleFont = GEngine ? GEngine->GetSmallFont() : nullptr;
+	for (const FBubble& B : Bubbles)
+	{
+		const FVector Screen = Project(B.Actor->GetActorLocation() + FVector(0.f, 0.f, 135.f), true);
+		if (Screen.Z <= 0.f || !BubbleFont)
+		{
+			continue;
+		}
+		// Quebra em linhas de ~26 caracteres
+		TArray<FString> Lines;
+		FString Rest = B.Text;
+		while (Rest.Len() > 26)
+		{
+			int32 Space = INDEX_NONE;
+			Rest.Left(26).FindLastChar(TEXT(' '), Space);
+			if (Space <= 0) { Space = 26; }
+			Lines.Add(Rest.Left(Space));
+			Rest = Rest.Mid(Space).TrimStart();
+		}
+		Lines.Add(Rest);
+		float W = 0.f, H = 0.f, MaxW = 0.f;
+		for (const FString& L : Lines)
+		{
+			float LW = 0.f, LH = 0.f;
+			Canvas->TextSize(BubbleFont, L, LW, LH, 1.f, 1.f);
+			MaxW = FMath::Max(MaxW, LW);
+			H = LH;
+		}
+		W = MaxW + 12.f;
+		const float TotalH = Lines.Num() * H + 8.f;
+		const float X = Screen.X - W * 0.5f;
+		const float Y = Screen.Y - TotalH - 6.f;
+		DrawRect(FLinearColor(0.1f, 0.1f, 0.1f, 0.9f), X - 1.f, Y - 1.f, W + 2.f, TotalH + 2.f);
+		DrawRect(FLinearColor(1.f, 1.f, 1.f, 0.95f), X, Y, W, TotalH);
+		for (int32 i = 0; i < Lines.Num(); ++i)
+		{
+			FCanvasTextItem Text(FVector2D(X + 6.f, Y + 4.f + i * H), FText::FromString(Lines[i]), BubbleFont, FLinearColor::Black);
+			Canvas->DrawItem(Text);
+		}
 	}
 	// Grito da skill: texto amarelo com contorno sobre a cabeca, subindo e sumindo em 1,6 s
 	Shouts.RemoveAll([Now](const FShout& S) { return !S.Actor.IsValid() || Now - S.Start > 1.6f; });
