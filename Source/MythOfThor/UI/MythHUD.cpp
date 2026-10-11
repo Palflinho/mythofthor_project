@@ -12,6 +12,7 @@
 #include "World/MythGroundItem.h"
 #include "World/MythMapInfo.h"
 #include "UI/MythRoHUDWidget.h"
+#include "Network/RagnarokNetworkSubsystem.h"
 #include "UI/MythOptions.h"
 #include "EngineUtils.h"
 #include "Camera/PlayerCameraManager.h"
@@ -57,6 +58,7 @@ void AMythHUD::DrawHUD()
 	Super::DrawHUD();
 	DrawCursorTile();
 	DrawMapBanner();
+	DrawChatRoomTitles();
 	DrawTargetRing();
 	DrawSelfBars();
 	DrawGroundItemLabels();
@@ -365,6 +367,67 @@ void AMythHUD::DrawMapBanner()
 	DrawRect(FLinearColor(0.f, 0.f, 0.f, 0.35f * Alpha), Canvas->SizeX * 0.5f - TW * 0.5f - 40.f, 70.f, TW + 80.f, TH + 14.f);
 	Canvas->SetDrawColor(FColor(255, 255, 255, static_cast<uint8>(255.f * Alpha)));
 	Canvas->DrawText(Font, BannerText, Canvas->SizeX * 0.5f - TW * 0.5f, 76.f, Scale, Scale, Info);
+}
+
+void AMythHUD::DrawChatRoomTitles()
+{
+	RoomHits.Reset();
+	AMythPlayerController* PC = Cast<AMythPlayerController>(PlayerOwner);
+	const URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr;
+	if (!Canvas || !PC || !Net || Net->GetChatRooms().Num() == 0)
+	{
+		return;
+	}
+	UFont* Font = GEngine ? GEngine->GetSmallFont() : nullptr;
+	if (!Font)
+	{
+		return;
+	}
+	for (TActorIterator<AMythMonster> It(GetWorld()); It; ++It)
+	{
+		if (!It->IsNetUnit() || It->NetObjectType != 0)
+		{
+			continue;
+		}
+		for (const TPair<int32, FRoChatRoom>& Pair : Net->GetChatRooms())
+		{
+			const FRoChatRoom& Room = Pair.Value;
+			if (Room.OwnerId != It->NetID)
+			{
+				continue;
+			}
+			FVector2D Head;
+			if (!PC->ProjectWorldLocationToScreen(It->GetActorLocation() + FVector(0.f, 0.f, 150.f), Head, false))
+			{
+				continue;
+			}
+			const FString Text = FString::Printf(TEXT("%s (%d/%d)"), *Room.Title, Room.Users, Room.Limit);
+			float TW = 0.f, TH = 0.f;
+			Canvas->TextSize(Font, Text, TW, TH, 1.f, 1.f);
+			const FVector2D Pos(Head.X - TW * 0.5f - 6.f, Head.Y - TH - 10.f);
+			DrawRect(FLinearColor(0.f, 0.f, 0.f, 0.55f), Pos.X, Pos.Y, TW + 12.f, TH + 6.f);
+			Canvas->SetDrawColor(Room.Type == 0 ? FColor(255, 180, 120) : FColor(255, 240, 140));
+			Canvas->DrawText(Font, Text, Pos.X + 6.f, Pos.Y + 3.f);
+			FRoomHit Hit;
+			Hit.Box = FBox2D(Pos, Pos + FVector2D(TW + 12.f, TH + 6.f));
+			Hit.Id = Room.Id;
+			Hit.Type = Room.Type;
+			RoomHits.Add(Hit);
+		}
+	}
+}
+
+int32 AMythHUD::ChatRoomAt(const FVector2D& CanvasPos, int32& OutType) const
+{
+	for (const FRoomHit& H : RoomHits)
+	{
+		if (H.Box.IsInside(CanvasPos))
+		{
+			OutType = H.Type;
+			return H.Id;
+		}
+	}
+	return 0;
 }
 
 void AMythHUD::DrawTargetRing()

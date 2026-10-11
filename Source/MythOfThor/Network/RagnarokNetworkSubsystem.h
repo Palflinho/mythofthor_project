@@ -362,6 +362,17 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnUnitBodyState, int64, UnitID, 
 /** ZC_RESURRECTION (0x0148): a unidade voltou a vida. */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUnitRevive, int64, UnitID);
 
+/** Sala de chat anunciada sobre a cabeca de quem a abriu (0x00d7). */
+struct FRoChatRoom
+{
+	int32 Id = 0;
+	int32 OwnerId = 0;
+	int32 Limit = 0;
+	int32 Users = 0;
+	int32 Type = 1; // 0 privada, 1 publica, 2 arena, 3 zona PK
+	FString Title;
+};
+
 /** Amigo da lista (0x0201): o estado online vem do 0x0206. */
 struct FRoFriend
 {
@@ -419,6 +430,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPartyChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTradeRequest, const FString&, FromName);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTradeChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFriendsChanged);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnChatRoomChanged);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnFriendRequest, int32, AccountId, int32, CharId, const FString&, Name);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPartyInvite, int32, PartyId, const FString&, PartyName);
 
@@ -524,6 +536,12 @@ public:
 	bool SendFriendAdd(const FString& Name);
 	bool SendFriendDelete(int32 AccountId, int32 CharId);
 	bool SendFriendReply(int32 AccountId, int32 CharId, bool bAccept);
+
+	/** Sala de chat: criar (0x00d5), entrar (0x00d9), sair (0x00e3), expulsar (0x00e2). */
+	bool SendCreateChatRoom(const FString& Title, int32 Limit, bool bPublic, const FString& Password);
+	bool SendEnterChatRoom(int32 ChatId, const FString& Password);
+	bool SendLeaveChatRoom();
+	bool SendKickFromChatRoom(const FString& Name);
 
 	/**
 	 * Envia requisição de ação/ataque básico para o Map-Server (CZ_REQUEST_ACT 0x088E / 0x0360).
@@ -647,6 +665,10 @@ public:
 	bool IsInParty() const { return !PartyName.IsEmpty(); }
 	bool IsTradeOpen() const { return bTradeOpen; }
 	const TArray<FRoFriend>& GetFriends() const { return Friends; }
+	bool IsInChatRoom() const { return bInChatRoom; }
+	const FString& GetChatRoomTitle() const { return CurrentChatRoomTitle; }
+	const TArray<FString>& GetChatRoomMembers() const { return ChatRoomMembers; }
+	const TMap<int32, FRoChatRoom>& GetChatRooms() const { return ChatRooms; }
 	const FString& GetTradePartner() const { return TradePartner; }
 	const TArray<FRoTradeItem>& GetTradeMine() const { return TradeMine; }
 	const TArray<FRoTradeItem>& GetTradeTheirs() const { return TradeTheirs; }
@@ -753,6 +775,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Trade") FOnTradeRequest OnTradeRequest;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Trade") FOnTradeChanged OnTradeChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Friends") FOnFriendsChanged OnFriendsChanged;
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|ChatRoom") FOnChatRoomChanged OnChatRoomChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Friends") FOnFriendRequest OnFriendRequest;
 
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Network|Events")
@@ -876,6 +899,13 @@ private:
 
 	FString PartyName;
 	TArray<FRoFriend> Friends;
+	TMap<int32, FRoChatRoom> ChatRooms;
+	bool bInChatRoom = false;
+	int32 CurrentChatRoomId = 0;
+	FString CurrentChatRoomTitle;
+	FString ChatRoomOwnerName;
+	FString PendingChatRoomTitle;
+	TArray<FString> ChatRoomMembers;
 	bool bTradeOpen = false;
 	bool bTradeLockMine = false;
 	bool bTradeLockTheirs = false;
@@ -946,6 +976,7 @@ private:
 	void HandlePartyPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleTradePacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleFriendsPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	void HandleChatRoomPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void HandleSkillUnitAppear(const uint8* PacketData, int32 PacketSize);
 	void HandleSkillUnitDisappear(const uint8* PacketData, int32 PacketSize);
 	void HandleNotifyEffect(const uint8* PacketData, int32 PacketSize);

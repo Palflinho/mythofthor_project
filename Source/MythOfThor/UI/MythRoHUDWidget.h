@@ -51,7 +51,8 @@ enum class EMythRoWindow : uint8
 	Party,    // Alt+Z: grupo
 	Emotions, // Alt+L: lista de emocoes
 	Macros,   // Alt+M: lista de atalhos de emocao
-	Friends   // Alt+H: amigos
+	Friends,  // Alt+H: amigos
+	ChatRoom  // Alt+C: sala de chat
 };
 
 /** Barra de medidor classica (gze*_left/mid/right sobre gze_bg): o meio estica conforme a fracao. */
@@ -430,6 +431,37 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardName;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo2;
+
+	// Sala de chat (MythRoChatRoom.cpp)
+public:
+	void OpenChatRoomWindow();
+	void RefreshChatRoom();
+	void AskChatRoomPassword(int32 ChatId);
+protected:
+	void BuildChatRoomWindows();
+	bool HandleChatRoomClick(const FVector2D& ScreenPos);
+	static constexpr int32 RoomRowCount = 14;
+	UPROPERTY() TObjectPtr<UCanvasPanel> ChatRoomCreateWindow;
+	UPROPERTY() TObjectPtr<UCanvasPanel> ChatRoomWindow;
+	UPROPERTY() TObjectPtr<UCanvasPanel> ChatRoomEnterWindow;
+	UPROPERTY() TObjectPtr<UEditableTextBox> RoomTitleBox;
+	UPROPERTY() TObjectPtr<UEditableTextBox> RoomPassBox;
+	UPROPERTY() TObjectPtr<UEditableTextBox> RoomEnterPassBox;
+	UPROPERTY() TObjectPtr<UTextBlock> RoomLimitLeft;
+	UPROPERTY() TObjectPtr<UTextBlock> RoomLimitText;
+	UPROPERTY() TObjectPtr<UTextBlock> RoomLimitRight;
+	UPROPERTY() TObjectPtr<UTextBlock> RoomTypeLink;
+	UPROPERTY() TObjectPtr<UTextBlock> RoomOkLink;
+	UPROPERTY() TObjectPtr<UTextBlock> RoomCancelLink;
+	UPROPERTY() TObjectPtr<UTextBlock> RoomTitleText;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> RoomMemberRows;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> RoomKickLinks;
+	UPROPERTY() TObjectPtr<UTextBlock> RoomLeaveLink;
+	UPROPERTY() TObjectPtr<UTextBlock> RoomEnterOkLink;
+	UPROPERTY() TObjectPtr<UTextBlock> RoomEnterCancelLink;
+	int32 RoomNewLimit = 10;
+	bool RoomNewPublic = true;
+	int32 PendingRoomId = 0;
 
 	// Amigos (MythRoFriends.cpp)
 public:

@@ -149,6 +149,7 @@ public:
 	UFUNCTION(Exec)
 	void MythOptions(int32 Tab);
 	UFUNCTION(Exec) void MythFriendReply(int32 Accept);
+	UFUNCTION(Exec) void MythRoom(int32 Create, const FString& Title);
 	UFUNCTION(Exec) void MythEntryLogin(const FString& User, const FString& Pass);
 	UFUNCTION(Exec) void MythEntryAction(int32 Action, const FString& Name);
 
@@ -362,6 +363,7 @@ private:
 	void OnHotkeyEmotions();
 	void OnHotkeyMacros();
 	void OnHotkeyFriends();
+	void OnHotkeyChatRoom();
 	void OnHotkeyItems();
 	void OnHotkeyEquip();
 	void OnHotkeySkills();

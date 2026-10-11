@@ -958,6 +958,16 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x00f8: // ZC_CLOSE_STORE
 				HandleStoragePacket(PacketData, ActualLen, PacketID);
 				break;
+			case 0x00d6: // ZC_ACK_CREATE_CHATROOM
+			case 0x00d7: // ZC_ROOM_NEWENTRY
+			case 0x00d8: // ZC_DESTROY_ROOM
+			case 0x00da: // ZC_REFUSE_ENTER_ROOM
+			case 0x00db: // ZC_ENTER_ROOM
+			case 0x00dc: // ZC_MEMBER_NEWENTRY
+			case 0x00dd: // ZC_MEMBER_EXIT
+			case 0x00df: // ZC_CHANGE_CHATROOM
+				HandleChatRoomPacket(PacketData, ActualLen, PacketID);
+				break;
 			case 0x0201: // ZC_FRIENDS_LIST
 			case 0x0206: // ZC_FRIENDS_STATE
 			case 0x0207: // ZC_REQ_ADD_FRIENDS
@@ -3262,6 +3272,180 @@ void URagnarokNetworkSubsystem::HandleFriendsPacket(const uint8* PacketData, int
 			const int32 Cid = *reinterpret_cast<const int32*>(PacketData + 6);
 			Friends.RemoveAll([Cid](const FRoFriend& X) { return X.CharId == Cid; });
 			OnFriendsChanged.Broadcast();
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+
+// ---- Sala de chat (clif_createchat, clif_dispchat, clif_joinchatok...) ----
+
+bool URagnarokNetworkSubsystem::SendCreateChatRoom(const FString& Title, int32 Limit, bool bPublic, const FString& Password)
+{
+	// CZ_CREATE_CHATROOM 0x00d5 <len>.W <limite>.W <tipo>.B (1 publica, 0 privada) <senha>.8B <titulo>.?B
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap || Title.IsEmpty())
+	{
+		return false;
+	}
+	PendingChatRoomTitle = Title;
+	FTCHARToUTF8 TitleUtf8(*Title);
+	const int32 TitleLen = FMath::Min<int32>(TitleUtf8.Length(), 60);
+	TArray<uint8> Pkt;
+	Pkt.SetNumZeroed(15 + TitleLen);
+	*reinterpret_cast<uint16*>(Pkt.GetData()) = 0x00d5;
+	*reinterpret_cast<uint16*>(Pkt.GetData() + 2) = static_cast<uint16>(Pkt.Num());
+	*reinterpret_cast<uint16*>(Pkt.GetData() + 4) = static_cast<uint16>(FMath::Clamp(Limit, 2, 20));
+	Pkt[6] = bPublic ? 1 : 0;
+	FTCHARToUTF8 PassUtf8(*Password);
+	FMemory::Memcpy(Pkt.GetData() + 7, PassUtf8.Get(), FMath::Min<int32>(PassUtf8.Length(), 7));
+	FMemory::Memcpy(Pkt.GetData() + 15, TitleUtf8.Get(), TitleLen);
+	SendData(Pkt.GetData(), Pkt.Num());
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendEnterChatRoom(int32 ChatId, const FString& Password)
+{
+	// CZ_REQ_ENTER_ROOM 0x00d9 <id>.L <senha>.8B (14 bytes)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	uint8 Packet[14] = { 0xd9, 0x00 };
+	*reinterpret_cast<uint32*>(Packet + 2) = static_cast<uint32>(ChatId);
+	FTCHARToUTF8 PassUtf8(*Password);
+	FMemory::Memcpy(Packet + 6, PassUtf8.Get(), FMath::Min<int32>(PassUtf8.Length(), 7));
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendLeaveChatRoom()
+{
+	// CZ_EXIT_ROOM 0x00e3 (2 bytes)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	const uint8 Packet[2] = { 0xe3, 0x00 };
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendKickFromChatRoom(const FString& Name)
+{
+	// CZ_REQ_EXPEL_MEMBER 0x00e2 <nome>.24B (26 bytes)
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	uint8 Packet[26] = { 0xe2, 0x00 };
+	FTCHARToUTF8 Utf8(*Name);
+	FMemory::Memcpy(Packet + 2, Utf8.Get(), FMath::Min<int32>(Utf8.Length(), 23));
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+void URagnarokNetworkSubsystem::HandleChatRoomPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
+{
+	auto Say = [this](const FString& Text) { OnChatMessage.Broadcast(TEXT(""), Text, TEXT("#FFFF00")); };
+	auto Title = [&](int32 From) -> FString
+	{
+		TArray<uint8> Buf;
+		Buf.Append(PacketData + From, FMath::Max(0, PacketSize - From));
+		Buf.Add(0);
+		return UTF8_TO_TCHAR(reinterpret_cast<const char*>(Buf.GetData()));
+	};
+	switch (PacketID)
+	{
+	case 0x00d6: // <resultado>.B (0 criada)
+		if (PacketSize >= 3 && PacketData[2] != 0)
+		{
+			Say(PacketData[2] == 1 ? TEXT("Limite de salas excedido.") : TEXT("Já existe uma sala igual."));
+		}
+		else if (PacketSize >= 3)
+		{
+			// Sala criada: voce e o dono e ja esta dentro
+			bInChatRoom = true;
+			CurrentChatRoomTitle = PendingChatRoomTitle;
+			ChatRoomMembers.Reset();
+			ChatRoomMembers.Add(SelectedCharName);
+			OnChatRoomChanged.Broadcast();
+		}
+		break;
+	case 0x00d7: // <len>.W <dono>.L <id>.L <limite>.W <usuarios>.W <tipo>.B <titulo>
+	case 0x00df: // <len>.W <dono>.L <id>.L <limite>.W <usuarios>.W <tipo>.B <titulo> (sala mudou)
+		if (PacketSize >= 17)
+		{
+			FRoChatRoom R;
+			R.OwnerId = *reinterpret_cast<const int32*>(PacketData + 4);
+			R.Id = *reinterpret_cast<const int32*>(PacketData + 8);
+			R.Limit = *reinterpret_cast<const uint16*>(PacketData + 12);
+			R.Users = *reinterpret_cast<const uint16*>(PacketData + 14);
+			R.Type = PacketData[16];
+			R.Title = Title(17);
+			ChatRooms.Add(R.Id, R);
+			if (bInChatRoom && R.Id == CurrentChatRoomId)
+			{
+				CurrentChatRoomTitle = R.Title;
+			}
+			OnChatRoomChanged.Broadcast();
+		}
+		break;
+	case 0x00d8: // <id>.L
+		if (PacketSize >= 6)
+		{
+			ChatRooms.Remove(*reinterpret_cast<const int32*>(PacketData + 2));
+			OnChatRoomChanged.Broadcast();
+		}
+		break;
+	case 0x00da: // <resultado>.B: 0 cheia, 1 senha errada, 2 expulso, 4 sem zeny, 5 nivel baixo, 6 nivel alto, 7 classe
+	{
+		static const TCHAR* Reasons[8] = { TEXT("A sala está cheia."), TEXT("Senha errada."), TEXT("Você foi expulso dessa sala."), TEXT(""), TEXT("Zeny insuficiente."), TEXT("Nível muito baixo."), TEXT("Nível muito alto."), TEXT("Classe não permitida.") };
+		if (PacketSize >= 3 && PacketData[2] < 8 && PacketData[2] != 3)
+		{
+			Say(Reasons[PacketData[2]]);
+		}
+		break;
+	}
+	case 0x00db: // <len>.W <id>.L { <papel>.L <nome>.24B }*: voce entrou
+		if (PacketSize >= 8)
+		{
+			bInChatRoom = true;
+			CurrentChatRoomId = *reinterpret_cast<const int32*>(PacketData + 4);
+			ChatRoomMembers.Reset();
+			for (int32 Off = 8; Off + 28 <= PacketSize; Off += 28)
+			{
+				ChatRoomMembers.Add(PartyFixed(PacketData + Off + 4, 24));
+			}
+			ChatRoomOwnerName = ChatRoomMembers.Num() > 0 ? ChatRoomMembers[0] : FString();
+			if (const FRoChatRoom* R = ChatRooms.Find(CurrentChatRoomId)) { CurrentChatRoomTitle = R->Title; }
+			OnChatRoomChanged.Broadcast();
+		}
+		break;
+	case 0x00dc: // <usuarios>.W <nome>.24B: entrou alguem
+		if (PacketSize >= 28)
+		{
+			ChatRoomMembers.AddUnique(PartyFixed(PacketData + 4, 24));
+			OnChatRoomChanged.Broadcast();
+		}
+		break;
+	case 0x00dd: // <usuarios>.W <nome>.24B <flag>.B (0 saiu, 1 expulso)
+		if (PacketSize >= 29)
+		{
+			const FString Who = PartyFixed(PacketData + 4, 24);
+			const bool bSelf = Who.Equals(SelectedCharName, ESearchCase::IgnoreCase);
+			if (bSelf)
+			{
+				bInChatRoom = false;
+				ChatRoomMembers.Reset();
+				Say(PacketData[28] == 1 ? TEXT("Você foi expulso da sala.") : TEXT("Você saiu da sala."));
+			}
+			else
+			{
+				ChatRoomMembers.Remove(Who);
+			}
+			OnChatRoomChanged.Broadcast();
 		}
 		break;
 	default:

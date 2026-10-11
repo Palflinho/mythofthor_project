@@ -75,6 +75,13 @@ private:
 
 	void DrawTargetRing();
 	void DrawMapBanner();
+	void DrawChatRoomTitles();
+	struct FRoomHit { FBox2D Box; int32 Id = 0; int32 Type = 1; };
+	TArray<FRoomHit> RoomHits;
+public:
+	/** Id da sala de chat cujo titulo esta sob a posicao (coordenadas do canvas), ou 0. */
+	int32 ChatRoomAt(const FVector2D& CanvasPos, int32& OutType) const;
+private:
 	FString BannerText;
 	double BannerStart = -100.0;
 	/** Quadrado do tile sob o mouse (cantos verdes) e, mirando skill de area, o anel branco com o nivel da skill. */

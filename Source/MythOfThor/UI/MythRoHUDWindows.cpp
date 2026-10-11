@@ -281,6 +281,7 @@ void UMythRoHUDWidget::ToggleWindow(EMythRoWindow Window)
 	case EMythRoWindow::Emotions: Target = EmotionWindow; break;
 	case EMythRoWindow::Macros:  Target = MacroWindow; break;
 	case EMythRoWindow::Friends: Target = FriendsWindow; break;
+	case EMythRoWindow::ChatRoom: OpenChatRoomWindow(); return;
 	}
 	if (!Target)
 	{
@@ -679,6 +680,10 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 		return true;
 	}
 	if (HandleFriendsClick(ScreenPos))
+	{
+		return true;
+	}
+	if (HandleChatRoomClick(ScreenPos))
 	{
 		return true;
 	}

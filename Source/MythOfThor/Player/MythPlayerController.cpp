@@ -191,6 +191,7 @@ void AMythPlayerController::SetupInputComponent()
 	InputComponent->BindKey(FInputChord(EKeys::L, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyEmotions);
 	InputComponent->BindKey(FInputChord(EKeys::M, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyMacros);
 	InputComponent->BindKey(FInputChord(EKeys::H, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyFriends);
+	InputComponent->BindKey(FInputChord(EKeys::C, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyChatRoom);
 	InputComponent->BindKey(FInputChord(EKeys::Tab, false, true, false, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyMinimap);
 	InputComponent->BindKey(EKeys::Escape, IE_Pressed, this, &AMythPlayerController::OnHotkeyEscape);
 	InputComponent->BindKey(EKeys::Insert, IE_Pressed, this, &AMythPlayerController::OnHotkeySit);
@@ -225,6 +226,24 @@ void AMythPlayerController::OnClickTriggered(const FInputActionValue&)
 
 void AMythPlayerController::MoveToCursor()
 {
+	// Clique no titulo de uma sala de chat sobre a cabeca de alguem: entra nela (pede a senha se for privada)
+	if (const AMythHUD* RoomHud = Cast<AMythHUD>(GetHUD()))
+	{
+		float MX = 0.f, MY = 0.f;
+		int32 RoomType = 1;
+		if (GetMousePosition(MX, MY))
+		{
+			if (const int32 RoomId = RoomHud->ChatRoomAt(FVector2D(MX, MY), RoomType))
+			{
+				if (HudWidget && bForceNextMove)
+				{
+					if (RoomType == 0) { HudWidget->AskChatRoomPassword(RoomId); }
+					else if (URagnarokNetworkSubsystem* RNet = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { RNet->SendEnterChatRoom(RoomId, FString()); }
+				}
+				return;
+			}
+		}
+	}
 	if (const AMythPlayerCharacter* Self = GetMythCharacter(); Self && Self->Sprite && Self->Sprite->GetState() == EMythSpriteState::Dead)
 	{
 		return; // morto: nao anda nem ataca (a janela de morte oferece voltar ao ponto de salvamento)
@@ -558,6 +577,7 @@ void AMythPlayerController::ToggleHudWindow(EMythRoWindow Window)
 }
 
 void AMythPlayerController::OnHotkeyEmotions() { ToggleHudWindow(EMythRoWindow::Emotions); }
+void AMythPlayerController::OnHotkeyChatRoom() { ToggleHudWindow(EMythRoWindow::ChatRoom); }
 void AMythPlayerController::OnHotkeyFriends() { ToggleHudWindow(EMythRoWindow::Friends); }
 void AMythPlayerController::OnHotkeyMacros() { ToggleHudWindow(EMythRoWindow::Macros); }
 void AMythPlayerController::OnHotkeyParty() { ToggleHudWindow(EMythRoWindow::Party); }
@@ -1842,6 +1862,13 @@ void AMythPlayerController::MythTradeLock() { if (URagnarokNetworkSubsystem* N =
 void AMythPlayerController::MythTradeCommit() { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendTradeCommit(); } }
 void AMythPlayerController::MythEntryLogin(const FString& User, const FString& Pass) { if (HudWidget) { HudWidget->EntryFillAndLogin(User, Pass); } }
 void AMythPlayerController::MythEntryAction(int32 Action, const FString& Name) { if (HudWidget) { HudWidget->EntryTestAction(Action, Name); } }
+void AMythPlayerController::MythRoom(int32 Create, const FString& Title)
+{
+	URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>();
+	if (!N) { return; }
+	if (Create) { N->SendCreateChatRoom(Title.Replace(TEXT("+"), TEXT(" ")), 8, true, FString()); return; }
+	for (const TPair<int32, FRoChatRoom>& P : N->GetChatRooms()) { N->SendEnterChatRoom(P.Key, FString()); break; }
+}
 void AMythPlayerController::MythFriendReply(int32 Accept) { if (HudWidget) { HudWidget->AnswerFriendRequest(Accept != 0); } }
 void AMythPlayerController::MythOptions(int32 Tab) { if (HudWidget) { HudWidget->ShowOptionsWindow(Tab); } }
 void AMythPlayerController::MythPartyAnswer(int32 Accept) { if (HudWidget) { HudWidget->AnswerPartyInvite(Accept != 0); } }
