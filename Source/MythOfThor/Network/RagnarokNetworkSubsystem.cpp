@@ -1587,7 +1587,7 @@ void URagnarokNetworkSubsystem::HandleChatMessage(const uint8* PacketData, int32
 		}
 	}
 
-	if (PacketID == RagnarokPackets::HEADER_ZC_NOTIFY_CHAT && !Text.IsEmpty())
+	if (PacketID == RagnarokPackets::HEADER_ZC_NOTIFY_CHAT && !Text.IsEmpty() && Sender != TEXT("System")) // so fala de verdade (nome : texto), nao aviso do servidor
 	{
 		OnSpeech.Broadcast(static_cast<int64>(SavedAccountID), Text); // propria fala: balao sobre o proprio personagem
 	}

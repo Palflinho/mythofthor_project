@@ -431,6 +431,18 @@ void AMythPlayerController::PlayerTick(float DeltaTime)
 	}
 
 	UpdateHeadTurn();
+	// Alt+1..9 e Alt+0: emocoes /e1../e10 (docs/ref/18 4)
+	if (HudWidget && IsAltDown() && !HudWidget->IsChatFocused())
+	{
+		static const FKey Digits[10] = { EKeys::One, EKeys::Two, EKeys::Three, EKeys::Four, EKeys::Five, EKeys::Six, EKeys::Seven, EKeys::Eight, EKeys::Nine, EKeys::Zero };
+		for (int32 i = 0; i < 10; ++i)
+		{
+			if (WasInputKeyJustPressed(Digits[i]))
+			{
+				HudWidget->SubmitChat(FString::Printf(TEXT("/e%d"), i + 1));
+			}
+		}
+	}
 	if (bAutoDoridori)
 	{
 		DoridoriTimer -= DeltaTime;

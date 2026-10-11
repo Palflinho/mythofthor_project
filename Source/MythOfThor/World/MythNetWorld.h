@@ -69,6 +69,7 @@ private:
 	UFUNCTION() void HandleStorageChanged(const TArray<FRagnarokInventoryItem>& Items);
 	UFUNCTION() void HandleStorageClose();
 	UFUNCTION() void HandleSpeech(int64 UnitID, const FString& Text);
+	UFUNCTION() void HandleEmotion(int64 UnitID, int32 EmotionType);
 	UFUNCTION() void HandleUnitVanish(int64 ID, uint8 Reason);
 	UFUNCTION() void HandleDamage(int64 SourceID, int64 TargetID, int32 Damage, uint8 DamageType, int32 DelayMs);
 	/** Numero de dano, sons e reacao do alvo (adiado ate a flecha chegar no caso do arco). */

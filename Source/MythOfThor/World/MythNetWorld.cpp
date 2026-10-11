@@ -8,6 +8,7 @@
 #include "Sprites/MythRoSpriteComponent.h"
 #include "Sprites/MythSkillEffects.h"
 #include "Sprites/MythAura99.h"
+#include "Sprites/MythEmotion.h"
 #include "World/MythGroundItem.h"
 #include "World/MythCellMoverComponent.h"
 #include "Sprites/MythRoSound.h"
@@ -207,6 +208,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnStorageChanged.AddDynamic(this, &AMythNetWorld::HandleStorageChanged);
 	Net->OnStorageClose.AddDynamic(this, &AMythNetWorld::HandleStorageClose);
 	Net->OnSpeech.AddDynamic(this, &AMythNetWorld::HandleSpeech);
+	Net->OnEmotion.AddDynamic(this, &AMythNetWorld::HandleEmotion);
 	Net->OnUnitVanish.AddDynamic(this, &AMythNetWorld::HandleUnitVanish);
 	Net->OnDamage.AddDynamic(this, &AMythNetWorld::HandleDamage);
 	Net->OnChatMessage.AddDynamic(this, &AMythNetWorld::HandleChat);
@@ -269,6 +271,7 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnStorageChanged.RemoveAll(this);
 		Net->OnStorageClose.RemoveAll(this);
 		Net->OnSpeech.RemoveAll(this);
+		Net->OnEmotion.RemoveAll(this);
 		Net->OnUnitVanish.RemoveAll(this);
 		Net->OnDamage.RemoveAll(this);
 		Net->OnChatMessage.RemoveAll(this);
@@ -680,6 +683,12 @@ void AMythNetWorld::HandleUnitOption(int64 ID, int32 Option)
 		S->CartType = Cart;
 		S->ReloadSprites();
 	}
+}
+
+void AMythNetWorld::HandleEmotion(int64 UnitID, int32 EmotionType)
+{
+	// ZC_EMOTION: a acao <tipo> do emotion.act sobre a cabeca (2,5 s)
+	AMythEmotion::Show(ResolveActor(UnitID), EmotionType);
 }
 
 void AMythNetWorld::HandleSpeech(int64 UnitID, const FString& Text)

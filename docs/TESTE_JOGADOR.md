@@ -29,7 +29,7 @@ NOVO nesta versao
 - Chat: Enter e digite. Fala publica agora mostra balao sobre a cabeca (4,5 s). Cima/Baixo repete mensagens antigas.
   Comandos: /w Nome mensagem (cochicho), /r (responder), %mensagem (grupo), /sit, /where, /doridori (liga e desliga),
   /bangbang e /bingbing (girar 45 graus), /noctrl (ataque continuo), /aura e /aura2, /sound, /bgm, /e1 a /e64 (emocoes;
-  o desenho da emocao ainda nao existe).
+  Alt+1 a Alt+0 tambem fazem emocoes (precisa da skill Habilidades Basicas nivel 2 no servidor). Teste com @allskill).
 - Armazem: @storage abre o armazem (ou fale com uma Kafra e escolha o armazem). Esquerda: o que esta guardado;
   direita: sua mochila. Clique num item para mover 1 (Shift: 10). Fechar ou Esc fecha. O peso muda ao mover.
 - Jogar item no chao: arraste um item da mochila (Alt+E) e solte fora das janelas. Joga 1; com Shift, a pilha toda.
