@@ -21,7 +21,7 @@ namespace
 {
 	const FLinearColor RoWinText(0.08f, 0.10f, 0.18f);
 	const FLinearColor RoWinLabel(0.12f, 0.27f, 0.55f);
-	const FLinearColor RoWinBody(0.965f, 0.965f, 0.975f, 0.96f);
+	const FLinearColor RoWinBody(0.965f, 0.965f, 0.98f, 0.93f);
 	const FLinearColor RoWinFaint(0.45f, 0.48f, 0.55f);
 
 	FString RoWinArt(const TCHAR* Name) { return FString::Printf(TEXT("basic_interface/%s.bmp"), Name); }
@@ -97,7 +97,7 @@ UCanvasPanel* UMythRoHUDWidget::MakeRoPanel(const FString& Title, const FVector2
 {
 	UCanvasPanel* Win = MakeWindow(FVector2D(0.5f, 0.5f), FVector2D(0.5f, 0.5f), Offset, Size);
 	// Fundo "Visible": o clique na janela chega ao HUD e nao atravessa para o jogo (nao anda nem ataca)
-	AddColor(Win, RoWinBody, 0.f, 17.f, Size.X, Size.Y - 17.f)->SetVisibility(ESlateVisibility::Visible);
+	AddRounded(Win, RoWinBody, FLinearColor(0.55f, 0.58f, 0.66f, 0.9f), 0.f, 17.f, Size.X, Size.Y - 17.f, 0.f, 7.f)->SetVisibility(ESlateVisibility::Visible);
 	AddTitleBar(Win, Size.X, Title);
 	MakeDraggable(Win, Size.X, 17.f);
 	// Botao de fechar (sys_close) por cima da alca de arrastar; o clique e testado antes do arrasto

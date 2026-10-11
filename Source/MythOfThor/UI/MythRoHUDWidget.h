@@ -214,6 +214,8 @@ protected:
 	UCanvasPanel* MakeWindow(const FVector2D& Anchor, const FVector2D& Alignment, const FVector2D& Offset, const FVector2D& Size);
 	UImage* AddImage(UCanvasPanel* Parent, UTexture2D* Tex, float X, float Y, float W = -1.f, float H = -1.f);
 	UImage* AddColor(UCanvasPanel* Parent, const FLinearColor& Color, float X, float Y, float W, float H);
+	/** Retangulo de cantos arredondados (RoundedBox do Slate) com borda fina: corpo de janela translucido como nos prints do LATAM. */
+	UImage* AddRounded(UCanvasPanel* Parent, const FLinearColor& Fill, const FLinearColor& Border, float X, float Y, float W, float H, float RadiusTop, float RadiusBottom);
 	UTextBlock* AddText(UCanvasPanel* Parent, float X, float Y, int32 Size, const FLinearColor& Color, bool bShadow = false);
 	void AddTitleBar(UCanvasPanel* Parent, float Width, const FString& Title, UTextBlock** OutText = nullptr);
 	FMythRoGauge MakeGauge(UCanvasPanel* Parent, const TCHAR* Color, float X, float Y, float W, bool bBackground = true);

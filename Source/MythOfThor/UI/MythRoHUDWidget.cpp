@@ -26,7 +26,7 @@ namespace
 	const FLinearColor ColText(0.08f, 0.10f, 0.18f);        // texto escuro das janelas claras
 	const FLinearColor ColLabel(0.12f, 0.27f, 0.55f);       // rotulos azulados
 	const FLinearColor ColTitle(1.f, 1.f, 1.f);
-	const FLinearColor ColWindow(0.965f, 0.965f, 0.975f, 0.94f);
+	const FLinearColor ColWindow(0.965f, 0.965f, 0.98f, 0.9f);
 	const FLinearColor ColWindowEdge(0.62f, 0.64f, 0.70f, 0.95f);
 	const FLinearColor ColChatBack(0.f, 0.f, 0.f, 0.38f);
 	const FLinearColor ColSystem(0.55f, 0.95f, 0.55f);
@@ -133,6 +133,28 @@ UImage* UMythRoHUDWidget::AddColor(UCanvasPanel* Parent, const FLinearColor& Col
 	UImage* Img = WidgetTree->ConstructWidget<UImage>();
 	Img->SetVisibility(ESlateVisibility::HitTestInvisible);
 	Img->SetColorAndOpacity(Color);
+	if (UCanvasPanelSlot* S = Parent->AddChildToCanvas(Img))
+	{
+		S->SetPosition(FVector2D(X, Y) * UIScale);
+		S->SetSize(FVector2D(W, H) * UIScale);
+	}
+	return Img;
+}
+
+UImage* UMythRoHUDWidget::AddRounded(UCanvasPanel* Parent, const FLinearColor& Fill, const FLinearColor& Border, float X, float Y, float W, float H, float RadiusTop, float RadiusBottom)
+{
+	UImage* Img = WidgetTree->ConstructWidget<UImage>();
+	FSlateBrush Brush;
+	Brush.DrawAs = ESlateBrushDrawType::RoundedBox;
+	Brush.TintColor = FSlateColor(FLinearColor::White);
+	Brush.OutlineSettings.RoundingType = ESlateBrushRoundingType::FixedRadius;
+	Brush.OutlineSettings.CornerRadii = FVector4(RadiusTop * UIScale, RadiusTop * UIScale, RadiusBottom * UIScale, RadiusBottom * UIScale);
+	Brush.OutlineSettings.Color = FSlateColor(Border);
+	Brush.OutlineSettings.Width = FMath::Max(1.f, UIScale);
+	Brush.ImageSize = FVector2D(W, H) * UIScale;
+	Img->SetBrush(Brush);
+	Img->SetColorAndOpacity(Fill);
+	Img->SetVisibility(ESlateVisibility::HitTestInvisible);
 	if (UCanvasPanelSlot* S = Parent->AddChildToCanvas(Img))
 	{
 		S->SetPosition(FVector2D(X, Y) * UIScale);
@@ -252,7 +274,7 @@ void UMythRoHUDWidget::BuildBasicInfo()
 	constexpr float W = 232.f;
 	UCanvasPanel* Win = MakeWindow(FVector2D(0.f, 0.f), FVector2D(0.f, 0.f), FVector2D(0.f, 0.f), FVector2D(W, BasicFullH));
 	BasicWindow = Win;
-	BasicBody = AddColor(Win, ColWindow, 0.f, 16.f, W, BasicFullH - 16.f);
+	BasicBody = AddRounded(Win, ColWindow, ColWindowEdge, 0.f, 16.f, W, BasicFullH - 16.f, 0.f, 7.f);
 	BasicBody->SetVisibility(ESlateVisibility::Visible); // o clique na janela nao atravessa para o jogo
 	AddTitleBar(Win, W, TEXT("Informações Básicas"));
 	BasicDetailStart = Win->GetChildrenCount(); // daqui para baixo: detalhes que somem na versao recolhida
@@ -441,7 +463,7 @@ void UMythRoHUDWidget::BuildChat()
 	AddColor(Win, ColWindowEdge, 76.f, 6.f, 74.f, 15.f);
 	AddColor(Win, FLinearColor(0.82f, 0.85f, 0.9f, 1.f), 77.f, 7.f, 72.f, 14.f);
 	AddText(Win, 85.f, 7.f, 8, ColText)->SetText(FText::FromString(TEXT("Batalha")));
-	AddColor(Win, ColChatBack, 0.f, 21.f, W, 98.f);
+	AddRounded(Win, ColChatBack, FLinearColor(1.f, 1.f, 1.f, 0.18f), 0.f, 21.f, W, 98.f, 0.f, 6.f);
 
 	ChatLines = WidgetTree->ConstructWidget<UVerticalBox>();
 	ChatLines->SetVisibility(ESlateVisibility::HitTestInvisible);
@@ -467,8 +489,7 @@ void UMythRoHUDWidget::BuildAutoBattle()
 	// Janela do Auto-Battle (baixo-direita): botao liga/desliga, vigor de 3h e peso
 	const float W = 170.f, H = 17.f + 52.f;
 	UCanvasPanel* Win = MakeWindow(FVector2D(1.f, 1.f), FVector2D(1.f, 1.f), FVector2D(-8.f, -8.f), FVector2D(W, H));
-	AddColor(Win, ColWindowEdge, 0.f, 16.f, W, H - 16.f);
-	AddColor(Win, ColWindow, 1.f, 17.f, W - 2.f, H - 18.f);
+	AddRounded(Win, ColWindow, ColWindowEdge, 0.f, 16.f, W, H - 16.f, 0.f, 7.f);
 	AddTitleBar(Win, W, TEXT("Auto-Battle"));
 
 	AutoButton = WidgetTree->ConstructWidget<UButton>();
