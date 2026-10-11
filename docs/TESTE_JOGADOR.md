@@ -26,6 +26,7 @@ O que ja da para testar (e o que deve acontecer)
 ------------------------------------------------
 
 NOVO nesta versao
+- Jogar item no chao: arraste um item da mochila (Alt+E) e solte fora das janelas. Joga 1; com Shift, a pilha toda.
 - Loja de NPC: va ate o Chef Assistant de Prontera (156,212), clique nele. Abre "Comprar / Vender / Cancelar". Comprar:
   clique num item da vitrine (soma 1; Shift soma 10), clique na cesta para tirar, "Comprar" confirma. O zeny e o peso
   mudam. Dica: @zeny 5000. Vender: o mesmo, com os itens do seu inventario. Esc ou Cancelar fecha.

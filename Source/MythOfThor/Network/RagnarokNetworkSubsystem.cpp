@@ -76,8 +76,8 @@ void URagnarokNetworkSubsystem::SendKeepAlive()
 	FKeepAlive Packet;
 	if (CurrentState == ERagnarokNetworkState::ConnectedMap)
 	{
-		// CZ_REQUEST_TIME (clif_parse_TickSend 0x0363 no PACKETVER 20211103): tick do cliente
-		Packet.PacketID = 0x0363;
+		// CZ_REQUEST_TIME (clif_parse_TickSend, 0x0360 na tabela embaralhada de clif_shuffle.hpp, PACKETVER > 20180307). Atencao: 0x0363 e o DropItem
+		Packet.PacketID = 0x0360;
 		Packet.Value = FPlatformTime::Cycles();
 	}
 	else if (CurrentState == ERagnarokNetworkState::ConnectedChar)
@@ -2622,4 +2622,18 @@ void URagnarokNetworkSubsystem::HandleShopPacket(const uint8* PacketData, int32 
 	default:
 		break;
 	}
+}
+
+bool URagnarokNetworkSubsystem::SendDropItem(int32 Index, int32 Amount)
+{
+	// clif_parse_DropItem 0x0363 (6 bytes, clif_shuffle.hpp): indice no byte 2, quantidade no byte 4
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap || Amount <= 0)
+	{
+		return false;
+	}
+	uint8 Packet[6] = { 0x63, 0x03 };
+	*reinterpret_cast<uint16*>(Packet + 2) = static_cast<uint16>(Index);
+	*reinterpret_cast<uint16*>(Packet + 4) = static_cast<uint16>(Amount);
+	SendData(Packet, sizeof(Packet));
+	return true;
 }

@@ -85,6 +85,7 @@ bool UMythRoHUDWidget::BeginHotDrag(const FVector2D& ScreenPos)
 	DragCount = 0;
 	DragFromHotbar = INDEX_NONE;
 	UTexture2D* Icon = nullptr;
+	DragItemIndex = INDEX_NONE;
 
 	// 1) skill da janela de habilidades
 	if (SkillsWindow && SkillsWindow->IsVisible())
@@ -116,6 +117,7 @@ bool UMythRoHUDWidget::BeginHotDrag(const FVector2D& ScreenPos)
 				{
 					DragID = Item.ItemID;
 					DragCount = Item.Amount;
+					DragItemIndex = Item.bIsEquipped ? INDEX_NONE : Item.Index;
 					Icon = FMythRoClientTables::ItemIcon(DragID);
 					break;
 				}
@@ -187,6 +189,14 @@ bool UMythRoHUDWidget::EndHotDrag(const FVector2D& ScreenPos)
 	{
 		return true;
 	}
+	// Item da mochila largado fora de qualquer janela: joga no chao (1; com Shift a pilha toda)
+	if (!bDragIsSkill && DragFromHotbar == INDEX_NONE && DragItemIndex != INDEX_NONE && HotbarSlotAt(ScreenPos) == INDEX_NONE && !IsOverAnyWindow(ScreenPos))
+	{
+		const bool bShift = GetOwningPlayer() && (GetOwningPlayer()->IsInputKeyDown(EKeys::LeftShift) || GetOwningPlayer()->IsInputKeyDown(EKeys::RightShift));
+		Net->SendDropItem(DragItemIndex, bShift ? DragCount : 1);
+		DragItemIndex = INDEX_NONE;
+		return true;
+	}
 	const int32 HotSlot = HotbarSlotAt(ScreenPos);
 	if (HotSlot != INDEX_NONE)
 	{
@@ -202,4 +212,16 @@ bool UMythRoHUDWidget::EndHotDrag(const FVector2D& ScreenPos)
 	}
 	RefreshHotbar();
 	return true;
+}
+
+bool UMythRoHUDWidget::IsOverAnyWindow(const FVector2D& ScreenPos) const
+{
+	for (const TWeakObjectPtr<UCanvasPanel>& Win : OpenOrder)
+	{
+		if (Win.IsValid() && Win->IsVisible() && IsUnder(Win.Get(), ScreenPos))
+		{
+			return true;
+		}
+	}
+	return (BasicWindow && BasicWindow->IsVisible() && IsUnder(BasicWindow, ScreenPos)) || (MinimapWindow && MinimapWindow->IsVisible() && IsUnder(MinimapWindow, ScreenPos));
 }

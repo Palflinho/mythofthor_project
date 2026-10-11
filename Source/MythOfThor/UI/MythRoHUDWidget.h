@@ -308,6 +308,8 @@ protected:
 	int32 DragID = 0;
 	int32 DragCount = 0;
 	int32 DragFromHotbar = INDEX_NONE;
+	int32 DragItemIndex = INDEX_NONE; // indice do item da mochila arrastado (solta no chao se largar fora das janelas)
+	bool IsOverAnyWindow(const FVector2D& ScreenPos) const;
 	void RefreshHotbar();
 	bool BeginHotDrag(const FVector2D& ScreenPos);
 	void UpdateHotDrag(const FVector2D& ScreenPos);

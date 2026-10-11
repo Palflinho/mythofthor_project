@@ -127,6 +127,10 @@ public:
 	UFUNCTION(Exec)
 	void MythAttackNearest();
 
+	/** Teste: MythDropFirst [quantidade] -> joga no chao o primeiro item nao equipado da mochila (CZ_ITEM_THROW). */
+	UFUNCTION(Exec)
+	void MythDropFirst(int32 Amount = 1);
+
 	/** Teste da loja: MythShop 0 (comprar) ou 1 (vender); MythShopAdd <linha> <quantidade>; MythShopConfirm. */
 	UFUNCTION(Exec)
 	void MythShop(int32 Type);

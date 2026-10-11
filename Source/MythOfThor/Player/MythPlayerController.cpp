@@ -1738,3 +1738,18 @@ void AMythPlayerController::MythFloatCheck()
 void AMythPlayerController::MythShop(int32 Type) { if (HudWidget) { HudWidget->ShopChooseDeal(Type); } }
 void AMythPlayerController::MythShopAdd(int32 Row, int32 Qty) { if (HudWidget) { HudWidget->ShopAddToBasket(Row, Qty); } }
 void AMythPlayerController::MythShopConfirm() { if (HudWidget) { HudWidget->ShopConfirm(); } }
+
+void AMythPlayerController::MythDropFirst(int32 Amount)
+{
+	if (URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr)
+	{
+		for (const FRagnarokInventoryItem& Item : Net->GetInventoryItems())
+		{
+			if (!Item.bIsEquipped)
+			{
+				Net->SendDropItem(Item.Index, FMath::Min(Amount, Item.Amount));
+				return;
+			}
+		}
+	}
+}

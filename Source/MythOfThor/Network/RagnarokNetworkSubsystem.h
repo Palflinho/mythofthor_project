@@ -424,6 +424,9 @@ public:
 	/** CZ_RESTART (0x00b2): 0 = voltar ao ponto de salvamento (reviver), 1 = tela de selecao de personagem. */
 	bool SendRestart(uint8 Type);
 
+	/** CZ_ITEM_THROW / DropItem (0x0363 neste PACKETVER: tabela embaralhada de clif_shuffle.hpp, bloco PACKETVER > 20180307): joga o item do indice no chao. */
+	bool SendDropItem(int32 Index, int32 Amount);
+
 	/** Loja de NPC: escolher comprar (0) ou vender (1) / comprar / vender / fechar. IDs e layouts conferidos no clif.cpp do rAthena. */
 	bool SendShopDealType(int64 NpcID, uint8 Type);
 	bool SendShopBuy(const TArray<TPair<int32, int32>>& ItemIdAmount);
