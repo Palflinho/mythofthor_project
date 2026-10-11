@@ -36,6 +36,14 @@ Ordem do que se vê o tempo todo jogando. Quem: Claude, salvo indicação.
 | 1.13 | Skills com Apply/Reset e "◀ nível ▶", menu Esc com abas (12) | ⬜ |
 | 1.14 | Porings no chão (corrigido no `f4ca760`, falta testar) | 🟡 |
 | 1.15 | **Acabamento visual da HUD** contra os prints do LATAM (`docs/ref/hud_latam`, 10 e 12): texturas reais com transparência em vez de retângulos chapados, cantos arredondados, fundo translúcido nas janelas, hotbar, chat e minimapa; opção de opacidade | Claude | ⬜ pedido do usuário em 2026-10-11 |
+| 1.16 | Janelas do cliente clássico que faltam (doc 12): sala de chat (Alt+C), lista de emoções (Alt+L), lista de atalhos (Alt+M / F12), info básica recolhida, nome do mapa ao entrar, pegadas, quantidade ao lado do item no chão | Claude | ⬜ |
+| 1.17 | Quests (Alt+U) com rastreador na tela, mapa-múndi (Ctrl+`) e `/navi` (docs 08, 12) | Claude | ⬜ |
+| 1.18 | Sobrepeso (50% trava regeneração, 90% trava combate), cores `^RRGGBB` nas descrições (doc 19) | Claude | ⬜ conferir |
+| 1.19 | ❓ Sistemas modernos do LATAM fora do pre-renovação: RODEX, Conquistas, Reputação, Agência de Aventureiros, Banco, troca rápida de equipamento, JCoins | decisão do usuário | ❓ |
+| 1.20 | Sons de interface e o campo `wav` dos efeitos de skill (doc 07) | Claude | ⬜ |
+| 1.21 | Os 33 efeitos FUNC vazios e o terremoto (ID 666) (doc 13) | Claude | ⬜ |
+
+Conferência de cobertura das referências: `docs/COBERTURA_REFERENCIAS.md`.
 
 Já conforme o spec e testado: movimento básico, combate e coleta, câmera, cursores, sons, números de dano, diálogo de NPC,
 portais e interiores de Prontera, sentar com Insert, chat em português, árvore de skills.
