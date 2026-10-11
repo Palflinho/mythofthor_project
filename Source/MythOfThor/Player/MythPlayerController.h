@@ -249,6 +249,9 @@ public:
 	void UseHotkey(int32 Index);
 
 	bool IsTargetingSkill() const { return PendingSkillID != 0; }
+	int32 GetPendingSkillID() const { return PendingSkillID; }
+	int32 GetPendingSkillLevel() const { return PendingSkillLevel; }
+	int32 GetPendingSkillInf() const { return PendingSkillInf; }
 	void CancelSkillTargeting();
 
 	/** Console: MythQuitAfter 40 -> fecha o jogo apos 40 s (usado com -ExecCmds nos testes automaticos). */

@@ -71,6 +71,8 @@ private:
 	TArray<FStatusIcon> StatusIcons;
 
 	void DrawTargetRing();
+	/** Quadrado do tile sob o mouse (cantos verdes) e, mirando skill de area, o anel branco com o nivel da skill. */
+	void DrawCursorTile();
 	/** Barras finas de HP (verde) e SP (azul) logo abaixo dos pes do proprio jogador (docs/ref/12, no mundo). */
 	void DrawSelfBars();
 	/** Nome dos itens no chao, na cor da raridade. */

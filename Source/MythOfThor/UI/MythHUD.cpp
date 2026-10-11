@@ -10,6 +10,8 @@
 #include "UI/MythRoUITextures.h"
 #include "UI/MythRoClientTables.h"
 #include "World/MythGroundItem.h"
+#include "World/MythMapInfo.h"
+#include "UI/MythRoHUDWidget.h"
 #include "EngineUtils.h"
 #include "Camera/PlayerCameraManager.h"
 #include "CanvasItem.h"
@@ -52,6 +54,7 @@ void AMythHUD::AddDamageNumber(const FVector& WorldLocation, int32 Amount, EComb
 void AMythHUD::DrawHUD()
 {
 	Super::DrawHUD();
+	DrawCursorTile();
 	DrawTargetRing();
 	DrawSelfBars();
 	DrawGroundItemLabels();
@@ -196,6 +199,105 @@ void UMythCombatText::ShowDamage(const UObject* WorldContextObject, const FVecto
 void UMythCombatText::ShowMiss(const UObject* WorldContextObject, const FVector& WorldLocation)
 {
 	ShowDamage(WorldContextObject, WorldLocation, 0, ECombatTextType::Miss);
+}
+
+namespace
+{
+	/** Config/skill_area.json (tools/gen_skill_area.py): raio em celulas da area de cada skill de chao. */
+	int32 SkillAreaRadius(int32 SkillID)
+	{
+		static TMap<int32, int32> Table;
+		static bool bLoaded = false;
+		if (!bLoaded)
+		{
+			bLoaded = true;
+			FString Text;
+			TSharedPtr<FJsonObject> Root;
+			if (FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("skill_area.json"))) && FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) && Root.IsValid())
+			{
+				for (const auto& Pair : Root->Values)
+				{
+					Table.Add(FCString::Atoi(*Pair.Key), FMath::Clamp(static_cast<int32>(Pair.Value->AsNumber()), 0, 5)); // limite: o raio de layouts especiais nao e uma area quadrada
+				}
+			}
+		}
+		const int32* R = Table.Find(SkillID);
+		return R ? *R : 0;
+	}
+}
+
+void AMythHUD::DrawCursorTile()
+{
+	AMythPlayerController* PC = Cast<AMythPlayerController>(PlayerOwner);
+	if (!Canvas || !PC)
+	{
+		return;
+	}
+	if (PC->GetHud() && PC->GetHud()->IsPointerOverUi())
+	{
+		return; // o cursor esta numa janela: sem quadrado no chao
+	}
+	FHitResult Hit;
+	if (!PC->GetHitResultUnderCursor(ECC_Visibility, false, Hit) || !Hit.bBlockingHit)
+	{
+		return;
+	}
+	const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld());
+	if (!Info)
+	{
+		return;
+	}
+	const FIntPoint Cell = PC->WorldToCell(Hit.ImpactPoint);
+	const FVector Center = Info->CellToWorld(Cell, 0.f);
+	const float Z = Hit.ImpactPoint.Z + 1.f;
+	constexpr float Half = 25.f; // celula de 50 uu
+	auto Project = [PC, Z](const FVector& P, FVector2D& Out) { return PC->ProjectWorldLocationToScreen(FVector(P.X, P.Y, Z), Out, false); };
+
+	// Quadrado do tile: so os cantos (um terco de cada lado), em verde
+	const FVector Corners[4] = { Center + FVector(-Half, -Half, 0.f), Center + FVector(Half, -Half, 0.f), Center + FVector(Half, Half, 0.f), Center + FVector(-Half, Half, 0.f) };
+	const FLinearColor Green(0.25f, 0.95f, 0.35f, 0.95f);
+	for (int32 i = 0; i < 4; ++i)
+	{
+		FVector2D A, B, C;
+		if (Project(Corners[i], A) && Project(Corners[(i + 1) % 4], B) && Project(Corners[(i + 3) % 4], C))
+		{
+			DrawLine(A.X, A.Y, A.X + (B.X - A.X) * 0.33f, A.Y + (B.Y - A.Y) * 0.33f, Green, 2.f);
+			DrawLine(A.X, A.Y, A.X + (C.X - A.X) * 0.33f, A.Y + (C.Y - A.Y) * 0.33f, Green, 2.f);
+		}
+	}
+
+	// Mirando skill de area: anel branco cobrindo a area e o nivel da skill ao lado (imagem 24 do doc 12)
+	if (PC->IsTargetingSkill() && (PC->GetPendingSkillInf() & 0x02))
+	{
+		const float Radius = (SkillAreaRadius(PC->GetPendingSkillID()) + 0.5f) * 50.f;
+		constexpr int32 Segments = 40;
+		FVector2D Prev, Right(0.f, 0.f);
+		bool bHavePrev = false;
+		for (int32 i = 0; i <= Segments; ++i)
+		{
+			const float A = (2.f * PI * i) / Segments;
+			FVector2D S;
+			if (!Project(Center + FVector(FMath::Cos(A), FMath::Sin(A), 0.f) * Radius, S))
+			{
+				bHavePrev = false;
+				continue;
+			}
+			if (bHavePrev)
+			{
+				DrawLine(Prev.X, Prev.Y, S.X, S.Y, FLinearColor(1.f, 1.f, 1.f, 0.95f), 2.f);
+			}
+			if (S.X > Right.X) { Right = S; }
+			Prev = S;
+			bHavePrev = true;
+		}
+		if (UFont* Font = GEngine ? GEngine->GetLargeFont() : nullptr; Font && Right.X > 0.f)
+		{
+			FFontRenderInfo Info2;
+			Info2.bEnableShadow = true;
+			Canvas->SetDrawColor(FColor(255, 240, 80));
+			Canvas->DrawText(Font, FString::FromInt(PC->GetPendingSkillLevel()), Right.X + 6.f, Right.Y - 10.f, 1.2f, 1.2f, Info2);
+		}
+	}
 }
 
 void AMythHUD::DrawTargetRing()
