@@ -483,6 +483,8 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardName;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo2;
+	UPROPERTY() TObjectPtr<UTextBlock> EntryInfoTitle;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryInfoValues;
 
 	// Correio (MythRoMail.cpp)
 public:

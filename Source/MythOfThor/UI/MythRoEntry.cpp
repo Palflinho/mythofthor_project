@@ -24,8 +24,9 @@ namespace
 	const FLinearColor EnError(0.75f, 0.1f, 0.1f);
 	const FLinearColor EnGold(0.96f, 0.82f, 0.45f);
 	constexpr int32 EnCardCols = 3;
-	constexpr float EnCardW = 214.f;
-	constexpr float EnCardH = 74.f;
+	constexpr float EnCardW = 126.f; // cartao img_slot (161 x 197) a 78%
+	constexpr float EnCardH = 155.f;
+	constexpr float EnInfoW = 170.f;
 	const TCHAR* EntrySection = TEXT("Myth.Entry");
 
 	FString EnJobName(int32 Job) { return URagnarokNetworkSubsystem::GetJobNameFromClass(Job); }
@@ -106,45 +107,51 @@ void UMythRoHUDWidget::BuildEntryScreens()
 		}
 		EntryStatus = AddText(EntryLoginPanel, 18.f, 108.f, 8, EnGray);
 		AddText(EntryLoginPanel, 18.f, 122.f, 7, EnGray)->SetText(FText::FromString(TEXT("Conta nova: usuário terminando em _M ou _F (se o servidor permitir).")));
-		EntryLoginLink = AddText(EntryLoginPanel, 60.f, 148.f, 11, EnLink);
+		EntryLoginLink = AddButtonHit(EntryLoginPanel, TEXT("connect"), 60.f, 144.f);
 		EntryLoginLink->SetText(FText::FromString(TEXT("Entrar")));
-		EntryQuitLink = AddText(EntryLoginPanel, 210.f, 148.f, 11, EnLink);
+		EntryQuitLink = AddButtonHit(EntryLoginPanel, TEXT("exit"), 210.f, 144.f);
 		EntryQuitLink->SetText(FText::FromString(TEXT("Sair")));
 	}
 
-	// ---- Escolha de personagem
+	// ---- Escolha de personagem (print 02): cartoes img_slot_* do cliente em grade e o painel de dados do personagem a direita
 	{
-		const float W = 10.f + EnCardCols * (EnCardW + 6.f) + 4.f;
-		const float H = 17.f + 28.f + 3 * (EnCardH + 6.f) + 70.f;
+		const float GridW = EnCardCols * (EnCardW + 6.f);
+		const float W = GridW + 12.f + EnInfoW;
+		const float H = 3 * (EnCardH + 6.f) + 8.f;
 		const FVector2D Size(W, H);
 		EntryCharPanel = WidgetTree->ConstructWidget<UCanvasPanel>();
 		EntryCharPanel->SetVisibility(ESlateVisibility::Collapsed);
 		if (UCanvasPanelSlot* S = EntryBackdrop->AddChildToCanvas(EntryCharPanel))
 		{
-			S->SetAnchors(FAnchors(0.5f, 0.52f));
+			S->SetAnchors(FAnchors(0.5f, 0.5f));
 			S->SetAlignment(FVector2D(0.5f, 0.5f));
 			S->SetSize(Size * UIScale);
 		}
-		AddRounded(EntryCharPanel, FLinearColor(0.965f, 0.965f, 0.98f, 1.f), FLinearColor::Transparent, 0.f, 9.f, Size.X, Size.Y - 9.f, 0.f, 7.f)->SetVisibility(ESlateVisibility::Visible);
-		AddTitleBar(EntryCharPanel, Size.X, TEXT("Escolha seu personagem"));
 		for (int32 i = 0; i < EntryCardCount; ++i)
 		{
-			const float X = 10.f + (i % EnCardCols) * (EnCardW + 6.f);
-			const float Y = 24.f + (i / EnCardCols) * (EnCardH + 6.f);
-			UImage* Back = AddRounded(EntryCharPanel, FLinearColor(0.82f, 0.85f, 0.93f, 1.f), FLinearColor::Transparent, X, Y, EnCardW, EnCardH, 6.f, 6.f);
+			const float X = (i % EnCardCols) * (EnCardW + 6.f);
+			const float Y = (i / EnCardCols) * (EnCardH + 6.f);
+			UImage* Back = AddImage(EntryCharPanel, FMythRoUITextures::Get(TEXT("select_character_ver3/img_slot_normal.bmp")), X, Y, EnCardW, EnCardH);
 			Back->SetVisibility(ESlateVisibility::Visible);
 			EntryCardBack.Add(Back);
-			EntryCardName.Add(AddText(EntryCharPanel, X + 10.f, Y + 8.f, 10, EnText));
-			EntryCardInfo.Add(AddText(EntryCharPanel, X + 10.f, Y + 30.f, 8, EnText));
-			EntryCardInfo2.Add(AddText(EntryCharPanel, X + 10.f, Y + 46.f, 7, EnGray));
+			EntryCardName.Add(AddText(EntryCharPanel, X + 8.f, Y + EnCardH - 24.f, 8, EnText, false));
+			EntryCardInfo.Add(AddText(EntryCharPanel, X + 10.f, Y + 40.f, 8, EnText));
+			EntryCardInfo2.Add(AddText(EntryCharPanel, X + 10.f, Y + 56.f, 7, EnGray));
 		}
-		EntryPlayLink = AddText(EntryCharPanel, 40.f, H - 38.f, 11, EnLink);
-		EntryPlayLink->SetText(FText::FromString(TEXT("Jogar")));
-		EntryCreateLink = AddText(EntryCharPanel, 160.f, H - 38.f, 11, EnLink);
-		EntryCreateLink->SetText(FText::FromString(TEXT("Criar personagem")));
-		EntryBackLink = AddText(EntryCharPanel, W - 120.f, H - 38.f, 11, EnLink);
-		EntryBackLink->SetText(FText::FromString(TEXT("Voltar")));
-		EntryCharStatus = AddText(EntryCharPanel, 12.f, H - 62.f, 8, EnGray);
+		// Painel de dados do personagem escolhido
+		const float IX = GridW + 12.f;
+		AddRounded(EntryCharPanel, FLinearColor(0.96f, 0.97f, 1.f, 0.96f), FLinearColor::Transparent, IX, 0.f, EnInfoW, 280.f, 6.f, 6.f);
+		EntryInfoTitle = AddText(EntryCharPanel, IX + 10.f, 10.f, 11, EnLink);
+		for (int32 r = 0; r < 6; ++r)
+		{
+			static const TCHAR* Names[6] = { TEXT("Classe"), TEXT("Nível base"), TEXT("Nível de classe"), TEXT("PV"), TEXT("PS"), TEXT("") };
+			AddText(EntryCharPanel, IX + 10.f, 40.f + r * 22.f, 8, EnGray)->SetText(FText::FromString(Names[r]));
+			EntryInfoValues.Add(AddText(EntryCharPanel, IX + 90.f, 40.f + r * 22.f, 8, EnText));
+		}
+		EntryCharStatus = AddText(EntryCharPanel, IX + 10.f, 190.f, 7, EnGray);
+		EntryPlayLink = AddButtonHit(EntryCharPanel, TEXT("connect"), IX + 20.f, 236.f);
+		EntryCreateLink = AddButtonHit(EntryCharPanel, TEXT("make"), IX + 70.f, 236.f);
+		EntryBackLink = AddButtonHit(EntryCharPanel, TEXT("exit"), IX + 120.f, 236.f);
 	}
 
 	// ---- Criacao de personagem
@@ -182,9 +189,9 @@ void UMythRoHUDWidget::BuildEntryScreens()
 		EntryColorRight->SetText(FText::FromString(TEXT("▶")));
 		AddText(EntryCreatePanel, 18.f, 130.f, 8, EnGray)->SetText(FText::FromString(TEXT("Todo personagem começa como Aprendiz.")));
 		EntryCreateStatus = AddText(EntryCreatePanel, 18.f, 148.f, 8, EnError);
-		EntryDoCreateLink = AddText(EntryCreatePanel, 60.f, 172.f, 11, EnLink);
+		EntryDoCreateLink = AddButtonHit(EntryCreatePanel, TEXT("make"), 60.f, 168.f);
 		EntryDoCreateLink->SetText(FText::FromString(TEXT("Criar")));
-		EntryCancelCreateLink = AddText(EntryCreatePanel, 210.f, 172.f, 11, EnLink);
+		EntryCancelCreateLink = AddButtonHit(EntryCreatePanel, TEXT("cancel"), 210.f, 168.f);
 		EntryCancelCreateLink->SetText(FText::FromString(TEXT("Cancelar")));
 	}
 }
@@ -316,18 +323,34 @@ const FRagnarokCharacterSlotInfo* UMythRoHUDWidget::EntrySlotChar(int32 SlotInde
 
 void UMythRoHUDWidget::RefreshEntryCharacters()
 {
+	UTexture2D* Normal = FMythRoUITextures::Get(TEXT("select_character_ver3/img_slot_normal.bmp"));
+	UTexture2D* Selected = FMythRoUITextures::Get(TEXT("select_character_ver3/img_slot_select.bmp"));
 	for (int32 i = 0; i < EntryCardCount; ++i)
 	{
 		const FRagnarokCharacterSlotInfo* C = EntrySlotChar(i);
-		EntryCardBack[i]->SetColorAndOpacity(i == EntrySelected ? FLinearColor(1.f, 0.95f, 0.7f, 1.f) : (C ? FLinearColor(0.82f, 0.88f, 1.f, 1.f) : FLinearColor(0.88f, 0.9f, 0.95f, 1.f)));
-		EntryCardName[i]->SetText(FText::FromString(C ? C->Name : FString(TEXT("+  Vazio"))));
+		if (UTexture2D* Tex = i == EntrySelected && C ? Selected : Normal)
+		{
+			{ FSlateBrush B; B.SetResourceObject(Tex); B.ImageSize = FVector2D(EnCardW, EnCardH) * UIScale; B.DrawAs = ESlateBrushDrawType::Image; EntryCardBack[i]->SetBrush(B); }
+		}
+		EntryCardName[i]->SetText(FText::FromString(C ? C->Name : FString(TEXT("+"))));
 		EntryCardName[i]->SetColorAndOpacity(FSlateColor(C ? EnText : EnGray));
-		EntryCardInfo[i]->SetText(C ? FText::FromString(FString::Printf(TEXT("%s  Nv %d / %d"), *EnJobName(C->JobClass), C->BaseLevel, C->JobLevel)) : FText::GetEmpty());
-		EntryCardInfo2[i]->SetText(C ? FText::FromString(FString::Printf(TEXT("PV %lld   SP %lld"), C->MaxHP, C->MaxSP)) : FText::FromString(TEXT("Clique para criar")));
+		EntryCardInfo[i]->SetText(C ? FText::FromString(FString::Printf(TEXT("%s"), *EnJobName(C->JobClass))) : FText::GetEmpty());
+		EntryCardInfo2[i]->SetText(C ? FText::FromString(FString::Printf(TEXT("Nv %d / %d"), C->BaseLevel, C->JobLevel)) : FText::GetEmpty());
 	}
 	const FRagnarokCharacterSlotInfo* Sel = EntrySlotChar(EntrySelected);
-	EntryPlayLink->SetColorAndOpacity(FSlateColor(Sel ? EnLink : EnGray));
-	EntryCharStatus->SetText(FText::FromString(Sel ? FString::Printf(TEXT("Selecionado: %s"), *Sel->Name) : FString(TEXT("Escolha um personagem, ou um espaço vazio para criar."))));
+	EntryInfoTitle->SetText(FText::FromString(Sel ? Sel->Name : FString(TEXT("Escolha"))));
+	const FString Values[6] = {
+		Sel ? EnJobName(Sel->JobClass) : FString(),
+		Sel ? FString::Printf(TEXT("%d"), Sel->BaseLevel) : FString(),
+		Sel ? FString::Printf(TEXT("%d"), Sel->JobLevel) : FString(),
+		Sel ? FString::Printf(TEXT("%lld"), Sel->MaxHP) : FString(),
+		Sel ? FString::Printf(TEXT("%lld"), Sel->MaxSP) : FString(),
+		FString() };
+	for (int32 r = 0; r < EntryInfoValues.Num() && r < 6; ++r)
+	{
+		EntryInfoValues[r]->SetText(FText::FromString(Values[r]));
+	}
+	EntryCharStatus->SetText(FText::FromString(Sel ? FString() : FString(TEXT("Escolha um personagem, ou um espaço com + para criar."))));
 }
 
 void UMythRoHUDWidget::ShowEntryCreate(int32 SlotIndex)
