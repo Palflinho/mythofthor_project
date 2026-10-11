@@ -68,3 +68,5 @@ mais o personagem; usar skill interrompe a perseguicao do ataque comum; /resetch
 sem pontos nem skills, para testar progressao e troca de classe.
 
 NOVO (rodada 2b): unidades de skill no chao agora aparecem (Muralha de Fogo, Muralha de Seguranca, Pneuma, Santuario, Magnus, Muralha de Gelo, Pantano, Vulcao/Dilúvio/Ventania, Protetor de Terra, Portal, Pilar de Fogo...). Armadilhas e cancoes do bardo ainda sem desenho (os arquivos nao estao no GRF). Lista do que falta: docs/EFEITOS_PENDENTES.md.
+
+NOVO (rodada 3): efeitos de skill - o mapa de skills para efeitos foi completado com o do roBrowser (mais de 500 skills ganharam efeito ou som). Estados do corpo tingem o sprite: veneno (rosado), maldicao (vermelho escuro), gelo (azul), pedra (escuro), Aceleracao (amarelo), Berserk (avermelhado), Energy Coat/Kaite/Soul Link (azulado), esconder/camuflar (some para os outros; voce se ve escurecido). Teste: @option 0 1 0 (veneno), @option 2 2 0 (gelo e maldicao), @option 0 0 0 (limpa).
