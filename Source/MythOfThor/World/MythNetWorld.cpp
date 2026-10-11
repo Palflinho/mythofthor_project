@@ -248,7 +248,9 @@ void AMythNetWorld::BeginPlay()
 	}
 	if (FParse::Param(FCommandLine::Get(), TEXT("MythOnline")))
 	{
-		Login();
+		// Espera o motor terminar de iniciar (o primeiro carregamento do build de teste trava ~50 s e derrubava o login)
+		FTimerHandle LoginTimer;
+		GetWorldTimerManager().SetTimer(LoginTimer, [this]() { Login(); }, 4.f, false);
 	}
 }
 
