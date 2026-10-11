@@ -30,19 +30,19 @@ Ordem do que se vê o tempo todo jogando. Quem: Claude, salvo indicação.
 | 1.7 | Barra de cast, ícones de buff e debuff (05) | 🟡 existem; conferir com a R2.8 |
 | 1.8 | Câmera: memória entre mapas feita; falta o clamp do terreno (precisa só da altura do GND, não dos prédios) e o `viewpointtable` (02) | 🟡 |
 | 1.9 | Movimento: tempo do servidor (`FixPathTime`), bloqueio de clique ao carregar mapa (01) | ⬜ |
-| 1.10 | Mira de skill em área (04) + cursor da imagem 24: anel branco no chão, ▼ e o nível da skill ao lado | ⬜ |
+| 1.10 | Mira de skill em área (04) + cursor da imagem 24: anel branco no chão, ▼ e o nível da skill ao lado | 🟡 feito (anel, ▼ e nível); falta teste do usuário |
 | 1.11 | Inventário, equipamento e status completos (06, 12): descarte, arrastar ao atalho, "Base + Bônus", slots | 🟡 |
 | 1.12 | Barras de HP/SP sob o personagem (12) | 🟡 feito, falta teste |
 | 1.13 | Skills com Apply/Reset e "◀ nível ▶", menu Esc com abas (12) | ⬜ |
 | 1.14 | Porings no chão (corrigido no `f4ca760`, falta testar) | 🟡 |
 | 1.15 | **Acabamento visual da HUD** contra os prints do LATAM (`docs/ref/hud_latam`, 10 e 12): texturas reais com transparência em vez de retângulos chapados, cantos arredondados, fundo translúcido nas janelas, hotbar, chat e minimapa; opção de opacidade | Claude | ⬜ pedido do usuário em 2026-10-11 |
-| 1.16 | Janelas do cliente clássico que faltam (doc 12): sala de chat (Alt+C), lista de emoções (Alt+L), lista de atalhos (Alt+M / F12), info básica recolhida, nome do mapa ao entrar, **quadrado do tile sob o mouse** (cantos verdes, imagem 23), pegadas de outros jogadores (chave da aba Effect) | Claude | 🟨 sala de chat feita; falta lista de atalhos F12 e pegadas |
+| 1.16 | Janelas do cliente clássico que faltam (doc 12): sala de chat (Alt+C), lista de emoções (Alt+L), lista de atalhos (Alt+M / F12), info básica recolhida, nome do mapa ao entrar, **quadrado do tile sob o mouse** (cantos verdes, imagem 23), pegadas de outros jogadores (chave da aba Effect) | Claude | 🟡 sala de chat, F12 e lista de emoções feitas; faltam pegadas |
 | 1.17 | Quests (Alt+U) com rastreador na tela, mapa-múndi (Ctrl+`) e `/navi` (docs 08, 12) | Claude | 🟨 quests + rastreador feitos; faltam mapa-múndi e /navi |
-| 1.18 | Sobrepeso (50% trava regeneração, 90% trava combate), cores `^RRGGBB` nas descrições (doc 19) | Claude | ⬜ conferir |
+| 1.18 | Sobrepeso (50% trava regeneração, 90% trava combate), cores `^RRGGBB` nas descrições (doc 19) | Claude | 🟡 cores nas descrições existem; peso vermelho a 50% feito; efeitos são do servidor |
 | 1.19 | Sistemas modernos do LATAM, **todos entram, adaptados depois ao pre-renovação** (decisão do usuário 2026-10-11): RODEX, Conquistas, Reputação, Agência de Aventureiros, Banco, `/navi`, troca rápida de equipamento. **JCoins fica de fora** (não haverá RO Premium/ROPs) | Claude | ⬜ |
-| 1.20 | Sons de interface e o campo `wav` dos efeitos de skill (doc 07) | Claude | ⬜ |
+| 1.20 | Sons de interface e o campo `wav` dos efeitos de skill (doc 07) | Claude | 🟡 sons de pegar item e equipar; botões e janelas sem arquivo no cliente local |
 | 1.21 | Os 33 efeitos FUNC vazios e o terremoto (ID 666) (doc 13) | Claude | ⬜ |
-| 1.22 | Menu Esc com os 5 botões (Seleção de personagem, Game settings, Set hotkeys, Sair, Voltar) e a janela **Game settings** com 5 abas (Default, Effect, Control, Graphics, Other com ON/OFF e "apply"), como em `hud_latam/INDICE.md` | Claude | ⬜ |
+| 1.22 | Menu Esc com os 5 botões (Seleção de personagem, Game settings, Set hotkeys, Sair, Voltar) e a janela **Game settings** com 5 abas (Default, Effect, Control, Graphics, Other com ON/OFF e "apply"), como em `hud_latam/INDICE.md` | Claude | 🟡 menu Esc com 5 itens (Seleção de personagem, Configurações, Atalhos, Sair, Voltar); falta unir Gráficos/Som/Efeito em abas únicas |
 
 Conferência de cobertura das referências: `docs/COBERTURA_REFERENCIAS.md`.
 
