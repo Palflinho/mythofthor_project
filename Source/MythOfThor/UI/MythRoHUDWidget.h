@@ -595,10 +595,22 @@ protected:
 	TArray<FRoButton> RoButtons;
 	UPROPERTY() TObjectPtr<UCanvasPanel> QuestWindow;
 	UPROPERTY() TObjectPtr<UTextBlock> QuestHeader;
+	UPROPERTY() TObjectPtr<UImage> QuestBack;
+	UPROPERTY() TArray<TObjectPtr<UImage>> QuestCards;
+	UPROPERTY() TArray<TObjectPtr<UImage>> QuestIcons;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> QuestTitles;
-	UPROPERTY() TArray<TObjectPtr<UTextBlock>> QuestEyes;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> QuestObjectives;
+	UPROPERTY() TArray<TObjectPtr<UImage>> QuestChecks;
+	UPROPERTY() TArray<TObjectPtr<UImage>> QuestEyes;
+	UPROPERTY() TObjectPtr<UTextBlock> QuestEmpty;
+	UPROPERTY() TObjectPtr<UImage> QuestViewBox;
+	UPROPERTY() TObjectPtr<UTextBlock> QuestClose;
+	UPROPERTY() TObjectPtr<UCanvasPanel> QuestDetailWindow;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> QuestDetail;
-	int32 QuestSelected = -1;
+	int32 QuestTab = 0;
+	int32 QuestScroll = 0;
+	int32 QuestSelectedId = 0;
+	bool HandleQuestWheel(const FVector2D& ScreenPos, float Delta);
 
 	// Sala de chat (MythRoChatRoom.cpp)
 public:

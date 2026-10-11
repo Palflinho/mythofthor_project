@@ -443,6 +443,10 @@ void AMythHUD::DrawQuestTracker()
 {
 	const URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr;
 	UFont* Font = GEngine ? GEngine->GetSmallFont() : nullptr;
+	if (!MythQuests::TrackerVisible())
+	{
+		return;
+	}
 	if (!Canvas || !Net || !Font)
 	{
 		return;
