@@ -98,6 +98,8 @@ public:
 	/** View id da arma (LOOK_WEAPON) e do escudo (LOOK_SHIELD); 0 = nada. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite|Equip")
 	int32 Weapon = 0;
+	/** Tipo de arma que o corpo usa no ataque (o da direita, ou o combinado de duas armas); calculado ao carregar. */
+	int32 EffectiveWeaponType = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite|Equip")
 	int32 Shield = 0;
@@ -239,6 +241,10 @@ public:
 	 * (ate 30) ou o ID do item (o proprio personagem recebe o ID; Config/weapon_types.json, tools/gen_weapon_types.py).
 	 */
 	static int32 WeaponTypeOf(int32 Weapon);
+	/** Tipo da arma da mao esquerda (duas armas), ou 0 se o que veio e um escudo. */
+	static int32 LeftWeaponTypeOf(int32 ShieldValue);
+	/** View do escudo (1 guarda, 2 broquel...) a partir do view ou do ID do item. */
+	static int32 ShieldViewOf(int32 ShieldValue);
 	/** Falcao do dono (OPTION_FALCON), se houver: o Ataque Aereo manda ele voar ate o alvo. */
 	class AMythFalcon* GetFalcon() const { return Falcon.Get(); }
 

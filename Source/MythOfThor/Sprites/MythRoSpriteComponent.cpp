@@ -351,6 +351,55 @@ void UMythRoSpriteComponent::PlayFrameEvent(const FRoActFrame& Frame, int32 Acti
 }
 
 
+namespace
+{
+	/** Config/weapon_types.json (tools/gen_weapon_types.py): ID do item -> tipo de arma / view do escudo. */
+	struct FItemVisuals
+	{
+		TMap<int32, int32> Weapons;
+		TMap<int32, int32> Shields;
+	};
+
+	const FItemVisuals& ItemVisuals()
+	{
+		static const FItemVisuals V = []
+		{
+			FItemVisuals Out;
+			FString Text;
+			TSharedPtr<FJsonObject> Root;
+			if (!FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("weapon_types.json")))
+				|| !FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) || !Root.IsValid())
+			{
+				UE_LOG(LogTemp, Warning, TEXT("MythRoSprite: Config/weapon_types.json ausente (tools/gen_weapon_types.py)"));
+				return Out;
+			}
+			auto Read = [&Root](const TCHAR* Field, TMap<int32, int32>& Map)
+			{
+				const TSharedPtr<FJsonObject>* Obj = nullptr;
+				if (Root->TryGetObjectField(Field, Obj))
+				{
+					for (const auto& P : (*Obj)->Values) { Map.Add(FCString::Atoi(*P.Key), static_cast<int32>(P.Value->AsNumber())); }
+				}
+			};
+			Read(TEXT("weapons"), Out.Weapons);
+			Read(TEXT("shields"), Out.Shields);
+			return Out;
+		}();
+		return V;
+	}
+
+	/** Duas armas (Mercenario/Algoz): o cliente desenha um sprite so com as duas (WeaponType SHORTSWORD_SHORTSWORD = 25...). */
+	int32 DualWeaponType(int32 Right, int32 Left)
+	{
+		static const TMap<TPair<int32, int32>, int32> Pairs = {
+			{ {1, 1}, 25 }, { {2, 2}, 26 }, { {6, 6}, 27 }, { {1, 2}, 28 }, { {1, 6}, 29 }, { {2, 6}, 30 },
+		};
+		if (const int32* T = Pairs.Find(TPair<int32, int32>(Right, Left))) { return *T; }
+		if (const int32* T = Pairs.Find(TPair<int32, int32>(Left, Right))) { return *T; }
+		return 0;
+	}
+}
+
 int32 UMythRoSpriteComponent::WeaponTypeOf(int32 Weapon)
 {
 	Weapon &= 0xFFFF;
@@ -358,23 +407,25 @@ int32 UMythRoSpriteComponent::WeaponTypeOf(int32 Weapon)
 	{
 		return FMath::Max(Weapon, 0);
 	}
-	static const TMap<int32, int32> Types = []
+	return ItemVisuals().Weapons.FindRef(Weapon);
+}
+
+int32 UMythRoSpriteComponent::LeftWeaponTypeOf(int32 ShieldValue)
+{
+	// Na mao esquerda pode vir um escudo ou uma arma (duas armas); so e arma se o ID for de arma no item_db
+	ShieldValue &= 0xFFFF;
+	return ShieldValue > 30 ? ItemVisuals().Weapons.FindRef(ShieldValue) : 0;
+}
+
+int32 UMythRoSpriteComponent::ShieldViewOf(int32 ShieldValue)
+{
+	ShieldValue &= 0xFFFF;
+	if (ShieldValue <= 30)
 	{
-		TMap<int32, int32> Out;
-		FString Text;
-		TSharedPtr<FJsonObject> Root;
-		if (FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("weapon_types.json")))
-			&& FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) && Root.IsValid())
-		{
-			for (const auto& P : Root->Values) { Out.Add(FCString::Atoi(*P.Key), static_cast<int32>(P.Value->AsNumber())); }
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("MythRoSprite: Config/weapon_types.json ausente (tools/gen_weapon_types.py)"));
-		}
-		return Out;
-	}();
-	return Types.FindRef(Weapon);
+		return FMath::Max(ShieldValue, 0);
+	}
+	const int32* View = ItemVisuals().Shields.Find(ShieldValue);
+	return View ? *View : 1; // escudo sem view: guarda, como o cliente
 }
 
 void UMythRoSpriteComponent::OnComponentDestroyed(bool bDestroyingHierarchy)
@@ -510,19 +561,25 @@ void UMythRoSpriteComponent::LoadEquipment(const FString& Root, const FString& S
 		const FString* Name = T.Weapons.Find(View);
 		return FPaths::Combine(SpriteRoot, HumanDir, Job, FString::Printf(TEXT("%s_%s%s"), *Job, *Sex, Name ? **Name : *FString::Printf(TEXT("_%d"), View)));
 	};
-	Load(WeaponSource, WeaponBase(WeaponTypeOf(Weapon)));
-	// Escudo: ids fora de 2100-2200 acima de 500 sao a arma da mao esquerda (Mercenario com duas armas)
-	if (Shield > 500 && (Shield < 2100 || Shield > 2200))
+	// O servidor manda o tipo/view ou, para o proprio personagem, o ID do item (Config/weapon_types.json)
+	const int32 RightType = WeaponTypeOf(Weapon);
+	const int32 LeftType = LeftWeaponTypeOf(Shield);
+	const int32 Dual = LeftType > 0 ? DualWeaponType(RightType, LeftType) : 0;
+	EffectiveWeaponType = Dual > 0 ? Dual : RightType;
+	Load(WeaponSource, WeaponBase(EffectiveWeaponType));
+	if (LeftType > 0)
 	{
-		Load(ShieldSource, WeaponBase(Shield));
+		// Arma na mao esquerda: ja vai no sprite combinado; sem combinacao, desenha a esquerda separada
+		if (Dual > 0) { ShieldSource = FMythRoSpriteSource(); } else { Load(ShieldSource, WeaponBase(LeftType)); }
 	}
 	else if (Shield > 0)
 	{
-		// Escudos com nome: <classe>_<sexo>_<nome> (가드, 버클러...); os demais: <classe>_<sexo>_<id>_방패
-		const FString* Name = T.Shields.Find(Shield);
+		// Escudos com nome: <classe>_<sexo>_<nome> (가드, 버클러...); os demais: <classe>_<sexo>_<view>_방패
+		const int32 ShieldView = ShieldViewOf(Shield);
+		const FString* Name = T.Shields.Find(ShieldView);
 		const FString Dir = FPaths::Combine(SpriteRoot, ShieldDir, Job);
 		FString Base = Name ? FPaths::Combine(Dir, FString::Printf(TEXT("%s_%s_%s"), *Job, *Sex, **Name))
-			: FPaths::Combine(Dir, FString::Printf(TEXT("%s_%s_%d_%s"), *Job, *Sex, Shield, ShieldDir));
+			: FPaths::Combine(Dir, FString::Printf(TEXT("%s_%s_%d_%s"), *Job, *Sex, ShieldView, ShieldDir));
 		if (!FPaths::FileExists(Base + TEXT(".spr")) && T.Shields.Contains(1))
 		{
 			Base = FPaths::Combine(Dir, FString::Printf(TEXT("%s_%s_%s"), *Job, *Sex, *T.Shields[1])); // sem sprite: guarda, como o cliente
@@ -872,7 +929,7 @@ int32 UMythRoSpriteComponent::GetActionIndex() const
 	{
 	case EMythSpriteState::Idle:   Group = GroupIdle; break;
 	case EMythSpriteState::Walk:   Group = GroupWalk; break;
-	case EMythSpriteState::Attack: Group = bMob ? MobGroupAttack : PlayerAttackGroup(JobClass, bMale, WeaponTypeOf(Weapon)); break;
+	case EMythSpriteState::Attack: Group = bMob ? MobGroupAttack : PlayerAttackGroup(JobClass, bMale, EffectiveWeaponType); break;
 	case EMythSpriteState::Hit:    Group = bMob ? MobGroupHurt : GroupHurt; break;
 	case EMythSpriteState::Dead:   Group = bMob ? MobGroupDead : GroupDead; break;
 	case EMythSpriteState::Sit:    Group = bMob ? GroupIdle : GroupSit; break;

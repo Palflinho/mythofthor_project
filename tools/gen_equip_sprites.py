@@ -30,7 +30,7 @@ WEAPON_JOB_DUPS = [
     ('HUNTER', 'HUNTER_H', 'HUNTER_B'), ('ASSASSIN', 'ASSASSIN_H', 'ASSASSIN_B'), ('CRUSADER', 'CRUSADER_H', 'CRUSADER_B'),
     ('CRUSADER2', 'CRUSADER2_H', 'CRUSADER2_B'), ('MONK', 'MONK_H', 'MONK_B'), ('SAGE', 'SAGE_H', 'SAGE_B'),
     ('ROGUE', 'ROGUE_H', 'ROGUE_B'), ('ALCHEMIST', 'ALCHEMIST_H', 'ALCHEMIST_B'), ('BARD', 'BARD_H', 'BARD_B'),
-    ('DANCER', 'DANCER_H', 'DANCER_B'),
+    ('DANCER', 'DANCER_H', 'DANCER_B'), ('SUPERNOVICE', 'SUPERNOVICE_B'),
 ]
 
 
@@ -43,21 +43,21 @@ def main():
     sprite = os.path.join(root, 'data', 'sprite')
 
     hats = {}
-    for vid, suffix in js_pairs(os.path.join(equip_js, 'HatTable.js'), r'"(\d+)":\s*"([^"]*)"'):
+    for vid, suffix in js_pairs(os.path.join(equip_js, 'HatTable.js'), r'''["']?(\d+)["']?:\s*["']([^"']*)["']'''):  # chave com ou sem aspas
         name = unescape(suffix)
         if any(os.path.exists(os.path.join(sprite, '악세사리', sex, sex + name + '.spr')) for sex in ('남', '여')):
             hats[vid] = name
 
     wtypes = dict(js_pairs(os.path.join(equip_js, 'WeaponType.js'), r'(\w+):\s*(\d+)'))
     weapons = {}
-    for key, suffix in js_pairs(os.path.join(equip_js, 'WeaponTable.js'), r'WeaponName\[WeaponType\.(\w+)\]\s*=\s*"([^"]*)"'):
+    for key, suffix in js_pairs(os.path.join(equip_js, 'WeaponTable.js'), r'WeaponName\[WeaponType\.(\w+)\]\s*=\s*["\']([^"\']*)["\']'):  # a katar usa aspas simples
         if key in wtypes:
             weapons[wtypes[key]] = unescape(suffix)
 
-    shields = dict((k, unescape(v)) for k, v in js_pairs(os.path.join(equip_js, 'ShieldTable.js'), r'(\d+):\s*"([^"]*)"'))
+    shields = dict((k, unescape(v)) for k, v in js_pairs(os.path.join(equip_js, 'ShieldTable.js'), r'''(\d+):\s*["']([^"']*)["']'''))
 
     consts = dict((n, int(v)) for n, v in js_pairs(os.path.join(jobs_js, 'JobConst.js'), r'(\w+)\s*:\s*(\d+)'))
-    names = dict((k, unescape(v)) for k, v in js_pairs(os.path.join(jobs_js, 'JobNameTable.js'), r'JobNameTable\[JobId\.(\w+)\]\s*=\s*"([^"]*)"'))
+    names = dict((k, unescape(v)) for k, v in js_pairs(os.path.join(jobs_js, 'JobNameTable.js'), r'''JobNameTable\[JobId\.(\w+)\]\s*=\s*["']([^"']*)["']'''))  # o roBrowser atual usa aspas simples
     for group in WEAPON_JOB_DUPS:
         for k in group[1:]:
             names[k] = names[group[0]]

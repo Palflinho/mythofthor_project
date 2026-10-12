@@ -1,11 +1,12 @@
 """
-Gera Config/weapon_types.json: ID do item de arma -> tipo de arma do cliente (WeaponType: 1 adaga ... 11 arco ... 23 cajado
-de duas maos).
+Gera Config/weapon_types.json: ID do item -> visual que o cliente desenha.
+  weapons: ID da arma -> tipo de arma do cliente (WeaponType: 1 adaga ... 11 arco ... 16 katar ... 23 cajado de 2 maos)
+  shields: ID do escudo -> view do escudo (1 guarda, 2 broquel, 3 escudo, 4 espelho...)
 
-Para o proprio personagem o servidor manda o ID do item da arma (ex.: 1714 Arco Gakkung) e nao o tipo, mas o cliente
-escolhe pelo tipo o sprite da arma na mao, a animacao de ataque (Config/weapon_action.json) e a flecha do arco. O cliente
-original tira o tipo do ClassNum da itemInfo; aqui sai do SubType do item_db do rAthena (a mesma ordem do enum
-weapon_type), ou do View quando o item tem um.
+Para o proprio personagem o servidor manda o ID do item (ex.: 1714 Arco Gakkung, 2101 Guarda) e nao o tipo/view, mas o
+cliente escolhe pelo tipo o sprite da arma na mao, a animacao de ataque (Config/weapon_action.json), a flecha do arco e o
+sprite do escudo. O cliente original tira isso do ClassNum da itemInfo; aqui sai do item_db do rAthena: SubType da arma
+(a mesma ordem do enum weapon_type) ou View, e View do escudo (Locations: Left_Hand).
 
 Uso (WSL): python3 tools/gen_weapon_types.py ~/mythofthor-server/rathena [Config/weapon_types.json]
 """
@@ -23,33 +24,46 @@ SUBTYPES = ['Dagger', '1hSword', '2hSword', '1hSpear', '2hSpear', '1hAxe', '2hAx
 def main():
     root = sys.argv[1]
     dest = sys.argv[2] if len(sys.argv) > 2 else os.path.join(os.path.dirname(__file__), '..', 'Config', 'weapon_types.json')
-    out = {}
-    for name in ('item_db_equip.yml',):
-        cur = {}
+    weapons, shields = {}, {}
+    cur = {}
 
-        def flush():
-            if cur.get('type') == 'Weapon' and 'id' in cur:
-                view = cur.get('view')
-                sub = cur.get('sub')
-                if view is not None and 0 < view <= 30:
-                    out[str(cur['id'])] = view
-                elif sub in SUBTYPES:
-                    out[str(cur['id'])] = SUBTYPES.index(sub) + 1
+    def flush():
+        if 'id' not in cur:
+            return
+        view = cur.get('view')
+        if cur.get('type') == 'Weapon':
+            if view is not None and 0 < view <= 30:
+                weapons[str(cur['id'])] = view
+            elif cur.get('sub') in SUBTYPES:
+                weapons[str(cur['id'])] = SUBTYPES.index(cur['sub']) + 1
+        elif cur.get('type') == 'Armor' and cur.get('left') and view:
+            shields[str(cur['id'])] = view
 
-        for line in open(os.path.join(root, 'db', 're', name), encoding='utf-8', errors='replace'):
-            m = re.match(r'^\s*-\s*Id:\s*(\d+)', line)
-            if m:
-                flush()
-                cur = {'id': int(m.group(1))}
-                continue
-            m = re.match(r'^\s{4}(Type|SubType|View):\s*(\S+)', line)
-            if m:
-                key = {'Type': 'type', 'SubType': 'sub', 'View': 'view'}[m.group(1)]
-                cur[key] = int(m.group(2)) if key == 'view' and m.group(2).isdigit() else m.group(2)
-        flush()
+    in_locations = False
+    for line in open(os.path.join(root, 'db', 're', 'item_db_equip.yml'), encoding='utf-8', errors='replace'):
+        m = re.match(r'^\s*-\s*Id:\s*(\d+)', line)
+        if m:
+            flush()
+            cur = {'id': int(m.group(1))}
+            in_locations = False
+            continue
+        m = re.match(r'^\s{4}(\w+):\s*(\S*)', line)
+        if m:
+            key, value = m.group(1), m.group(2)
+            in_locations = key == 'Locations'
+            if key == 'Type':
+                cur['type'] = value
+            elif key == 'SubType':
+                cur['sub'] = value
+            elif key == 'View' and value.isdigit():
+                cur['view'] = int(value)
+            continue
+        if in_locations and re.match(r'^\s{6}Left_Hand:\s*true', line):
+            cur['left'] = True
+    flush()
     with open(dest, 'w', encoding='utf-8') as f:
-        json.dump(out, f, separators=(',', ':'), sort_keys=True)
-    print('weapon_types.json: %d armas -> %s' % (len(out), os.path.normpath(dest)))
+        json.dump({'weapons': weapons, 'shields': shields}, f, separators=(',', ':'), sort_keys=True)
+    print('weapon_types.json: %d armas, %d escudos -> %s' % (len(weapons), len(shields), os.path.normpath(dest)))
 
 
 if __name__ == '__main__':
