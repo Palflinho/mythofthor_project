@@ -11,6 +11,62 @@ login, teste fechado, sistemas próprios, visual HD-2D e conteúdo novo.
 
 Legenda: ✅ feito e testado · 🟡 em parte · ⬜ falta
 
+## Onde estamos (2026-10-11, depois da 1ª rodada de testes do usuário)
+
+**Resumo:** F0 feita. F1 tem tudo implementado, mas só 🟡 (falta o seu teste item a item). A HUD inteira foi refeita com a arte do
+LATAM (`HUD_MODERNA_PLANO.md`). F2 (pesquisa R2) e F4 (auditoria do servidor) seguem com o Antigravity. A fase "Entrada do jogo"
+está feita sem arte própria. Teste fechado, sistemas próprios, HD-2D e conteúdo ainda não começaram.
+
+**Versão de teste:** `E:\Dev\MythTeste` (commit `c6ef089`). Notas em `TESTE_JOGADOR.md`. Contas de teste: `mythclaude` / `mythclaude123`.
+
+### Retorno da 1ª rodada de testes (em correção agora)
+
+| # | O que você achou | Estado |
+|---|---|---|
+| T1 | Falta o botão de **minimizar** nas janelas (e no menu principal) | 🟡 feito no código, falta compilar e testar |
+| T2 | Rastreador de missão, minimapa e ícones de buff **se sobrepõem** no canto direito | ⬜ |
+| T3 | **Munição** não equipa (flechas); sem isso o arco não ataca | 🟡 corrigido no código (duplo clique equipa; vai para a aba Especial), falta testar |
+| T4 | **Aluguel de montaria e falcão** (Peco Peco, falcão): conferir | ⬜ NPC do Peco está em Prontera (55,350); o do falcão fica em `hu_in01` (mapa ainda não importado) |
+| T5 | **Navegação**: falta o botão de ir automático; textos saem da janela | ⬜ |
+| T6 | **Câmera**: travar o ângulo máximo e a distância máxima na vista de referência (tudo dentro dela visível) | 🟡 feito (inclinação máx. -45°, zoom máx. 5000 fora; -40° e 3500 dentro), falta testar |
+| T7 | Botão direito numa **skill** não mostra a descrição | ⬜ |
+| T8 | Muitos **itens sem sprite/ícone** | ⬜ levantar quais |
+| T9 | Menu principal: **HP/SP mais legíveis** e **% de EXP** | 🟡 feito (contorno nos números, % de Base e Classe), falta testar |
+| T10 | **Drops** sobrepostos ficam com fundo rosa e piscando | ⬜ |
+| T11 | **Emotes** ainda com defeito | ⬜ |
+| T12 | Som de assobio ao pegar item do chão | 🟡 som removido |
+| T13 | Tela de login mostrava "Servidor fechado" quando a senha estava errada | 🟡 corrigido (mensagem "Senha incorreta"); entra na próxima versão de teste |
+
+### Tudo o que já foi feito (implementado; "testado" = visto em jogo por mim, ainda sem o seu teste)
+
+**Mundo e personagem**
+- Movimento, combate, coleta, portais e interiores de Prontera, 40 mapas de campos e cidades das classes importados; sentar (Insert), câmera com memória entre mapas e clamp do terreno.
+- Sprites em camadas (corpo, cabeça, capa, carrinho, falcão), postura de combate, pegar item, congelado e atordoado, barras de HP/SP sob o personagem, correção das paredes que cobriam os sprites.
+- Efeitos de skill (mapa do roBrowser, 575 a mais, unidades no chão, área sem alvo, tintas de estado), esferas do Monge, vinhetas de veneno e cegueira, terremoto, tremor de tela, aura do 99.
+
+**Sistemas de jogo (cliente falando com o rAthena, testados em jogo)**
+- Lojas (compra e venda), Kafra, morte e reviver, grupo, amigos, chat completo com abas, cochicho, sala de chat, emoções, troca entre jogadores (testada com 2 clientes).
+- Missões com rastreador, Banco, Conquistas (dados reais do servidor), troca rápida de equipamento, `/navi`, Correio/RODEX (lista, leitura, escrita, excluir, pegar zeny e itens), favoritos no inventário.
+- Atributos com custo do ponto, "Base + Bônus", skills com Apply/Reset e seletor de nível, mira de skill em área.
+
+**HUD moderna (toda com a arte do cliente LATAM, `HUD_MODERNA_PLANO.md`)**
+- Info básica (recolhível, grade de ícones do menu), hotbar de 2 linhas, chat, minimapa com zoom, Status, Itens (4 abas), Equipamento (Geral e Especial), Habilidades em árvore, Missões, Navegação, Conquistas, Correio, Banco, Troca rápida, Atalhos (F12), Game settings com 5 abas, menu Esc com 5 itens, Amigos/Grupo com botão de alternar, Loja, Troca, Armazém, Sala de chat, lista de emoções.
+- Entrada do jogo: login, seleção de personagem (cartões e painel de informações) e criação, fazendo o retorno à seleção pelo Esc.
+- Campo de texto com a mesma fonte em toda a HUD.
+
+**Ferramentas**
+- Versão de teste congelada (`tools/make_test_build.ps1` → `E:\Dev\MythTeste`), testes automatizados por linha de comando (`MythLogin`, `MythWindow`, `MythShot`...), `TESTE_JOGADOR.md` por rodada.
+
+**Corrigido depois da 1ª rodada de testes (ainda sem compilar):** minimizar nas janelas e no menu, munição, câmera travada, legibilidade de HP/SP e % de EXP, som de pegar item, mensagem de senha incorreta.
+
+### O que falta, por fase
+
+- **F1:** fechar T1–T13; depois seu teste de cada janela; decisões abertas: segundo golpe (mão esquerda), `viewpointtable`, `FixPathTime` (só no teste fechado).
+- **Fora do que dá para fazer hoje (documentado):** Reputação e Agência (servidor sem dados), abas Título/Dano do equipamento, mapa-múndi gráfico, prévia do sprite no cartão e no equipamento, fundo e criação de personagem com arte própria.
+- **F2/F4:** com o Antigravity (pesquisa R2.9–R2.11 e auditoria do servidor).
+- **F3:** 3.2 troca de classe pelas quests originais testada; 3.3 e 3.5 testar com 2 jogadores; 3.5 falcão e montaria (ver T4).
+- **Depois:** entrada do jogo (arte, excluir personagem, PIN), teste fechado (VPN, contas, backup), sistemas próprios, HD-2D, conteúdo, silhueta atrás de paredes por último.
+
 ## F0. Auditoria de fidelidade ✅
 
 Matriz de divergências em `docs/FIDELIDADE.md` (2026-10-10). Refazer a leitura de um sistema quando ele for mexido.
