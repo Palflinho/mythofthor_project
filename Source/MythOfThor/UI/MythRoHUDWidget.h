@@ -177,6 +177,8 @@ protected:
 		float HandleHeight = 17.f;
 	};
 	TArray<FDragWindow> DragWindows;
+	/** Janelas travadas no lugar (botao de cadeado, ex.: Grupo): nao arrastam. */
+	TSet<const UWidget*> LockedWindows;
 	TWeakObjectPtr<UCanvasPanel> Dragging;
 	FVector2D DragOffset = FVector2D::ZeroVector;
 	int32 TopZOrder = 10;
@@ -881,7 +883,13 @@ protected:
 	UPROPERTY() TObjectPtr<UCanvasPanel> PartyWindow;
 	UPROPERTY() TObjectPtr<UCanvasPanel> PartyInviteWindow;
 	UPROPERTY() TObjectPtr<UTextBlock> PartyNameText;
-	UPROPERTY() TObjectPtr<UTextBlock> PartyLeaveLink;
+	// Barra de ferramentas do Grupo (print 19, mesbtn_*): procura de grupo, busca, cadeado, criar; no grupo, convidar e sair
+	UPROPERTY() TObjectPtr<UImage> PartyToolBooking;
+	UPROPERTY() TObjectPtr<UImage> PartyToolSearch;
+	UPROPERTY() TObjectPtr<UImage> PartyToolLock;
+	UPROPERTY() TObjectPtr<UImage> PartyToolCreate;
+	UPROPERTY() TObjectPtr<UImage> PartyToolInvite;
+	UPROPERTY() TObjectPtr<UImage> PartyToolLeave;
 	UPROPERTY() TObjectPtr<UTextBlock> PartyInviteText;
 	UPROPERTY() TObjectPtr<UTextBlock> PartyAcceptLink;
 	UPROPERTY() TObjectPtr<UTextBlock> PartyDeclineLink;

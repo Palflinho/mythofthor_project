@@ -60,7 +60,7 @@ Cada item: abrir no jogo com `MythWindow` (o menu Esc abre com `MythGameMenu`) e
 ## Andamento (atualizado 2026-10-12)
 
 - ✅ **Menu Esc:** 300 de largura, 5 botões de 262, um a cada 26 px (commit `d6399ab`); falta conferir a altura total contra o print.
-- 🟡 **Grupo:** 286 de largura, cartões de 38 **claros com texto escuro** (sem o `bg_partymember`, commit `3803830`; decisão: fica assim), ícone da classe (`icon_jobs_<id>`, `_die` quando morto) e coroa do líder; faltam barra de ferramentas, alça de redimensionar, contador de membros e a barra de SP.
+- 🟡 **Grupo:** 286 de largura, cartões de 38 **claros com texto escuro** (sem o `bg_partymember`, commit `3803830`; decisão: fica assim), ícone da classe (`icon_jobs_<id>`, `_die` quando morto) e coroa do líder; **barra de ferramentas** (`mesbtn_*`: procura de grupo e busca ainda sem função, cadeado trava a janela, criar / convidar põem o comando no chat, sair). Faltam alça de redimensionar, contador de membros e a barra de SP.
 - ✅ **Fonte:** UI usa Tahoma (Windows) com fallback para Arial e Roboto; conferir visualmente contra os prints. O SCDream fica só para o coreano.
 - 🟡 **Equipamento** (`595b1a9`): 280 × 186, 4 abas de 70 (Geral, Especial, Título, Fonte de dano), encaixes em linhas de 26 com o
   nome em até 2 linhas e o rótulo da arte apagado por baixo, **prévia do personagem** desenhada dos .spr/.act (`RenderPortrait`),

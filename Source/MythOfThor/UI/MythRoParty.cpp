@@ -9,6 +9,7 @@
 
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
+#include "Components/EditableTextBox.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 
@@ -27,11 +28,13 @@ namespace
 	constexpr float PartyRowH = 38.f; // cartao de membro de 38 (roBrowser info-v2)
 	constexpr float PartyListY = 40.f;
 	constexpr float PartyBarW = 150.f;
+	constexpr float PartyToolH = 22.f; // faixa da barra de ferramentas acima de Amigos/Grupo
+	FString PartyBtn(const TCHAR* Name) { return FString::Printf(TEXT("basic_interface/mesbtn_%s.bmp"), Name); }
 }
 
 void UMythRoHUDWidget::BuildPartyWindow()
 {
-	const float H = PartyListY + PartyRowCount * PartyRowH + 34.f;
+	const float H = PartyListY + PartyRowCount * PartyRowH + 34.f + PartyToolH;
 	PartyWindow = MakeRoPanel(TEXT("Grupo"), FVector2D(PartyW, H), FVector2D(330.f, -60.f));
 	AddFriendPartySwitch(PartyWindow, H, true);
 	PartyNameText = AddText(PartyWindow, 8.f, 22.f, 9, PartyText);
@@ -49,7 +52,22 @@ void UMythRoHUDWidget::BuildPartyWindow()
 		Expel->SetText(FText::FromString(TEXT("Expulsar")));
 		PartyExpelLinks.Add(Expel);
 	}
-	PartyLeaveLink = AddButtonHit(PartyWindow, TEXT("exit"), 160.f, H - 28.f);
+	// Barra de ferramentas (print 19): faixa clara mesbtn_left/mid/right e botoes de 26 x 20 colados
+	const float ToolY = H - 26.f - PartyToolH;
+	AddImage(PartyWindow, FMythRoUITextures::Get(PartyBtn(TEXT("left"))), 4.f, ToolY, 7.f, 20.f);
+	AddImage(PartyWindow, FMythRoUITextures::Get(PartyBtn(TEXT("mid"))), 11.f, ToolY, PartyW - 22.f, 20.f);
+	AddImage(PartyWindow, FMythRoUITextures::Get(PartyBtn(TEXT("right"))), PartyW - 11.f, ToolY, 7.f, 20.f);
+	auto Tool = [this, ToolY](const TCHAR* Name, float X) -> UImage*
+	{
+		UImage* Img = AddButtonEx(PartyWindow, PartyBtn(Name), PartyBtn(Name), PartyBtn(Name), X, ToolY);
+		return Img;
+	};
+	PartyToolBooking = Tool(TEXT("partymaster_01"), 10.f);
+	PartyToolSearch = Tool(TEXT("04"), 36.f);
+	PartyToolLock = Tool(TEXT("07"), 62.f);
+	PartyToolCreate = Tool(TEXT("08"), 88.f);
+	PartyToolInvite = Tool(TEXT("010"), 88.f);
+	PartyToolLeave = Tool(TEXT("09"), 114.f);
 
 	// Convite recebido
 	PartyInviteWindow = MakeRoPanel(TEXT("Convite de grupo"), FVector2D(300.f, 92.f), FVector2D(0.f, -120.f));
@@ -122,7 +140,11 @@ void UMythRoHUDWidget::RefreshParty()
 		}
 		PartyBarFill[i]->SetColorAndOpacity(Fraction < 0.25f ? FLinearColor(0.85f, 0.2f, 0.15f) : FLinearColor(0.2f, 0.75f, 0.2f));
 	}
-	PartyLeaveLink->SetVisibility(Net->IsInParty() ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+	// Fora de um grupo: criar; num grupo: convidar e sair
+	const bool bInParty = Net->IsInParty();
+	PartyToolCreate->SetVisibility(bInParty ? ESlateVisibility::Collapsed : ESlateVisibility::Visible);
+	PartyToolInvite->SetVisibility(bInParty ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+	PartyToolLeave->SetVisibility(bInParty ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
 }
 
 void UMythRoHUDWidget::ShowPartyInvite(int32 PartyId, const FString& PartyName)
@@ -172,9 +194,49 @@ bool UMythRoHUDWidget::HandlePartyClick(const FVector2D& ScreenPos)
 	{
 		return false;
 	}
-	if (IsUnder(PartyLeaveLink, ScreenPos) && PartyLeaveLink->IsVisible())
+	if (IsUnder(PartyToolLeave, ScreenPos))
 	{
 		Net->SendLeaveParty();
+		return true;
+	}
+	auto PrefillChat = [this](const TCHAR* Command)
+	{
+		// Como o cliente: o comando fica pronto no chat para completar com o nome
+		if (ChatInput)
+		{
+			ChatInput->SetText(FText::FromString(Command));
+			FocusChat();
+		}
+	};
+	if (IsUnder(PartyToolCreate, ScreenPos))
+	{
+		PrefillChat(TEXT("/organize "));
+		return true;
+	}
+	if (IsUnder(PartyToolInvite, ScreenPos))
+	{
+		PrefillChat(TEXT("/invite "));
+		return true;
+	}
+	if (IsUnder(PartyToolLock, ScreenPos))
+	{
+		// Cadeado: trava a janela no lugar (mesbtn_06 fechado / 07 aberto)
+		const bool bLock = !LockedWindows.Contains(PartyWindow);
+		if (bLock) { LockedWindows.Add(PartyWindow); } else { LockedWindows.Remove(PartyWindow); }
+		for (FRoButton& B : RoButtons)
+		{
+			if (B.Image.Get() == PartyToolLock)
+			{
+				UTexture2D* Tex = FMythRoUITextures::Get(PartyBtn(bLock ? TEXT("06") : TEXT("07")));
+				B.Normal = B.Hover = B.Pressed = Tex;
+				B.Shown = -1;
+			}
+		}
+		return true;
+	}
+	if (IsUnder(PartyToolBooking, ScreenPos) || IsUnder(PartyToolSearch, ScreenPos))
+	{
+		AddChatLine(TEXT("A procura de grupo ainda não está disponível."), FLinearColor(1.f, 0.85f, 0.4f));
 		return true;
 	}
 	const TArray<FRoPartyMember>& Members = Net->GetPartyMembers();

@@ -1111,7 +1111,7 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, co
 	for (int32 i = DragWindows.Num() - 1; i >= 0; --i)
 	{
 		UCanvasPanel* Win = DragWindows[i].Window.Get();
-		if (!Win || Win->GetVisibility() == ESlateVisibility::Collapsed)
+		if (!Win || Win->GetVisibility() == ESlateVisibility::Collapsed || LockedWindows.Contains(Win))
 		{
 			continue;
 		}
