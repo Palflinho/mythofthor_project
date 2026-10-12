@@ -180,8 +180,9 @@ UTextBlock* UMythRoHUDWidget::AddTextButton(UCanvasPanel* Parent, const FString&
 	B.Normal = FMythRoUITextures::Get(Part(TEXT("out"), TEXT("mid")));
 	B.Hover = FMythRoUITextures::Get(Part(TEXT("over"), TEXT("mid")));
 	B.Pressed = FMythRoUITextures::Get(Part(TEXT("press"), TEXT("mid")));
-	RoButtons.Add(B);
 	UTextBlock* T = AddText(Parent, X, Y + 4.f, 7, FLinearColor(0.1f, 0.1f, 0.15f));
+	B.Label = T;
+	RoButtons.Add(B);
 	T->SetText(FText::FromString(Label));
 	T->SetJustification(ETextJustify::Center);
 	if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(T->Slot))
@@ -190,6 +191,25 @@ UTextBlock* UMythRoHUDWidget::AddTextButton(UCanvasPanel* Parent, const FString&
 		S->SetSize(FVector2D(W, H - 4.f) * UIScale);
 	}
 	return T;
+}
+
+void UMythRoHUDWidget::SetTextButtonShown(UTextBlock* Label, bool bShow)
+{
+	if (!Label)
+	{
+		return;
+	}
+	Label->SetVisibility(bShow ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
+	for (FRoButton& B : RoButtons)
+	{
+		if (B.Label.Get() != Label)
+		{
+			continue;
+		}
+		if (UImage* M = B.Image.Get()) { M->SetVisibility(bShow ? ESlateVisibility::Visible : ESlateVisibility::Collapsed); }
+		if (UImage* L = B.Left.Get()) { L->SetVisibility(bShow ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed); }
+		if (UImage* R = B.Right.Get()) { R->SetVisibility(bShow ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed); }
+	}
 }
 
 UImage* UMythRoHUDWidget::AddColor(UCanvasPanel* Parent, const FLinearColor& Color, float X, float Y, float W, float H)
@@ -374,6 +394,7 @@ void UMythRoHUDWidget::BuildLayout()
 	BuildVendingWindows();
 	BuildWorldMapWindow();
 	BuildPartyWindow();
+	BuildGuildWindow();
 	BuildOptionsWindow();
 	BuildEmotionWindows();
 	BuildTradeWindows();
@@ -537,6 +558,7 @@ bool UMythRoHUDWidget::HandleBasicMenuClick(const FVector2D& ScreenPos)
 		else if (Name == TEXT("map")) { ToggleWindow(EMythRoWindow::Minimap); }
 		else if (Name == TEXT("option")) { ToggleGameMenu(); }
 		else if (Name == TEXT("party")) { ToggleWindow(EMythRoWindow::Party); }
+		else if (Name == TEXT("guild")) { ToggleWindow(EMythRoWindow::Guild); }
 		else if (Name == TEXT("quest")) { ToggleWindow(EMythRoWindow::Quests); }
 		else if (Name == TEXT("navigation")) { ToggleWindow(EMythRoWindow::Navi); }
 		else if (Name == TEXT("sns")) { ToggleWindow(EMythRoWindow::Friends); }

@@ -60,7 +60,8 @@ enum class EMythRoWindow : uint8
 	EquipSwitch, // Alt+W: troca rapida
 	Navi,     // Alt+N: navegacao
 	Mail,     // Alt+R: correio
-	WorldMap  // Ctrl+`: mapa-mundi
+	WorldMap, // Ctrl+`: mapa-mundi
+	Guild     // Alt+G: cla
 };
 
 /** Barra de medidor classica (gze*_left/mid/right sobre gze_bg): o meio estica conforme a fracao. */
@@ -735,9 +736,12 @@ protected:
 		// botao de texto de 3 partes: as imagens do meio e das pontas trocam juntas
 		TWeakObjectPtr<UImage> Left;
 		TWeakObjectPtr<UImage> Right;
+		TWeakObjectPtr<UTextBlock> Label;
 		FString Part;
 	};
 	TArray<FRoButton> RoButtons;
+	/** Mostra ou esconde um botao de texto (AddTextButton) inteiro: rotulo, meio e pontas. */
+	void SetTextButtonShown(UTextBlock* Label, bool bShow);
 	UPROPERTY() TObjectPtr<UCanvasPanel> QuestWindow;
 	UPROPERTY() TObjectPtr<UTextBlock> QuestHeader;
 	UPROPERTY() TObjectPtr<UImage> QuestBack;
@@ -1015,6 +1019,56 @@ protected:
 	UPROPERTY() TObjectPtr<UTextBlock> VendBuyBtn;
 	UPROPERTY() TObjectPtr<UTextBlock> VendBuyCancelBtn;
 	TMap<int32, int32> VendBuyChosen; // indice na loja -> quantidade escolhida
+
+	// Cla (MythRoGuild.cpp): janela Alt+G com as abas do cliente (Cla, Membros, Cargos, Habil., Expulsos, Avisos) e o convite
+public:
+	void OnGuildEvent(uint8 Event);
+	void AnswerGuildInvite(bool bAccept);
+	void SetGuildTab(int32 Tab);
+	/** Teste: escolhe a linha Row da aba Membros. */
+	void GuildTestSelect(int32 Row) { GuildSelected = Row; RefreshGuild(); }
+protected:
+	void ToggleGuildWindow();
+	void BuildGuildWindow();
+	void RefreshGuild();
+	bool HandleGuildClick(const FVector2D& ScreenPos);
+	bool HandleGuildWheel(const FVector2D& ScreenPos, float Delta);
+	static constexpr int32 GuildRows = 11;
+	static constexpr int32 GuildTabCount = 6;
+	UPROPERTY() TObjectPtr<UCanvasPanel> GuildWindow;
+	UPROPERTY() TArray<TObjectPtr<UImage>> GuildTabBg;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> GuildTabText;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> GuildInfoLines;   // aba Cla: coluna da esquerda e da direita
+	UPROPERTY() TArray<TObjectPtr<UImage>> GuildAllyBoxes;    // caixas de aliancas e inimigos
+	UPROPERTY() TObjectPtr<UTextBlock> GuildNoneText;              // "Voce nao tem cla."
+	UPROPERTY() TObjectPtr<UTextBlock> GuildCreateBtn;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> GuildHeader;        // cabecalho da aba Membros
+	UPROPERTY() TArray<TObjectPtr<UImage>> GuildRowBg;
+	UPROPERTY() TArray<TObjectPtr<UImage>> GuildRowIcon;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> GuildRowName;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> GuildRowPos;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> GuildRowJob;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> GuildRowLevel;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> GuildRowExp;
+	UPROPERTY() TObjectPtr<UTextBlock> GuildNoticeLabel1;
+	UPROPERTY() TObjectPtr<UTextBlock> GuildNoticeLabel2;
+	UPROPERTY() TObjectPtr<UEditableTextBox> GuildSubjectBox;
+	UPROPERTY() TObjectPtr<UEditableTextBox> GuildNoticeBox;
+	UPROPERTY() TObjectPtr<UTextBlock> GuildOkBtn;
+	UPROPERTY() TObjectPtr<UTextBlock> GuildLeaveBtn;
+	UPROPERTY() TObjectPtr<UTextBlock> GuildExpelBtn;
+	UPROPERTY() TObjectPtr<UTextBlock> GuildDisbandBtn;
+	UPROPERTY() TObjectPtr<UTextBlock> GuildFooterText;
+	UPROPERTY() TObjectPtr<UCanvasPanel> GuildInviteWindow;
+	UPROPERTY() TObjectPtr<UTextBlock> GuildInviteText;
+	UPROPERTY() TObjectPtr<UTextBlock> GuildAcceptLink;
+	UPROPERTY() TObjectPtr<UTextBlock> GuildDeclineLink;
+	int32 GuildTab = 0;
+	int32 GuildScroll = 0;
+	int32 GuildSelected = -1;
+	bool bGuildNoticeFilled = false; // as caixas do aviso so recebem o texto do servidor uma vez por abertura
+	int32 GuildConfirm = 0;          // 1 sair, 2 expulsar: o segundo clique confirma
+	double GuildConfirmUntil = 0.0;
 
 	// Carrinho do Mercador (MythRoCart.cpp): mesma forma do armazem, com peso e quantidade do servidor (ZC_NOTIFY_CARTITEM_COUNTINFO)
 public:

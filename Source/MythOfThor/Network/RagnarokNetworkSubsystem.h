@@ -467,6 +467,38 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCartChanged);
  */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnSelectList, uint8, ListType, const TArray<int32>&, Values, const TArray<FString>&, Names);
 
+/** Cla (guilda): dados do ZC_GUILD_INFO 0x0b7b. */
+struct FRoGuildInfo
+{
+	int32 Level = 0;
+	int32 Online = 0;
+	int32 MaxMembers = 0;
+	int32 AvgLevel = 0;
+	int64 Exp = 0;
+	int64 MaxExp = 0;
+	int32 MasterCharId = 0;
+	FString Name;
+	FString Master;
+	FString Land;
+};
+
+/** Membro do cla (ZC_MEMBERMGR_INFO 0x0b7d, 58 bytes cada). */
+struct FRoGuildMember
+{
+	int32 AccountId = 0;
+	int32 CharId = 0;
+	int32 ClassId = 0;
+	int32 Level = 0;
+	int32 Exp = 0;
+	int32 Position = 0;
+	int32 LastLogin = 0;
+	bool bOnline = false;
+	FString Name;
+};
+
+/** Cla: 0 dados mudaram, 1 convite recebido (GetGuildInviteId/Name), 2 voce saiu, foi expulso ou o cla acabou. */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGuild, uint8, Event);
+
 /** Loja de jogador (Vending): 0 abrir a loja (ZC_OPENSTORE), 1 lista de outra loja chegou, 2 a minha loja mudou, 3 a minha loja fechou. */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnVending, uint8, Event);
 
@@ -619,6 +651,27 @@ public:
 	int32 GetVendBuyOwner() const { return VendBuyAID; }
 	const TArray<FRoVendItem>& GetMyVendItems() const { return MyVendItems; }
 	bool IsVending() const { return bVending; }
+	/** Cla (RagnarokNetworkGuild.cpp). CZ_REQ_GUILD_MENU: 0 informacoes, 1 membros, 2 cargos, 3 habilidades, 4 expulsos. */
+	bool SendGuildMenuRequest(int32 Type);
+	bool SendCreateGuild(const FString& Name);
+	bool SendGuildInvite(const FString& CharName);
+	bool SendGuildInviteReply(int32 InviteGuildId, bool bAccept);
+	bool SendLeaveGuild(const FString& Reason);
+	bool SendGuildExpel(int32 AccountId, int32 CharId, const FString& Reason);
+	bool SendGuildNotice(const FString& Subject, const FString& Notice);
+	bool SendBreakGuild(const FString& Name);
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Guild") FOnGuild OnGuild;
+	bool IsInGuild() const { return GuildId != 0; }
+	bool IsGuildMaster() const { return bGuildMaster; }
+	int32 GetGuildId() const { return GuildId; }
+	const FString& GetGuildName() const { return GuildName; }
+	const FRoGuildInfo& GetGuildInfo() const { return GuildInfo; }
+	const TArray<FRoGuildMember>& GetGuildMembers() const { return GuildMembers; }
+	FString GetGuildPositionName(int32 Position) const { const FString* P = GuildPositions.Find(Position); return P ? *P : FString(); }
+	const FString& GetGuildNoticeSubject() const { return GuildNoticeSubject; }
+	const FString& GetGuildNoticeText() const { return GuildNoticeText; }
+	int32 GetGuildInviteId() const { return GuildInviteId; }
+	const FString& GetGuildInviteName() const { return GuildInviteName; }
 	/** Usar uma carta: pede a lista de equipamentos que a aceitam (CZ_REQ_ITEMCOMPOSITION_LIST 0x017a). */
 	bool SendCardListRequest(int32 CardIndex);
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Skill") FOnSelectList OnSelectList;
@@ -1087,6 +1140,18 @@ private:
 	/** Listas de escolha e as respostas delas (RagnarokNetworkSelectLists.cpp). */
 	void HandleSelectListPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	int32 PendingCardIndex = -1;
+	void HandleGuildPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	void ClearGuild();
+	int32 GuildId = 0;
+	bool bGuildMaster = false;
+	FString GuildName;
+	FRoGuildInfo GuildInfo;
+	TArray<FRoGuildMember> GuildMembers;
+	TMap<int32, FString> GuildPositions;
+	FString GuildNoticeSubject;
+	FString GuildNoticeText;
+	int32 GuildInviteId = 0;
+	FString GuildInviteName;
 	void HandleVendingPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	TMap<int32, FString> VendingBoards; // dono (AID) -> titulo da loja sobre a cabeca
 	int32 VendMaxItems = 0;

@@ -173,6 +173,27 @@ bool UMythRoHUDWidget::HandleChatCommand(const FString& Msg)
 		}
 		return true;
 	}
+	// Cla: /guild "nome" cria (o servidor pede o Emperium), /breakguild nome desfaz
+	if (Cmd == TEXT("guild") || Cmd == TEXT("breakguild"))
+	{
+		if (!bOnline) { Offline(); return true; }
+		FString Arg = Args;
+		Arg.TrimQuotesInline();
+		Arg.TrimStartAndEndInline();
+		if (Arg.IsEmpty())
+		{
+			AddChatLine(Cmd == TEXT("guild") ? TEXT("Uso: /guild \"nome do clã\"") : TEXT("Uso: /breakguild nome do clã"), FLinearColor(1.f, 0.4f, 0.4f));
+		}
+		else if (Cmd == TEXT("guild"))
+		{
+			Net->SendCreateGuild(Arg);
+		}
+		else
+		{
+			Net->SendBreakGuild(Arg);
+		}
+		return true;
+	}
 	if (PC && PC->RunSlashCommand(Cmd, Args))
 	{
 		return true;

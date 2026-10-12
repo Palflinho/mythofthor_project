@@ -493,6 +493,7 @@ void UMythRoHUDWidget::ToggleWindow(EMythRoWindow Window)
 	case EMythRoWindow::EquipSwitch: Target = EquipSwitchWindow; break;
 	case EMythRoWindow::Mail: OpenMailWindow(); return;
 	case EMythRoWindow::WorldMap: ToggleWorldMap(); return;
+	case EMythRoWindow::Guild: ToggleGuildWindow(); return;
 	case EMythRoWindow::Navi:
 		if (NaviWindow && NaviWindow->IsVisible()) { NaviWindow->SetVisibility(ESlateVisibility::Collapsed); } else { OpenNaviWindow(); }
 		return;
@@ -541,6 +542,11 @@ bool UMythRoHUDWidget::CloseTopWindow()
 				AnswerPartyInvite(false);
 				return true;
 			}
+			if (Win == GuildInviteWindow)
+			{
+				AnswerGuildInvite(false);
+				return true;
+			}
 			if (Win == TradeAskWindow)
 			{
 				if (URagnarokNetworkSubsystem* TNet = GetNet()) { TNet->SendTradeReply(false); }
@@ -573,6 +579,7 @@ void UMythRoHUDWidget::RefreshWindows()
 	RefreshCart(); // tambem mostra ou esconde o botao do carrinho no Equipamento
 	RefreshVending();
 	if (PartyWindow && PartyWindow->IsVisible()) { RefreshParty(); }
+	if (GuildWindow && GuildWindow->IsVisible()) { RefreshGuild(); }
 	if (EmotionWindow && EmotionWindow->IsVisible()) { RefreshEmotionList(); }
 	if (FriendsWindow && FriendsWindow->IsVisible()) { RefreshFriends(); }
 	if (QuestWindow && QuestWindow->IsVisible()) { RefreshQuests(); }
@@ -1059,6 +1066,10 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 	{
 		return true;
 	}
+	if (HandleGuildClick(ScreenPos))
+	{
+		return true;
+	}
 	if (HandleOptionsClick(ScreenPos))
 	{
 		return true;
@@ -1389,6 +1400,10 @@ FReply UMythRoHUDWidget::NativeOnMouseWheel(const FGeometry& InGeometry, const F
 		return FReply::Handled();
 	}
 	if (HandleQuestWheel(InMouseEvent.GetScreenSpacePosition(), InMouseEvent.GetWheelDelta()))
+	{
+		return FReply::Handled();
+	}
+	if (HandleGuildWheel(InMouseEvent.GetScreenSpacePosition(), InMouseEvent.GetWheelDelta()))
 	{
 		return FReply::Handled();
 	}

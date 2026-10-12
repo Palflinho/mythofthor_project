@@ -1022,6 +1022,21 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x0135: // ZC_PC_PURCHASE_RESULT_FROMMC
 				HandleVendingPacket(PacketData, ActualLen, PacketID);
 				break;
+			case 0x02f7: // ZC_UPDATE_GDID (voce e de um cla)
+			case 0x0b7b: // ZC_GUILD_INFO
+			case 0x0b7d: // ZC_MEMBERMGR_INFO
+			case 0x0166: // ZC_POSITION_ID_NAME_INFO
+			case 0x0156: // ZC_ACK_REQ_CHANGE_MEMBERS
+			case 0x016f: // ZC_GUILD_NOTICE
+			case 0x016a: // ZC_REQ_JOIN_GUILD (convite)
+			case 0x0169: // ZC_ACK_REQ_JOIN_GUILD
+			case 0x0167: // ZC_RESULT_MAKE_GUILD
+			case 0x0a83: // ZC_ACK_LEAVE_GUILD
+			case 0x0a82: // ZC_ACK_BAN_GUILD
+			case 0x01f2: // ZC_UPDATE_CHARSTAT (membro entrou/saiu do jogo)
+			case 0x015e: // ZC_ACK_DISORGANIZE_GUILD_RESULT
+				HandleGuildPacket(PacketData, ActualLen, PacketID);
+				break;
 			case 0x0abe: // ZC_WARPLIST (Portal)
 			case 0x0177: // ZC_ITEMIDENTIFY_LIST (Lupa)
 			case 0x017b: // ZC_ITEMCOMPOSITION_LIST (carta)
@@ -1556,6 +1571,7 @@ void URagnarokNetworkSubsystem::HandleCharMakeResult(const uint8* PacketData, in
 void URagnarokNetworkSubsystem::HandleZoneServerNotify(const uint8* PacketData, int32 PacketSize)
 {
 	PendingCharID = *reinterpret_cast<const uint32*>(PacketData + 2);
+	ClearGuild(); // outro personagem: o servidor manda o ZC_UPDATE_GDID de novo se ele for de um cla
 
 	char MapBuf[17] = { 0 };
 	FMemory::Memcpy(MapBuf, PacketData + 6, 16);

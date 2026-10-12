@@ -188,6 +188,7 @@ void AMythPlayerController::SetupInputComponent()
 	InputComponent->BindKey(FInputChord(EKeys::S, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeySkills);
 	InputComponent->BindKey(FInputChord(EKeys::V, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyBasic);
 	InputComponent->BindKey(FInputChord(EKeys::Z, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyParty);
+	InputComponent->BindKey(FInputChord(EKeys::G, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyGuild);
 	InputComponent->BindKey(FInputChord(EKeys::L, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyEmotions);
 	InputComponent->BindKey(FInputChord(EKeys::M, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyMacros);
 	InputComponent->BindKey(FInputChord(EKeys::H, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyFriends);
@@ -598,6 +599,7 @@ void AMythPlayerController::OnHotkeyChatRoom() { ToggleHudWindow(EMythRoWindow::
 void AMythPlayerController::OnHotkeyFriends() { ToggleHudWindow(EMythRoWindow::Friends); }
 void AMythPlayerController::OnHotkeyMacros() { ToggleHudWindow(EMythRoWindow::Macros); }
 void AMythPlayerController::OnHotkeyParty() { ToggleHudWindow(EMythRoWindow::Party); }
+void AMythPlayerController::OnHotkeyGuild() { ToggleHudWindow(EMythRoWindow::Guild); }
 void AMythPlayerController::OnHotkeyStatus() { ToggleHudWindow(EMythRoWindow::Status); }
 void AMythPlayerController::OnHotkeyItems() { ToggleHudWindow(EMythRoWindow::Items); }
 void AMythPlayerController::OnHotkeyEquip() { ToggleHudWindow(EMythRoWindow::Equip); }

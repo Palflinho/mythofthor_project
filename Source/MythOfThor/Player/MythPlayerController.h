@@ -159,6 +159,15 @@ public:
 	/** Teste: usa o titulo (0 tira). */
 	UFUNCTION(Exec) void MythTitle(int32 TitleId) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendChangeTitle(TitleId); } }
 	UFUNCTION(Exec) void MythVendBuy(int32 Row, int32 Count) { if (HudWidget) { HudWidget->VendTestBuy(Row, Count); } }
+	/** Testes do cla: aba (0 Cla, 1 Membros, 5 Avisos), responder convite, convidar pelo nome, escolher linha de Membros. */
+	UFUNCTION(Exec) void MythGuildTab(int32 Tab) { if (HudWidget) { HudWidget->SetGuildTab(Tab); } }
+	UFUNCTION(Exec) void MythGuildAnswer(int32 Accept) { if (HudWidget) { HudWidget->AnswerGuildInvite(Accept != 0); } }
+	UFUNCTION(Exec) void MythGuildInvite(const FString& Name) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendGuildInvite(Name); } }
+	UFUNCTION(Exec) void MythGuildSelect(int32 Row) { if (HudWidget) { HudWidget->GuildTestSelect(Row); } }
+	UFUNCTION(Exec) void MythGuild() { ToggleHudWindow(EMythRoWindow::Guild); }
+	UFUNCTION(Exec) void MythGuildLeave() { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendLeaveGuild(TEXT("teste")); } }
+	UFUNCTION(Exec) void MythGuildExpel(const FString& Name) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { for (const FRoGuildMember& M : N->GetGuildMembers()) { if (M.Name == Name) { N->SendGuildExpel(M.AccountId, M.CharId, TEXT("teste")); } } } }
+	UFUNCTION(Exec) void MythGuildNotice(const FString& Subject, const FString& Text) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendGuildNotice(Subject, Text); } }
 	/** Teste: aba da janela de Habilidades (0 = 1a, 1 = 2a, 2 = 3a, 3 = Etc). */
 	UFUNCTION(Exec) void MythSkillTab(int32 Tab) { if (HudWidget) { HudWidget->SetSkillTab(Tab); } }
 	/** Teste: escolhe a linha Row da lista de escolha aberta (Portal, Lupa, carta...); Row < 0 cancela. */
@@ -405,6 +414,7 @@ private:
 	void ToggleHudWindow(EMythRoWindow Window);
 	void OnHotkeyStatus();
 	void OnHotkeyParty();
+	void OnHotkeyGuild();
 	void OnHotkeyEmotions();
 	void OnHotkeyMacros();
 	void OnHotkeyFriends();
