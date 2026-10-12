@@ -56,3 +56,10 @@ Carrinho, loja de jogador (vending), guilda, pets, homúnculo, mercenário, fabr
 6. Janelas funcionais da seção 3, na ordem de prioridade da auditoria.
 
 Cada item: abrir no jogo com `MythWindow` (precisa de um comando novo para o menu Esc) e comparar **lado a lado** com o print antes de entregar.
+
+## Andamento (atualizado 2026-10-12)
+
+- ✅ **Menu Esc:** 300 de largura, 5 botões de 262 × 20 (commit `d6399ab`).
+- 🟡 **Grupo:** cartões de 38 com fundo `bg_partymember`, ícone da classe (`icon_jobs_<id>`), coroa do líder e texto claro; faltam barra de ferramentas, alça de redimensionar, contador de membros e a barra de SP.
+- ✅ **Fonte:** UI usa Tahoma (Windows) com fallback para Arial e Roboto; conferir visualmente contra os prints. O SCDream fica só para o coreano.
+- ⬜ Habilidades, Equipamento, Navegação e janelas funcionais (ver a ordem acima).

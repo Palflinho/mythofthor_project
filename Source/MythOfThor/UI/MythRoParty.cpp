@@ -3,6 +3,7 @@
 // mostra o que ele manda e se pedem as acoes (/organize, /invite, /leave, expulsar).
 
 #include "UI/MythRoHUDWidget.h"
+#include "UI/MythRoUITextures.h"
 
 #include "Network/RagnarokNetworkSubsystem.h"
 
@@ -17,8 +18,13 @@ namespace
 	const FLinearColor PartyLink(0.12f, 0.3f, 0.65f);
 	const FLinearColor PartyGray(0.45f, 0.45f, 0.45f);
 	const FLinearColor PartyRed(0.7f, 0.1f, 0.1f);
-	constexpr float PartyW = 280.f;
-	constexpr float PartyRowH = 34.f;
+	// Texto sobre o cartao escuro do membro (renewalparty/bg_partymember): claro
+	const FLinearColor PartyCardText(1.f, 1.f, 1.f);
+	const FLinearColor PartyCardGray(0.78f, 0.8f, 0.85f);
+	const FLinearColor PartyCardRed(1.f, 0.45f, 0.4f);
+	const FLinearColor PartyCardLink(0.55f, 0.75f, 1.f);
+	constexpr float PartyW = 286.f; // roBrowser PartyFriends V1 / goro: 286 de largura
+	constexpr float PartyRowH = 38.f; // cartao de membro de 38 (roBrowser info-v2)
 	constexpr float PartyListY = 40.f;
 	constexpr float PartyBarW = 150.f;
 }
@@ -32,11 +38,14 @@ void UMythRoHUDWidget::BuildPartyWindow()
 	for (int32 i = 0; i < PartyRowCount; ++i)
 	{
 		const float Y = PartyListY + i * PartyRowH;
-		PartyRowNames.Add(AddText(PartyWindow, 8.f, Y, 8, PartyText));
-		PartyRowInfo.Add(AddText(PartyWindow, 8.f, Y + 12.f, 7, PartyGray));
-		PartyBarBg.Add(AddColor(PartyWindow, FLinearColor(0.25f, 0.25f, 0.25f, 1.f), 8.f, Y + 24.f, PartyBarW, 5.f));
-		PartyBarFill.Add(AddColor(PartyWindow, FLinearColor(0.2f, 0.75f, 0.2f, 1.f), 8.f, Y + 24.f, PartyBarW, 5.f));
-		UTextBlock* Expel = AddText(PartyWindow, PartyW - 74.f, Y + 6.f, 8, PartyLink);
+		PartyCards.Add(AddImage(PartyWindow, FMythRoUITextures::Get(TEXT("renewalparty/bg_partymember.bmp")), 2.f, Y, PartyW - 4.f, PartyRowH - 2.f));
+		PartyJobIcons.Add(AddImage(PartyWindow, nullptr, 8.f, Y + 7.f, 24.f, 24.f));
+		PartyCrowns.Add(AddImage(PartyWindow, FMythRoUITextures::Get(TEXT("renewalparty/ico_partycrown.bmp")), 8.f, Y - 6.f));
+		PartyRowNames.Add(AddText(PartyWindow,  40.f, Y + 3.f, 8, PartyText));
+		PartyRowInfo.Add(AddText(PartyWindow, 40.f, Y + 15.f, 7, PartyCardGray));
+		PartyBarBg.Add(AddColor(PartyWindow, FLinearColor(0.25f, 0.25f, 0.25f, 1.f), 40.f, Y + 28.f, PartyBarW, 5.f));
+		PartyBarFill.Add(AddColor(PartyWindow, FLinearColor(0.2f, 0.75f, 0.2f, 1.f), 40.f, Y + 28.f, PartyBarW, 5.f));
+		UTextBlock* Expel = AddText(PartyWindow, PartyW - 74.f, Y + 12.f, 8, PartyCardLink);
 		Expel->SetText(FText::FromString(TEXT("Expulsar")));
 		PartyExpelLinks.Add(Expel);
 	}
@@ -69,6 +78,9 @@ void UMythRoHUDWidget::RefreshParty()
 		const FRoPartyMember* M = Members.IsValidIndex(i) ? &Members[i] : nullptr;
 		const ESlateVisibility Vis = M ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed;
 		PartyRowNames[i]->SetVisibility(Vis);
+		PartyCards[i]->SetVisibility(Vis);
+		PartyJobIcons[i]->SetVisibility(Vis);
+		PartyCrowns[i]->SetVisibility(M && M->bLeader ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
 		PartyRowInfo[i]->SetVisibility(Vis);
 		PartyBarBg[i]->SetVisibility(Vis);
 		PartyBarFill[i]->SetVisibility(Vis);
@@ -86,7 +98,13 @@ void UMythRoHUDWidget::RefreshParty()
 		}
 		const bool bDead = M->bDead || (bSelf && Hp <= 0 && MaxHp > 0);
 		PartyRowNames[i]->SetText(FText::FromString(M->Name));
-		PartyRowNames[i]->SetColorAndOpacity(FSlateColor(M->bOffline ? PartyGray : (bDead ? PartyRed : PartyText)));
+		{
+			// icone da classe (renewalparty/icon_jobs_<id>.bmp; a versao _die quando morto)
+			UTexture2D* JobIcon = FMythRoUITextures::Get(FString::Printf(TEXT("renewalparty/icon_jobs_%d%s.bmp"), M->ClassId, bDead ? TEXT("_die") : TEXT("")));
+			if (JobIcon) { PartyJobIcons[i]->SetBrushFromTexture(JobIcon, false); PartyJobIcons[i]->SetDesiredSizeOverride(FVector2D(24.f, 24.f) * UIScale); }
+			PartyJobIcons[i]->SetVisibility(JobIcon ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
+		}
+		PartyRowNames[i]->SetColorAndOpacity(FSlateColor(M->bOffline ? PartyCardGray : (bDead ? PartyCardRed : PartyCardText)));
 		FString Info = M->Map;
 		Info.RemoveFromEnd(TEXT(".gat"));
 		if (M->ClassId > 0 || M->Level > 0)

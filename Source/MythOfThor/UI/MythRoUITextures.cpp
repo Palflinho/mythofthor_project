@@ -159,7 +159,17 @@ FSlateFontInfo FMythRoUITextures::RoFont(int32 Size, bool bBold)
 	{
 		// A SCDream do cliente so tem o latim basico (sem a, c, e acentuados): o texto em portugues sai na Roboto
 		// da engine e o coreano (nomes de recurso, NPCs sem traducao) na SCDream
-		const FString Latin = FPaths::Combine(FPaths::EngineContentDir(), TEXT("Slate"), TEXT("Fonts"), bBold ? TEXT("Roboto-Bold.ttf") : TEXT("Roboto-Regular.ttf"));
+		// O cliente original usa fonte do sistema para o latim (nos prints do LATAM parece Tahoma): usa Tahoma, depois Arial, do Windows do jogador
+		// (nao distribuimos a fonte) e so cai na Roboto da engine se nenhuma existir
+		FString Latin;
+		for (const TCHAR* Candidate : { bBold ? TEXT("C:/Windows/Fonts/tahomabd.ttf") : TEXT("C:/Windows/Fonts/tahoma.ttf"), bBold ? TEXT("C:/Windows/Fonts/arialbd.ttf") : TEXT("C:/Windows/Fonts/arial.ttf") })
+		{
+			if (FPaths::FileExists(Candidate)) { Latin = Candidate; break; }
+		}
+		if (Latin.IsEmpty())
+		{
+			Latin = FPaths::Combine(FPaths::EngineContentDir(), TEXT("Slate"), TEXT("Fonts"), bBold ? TEXT("Roboto-Bold.ttf") : TEXT("Roboto-Regular.ttf"));
+		}
 		const FString Hangul = FPaths::Combine(FPaths::ProjectContentDir(), TEXT("Myth"), TEXT("Fonts"), bBold ? TEXT("SCDream6.otf") : TEXT("SCDream4.otf"));
 		if (!FPaths::FileExists(Latin))
 		{

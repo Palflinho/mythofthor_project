@@ -108,3 +108,5 @@ NOVO (rodada 20): Equipamento, aba Geral: a municao equipada aparece no meio, ac
 NOVO (rodada 21): a municao equipada agora continua na lista de Itens > Diversos (antes sumia da lista ao equipar e nao havia como desequipar). Duplo clique na municao equipa ou desequipa; o slot no meio da janela de Equipamento tambem desequipa com duplo clique.
 
 NOVO (rodada 22): itens no chao agora tem sombra embaixo (como no cliente original), caem com a curva original (sobem um pouco e pousam em ~0,4 s, sem quique) e ficam na posicao exata dentro da celula que o servidor manda.
+
+NOVO (rodada 23, HUD): o menu Esc agora tem 5 botoes largos (300 de largura) como no LATAM. A janela de Grupo tem cartoes de membro (fundo escuro, icone da classe, coroa no lider, nome, nivel, mapa e barra de HP); ainda faltam a barra de ferramentas e a alca de redimensionar. A fonte da interface passou a ser a do Windows (Tahoma, ou Arial) como no cliente original; se nao existir, usa a Roboto de antes. Itens no chao tem sombra e caem com a curva original.

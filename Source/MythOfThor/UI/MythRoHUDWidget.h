@@ -834,6 +834,9 @@ protected:
 	UPROPERTY() TObjectPtr<UTextBlock> PartyAcceptLink;
 	UPROPERTY() TObjectPtr<UTextBlock> PartyDeclineLink;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> PartyRowNames;
+	UPROPERTY() TArray<TObjectPtr<UImage>> PartyCards;
+	UPROPERTY() TArray<TObjectPtr<UImage>> PartyJobIcons;
+	UPROPERTY() TArray<TObjectPtr<UImage>> PartyCrowns;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> PartyRowInfo;
 	UPROPERTY() TArray<TObjectPtr<UImage>> PartyBarBg;
 	UPROPERTY() TArray<TObjectPtr<UImage>> PartyBarFill;
