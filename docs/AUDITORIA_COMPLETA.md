@@ -238,3 +238,25 @@ pet, guilda) para completar a lista.
 | Janela única de lista de fabricação com contexto e **pré-carga dos ícones** (identificar, arrow making, autospell, refino, reparo, forja, poção) | ⬜ | P1 |
 | Opções `show_other_damage` e `show_miss`; efeito "Guard" de Kyrie/Parry | ⬜ | P2 |
 | Avisos: bind on equip, recusas de pegar item por código de peso/contagem | ⬜ | P1 |
+
+## Itens do "Current Scope" do goro (colado pelo usuário em 2026-10-12) que ainda não estavam na lista
+
+| Função | Estado | Prio |
+|---|---|---|
+| Andar segurando o clique (movimento contínuo) | 🟡 verificar | P0 |
+| Cancelar a caminhada e cancelar o cast (clicar de novo / andar) | 🟡 verificar | P0 |
+| Noshift / Noctrl (opções de alvo), cursor que gruda no alvo (cursor snap) | ⬜ | P1 |
+| Janelas modais de skill: Teleporte (escolher destino/ponto), Warp Portal e escolha de visual do carrinho | 🟡 / ⬜ | P0 / P1 |
+| Dicas (tooltip) de itens e de skills ao passar o mouse | 🟡 | P1 |
+| Metadados dos ícones de status (nome/descrição por ícone, do roBrowser) | 🟡 | P1 |
+| Ver equipamento de outro jogador (janela) | ⬜ | P2 |
+| Contador e alvo de PvP clássico; WoE com comportamento do cliente 2008 | ⬜ | P2 |
+| Lightmaps, névoa do RSW (perto/longe), modelos animados do mapa, modelos 3D Granny de NPC | 🟡 / ⬜ | P1 |
+| Carregamento: mapa coberto de preto, 1º quadro pré-aquecido e fade | ⬜ | P1 |
+| Mapa-múndi clássico com jogadores/grupo e prévias do minimapa; marcadores de NPC/guilda no minimapa | ⬜ | P1 |
+| Journal de missão com descrição, progresso de caçada e limite de tempo | 🟡 | P1 |
+| Barra de atalhos de várias linhas com teclas clássicas; `/bm` (Battle Mode), digitar direto, F12 troca a linha | 🟡 | P1 |
+| Console (janela de log de sistema) e medidor de FPS | ⬜ | P2 |
+| Sprites de casamento, sprites de arma por item, **bebê** e classes expandidas (Taekwon/SL/Ninja/Gunslinger) | ⬜ / decidir | P2 |
+| Teclado independente de layout (tecla física) e entrada de texto | ⬜ | P2 |
+| Script Lua de personagem (automação): não entra no nosso escopo | ➖ | – |
