@@ -196,3 +196,25 @@ O cliente agora grava cada pacote sem tratamento, uma vez, em `Saved/Logs/pacote
 
 Repetir a coleta jogando cada classe/sistema (Ferreiro, Alquimista, Mercador com carrinho e loja, Caçador com armadilhas, Sábio, Monge, Cavaleiro montado,
 pet, guilda) para completar a lista.
+
+## Itens adicionados depois de ler goro e nostalro (ver `docs/ref/REFERENCIAS_GORO_NOSTALRO.md`)
+
+| Função | Estado | Prio |
+|---|---|---|
+| Armazém com senha (0x023a–0x023c) | ⬜ | P2 |
+| Excluir personagem (0x01fb) | ⬜ | P1 |
+| Barra de progresso de NPC (0x02f0–0x02f2) e contagem do servidor (ShowDigit) | ⬜ | P1 |
+| Monster Info / Sense (0x018c) | ⬜ | P1 |
+| Cut-in de NPC (0x01b3) | ⬜ | P1 |
+| Ver equipamento de outro jogador (0x02d6–0x02d8) | ⬜ | P2 |
+| Quantidade ao largar item empilhado; leitor de livro; sombra do item no chão | ⬜ | P1 |
+| Avisos de pontos de atributo/skill disponíveis (abrem a janela) | ⬜ | P1 |
+| Stealth completo (esconde nome/aura/carrinho/falcão, sem alvo, limites de skill) | 🟡 | P1 |
+| Fluxos de skill que travam sem resposta (Autospell 0x01ce, Dori-dori 0x01e7, Token of Siegfried 0x0292, Feel) | ⬜ | P1 |
+| Persistência de janelas (posição, aberta, recolhida) e limite à tela | ⬜ | P1 |
+| Mapa que falta: erro claro e volta à seleção | ⬜ | P1 |
+| Tempo de ataque por classe/sexo/arma e retomar a caminhada depois de apanhar | 🟡 | P0 |
+| Efeitos de mapa do RSW por ID (fumaça 44, vaga-lume 45, tocha 47, bolhas 109, pilar 231, brilhos 693–695...) | ⬜ | P1 |
+| Nuvens e neve/fogos/chuva por mapa; cores de céu especiais | ⬜ | P1 |
+| Alucinação (distorção de tela) e fade do tom noturno do Soul Link | ⬜ | P2 |
+| Cooking (0x025a/0x025b) e Cash NPC (0x0288) | ⬜/➖ | P2 |
