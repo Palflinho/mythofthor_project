@@ -23,3 +23,11 @@ Não executar o exe fora de uma VM (DLL personalizada e proxy). Uso possível no
 - Os dois hashes de VirusTotal citados no post (`bbbf2f61...` e `7eedee17...`) **não são** o SHA-256 do nosso arquivo (`0A4FBF90...`). Provavelmente são das versões anteriores à correção DX7. O "falso positivo" é a palavra do autor, não verificado.
 - **"Database Package"** (link do Google Drive no post): provavelmente os dados do **servidor** (rAthena) para as classes novas. É a peça que diria se existe Druida jogável no servidor. **Ainda não baixado nem lido.**
 - Pedem para não abrir issue sobre configuração de GRF/data; só bugs do exe e dos diffs.
+
+## Leitura do `Data2026` (`D:\Ragnarok_Assets\Data2026_\Data2026`, 2026-10-12) — só listagem dos índices dos GRF
+
+- `2026.grf` (1.170 arquivos) traz `data\clientinfo.xml` e `data\sclientinfo.xml`: **configuração genérica** (serviço `korea`, `version` 55, portas 6101/6900, `langtype` 12 e 0), **sem PACKETVER**. A data do pacote só vem do exe (convenção 20260107).
+- `data.grf` (241.336 arquivos) não é o "Database Package" do servidor: é o **dado do cliente**. Os links do post apontam para este mesmo conjunto.
+- **Druida no cliente:** corpos `druid_남/여` e `druid_riding_남/여` (`sprite\인간족\몸통`), paletas, escudos, 2.335 texturas de efeito (`texture\effect`), 76 sons de efeito (`wav\effect`), `imf\druid_riding_남.imf` e ícones de interface. As entradas `c_evil_druid_cross` (robes) e `evil_druid_*.wav` são itens/monstro, não a classe.
+- Tabelas de classe/skill já compiladas: `jobname.lub`, `pcjobname.lub`, `jobinheritlist.lub`, `skillinfolist.lub`, `idnum2itemdisplaynametable.txt` (precisam de decompilação Lua para ler).
+- Conclusão: **o cliente 2026 tem os assets do Druida; o servidor (rAthena oficial) não tem a classe**. Para jogar com ela seria preciso implementar job, skills e balanceamento no servidor.
