@@ -67,5 +67,10 @@ Cada item: abrir no jogo com `MythWindow` (o menu Esc abre com `MythGameMenu`) e
   munição no topo da coluna do meio (só com munição), botão redondo `btn_off` para falcão/Peco e rodapé com "Mostrar equip."
   (CZ_CONFIG) e os botões `btn_e_ability` (Status), `btn_e_change` (troca rápida) e `btn_e_off` (tirar tudo, 0x0bf5). Conferido
   em jogo. Faltam: falcão na prévia, setas de girar o personagem (`chr_arrow_rotate_*`), lista de títulos e seletor de fonte de dano.
-- ⬜ Navegação e janelas funcionais (ver a ordem acima).
+- 🟡 **Navegação** (`1e8a73b`): 286 × 300; linha de busca com voltar (histórico), filtro em lista suspensa (Todos, Mapas,
+  Monstros), texto e lupa; esquerda "Resultado[n]" com ícones de mapa/monstro e rolagem; direita nome, imagem 100 × 100 e a lista
+  do mapa com os monstros (nome e tamanho, `Config/navi_mobs.json`) ou a rota depois de "Procurar"; "Enviar" põe `/navi <mapa>`
+  no chat; "Mover" anda sozinho. Conferido em jogo. Faltam: NPCs por mapa (o nome no `navi_npc_br` vem codificado), caixas
+  "service" e "Minimize", e os dois ícones do rodapé.
+- ⬜ Janelas funcionais (ver a ordem acima).
 - 🟡 **Habilidades:** abas verticais na esquerda (Ap, 1a, 2a, Tr), grade de 7 colunas de 68 × 56 como no print 13, nome da skill em cima (cortado com reticências), nível embaixo, casas vazias com moldura apagada; a janela tem no mínimo 6 linhas e cresce até 9 com a árvore da aba (`ResizeSkillTree`). Conferido em jogo. Faltam a ilustração do personagem, as abas "3a/Etc" e o texto "skill point : N" no estilo do print.
