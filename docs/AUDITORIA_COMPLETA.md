@@ -24,7 +24,7 @@ Prioridade: **P0** = laço básico do jogo (quem joga 1 hora precisa), **P1** = 
 | Ataque à distância com arco (flecha visível, consumo de munição) | 🟡 | ok | P0 | flecha do jogador existe; munição equipada (0x013c) e aviso "sem flechas" (0x013b) feitos em 2026-10-13 (`a91f563`) |
 | Skills de alvo, de chão e de si mesmo | 🟡 | ok | P0 | |
 | Barra de cast, cast interrompido, cast sem barra | 🟡 | ok | P0 | |
-| Skills com **menu depois do uso** (lista de alvos/receitas/ materiais) | 🟡 | ok | P0 | 2026-10-13 (`4634407`): janela de lista para Portal, Lupa, carta, Fabricar Flechas, Forjar/Farmacologia (sem pedras), Autoconjurar e Refinar arma. Faltam Reparar arma (0x0b65), Hocus-pocus, Detecting, Create Elemental, Scribble |
+| Skills com **menu depois do uso** (lista de alvos/receitas/ materiais) | 🟡 | ok | P0 | 2026-10-13 (`4634407`): janela de lista para Portal, Lupa, carta, Fabricar Flechas, Forjar/Farmacologia (sem pedras), Autoconjurar e Refinar arma. Reparar arma feito (`177faa1`). Faltam Hocus-pocus, Detecting, Create Elemental, Scribble |
 | Skills de combo (Monge, Ferreiro) e `ZC_COMBODELAY` (0x01d2) | ⬜ | ok | P1 | sem tratamento do atraso de combo |
 | Skills de quest / platinum (NPCs que ensinam) | 🟡 | scripts presentes | P1 | |
 | Animações de skill (STR, SPR, sprites, sons) | 🟡 | – | P0 | 575 efeitos mapeados; ver `docs/EFEITOS_PENDENTES.md` (SPR/QuadHorn/TRAIL, armadilhas e canções faltam) |
@@ -45,7 +45,7 @@ Prioridade: **P0** = laço básico do jogo (quem joga 1 hora precisa), **P1** = 
 |---|---|---|---|
 | **Ferreiro: forja** (martelos, lista de forja, chance, resultado) | ⬜ | P1 | pacotes 0x018d (lista) → 0x018e (pedido) → 0x018f (resultado); sem janela |
 | **Ferreiro: refino** por NPC (Hollgrehenn) e por skill (Weapon Refine) | 🟡 | P1 | NPC funciona pelo diálogo; skill precisa da lista 0x0221 |
-| **Ferreiro: reparar** (0x01fc/0x01fe) | ⬜ | P1 | |
+| **Ferreiro: reparar** (0x01fc/0x01fe) | ✅ | P1 | 0x0b65 lista, 0x0b66 pedido, 0x01fe resultado, 0x02bb aviso de dano (`177faa1`) |
 | Ferreiro: ranking, pontos de ranking (0x0219/0x021b) | ⬜ | P2 | |
 | **Alquimista: poções** (Pharmacy, Bioethics, Marine Sphere, Cannibalize) | ⬜ | P1 | mesma lista de materiais |
 | **Alquimista: carrinho, vender no carrinho (Vending)** | 🟡 | P1 | carrinho e loja de jogador feitos em 2026-10-13 (`e3211c2`, `f219741`), testados com 2 clientes; falta a arte do LATAM |
@@ -88,7 +88,7 @@ Prioridade: **P0** = laço básico do jogo (quem joga 1 hora precisa), **P1** = 
 | Equipar/desequipar tudo, cabeças, capas, escudo, ambas as mãos, 2 acessórios | 🟡 | P0 | incluir **posições alternativas** (arma de duas mãos x escudo) |
 | **Munição** | 🟡 | P0 | munição real pelo 0x013c e aviso de falta (2026-10-13); falta troca automática ao acabar |
 | Cartas: encaixar (0x017a/0x017d) e nome composto ("Espada [Soldado]") | 🟡 | P0 | encaixar feito (0x017a/0x017b/0x017c/0x017d, testado); falta o nome composto |
-| Identificar item (0x0177 lista), Refinar (Oridecon), Reparar | 🟡 | P0 | Lupa/Avaliação de item e Refinar arma (skill) em 2026-10-13; falta Reparar e o refino do NPC |
+| Identificar item (0x0177 lista), Refinar (Oridecon), Reparar | 🟡 | P0 | Lupa/Avaliação de item e Refinar arma (skill) em 2026-10-13; Reparar feito (`177faa1`); falta o refino do NPC |
 | Itens de ovo/pet, itens de invocação (Bolsa) | 🟡 | P1 | ovo e Incubadora feitos (df0a8dc) |
 | Itens de evento / cash / disfarces | ➖ | P2 | ~96 itens sem recurso no cliente |
 | Dica do item com cores, slots e peso | 🟡 | P0 | |
