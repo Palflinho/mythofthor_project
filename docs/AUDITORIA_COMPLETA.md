@@ -260,3 +260,16 @@ pet, guilda) para completar a lista.
 | Sprites de casamento, sprites de arma por item, **bebê** e classes expandidas (Taekwon/SL/Ninja/Gunslinger) | ⬜ / decidir | P2 |
 | Teclado independente de layout (tecla física) e entrada de texto | ⬜ | P2 |
 | Script Lua de personagem (automação): não entra no nosso escopo | ➖ | – |
+
+## Dados que já temos no GRF LATAM e não extraímos (ver `docs/ref/ANALISE_DATA2026.md`)
+
+| Tabela do GRF | Destrava | Prio |
+|---|---|---|
+| `mappostable.txt` | mapa-múndi gráfico | P1 |
+| `viewpointtable.txt` | câmera por mapa (torres, naves...) | P1 |
+| `fogparametertable.txt`, `mapobjlighttable.txt`, `mapskydata.lub` | névoa, luzes e céu por mapa | P1 |
+| `effecttool\<mapa>.lub` (160 arquivos) | efeitos dos objetos do mapa (fumaça, tochas, brilhos) | P1 |
+| `skilldelaylist.lub` | cooldown/atraso por skill | P0 |
+| `footprinteffectinfo.lub` | pegadas | P2 |
+| `ridingspreditinfo.lub`, `spreditinfo\*.lub` | posição das camadas, inclusive montado (Peco Peco) | P0 |
+| `skilleffectinfolist.lub` | efeito de cada skill | P1 |
