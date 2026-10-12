@@ -150,6 +150,8 @@ public:
 	void MythOptions(int32 Tab);
 	UFUNCTION(Exec) void MythFriendReply(int32 Accept);
 	UFUNCTION(Exec) void MythEquip(int32 ItemID);
+	/** Teste: aba da janela de Habilidades (0 = 1a, 1 = 2a, 2 = 3a, 3 = Etc). */
+	UFUNCTION(Exec) void MythSkillTab(int32 Tab) { if (HudWidget) { HudWidget->SetSkillTab(Tab); } }
 	/** Teste: escolhe a linha Row da lista de escolha aberta (Portal, Lupa, carta...); Row < 0 cancela. */
 	UFUNCTION(Exec) void MythSelect(int32 Row) { if (HudWidget) { HudWidget->SelectListChoose(Row); } }
 	/** Teste: usa o primeiro item com esse ID (carta: pede a lista de equipamentos, como o duplo clique). */

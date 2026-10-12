@@ -73,4 +73,4 @@ Cada item: abrir no jogo com `MythWindow` (o menu Esc abre com `MythGameMenu`) e
   no chat; "Mover" anda sozinho. Conferido em jogo. Faltam: NPCs por mapa (o nome no `navi_npc_br` vem codificado), caixas
   "service" e "Minimize", e os dois ícones do rodapé.
 - ⬜ Janelas funcionais (ver a ordem acima).
-- 🟡 **Habilidades:** abas verticais na esquerda (Ap, 1a, 2a, Tr), grade de 7 colunas de 68 × 56 como no print 13, nome da skill em cima (cortado com reticências), nível embaixo, casas vazias com moldura apagada; a janela tem no mínimo 6 linhas e cresce até 9 com a árvore da aba (`ResizeSkillTree`). Conferido em jogo. Faltam a ilustração do personagem, as abas "3a/Etc" e o texto "skill point : N" no estilo do print.
+- 🟡 **Habilidades:** abas 1a (Aprendiz + 1ª classe), 2a (2ª + transclasse), 3a e Etc como no print, grade de 7 colunas de 68 × 56 como no print 13, nome da skill em cima (cortado com reticências), nível embaixo, casas vazias com moldura apagada; a janela tem no mínimo 6 linhas e cresce até 9 com a árvore da aba (`ResizeSkillTree`). Conferido em jogo. Faltam a ilustração do personagem, as abas "3a/Etc" e o texto "skill point : N" no estilo do print.

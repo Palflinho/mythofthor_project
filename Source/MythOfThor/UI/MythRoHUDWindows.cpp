@@ -79,6 +79,8 @@ namespace
 	constexpr float EqTop = 34.f;
 	constexpr float EqFootH = 22.f;
 	constexpr float EqPreviewW = 120.f;
+	// Personagem da janela de Habilidades: 80 x 100, subindo da barra de baixo
+	constexpr float SkillPortraitLift = 66.f;
 }
 
 // Aba da mochila de um item (print 04): 0 consumiveis, 1 equipamentos, 2 diversos e 3 favoritos (o servidor guarda a marca)
@@ -377,12 +379,16 @@ void UMythRoHUDWidget::BuildSkillsWindow()
 	SkillBottomBar.Add(AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("skill_botbar_left"))), 0.f, BarY, 12.f, 32.f));
 	SkillBottomBar.Add(AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("skill_botbar_mid"))), 12.f, BarY, W - 24.f, 32.f));
 	SkillBottomBar.Add(AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("skill_botbar_right"))), W - 12.f, BarY, 12.f, 32.f));
-	SkillPointsText = AddText(SkillsWindow, 12.f, BarY + 9.f, 8, RoWinText);
+	SkillPointsText = AddText(SkillsWindow, 88.f, BarY + 9.f, 8, RoWinText); // depois do personagem, como no print 13
 	SkillBottomBar.Add(SkillPointsText);
 	SkillApplyImg = AddButton(SkillsWindow, TEXT("ok"), W - 96.f, BarY + 6.f);
 	SkillResetImg = AddButton(SkillsWindow, TEXT("reset"), W - 52.f, BarY + 6.f);
 	SkillBottomBar.Add(SkillApplyImg);
 	SkillBottomBar.Add(SkillResetImg);
+	// Personagem no canto de baixo, por cima da barra (print 13)
+	SkillPortrait = AddImage(SkillsWindow, nullptr, 2.f, BarY - SkillPortraitLift, 80.f, 100.f);
+	SkillPortrait->SetVisibility(ESlateVisibility::Collapsed);
+	SkillBottomBar.Add(SkillPortrait);
 }
 
 void UMythRoHUDWidget::ResizeSkillTree(int32 Rows)
@@ -408,7 +414,8 @@ void UMythRoHUDWidget::ResizeSkillTree(int32 Rows)
 		if (UCanvasPanelSlot* S = Part ? Cast<UCanvasPanelSlot>(Part->Slot) : nullptr)
 		{
 			const FVector2D Pos = S->GetPosition();
-			S->SetPosition(FVector2D(Pos.X, (Part == SkillPointsText ? BarY + 9.f : (Part == SkillApplyImg || Part == SkillResetImg ? BarY + 6.f : BarY)) * UIScale));
+			const float Y = Part == SkillPointsText ? BarY + 9.f : (Part == SkillApplyImg || Part == SkillResetImg ? BarY + 6.f : (Part == SkillPortrait ? BarY - SkillPortraitLift : BarY));
+			S->SetPosition(FVector2D(Pos.X, Y * UIScale)); // Pos.X ja esta na escala da interface
 		}
 	}
 }
@@ -724,19 +731,25 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 	const int32 Points = FMath::Max(0, FreePoints - PendingSkillTotal());
 	const int32 Job = Net ? Net->GetPlayerStats().JobClass : 0;
 
-	// Abas: uma por etapa da classe (Aprendiz, 1a, 2a, trans); sem escolha, abre na classe atual
-	SkillTabJobs = FMythRoSkillTree::JobChain(Job);
+	// Abas do LATAM: 1a (Aprendiz + 1a classe), 2a (2a classe + transclasse), 3a e Etc; sem escolha, abre na ultima com skills
+	{
+		const TArray<int32> Chain = FMythRoSkillTree::JobChain(Job);
+		SkillTabJobs.Init(TArray<int32>(), 4);
+		for (int32 c = 0; c < Chain.Num(); ++c)
+		{
+			SkillTabJobs[c < 2 ? 0 : 1].Add(Chain[c]); // Aprendiz e 1a classe na 1a aba; 2a classe e transclasse na 2a
+		}
+	}
 	if (!SkillTabJobs.IsValidIndex(SkillTab))
 	{
-		SkillTab = SkillTabJobs.Num() - 1;
+		SkillTab = SkillTabJobs[1].Num() > 0 ? 1 : 0;
 	}
 	for (int32 t = 0; t < SkillTabTexts.Num(); ++t)
 	{
-		const bool bHas = SkillTabJobs.IsValidIndex(t);
-		static const TCHAR* TabLabels[4] = { TEXT("Ap"), TEXT("1a"), TEXT("2a"), TEXT("Tr") };
-		SkillTabTexts[t]->SetText(bHas ? FText::FromString(TabLabels[FMath::Clamp(t, 0, 3)]) : FText::GetEmpty()); // o nome da classe vem na dica da etapa
+		static const TCHAR* TabLabels[4] = { TEXT("1a"), TEXT("2a"), TEXT("3a"), TEXT("Etc") };
+		SkillTabTexts[t]->SetText(FText::FromString(TabLabels[FMath::Clamp(t, 0, 3)]));
 		SkillTabTexts[t]->SetColorAndOpacity(FSlateColor(t == SkillTab ? RoWinText : RoWinLabel));
-		SkillTabBacks[t]->SetVisibility(bHas ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+		SkillTabBacks[t]->SetVisibility(ESlateVisibility::Visible);
 		SkillTabBacks[t]->SetColorAndOpacity(t == SkillTab ? FLinearColor(1.f, 1.f, 1.f, 0.85f) : FLinearColor(0.85f, 0.88f, 0.94f, 0.6f));
 	}
 
@@ -749,7 +762,19 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 			Known.Add(S.SkillID, &S);
 		}
 	}
-	const TMap<int32, int32>* Grid = SkillTabJobs.IsValidIndex(SkillTab) ? FMythRoSkillTree::Grid(SkillTabJobs[SkillTab]) : nullptr;
+	// Grade da aba: as grades das classes da aba somadas (a classe mais avancada vence se uma casa repetir)
+	TMap<int32, int32> TabGrid;
+	if (SkillTabJobs.IsValidIndex(SkillTab))
+	{
+		for (const int32 TabJob : SkillTabJobs[SkillTab])
+		{
+			if (const TMap<int32, int32>* JobGrid = FMythRoSkillTree::Grid(TabJob))
+			{
+				TabGrid.Append(*JobGrid);
+			}
+		}
+	}
+	const TMap<int32, int32>* Grid = &TabGrid;
 	TMap<int32, int32> CellOfSkill;
 	int32 LastCell = 0;
 	if (Grid)
@@ -760,6 +785,19 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 		}
 	}
 	ResizeSkillTree(FMath::Clamp(LastCell / FMythRoSkillTree::Columns + 1, 6, RoTreeRows));
+	if (SkillPortrait)
+	{
+		// Mesmo desenho da previa do Equipamento, virado para a esquerda (direcao 1), redesenhado quando o visual muda
+		const APawn* Pawn = GetOwningPlayerPawn();
+		const UMythRoSpriteComponent* Sprite = Pawn ? Pawn->FindComponentByClass<UMythRoSpriteComponent>() : nullptr;
+		if (Sprite && Sprite->GetLoadVersion() != SkillPortraitVersion)
+		{
+			SkillPortraitVersion = Sprite->GetLoadVersion();
+			SkillPortraitTex = Sprite->RenderPortrait(80, 100, 94, 1);
+			SkillPortrait->SetBrush(RoWinBrush(SkillPortraitTex, FVector2D(80.f, 100.f) * UIScale));
+		}
+		SkillPortrait->SetVisibility(SkillPortraitTex ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
+	}
 	for (int32 i = 0; i < Cells; ++i)
 	{
 		const int32* SkillID = Grid ? Grid->Find(i) : nullptr;

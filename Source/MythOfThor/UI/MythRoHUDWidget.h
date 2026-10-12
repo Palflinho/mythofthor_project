@@ -136,6 +136,8 @@ public:
 	void NpcInput(int64 NpcID, bool bNumber);
 	/** Teste: preenche a caixa de entrada e confirma. */
 	void NpcInputSubmitText(const FString& Text);
+	/** Teste: troca a aba da janela de Habilidades (0 = 1a, 1 = 2a, 2 = 3a, 3 = Etc). */
+	void SetSkillTab(int32 Tab) { SkillTab = FMath::Clamp(Tab, 0, 3); RefreshSkillsWindow(); }
 	/** select(...) do script: lista de opcoes (vazias ficam ocultas, mas contam no indice enviado). */
 	void NpcMenu(int64 NpcID, const TArray<FString>& Options);
 	/** Fecha a janela de dialogo sem enviar nada (ex.: o servidor encerrou). */
@@ -387,8 +389,14 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UImage>> SkillLinePool;
 	UPROPERTY() TArray<TObjectPtr<UWidget>> SkillBottomBar;
 	void ResizeSkillTree(int32 Rows);
-	TArray<int32> SkillTabJobs;
+	/** Abas do LATAM (print 13): 1a = Aprendiz + 1a classe, 2a = 2a classe (+ transclasse), 3a e Etc vazias. Cada aba junta as
+	 * grades dessas classes do skilltreeview (as casas nao se sobrepoem: a 1a classe deixa livres as do Aprendiz). */
+	TArray<TArray<int32>> SkillTabJobs;
 	int32 SkillTab = -1; // -1 = a aba da classe atual
+	/** Personagem no canto de baixo da janela (como no print), feito por UMythRoSpriteComponent::RenderPortrait. */
+	UPROPERTY() TObjectPtr<UImage> SkillPortrait;
+	UPROPERTY() TObjectPtr<UTexture2D> SkillPortraitTex;
+	int32 SkillPortraitVersion = -1;
 
 	float WindowRefreshTimer = 0.f;
 
