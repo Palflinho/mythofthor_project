@@ -150,6 +150,10 @@ public:
 	void MythOptions(int32 Tab);
 	UFUNCTION(Exec) void MythFriendReply(int32 Accept);
 	UFUNCTION(Exec) void MythEquip(int32 ItemID);
+	/** Testes da loja de jogador: abre a minha loja (itens do carrinho, mesmo preco), abre a primeira loja vista, compra a linha Row. */
+	UFUNCTION(Exec) void MythVendOpen(const FString& Title, int32 Price) { if (HudWidget) { HudWidget->VendTestOpen(Title.Replace(TEXT("+"), TEXT(" ")), Price); } }
+	UFUNCTION(Exec) void MythVendBrowse();
+	UFUNCTION(Exec) void MythVendBuy(int32 Row, int32 Count) { if (HudWidget) { HudWidget->VendTestBuy(Row, Count); } }
 	/** Teste: aba da janela de Habilidades (0 = 1a, 1 = 2a, 2 = 3a, 3 = Etc). */
 	UFUNCTION(Exec) void MythSkillTab(int32 Tab) { if (HudWidget) { HudWidget->SetSkillTab(Tab); } }
 	/** Teste: escolhe a linha Row da lista de escolha aberta (Portal, Lupa, carta...); Row < 0 cancela. */

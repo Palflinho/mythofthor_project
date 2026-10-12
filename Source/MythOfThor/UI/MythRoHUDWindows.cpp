@@ -520,6 +520,7 @@ void UMythRoHUDWidget::RefreshWindows()
 	if (SkillsWindow && SkillsWindow->IsVisible()) { RefreshSkillsWindow(); }
 	if (StorageWindow && StorageWindow->IsVisible()) { RefreshStorage(); }
 	RefreshCart(); // tambem mostra ou esconde o botao do carrinho no Equipamento
+	RefreshVending();
 	if (PartyWindow && PartyWindow->IsVisible()) { RefreshParty(); }
 	if (EmotionWindow && EmotionWindow->IsVisible()) { RefreshEmotionList(); }
 	if (FriendsWindow && FriendsWindow->IsVisible()) { RefreshFriends(); }
@@ -948,6 +949,10 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 		return true;
 	}
 	if (HandleShopClick(ScreenPos))
+	{
+		return true;
+	}
+	if (HandleVendingClick(ScreenPos))
 	{
 		return true;
 	}

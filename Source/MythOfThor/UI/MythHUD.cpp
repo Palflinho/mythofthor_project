@@ -489,7 +489,7 @@ void AMythHUD::DrawChatRoomTitles()
 	RoomHits.Reset();
 	AMythPlayerController* PC = Cast<AMythPlayerController>(PlayerOwner);
 	const URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr;
-	if (!Canvas || !PC || !Net || Net->GetChatRooms().Num() == 0)
+	if (!Canvas || !PC || !Net || (Net->GetChatRooms().Num() == 0 && Net->GetVendingBoards().Num() == 0))
 	{
 		return;
 	}
@@ -527,6 +527,27 @@ void AMythHUD::DrawChatRoomTitles()
 			Hit.Box = FBox2D(Pos, Pos + FVector2D(TW + 12.f, TH + 6.f));
 			Hit.Id = Room.Id;
 			Hit.Type = Room.Type;
+			RoomHits.Add(Hit);
+		}
+		// Placa de loja de jogador (ZC_STORE_ENTRY): caixa clara com o titulo; clique abre a loja (tipo 2, id = dono)
+		if (const FString* Shop = Net->GetVendingBoards().Find(static_cast<int32>(It->NetID)))
+		{
+			FVector2D Head;
+			if (!PC->ProjectWorldLocationToScreen(It->GetActorLocation() + FVector(0.f, 0.f, 150.f), Head, false))
+			{
+				continue;
+			}
+			float TW = 0.f, TH = 0.f;
+			Canvas->TextSize(Font, *Shop, TW, TH, 1.f, 1.f);
+			const FVector2D Pos(Head.X - TW * 0.5f - 6.f, Head.Y - TH - 10.f);
+			DrawRect(FLinearColor(0.35f, 0.42f, 0.6f, 0.95f), Pos.X - 1.f, Pos.Y - 1.f, TW + 14.f, TH + 8.f);
+			DrawRect(FLinearColor(0.97f, 0.97f, 1.f, 0.95f), Pos.X, Pos.Y, TW + 12.f, TH + 6.f);
+			Canvas->SetDrawColor(FColor(20, 30, 60));
+			Canvas->DrawText(Font, *Shop, Pos.X + 6.f, Pos.Y + 3.f);
+			FRoomHit Hit;
+			Hit.Box = FBox2D(Pos, Pos + FVector2D(TW + 12.f, TH + 6.f));
+			Hit.Id = static_cast<int32>(It->NetID);
+			Hit.Type = 2;
 			RoomHits.Add(Hit);
 		}
 	}

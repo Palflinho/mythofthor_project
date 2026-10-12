@@ -371,6 +371,7 @@ void UMythRoHUDWidget::BuildLayout()
 	BuildStorageWindow();
 	BuildCartWindow();
 	BuildSelectListWindow();
+	BuildVendingWindows();
 	BuildPartyWindow();
 	BuildOptionsWindow();
 	BuildEmotionWindows();

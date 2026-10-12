@@ -68,6 +68,7 @@ private:
 	UFUNCTION() void HandleShopResult(bool bSell, int32 Result);
 	UFUNCTION() void HandleStorageOpen(const TArray<FRagnarokInventoryItem>& Items);
 	UFUNCTION() void HandleSelectList(uint8 ListType, const TArray<int32>& Values, const TArray<FString>& Names);
+	UFUNCTION() void HandleVending(uint8 Event);
 	UFUNCTION() void HandleStorageChanged(const TArray<FRagnarokInventoryItem>& Items);
 	UFUNCTION() void HandlePartyChanged();
 	UFUNCTION() void HandleCharCreateResult(bool bSuccess, const FString& Message);

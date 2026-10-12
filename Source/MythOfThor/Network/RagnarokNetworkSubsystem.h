@@ -467,6 +467,22 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCartChanged);
  */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnSelectList, uint8, ListType, const TArray<int32>&, Values, const TArray<FString>&, Names);
 
+/** Loja de jogador (Vending): 0 abrir a loja (ZC_OPENSTORE), 1 lista de outra loja chegou, 2 a minha loja mudou, 3 a minha loja fechou. */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnVending, uint8, Event);
+
+/** Item de uma loja de jogador (a minha ou a que estou olhando). */
+struct FRoVendItem
+{
+	int32 Index = 0;    // na loja de outro: indice no carrinho dele; na minha: indice no meu carrinho
+	int32 ItemID = 0;
+	int32 Amount = 0;
+	int32 Price = 0;
+	int32 Type = 0;
+	int32 Refine = 0;
+	bool bIdentified = true;
+	int32 Slots[4] = { 0, 0, 0, 0 };
+};
+
 /** Tipos de lista de escolha (FOnSelectList). */
 enum class EMythSelectList : uint8
 {
@@ -590,6 +606,19 @@ public:
 	/** Resposta a uma lista de escolha (EMythSelectList). Value: o valor escolhido (Values da lista); Name: mapa do Portal.
 	 * bCancel: fecha sem escolher (Portal manda "cancel", Identificar manda -1; as outras so fecham). */
 	bool SendSelectListChoice(EMythSelectList Type, int32 Value, const FString& Name, bool bCancel);
+	/** Loja de jogador (RagnarokNetworkVending.cpp). Abrir: titulo e itens do carrinho {indice, quantidade, preco}; bOpen falso cancela. */
+	bool SendOpenVending(const FString& Title, const TArray<FIntVector>& Items, bool bOpen);
+	bool SendVendingListReq(int32 OwnerAID);
+	/** Comprar da loja aberta: {indice na loja, quantidade}. */
+	bool SendVendingBuy(const TArray<FIntPoint>& Items);
+	bool SendCloseVending();
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Vending") FOnVending OnVending;
+	const TMap<int32, FString>& GetVendingBoards() const { return VendingBoards; }
+	int32 GetVendMaxItems() const { return VendMaxItems; }
+	const TArray<FRoVendItem>& GetVendBuyItems() const { return VendBuyItems; }
+	int32 GetVendBuyOwner() const { return VendBuyAID; }
+	const TArray<FRoVendItem>& GetMyVendItems() const { return MyVendItems; }
+	bool IsVending() const { return bVending; }
 	/** Usar uma carta: pede a lista de equipamentos que a aceitam (CZ_REQ_ITEMCOMPOSITION_LIST 0x017a). */
 	bool SendCardListRequest(int32 CardIndex);
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Skill") FOnSelectList OnSelectList;
@@ -1055,6 +1084,14 @@ private:
 	/** Listas de escolha e as respostas delas (RagnarokNetworkSelectLists.cpp). */
 	void HandleSelectListPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	int32 PendingCardIndex = -1;
+	void HandleVendingPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	TMap<int32, FString> VendingBoards; // dono (AID) -> titulo da loja sobre a cabeca
+	int32 VendMaxItems = 0;
+	int32 VendBuyAID = 0;
+	int32 VendBuyId = 0;
+	TArray<FRoVendItem> VendBuyItems;
+	TArray<FRoVendItem> MyVendItems;
+	bool bVending = false;
 	int32 SelectSkillId = 0; // skill do Portal (vai de volta no CZ_SELECT_WARPPOINT)
 
 	FString PartyName;

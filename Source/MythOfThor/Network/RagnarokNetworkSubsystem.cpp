@@ -1012,6 +1012,16 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x012c: // ZC_ACK_ADDITEM_TO_CART
 				HandleCartPacket(PacketData, ActualLen, PacketID);
 				break;
+			case 0x012d: // ZC_OPENSTORE (Venda)
+			case 0x0a28: // ZC_ACK_OPENSTORE2
+			case 0x0131: // ZC_STORE_ENTRY (placa da loja)
+			case 0x0132: // ZC_DISAPPEAR_ENTRY
+			case 0x0b3d: // ZC_PC_PURCHASE_ITEMLIST_FROMMC
+			case 0x0b40: // ZC_PC_PURCHASE_MYITEMLIST
+			case 0x09e5: // ZC_DELETEITEM_FROM_MCSTORE
+			case 0x0135: // ZC_PC_PURCHASE_RESULT_FROMMC
+				HandleVendingPacket(PacketData, ActualLen, PacketID);
+				break;
 			case 0x0abe: // ZC_WARPLIST (Portal)
 			case 0x0177: // ZC_ITEMIDENTIFY_LIST (Lupa)
 			case 0x017b: // ZC_ITEMCOMPOSITION_LIST (carta)

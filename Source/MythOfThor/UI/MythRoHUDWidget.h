@@ -958,6 +958,40 @@ protected:
 	int32 SelectScroll = 0;
 	int32 SelectRow = 0;
 
+	// Loja de jogador (MythRoVending.cpp): montar a minha loja, a minha loja aberta e comprar na loja de outro
+public:
+	void OnVendingEvent(uint8 Event);
+	/** Testes: monta e abre a loja com os itens do carrinho (preco igual para todos); compra a linha Row (Count unidades). */
+	void VendTestOpen(const FString& Title, int32 Price);
+	void VendTestBuy(int32 Row, int32 Count);
+protected:
+	void BuildVendingWindows();
+	void RefreshVending();
+	bool HandleVendingClick(const FVector2D& ScreenPos);
+	static constexpr int32 VendRows = 10;
+	UPROPERTY() TObjectPtr<UCanvasPanel> VendSetupWindow;
+	UPROPERTY() TObjectPtr<UEditableTextBox> VendTitleBox;
+	UPROPERTY() TObjectPtr<UEditableTextBox> VendPriceBox;
+	UPROPERTY() TObjectPtr<UEditableTextBox> VendAmountBox;
+	UPROPERTY() TArray<TObjectPtr<UImage>> VendCartHit;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> VendCartNames;
+	UPROPERTY() TArray<TObjectPtr<UImage>> VendShopHit;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> VendShopNames;
+	UPROPERTY() TObjectPtr<UTextBlock> VendSetupInfo;
+	UPROPERTY() TObjectPtr<UTextBlock> VendOpenBtn;
+	UPROPERTY() TObjectPtr<UTextBlock> VendCancelBtn;
+	TArray<FIntVector> VendPlanned; // {indice no carrinho, quantidade, preco}
+	UPROPERTY() TObjectPtr<UCanvasPanel> VendShopWindow;    // a minha loja aberta
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> VendMyNames;
+	UPROPERTY() TObjectPtr<UTextBlock> VendCloseShopBtn;
+	UPROPERTY() TObjectPtr<UCanvasPanel> VendBuyWindow;     // a loja de outro
+	UPROPERTY() TArray<TObjectPtr<UImage>> VendBuyHit;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> VendBuyNames;
+	UPROPERTY() TObjectPtr<UTextBlock> VendBuyTotal;
+	UPROPERTY() TObjectPtr<UTextBlock> VendBuyBtn;
+	UPROPERTY() TObjectPtr<UTextBlock> VendBuyCancelBtn;
+	TMap<int32, int32> VendBuyChosen; // indice na loja -> quantidade escolhida
+
 	// Carrinho do Mercador (MythRoCart.cpp): mesma forma do armazem, com peso e quantidade do servidor (ZC_NOTIFY_CARTITEM_COUNTINFO)
 public:
 	void ToggleCartWindow();

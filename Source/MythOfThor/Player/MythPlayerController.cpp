@@ -244,7 +244,8 @@ void AMythPlayerController::MoveToCursor()
 			{
 				if (HudWidget && bForceNextMove)
 				{
-					if (RoomType == 0) { HudWidget->AskChatRoomPassword(RoomId); }
+					if (RoomType == 2) { if (URagnarokNetworkSubsystem* VNet = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { VNet->SendVendingListReq(RoomId); } } // placa de loja
+					else if (RoomType == 0) { HudWidget->AskChatRoomPassword(RoomId); }
 					else if (URagnarokNetworkSubsystem* RNet = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { RNet->SendEnterChatRoom(RoomId, FString()); }
 				}
 				return;
@@ -1947,6 +1948,20 @@ void AMythPlayerController::MythEquip(int32 ItemID)
 				return;
 			}
 		}
+	}
+}
+
+void AMythPlayerController::MythVendBrowse()
+{
+	if (URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr)
+	{
+		for (const TPair<int32, FString>& Board : Net->GetVendingBoards())
+		{
+			UE_LOG(LogTemp, Log, TEXT("MythVend: abrindo a loja '%s' de %d"), *Board.Value, Board.Key);
+			Net->SendVendingListReq(Board.Key);
+			return;
+		}
+		UE_LOG(LogTemp, Log, TEXT("MythVend: nenhuma loja por perto"));
 	}
 }
 

@@ -224,6 +224,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnShopResult.AddDynamic(this, &AMythNetWorld::HandleShopResult);
 	Net->OnStorageOpen.AddDynamic(this, &AMythNetWorld::HandleStorageOpen);
 	Net->OnSelectList.AddDynamic(this, &AMythNetWorld::HandleSelectList);
+	Net->OnVending.AddDynamic(this, &AMythNetWorld::HandleVending);
 	Net->OnStorageChanged.AddDynamic(this, &AMythNetWorld::HandleStorageChanged);
 	Net->OnPartyChanged.AddDynamic(this, &AMythNetWorld::HandlePartyChanged);
 	Net->OnCharCreateResult.AddDynamic(this, &AMythNetWorld::HandleCharCreateResult);
@@ -316,6 +317,7 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnShopResult.RemoveAll(this);
 		Net->OnStorageOpen.RemoveAll(this);
 		Net->OnSelectList.RemoveAll(this);
+		Net->OnVending.RemoveAll(this);
 		Net->OnPartyChanged.RemoveAll(this);
 		Net->OnCharCreateResult.RemoveAll(this);
 		Net->OnTradeRequest.RemoveAll(this);
@@ -839,6 +841,14 @@ void AMythNetWorld::HandleSpeech(int64 UnitID, const FString& Text)
 		{
 			Hud->AddSpeechBubble(Speaker, Text);
 		}
+	}
+}
+
+void AMythNetWorld::HandleVending(uint8 Event)
+{
+	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
+	{
+		PC->GetHud()->OnVendingEvent(Event);
 	}
 }
 
