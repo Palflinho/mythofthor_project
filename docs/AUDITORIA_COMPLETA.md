@@ -21,20 +21,20 @@ Prioridade: **P0** = laço básico do jogo (quem joga 1 hora precisa), **P1** = 
 | Função | Estado | Servidor | Prio | Notas |
 |---|---|---|---|---|
 | Ataque básico corpo a corpo, esquiva, crítico, miss | 🟡 | ok | P0 | números de dano existem; conferir tempo de ataque (ASPD) por arma |
-| Ataque à distância com arco (flecha visível, consumo de munição) | 🟡 | ok | P0 | flecha do jogador existe; **troca/fim da munição (0x013b/0x013c) e aviso "sem munição"** sem tratamento |
+| Ataque à distância com arco (flecha visível, consumo de munição) | 🟡 | ok | P0 | flecha do jogador existe; munição equipada (0x013c) e aviso "sem flechas" (0x013b) feitos em 2026-10-13 (`a91f563`) |
 | Skills de alvo, de chão e de si mesmo | 🟡 | ok | P0 | |
 | Barra de cast, cast interrompido, cast sem barra | 🟡 | ok | P0 | |
-| Skills com **menu depois do uso** (lista de alvos/receitas/ materiais) | ⬜ | ok | P0 | Arrow Making (0x01ad), Autospell (0x01cd), Pharmacy/Forge (0x018d), Reparar arma (0x01fc), Refinar arma (0x0221), Hocus-pocus, Detecting, Create Elemental, Scribble: **nenhuma tem janela** |
+| Skills com **menu depois do uso** (lista de alvos/receitas/ materiais) | 🟡 | ok | P0 | 2026-10-13 (`4634407`): janela de lista para Portal, Lupa, carta, Fabricar Flechas, Forjar/Farmacologia (sem pedras), Autoconjurar e Refinar arma. Faltam Reparar arma (0x0b65), Hocus-pocus, Detecting, Create Elemental, Scribble |
 | Skills de combo (Monge, Ferreiro) e `ZC_COMBODELAY` (0x01d2) | ⬜ | ok | P1 | sem tratamento do atraso de combo |
 | Skills de quest / platinum (NPCs que ensinam) | 🟡 | scripts presentes | P1 | |
 | Animações de skill (STR, SPR, sprites, sons) | 🟡 | – | P0 | 575 efeitos mapeados; ver `docs/EFEITOS_PENDENTES.md` (SPR/QuadHorn/TRAIL, armadilhas e canções faltam) |
 | Efeitos de status na unidade (veneno, congelado, pedra, atordoado, sono, maldição, silêncio, cego) | 🟡 | ok | P0 | tintas e adereços feitos; ícones de status com tempo corrigidos hoje |
-| Skill de teleporte/portal (Warp Portal lista, Memo/Remember) | 🟡 | ok | P0 | lista 0x011c existe; **Memo (0x011e) sem tratamento** |
+| Skill de teleporte/portal (Warp Portal lista, Memo/Remember) | 🟡 | ok | P0 | lista do Portal (0x0abe) e resultado do Memo (0x011e) feitos em 2026-10-13; falta testar o Portal com Noviço |
 | Skills de passiva (aparecem, sem uso) | 🟡 | ok | P1 | |
 | Skills de armadilha e unidades no chão | 🟡 | ok | P1 | `MythSkillEffects`; faltam arquivos de armadilha no GRF |
 | Pós-delay (0x043d), delay global, "skill em cooldown" | ⬜ | ok | P1 | |
 | Dano elemental/ colorido, "Miss", "Lucky", cura em verde | 🟡 | ok | P1 | |
-| Mensagens de falha de skill (`ZC_ACK_TOUCHSKILL`, SP insuficiente, sem item) | 🟡 | ok | P0 | confirmar a lista inteira de motivos |
+| Mensagens de falha de skill (`ZC_ACK_TOUCHSKILL`, SP insuficiente, sem item) | 🟡 | ok | P0 | motivos com as mensagens do próprio cliente (msgstringtable, mapa do roBrowser) desde 2026-10-13 |
 | Kill steal / alvo preso (lock) e "/attackmode" | ⬜ | ok | P2 | |
 | MVP: mensagem, prêmio, EXP especial (0x010b/0x010c/0x010d) | ⬜ | ok | P1 | só o servidor decide; o cliente nem mostra o aviso |
 | Efeitos de refino ≥ +7 (brilho nas armas/armaduras) | ⬜ | ok | P1 | `ZC_EQUIPMENT_EFFECT` 0x0a3b |
@@ -49,7 +49,7 @@ Prioridade: **P0** = laço básico do jogo (quem joga 1 hora precisa), **P1** = 
 | Ferreiro: ranking, pontos de ranking (0x0219/0x021b) | ⬜ | P2 | |
 | **Alquimista: poções** (Pharmacy, Bioethics, Marine Sphere, Cannibalize) | ⬜ | P1 | mesma lista de materiais |
 | **Alquimista: carrinho, vender no carrinho (Vending)** | ⬜ | P1 | só o sprite do carrinho existe |
-| **Mercador: carrinho** (janela, mover itens 0x0121/0x0124/0x0125) | ⬜ | P0 | sem janela de carrinho |
+| **Mercador: carrinho** (janela, mover itens 0x0121/0x0124/0x0125) | 🟡 | P0 | janela de carrinho (listas, mover, peso/itens) em 2026-10-13 (`e3211c2`); falta a arte do LATAM e vender (Vending) |
 | **Mercador: loja do jogador** (abrir, comprar de outros) | ⬜ | P1 | 0x012d/0x0131/0x0136 |
 | Mercador: Buying Store (0x0812) | ⬜ | P2 | |
 | **Caçador: falcão** (aparecer, comando Blitz Beat, Detect, Steel Crow) | 🟡 | P0 | aparece e vira; **botão de soltar** feito hoje; faltam o ataque do falcão (Blitz Beat) e o aviso de "falcão voltou" |
@@ -86,9 +86,9 @@ Prioridade: **P0** = laço básico do jogo (quem joga 1 hora precisa), **P1** = 
 | Janela de itens (abas, favoritos, descarte, contagem) | 🟡 | P0 | |
 | Usar item, comer, poções com cooldown (cooldown visual?) | 🟡 | P0 | |
 | Equipar/desequipar tudo, cabeças, capas, escudo, ambas as mãos, 2 acessórios | 🟡 | P0 | incluir **posições alternativas** (arma de duas mãos x escudo) |
-| **Munição** | 🟡 | P0 | corrigido hoje: slot no equipamento + lista; falta aviso e troca automática |
-| Cartas: encaixar (0x017a/0x017d) e nome composto ("Espada [Soldado]") | 🟡 | P0 | |
-| Identificar item (0x0177 lista), Refinar (Oridecon), Reparar | 🟡 | P0 | |
+| **Munição** | 🟡 | P0 | munição real pelo 0x013c e aviso de falta (2026-10-13); falta troca automática ao acabar |
+| Cartas: encaixar (0x017a/0x017d) e nome composto ("Espada [Soldado]") | 🟡 | P0 | encaixar feito (0x017a/0x017b/0x017c/0x017d, testado); falta o nome composto |
+| Identificar item (0x0177 lista), Refinar (Oridecon), Reparar | 🟡 | P0 | Lupa/Avaliação de item e Refinar arma (skill) em 2026-10-13; falta Reparar e o refino do NPC |
 | Itens de ovo/pet, itens de invocação (Bolsa) | ⬜ | P1 | |
 | Itens de evento / cash / disfarces | ➖ | P2 | ~96 itens sem recurso no cliente |
 | Dica do item com cores, slots e peso | 🟡 | P0 | |
@@ -103,7 +103,7 @@ Prioridade: **P0** = laço básico do jogo (quem joga 1 hora precisa), **P1** = 
 
 | Função | Estado | Prio | Notas |
 |---|---|---|---|
-| Diálogo de NPC (mes/next/close), menu, **entrada de texto e de número** | 🟡 | P0 | `input()` do script: pacotes 0x0142 / 0x01d5 sem tratamento — NPCs que pedem número/texto **travam** |
+| Diálogo de NPC (mes/next/close), menu, **entrada de texto e de número** | ✅ | P0 | entrada de número e de texto (0x0142/0x01d4 → 0x0143/0x01d5) em 2026-10-13 (`a43bf70`), testada |
 | Imagens de NPC / cutin (0x01b3) e mapas de imagem | ⬜ | P1 | |
 | Lojas NPC (compra, venda, desconto de Mercador/ Overcharge) | 🟡 | P0 | |
 | Kafra (salvar, armazém, teleporte, carrinho) | 🟡 | P0 | |
