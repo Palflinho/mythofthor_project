@@ -415,6 +415,22 @@ void UMythRoHUDWidget::RefreshWindows()
 	if (FriendsWindow && FriendsWindow->IsVisible()) { RefreshFriends(); }
 	if (QuestWindow && QuestWindow->IsVisible()) { RefreshQuests(); }
 	UpdateSettingsTabs();
+	// Icone do correio com o aviso "novo" quando ha carta nao lida (arte bt_mail_new)
+	if (const URagnarokNetworkSubsystem* BadgeNet = GetNet())
+	{
+		const bool bUnread = BadgeNet->HasUnreadMail();
+		if (bUnread != bMailBadge)
+		{
+			bMailBadge = bUnread;
+			for (int32 i = 0; i < MenuIcons.Num(); ++i)
+			{
+				if (MenuIconNames[i] == TEXT("mail"))
+				{
+					MenuIcons[i]->SetBrush(RoWinBrush(FMythRoUITextures::Get(bUnread ? TEXT("menu_icon/bt_mail_new.bmp") : TEXT("menu_icon/bt_mail.bmp")), FVector2D(32.f, 34.f) * UIScale));
+				}
+			}
+		}
+	}
 	if (BankWindow && BankWindow->IsVisible()) { RefreshBank(); }
 	if (AchievementWindow && AchievementWindow->IsVisible()) { RefreshAchievements(); }
 	if (EquipSwitchWindow && EquipSwitchWindow->IsVisible()) { RefreshEquipSwitch(); }

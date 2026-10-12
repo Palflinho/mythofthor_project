@@ -134,6 +134,9 @@ void UMythRoHUDWidget::BuildEntryScreens()
 			UImage* Back = AddImage(EntryCharPanel, FMythRoUITextures::Get(TEXT("select_character_ver3/img_slot_normal.bmp")), X, Y, EnCardW, EnCardH);
 			Back->SetVisibility(ESlateVisibility::Visible);
 			EntryCardBack.Add(Back);
+			UTextBlock* Plus = AddText(EntryCharPanel, X + EnCardW * 0.5f - 9.f, Y + 38.f, 24, FLinearColor(0.62f, 0.68f, 0.88f));
+			Plus->SetText(FText::FromString(TEXT("+")));
+			EntryCardPlus.Add(Plus);
 			EntryCardName.Add(AddText(EntryCharPanel, X + 8.f, Y + EnCardH - 24.f, 8, EnText, false));
 			EntryCardInfo.Add(AddText(EntryCharPanel, X + 10.f, Y + 40.f, 8, EnText));
 			EntryCardInfo2.Add(AddText(EntryCharPanel, X + 10.f, Y + 56.f, 7, EnGray));
@@ -332,7 +335,8 @@ void UMythRoHUDWidget::RefreshEntryCharacters()
 		{
 			{ FSlateBrush B; B.SetResourceObject(Tex); B.ImageSize = FVector2D(EnCardW, EnCardH) * UIScale; B.DrawAs = ESlateBrushDrawType::Image; EntryCardBack[i]->SetBrush(B); }
 		}
-		EntryCardName[i]->SetText(FText::FromString(C ? C->Name : FString(TEXT("+"))));
+		EntryCardPlus[i]->SetVisibility(C ? ESlateVisibility::Collapsed : ESlateVisibility::HitTestInvisible);
+		EntryCardName[i]->SetText(FText::FromString(C ? C->Name : FString()));
 		EntryCardName[i]->SetColorAndOpacity(FSlateColor(C ? EnText : EnGray));
 		EntryCardInfo[i]->SetText(C ? FText::FromString(FString::Printf(TEXT("%s"), *EnJobName(C->JobClass))) : FText::GetEmpty());
 		EntryCardInfo2[i]->SetText(C ? FText::FromString(FString::Printf(TEXT("Nv %d / %d"), C->BaseLevel, C->JobLevel)) : FText::GetEmpty());

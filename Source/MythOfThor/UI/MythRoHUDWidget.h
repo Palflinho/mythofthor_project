@@ -495,6 +495,7 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardName;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardInfo2;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryCardPlus;
 	UPROPERTY() TObjectPtr<UTextBlock> EntryInfoTitle;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EntryInfoValues;
 
@@ -687,6 +688,7 @@ protected:
 	// Configuracoes: faixa de abas comum as tres janelas de opcoes (MythRoSettingsTabs.cpp)
 	struct FSettingsTab { UCanvasPanel* Window = nullptr; UImage* Box = nullptr; UTextBlock* Label = nullptr; int32 Index = 0; };
 	TArray<FSettingsTab> SettingsTabs;
+	bool bMailBadge = false;
 	void AddSettingsTabs(UCanvasPanel* Win);
 	int32 ActiveSettingsTab() const;
 	void UpdateSettingsTabs();

@@ -3455,6 +3455,7 @@ void URagnarokNetworkSubsystem::HandleMailPacket(const uint8* PacketData, int32 
 			Mails.Add(M);
 			Off += 41 + TitleLen;
 		}
+		bMailUnreadFlag = false; // a lista nova traz o estado de cada carta
 		OnMailChanged.Broadcast();
 		break;
 	case 0x0b63: // <len>.W <aba>.B <id>.Q <tam texto>.W <zeny>.Q <itens>.B <texto> ...
@@ -3510,6 +3511,7 @@ void URagnarokNetworkSubsystem::HandleMailPacket(const uint8* PacketData, int32 
 		}
 		break;
 	case 0x09e7: // <ha correio novo>.B
+		bMailUnreadFlag = PacketSize >= 3 && PacketData[2] != 0;
 		if (PacketSize >= 3 && PacketData[2] != 0)
 		{
 			Say(TEXT("Você tem correio novo (Alt+R)."));

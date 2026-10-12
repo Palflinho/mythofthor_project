@@ -749,6 +749,7 @@ public:
 	const FString& GetOpenMailText() const { return OpenMailText; }
 	int64 GetOpenMailZeny() const { return OpenMailZeny; }
 	int32 GetOpenMailItems() const { return OpenMailItems; }
+	bool HasUnreadMail() const { if (bMailUnreadFlag) { return true; } for (const FRoMail& M : Mails) { if (!M.bRead) { return true; } } return false; }
 	void ClearOpenMail() { OpenMailId = 0; OpenMailText.Reset(); OpenMailZeny = 0; OpenMailItems = 0; }
 	bool IsInChatRoom() const { return bInChatRoom; }
 	const FString& GetChatRoomTitle() const { return CurrentChatRoomTitle; }
@@ -1002,6 +1003,7 @@ private:
 	int64 OpenMailZeny = 0;
 	int32 OpenMailItems = 0;
 	bool bMailWriting = false;
+	bool bMailUnreadFlag = false;
 	int32 AchievementPoints = 0;
 	int32 AchievementRank = 0;
 	bool bBankOpen = false;
