@@ -1,4 +1,4 @@
-# Redesenho das janelas Equipamento, Habilidades, Grupo e Menu Esc (spec)
+# Redesenho das janelas Equipamento, Habilidades, Grupo, Navegação e Menu Esc (spec)
 
 Pedido do usuário em 2026-10-12: nossas janelas de equipamento, habilidades, grupo e menu "são feias, parecem versão muito antiga". Comparei os prints do LATAM
 (`docs/ref/hud_latam/08_equip_geral.png`, `13_skilltree_1a.png`, `19_grupo.png`, `image-1791661013503.png`) com o que o jogo mostra hoje (capturas de 2026-10-12).
@@ -39,5 +39,16 @@ Nota: o comando de teste `MythWindow` não tem o menu Esc; para capturar é prec
 
 ## Ordem sugerida
 
-1. Grupo (rápido: cartões e barra de ferramentas), 2. Habilidades (abas verticais e ilustração), 3. Equipamento (prévia do personagem exige renderizar o sprite no UMG), 4. Menu Esc (retoque).
+1. Grupo (rápido: cartões e barra de ferramentas), 2. Habilidades (abas verticais e ilustração), 3. Navegação (busca com filtro, monstros e NPCs por mapa), 4. Equipamento (prévia do personagem exige renderizar o sprite no UMG), 5. Menu Esc (retoque).
 Para cada uma: abrir no jogo com `MythWindow` e comparar com o print do LATAM lado a lado antes de entregar.
+
+## Navegação (Alt+N, /navi), alvo: `image-1791661011151.png`
+
+Hoje: janela de ~290 px, caixa de busca com botão "procura", lista de resultados simples com ícone verde, miniatura do mapa e botões "ver" e "Ir até o mapa"; rota em linhas de texto.
+Alvo (print):
+- Janela estreita e alta (~285 x 350) com barra de título "Navigation" (3 botões: ajuda, minimizar, fechar) e **linha de busca**: seta de voltar, **caixa de filtro "ALL"** (lista suspensa: mapa, NPC, monstro), campo de texto, **lupa** e **pasta** (abrir/guardar).
+- Painel esquerdo: **"Result[n]"** com os resultados, cada um com o ícone da categoria (M verde = mapa, M vermelho = monstro, NPC) e o nome em azul sublinhado.
+- Painel direito: nome do mapa em azul em cima, **imagem do mapa** (já temos), e a **lista de itens do mapa selecionado** com ícones: o próprio mapa, NPCs e monstros com o nível/tamanho entre parênteses.
+- Rodapé da direita: caixa "service", botões **Share**, **Find** e **Move** (o "Move" é o nosso "Ir até o mapa", já funcionando), caixa "Minimize" e dois ícones (histórico e destino fixo) embaixo.
+- Dados: `navi_map`, `navi_mob`, `navi_npc`, `navi_link`, `navi_linkdistance`, `navi_npcdistance` e `navi_picknpc` do `luafiles514\lua files\navigation\*.lub` (já extraídos para `E:\Dev\Ragnarok_Assets\grf\data\luafiles514\...`; decompilar com `tools/lub_eval.py`). Hoje só usamos mapas e ligações; faltam monstros e NPCs por mapa, que enchem o painel direito.
+- Arte: `navigation_interface3/*` (`btn_find_*`, `btn_share_*`, `btn_getdirections_*`, `dropdown_*`, `icon_list_map/mob/npc`, `bg_search`, `navi_bar_*`).
