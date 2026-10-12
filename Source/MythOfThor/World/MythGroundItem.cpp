@@ -1,7 +1,7 @@
 #include "World/MythGroundItem.h"
 
 #include "Sprites/MythRoSpriteComponent.h"
-#include "UI/MythRoClientTables.h"
+#include "Core/MythRoClientTables.h"
 
 #include "Components/BoxComponent.h"
 #include "Components/PointLightComponent.h"

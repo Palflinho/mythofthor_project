@@ -8,7 +8,7 @@
 // Quem pode convidar, expulsar e desfazer e decisao do servidor; os textos sao os da msgstringtable do cliente LATAM ("Cla").
 
 #include "Network/RagnarokNetworkSubsystem.h"
-#include "UI/MythRoClientTables.h"
+#include "Core/MythRoClientTables.h"
 
 namespace
 {

@@ -7,7 +7,7 @@
 
 #include "Network/RagnarokNetworkSubsystem.h"
 #include "Sprites/MythRoSound.h"
-#include "UI/MythRoClientTables.h"
+#include "Core/MythRoClientTables.h"
 
 #include "Components/CanvasPanel.h"
 #include "Components/Image.h"

@@ -11,7 +11,7 @@
 // (seguir o dono, atacar o alvo dele) e o servidor decide tudo o mais.
 
 #include "Network/RagnarokNetworkSubsystem.h"
-#include "UI/MythRoClientTables.h"
+#include "Core/MythRoClientTables.h"
 
 namespace
 {

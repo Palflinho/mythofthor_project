@@ -4,7 +4,7 @@
 // Formatos conferidos no packets.hpp do rAthena para o PACKETVER 20250402 (IDs de item com 4 bytes).
 
 #include "Network/RagnarokNetworkSubsystem.h"
-#include "UI/MythRoClientTables.h"
+#include "Core/MythRoClientTables.h"
 
 namespace
 {

@@ -11,7 +11,7 @@
 #include "Sprites/MythMonster.h"
 #include "Gameplay/MythStatsComponent.h"
 #include "UI/MythRoUITextures.h"
-#include "UI/MythRoClientTables.h"
+#include "Core/MythRoClientTables.h"
 #include "World/MythGroundItem.h"
 #include "World/MythMapInfo.h"
 #include "UI/MythRoHUDWidget.h"

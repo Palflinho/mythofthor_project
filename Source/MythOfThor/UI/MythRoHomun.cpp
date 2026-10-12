@@ -5,7 +5,7 @@
 // habilidade, [+] distribui ponto. Pacotes em Network/RagnarokNetworkHomun.cpp; IA basica em Player/MythPlayerHomun.cpp.
 
 #include "UI/MythRoHUDWidget.h"
-#include "UI/MythRoClientTables.h"
+#include "Core/MythRoClientTables.h"
 #include "UI/MythRoUITextures.h"
 
 #include "Network/RagnarokNetworkSubsystem.h"

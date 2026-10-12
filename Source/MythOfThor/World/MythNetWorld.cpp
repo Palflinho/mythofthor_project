@@ -16,7 +16,7 @@
 #include "World/MythCellMoverComponent.h"
 #include "Sprites/MythRoSound.h"
 #include "World/MythWarpPortal.h"
-#include "UI/MythRoClientTables.h"
+#include "Core/MythRoClientTables.h"
 #include "UI/MythHUD.h"
 #include "UI/MythRoHUDWidget.h"
 

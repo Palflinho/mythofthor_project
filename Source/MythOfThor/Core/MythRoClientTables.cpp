@@ -1,4 +1,4 @@
-#include "UI/MythRoClientTables.h"
+#include "Core/MythRoClientTables.h"
 #include "Sprites/MythRoSpriteComponent.h"
 
 #include "UI/MythRoUITextures.h"

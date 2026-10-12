@@ -46,6 +46,7 @@ flowchart LR
     A -- "lê" --> E["Graficos do RO (GRF extraído)"]
 ```
 
+- Regras das camadas: [`docs/ARQUITETURA.md`](docs/ARQUITETURA.md).
 - Cliente: `Source/MythOfThor/` com `Network/` (sockets e pacotes), `Player/` (controle, movimento, rota), `Sprites/` (sprites, efeitos de
   skill, falcão), `World/` (mundo em rede, monstros, NPCs), `UI/` (HUD estilo LATAM), `Core/` e `Gameplay/`.
 - Servidor: `server/` (Docker compose, NPCs customizados em `server/npc/custom/myth`, scripts de acesso externo e de Renovação).

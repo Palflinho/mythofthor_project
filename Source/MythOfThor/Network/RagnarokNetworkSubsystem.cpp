@@ -1,6 +1,6 @@
 #include "RagnarokNetworkSubsystem.h"
 #include "RagnarokPacketDatabase.h"
-#include "UI/MythRoClientTables.h"
+#include "Core/MythRoClientTables.h"
 #include "Common/TcpSocketBuilder.h"
 #include "Dom/JsonObject.h"
 #include "Misc/FileHelper.h"

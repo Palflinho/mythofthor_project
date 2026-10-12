@@ -3,7 +3,7 @@
 // duplo clique nele na janela de itens. Quem veste, tira e valida e o servidor.
 
 #include "UI/MythRoHUDWidget.h"
-#include "UI/MythRoClientTables.h"
+#include "Core/MythRoClientTables.h"
 
 #include "Network/RagnarokNetworkSubsystem.h"
 

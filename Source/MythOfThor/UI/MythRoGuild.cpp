@@ -7,7 +7,7 @@
 // Pacotes em Network/RagnarokNetworkGuild.cpp; quem pode o que e decisao do servidor.
 
 #include "UI/MythRoHUDWidget.h"
-#include "UI/MythRoClientTables.h"
+#include "Core/MythRoClientTables.h"
 #include "UI/MythRoUITextures.h"
 
 #include "Network/RagnarokNetworkSubsystem.h"

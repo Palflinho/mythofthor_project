@@ -7,7 +7,7 @@
 // Precos, zeny, peso e estoque sao do servidor; o cliente so mostra e pede.
 
 #include "Network/RagnarokNetworkSubsystem.h"
-#include "UI/MythRoClientTables.h"
+#include "Core/MythRoClientTables.h"
 
 namespace
 {

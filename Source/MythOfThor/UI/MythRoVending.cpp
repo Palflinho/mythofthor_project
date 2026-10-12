@@ -9,7 +9,7 @@
 #include "UI/MythRoHUDWidget.h"
 
 #include "Network/RagnarokNetworkSubsystem.h"
-#include "UI/MythRoClientTables.h"
+#include "Core/MythRoClientTables.h"
 
 #include "Blueprint/WidgetTree.h"
 #include "Components/CanvasPanel.h"

@@ -5,7 +5,7 @@
 #include "UI/MythRoHUDWidget.h"
 
 #include "Network/RagnarokNetworkSubsystem.h"
-#include "UI/MythRoClientTables.h"
+#include "Core/MythRoClientTables.h"
 
 #include "Components/CanvasPanel.h"
 #include "Components/Image.h"

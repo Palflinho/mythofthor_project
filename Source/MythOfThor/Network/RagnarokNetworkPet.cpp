@@ -9,7 +9,7 @@
 // Fome, lealdade, comida e chance de captura sao do servidor; o cliente mostra e pede.
 
 #include "Network/RagnarokNetworkSubsystem.h"
-#include "UI/MythRoClientTables.h"
+#include "Core/MythRoClientTables.h"
 
 namespace
 {
