@@ -59,7 +59,8 @@ enum class EMythRoWindow : uint8
 	Achievements, // Alt+Y: conquistas
 	EquipSwitch, // Alt+W: troca rapida
 	Navi,     // Alt+N: navegacao
-	Mail      // Alt+R: correio
+	Mail,     // Alt+R: correio
+	WorldMap  // Ctrl+`: mapa-mundi
 };
 
 /** Barra de medidor classica (gze*_left/mid/right sobre gze_bg): o meio estica conforme a fracao. */
@@ -963,6 +964,23 @@ protected:
 	TArray<FString> SelectNames;
 	int32 SelectScroll = 0;
 	int32 SelectRow = 0;
+
+	// Mapa-mundi (MythRoWorldMap.cpp): worldmap.jpg com os retangulos do mappostable.txt, mapa atual marcado, nome sob o mouse
+public:
+	void ToggleWorldMap();
+	/** Nome do mapa em portugues (tabela da Navegacao do LATAM), ou o proprio id. */
+	static FString NaviDisplayName(const FString& MapId);
+protected:
+	void BuildWorldMapWindow();
+	void TickWorldMap();
+	bool HandleWorldMapClick(const FVector2D& ScreenPos);
+	UPROPERTY() TObjectPtr<UCanvasPanel> WorldMapWindow;
+	UPROPERTY() TObjectPtr<UImage> WorldMapImage;
+	UPROPERTY() TObjectPtr<UImage> WorldMapHere;
+	UPROPERTY() TObjectPtr<UImage> WorldMapHover;
+	UPROPERTY() TObjectPtr<UTextBlock> WorldMapLabel;
+	UPROPERTY() TObjectPtr<UTextBlock> WorldMapTitle;
+	FString WorldMapHoverId;
 
 	// Loja de jogador (MythRoVending.cpp): montar a minha loja, a minha loja aberta e comprar na loja de outro
 public:

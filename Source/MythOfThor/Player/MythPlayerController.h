@@ -414,6 +414,7 @@ private:
 	void OnHotkeyBank();
 	void OnHotkeyMail();
 	void OnHotkeyNavi();
+	void OnHotkeyWorldMap();
 	void OnHotkeyEquipSwitch();
 	void OnHotkeyAchievements();
 	void OnHotkeyItems();

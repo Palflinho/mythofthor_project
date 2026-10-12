@@ -711,3 +711,9 @@ bool UMythRoHUDWidget::HandleNaviWheel(const FVector2D& ScreenPos, float Delta)
 	RefreshNaviLists();
 	return true;
 }
+
+FString UMythRoHUDWidget::NaviDisplayName(const FString& MapId)
+{
+	const FString* Name = Navi().Names.Find(MapId.ToLower());
+	return Name && !Name->IsEmpty() ? *Name : MapId;
+}

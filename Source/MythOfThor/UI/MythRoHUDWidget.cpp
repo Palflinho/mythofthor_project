@@ -372,6 +372,7 @@ void UMythRoHUDWidget::BuildLayout()
 	BuildCartWindow();
 	BuildSelectListWindow();
 	BuildVendingWindows();
+	BuildWorldMapWindow();
 	BuildPartyWindow();
 	BuildOptionsWindow();
 	BuildEmotionWindows();
@@ -1212,6 +1213,7 @@ void UMythRoHUDWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
 	TickNaviAuto(InDeltaTime);
+	TickWorldMap();
 	if (EquipWindow && EquipWindow->IsVisible())
 	{
 		UpdateEquipMount(); // municao e falcao/montaria mudam sem avisar a janela
