@@ -150,6 +150,7 @@ public:
 	void MythOptions(int32 Tab);
 	UFUNCTION(Exec) void MythFriendReply(int32 Accept);
 	UFUNCTION(Exec) void MythEquip(int32 ItemID);
+	UFUNCTION(Exec) void MythGameMenu() { if (HudWidget) { HudWidget->ToggleGameMenu(); } }
 	UFUNCTION(Exec) void MythItemTab(int32 Tab) { if (HudWidget) { HudWidget->SetItemTab(Tab); } }
 	UFUNCTION(Exec) void MythNavi(const FString& Query, int32 Go = 0) { if (HudWidget) { HudWidget->OpenNaviWindow(Query); if (Go) { HudWidget->NaviGoSelected(); } } }
 	UFUNCTION(Exec) void MythRoom(int32 Create, const FString& Title);

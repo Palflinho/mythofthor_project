@@ -131,14 +131,14 @@ void UMythRoHUDWidget::ApplyGraphicsOptions()
 
 void UMythRoHUDWidget::BuildGameMenu()
 {
-	// Menu principal (como a janela de "Sair" do RO, com as opcoes de hoje)
-	const FVector2D MenuSize(200.f, 17.f + 5 * 24.f + 12.f);
+	// Menu principal ("Game setting window" do LATAM, print image-1791661013503): 300 de largura, 5 botoes largos de 262 x 20
+	// com 6 px entre eles; ate aqui eram links de texto numa janela de 200
+	const FVector2D MenuSize(300.f, 17.f + 12.f + 5 * 26.f + 4.f);
 	GameMenuWindow = MakeRoPanel(TEXT("Menu"), MenuSize, FVector2D::ZeroVector);
 	const TCHAR* Items[5] = { TEXT("Seleção de personagem"), TEXT("Configurações do jogo"), TEXT("Atalhos"), TEXT("Sair do jogo"), TEXT("Voltar ao jogo") };
 	for (int32 i = 0; i < 5; ++i)
 	{
-		UTextBlock* T = AddText(GameMenuWindow, 18.f, 26.f + i * 24.f, 9, MenuLink);
-		T->SetText(FText::FromString(Items[i]));
+		UTextBlock* T = AddTextButton(GameMenuWindow, Items[i], 19.f, 17.f + 12.f + i * 26.f, 262.f);
 		GameMenuItems.Add(T);
 	}
 	GameMenuWindow->SetVisibility(ESlateVisibility::Collapsed);
