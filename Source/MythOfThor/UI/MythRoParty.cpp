@@ -18,11 +18,11 @@ namespace
 	const FLinearColor PartyLink(0.12f, 0.3f, 0.65f);
 	const FLinearColor PartyGray(0.45f, 0.45f, 0.45f);
 	const FLinearColor PartyRed(0.7f, 0.1f, 0.1f);
-	// Texto sobre o cartao escuro do membro (renewalparty/bg_partymember): claro
-	const FLinearColor PartyCardText(1.f, 1.f, 1.f);
-	const FLinearColor PartyCardGray(0.78f, 0.8f, 0.85f);
-	const FLinearColor PartyCardRed(1.f, 0.45f, 0.4f);
-	const FLinearColor PartyCardLink(0.55f, 0.75f, 1.f);
+	// Texto escuro sobre o cartao claro do membro
+	const FLinearColor PartyCardText(0.08f, 0.08f, 0.08f);
+	const FLinearColor PartyCardGray(0.35f, 0.35f, 0.38f);
+	const FLinearColor PartyCardRed(0.7f, 0.1f, 0.1f);
+	const FLinearColor PartyCardLink(0.12f, 0.3f, 0.65f);
 	constexpr float PartyW = 286.f; // roBrowser PartyFriends V1 / goro: 286 de largura
 	constexpr float PartyRowH = 38.f; // cartao de membro de 38 (roBrowser info-v2)
 	constexpr float PartyListY = 40.f;
@@ -38,7 +38,7 @@ void UMythRoHUDWidget::BuildPartyWindow()
 	for (int32 i = 0; i < PartyRowCount; ++i)
 	{
 		const float Y = PartyListY + i * PartyRowH;
-		PartyCards.Add(AddImage(PartyWindow, FMythRoUITextures::Get(TEXT("renewalparty/bg_partymember.bmp")), 2.f, Y, PartyW - 4.f, PartyRowH - 2.f));
+		PartyCards.Add(AddColor(PartyWindow, FLinearColor(0.95f, 0.96f, 0.98f, 1.f), 2.f, Y, PartyW - 4.f, PartyRowH - 3.f)); // cartao claro, sem a moldura escura do bg_partymember
 		PartyJobIcons.Add(AddImage(PartyWindow, nullptr, 8.f, Y + 7.f, 24.f, 24.f));
 		PartyCrowns.Add(AddImage(PartyWindow, FMythRoUITextures::Get(TEXT("renewalparty/ico_partycrown.bmp")), 8.f, Y - 6.f));
 		PartyRowNames.Add(AddText(PartyWindow,  40.f, Y + 3.f, 8, PartyText));
