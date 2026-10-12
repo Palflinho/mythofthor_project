@@ -15,10 +15,10 @@ Onde não tenho número de referência, a regra é o print. Veredito: ✅ confer
 | Status (`MythRoHUDWindows.cpp`) | 280 × 141 | arte `w_statwin_bg` 280 × 124 + título 17 | ✅ (usa a arte real) |
 | Itens | 254 × 175 (7 × 4 casas de 32) | print 04 (aprox. 280 × 190); inventário LATAM: 7 colunas | 🟡 conferir contra o print: altura e rodapé |
 | **Equipamento** | **280 × 165** | roBrowser V4: título 17 + abas 15 + painel 150 + rodapé 20 = **202**; goro 300 | ❌ 37 px mais baixa que a referência; **falta rodapé** (Show Equip, switch, remover), abas Title/Damage e prévia; slots de 115 × 24 (nós ~86 de largura) |
-| **Habilidades** | **296 × ~496** (abas no topo) | print 13: ~**560 × 410** com abas verticais; roBrowser V2: células 28 × 28, rodapé 27 | ❌ layout diferente: abas verticais, 7 colunas × 6 linhas (nós 9 linhas), ilustração, rodapé com Apply/Reset |
-| **Grupo** | **280 × (lista + 34)** | roBrowser V1: conteúdo 240 × 120, título 17, ferramentas 20, rodapé 21; goro 286 × 256; print 19 ~285 × 320 | ❌ cartões de 34 → **38**, sem ícone de classe, sem coroa, sem barra de ferramentas nem alça |
+| **Habilidades** | **532 × (24 + linhas × 56 + 40)**: 532 × 400 com 6 linhas, até 568 com 9 (Super Aprendiz) | print 13: ~**560 × 410** com abas verticais; roBrowser V2: células 28 × 28, rodapé 27 | 🟡 abas verticais e grade 7 × 68 feitas; a altura acompanha a aba (`ResizeSkillTree`); faltam ilustração, abas 3a/Etc e "skill point : N" |
+| **Grupo** | **286 × (lista + 34)**, cartões de 38 | roBrowser V1: conteúdo 240 × 120, título 17, ferramentas 20, rodapé 21; goro 286 × 256; print 19 ~285 × 320 | 🟡 largura, cartões, ícone de classe e coroa feitos; cartão claro com texto escuro (escolha nossa, aprovada); faltam barra de ferramentas e alça |
 | Amigos | 270 × (lista) | goro: linhas 286 × 24; roBrowser PartyFriends compartilhado | 🟡 usar a **mesma janela do Grupo** (286 de largura, linhas de 24) |
-| **Menu Esc** (`MythRoGameMenu.cpp`) | **200 × 149** (botões de 24) | print: ~**300 × 146** com 5 botões largos; goro 252 × 200; roBrowser 280 | ❌ estreito demais; **largura 300**, botões ~262 × 21, 5 px entre eles |
+| **Menu Esc** (`MythRoGameMenu.cpp`) | **300 × 163**, botões de 262 a cada 26 px | print: ~**300 × 146** com 5 botões largos; goro 252 × 200; roBrowser 280 | ✅ largura; 🟡 ~17 px mais alta que o print (passo de 26; o print sugere ~21 + 5) |
 | Configurações (gráficos/som/opções) | 470 × variável | prints 60973410…60989882: ~ 470 de largura | ✅ largura; 🟡 conferir altura por aba |
 | Morte (`DeathWindow`) | 260 × 91 | goro: menu de morte 252 × 238 com 5 botões | 🟡 hoje 2 opções; o original tem Voltar à vida / ao ponto salvo / seleção de personagem / sair / cancelar |
 | Informações do item | InfoW × InfoH (300 × 210) | tipbox / print do LATAM | 🟡 conferir |
@@ -59,9 +59,8 @@ Cada item: abrir no jogo com `MythWindow` (precisa de um comando novo para o men
 
 ## Andamento (atualizado 2026-10-12)
 
-- ✅ **Menu Esc:** 300 de largura, 5 botões de 262 × 20 (commit `d6399ab`).
-- 🟡 **Grupo:** cartões de 38 com fundo `bg_partymember`, ícone da classe (`icon_jobs_<id>`), coroa do líder e texto claro; faltam barra de ferramentas, alça de redimensionar, contador de membros e a barra de SP.
+- ✅ **Menu Esc:** 300 de largura, 5 botões de 262, um a cada 26 px (commit `d6399ab`); falta conferir a altura total contra o print.
+- 🟡 **Grupo:** 286 de largura, cartões de 38 **claros com texto escuro** (sem o `bg_partymember`, commit `3803830`; decisão: fica assim), ícone da classe (`icon_jobs_<id>`, `_die` quando morto) e coroa do líder; faltam barra de ferramentas, alça de redimensionar, contador de membros e a barra de SP.
 - ✅ **Fonte:** UI usa Tahoma (Windows) com fallback para Arial e Roboto; conferir visualmente contra os prints. O SCDream fica só para o coreano.
-- ⬜ Habilidades, Equipamento, Navegação e janelas funcionais (ver a ordem acima).
-- 🟡 **Habilidades:** abas verticais na esquerda (Ap, 1a, 2a, Tr) no lugar da faixa superior, grade deslocada; faltam a ilustração do personagem, limitar a 6 linhas, e rodapé idêntico ao do print (Apply/Reset já existem). Conferido em jogo.
-- 🟡 **Habilidades (2ª passada):** grade de 7 colunas de 68 × 56 como no print 13, nome da skill em cima (cortado com reticências), nível embaixo, casas vazias com moldura apagada, mínimo de 6 linhas e abas verticais; faltam a ilustração do personagem, as abas "3a/Etc" e o texto "skill point : N" no estilo do print.
+- ⬜ Equipamento, Navegação e janelas funcionais (ver a ordem acima).
+- 🟡 **Habilidades:** abas verticais na esquerda (Ap, 1a, 2a, Tr), grade de 7 colunas de 68 × 56 como no print 13, nome da skill em cima (cortado com reticências), nível embaixo, casas vazias com moldura apagada; a janela tem no mínimo 6 linhas e cresce até 9 com a árvore da aba (`ResizeSkillTree`). Conferido em jogo. Faltam a ilustração do personagem, as abas "3a/Etc" e o texto "skill point : N" no estilo do print.
