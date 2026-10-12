@@ -410,6 +410,7 @@ void UMythRoHUDWidget::RefreshWindows()
 	if (EmotionWindow && EmotionWindow->IsVisible()) { RefreshEmotionList(); }
 	if (FriendsWindow && FriendsWindow->IsVisible()) { RefreshFriends(); }
 	if (QuestWindow && QuestWindow->IsVisible()) { RefreshQuests(); }
+	UpdateSettingsTabs();
 	if (BankWindow && BankWindow->IsVisible()) { RefreshBank(); }
 	if (AchievementWindow && AchievementWindow->IsVisible()) { RefreshAchievements(); }
 	if (EquipSwitchWindow && EquipSwitchWindow->IsVisible()) { RefreshEquipSwitch(); }

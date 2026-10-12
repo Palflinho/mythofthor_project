@@ -94,12 +94,7 @@ void UMythRoHUDWidget::BuildOptionsWindow()
 {
 	const float H = OptListY + OptRowCount * OptRowH + 40.f;
 	OptionsWindow = MakeRoPanel(TEXT("Opções do jogo"), FVector2D(OptW, H), FVector2D(0.f, 0.f));
-	for (int32 t = 0; t < 3; ++t)
-	{
-		OptTabTexts.Add(AddText(OptionsWindow, 14.f + t * 82.f, 24.f, 8, OptLink));
-	}
-	OptTabGraphics = AddText(OptionsWindow, 14.f + 3 * 82.f, 24.f, 8, OptLink);
-	OptTabGraphics->SetText(FText::FromString(TEXT("Gráficos e som")));
+	AddSettingsTabs(OptionsWindow);
 	for (int32 i = 0; i < OptRowCount; ++i)
 	{
 		const float Y = OptListY + i * OptRowH;
@@ -185,24 +180,9 @@ bool UMythRoHUDWidget::HandleOptionsClick(const FVector2D& ScreenPos)
 		OptionsWindow->SetVisibility(ESlateVisibility::Collapsed);
 		return true;
 	}
-	if (IsUnder(OptTabGraphics, ScreenPos))
+	if (HandleSettingsTab(ScreenPos))
 	{
-		OptionsWindow->SetVisibility(ESlateVisibility::Collapsed);
-		RefreshGraphicsWindow();
-		GraphicsWindow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
-		OpenOrder.Remove(GraphicsWindow);
-		OpenOrder.Add(GraphicsWindow);
 		return true;
-	}
-	for (int32 t = 0; t < OptTabTexts.Num(); ++t)
-	{
-		if (IsUnder(OptTabTexts[t], ScreenPos))
-		{
-			OptTab = t;
-			OptScroll = 0;
-			RefreshOptions();
-			return true;
-		}
 	}
 	const TArray<FOptionDef>& Defs = OptionsOfTab(OptTab);
 	for (int32 i = 0; i < OptRowCount; ++i)

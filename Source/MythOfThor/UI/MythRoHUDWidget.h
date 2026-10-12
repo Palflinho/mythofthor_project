@@ -679,6 +679,13 @@ protected:
 	bool RoomNewPublic = true;
 	int32 PendingRoomId = 0;
 
+	// Configuracoes: faixa de abas comum as tres janelas de opcoes (MythRoSettingsTabs.cpp)
+	struct FSettingsTab { UCanvasPanel* Window = nullptr; UImage* Box = nullptr; UTextBlock* Label = nullptr; int32 Index = 0; };
+	TArray<FSettingsTab> SettingsTabs;
+	void AddSettingsTabs(UCanvasPanel* Win);
+	int32 ActiveSettingsTab() const;
+	void UpdateSettingsTabs();
+	bool HandleSettingsTab(const FVector2D& ScreenPos);
 	// Amigos e Grupo dividem o cliente moderno numa janela so: o par de botoes de radio troca de uma para a outra
 	void AddFriendPartySwitch(UCanvasPanel* Win, float H, bool bParty);
 	bool HandleFriendPartySwitch(const FVector2D& ScreenPos);
