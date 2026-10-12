@@ -28,7 +28,7 @@ def extract_items(lua_path: str, out_json: str):
         print(f"  [AVISO] Arquivo {lua_path} não encontrado!")
         return
 
-    with open(lua_path, 'r', encoding='cp1252', errors='ignore') as f:
+    with open(lua_path, 'r', encoding='latin1') as f:  # sem perda: os recursos em cp949 tem bytes que o cp1252 descarta
         content = f.read()
 
     raw_parts = re.split(r'\n\t*\[(\d+)\]\s*=\s*\{', content)
@@ -42,7 +42,7 @@ def extract_items(lua_path: str, out_json: str):
         iid = int(iid_str)
 
         name_m = re.search(r'identifiedDisplayName\s*=\s*\[=\[(.*?)\]=\]', block)
-        name = name_m.group(1).strip() if name_m else ''
+        name = name_m.group(1).strip().encode('latin1').decode('cp1252', errors='ignore') if name_m else ''
 
         res_m = re.search(r'identifiedResourceName\s*=\s*\[=\[(.*?)\]=\]', block)
         res_raw = res_m.group(1).strip() if res_m else ''
@@ -66,7 +66,7 @@ def extract_items(lua_path: str, out_json: str):
         desc_lines = []
         if desc_block_m:
             desc_lines = [
-                d.strip() for d in re.findall(r'\[=\[(.*?)\]=\]', desc_block_m.group(1))
+                d.strip().encode('latin1').decode('cp1252', errors='ignore') for d in re.findall(r'\[=\[(.*?)\]=\]', desc_block_m.group(1))
             ]
 
         items[str(iid)] = {

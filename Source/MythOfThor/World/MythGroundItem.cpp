@@ -66,7 +66,14 @@ void AMythGroundItem::Setup(int64 InNetID, int32 InItemID, int32 InAmount, bool 
 	Amount = FMath::Max(1, InAmount);
 	FString Resource = FMythRoClientTables::ItemResource(ItemID);
 	Sprite->MonsterSpriteName = Resource.IsEmpty() ? TEXT("사과") : Resource; // 사과 (maca) se faltar na tabela
-	RestLocation = GetActorLocation();
+	// Itens na mesma celula: posicao fixa e diferente dentro dela (como o subX/subY do cliente original) e profundidade
+	// levemente diferente, para os sprites nao brigarem pelo mesmo pixel (serrilhado, piscar e fundo rosa na mistura)
+	const uint32 Hash = GetTypeHash(InNetID) * 2654435761u;
+	const float JitterX = static_cast<float>(static_cast<int32>((Hash >> 8) % 5) - 2) * 7.f;
+	const float JitterY = static_cast<float>(static_cast<int32>((Hash >> 16) % 5) - 2) * 7.f;
+	Sprite->CameraDepthOffset += static_cast<float>((Hash >> 24) % 8) * 3.f;
+	RestLocation = GetActorLocation() + FVector(JitterX, JitterY, 0.f);
+	SetActorLocation(RestLocation);
 	DropTime = bJustDropped ? 0.f : -1.f;
 	Rarity = FMythRoClientTables::ItemRarity(ItemID);
 }

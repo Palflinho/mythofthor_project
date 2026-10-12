@@ -17,7 +17,7 @@ namespace
 {
 	constexpr float FrameSeconds = 0.05f;   // 50 ms por quadro (emotion.act)
 	constexpr float TotalSeconds = 2.5f;    // docs/ref/18 2.3
-	constexpr int32 MaxLayers = 3;
+	constexpr int32 MaxLayers = 8;
 
 	struct FEmotionData
 	{
@@ -203,11 +203,13 @@ void AMythEmotion::Tick(float DeltaSeconds)
 
 	FVector Right = FVector::RightVector;
 	FVector Up = FVector::UpVector;
+	FVector Toward = FVector::BackwardVector; // para a camera: camadas empilhadas nao brigam pela mesma profundidade
 	if (const APlayerController* PC = GetWorld() ? GetWorld()->GetFirstPlayerController() : nullptr; PC && PC->PlayerCameraManager)
 	{
 		const FRotationMatrix M(PC->PlayerCameraManager->GetCameraRotation());
 		Right = M.GetUnitAxis(EAxis::Y);
 		Up = M.GetUnitAxis(EAxis::Z);
+		Toward = -M.GetUnitAxis(EAxis::X);
 	}
 	// A emocao fica acima e um pouco a direita da cabeca
 	const FVector Anchor = GetActorLocation();
@@ -218,9 +220,13 @@ void AMythEmotion::Tick(float DeltaSeconds)
 	int32 Section = 0;
 	for (const FRoActLayer& L : Frame.Layers)
 	{
-		if (Section >= MaxLayers || L.SprIndex < 0 || !Materials.IsValidIndex(Section))
+		if (Section >= MaxLayers || !Materials.IsValidIndex(Section))
 		{
 			break;
+		}
+		if (L.SprIndex < 0)
+		{
+			continue; // camada vazia: as seguintes ainda valem
 		}
 		FIntPoint Size;
 		UTexture2D* Tex = TextureFor(D, L.SprIndex, Size);
@@ -231,7 +237,7 @@ void AMythEmotion::Tick(float DeltaSeconds)
 		Materials[Section]->SetTextureParameterValue(TEXT("SpriteTexture"), Tex);
 		const float HW = Size.X * 0.5f * UnitsPerPixel * L.Scale.X;
 		const float HH = Size.Y * 0.5f * UnitsPerPixel * L.Scale.Y;
-		const FVector Center = Base + Right * (L.Offset.X * UnitsPerPixel) - Up * (L.Offset.Y * UnitsPerPixel) - GetActorLocation();
+		const FVector Center = Base + Right * (L.Offset.X * UnitsPerPixel) - Up * (L.Offset.Y * UnitsPerPixel) + Toward * (Section * 1.5f) - GetActorLocation();
 		const float Flip = L.bMirror ? -1.f : 1.f;
 		TArray<FVector> Verts = { Center - Right * HW * Flip + Up * HH, Center + Right * HW * Flip + Up * HH, Center - Right * HW * Flip - Up * HH, Center + Right * HW * Flip - Up * HH };
 		TArray<FVector2D> UVs = { FVector2D(0.f, 0.f), FVector2D(1.f, 0.f), FVector2D(0.f, 1.f), FVector2D(1.f, 1.f) };

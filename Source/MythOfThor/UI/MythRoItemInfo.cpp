@@ -85,21 +85,41 @@ void UMythRoHUDWidget::ShowItemInfo(const FRagnarokInventoryItem& Item)
 	{
 		Name += FString::Printf(TEXT(" [%d]"), Info->Slots);
 	}
-	ItemInfoName->SetText(FText::FromString(Name));
-
 	UTexture2D* Illust = FMythRoClientTables::ItemIllustration(Item.ItemID);
 	if (!Illust)
 	{
 		Illust = FMythRoClientTables::ItemIcon(Item.ItemID); // sem ilustracao: o icone do item
 	}
+	const TArray<FString> Empty;
+	ShowInfoLines(Name, Illust, Info ? (Item.bIdentified ? Info->Desc : Info->UnidentifiedDesc) : Empty);
+}
+
+void UMythRoHUDWidget::ShowSkillInfo(int32 SkillID)
+{
+	// Botao direito numa habilidade: a descricao do skilldesctable (tipo, alvo, resultado) na mesma janela dos itens
+	const TArray<FString>* Desc = FMythRoClientTables::SkillDescription(SkillID);
+	const TArray<FString> Empty;
+	FString Name = FMythRoClientTables::SkillName(SkillID);
+	if (Name.IsEmpty())
+	{
+		Name = FString::Printf(TEXT("Habilidade %d"), SkillID);
+	}
+	ShowInfoLines(Name, FMythRoClientTables::SkillIcon(SkillID), Desc ? *Desc : Empty);
+}
+
+void UMythRoHUDWidget::ShowInfoLines(const FString& Name, UTexture2D* Illust, const TArray<FString>& Lines)
+{
+	if (!ItemInfoWindow)
+	{
+		return;
+	}
+	ItemInfoName->SetText(FText::FromString(Name));
 	ItemInfoImage->SetBrushFromTexture(Illust);
 	ItemInfoImage->SetVisibility(Illust ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
 
 	ItemInfoBody->ClearChildren();
 	const int32 FontSize = FMath::RoundToInt(8 * UIScale);
 	const float WrapWidth = (InfoW - IllustW - 32.f) * UIScale;
-	const TArray<FString> Empty;
-	const TArray<FString>& Lines = Info ? (Item.bIdentified ? Info->Desc : Info->UnidentifiedDesc) : Empty;
 	for (const FString& Line : Lines)
 	{
 		const TArray<TPair<FString, FLinearColor>> Parts = SplitColors(Line);
@@ -162,6 +182,17 @@ bool UMythRoHUDWidget::HandleItemInfoClick(const FVector2D& ScreenPos)
 			if (ItemCellIndex[i] >= 0 && IsUnder(ItemCells[i], ScreenPos))
 			{
 				return ShowIndex(ItemCellIndex[i]);
+			}
+		}
+	}
+	if (SkillsWindow && SkillsWindow->IsVisible())
+	{
+		for (int32 r = 0; r < SkillIcons.Num() && r < SkillRowID.Num(); ++r)
+		{
+			if (SkillRowID[r] != 0 && (IsUnder(SkillIcons[r], ScreenPos) || IsUnder(SkillNames[r], ScreenPos)))
+			{
+				ShowSkillInfo(SkillRowID[r]);
+				return true;
 			}
 		}
 	}

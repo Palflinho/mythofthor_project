@@ -28,12 +28,16 @@ public:
 	/** Adereco de estado que fica em loop preso a quem esta com o estado (sono, atordoado, maldicao); destrua o ator para tirar. */
 	static AMythSprEffect* Attach(AActor* Owner, const FString& SprFile, bool bAboveHead, float SideOffset = 0.f, float UpOffset = 0.f);
 
+	/** Sprite opaco (sem mistura): o falcao do Cacador. As camadas usam o material de mascara dos sprites de personagem. */
+	bool bMasked = false;
+
 	virtual void Tick(float DeltaSeconds) override;
 
 private:
 	UPROPERTY() TObjectPtr<UProceduralMeshComponent> Mesh;
 	UPROPERTY() TArray<TObjectPtr<UMaterialInstanceDynamic>> Materials;
 	UPROPERTY() TArray<TObjectPtr<UMaterialInstanceDynamic>> AdditiveMaterials;
+	UPROPERTY() TArray<TObjectPtr<UMaterialInstanceDynamic>> MaskedMaterials;
 	TWeakObjectPtr<AActor> FollowActor;
 	FString Key;
 	float Age = 0.f;

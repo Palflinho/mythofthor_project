@@ -15,6 +15,7 @@ namespace
 	{
 		FString Name;
 		FString Resource; // item: resource_name; skill: aegis_name
+		TArray<FString> Desc; // skill: description (linhas do skilldesctable)
 	};
 
 	TMap<int32, FRoTableEntry> LoadRoTable(const TCHAR* FileName, const TCHAR* ResourceField)
@@ -195,4 +196,10 @@ FLinearColor FMythRoClientTables::RarityColor(int32 Rarity)
 	case 4: return FLinearColor(1.f, 0.52f, 0.1f);    // lendario: laranja
 	default: return FLinearColor(0.95f, 0.95f, 0.95f); // comum: branco
 	}
+}
+
+const TArray<FString>* FMythRoClientTables::SkillDescription(int32 SkillID)
+{
+	const FRoTableEntry* E = RoSkills().Find(SkillID);
+	return E && E->Desc.Num() > 0 ? &E->Desc : nullptr;
 }

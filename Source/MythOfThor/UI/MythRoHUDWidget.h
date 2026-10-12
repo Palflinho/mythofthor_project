@@ -430,6 +430,8 @@ protected:
 	void BuildItemInfoWindow();
 	/** Janela de descricao do item (botao direito no inventario/equipamento), como no cliente original. */
 	void ShowItemInfo(const struct FRagnarokInventoryItem& Item);
+	void ShowSkillInfo(int32 SkillID);
+	void ShowInfoLines(const FString& Name, UTexture2D* Illust, const TArray<FString>& Lines);
 	bool HandleItemInfoClick(const FVector2D& ScreenPos);
 
 	// Menu Esc e configuracoes graficas (MythRoGameMenu.cpp)
@@ -543,6 +545,8 @@ protected:
 	// Navegacao (MythRoNavi.cpp)
 public:
 	void OpenNaviWindow(const FString& Query = FString());
+	/** Teste e atalho: inicia a navegacao automatica ate o mapa escolhido na janela. */
+	void NaviGoSelected() { StartNaviAuto(); }
 	void SetCurrentMapId(const FString& MapId) { CurrentMapId = MapId; }
 protected:
 	void BuildNaviWindow();
@@ -560,6 +564,18 @@ protected:
 	UPROPERTY() TObjectPtr<UTextBlock> NaviFind;
 	UPROPERTY() TObjectPtr<UTextBlock> NaviGo;
 	FString NaviSelected;
+	struct FNaviStep { FString From; int32 X = 0, Y = 0; FString To; };
+	TArray<FNaviStep> NaviSteps; // rota da selecao a partir do mapa atual
+	UPROPERTY() TObjectPtr<UTextBlock> NaviAutoBtn;
+	bool bNaviAuto = false;
+	FString NaviAutoDest;
+	float NaviAutoTimer = 0.f;
+	FIntPoint NaviLastTarget = FIntPoint(-100, -100);
+	float NaviLastSend = 0.f;
+	bool bNaviBackoff = false;
+	int32 NaviProbe = 0;
+	void StartNaviAuto();
+	void TickNaviAuto(float DeltaTime);
 	TArray<FString> NaviMatches;
 	FString CurrentMapId;
 

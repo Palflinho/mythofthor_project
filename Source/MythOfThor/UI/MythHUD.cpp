@@ -441,6 +441,7 @@ void AMythHUD::DrawStatusVignette()
 
 void AMythHUD::DrawQuestTracker()
 {
+	TrackerBottom = 0.f;
 	const URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr;
 	UFont* Font = GEngine ? GEngine->GetSmallFont() : nullptr;
 	if (!MythQuests::TrackerVisible())
@@ -452,7 +453,7 @@ void AMythHUD::DrawQuestTracker()
 		return;
 	}
 	// Rastreador de missoes: abaixo do minimapa, so as quests ativas (olho ligado na janela Alt+U)
-	float Y = 190.f;
+	float Y = 214.f; // abaixo do minimapa e da faixa de coordenadas
 	const float Right = Canvas->SizeX - 12.f;
 	FFontRenderInfo Info;
 	Info.bEnableShadow = true;
@@ -480,6 +481,7 @@ void AMythHUD::DrawQuestTracker()
 		}
 		Y += 6.f;
 	}
+	TrackerBottom = Shown > 0 ? Y : 0.f;
 }
 
 void AMythHUD::DrawChatRoomTitles()
@@ -851,8 +853,10 @@ void AMythHUD::SetStatusIcon(int32 EfstID, bool bActive, int32 TotalMs, int32 Re
 	FStatusIcon& I = StatusIcons.AddDefaulted_GetRef();
 	I.Efst = EfstID;
 	const float Now = GetWorld() ? GetWorld()->GetTimeSeconds() : 0.f;
-	I.Total = FMath::Max(TotalMs, RemainMs) / 1000.f;
-	I.End = RemainMs > 0 ? Now + RemainMs / 1000.f : 0.f;
+	// O rAthena manda 9999 ms quando o estado nao tem duracao (clif_status_change: "this is indeed what official servers do"): sem barra nem fim
+	const bool bNoDuration = RemainMs == 9999 && TotalMs == 9999;
+	I.Total = bNoDuration ? 0.f : FMath::Max(TotalMs, RemainMs) / 1000.f;
+	I.End = (!bNoDuration && RemainMs > 0) ? Now + RemainMs / 1000.f : 0.f;
 }
 
 void AMythHUD::DrawStatusIcons()
@@ -868,7 +872,7 @@ void AMythHUD::DrawStatusIcons()
 	const float Sc = FMath::Max(Canvas->ClipY / 900.f, 0.6f);
 	const float IconSize = 28.f * Sc, Gap = 4.f * Sc, BarW = 44.f * Sc, BarH = 5.f * Sc;
 	const float Right = Canvas->ClipX - 10.f * Sc;
-	float Y = 200.f * Sc;
+	float Y = FMath::Max(214.f, TrackerBottom + 8.f); // sob o minimapa e o rastreador de missoes
 	float MouseX = -1.f, MouseY = -1.f;
 	if (PlayerOwner)
 	{

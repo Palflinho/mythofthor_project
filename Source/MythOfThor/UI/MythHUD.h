@@ -77,6 +77,8 @@ private:
 	void DrawMapBanner();
 	void DrawChatRoomTitles();
 	void DrawQuestTracker();
+	/** Fim (y) do rastreador de missoes: os icones de status ficam abaixo dele. */
+	float TrackerBottom = 0.f;
 	void DrawStatusVignette();
 	struct FRoomHit { FBox2D Box; int32 Id = 0; int32 Type = 1; };
 	TArray<FRoomHit> RoomHits;

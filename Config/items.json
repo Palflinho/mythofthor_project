@@ -846,7 +846,7 @@
   "566": {
     "id": 566,
     "name": "Sopa Tailandesa",
-    "resource_name": "Œc¾ç²á",
+    "resource_name": "똠양꿍",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -1080,7 +1080,7 @@
   "583": {
     "id": 583,
     "name": "KETUPAT SAYUR",
-    "resource_name": "Œc¾ç²á",
+    "resource_name": "똠양꿍",
     "slots": 0,
     "class_num": 0,
     "description": []
@@ -1088,7 +1088,7 @@
   "584": {
     "id": 584,
     "name": "Sopa com Bolinhos de Peixe",
-    "resource_name": "Œc¾ç²á",
+    "resource_name": "똠양꿍",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -1131,7 +1131,7 @@
   "588": {
     "id": 588,
     "name": "½ºÆÄ°ÔÆ¼",
-    "resource_name": "Œc¾ç²á",
+    "resource_name": "똠양꿍",
     "slots": 0,
     "class_num": 0,
     "description": []
@@ -2551,7 +2551,7 @@
   "715": {
     "id": 715,
     "name": "Gema Amarela",
-    "resource_name": "??????",
+    "resource_name": "옐로우젬스톤",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -2563,7 +2563,7 @@
   "716": {
     "id": 716,
     "name": "Gema Vermelha",
-    "resource_name": "?????",
+    "resource_name": "레드젬스톤",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -2575,7 +2575,7 @@
   "717": {
     "id": 717,
     "name": "Gema Azul",
-    "resource_name": "?????",
+    "resource_name": "블루젬스톤",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -5061,7 +5061,7 @@
   "1065": {
     "id": 1065,
     "name": "Armadilha",
-    "resource_name": "??",
+    "resource_name": "트랩",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -8582,7 +8582,7 @@
   "1449": {
     "id": 1449,
     "name": "Lança",
-    "resource_name": "",
+    "resource_name": "겔러드리아",
     "slots": 3,
     "class_num": 4,
     "description": [
@@ -10648,7 +10648,7 @@
   "1664": {
     "id": 1664,
     "name": "Cajado",
-    "resource_name": "",
+    "resource_name": "해골지팡이",
     "slots": 1,
     "class_num": 10,
     "description": [
@@ -10666,7 +10666,7 @@
   "1666": {
     "id": 1666,
     "name": "Cajado",
-    "resource_name": "",
+    "resource_name": "치유의지팡이",
     "slots": 2,
     "class_num": 10,
     "description": [
@@ -11484,7 +11484,7 @@
   "1750": {
     "id": 1750,
     "name": "Flecha",
-    "resource_name": "??",
+    "resource_name": "화살",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11496,7 +11496,7 @@
   "1751": {
     "id": 1751,
     "name": "Flecha de Prata",
-    "resource_name": "??",
+    "resource_name": "은화살",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11508,7 +11508,7 @@
   "1752": {
     "id": 1752,
     "name": "Flecha",
-    "resource_name": "??",
+    "resource_name": "불화살",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11520,7 +11520,7 @@
   "1753": {
     "id": 1753,
     "name": "Flecha de Aço",
-    "resource_name": "????",
+    "resource_name": "강철화살",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11532,7 +11532,7 @@
   "1754": {
     "id": 1754,
     "name": "Flecha de Cristal",
-    "resource_name": "????",
+    "resource_name": "수정화살",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11544,7 +11544,7 @@
   "1755": {
     "id": 1755,
     "name": "Flecha de Vento",
-    "resource_name": "?????",
+    "resource_name": "바람의화살",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11556,7 +11556,7 @@
   "1756": {
     "id": 1756,
     "name": "Flecha de Pedra",
-    "resource_name": "????",
+    "resource_name": "암석화살",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11568,7 +11568,7 @@
   "1757": {
     "id": 1757,
     "name": "Flecha Imaterial",
-    "resource_name": "?????",
+    "resource_name": "무형의화살",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11580,7 +11580,7 @@
   "1758": {
     "id": 1758,
     "name": "Flecha Atordoante",
-    "resource_name": "?????",
+    "resource_name": "스턴애로우",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11592,7 +11592,7 @@
   "1759": {
     "id": 1759,
     "name": "Flecha Congelante",
-    "resource_name": "??????",
+    "resource_name": "프리징애로우",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11604,7 +11604,7 @@
   "1760": {
     "id": 1760,
     "name": "Flecha Luminosa",
-    "resource_name": "?????",
+    "resource_name": "스턴애로우",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11616,7 +11616,7 @@
   "1761": {
     "id": 1761,
     "name": "Flecha Amaldiçoada",
-    "resource_name": "?????",
+    "resource_name": "커스애로우",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11628,7 +11628,7 @@
   "1762": {
     "id": 1762,
     "name": "Flecha Enferrujada",
-    "resource_name": "????",
+    "resource_name": "녹슨화살",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11640,7 +11640,7 @@
   "1763": {
     "id": 1763,
     "name": "Flecha Envenenada",
-    "resource_name": "???",
+    "resource_name": "독화살",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11652,7 +11652,7 @@
   "1764": {
     "id": 1764,
     "name": "Flecha Afiada",
-    "resource_name": "??????",
+    "resource_name": "날카로운화살",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11664,7 +11664,7 @@
   "1765": {
     "id": 1765,
     "name": "Flecha de Oridecon",
-    "resource_name": "????",
+    "resource_name": "강철화살",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11688,7 +11688,7 @@
   "1767": {
     "id": 1767,
     "name": "Flecha Sombria",
-    "resource_name": "??????",
+    "resource_name": "그림자의화살",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11700,7 +11700,7 @@
   "1768": {
     "id": 1768,
     "name": "Flecha Sonífera",
-    "resource_name": "?????",
+    "resource_name": "슬립애로우",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11712,7 +11712,7 @@
   "1769": {
     "id": 1769,
     "name": "Flecha Emudecedora",
-    "resource_name": "???????",
+    "resource_name": "사일런스애로우",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11724,7 +11724,7 @@
   "1770": {
     "id": 1770,
     "name": "Flecha de Ferro",
-    "resource_name": "??",
+    "resource_name": "화살",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11753,7 +11753,7 @@
   "1772": {
     "id": 1772,
     "name": "Flecha Sagrada",
-    "resource_name": "????",
+    "resource_name": "강철화살",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11766,7 +11766,7 @@
   "1773": {
     "id": 1773,
     "name": "Flecha Élfica",
-    "resource_name": "?????",
+    "resource_name": "엘프의화살",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11779,7 +11779,7 @@
   "1774": {
     "id": 1774,
     "name": "Flecha de Caça",
-    "resource_name": "?????",
+    "resource_name": "사냥용화살",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11791,7 +11791,7 @@
   "1775": {
     "id": 1775,
     "name": "Flecha de Cerco S",
-    "resource_name": "????",
+    "resource_name": "강철화살",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -11806,7 +11806,7 @@
   "1776": {
     "id": 1776,
     "name": "Flecha de Cerco A",
-    "resource_name": "??",
+    "resource_name": "화살",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -17504,7 +17504,7 @@
   "2487": {
     "id": 2487,
     "name": "Calçado",
-    "resource_name": "",
+    "resource_name": "생명나무줄기슈즈",
     "slots": 1,
     "class_num": 0,
     "description": [
@@ -45281,7 +45281,7 @@
   "6145": {
     "id": 6145,
     "name": "Cápsula Incandescente",
-    "resource_name": "????",
+    "resource_name": "발칸블릿",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -45293,7 +45293,7 @@
   "6146": {
     "id": 6146,
     "name": "Gasolina",
-    "resource_name": "??????",
+    "resource_name": "마도기어연료",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -45305,7 +45305,7 @@
   "6147": {
     "id": 6147,
     "name": "Cápsula de Nitrogênio Líquido",
-    "resource_name": "?????",
+    "resource_name": "액체냉각탄",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -48391,7 +48391,7 @@
   "6512": {
     "id": 6512,
     "name": "Amuleto de Fogo",
-    "resource_name": "????",
+    "resource_name": "불의부적",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -48402,7 +48402,7 @@
   "6513": {
     "id": 6513,
     "name": "Amuleto de Gelo",
-    "resource_name": "?????",
+    "resource_name": "얼음의부적",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -48413,7 +48413,7 @@
   "6514": {
     "id": 6514,
     "name": "Amuleto de Vento",
-    "resource_name": "?????",
+    "resource_name": "바람의부적",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -48424,7 +48424,7 @@
   "6515": {
     "id": 6515,
     "name": "Amuleto de Terra",
-    "resource_name": "????",
+    "resource_name": "땅의부적",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -59262,7 +59262,7 @@
   "7521": {
     "id": 7521,
     "name": "Pedra do Fogo",
-    "resource_name": "???",
+    "resource_name": "열화석",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -59274,7 +59274,7 @@
   "7522": {
     "id": 7522,
     "name": "Pedra do Gelo",
-    "resource_name": "???",
+    "resource_name": "빙섬석",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -59286,7 +59286,7 @@
   "7523": {
     "id": 7523,
     "name": "Pedra do Vento",
-    "resource_name": "???",
+    "resource_name": "풍령석",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -59298,7 +59298,7 @@
   "7524": {
     "id": 7524,
     "name": "Pedra da Sombra",
-    "resource_name": "??",
+    "resource_name": "환구",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -60634,7 +60634,7 @@
   "7663": {
     "id": 7663,
     "name": "Projétil Revestido",
-    "resource_name": "?????",
+    "resource_name": "풀메탈쟈켓",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -60647,7 +60647,7 @@
   "7664": {
     "id": 7664,
     "name": "Granada Aderente",
-    "resource_name": "?????",
+    "resource_name": "투사형지뢰",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -60659,7 +60659,7 @@
   "7665": {
     "id": 7665,
     "name": "Míssil Cauda de Dragão",
-    "resource_name": "????????",
+    "resource_name": "드래곤테일미사일",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -63170,7 +63170,7 @@
   "7940": {
     "id": 7940,
     "name": "Armadilha Especial",
-    "resource_name": "??",
+    "resource_name": "트랩",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -67483,7 +67483,7 @@
   "12004": {
     "id": 12004,
     "name": "Aljava Comum",
-    "resource_name": "???",
+    "resource_name": "화살통",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -67495,7 +67495,7 @@
   "12005": {
     "id": 12005,
     "name": "Aljava de Ferro",
-    "resource_name": "????",
+    "resource_name": "철화살통",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -67507,7 +67507,7 @@
   "12006": {
     "id": 12006,
     "name": "Aljava de Aço",
-    "resource_name": "?????",
+    "resource_name": "강철화살통",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -67521,7 +67521,7 @@
   "12007": {
     "id": 12007,
     "name": "Aljava de Oridecon",
-    "resource_name": "?????",
+    "resource_name": "오리화살통",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -67535,7 +67535,7 @@
   "12008": {
     "id": 12008,
     "name": "Aljava de Fogo",
-    "resource_name": "????",
+    "resource_name": "불화살통",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -67549,7 +67549,7 @@
   "12009": {
     "id": 12009,
     "name": "Aljava de Prata",
-    "resource_name": "????",
+    "resource_name": "은화살통",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -67563,7 +67563,7 @@
   "12010": {
     "id": 12010,
     "name": "Aljava de Vento",
-    "resource_name": "?????",
+    "resource_name": "바람화살통",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -67577,7 +67577,7 @@
   "12011": {
     "id": 12011,
     "name": "Aljava de Pedra",
-    "resource_name": "?????",
+    "resource_name": "암석화살통",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -67591,7 +67591,7 @@
   "12012": {
     "id": 12012,
     "name": "Aljava de Cristal",
-    "resource_name": "?????",
+    "resource_name": "수정화살통",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -67605,7 +67605,7 @@
   "12013": {
     "id": 12013,
     "name": "Aljava Sombria",
-    "resource_name": "??????",
+    "resource_name": "그림자화살통",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -67619,7 +67619,7 @@
   "12014": {
     "id": 12014,
     "name": "Aljava Imaterial",
-    "resource_name": "?????",
+    "resource_name": "무형화살통",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -67633,7 +67633,7 @@
   "12015": {
     "id": 12015,
     "name": "Aljava Enferrujada",
-    "resource_name": "?????",
+    "resource_name": "녹슨화살통",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -69523,7 +69523,7 @@
   "12149": {
     "id": 12149,
     "name": "Carregador Comum",
-    "resource_name": "???",
+    "resource_name": "탄약통",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -69537,7 +69537,7 @@
   "12150": {
     "id": 12150,
     "name": "Antigo Cartucho Sanguinário",
-    "resource_name": "???_???",
+    "resource_name": "탄약통_블러드",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -69551,7 +69551,7 @@
   "12151": {
     "id": 12151,
     "name": "Antigo Cartucho de Prata",
-    "resource_name": "???_??",
+    "resource_name": "탄약통_실버",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -69933,7 +69933,7 @@
   "12183": {
     "id": 12183,
     "name": "Aljava Sagrada",
-    "resource_name": "????",
+    "resource_name": "은화살통",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -71570,7 +71570,7 @@
   "12341": {
     "id": 12341,
     "name": "Caixa de Armadilhas Especiais",
-    "resource_name": "???",
+    "resource_name": "탄약통",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -72087,7 +72087,7 @@
   "12383": {
     "id": 12383,
     "name": "Cartucho de Cápsulas Incandescentes",
-    "resource_name": "??????",
+    "resource_name": "발칸블릿탄창",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -72180,7 +72180,7 @@
   "12392": {
     "id": 12392,
     "name": "Reparador A",
-    "resource_name": "???a",
+    "resource_name": "리페어A",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -72191,7 +72191,7 @@
   "12393": {
     "id": 12393,
     "name": "Reparador B",
-    "resource_name": "???B",
+    "resource_name": "리페어B",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -72202,7 +72202,7 @@
   "12394": {
     "id": 12394,
     "name": "Reparador C",
-    "resource_name": "???C",
+    "resource_name": "리페어C",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -72435,7 +72435,7 @@
   "12418": {
     "id": 12418,
     "name": "Poção do Furor Físico",
-    "resource_name": "",
+    "resource_name": "풀스윙K",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -72449,7 +72449,7 @@
   "12419": {
     "id": 12419,
     "name": "Poção do Furor Mágico",
-    "resource_name": "",
+    "resource_name": "마나플러스",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -72909,7 +72909,7 @@
   "12516": {
     "id": 12516,
     "name": "Poção Menor de Vida",
-    "resource_name": "",
+    "resource_name": "굴라만",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -73282,7 +73282,7 @@
   "12575": {
     "id": 12575,
     "name": "Aljava Élfica",
-    "resource_name": "??????",
+    "resource_name": "엘프의화살통",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -73296,7 +73296,7 @@
   "12576": {
     "id": 12576,
     "name": "Aljava de Caça",
-    "resource_name": "??????",
+    "resource_name": "사냥용화살통",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -74075,7 +74075,7 @@
   "12677": {
     "id": 12677,
     "name": "Aljava de Cerco S",
-    "resource_name": "???",
+    "resource_name": "화살통",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -74089,7 +74089,7 @@
   "12678": {
     "id": 12678,
     "name": "Aljava de Cerco A",
-    "resource_name": "???",
+    "resource_name": "화살통",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -78829,7 +78829,7 @@
   "13200": {
     "id": 13200,
     "name": "Projétil",
-    "resource_name": "??",
+    "resource_name": "블릿",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79050,7 +79050,7 @@
   "13215": {
     "id": 13215,
     "name": "Projétil Perfurador",
-    "resource_name": "???",
+    "resource_name": "철갑탄",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79063,7 +79063,7 @@
   "13216": {
     "id": 13216,
     "name": "Projétil Incandescente",
-    "resource_name": "???",
+    "resource_name": "작열탄",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79076,7 +79076,7 @@
   "13217": {
     "id": 13217,
     "name": "Projétil Glacial",
-    "resource_name": "???",
+    "resource_name": "빙결탄",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79089,7 +79089,7 @@
   "13218": {
     "id": 13218,
     "name": "Projétil de Eletrochoque",
-    "resource_name": "???",
+    "resource_name": "전격탄",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79102,7 +79102,7 @@
   "13219": {
     "id": 13219,
     "name": "Projétil Tectônico",
-    "resource_name": "???",
+    "resource_name": "마석탄",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79115,7 +79115,7 @@
   "13220": {
     "id": 13220,
     "name": "Projétil de Purificação",
-    "resource_name": "????",
+    "resource_name": "실버블릿",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79128,7 +79128,7 @@
   "13221": {
     "id": 13221,
     "name": "Projétil de Prata",
-    "resource_name": "????",
+    "resource_name": "실버블릿",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79140,7 +79140,7 @@
   "13222": {
     "id": 13222,
     "name": "Projétil Sanguinário",
-    "resource_name": "????",
+    "resource_name": "블러디셀",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79225,7 +79225,7 @@
   "13228": {
     "id": 13228,
     "name": "Projétil de Fogo",
-    "resource_name": "?????",
+    "resource_name": "플레어블릿",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79237,7 +79237,7 @@
   "13229": {
     "id": 13229,
     "name": "Projétil Relâmpago",
-    "resource_name": "??????",
+    "resource_name": "라이트닝블릿",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79249,7 +79249,7 @@
   "13230": {
     "id": 13230,
     "name": "Projétil Congelante",
-    "resource_name": "?????",
+    "resource_name": "아이스블릿",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79261,7 +79261,7 @@
   "13231": {
     "id": 13231,
     "name": "Projétil Venenoso",
-    "resource_name": "?????",
+    "resource_name": "포이즌블릿",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79274,7 +79274,7 @@
   "13232": {
     "id": 13232,
     "name": "Projétil Cegante",
-    "resource_name": "??????",
+    "resource_name": "블라인드블릿",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79287,7 +79287,7 @@
   "13250": {
     "id": 13250,
     "name": "Shuriken",
-    "resource_name": "???",
+    "resource_name": "수리검",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79300,7 +79300,7 @@
   "13251": {
     "id": 13251,
     "name": "Shuriken Nebuloso",
-    "resource_name": "???_??",
+    "resource_name": "수리검_통운",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79314,7 +79314,7 @@
   "13252": {
     "id": 13252,
     "name": "Shuriken Relâmpago",
-    "resource_name": "???_??",
+    "resource_name": "수리검_비환",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79328,7 +79328,7 @@
   "13253": {
     "id": 13253,
     "name": "Shuriken Folha Afiada",
-    "resource_name": "???_??",
+    "resource_name": "수리검_선엽",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79342,7 +79342,7 @@
   "13254": {
     "id": 13254,
     "name": "Shuriken Retorcido",
-    "resource_name": "???_??",
+    "resource_name": "수리검_침서",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79356,7 +79356,7 @@
   "13255": {
     "id": 13255,
     "name": "Kunai Glacial",
-    "resource_name": "???_?",
+    "resource_name": "쿠나이_수",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79369,7 +79369,7 @@
   "13256": {
     "id": 13256,
     "name": "Kunai de Pedra",
-    "resource_name": "???_?",
+    "resource_name": "쿠나이_토",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79382,7 +79382,7 @@
   "13257": {
     "id": 13257,
     "name": "Kunai Ciclonal",
-    "resource_name": "???_?",
+    "resource_name": "쿠나이_풍",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79395,7 +79395,7 @@
   "13258": {
     "id": 13258,
     "name": "Kunai Ardente",
-    "resource_name": "???_?",
+    "resource_name": "쿠나이_화",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79408,7 +79408,7 @@
   "13259": {
     "id": 13259,
     "name": "Kunai Venenosa",
-    "resource_name": "???_?",
+    "resource_name": "쿠나이_독",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -79766,7 +79766,7 @@
   "13294": {
     "id": 13294,
     "name": "Kunai Explosiva",
-    "resource_name": "?????",
+    "resource_name": "폭발쿠나이",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -80415,7 +80415,7 @@
   "13437": {
     "id": 13437,
     "name": "Espada",
-    "resource_name": "",
+    "resource_name": "오키쉬소드",
     "slots": 4,
     "class_num": 2,
     "description": [
@@ -80499,7 +80499,7 @@
   "13447": {
     "id": 13447,
     "name": "Espada",
-    "resource_name": "",
+    "resource_name": "별운검",
     "slots": 2,
     "class_num": 2,
     "description": [
@@ -80635,7 +80635,7 @@
   "13463": {
     "id": 13463,
     "name": "Espada",
-    "resource_name": "",
+    "resource_name": "엑스칼리버",
     "slots": 3,
     "class_num": 2,
     "description": [
@@ -89850,7 +89850,7 @@
   "14512": {
     "id": 14512,
     "name": "Pergaminho de Chuva de Meteoros",
-    "resource_name": "?????",
+    "resource_name": "불의주문서",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -89862,7 +89862,7 @@
   "14513": {
     "id": 14513,
     "name": "Pergaminho de Nevasca",
-    "resource_name": "?????",
+    "resource_name": "물의주문서",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -89874,7 +89874,7 @@
   "14514": {
     "id": 14514,
     "name": "Pergaminho de Ira de Thor",
-    "resource_name": "??????",
+    "resource_name": "바람의주문서",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -94771,7 +94771,7 @@
   "15195": {
     "id": 15195,
     "name": "Armadura",
-    "resource_name": "????",
+    "resource_name": "Puente_Robe_IL",
     "slots": 1,
     "class_num": 0,
     "description": [
@@ -95433,7 +95433,7 @@
   "15368": {
     "id": 15368,
     "name": "Calçado",
-    "resource_name": "",
+    "resource_name": "Scaraba_High_Heels",
     "slots": 1,
     "class_num": 0,
     "description": [
@@ -95489,7 +95489,7 @@
   "15374": {
     "id": 15374,
     "name": "Armadura",
-    "resource_name": "",
+    "resource_name": "lunar_eclipse_Armor_",
     "slots": 1,
     "class_num": 0,
     "description": [
@@ -95499,7 +95499,7 @@
   "15375": {
     "id": 15375,
     "name": "Armadura",
-    "resource_name": "",
+    "resource_name": "lunar_eclipse_Armor",
     "slots": 1,
     "class_num": 0,
     "description": [
@@ -95533,7 +95533,7 @@
   "15383": {
     "id": 15383,
     "name": "Armadura",
-    "resource_name": "????",
+    "resource_name": "미라쥬로브",
     "slots": 1,
     "class_num": 0,
     "description": [
@@ -95553,7 +95553,7 @@
   "15385": {
     "id": 15385,
     "name": "Equipamento para Cabeça",
-    "resource_name": "",
+    "resource_name": "소형정찰기",
     "slots": 0,
     "class_num": 1561,
     "description": [
@@ -96177,7 +96177,7 @@
   "16056": {
     "id": 16056,
     "name": "Maça",
-    "resource_name": "",
+    "resource_name": "베테랑햄머",
     "slots": 3,
     "class_num": 8,
     "description": [
@@ -96221,7 +96221,7 @@
   "16063": {
     "id": 16063,
     "name": "Maça",
-    "resource_name": "??",
+    "resource_name": "Long_Mace_IL",
     "slots": 2,
     "class_num": 8,
     "description": [
@@ -107992,7 +107992,7 @@
   "18000": {
     "id": 18000,
     "name": "Bala de Canhão",
-    "resource_name": "???",
+    "resource_name": "캐논볼",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -108004,7 +108004,7 @@
   "18001": {
     "id": 18001,
     "name": "Bala de Canhão Sagrada",
-    "resource_name": "?????",
+    "resource_name": "홀리캐논볼",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -108016,7 +108016,7 @@
   "18002": {
     "id": 18002,
     "name": "Bala de Canhão Sombria",
-    "resource_name": "?????",
+    "resource_name": "다크캐논볼",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -108028,7 +108028,7 @@
   "18003": {
     "id": 18003,
     "name": "Bala de Canhão Fantasma",
-    "resource_name": "?????",
+    "resource_name": "소울캐논볼",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -108040,7 +108040,7 @@
   "18004": {
     "id": 18004,
     "name": "Bala de Canhão de Ferro",
-    "resource_name": "??????",
+    "resource_name": "아이언캐논볼",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -113636,7 +113636,7 @@
   "19110": {
     "id": 19110,
     "name": "Equipamento para Cabeça",
-    "resource_name": "",
+    "resource_name": "발할라아이돌",
     "slots": 1,
     "class_num": 1423,
     "description": [
@@ -114396,7 +114396,7 @@
   "19209": {
     "id": 19209,
     "name": "Chapéu",
-    "resource_name": "?",
+    "resource_name": "Nurse_Cap_IL",
     "slots": 1,
     "class_num": 64,
     "description": [
@@ -114406,7 +114406,7 @@
   "19210": {
     "id": 19210,
     "name": "Equip. para Cabeça",
-    "resource_name": "??",
+    "resource_name": "Apple_Of_Archer_IL",
     "slots": 1,
     "class_num": 72,
     "description": [
@@ -115584,7 +115584,7 @@
   "19381": {
     "id": 19381,
     "name": "Equipamento para Cabeça",
-    "resource_name": "??",
+    "resource_name": "Protect_cloth",
     "slots": 0,
     "class_num": 1761,
     "description": [
@@ -116574,7 +116574,7 @@
   "19578": {
     "id": 19578,
     "name": "Equipamento Visual",
-    "resource_name": "",
+    "resource_name": "고글",
     "slots": 0,
     "class_num": 1,
     "description": [
@@ -116998,7 +116998,7 @@
   "19629": {
     "id": 19629,
     "name": "Equipamento Visual",
-    "resource_name": "",
+    "resource_name": "티아라",
     "slots": 0,
     "class_num": 19,
     "description": [
@@ -117008,7 +117008,7 @@
   "19630": {
     "id": 19630,
     "name": "Equipamento Visual",
-    "resource_name": "",
+    "resource_name": "크라운",
     "slots": 0,
     "class_num": 45,
     "description": [
@@ -117070,7 +117070,7 @@
   "19637": {
     "id": 19637,
     "name": "Equipamento Visual",
-    "resource_name": "",
+    "resource_name": "간호모",
     "slots": 0,
     "class_num": 64,
     "description": [
@@ -117962,7 +117962,7 @@
   "19735": {
     "id": 19735,
     "name": "Equipamento Visual",
-    "resource_name": "",
+    "resource_name": "핀헬름",
     "slots": 0,
     "class_num": 100,
     "description": [
@@ -118394,7 +118394,7 @@
   "19784": {
     "id": 19784,
     "name": "Equipamento Visual",
-    "resource_name": "",
+    "resource_name": "모리아네헬름",
     "slots": 0,
     "class_num": 257,
     "description": [
@@ -118500,7 +118500,7 @@
   "19796": {
     "id": 19796,
     "name": "Equipamento Visual",
-    "resource_name": "",
+    "resource_name": "본헬름",
     "slots": 0,
     "class_num": 103,
     "description": [
@@ -120748,7 +120748,7 @@
   "20052": {
     "id": 20052,
     "name": "Equipamento Visual",
-    "resource_name": "",
+    "resource_name": "알림간판",
     "slots": 0,
     "class_num": 471,
     "description": [
@@ -121852,7 +121852,7 @@
   "20188": {
     "id": 20188,
     "name": "Equipamento Visual",
-    "resource_name": "",
+    "resource_name": "모르피셔스두건",
     "slots": 0,
     "class_num": 256,
     "description": [
@@ -121966,7 +121966,7 @@
   "20203": {
     "id": 20203,
     "name": "Equipamento Visual",
-    "resource_name": "",
+    "resource_name": "두건",
     "slots": 0,
     "class_num": 6,
     "description": [
@@ -122210,7 +122210,7 @@
   "20232": {
     "id": 20232,
     "name": "Equipamento Visual",
-    "resource_name": "",
+    "resource_name": "셀린느의리본",
     "slots": 0,
     "class_num": 967,
     "description": [
@@ -122604,7 +122604,7 @@
   "20281": {
     "id": 20281,
     "name": "Equipamento Visual",
-    "resource_name": "?",
+    "resource_name": "크리투라학원모자",
     "slots": 0,
     "class_num": 977,
     "description": [
@@ -123764,7 +123764,7 @@
   "20410": {
     "id": 20410,
     "name": "Equipamento Visual",
-    "resource_name": "??",
+    "resource_name": "본헤드",
     "slots": 0,
     "class_num": 401,
     "description": [
@@ -124730,7 +124730,7 @@
   "20535": {
     "id": 20535,
     "name": "Equipamento Visual",
-    "resource_name": "??",
+    "resource_name": "C_Digital_Space",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -126266,7 +126266,7 @@
   "20838": {
     "id": 20838,
     "name": "Capa",
-    "resource_name": "??",
+    "resource_name": "Muffler_IL",
     "slots": 1,
     "class_num": 0,
     "description": [
@@ -127230,7 +127230,7 @@
   "21004": {
     "id": 21004,
     "name": "Espada de Duas Mãos",
-    "resource_name": "",
+    "resource_name": "알카브링거",
     "slots": 2,
     "class_num": 3,
     "description": [
@@ -127378,7 +127378,7 @@
   "21024": {
     "id": 21024,
     "name": "Espada",
-    "resource_name": "",
+    "resource_name": "베테랑소드",
     "slots": 3,
     "class_num": 3,
     "description": [
@@ -128412,7 +128412,7 @@
   "22107": {
     "id": 22107,
     "name": "Calçado",
-    "resource_name": "??",
+    "resource_name": "시간의힘부츠",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -128422,7 +128422,7 @@
   "22108": {
     "id": 22108,
     "name": "Calçado",
-    "resource_name": "??",
+    "resource_name": "시간의지력부츠",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -128432,7 +128432,7 @@
   "22109": {
     "id": 22109,
     "name": "Calçado",
-    "resource_name": "??",
+    "resource_name": "시간의민첩부츠",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -128442,7 +128442,7 @@
   "22110": {
     "id": 22110,
     "name": "Calçado",
-    "resource_name": "??",
+    "resource_name": "시간의체력부츠",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -128452,7 +128452,7 @@
   "22111": {
     "id": 22111,
     "name": "Calçado",
-    "resource_name": "??",
+    "resource_name": "시간의손재주부츠",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -128462,7 +128462,7 @@
   "22112": {
     "id": 22112,
     "name": "Calçado",
-    "resource_name": "??",
+    "resource_name": "시간의행운부츠",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -128472,7 +128472,7 @@
   "22113": {
     "id": 22113,
     "name": "Calçado",
-    "resource_name": "??",
+    "resource_name": "시간의힘부츠",
     "slots": 1,
     "class_num": 0,
     "description": [
@@ -128482,7 +128482,7 @@
   "22114": {
     "id": 22114,
     "name": "Calçado",
-    "resource_name": "??",
+    "resource_name": "시간의지력부츠",
     "slots": 1,
     "class_num": 0,
     "description": [
@@ -128492,7 +128492,7 @@
   "22115": {
     "id": 22115,
     "name": "Calçado",
-    "resource_name": "??",
+    "resource_name": "시간의민첩부츠",
     "slots": 1,
     "class_num": 0,
     "description": [
@@ -128502,7 +128502,7 @@
   "22116": {
     "id": 22116,
     "name": "Calçado",
-    "resource_name": "??",
+    "resource_name": "시간의체력부츠",
     "slots": 1,
     "class_num": 0,
     "description": [
@@ -128512,7 +128512,7 @@
   "22117": {
     "id": 22117,
     "name": "Calçado",
-    "resource_name": "??",
+    "resource_name": "시간의손재주부츠",
     "slots": 1,
     "class_num": 0,
     "description": [
@@ -128522,7 +128522,7 @@
   "22118": {
     "id": 22118,
     "name": "Calçado",
-    "resource_name": "??",
+    "resource_name": "시간의행운부츠",
     "slots": 1,
     "class_num": 0,
     "description": [
@@ -128604,7 +128604,7 @@
   "22129": {
     "id": 22129,
     "name": "Calçado",
-    "resource_name": "",
+    "resource_name": "용자의슈즈",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -128630,7 +128630,7 @@
   "22133": {
     "id": 22133,
     "name": "Calçado",
-    "resource_name": "??",
+    "resource_name": "Shoes_IL",
     "slots": 1,
     "class_num": 0,
     "description": [
@@ -128674,7 +128674,7 @@
   "22138": {
     "id": 22138,
     "name": "Calçado",
-    "resource_name": "",
+    "resource_name": "Demonist_Shoes",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -129122,7 +129122,7 @@
   "22204": {
     "id": 22204,
     "name": "Sapatos",
-    "resource_name": "??",
+    "resource_name": "미라쥬슈즈",
     "slots": 1,
     "class_num": 0,
     "description": [
@@ -129604,7 +129604,7 @@
   "22545": {
     "id": 22545,
     "name": "Poção do Vento",
-    "resource_name": "",
+    "resource_name": "이속증가포션",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -130894,7 +130894,7 @@
   "22737": {
     "id": 22737,
     "name": "Cartucho Sanguinário",
-    "resource_name": "???_???",
+    "resource_name": "탄약통_블러드",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -130908,7 +130908,7 @@
   "22738": {
     "id": 22738,
     "name": "Cartucho de Prata",
-    "resource_name": "???_??",
+    "resource_name": "탄약통_실버",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -130992,7 +130992,7 @@
   "22744": {
     "id": 22744,
     "name": "Cartucho Perfurador",
-    "resource_name": "???_???",
+    "resource_name": "탄약통_철갑탄",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -131006,7 +131006,7 @@
   "22745": {
     "id": 22745,
     "name": "Cartucho Incandescente",
-    "resource_name": "???_???",
+    "resource_name": "탄약통_작열탄",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -131020,7 +131020,7 @@
   "22746": {
     "id": 22746,
     "name": "Cartucho Glacial",
-    "resource_name": "???_???",
+    "resource_name": "탄약통_빙결탄",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -131034,7 +131034,7 @@
   "22747": {
     "id": 22747,
     "name": "Cartucho de Eletrochoque",
-    "resource_name": "???_???",
+    "resource_name": "탄약통_전격탄",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -131048,7 +131048,7 @@
   "22748": {
     "id": 22748,
     "name": "Cartucho Tectônico",
-    "resource_name": "???_???",
+    "resource_name": "탄약통_마석탄",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -131062,7 +131062,7 @@
   "22749": {
     "id": 22749,
     "name": "Cartucho de Purificação",
-    "resource_name": "???_???",
+    "resource_name": "탄약통_정화탄",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -132799,7 +132799,7 @@
   "23012": {
     "id": 23012,
     "name": "Poção Menor de Mana",
-    "resource_name": "",
+    "resource_name": "마카푸노",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -133181,7 +133181,7 @@
   "23061": {
     "id": 23061,
     "name": "Aljave Afiada",
-    "resource_name": "???",
+    "resource_name": "화살통",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -133348,7 +133348,7 @@
   "23081": {
     "id": 23081,
     "name": "Emakimono Ardente",
-    "resource_name": "??????_?",
+    "resource_name": "쿠나이소환서_화",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -133362,7 +133362,7 @@
   "23082": {
     "id": 23082,
     "name": "Emakimono Glacial",
-    "resource_name": "??????_?",
+    "resource_name": "쿠나이소환서_수",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -133376,7 +133376,7 @@
   "23083": {
     "id": 23083,
     "name": "Emakimono Ciclone",
-    "resource_name": "??????_?",
+    "resource_name": "쿠나이소환서_풍",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -133390,7 +133390,7 @@
   "23084": {
     "id": 23084,
     "name": "Emakimono Terrestre",
-    "resource_name": "??????_?",
+    "resource_name": "쿠나이소환서_토",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -133404,7 +133404,7 @@
   "23085": {
     "id": 23085,
     "name": "Emakimono Venenoso",
-    "resource_name": "??????_?",
+    "resource_name": "쿠나이소환서_독",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -133659,7 +133659,7 @@
   "23123": {
     "id": 23123,
     "name": "Cartucho de Fogo",
-    "resource_name": "???_???",
+    "resource_name": "탄약통_플레어",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -133672,7 +133672,7 @@
   "23124": {
     "id": 23124,
     "name": "Cartucho Relâmpago",
-    "resource_name": "???_????",
+    "resource_name": "탄약통_라이트닝",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -133685,7 +133685,7 @@
   "23125": {
     "id": 23125,
     "name": "Cartucho Congelante",
-    "resource_name": "???_???",
+    "resource_name": "탄약통_아이스",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -133698,7 +133698,7 @@
   "23126": {
     "id": 23126,
     "name": "Cartucho Venenoso",
-    "resource_name": "???_???",
+    "resource_name": "탄약통_포이즌",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -133711,7 +133711,7 @@
   "23127": {
     "id": 23127,
     "name": "Cartucho Cegante",
-    "resource_name": "???_????",
+    "resource_name": "탄약통_블라인드",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -142838,7 +142838,7 @@
   "25187": {
     "id": 25187,
     "name": "Projétil Pesado",
-    "resource_name": "????_5",
+    "resource_name": "슬러그탄_5",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -146151,7 +146151,7 @@
   "26007": {
     "id": 26007,
     "name": "Arma",
-    "resource_name": "???",
+    "resource_name": "Spectral_Spear_IL",
     "slots": 1,
     "class_num": 5,
     "description": [
@@ -146257,7 +146257,7 @@
   "26109": {
     "id": 26109,
     "name": "Arma",
-    "resource_name": "??",
+    "resource_name": "Staff_Of_Bordeaux_IL",
     "slots": 2,
     "class_num": 10,
     "description": [
@@ -146267,7 +146267,7 @@
   "26110": {
     "id": 26110,
     "name": "Arma",
-    "resource_name": "????",
+    "resource_name": "CandyCaneRod",
     "slots": 2,
     "class_num": 10,
     "description": [
@@ -146786,7 +146786,7 @@
   "27082": {
     "id": 27082,
     "name": "Carta Raposa Raivosa",
-    "resource_name": "??????",
+    "resource_name": "이름없는카드",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -146800,7 +146800,7 @@
   "27083": {
     "id": 27083,
     "name": "Carta Bongun Ressentido",
-    "resource_name": "??????",
+    "resource_name": "이름없는카드",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -146815,7 +146815,7 @@
   "27084": {
     "id": 27084,
     "name": "Carta Sohee Maldita",
-    "resource_name": "??????",
+    "resource_name": "이름없는카드",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -146830,7 +146830,7 @@
   "27085": {
     "id": 27085,
     "name": "Carta Munak Ressentida",
-    "resource_name": "??????",
+    "resource_name": "이름없는카드",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -146846,7 +146846,7 @@
   "27086": {
     "id": 27086,
     "name": "Carta Arqueiro Cruel",
-    "resource_name": "??????",
+    "resource_name": "이름없는카드",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -146861,7 +146861,7 @@
   "27087": {
     "id": 27087,
     "name": "Carta Veritas",
-    "resource_name": "??????",
+    "resource_name": "이름없는카드",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -146875,7 +146875,7 @@
   "27088": {
     "id": 27088,
     "name": "Carta Aventureiro",
-    "resource_name": "??????",
+    "resource_name": "이름없는카드",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -149265,7 +149265,7 @@
   "28114": {
     "id": 28114,
     "name": "Machado de Duas Mãos",
-    "resource_name": "",
+    "resource_name": "베테랑액스",
     "slots": 3,
     "class_num": 7,
     "description": [
@@ -149729,7 +149729,7 @@
   "28256": {
     "id": 28256,
     "name": "Espingarda",
-    "resource_name": "",
+    "resource_name": "데몬샷건",
     "slots": 2,
     "class_num": 20,
     "description": [
@@ -151963,7 +151963,7 @@
   "28598": {
     "id": 28598,
     "name": "Acessório",
-    "resource_name": "",
+    "resource_name": "Supplement_Part_Chip",
     "slots": 1,
     "class_num": 0,
     "description": [
@@ -152317,7 +152317,7 @@
   "28725": {
     "id": 28725,
     "name": "Adaga",
-    "resource_name": "???",
+    "resource_name": "Moonlight_Sword_IL",
     "slots": 1,
     "class_num": 1,
     "description": [
@@ -157965,7 +157965,7 @@
   "31124": {
     "id": 31124,
     "name": "Equipamento Visual",
-    "resource_name": "?",
+    "resource_name": "리본요리사모자",
     "slots": 0,
     "class_num": 785,
     "description": [
@@ -159703,7 +159703,7 @@
   "31388": {
     "id": 31388,
     "name": "Equipamento Visual",
-    "resource_name": "",
+    "resource_name": "Garden_Of_Eden",
     "slots": 0,
     "class_num": 1653,
     "description": [
@@ -160467,7 +160467,7 @@
   "31487": {
     "id": 31487,
     "name": "Equipamento Visual",
-    "resource_name": "",
+    "resource_name": "안대",
     "slots": 0,
     "class_num": 13,
     "description": [
@@ -160775,7 +160775,7 @@
   "31530": {
     "id": 31530,
     "name": "Equipamento Visual",
-    "resource_name": "",
+    "resource_name": "Greater_Dracul_Horn",
     "slots": 0,
     "class_num": 1695,
     "description": [
@@ -160851,7 +160851,7 @@
   "31538": {
     "id": 31538,
     "name": "Equipamento Visual",
-    "resource_name": "??",
+    "resource_name": "Love_Feeling",
     "slots": 0,
     "class_num": 1717,
     "description": [
@@ -160977,7 +160977,7 @@
   "31561": {
     "id": 31561,
     "name": "Equipamento Visual",
-    "resource_name": "??",
+    "resource_name": "천상의어둠화염",
     "slots": 0,
     "class_num": 1008,
     "description": [
@@ -160987,7 +160987,7 @@
   "31564": {
     "id": 31564,
     "name": "Equipamento Visual",
-    "resource_name": "",
+    "resource_name": "C_Variant_Veil",
     "slots": 0,
     "class_num": 1785,
     "description": [
@@ -160997,7 +160997,7 @@
   "31565": {
     "id": 31565,
     "name": "Equipamento Visual",
-    "resource_name": "",
+    "resource_name": "C_Princess_Ribbon_Crown",
     "slots": 0,
     "class_num": 1786,
     "description": [
@@ -161027,7 +161027,7 @@
   "31568": {
     "id": 31568,
     "name": "Equipamento Visual",
-    "resource_name": "",
+    "resource_name": "Floating_Ball",
     "slots": 0,
     "class_num": 1760,
     "description": [
@@ -161037,7 +161037,7 @@
   "31569": {
     "id": 31569,
     "name": "Equipamento Visual",
-    "resource_name": "??",
+    "resource_name": "OpenAir_Headset",
     "slots": 0,
     "class_num": 1655,
     "description": [
@@ -161067,7 +161067,7 @@
   "31572": {
     "id": 31572,
     "name": "Equipamento Visual",
-    "resource_name": "?",
+    "resource_name": "C_Mobile_Pursuit_System",
     "slots": 0,
     "class_num": 1788,
     "description": [
@@ -161097,7 +161097,7 @@
   "31575": {
     "id": 31575,
     "name": "Equipamento Visual",
-    "resource_name": "",
+    "resource_name": "C_Electro_Two_Side_Up",
     "slots": 0,
     "class_num": 1791,
     "description": [
@@ -161127,7 +161127,7 @@
   "31586": {
     "id": 31586,
     "name": "Equipamento Visual",
-    "resource_name": "??",
+    "resource_name": "C_Poporing_Muffler",
     "slots": 0,
     "class_num": 1797,
     "description": [
@@ -165392,7 +165392,7 @@
   "27081": {
     "id": 27081,
     "name": "Carta Flor da Ilusão",
-    "resource_name": "??????",
+    "resource_name": "이름없는카드",
     "slots": 0,
     "class_num": 104,
     "description": [
@@ -165406,7 +165406,7 @@
   "25256": {
     "id": 25256,
     "name": "Pedaço de Sonho",
-    "resource_name": "?????",
+    "resource_name": "영혼의조각",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165418,7 +165418,7 @@
   "25257": {
     "id": 25257,
     "name": "Poesias de Amor",
-    "resource_name": "?????",
+    "resource_name": "피묻은책장",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165429,7 +165429,7 @@
   "25259": {
     "id": 25259,
     "name": "Recruta-se",
-    "resource_name": "???",
+    "resource_name": "레시피",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165442,7 +165442,7 @@
   "25272": {
     "id": 25272,
     "name": "Minério Ilusional",
-    "resource_name": "??",
+    "resource_name": "광석",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165455,7 +165455,7 @@
   "23228": {
     "id": 23228,
     "name": "Bolinho de Chuva",
-    "resource_name": "??",
+    "resource_name": "월병",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165467,7 +165467,7 @@
   "23711": {
     "id": 23711,
     "name": "Caixa de Armadilhas Comuns",
-    "resource_name": "???_??",
+    "resource_name": "탄약통_실버",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165481,7 +165481,7 @@
   "100171": {
     "id": 100171,
     "name": "Pacote de Balas",
-    "resource_name": "????_?",
+    "resource_name": "스피어팩_암",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165495,7 +165495,7 @@
   "100172": {
     "id": 100172,
     "name": "Pacote de Ferro",
-    "resource_name": "????_?",
+    "resource_name": "스피어팩_풍",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165509,7 +165509,7 @@
   "100173": {
     "id": 100173,
     "name": "Pacote Fantasma",
-    "resource_name": "????_?",
+    "resource_name": "스피어팩_수",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165523,7 +165523,7 @@
   "100174": {
     "id": 100174,
     "name": "Aljava Envenenada",
-    "resource_name": "?????",
+    "resource_name": "녹슨화살통",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165537,7 +165537,7 @@
   "100176": {
     "id": 100176,
     "name": "Pacote Sombrio",
-    "resource_name": "????_?",
+    "resource_name": "스피어팩_독",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165550,7 +165550,7 @@
   "100177": {
     "id": 100177,
     "name": "Pacote Sagrado",
-    "resource_name": "????_?",
+    "resource_name": "스피어팩_화",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165564,7 +165564,7 @@
   "100178": {
     "id": 100178,
     "name": "Pacote de Cápsulas",
-    "resource_name": "???",
+    "resource_name": "철상자",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165577,7 +165577,7 @@
   "100179": {
     "id": 100179,
     "name": "Galão de Gasolina",
-    "resource_name": "??????",
+    "resource_name": "마도기어연료",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165590,7 +165590,7 @@
   "100180": {
     "id": 100180,
     "name": "Caixa de Reparador A",
-    "resource_name": "?????",
+    "resource_name": "리페어키트",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165603,7 +165603,7 @@
   "100181": {
     "id": 100181,
     "name": "Caixa de Reparador B",
-    "resource_name": "?????",
+    "resource_name": "리페어키트",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165616,7 +165616,7 @@
   "100182": {
     "id": 100182,
     "name": "Caixa de Reparador C",
-    "resource_name": "?????",
+    "resource_name": "리페어키트",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165629,7 +165629,7 @@
   "100183": {
     "id": 100183,
     "name": "Minerais de Fogo",
-    "resource_name": "???",
+    "resource_name": "열화석",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165642,7 +165642,7 @@
   "100184": {
     "id": 100184,
     "name": "Minerais do Gelo",
-    "resource_name": "???",
+    "resource_name": "빙섬석",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165655,7 +165655,7 @@
   "100185": {
     "id": 100185,
     "name": "Minerais do Vento",
-    "resource_name": "???",
+    "resource_name": "풍령석",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165668,7 +165668,7 @@
   "100186": {
     "id": 100186,
     "name": "Minerais das Sombras",
-    "resource_name": "??",
+    "resource_name": "환구",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165681,7 +165681,7 @@
   "100187": {
     "id": 100187,
     "name": "Álbum de Amuletos (Fogo)",
-    "resource_name": "????",
+    "resource_name": "불의부적",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165694,7 +165694,7 @@
   "100188": {
     "id": 100188,
     "name": "Álbum de Amuletos (Gelo)",
-    "resource_name": "?????",
+    "resource_name": "얼음의부적",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165707,7 +165707,7 @@
   "100189": {
     "id": 100189,
     "name": "Álbum de Amuletos (Vento)",
-    "resource_name": "?????",
+    "resource_name": "바람의부적",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165720,7 +165720,7 @@
   "100190": {
     "id": 100190,
     "name": "Álbum de Amuletos (Terra)",
-    "resource_name": "????",
+    "resource_name": "땅의부적",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165733,7 +165733,7 @@
   "100191": {
     "id": 100191,
     "name": "Emakimono Explosivo",
-    "resource_name": "??????_?",
+    "resource_name": "쿠나이소환서_독",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165786,7 +165786,7 @@
   "100195": {
     "id": 100195,
     "name": "Cartucho Revestido",
-    "resource_name": "???_???",
+    "resource_name": "탄약통_철갑탄",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165799,7 +165799,7 @@
   "100196": {
     "id": 100196,
     "name": "Cartucho de Granada",
-    "resource_name": "???_????",
+    "resource_name": "탄약통_블라인드",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165812,7 +165812,7 @@
   "100197": {
     "id": 100197,
     "name": "Cartucho de Míssil",
-    "resource_name": "???_???",
+    "resource_name": "탄약통_작열탄",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165836,7 +165836,7 @@
   "100391": {
     "id": 100391,
     "name": "Cubo do Luar",
-    "resource_name": "???????",
+    "resource_name": "보라쉐도우큐브",
     "slots": 0,
     "class_num": 0,
     "description": [
@@ -165855,7 +165855,7 @@
   "100392": {
     "id": 100392,
     "name": "Super Cubo do Luar",
-    "resource_name": "?????",
+    "resource_name": "쉐도우큐브",
     "slots": 0,
     "class_num": 0,
     "description": [

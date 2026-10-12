@@ -166,6 +166,7 @@ AMythSprEffect* AMythSprEffect::Attach(AActor* Owner, const FString& SprFile, bo
 	if (E)
 	{
 		E->HeightOffset += UpOffset;
+		E->bMasked = SprFile == TEXT("매"); // falcao: sprite solido, nao brilho
 		E->SideOffset = SideOffsetUU;
 	}
 	return E;
@@ -218,9 +219,28 @@ void AMythSprEffect::Tick(float DeltaSeconds)
 		{
 			continue;
 		}
-		const bool bAdd = D->Opaque.FindRef(L.SprIndex * 2 + L.SprType);
-		UMaterialInstanceDynamic* Mat = bAdd ? AdditiveMaterials[Section] : Materials[Section];
-		Mat->SetTextureParameterValue(TEXT("Tex"), Tex);
+		UMaterialInstanceDynamic* Mat = nullptr;
+		if (bMasked)
+		{
+			if (MaskedMaterials.Num() <= Section)
+			{
+				if (UMaterialInterface* MaskBase = LoadObject<UMaterialInterface>(nullptr, TEXT("/Paper2D/MaskedUnlitSpriteMaterial.MaskedUnlitSpriteMaterial")))
+				{
+					MaskedMaterials.Add(UMaterialInstanceDynamic::Create(MaskBase, this));
+				}
+			}
+			if (MaskedMaterials.IsValidIndex(Section))
+			{
+				Mat = MaskedMaterials[Section];
+				Mat->SetTextureParameterValue(TEXT("SpriteTexture"), Tex);
+			}
+		}
+		if (!Mat)
+		{
+			const bool bAdd = D->Opaque.FindRef(L.SprIndex * 2 + L.SprType);
+			Mat = bAdd ? AdditiveMaterials[Section] : Materials[Section];
+			Mat->SetTextureParameterValue(TEXT("Tex"), Tex);
+		}
 		const float HW = Size.X * 0.5f * UnitsPerPixel * L.Scale.X;
 		const float HH = Size.Y * 0.5f * UnitsPerPixel * L.Scale.Y;
 		// Origem do .act = pes; o centro da imagem fica em Offset (Y para baixo); puxado para a camera para ficar na frente

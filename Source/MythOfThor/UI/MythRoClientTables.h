@@ -48,4 +48,7 @@ struct MYTHOFTHOR_API FMythRoClientTables
 
 	/** Icone da habilidade (texture/유저인터페이스/item/<aegis_name minusculo>.bmp). */
 	static UTexture2D* SkillIcon(int32 SkillID);
+
+	/** Linhas de descricao da habilidade (skilldesctable do cliente, com cores ^RRGGBB); nulo se nao ha. */
+	static const TArray<FString>* SkillDescription(int32 SkillID);
 };
