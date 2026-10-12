@@ -73,3 +73,6 @@ Tudo em `server/renovacao/` (no repositório; o rAthena fica no WSL):
 - Recompilar: no `server/`, `docker compose --profile build run --rm builder sh -c './configure --enable-packetver=20250402 --enable-prere=no && make clean server'`
   e reiniciar `mythofthor-login mythofthor-char mythofthor-map`. O `server/docker-compose.yml` já tem `--enable-prere=no`.
 - Cliente: a janela de Status mostra MATK como "atributo + equipamento" e o custo do próximo ponto vem do servidor.
+- Mensagens do servidor em português (2026-10-13): `aplicar.sh` põe `#define LANG_ENABLE 0x80` no `src/custom/defines_pre.hpp`,
+  converte `conf/msg_conf/map_msg_por.conf` para UTF-8 e carrega `npc/custom/myth/idioma.txt` (cada conta vira `@langtype por`
+  ao entrar). Depois de mudar o define é preciso recompilar `src/common/msg_conf.cpp` (um `touch` nele antes do `make server`).

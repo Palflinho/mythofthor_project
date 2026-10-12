@@ -55,7 +55,7 @@ Prioridade: **P0** = laço básico do jogo (quem joga 1 hora precisa), **P1** = 
 | **Caçador: falcão** (aparecer, comando Blitz Beat, Detect, Steel Crow) | 🟡 | P0 | aparece e vira; **botão de soltar** feito hoje; faltam o ataque do falcão (Blitz Beat) e o aviso de "falcão voltou" |
 | Caçador: armadilhas (colocar, visual, disparar) | 🟡 | P1 | |
 | Caçador: Arrow Making / Phantasmagoria | ⬜ | P1 | lista de materiais 0x01ad |
-| **Cavaleiro: Peco Peco** (montar, sprite montado, alugar) | 🟡 | P0 | tabela de sprite existe (jobs 13/21/4014...); **não testado**; botão de descer feito hoje |
+| **Cavaleiro: Peco Peco** (montar, sprite montado, alugar) | 🟡 | P0 | 2026-10-13: corpo montado pelo bit 0x20 (testado com @mount), botão "off"; falta testar o aluguel no NPC |
 | Cruzado: Peco Peco, Grand Cross, Devotion, Providence | 🟡 | P1 | |
 | **Mago:** Warp Portal, Memo, Estalo de gelo etc. | 🟡 | P0 | |
 | **Sacerdote:** Heal, Aqua Benedicta, Sanctuary, Resurrect, Warp, Impositio | 🟡 | P0 | |
@@ -64,7 +64,7 @@ Prioridade: **P0** = laço básico do jogo (quem joga 1 hora precisa), **P1** = 
 | **Ladrão/Assassino:** Steal, Hide (invisível), Envenom, Cloaking | 🟡 | P1 | Hide parcial (opacidade); Steal sem resultado visível? conferir |
 | **Bardo/Odalisca:** canções, dança em dupla, instrumentos | ⬜ | P1 | sem sprites de instrumento e sem animação da música |
 | Aprendiz/Super Aprendiz, Primeiros Passos (Training Grounds) | 🟡 | P0 | |
-| Trocar de classe (Job change) nos NPCs originais | 🟡 | P0 | mapas já importados; fluxo não verificado de ponta a ponta |
+| Trocar de classe (Job change) nos NPCs originais | 🟡 | P0 | Aprendiz → Espadachim pelo NPC de Izlude testado de ponta a ponta em 2026-10-13 (Renovação); faltam as outras classes |
 | Taekwon/Star Gladiator/Soul Linker, Ninja, Gunslinger | ➖/decidir | P2 | fora da regra "até transclasse"? decidir com o usuário |
 
 ## 3. Companheiros e montarias
@@ -76,7 +76,7 @@ Prioridade: **P0** = laço básico do jogo (quem joga 1 hora precisa), **P1** = 
 | **Mercenário:** contratar, janela, skills | ⬜ | P2 | |
 | Carrinho: sprite | ✅ | – | |
 | Falcão: sprite | ✅ | – | |
-| Peco Peco: sprite montado, velocidade, soltar | 🟡 | P0 | |
+| Peco Peco: sprite montado, velocidade, soltar | 🟡 | P0 | sprite montado e soltar feitos em 2026-10-13 (`33c251d`); velocidade é do servidor |
 | Warg/Lobo (Ranger), Dragão (Rune Knight), Madogear | ➖ | P2 | 3ª classe |
 
 ## 4. Itens e inventário
@@ -135,7 +135,7 @@ Prioridade: **P0** = laço básico do jogo (quem joga 1 hora precisa), **P1** = 
 | PvP (arena, placar) e `/duel` | ⬜ | P2 | |
 | Casamento, adoção, bebê | ⬜ | P2 | |
 | Ranking (Ferreiro, Alquimista, PK, Taekwon) | ⬜ | P2 | |
-| Mensagens de sistema do cliente (`msgstringtable`, 0x0291) | ⬜ | P0 | o cliente mostra texto em inglês do servidor; falta a tabela LATAM |
+| Mensagens de sistema do cliente (`msgstringtable`, 0x0291) | ✅ | P0 | 2026-10-13: 0x0291/0x07e2/0x09cd/0x07e6 com a msgstringtable do LATAM; mensagens do próprio servidor em português (pacote POR do rAthena) |
 
 ## 7. Interface e conforto
 
