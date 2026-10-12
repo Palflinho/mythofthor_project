@@ -6,8 +6,9 @@ terminar cada bloco de trabalho. Leia também `docs/ROADMAP.md` (fases e estado)
 
 ## O projeto
 
-Myth of Thor: remaster em Unreal Engine 5.8 (C++) do Ragnarok Online pré-renovação. Servidor = rAthena (WSL/Docker,
-PACKETVER 20250402); o servidor decide as regras, o cliente só mostra e envia pacotes confirmados no código do rAthena
+Myth of Thor: remaster em Unreal Engine 5.8 (C++) do Ragnarok Online, com as regras da **Renovação até a transclasse**
+(desde 2026-10-12: 125/70, atributos 110; `docs/PRERE_X_RENOVACAO.md`, `server/renovacao/`). Servidor = rAthena (WSL/Docker,
+PACKETVER 20250402, `--enable-prere=no`); o servidor decide as regras, o cliente só mostra e envia pacotes confirmados no código do rAthena
 (`~/mythofthor-server/rathena/src/map`, no WSL). Meta atual: ficar 1:1 com o cliente RO/LATAM antes de sistemas próprios,
 teste fechado e HD-2D. O usuário (fala pt-BR; responda sempre em português) testa e reporta por número de janela/item.
 Autorizado: desenvolver sem pedir confirmação, commitar localmente (sem push), regenerar a versão de teste e atualizar docs.
@@ -46,7 +47,9 @@ janela por janela, nosso tamanho × referência: `docs/HUD_REVISAO_COMPLETA.md` 
 - 🟡 Grupo: 286 de largura, cartões de 38, ícone da classe e coroa (`8e73c69`). Cartão **claro com texto escuro** (`3803830`):
   decisão do usuário, fica assim, não voltar ao `bg_partymember`. Faltam barra de ferramentas e alça.
 - 🟡 Habilidades: abas verticais e grade 7 × 68 × 56 do print 13 (`c752514`, `a6ca270`). Faltam ilustração, abas 3a/Etc e "skill point : N".
-- ⬜ Próximo: **Equipamento** (rodapé, abas Title/Damage, encaixes de 115 × 24, prévia do personagem), depois Navegação.
+- 🟡 Equipamento (`595b1a9`): 4 abas, prévia do personagem (`UMythRoSpriteComponent::RenderPortrait`), rodapé com Mostrar equip. e
+  tirar tudo. Faltam falcão na prévia, girar, títulos e fonte de dano.
+- ⬜ Próximo: Navegação. Relatório da noite: `docs/RELATORIO_NOITE_2026-10-12.md`.
 
 **Feito antes (2026-10-12):** `docs/AUDITORIA_COMPLETA.md` (todas as funções do RO com estado); análise das referências
 (`docs/ref/REFERENCIAS_GORO_NOSTALRO.md`, `NOSTALRO_COMPARACAO.md`, `CLIENTE_2026.md`, `ANALISE_DATA2026.md`); pacotes sem tratamento

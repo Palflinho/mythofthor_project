@@ -14,7 +14,7 @@ Onde não tenho número de referência, a regra é o print. Veredito: ✅ confer
 | Minimapa | 128 × 144 | print 22 (128 × 128 + faixa de 16) | ✅ |
 | Status (`MythRoHUDWindows.cpp`) | 280 × 141 | arte `w_statwin_bg` 280 × 124 + título 17 | ✅ (usa a arte real) |
 | Itens | 254 × 175 (7 × 4 casas de 32) | print 04 (aprox. 280 × 190); inventário LATAM: 7 colunas | 🟡 conferir contra o print: altura e rodapé |
-| **Equipamento** | **280 × 165** | roBrowser V4: título 17 + abas 15 + painel 150 + rodapé 20 = **202**; goro 300 | ❌ 37 px mais baixa que a referência; **falta rodapé** (Show Equip, switch, remover), abas Title/Damage e prévia; slots de 115 × 24 (nós ~86 de largura) |
+| **Equipamento** | **280 × 186** (título 17, abas 17, arte 130, rodapé 22) | roBrowser V4: título 17 + abas 15 + painel 150 + rodapé 20 = **202**; goro 300; print 08 ~280 × 194 | 🟡 abas, prévia e rodapé feitos; faltam falcão na prévia, girar o personagem, títulos e fonte de dano |
 | **Habilidades** | **532 × (24 + linhas × 56 + 40)**: 532 × 400 com 6 linhas, até 568 com 9 (Super Aprendiz) | print 13: ~**560 × 410** com abas verticais; roBrowser V2: células 28 × 28, rodapé 27 | 🟡 abas verticais e grade 7 × 68 feitas; a altura acompanha a aba (`ResizeSkillTree`); faltam ilustração, abas 3a/Etc e "skill point : N" |
 | **Grupo** | **286 × (lista + 34)**, cartões de 38 | roBrowser V1: conteúdo 240 × 120, título 17, ferramentas 20, rodapé 21; goro 286 × 256; print 19 ~285 × 320 | 🟡 largura, cartões, ícone de classe e coroa feitos; cartão claro com texto escuro (escolha nossa, aprovada); faltam barra de ferramentas e alça |
 | Amigos | 270 × (lista) | goro: linhas 286 × 24; roBrowser PartyFriends compartilhado | 🟡 usar a **mesma janela do Grupo** (286 de largura, linhas de 24) |
@@ -62,5 +62,10 @@ Cada item: abrir no jogo com `MythWindow` (o menu Esc abre com `MythGameMenu`) e
 - ✅ **Menu Esc:** 300 de largura, 5 botões de 262, um a cada 26 px (commit `d6399ab`); falta conferir a altura total contra o print.
 - 🟡 **Grupo:** 286 de largura, cartões de 38 **claros com texto escuro** (sem o `bg_partymember`, commit `3803830`; decisão: fica assim), ícone da classe (`icon_jobs_<id>`, `_die` quando morto) e coroa do líder; faltam barra de ferramentas, alça de redimensionar, contador de membros e a barra de SP.
 - ✅ **Fonte:** UI usa Tahoma (Windows) com fallback para Arial e Roboto; conferir visualmente contra os prints. O SCDream fica só para o coreano.
-- ⬜ Equipamento, Navegação e janelas funcionais (ver a ordem acima).
+- 🟡 **Equipamento** (`595b1a9`): 280 × 186, 4 abas de 70 (Geral, Especial, Título, Fonte de dano), encaixes em linhas de 26 com o
+  nome em até 2 linhas e o rótulo da arte apagado por baixo, **prévia do personagem** desenhada dos .spr/.act (`RenderPortrait`),
+  munição no topo da coluna do meio (só com munição), botão redondo `btn_off` para falcão/Peco e rodapé com "Mostrar equip."
+  (CZ_CONFIG) e os botões `btn_e_ability` (Status), `btn_e_change` (troca rápida) e `btn_e_off` (tirar tudo, 0x0bf5). Conferido
+  em jogo. Faltam: falcão na prévia, setas de girar o personagem (`chr_arrow_rotate_*`), lista de títulos e seletor de fonte de dano.
+- ⬜ Navegação e janelas funcionais (ver a ordem acima).
 - 🟡 **Habilidades:** abas verticais na esquerda (Ap, 1a, 2a, Tr), grade de 7 colunas de 68 × 56 como no print 13, nome da skill em cima (cortado com reticências), nível embaixo, casas vazias com moldura apagada; a janela tem no mínimo 6 linhas e cresce até 9 com a árvore da aba (`ResizeSkillTree`). Conferido em jogo. Faltam a ilustração do personagem, as abas "3a/Etc" e o texto "skill point : N" no estilo do print.

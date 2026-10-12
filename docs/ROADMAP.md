@@ -8,6 +8,8 @@ login, teste fechado, sistemas próprios, visual HD-2D e conteúdo novo.
 - O comportamento esperado vem dos specs em `docs/ref/` (pesquisa do Antigravity nos clientes abertos OM, RB e KO).
 - O servidor (rAthena) decide as regras; o cliente só mostra (`docs/PLANO_CLIENTE_FIEL.md`, seção 1).
 - Uma etapa só fecha depois de **você testar jogando** e aprovar.
+- **Regras (decisão de 2026-10-12):** servidor em **Renovação**, jogo até a transclasse (125/70, atributos 110, classes expandidas
+  liberadas, sem 3ª classe nem Doram). Detalhes e como aplicar: [`PRERE_X_RENOVACAO.md`](PRERE_X_RENOVACAO.md).
 
 Legenda: ✅ feito e testado · 🟡 em parte · ⬜ falta
 
@@ -95,7 +97,7 @@ Ordem do que se vê o tempo todo jogando. Quem: Claude, salvo indicação.
 | 1.16 | Janelas do cliente clássico que faltam (doc 12): sala de chat (Alt+C), lista de emoções (Alt+L), lista de atalhos (Alt+M / F12), info básica recolhida, nome do mapa ao entrar, **quadrado do tile sob o mouse** (cantos verdes, imagem 23), pegadas de outros jogadores (chave da aba Effect) | Claude | 🟡 sala de chat, F12, emoções, quadrado do tile feitos; pegadas são efeito cosmético de item (backlog) |
 | 1.17 | Quests (Alt+U) com rastreador na tela, mapa-múndi (Ctrl+`) e `/navi` (docs 08, 12) | Claude | 🟡 quests (Alt+U), rastreador e `/navi` (Alt+N) feitos; mapa-múndi gráfico fica no backlog (falta a tabela de posições dos nomes) |
 | 1.18 | Sobrepeso (50% trava regeneração, 90% trava combate), cores `^RRGGBB` nas descrições (doc 19) | Claude | 🟡 cores nas descrições existem; peso vermelho a 50% feito; efeitos são do servidor |
-| 1.19 | Sistemas modernos do LATAM, **todos entram, adaptados depois ao pre-renovação** (decisão do usuário 2026-10-11): RODEX, Conquistas, Reputação, Agência de Aventureiros, Banco, `/navi`, troca rápida de equipamento. **JCoins fica de fora** (não haverá RO Premium/ROPs) | Claude | 🟡 Banco (Ctrl+B), Conquistas (Alt+Y), troca rápida (Alt+W) feitos; Correio (Alt+R) feito (sem anexos ao escrever); Reputação e Agência: o servidor não tem (sem banco de dados pre-renovação) |
+| 1.19 | Sistemas modernos do LATAM, **todos entram** (decisão do usuário 2026-10-11; desde 2026-10-12 o servidor é Renovação, então os bancos desses sistemas existem): RODEX, Conquistas, Reputação, Agência de Aventureiros, Banco, `/navi`, troca rápida de equipamento. **JCoins fica de fora** (não haverá RO Premium/ROPs) | Claude | 🟡 Banco (Ctrl+B), Conquistas (Alt+Y), troca rápida (Alt+W) feitos; Correio (Alt+R) feito (sem anexos ao escrever); Reputação e Agência: rever agora que o servidor é Renovação (`db/re/reputation.yml`) |
 | 1.20 | Sons de interface e o campo `wav` dos efeitos de skill (doc 07) | Claude | 🟡 sons de pegar item e equipar; botões e janelas sem arquivo no cliente local |
 | 1.21 | Os 33 efeitos FUNC vazios e o terremoto (ID 666) (doc 13) | Claude | 🟡 esferas do Monge, vinhetas de veneno e cegueira, terremoto feitos; clima e nuvens ficam para o visual HD-2D |
 | 1.22 | Menu Esc com os 5 botões (Seleção de personagem, Game settings, Set hotkeys, Sair, Voltar) e a janela **Game settings** com 5 abas (Default, Effect, Control, Graphics, Other com ON/OFF e "apply"), como em `hud_latam/INDICE.md` | Claude | 🟡 menu Esc com 5 itens; Gráficos, Som e Opções (Efeito/Controle/Outros) ligados por abas |
