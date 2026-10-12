@@ -39,6 +39,20 @@ Trabalho feito sem confirmação, como combinado. Cada item tem o commit e foi c
   flecha que o servidor equipou de verdade; "sem flechas" aparece no chat em vermelho com o texto do cliente LATAM
   ("Você deve equipar flechas antes."); Memo (Portal) mostra o resultado.
 
+- **Carrinho do Mercador** (`e3211c2`): janela com carrinho e mochila lado a lado (clique move 1, Shift 10), itens e peso do
+  servidor; abre pelo botão "itens" que aparece na janela de Equipamento quando há carrinho. Testado com o ClaudeTester2.
+- **Listas depois de skill/item** (`4634407`): Lupa/Avaliação de item, **encaixar carta** (duplo clique na carta), Fabricar
+  Flechas, Forjar/Farmacologia, Autoconjurar, Refinar arma e destinos do Portal. Testados: avaliação, carta na Camisa de
+  Algodão (conferido no banco) e flechas (1 minério → 50 Flechas de Ferro).
+- **Skills ganhas por quest** (`45f010a`): o servidor manda essas skills num pacote que o cliente ignorava (0x0111); agora
+  entram na lista e funcionam no atalho. Mensagens de falha de skill com o texto do cliente LATAM.
+- **Troca de classe pelo NPC original** (Aprendiz → Espadachim em Izlude): funcionou do começo ao fim no servidor em Renovação.
+
+## Versão de teste
+
+`E:\Dev\MythTeste`, commit `5761114` (rodada 24 no `COMO_TESTAR.txt`). Importante: o servidor agora é Renovação; personagens
+antigos podem ficar com pontos de atributo a mais ou a menos — use `@streset` (ou o NPC de teste) e redistribua.
+
 ## Pendências e decisões que deixei para você
 
 - (preencher ao fim da noite)
