@@ -47,12 +47,30 @@ Trabalho feito sem confirmação, como combinado. Cada item tem o commit e foi c
 - **Skills ganhas por quest** (`45f010a`): o servidor manda essas skills num pacote que o cliente ignorava (0x0111); agora
   entram na lista e funcionam no atalho. Mensagens de falha de skill com o texto do cliente LATAM.
 - **Troca de classe pelo NPC original** (Aprendiz → Espadachim em Izlude): funcionou do começo ao fim no servidor em Renovação.
+- **Peco Peco** (`33c251d`): o cliente não trocava para o corpo montado; agora Cavaleiro/Templário (e transclasses) aparecem
+  montados no mundo e na prévia. Testado com `@mount`.
+- **Mensagens em português** (`e67229d`): as mensagens do próprio servidor (comandos, avisos) agora vêm em português, com
+  acentos; as mensagens de sistema do cliente (ZC_MSG) usam o texto do LATAM.
+
+## 5. Mais janelas
+
+- **Habilidades** (`5f3379e`): abas como no LATAM (1a = Aprendiz + 1ª classe, 2a, 3a, Etc) e o personagem no canto de baixo.
+  Corrigido um defeito antigo: a barra de baixo (pontos, OK/Cancelar) andava para a direita a cada vez que a janela mudava de tamanho.
+- **Grupo** (`212215c`): barra de ferramentas do print 19 (cadeado trava a janela, criar/convidar, sair).
 
 ## Versão de teste
 
-`E:\Dev\MythTeste`, commit `5761114` (rodada 24 no `COMO_TESTAR.txt`). Importante: o servidor agora é Renovação; personagens
-antigos podem ficar com pontos de atributo a mais ou a menos — use `@streset` (ou o NPC de teste) e redistribua.
+`E:\Dev\MythTeste`, commit `5de32c7` (rodadas 24 e 25 no `COMO_TESTAR.txt`). Importante: o servidor agora é Renovação;
+personagens antigos podem ficar com pontos de atributo a mais ou a menos — use `@streset` (ou o NPC de teste) e redistribua.
+Contas de teste mexidas: ClaudeTester voltou ao estado de antes (Caçador 99/10); o ClaudeTester2 virou Cavaleiro montado nos testes.
 
 ## Pendências e decisões que deixei para você
 
-- (preencher ao fim da noite)
+1. **Títulos (aba do Equipamento)**: precisam da ligação conquista → título do banco do servidor e dos nomes do
+   `titletable_ptbr.lub`. Não fiz: pouco uso no começo do jogo. Diga se quer agora.
+2. **Procura de grupo** (2 primeiros botões da barra do Grupo) e **Fonte de dano**: botões no lugar, ainda sem função.
+3. **NPCs no mapa da Navegação**: os nomes no arquivo do cliente vêm codificados e não achei a tabela; só mapas e monstros por enquanto.
+4. **Janelas funcionais que ainda faltam**: loja de jogador (Vending), guilda, pets, homúnculo, mapa-múndi, Reparar arma.
+5. **Arte do LATAM** no Carrinho e no Armazém (hoje as duas usam listas simples, funcionais).
+6. **Rastreador de missão**: "Job Change to Swordman" continuou na tela depois da troca de classe; conferir se o servidor apaga a missão.
+7. **3ª classe e Doram** ficaram bloqueados; o dia em que quiser abri-los é só tirar o `escopo_classes.conf` e ajustar `job_stats`.
