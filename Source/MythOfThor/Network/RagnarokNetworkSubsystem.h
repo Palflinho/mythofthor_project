@@ -552,6 +552,10 @@ public:
 
 	/** CZ_RESTART (0x00b2): 0 = voltar ao ponto de salvamento (reviver), 1 = tela de selecao de personagem. */
 	bool SendRestart(uint8 Type);
+	/** CZ_REQ_CARTOFF (0x012a): tira falcao, Peco Peco, dragao ou Madogear (o carrinho so se nao houver os outros). */
+	bool SendRemoveOption();
+	/** Ultimo estado (OPTION_*) do proprio jogador, vindo do servidor. */
+	int32 GetSelfOption() const { return SelfOption; }
 
 	/** Armazem: mover item da mochila (bToStorage) ou do armazem para a mochila; fechar. IDs da tabela embaralhada (0x0364, 0x0365) e 0x0193. */
 	bool SendStorageMove(bool bToStorage, int32 Index, int32 Amount);
@@ -974,6 +978,7 @@ private:
 	FString SessionUser;
 	FString SessionPass;
 	uint32 SavedAccountID;
+	int32 SelfOption = 0;
 	uint32 SavedLoginID1;
 	uint32 SavedLoginID2;
 	uint8 SavedSex;

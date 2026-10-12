@@ -198,6 +198,10 @@ bool UMythRoHUDWidget::HandleItemInfoClick(const FVector2D& ScreenPos)
 	}
 	if (EquipWindow && EquipWindow->IsVisible())
 	{
+		if (EquipAmmoIndex >= 0 && IsUnder(EquipAmmoIcon, ScreenPos))
+		{
+			return ShowIndex(EquipAmmoIndex);
+		}
 		for (int32 i = 0; i < EquipCellIndex.Num(); ++i)
 		{
 			if (EquipCellIndex[i] >= 0 && EquipIcons.IsValidIndex(2 * i) && IsUnder(EquipIcons[2 * i], ScreenPos))

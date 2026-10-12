@@ -2693,6 +2693,10 @@ void URagnarokNetworkSubsystem::HandleOptionChange(const uint8* PacketData, int3
 	{
 		UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] [OnUnitOption] AID=%u option=0x%X"), AID, Option);
 	}
+	if (static_cast<int64>(AID) == SavedAccountID)
+	{
+		SelfOption = Option;
+	}
 	OnUnitOption.Broadcast(AID, Option);
 	OnUnitBodyState.Broadcast(AID, static_cast<int32>(*reinterpret_cast<const uint16*>(PacketData + 6)), static_cast<int32>(*reinterpret_cast<const uint16*>(PacketData + 8)));
 }
@@ -4366,4 +4370,15 @@ void URagnarokNetworkSubsystem::HandleChatExtras(const uint8* PacketData, int32 
 	default:
 		break;
 	}
+}
+
+bool URagnarokNetworkSubsystem::SendRemoveOption()
+{
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	const uint8 Packet[2] = { 0x2a, 0x01 };
+	SendData(Packet, sizeof(Packet));
+	return true;
 }

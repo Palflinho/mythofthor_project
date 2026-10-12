@@ -1209,6 +1209,10 @@ void UMythRoHUDWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
 	TickNaviAuto(InDeltaTime);
+	if (EquipWindow && EquipWindow->IsVisible())
+	{
+		UpdateEquipMount(); // municao e falcao/montaria mudam sem avisar a janela
+	}
 	UpdateMinimap();
 	UpdateButtons();
 	WindowRefreshTimer -= InDeltaTime;

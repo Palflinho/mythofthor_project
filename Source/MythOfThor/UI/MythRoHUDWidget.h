@@ -342,6 +342,13 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EquipTabTexts;
 	int32 EquipTab = 0;
 	TArray<int32> EquipCellIndex;
+	// Aba Geral: encaixe da municao acima do personagem e o botao de soltar falcao / descer do Peco abaixo dele
+	UPROPERTY() TObjectPtr<UImage> EquipAmmoFrame;
+	UPROPERTY() TObjectPtr<UImage> EquipAmmoIcon;
+	UPROPERTY() TObjectPtr<UTextBlock> EquipAmmoName;
+	int32 EquipAmmoIndex = -1;
+	UPROPERTY() TObjectPtr<UTextBlock> EquipMountBtn;
+	TWeakObjectPtr<UImage> EquipMountParts[3];
 
 	// Habilidades: linhas com icone, nome e nivel
 	UPROPERTY() TArray<TObjectPtr<UImage>> SkillIcons;
@@ -426,6 +433,7 @@ protected:
 	void BuildStatusWindow();
 	void BuildItemsWindow();
 	void BuildEquipWindow();
+	void UpdateEquipMount();
 	void BuildSkillsWindow();
 	void BuildItemInfoWindow();
 	/** Janela de descricao do item (botao direito no inventario/equipamento), como no cliente original. */

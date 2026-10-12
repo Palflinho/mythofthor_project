@@ -1921,3 +1921,19 @@ void AMythPlayerController::MythMail(int32 Op, const FString& To, const FString&
 	if (Op == 2) { if (N->GetMails().Num() > 0) { N->SendMailRequest(0x09ea, N->GetMails()[0].Id, N->GetMails()[0].Tab); } return; }
 	N->SendMailWrite(To, Title.Replace(TEXT("+"), TEXT(" ")), Body.Replace(TEXT("+"), TEXT(" ")));
 }
+
+void AMythPlayerController::MythEquip(int32 ItemID)
+{
+	// Teste: veste o primeiro item com esse ID (municao usa 0x8000)
+	if (URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr)
+	{
+		for (const FRagnarokInventoryItem& Item : Net->GetInventoryItems())
+		{
+			if (static_cast<int32>(Item.ItemID) == ItemID && !Item.bIsEquipped)
+			{
+				Net->EquipItem(Item.Index, Item.EquipLocation);
+				return;
+			}
+		}
+	}
+}

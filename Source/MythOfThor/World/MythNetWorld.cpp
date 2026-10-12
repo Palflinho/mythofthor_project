@@ -762,6 +762,10 @@ void AMythNetWorld::HandleUnitDirection(int64 ID, uint8 HeadTurnValue, uint8 Bod
 
 void AMythNetWorld::HandleUnitOption(int64 ID, int32 Option)
 {
+	if (GetNet() && ID == GetNet()->GetSelfID())
+	{
+		SelfOption = Option;
+	}
 	if (const AActor* A = ResolveActor(ID))
 	{
 		if (UMythRoSpriteComponent* Vis = A->FindComponentByClass<UMythRoSpriteComponent>(); Vis && Vis->MonsterSpriteName.IsEmpty())
@@ -1526,6 +1530,12 @@ void AMythNetWorld::ApplySelfAppearance()
 	S->Shield = Slot.Shield;
 	S->Robe = Slot.Robe;
 	S->ReloadSprites();
+	if (SelfOption != 0)
+	{
+		S->SetEffectOption(SelfOption, true); // falcao, carrinho e montaria seguem o jogador de um mapa para outro
+		S->CartType = UMythRoSpriteComponent::CartTypeFromOption(SelfOption);
+		if (S->CartType != 0) { S->ReloadSprites(); }
+	}
 }
 
 void AMythNetWorld::HandleStatusChange(int64 UnitID, int32 EfstID, bool bActive, int32 TotalMs, int32 RemainMs)

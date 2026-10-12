@@ -61,7 +61,7 @@ namespace
 		{
 		case 0: case 2: case 11: case 18: return 0;          // cura, usavel, consumo com atraso, cash
 		case 4: case 5: case 7: case 8: case 12: return 1;   // armadura, arma, ovo, acessorio de pet, sombra
-		default: return 2;                                   // etc, carta, municao
+		default: return 2;                                   // etc, carta, municao (como no cliente: a municao fica em Diversos)
 		}
 	}
 
@@ -260,6 +260,25 @@ void UMythRoHUDWidget::BuildEquipWindow()
 		EquipIcons.Add(Back); // pares (icone, fundo) no mesmo array: indice 2*i e 2*i+1
 		EquipCellIndex.Add(-1);
 	}
+	// Coluna do meio da aba Geral: a municao equipada em cima do personagem e, embaixo, soltar o falcao / descer do Peco Peco
+	EquipAmmoFrame = AddImage(EquipWindow, FMythRoUITextures::Get(RoWinArt(TEXT("itemwin_mid"))), 136.f, 17.f + TabH + 4.f, 32.f, 32.f);
+	EquipAmmoIcon = AddImage(EquipWindow, nullptr, 140.f, 17.f + TabH + 8.f, 24.f, 24.f);
+	EquipAmmoIcon->SetVisibility(ESlateVisibility::Collapsed);
+	EquipAmmoName = AddText(EquipWindow, 114.f, 17.f + TabH + 38.f, 6, RoWinText);
+	EquipAmmoName->SetJustification(ETextJustify::Center);
+	if (UCanvasPanelSlot* NameSlot = Cast<UCanvasPanelSlot>(EquipAmmoName->Slot))
+	{
+		NameSlot->SetAutoSize(false);
+		NameSlot->SetSize(FVector2D(76.f, 12.f) * UIScale);
+	}
+	EquipMountBtn = AddTextButton(EquipWindow, TEXT("Soltar falcão"), 116.f, 17.f + TabH + 98.f, 72.f);
+	if (RoButtons.Num() > 0)
+	{
+		EquipMountParts[0] = RoButtons.Last().Left;
+		EquipMountParts[1] = RoButtons.Last().Image;
+		EquipMountParts[2] = RoButtons.Last().Right;
+	}
+	UpdateEquipMount();
 }
 
 void UMythRoHUDWidget::BuildSkillsWindow()
@@ -571,6 +590,7 @@ void UMythRoHUDWidget::RefreshItemsWindow()
 
 void UMythRoHUDWidget::RefreshEquipWindow()
 {
+	UpdateEquipMount();
 	auto EquipMask = [this](int32 SlotNo) -> uint32
 	{
 		// Especial: esquerda costume topo/meio/baixo, capa de visual e municao; direita arma, armadura, escudo, botas e acessorio sombrios
@@ -876,6 +896,11 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 	{
 		return true;
 	}
+	if (EquipWindow && EquipWindow->IsVisible() && EquipMountBtn && IsUnder(EquipMountBtn, ScreenPos))
+	{
+		if (URagnarokNetworkSubsystem* MountNet = GetNet()) { MountNet->SendRemoveOption(); } // o servidor tira o falcao ou o Peco e avisa pelo estado
+		return true;
+	}
 	for (const TPair<TWeakObjectPtr<UImage>, TWeakObjectPtr<UCanvasPanel>>& Pair : CloseButtons)
 	{
 		UCanvasPanel* Win = Pair.Value.Get();
@@ -1084,6 +1109,11 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDoubleClick(const FGeometry& InGeome
 	}
 	if (Net && EquipWindow && EquipWindow->IsVisible())
 	{
+		if (EquipAmmoIndex >= 0 && IsUnder(EquipAmmoIcon, Screen))
+		{
+			Net->UnequipItem(EquipAmmoIndex); // duplo clique na municao a desequipa
+			return FReply::Handled();
+		}
 		for (int32 i = 0; i < EquipCellIndex.Num(); ++i)
 		{
 			if (EquipCellIndex[i] >= 0 && IsUnder(EquipIcons[2 * i], Screen))
@@ -1154,4 +1184,49 @@ bool UMythRoHUDWidget::HandleMinimizeClick(const FVector2D& ScreenPos)
 		return true;
 	}
 	return false;
+}
+
+void UMythRoHUDWidget::UpdateEquipMount()
+{
+	// Aba Geral: municao equipada (encaixe em cima do personagem) e o botao de soltar falcao / descer do Peco Peco, so se houver
+	const URagnarokNetworkSubsystem* Net = GetNet();
+	const bool bGeneral = EquipTab == 0;
+	const FRagnarokInventoryItem* Ammo = nullptr;
+	if (Net)
+	{
+		for (const FRagnarokInventoryItem& Item : Net->GetInventoryItems())
+		{
+			if (Item.bIsEquipped && Item.Type == 10)
+			{
+				Ammo = &Item;
+				break;
+			}
+		}
+	}
+	EquipAmmoIndex = Ammo ? Ammo->Index : -1;
+	if (EquipAmmoFrame) { EquipAmmoFrame->SetVisibility(bGeneral ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed); }
+	if (EquipAmmoIcon)
+	{
+		UTexture2D* Tex = Ammo ? FMythRoClientTables::ItemIcon(Ammo->ItemID) : nullptr;
+		if (Tex) { EquipAmmoIcon->SetBrush(RoWinBrush(Tex, FVector2D(24.f, 24.f) * UIScale)); }
+		EquipAmmoIcon->SetVisibility(bGeneral && Tex ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+	}
+	if (EquipAmmoName)
+	{
+		EquipAmmoName->SetText(FText::FromString(bGeneral && Ammo ? FMythRoClientTables::ItemName(Ammo->ItemID).Left(14) : FString()));
+	}
+	const int32 Option = Net ? Net->GetSelfOption() : 0;
+	const bool bFalcon = (Option & 0x10) != 0;
+	const bool bRiding = (Option & 0x20) != 0;
+	const bool bShowMount = bGeneral && (bFalcon || bRiding);
+	for (const TWeakObjectPtr<UImage>& Part : EquipMountParts)
+	{
+		if (UImage* P = Part.Get()) { P->SetVisibility(bShowMount ? ESlateVisibility::Visible : ESlateVisibility::Collapsed); }
+	}
+	if (EquipMountBtn)
+	{
+		EquipMountBtn->SetVisibility(bShowMount ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
+		const FString Want = bRiding ? TEXT("Descer do Peco") : TEXT("Soltar falcão");
+		if (EquipMountBtn->GetText().ToString() != Want) { EquipMountBtn->SetText(FText::FromString(Want)); }
+	}
 }

@@ -119,6 +119,8 @@ private:
 
 	/** Classe, sexo e cabelo do proprio personagem a partir do login/selecao (o sprite padrao e Aprendiz). */
 	void ApplySelfAppearance();
+	/** Ultimo estado (OPTION_*) do proprio jogador: reaplicado ao entrar em outro mapa, onde o sprite e novo. */
+	int32 SelfOption = 0;
 	class AMythHUD* GetGameHud() const;
 
 	UPROPERTY() TMap<int64, TObjectPtr<class AMythGroundItem>> GroundItems;
