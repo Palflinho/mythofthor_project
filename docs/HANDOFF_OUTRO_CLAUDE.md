@@ -49,7 +49,9 @@ janela por janela, nosso tamanho × referência: `docs/HUD_REVISAO_COMPLETA.md` 
 - 🟡 Habilidades: abas verticais e grade 7 × 68 × 56 do print 13 (`c752514`, `a6ca270`). Faltam ilustração, abas 3a/Etc e "skill point : N".
 - 🟡 Equipamento (`595b1a9`): 4 abas, prévia do personagem (`UMythRoSpriteComponent::RenderPortrait`), rodapé com Mostrar equip. e
   tirar tudo. Faltam falcão na prévia, girar, títulos e fonte de dano.
-- ⬜ Próximo: Navegação. Relatório da noite: `docs/RELATORIO_NOITE_2026-10-12.md`.
+- Noite de 12 → 13/10: Navegação, Carrinho, listas de skill (Lupa, carta, flechas...), caixa de entrada do NPC, munição real,
+  Peco Peco montado, mensagens do servidor em português, abas de Habilidades do LATAM e barra do Grupo. Tudo, com os commits e
+  as pendências numeradas, em `docs/RELATORIO_NOITE_2026-10-12.md`. Versão de teste: rodada 25 (`5de32c7`).
 
 **Feito antes (2026-10-12):** `docs/AUDITORIA_COMPLETA.md` (todas as funções do RO com estado); análise das referências
 (`docs/ref/REFERENCIAS_GORO_NOSTALRO.md`, `NOSTALRO_COMPARACAO.md`, `CLIENTE_2026.md`, `ANALISE_DATA2026.md`); pacotes sem tratamento
