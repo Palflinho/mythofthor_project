@@ -527,9 +527,9 @@ void UMythRoHUDWidget::RefreshItemsWindow()
 	{
 		for (const FRagnarokInventoryItem& Item : Net->GetInventoryItems())
 		{
-			if (Item.bIsEquipped || Item.Amount <= 0)
+			if ((Item.bIsEquipped && Item.Type != 10) || Item.Amount <= 0)
 			{
-				continue; // equipados aparecem na janela de equipamento
+				continue; // equipados aparecem na janela de equipamento (a municao equipada continua em Diversos, como no cliente)
 			}
 			++Total;
 			if (RoItemTabOf(Item) != ItemTab || Cell >= ItemCells.Num())
@@ -1081,7 +1081,7 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDoubleClick(const FGeometry& InGeome
 					}
 					else if (Item.Type == 10)
 					{
-						Net->EquipItem(Item.Index, 0x8000); // municao (flechas, balas...): duplo clique equipa
+						if (Item.bIsEquipped) { Net->UnequipItem(Item.Index); } else { Net->EquipItem(Item.Index, 0x8000); } // municao: duplo clique equipa ou desequipa
 					}
 					else if (RoItemTabOf(Item) == 0)
 					{

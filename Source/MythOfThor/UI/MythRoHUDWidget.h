@@ -434,6 +434,9 @@ protected:
 	void BuildItemsWindow();
 	void BuildEquipWindow();
 	void UpdateEquipMount();
+public:
+	void SetItemTab(int32 Tab) { ItemTab = Tab; if (ItemsWindow) { RefreshItemsWindow(); } }
+private:
 	void BuildSkillsWindow();
 	void BuildItemInfoWindow();
 	/** Janela de descricao do item (botao direito no inventario/equipamento), como no cliente original. */
