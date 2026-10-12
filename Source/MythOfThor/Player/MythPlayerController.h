@@ -353,6 +353,17 @@ public:
 	/** Converte posicao do mundo em celula do grid do servidor. */
 	UFUNCTION(BlueprintPure, Category = "Myth|Network")
 	FIntPoint WorldToCell(const FVector& WorldLocation) const;
+	/**
+	 * Andar por rota (MythPlayerRoute.cpp): destino alem do que o servidor aceita num pedido (max_walk_path 17; 14 com obstaculo
+	 * no meio) ou atras de obstaculo. O cliente tira o caminho inteiro no .gat (A*) e manda trechos de 12 celulas, sempre a
+	 * frente de onde o personagem esta, entao ele anda sem parar e contorna paredes. Falso se o pedido direto ja basta.
+	 */
+	bool StartRoute(const FIntPoint& Dest);
+	void CancelRoute();
+	bool IsRouting() const { return RouteCells.Num() > 0; }
+	FIntPoint GetRouteDest() const { return RouteCells.Num() > 0 ? RouteCells.Last() : FIntPoint(-1, -1); }
+	/** Celulas da rota que ainda faltam (para desenhar o caminho no minimapa). */
+	void GetRouteRemaining(TArray<FIntPoint>& Out) const;
 
 protected:
 	virtual void BeginPlay() override;
@@ -467,6 +478,12 @@ private:
 
 	void MoveToCursor();
 	void MoveToLocation(const FVector& Destination, bool bForceSend = true);
+	void UpdateRoute();
+	TArray<FIntPoint> RouteCells;
+	int32 RouteProgress = -1;  // indice da rota onde o personagem esta (-1: antes da primeira celula)
+	int32 RouteSentIdx = -1;   // indice do ultimo trecho mandado ao servidor
+	double RouteProgressTime = 0.0;
+	int32 RouteRetries = 0;
 	void UpdateCombat(float DeltaTime);
 	void UpdatePickup();
 	double RightClickHeldSince = 0.0;

@@ -526,7 +526,7 @@ void UMythRoHUDWidget::TickNaviAuto(float DeltaTime)
 			return;
 		}
 	}
-	// O servidor so aceita rotas curtas (MAX_WALKPATH): o cliente tira o caminho no .gat e manda um trecho de cada vez
+	// O servidor so aceita rotas curtas (max_walk_path): o controle anda pela rota do .gat em trechos (StartRoute)
 	APawn* Pawn = GetOwningPlayerPawn();
 	UMythCellMoverComponent* Mover = Pawn ? Pawn->FindComponentByClass<UMythCellMoverComponent>() : nullptr;
 	if (!Mover)
@@ -536,53 +536,28 @@ void UMythRoHUDWidget::TickNaviAuto(float DeltaTime)
 	const FIntPoint Me = Mover->GetCurrentCell();
 	const FIntPoint Goal(NaviSteps[0].X, NaviSteps[0].Y);
 	const float Now = static_cast<float>(FPlatformTime::Seconds());
-	const bool bNear = FMath::Max(FMath::Abs(Me.X - NaviLastTarget.X), FMath::Abs(Me.Y - NaviLastTarget.Y)) <= (bNaviBackoff ? 0 : 2);
-	if (!bNear && Now - NaviLastSend < 3.f)
+	AMythPlayerController* NaviPC = Cast<AMythPlayerController>(GetOwningPlayer());
+	if (!NaviPC)
 	{
-		NaviAutoTimer = 0.3f;
-		return; // ainda andando ate o trecho anterior
+		return;
 	}
-	const FIntPoint Delta = Goal - Me;
-	const int32 Dist = FMath::Max(FMath::Abs(Delta.X), FMath::Abs(Delta.Y));
-	TArray<FIntPoint> Path;
-	if (Dist <= 24)
+	const int32 GoalDist = FMath::Max(FMath::Abs(Me.X - Goal.X), FMath::Abs(Me.Y - Goal.Y));
+	if (GoalDist > 1)
 	{
-		Path = UMythCellMoverComponent::FindPath(GetWorld(), Me, Goal);
-	}
-	if (Path.Num() == 0)
-	{
-		// Longe demais para uma rota so (o servidor limita o trecho): escolhe um ponto intermediario na direcao do destino,
-		// tentando distancias menores e desvios para os lados ate achar um caminho livre
-		const FVector2D Dir = FVector2D(Delta.X, Delta.Y).GetSafeNormal();
-		const FVector2D Side(-Dir.Y, Dir.X);
-		for (int32 Reach : { 22, 16, 11, 7 })
+		// Anda pela rota do .gat em trechos que o servidor aceita (AMythPlayerController::StartRoute): sem parar a cada trecho
+		// e contornando obstaculos. So pede de novo se a rota acabou ou parou (pedido recusado, desvio)
+		const bool bOnIt = (NaviPC->IsRouting() && NaviPC->GetRouteDest() == Goal) || (Mover->IsMoving() && NaviLastTarget == Goal);
+		if (!bOnIt && Now - NaviLastSend >= 1.f)
 		{
-			for (int32 Off : { 0, 4, -4, 8, -8, 12, -12 })
-			{
-				const FVector2D P = FVector2D(Me.X, Me.Y) + Dir * FMath::Min(Reach, Dist) + Side * Off;
-				const FIntPoint Cand(FMath::RoundToInt(P.X), FMath::RoundToInt(P.Y));
-				if (Cand == Me || !UMythCellMoverComponent::IsWalkable(GetWorld(), Cand))
-				{
-					continue;
-				}
-				Path = UMythCellMoverComponent::FindPath(GetWorld(), Me, Cand);
-				if (Path.Num() > 0)
-				{
-					break;
-				}
-			}
-			if (Path.Num() > 0)
-			{
-				break;
-			}
+			NaviLastTarget = Goal;
+			NaviLastSend = Now;
+			UE_LOG(LogTemp, Log, TEXT("MythNavi: de (%d,%d) para (%d,%d)"), Me.X, Me.Y, Goal.X, Goal.Y);
+			NaviPC->MythWalk(Goal.X, Goal.Y);
 		}
+		NaviAutoTimer = 0.3f;
+		return;
 	}
-	FIntPoint Target = Goal;
-	if (Path.Num() > 0)
-	{
-		Target = Path.Last();
-	}
-	if (Target == Goal && NaviLastTarget == Goal && Now - NaviLastSend >= 1.5f && FMath::Max(FMath::Abs(Me.X - Goal.X), FMath::Abs(Me.Y - Goal.Y)) <= 1)
+	if (Now - NaviLastSend >= 1.5f)
 	{
 		// Chegou e o mapa nao mudou. O ponto da tabela do cliente fica na borda do portal do nosso servidor (a area dele pode
 		// comecar 1 a 3 celulas adiante): tenta pisar em celulas ao redor ate o aviso de mapa; esgotadas, para (ex.: Kafra)
@@ -605,20 +580,7 @@ void UMythRoHUDWidget::TickNaviAuto(float DeltaTime)
 		AddChatLine(FString::Printf(TEXT("Você chegou ao ponto da rota (%d, %d). Continue por aqui até %s."), Goal.X, Goal.Y, *NaviLabelShort(NaviSteps[0].To)), NvSystem);
 		return;
 	}
-	if (Target == Goal && NaviLastTarget == Goal && Now - NaviLastSend < 4.f)
-	{
-		NaviAutoTimer = 0.5f;
-		return; // ja mandou o passo final do portal: espera o aviso de mapa em vez de reiniciar a caminhada
-	}
-	if (Target == Goal) { bNaviBackoff = false; }
-	NaviLastTarget = Target;
-	NaviLastSend = Now;
-	UE_LOG(LogTemp, Log, TEXT("MythNavi: de (%d,%d) para (%d,%d), trecho ate (%d,%d), caminho %d celulas"), Me.X, Me.Y, Goal.X, Goal.Y, Target.X, Target.Y, Path.Num());
-	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetOwningPlayer()))
-	{
-		PC->MythWalk(Target.X, Target.Y); // anda como um clique no chao: o cliente move e manda o pedido ao servidor
-	}
-	NaviAutoTimer = 0.5f;
+	NaviAutoTimer = 0.5f; // no ponto do portal: espera o aviso de mapa
 }
 
 bool UMythRoHUDWidget::HandleNaviClick(const FVector2D& ScreenPos)

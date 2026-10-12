@@ -216,6 +216,7 @@ protected:
 	UPROPERTY() TObjectPtr<UImage> MinimapImage;
 	UPROPERTY() TObjectPtr<UImage> PlayerDot;
 	UPROPERTY() TObjectPtr<UCanvasPanel> MinimapView;
+	UPROPERTY() TArray<TObjectPtr<UImage>> MinimapRouteDots; // caminho que o personagem esta seguindo (clique longe ou Navegacao)
 	UPROPERTY() TObjectPtr<UImage> MinimapZoomIn;
 	UPROPERTY() TObjectPtr<UImage> MinimapZoomOut;
 	UPROPERTY() TObjectPtr<UImage> MinimapFold;

@@ -1390,4 +1390,39 @@ void UMythRoHUDWidget::UpdateMinimap()
 		S->SetPosition(FVector2D(ImgX + Px0 * Z - 2.f, ImgY + Py0 * Z - 2.f) * UIScale);
 	}
 	PlayerDot->SetVisibility(ESlateVisibility::HitTestInvisible);
+
+	// Rota em andamento (AMythPlayerController::StartRoute): pontos no minimapa ate o destino, como a linha da Navegacao
+	TArray<FIntPoint> Route;
+	if (const AMythPlayerController* RoutePC = Cast<AMythPlayerController>(GetOwningPlayer()))
+	{
+		RoutePC->GetRouteRemaining(Route);
+	}
+	constexpr int32 MaxDots = 48;
+	while (MinimapRouteDots.Num() < MaxDots && MinimapView)
+	{
+		UImage* Dot = WidgetTree->ConstructWidget<UImage>();
+		Dot->SetColorAndOpacity(FLinearColor(1.f, 0.55f, 0.1f, 0.95f));
+		Dot->SetVisibility(ESlateVisibility::Collapsed);
+		if (UCanvasPanelSlot* DS = MinimapView->AddChildToCanvas(Dot))
+		{
+			DS->SetSize(FVector2D(2.f, 2.f) * UIScale);
+		}
+		MinimapRouteDots.Add(Dot);
+	}
+	const int32 Step = FMath::Max(1, FMath::DivideAndRoundUp(Route.Num(), MaxDots));
+	int32 Used = 0;
+	for (int32 i = Step - 1; i < Route.Num() && Used < MinimapRouteDots.Num(); i += Step)
+	{
+		const float Rx = OffX + (Route[i].X + 0.5f) * K;
+		const float Ry = MapPx - (OffY + (Route[i].Y + 0.5f) * K);
+		if (UCanvasPanelSlot* DS = Cast<UCanvasPanelSlot>(MinimapRouteDots[Used]->Slot))
+		{
+			DS->SetPosition(FVector2D(ImgX + Rx * Z - 1.f, ImgY + Ry * Z - 1.f) * UIScale);
+		}
+		MinimapRouteDots[Used++]->SetVisibility(ESlateVisibility::HitTestInvisible);
+	}
+	for (int32 i = Used; i < MinimapRouteDots.Num(); ++i)
+	{
+		MinimapRouteDots[i]->SetVisibility(ESlateVisibility::Collapsed);
+	}
 }

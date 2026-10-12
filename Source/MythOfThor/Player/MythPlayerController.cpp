@@ -344,10 +344,16 @@ void AMythPlayerController::MoveToLocation(const FVector& Destination, bool bFor
 
 	// Conectado: como no cliente original, so pede a rota (CZ_REQUEST_MOVE) e anda quando o servidor confirmar
 	// (ZC_NOTIFY_PLAYERMOVE -> AMythNetWorld). O rAthena recusa rotas acima de max_walk_path (17 celulas,
-	// conf/battle/client.conf): cliques longe demais viram um passo de ate 14 celulas na mesma direcao.
+	// conf/battle/client.conf): cliques longe ou atras de obstaculo andam pela rota do .gat em trechos que ele
+	// aceita (StartRoute); sem rota conhecida, um passo de ate 14 celulas na mesma direcao.
 	const URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr;
 	if (Net && Net->GetNetworkState() == ERagnarokNetworkState::ConnectedMap && GetPawn())
 	{
+		if (StartRoute(WorldToCell(Destination)))
+		{
+			bHasDirectTarget = false;
+			return; // longe ou atras de obstaculo: anda pela rota do .gat em trechos (MythPlayerRoute.cpp)
+		}
 		FVector Dest = Destination;
 		const FVector From = GetPawn()->GetActorLocation();
 		const float MaxReach = 14.f * 50.f;
@@ -448,6 +454,7 @@ void AMythPlayerController::PlayerTick(float DeltaTime)
 	UpdateCombat(DeltaTime);
 	UpdatePickup();
 	UpdateHomunAI(DeltaTime);
+	UpdateRoute();
 	if (PendingSkillID != 0 && WasInputKeyJustPressed(EKeys::RightMouseButton))
 	{
 		CancelSkillTargeting(); // botao direito cancela a mira, como no cliente original

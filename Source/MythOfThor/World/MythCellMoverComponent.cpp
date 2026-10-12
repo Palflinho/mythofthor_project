@@ -3,6 +3,7 @@
 #include "World/MythMapInfo.h"
 
 #include "Components/CapsuleComponent.h"
+#include "Algo/Reverse.h"
 #include "Engine/World.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -446,4 +447,80 @@ void UMythCellMoverComponent::TickComponent(float DeltaTime, ELevelTick TickType
 	Owner->SetActorLocation(Pos, false, nullptr, ETeleportType::TeleportPhysics);
 	const float Speed = 50.f * 1000.f / MsPerCell;
 	SetOwnerVelocity(Path.Num() > 0 ? Dir * Speed : FVector::ZeroVector);
+}
+
+TArray<FIntPoint> UMythCellMoverComponent::FindRoute(const UWorld* World, const FIntPoint& From, const FIntPoint& To, int32 MaxRadius)
+{
+	// Mesmo A* do FindPath (custos e quinas do rAthena), com fila de prioridade e teto de nos para nao travar o jogo
+	TArray<FIntPoint> Result;
+	if (From == To || !IsWalkable(World, To) || FMath::Max(FMath::Abs(To.X - From.X), FMath::Abs(To.Y - From.Y)) > MaxRadius)
+	{
+		return Result;
+	}
+	Result = StraightPath(World, From, To);
+	if (Result.Num() > 0)
+	{
+		return Result;
+	}
+	struct FNode
+	{
+		FIntPoint Cell;
+		int32 G;
+		int32 F;
+	};
+	struct FByF { bool operator()(const FNode& A, const FNode& B) const { return A.F < B.F; } };
+	auto Heuristic = [&To](const FIntPoint& C)
+	{
+		const int32 DX = FMath::Abs(To.X - C.X), DY = FMath::Abs(To.Y - C.Y);
+		return MoveCost * (DX + DY) + (MoveDiagonalCost - 2 * MoveCost) * FMath::Min(DX, DY);
+	};
+	constexpr int32 MaxNodes = 60000;
+	TArray<FNode> Open;
+	TMap<FIntPoint, int32> Best;
+	TMap<FIntPoint, FIntPoint> Parent;
+	Open.HeapPush({ From, 0, Heuristic(From) }, FByF());
+	Best.Add(From, 0);
+	static const FIntPoint Dirs[8] = { {1,0}, {-1,0}, {0,1}, {0,-1}, {1,1}, {1,-1}, {-1,1}, {-1,-1} };
+	int32 Visited = 0;
+	while (Open.Num() > 0 && Visited < MaxNodes)
+	{
+		FNode Cur;
+		Open.HeapPop(Cur, FByF());
+		if (Cur.Cell == To)
+		{
+			for (FIntPoint C = To; C != From; C = Parent[C])
+			{
+				Result.Add(C);
+			}
+			Algo::Reverse(Result);
+			return Result;
+		}
+		if (Cur.G > Best[Cur.Cell])
+		{
+			continue;
+		}
+		++Visited;
+		for (const FIntPoint& D : Dirs)
+		{
+			const FIntPoint N = Cur.Cell + D;
+			if (FMath::Abs(N.X - From.X) > MaxRadius || FMath::Abs(N.Y - From.Y) > MaxRadius || !IsWalkable(World, N))
+			{
+				continue;
+			}
+			const bool bDiagonal = D.X != 0 && D.Y != 0;
+			if (bDiagonal && (!IsWalkable(World, Cur.Cell + FIntPoint(D.X, 0)) || !IsWalkable(World, Cur.Cell + FIntPoint(0, D.Y))))
+			{
+				continue;
+			}
+			const int32 G = Cur.G + (bDiagonal ? MoveDiagonalCost : MoveCost);
+			if (const int32* Known = Best.Find(N); Known && *Known <= G)
+			{
+				continue;
+			}
+			Best.Add(N, G);
+			Parent.Add(N, Cur.Cell);
+			Open.HeapPush({ N, G, G + Heuristic(N) }, FByF());
+		}
+	}
+	return Result;
 }

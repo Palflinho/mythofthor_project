@@ -75,6 +75,12 @@ public:
 	/** Caminho de From ate To (sem incluir From); vazio se nao houver. Reta primeiro, A* se ela bater em algo. */
 	static TArray<FIntPoint> FindPath(const UWorld* World, const FIntPoint& From, const FIntPoint& To);
 
+	/**
+	 * Rota longa (ate MaxRadius celulas para cada lado, com limite de nos visitados), para andar contornando obstaculos alem
+	 * do max_walk_path do servidor: o controle manda a rota em trechos que o servidor aceita. Vazio se nao houver caminho.
+	 */
+	static TArray<FIntPoint> FindRoute(const UWorld* World, const FIntPoint& From, const FIntPoint& To, int32 MaxRadius = 160);
+
 	/** Distancia maxima (celulas) entre cliente e servidor antes de saltar em vez de andar. */
 	static constexpr int32 MaxDesyncCells = 16;
 
