@@ -1,0 +1,12 @@
+//===== Myth of Thor =========================================
+//= Mensagens do servidor em portugues (como o RO LATAM).
+//= O rAthena so carrega o pacote de idiomas com LANG_ENABLE 0x80
+//= (src/custom/defines_pre.hpp, ver server/renovacao/aplicar.sh);
+//= aqui cada conta passa a usar o portugues ao entrar.
+//============================================================
+-	script	MythIdioma	-1,{
+OnPCLoginEvent:
+	if (#langtype != 8)
+		atcommand "@langtype por";
+	end;
+}

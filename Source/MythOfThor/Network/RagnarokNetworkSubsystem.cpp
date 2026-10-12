@@ -1131,6 +1131,32 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 					}
 				}
 				break;
+			case 0x0291: // ZC_MSG <msg>.W: linha da msgstringtable do cliente
+			case 0x07e2: // ZC_MSG_VALUE <msg>.W <valor>.L (%d no texto)
+			case 0x09cd: // ZC_MSG_COLOR <msg>.W <cor>.L (0xBBGGRR)
+			case 0x07e6: // ZC_MSG_SKILL <skill>.W <msg>.L
+				if (ActualLen >= 4)
+				{
+					const bool bSkill = PacketID == 0x07e6;
+					const int32 Index = bSkill ? (ActualLen >= 8 ? *reinterpret_cast<const int32*>(PacketData + 4) : 0) : *reinterpret_cast<const uint16*>(PacketData + 2);
+					FString Msg = FMythRoClientTables::Message(Index);
+					if (Msg.IsEmpty())
+					{
+						break;
+					}
+					FString Color = TEXT("#FFFFFF");
+					if (PacketID == 0x07e2 && ActualLen >= 8)
+					{
+						Msg = Msg.Replace(TEXT("%d"), *FString::FromInt(*reinterpret_cast<const int32*>(PacketData + 4)));
+					}
+					else if (PacketID == 0x09cd && ActualLen >= 8)
+					{
+						const uint32 Bgr = *reinterpret_cast<const uint32*>(PacketData + 4);
+						Color = FString::Printf(TEXT("#%02X%02X%02X"), Bgr & 0xFF, (Bgr >> 8) & 0xFF, (Bgr >> 16) & 0xFF);
+					}
+					OnChatMessage.Broadcast(TEXT(""), Msg, Color);
+				}
+				break;
 			case 0x013c: // ZC_EQUIP_ARROW <indice>.W: municao equipada (o rAthena nao manda o ZC_REQ_WEAR_EQUIP_ACK para ela)
 				if (ActualLen >= 4)
 				{
