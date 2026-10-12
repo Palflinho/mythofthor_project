@@ -735,6 +735,42 @@ bool URagnarokNetworkSubsystem::SelectNpcMenu(int64 NpcID, int32 MenuIndex)
 	return true;
 }
 
+bool URagnarokNetworkSubsystem::SendNpcInputNumber(int64 NpcID, int32 Value)
+{
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	// CZ_INPUT_EDITDLG 0x0143 <npc>.L <valor>.L (clif_parse_NpcAmountInput)
+	uint8 Packet[10] = { 0x43, 0x01 };
+	const uint32 Npc = static_cast<uint32>(NpcID);
+	FMemory::Memcpy(Packet + 2, &Npc, 4);
+	FMemory::Memcpy(Packet + 6, &Value, 4);
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendNpcInputText(int64 NpcID, const FString& Text)
+{
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	// CZ_INPUT_EDITDLGSTR 0x01d5 <tamanho>.W <npc>.L <texto> (sem o zero final; o servidor corta em 70 letras)
+	FTCHARToUTF8 Utf8(*Text);
+	const int32 Len = FMath::Min(Utf8.Length(), 69);
+	TArray<uint8> Packet;
+	Packet.SetNumZeroed(8 + Len);
+	const uint16 Id = 0x01d5, Size = static_cast<uint16>(8 + Len);
+	const uint32 Npc = static_cast<uint32>(NpcID);
+	FMemory::Memcpy(Packet.GetData(), &Id, 2);
+	FMemory::Memcpy(Packet.GetData() + 2, &Size, 2);
+	FMemory::Memcpy(Packet.GetData() + 4, &Npc, 4);
+	FMemory::Memcpy(Packet.GetData() + 8, Utf8.Get(), Len);
+	SendData(Packet.GetData(), Packet.Num());
+	return true;
+}
+
 bool URagnarokNetworkSubsystem::CloseNpcDialog(int64 NpcID)
 {
 	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
@@ -1150,6 +1186,13 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 				break;
 			case RagnarokPackets::HEADER_ZC_CLOSE_DIALOG:
 				HandleNpcClose(PacketData, ActualLen);
+				break;
+			case 0x0142: // ZC_OPEN_EDITDLG <npc>.L: o script pede um numero (input .@n)
+			case 0x01d4: // ZC_OPEN_EDITDLGSTR <npc>.L: o script pede um texto (input .@s$)
+				if (ActualLen >= 6)
+				{
+					OnNpcDialog.Broadcast(*reinterpret_cast<const uint32*>(PacketData + 2), PacketID == 0x0142 ? TEXT("[INPUT_NUM]") : TEXT("[INPUT_STR]"));
+				}
 				break;
 			case RagnarokPackets::HEADER_ZC_MENU_LIST:
 				HandleNpcMenu(PacketData, ActualLen);

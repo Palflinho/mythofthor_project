@@ -1390,6 +1390,18 @@ void AMythPlayerController::MythTalkNearest()
 		UE_LOG(LogTemp, Log, TEXT("MythNet: falando com %s"), *Best->MonsterName);
 		SetFocusedTarget(Best);
 	}
+	else
+	{
+		int32 Count = 0;
+		for (TActorIterator<AMythMonster> It(GetWorld()); It; ++It)
+		{
+			if (++Count <= 8)
+			{
+				UE_LOG(LogTemp, Log, TEXT("MythTalkNearest: sem NPC; unidade '%s' tipo %d rede %d"), *It->MonsterName, It->NetObjectType, It->IsNetUnit() ? 1 : 0);
+			}
+		}
+		UE_LOG(LogTemp, Log, TEXT("MythTalkNearest: nenhum NPC entre %d unidades"), Count);
+	}
 }
 
 void AMythPlayerController::MythPickNearest()

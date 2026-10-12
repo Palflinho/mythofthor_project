@@ -10,6 +10,7 @@
 #include "Blueprint/WidgetTree.h"
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
+#include "Components/EditableTextBox.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "Components/WrapBox.h"
@@ -127,6 +128,89 @@ void UMythRoHUDWidget::BuildNpcDialog()
 	NpcMenuOk->SetVisibility(ESlateVisibility::Visible);
 	NpcMenuCancel->SetVisibility(ESlateVisibility::Visible);
 	NpcMenuWindow->SetVisibility(ESlateVisibility::Collapsed);
+
+	// Caixa de entrada (input do script): no lugar da caixa de opcoes, campo de texto com OK e Cancelar
+	constexpr float InH = 10.f + 20.f + 8.f + NpcBtnH + 6.f;
+	NpcInputWindow = MakeWindow(FVector2D(0.5f, 0.5f), FVector2D(0.5f, 0.f), FVector2D(0.f, -170.f + NpcH * 0.5f * UIScale + 6.f), FVector2D(NpcW, InH));
+	MakeRounded(AddColor(NpcInputWindow, NpcBody, 0.f, 0.f, NpcW, InH), UIScale);
+	NpcInputHint = AddText(NpcInputWindow, 14.f, 12.f, 8, FLinearColor(0.35f, 0.38f, 0.45f));
+	NpcInputBox = WidgetTree->ConstructWidget<UEditableTextBox>();
+	NpcInputBox->OnTextCommitted.AddDynamic(this, &UMythRoHUDWidget::OnNpcInputCommitted);
+	if (UCanvasPanelSlot* S = NpcInputWindow->AddChildToCanvas(NpcInputBox))
+	{
+		S->SetPosition(FVector2D(96.f, 10.f) * UIScale);
+		S->SetSize(FVector2D(NpcW - 110.f, 20.f) * UIScale);
+	}
+	NpcInputOk = AddImage(NpcInputWindow, FMythRoUITextures::Get(TEXT("btn_ok.bmp")), NpcW - 2.f * NpcBtnW - 14.f, InH - NpcBtnH - 6.f, NpcBtnW, NpcBtnH);
+	NpcInputCancel = AddImage(NpcInputWindow, FMythRoUITextures::Get(TEXT("btn_cancel.bmp")), NpcW - NpcBtnW - 8.f, InH - NpcBtnH - 6.f, NpcBtnW, NpcBtnH);
+	NpcInputOk->SetVisibility(ESlateVisibility::Visible);
+	NpcInputCancel->SetVisibility(ESlateVisibility::Visible);
+	NpcInputWindow->SetVisibility(ESlateVisibility::Collapsed);
+}
+
+void UMythRoHUDWidget::NpcInput(int64 NpcID, bool bNumber)
+{
+	if (!NpcInputWindow)
+	{
+		return;
+	}
+	NpcTalking = NpcID;
+	bNpcInputNumber = bNumber;
+	NpcInputHint->SetText(FText::FromString(bNumber ? TEXT("Quantidade:") : TEXT("Texto:")));
+	NpcInputBox->SetText(FText::GetEmpty());
+	NpcInputWindow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+	if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(NpcInputWindow->Slot))
+	{
+		S->SetZOrder(++TopZOrder);
+	}
+	NpcInputBox->SetKeyboardFocus();
+}
+
+void UMythRoHUDWidget::NpcInputSubmitText(const FString& Text)
+{
+	if (NpcInputBox && NpcInputWindow && NpcInputWindow->IsVisible())
+	{
+		NpcInputBox->SetText(FText::FromString(Text));
+		SubmitNpcInput();
+	}
+}
+
+void UMythRoHUDWidget::OnNpcInputCommitted(const FText& Text, ETextCommit::Type CommitMethod)
+{
+	if (CommitMethod == ETextCommit::OnEnter)
+	{
+		SubmitNpcInput();
+	}
+}
+
+void UMythRoHUDWidget::SubmitNpcInput()
+{
+	URagnarokNetworkSubsystem* Net = GetNet();
+	if (!Net || !NpcInputWindow || !NpcInputWindow->IsVisible() || NpcTalking == 0)
+	{
+		return;
+	}
+	const FString Text = NpcInputBox->GetText().ToString().TrimStartAndEnd();
+	if (bNpcInputNumber)
+	{
+		// So digitos (o cliente nao manda letras); vazio vale 0, como o original. O script decide o que fazer com o valor
+		FString Digits;
+		for (TCHAR C : Text)
+		{
+			if (FChar::IsDigit(C) || (C == TEXT('-') && Digits.IsEmpty()))
+			{
+				Digits.AppendChar(C);
+			}
+		}
+		const int64 Value = Digits.IsEmpty() || Digits == TEXT("-") ? 0 : FCString::Atoi64(*Digits);
+		Net->SendNpcInputNumber(NpcTalking, static_cast<int32>(FMath::Clamp<int64>(Value, MIN_int32, MAX_int32)));
+	}
+	else
+	{
+		Net->SendNpcInputText(NpcTalking, Text);
+	}
+	NpcInputWindow->SetVisibility(ESlateVisibility::Collapsed);
+	bNpcClearOnNextSay = true;
 }
 
 void UMythRoHUDWidget::NpcSay(int64 NpcID, const FString& Text)
@@ -153,25 +237,32 @@ void UMythRoHUDWidget::NpcSay(int64 NpcID, const FString& Text)
 	TArray<TPair<FString, FLinearColor>> Segments;
 	NpcColorSegments(Text, Segments);
 	const FSlateFontInfo Font = FMythRoUITextures::RoFont(FMath::RoundToInt(NpcFontSize * UIScale));
+	// Cada mes comeca numa linha nova (a primeira palavra forca a quebra); uma fala vazia vira uma linha em branco
+	bool bFirst = true;
+	auto AddWord = [&](const FString& Word, const FLinearColor& Color)
+	{
+		UTextBlock* T = WidgetTree->ConstructWidget<UTextBlock>();
+		T->SetFont(Font);
+		T->SetColorAndOpacity(FSlateColor(Color));
+		T->SetText(FText::FromString(Word));
+		if (UWrapBoxSlot* WS = NpcText->AddChildToWrapBox(T))
+		{
+			WS->SetNewLine(bFirst && NpcText->GetChildrenCount() > 1);
+		}
+		bFirst = false;
+	};
 	for (const TPair<FString, FLinearColor>& Seg : Segments)
 	{
 		TArray<FString> Words;
 		Seg.Key.ParseIntoArray(Words, TEXT(" "), true);
 		for (const FString& W : Words)
 		{
-			UTextBlock* T = WidgetTree->ConstructWidget<UTextBlock>();
-			T->SetFont(Font);
-			T->SetColorAndOpacity(FSlateColor(Seg.Value));
-			T->SetText(FText::FromString(W + TEXT(" ")));
-			NpcText->AddChildToWrapBox(T);
+			AddWord(W + TEXT(" "), Seg.Value);
 		}
 	}
-	// Quebra de linha: um bloco vazio com a largura inteira
-	UTextBlock* Break = WidgetTree->ConstructWidget<UTextBlock>();
-	Break->SetFont(Font);
-	if (UWrapBoxSlot* BS = NpcText->AddChildToWrapBox(Break))
+	if (bFirst)
 	{
-		BS->SetFillEmptySpace(true);
+		AddWord(TEXT(" "), FLinearColor::Black);
 	}
 }
 
@@ -272,6 +363,10 @@ void UMythRoHUDWidget::HideNpcDialog()
 	{
 		NpcMenuWindow->SetVisibility(ESlateVisibility::Collapsed);
 	}
+	if (NpcInputWindow)
+	{
+		NpcInputWindow->SetVisibility(ESlateVisibility::Collapsed);
+	}
 	NpcTalking = 0;
 	bNpcClearOnNextSay = false;
 }
@@ -282,6 +377,11 @@ bool UMythRoHUDWidget::NpcDialogConfirm()
 	if (!Net || NpcTalking == 0)
 	{
 		return false;
+	}
+	if (NpcInputWindow && NpcInputWindow->IsVisible())
+	{
+		SubmitNpcInput();
+		return true;
 	}
 	if (NpcMenuWindow && NpcMenuWindow->IsVisible() && NpcMenuIndex.IsValidIndex(NpcMenuSelected))
 	{
@@ -312,6 +412,24 @@ bool UMythRoHUDWidget::HandleNpcClick(const FVector2D& ScreenPos, bool bDouble)
 	if (!Net || NpcTalking == 0)
 	{
 		return false;
+	}
+	if (NpcInputWindow && NpcInputWindow->IsVisible())
+	{
+		if (IsUnder(NpcInputOk, ScreenPos))
+		{
+			SubmitNpcInput();
+			return true;
+		}
+		if (IsUnder(NpcInputCancel, ScreenPos))
+		{
+			Net->CloseNpcDialog(NpcTalking); // cancelar encerra o script, como fechar a conversa
+			HideNpcDialog();
+			return true;
+		}
+		if (IsUnder(NpcInputWindow, ScreenPos))
+		{
+			return true;
+		}
 	}
 	if (NpcMenuWindow && NpcMenuWindow->IsVisible())
 	{

@@ -23,7 +23,7 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 	next;
 
 	while (1) {
-		switch(select("Mudar de Classe:Nível 99 / Job Máximo:Aprender Todas as Habilidades:Kit de Equipamentos:Poções e Asas:Resetar Atributos e Habilidades:Encerrar")) {
+		switch(select("Mudar de Classe:Definir Nível / Job Máximo:Aprender Todas as Habilidades:Kit de Equipamentos:Poções e Asas:Resetar Atributos e Habilidades:Recuperar HP e SP:Encerrar:Testar Caixa de Texto")) {
 		case 1: // Mudar de Classe
 			mes .@npc_name$;
 			mes "Escolha a categoria da classe desejada:";
@@ -100,12 +100,22 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 			break;
 
 		case 2: // Nível 99 / Job Máximo
-			atcommand "@blvl 99";
+			// Renovacao ate a transclasse: 2a classe vai a 99, transclasse e expandidas a 125 (o servidor limita)
+			mes .@npc_name$;
+			mes "Qual nível de base você quer? (1 a 125)";
+			next;
+			if (input(.@lv, 1, 125) != 0) {
+				mes .@npc_name$;
+				mes "Digite um número de 1 a 125.";
+				next;
+				break;
+			}
+			atcommand "@blvl " + (.@lv - BaseLevel);
 			atcommand "@jlvl 70";
 			specialeffect2 EF_LEVELUP;
 			specialeffect2 EF_ANGEL;
 			mes .@npc_name$;
-			mes "Seu nível de Base foi definido para 99 e Job para o nível máximo!";
+			mes "Nível de base agora: " + BaseLevel + ". Job no máximo da classe.";
 			next;
 			break;
 
@@ -199,10 +209,28 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 			next;
 			break;
 
-		case 7: // Encerrar
+		case 7: // Recuperar HP e SP (para testar as skills sem esperar a regeneracao)
+			percentheal 100, 100;
+			specialeffect2 EF_HEAL;
+			mes .@npc_name$;
+			mes "HP e SP recuperados.";
+			next;
+			break;
+
+		case 8: // Encerrar
 			mes .@npc_name$;
 			mes "Bom trabalho nos testes! Até logo.";
 			close;
+
+		case 9: // Testar a caixa de texto do cliente (input com texto)
+			mes .@npc_name$;
+			mes "Escreva qualquer coisa:";
+			next;
+			input .@texto$;
+			mes .@npc_name$;
+			mes "Você escreveu: ^0000FF" + .@texto$ + "^000000";
+			next;
+			break;
 		}
 	}
 }

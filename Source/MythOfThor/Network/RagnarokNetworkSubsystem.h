@@ -727,6 +727,9 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
 	bool SelectNpcMenu(int64 NpcID, int32 MenuIndex);
+	/** Resposta ao input do script: numero (CZ_INPUT_EDITDLG 0x0143) ou texto (CZ_INPUT_EDITDLGSTR 0x01d5). */
+	bool SendNpcInputNumber(int64 NpcID, int32 Value);
+	bool SendNpcInputText(int64 NpcID, const FString& Text);
 
 	/**
 	 * Fecha a janela de diálogo com o NPC (CZ_CLOSE_DIALOG 0x0146).

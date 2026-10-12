@@ -1307,6 +1307,10 @@ void AMythNetWorld::HandleNpcDialog(int64 NpcID, const FString& Text)
 	{
 		Hud->NpcCloseButton(NpcID);
 	}
+	else if (Text == TEXT("[INPUT_NUM]") || Text == TEXT("[INPUT_STR]"))
+	{
+		Hud->NpcInput(NpcID, Text == TEXT("[INPUT_NUM]"));
+	}
 	else
 	{
 		Hud->NpcSay(NpcID, Text);

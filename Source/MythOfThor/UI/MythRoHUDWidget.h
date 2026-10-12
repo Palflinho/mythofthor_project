@@ -132,6 +132,10 @@ public:
 	void NpcWait(int64 NpcID);
 	/** close; do script: mostra o botao "Fechar". */
 	void NpcCloseButton(int64 NpcID);
+	/** input do script: caixa de numero (ZC_OPEN_EDITDLG) ou de texto (ZC_OPEN_EDITDLGSTR) abaixo da fala. */
+	void NpcInput(int64 NpcID, bool bNumber);
+	/** Teste: preenche a caixa de entrada e confirma. */
+	void NpcInputSubmitText(const FString& Text);
 	/** select(...) do script: lista de opcoes (vazias ficam ocultas, mas contam no indice enviado). */
 	void NpcMenu(int64 NpcID, const TArray<FString>& Options);
 	/** Fecha a janela de dialogo sem enviar nada (ex.: o servidor encerrou). */
@@ -431,6 +435,14 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> NpcMenuTexts;
 	UPROPERTY() TObjectPtr<UImage> NpcMenuOk;
 	UPROPERTY() TObjectPtr<UImage> NpcMenuCancel;
+	UPROPERTY() TObjectPtr<UCanvasPanel> NpcInputWindow;
+	UPROPERTY() TObjectPtr<UEditableTextBox> NpcInputBox;
+	UPROPERTY() TObjectPtr<UTextBlock> NpcInputHint;
+	UPROPERTY() TObjectPtr<UImage> NpcInputOk;
+	UPROPERTY() TObjectPtr<UImage> NpcInputCancel;
+	bool bNpcInputNumber = true;
+	void SubmitNpcInput();
+	UFUNCTION() void OnNpcInputCommitted(const FText& Text, ETextCommit::Type CommitMethod);
 	UPROPERTY() TObjectPtr<UImage> NpcMenuEdge;
 	UPROPERTY() TObjectPtr<UImage> NpcMenuBody;
 	TArray<int32> NpcMenuIndex; // indice (1..N) enviado ao servidor para cada linha visivel

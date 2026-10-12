@@ -198,6 +198,12 @@ public:
 	UFUNCTION(Exec)
 	void MythNpcNext();
 
+	/** Teste: escolhe a opcao Row (0 = primeira visivel) da caixa de opcoes do NPC. */
+	UFUNCTION(Exec) void MythNpcChoose(int32 Row) { if (HudWidget) { HudWidget->NpcMenuChoose(Row); } }
+
+	/** Teste: escreve na caixa de entrada do NPC (input) e confirma. Use + no lugar de espaco com MythDelayed. */
+	UFUNCTION(Exec) void MythNpcInput(const FString& Text) { if (HudWidget) { HudWidget->NpcInputSubmitText(Text.Replace(TEXT("+"), TEXT(" "))); } }
+
 	/** Teste: MythCharSelect -> o item "Selecao de personagem" do menu Esc. */
 	UFUNCTION(Exec)
 	void MythCharSelect() { if (HudWidget) { HudWidget->ReturnToCharacterSelect(); } }
