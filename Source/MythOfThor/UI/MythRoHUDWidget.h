@@ -261,6 +261,31 @@ protected:
 
 	void BuildLayout();
 	void BuildBasicInfo();
+	// HUD propria: painel do personagem (avatar, HP, SP) e barras de EXP embaixo (MythRoModernHud.cpp)
+	void BuildModernHud();
+	void UpdateModernHud();
+	bool HandleModernHudClick(const FVector2D& ScreenPos);
+	UPROPERTY() TObjectPtr<UCanvasPanel> ModernPanel;
+	UPROPERTY() TObjectPtr<UCanvasPanel> ModernExpStrip;
+	UPROPERTY() TObjectPtr<UImage> ModernAvatar;
+	UPROPERTY() TObjectPtr<UTexture2D> ModernAvatarTex;
+	int32 ModernAvatarVersion = -1;
+	UPROPERTY() TObjectPtr<UTextBlock> ModernName;
+	UPROPERTY() TObjectPtr<UTextBlock> ModernJob;
+	UPROPERTY() TObjectPtr<UImage> ModernHPFill;
+	UPROPERTY() TObjectPtr<UImage> ModernSPFill;
+	UPROPERTY() TObjectPtr<UTextBlock> ModernHPText;
+	UPROPERTY() TObjectPtr<UTextBlock> ModernSPText;
+	UPROPERTY() TObjectPtr<UTextBlock> ModernHPPct;
+	UPROPERTY() TObjectPtr<UTextBlock> ModernSPPct;
+	UPROPERTY() TObjectPtr<UImage> ModernBaseFill;
+	UPROPERTY() TObjectPtr<UImage> ModernJobFill;
+	UPROPERTY() TObjectPtr<UTextBlock> ModernBaseLabel;
+	UPROPERTY() TObjectPtr<UTextBlock> ModernJobLabel;
+	UPROPERTY() TObjectPtr<UImage> ModernBaseHover;
+	UPROPERTY() TObjectPtr<UImage> ModernJobHover;
+	UPROPERTY() TObjectPtr<UImage> ModernBaseLvUp;
+	UPROPERTY() TObjectPtr<UImage> ModernJobLvUp;
 	void BuildMinimap();
 	void BuildHotbar();
 	void BuildChat();
@@ -440,6 +465,9 @@ protected:
 	TArray<int32> SkillRowLevel;
 	/** Nivel escolhido para usar cada skill (setas ao lado do nivel na arvore); vai para o atalho e para o duplo clique. */
 	TMap<int32, int32> SkillSelLevel;
+	/** Setas < e > ao lado do nivel de cada celula (arw_left/arw_right do cliente): trocam o nivel que vai para o atalho. */
+	UPROPERTY() TArray<TObjectPtr<UImage>> SkillArrowL;
+	UPROPERTY() TArray<TObjectPtr<UImage>> SkillArrowR;
 	/** Botao "Lv Up" de cada linha (lv_up_on.bmp do cliente), visivel com pontos e skill que ainda sobe. */
 	UPROPERTY() TArray<TObjectPtr<UImage>> SkillUpButtons;
 	/** Primeira skill mostrada (a roda do mouse rola a lista, que tem mais skills que linhas). */

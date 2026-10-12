@@ -377,6 +377,7 @@ void UMythRoHUDWidget::BuildLayout()
 	WidgetTree->RootWidget = Root;
 
 	BuildBasicInfo();
+	BuildModernHud();
 	BuildMinimap();
 	BuildHotbar();
 	BuildChat();
@@ -420,7 +421,7 @@ void UMythRoHUDWidget::BuildBasicInfo()
 	// "Basic Information" do cliente LATAM (docs/ref/12, print 17): 232 de largura; nome, classe, HP/SP com "atual /
 	// max" e %, nivel de base/classe com a barra de EXP, peso/zeny, a barra de recolher e a grade de icones do menu
 	constexpr float W = 232.f;
-	UCanvasPanel* Win = MakeWindow(FVector2D(0.f, 0.f), FVector2D(0.f, 0.f), FVector2D(0.f, 0.f), FVector2D(W, BasicFullH));
+	UCanvasPanel* Win = MakeWindow(FVector2D(0.f, 0.f), FVector2D(0.f, 0.f), FVector2D(0.f, 56.f * UIScale), FVector2D(W, BasicFullH));
 	BasicWindow = Win;
 	BasicBody = AddRounded(Win, ColWindow, ColWindowEdge, 0.f, 8.f, W, BasicInfoH - 8.f, 0.f, 7.f);
 	BasicBody->SetVisibility(ESlateVisibility::Visible); // o clique na janela nao atravessa para o jogo
@@ -659,7 +660,7 @@ void UMythRoHUDWidget::BuildChat()
 	// Chat (baixo-esquerda, print 18): abas "Regular Message" (branca, ativa) e "Battle Message" (escura), corpo translucido
 	// com as linhas, barra de rolagem a direita e o campo de digitacao
 	const float W = 440.f, H = 21.f + 98.f + 20.f; // largura do chat do LATAM (~60% da tela no print)
-	UCanvasPanel* Win = MakeWindow(FVector2D(0.f, 1.f), FVector2D(0.f, 1.f), FVector2D(8.f, -8.f), FVector2D(W, H));
+	UCanvasPanel* Win = MakeWindow(FVector2D(0.f, 1.f), FVector2D(0.f, 1.f), FVector2D(8.f, -26.f), FVector2D(W, H));
 	ChatWindow = Win;
 	const TCHAR* TabNames[2] = { TEXT("Geral"), TEXT("Batalha") };
 	for (int32 t = 0; t < 2; ++t)
@@ -779,7 +780,7 @@ void UMythRoHUDWidget::BuildAutoBattle()
 {
 	// Janela do Auto-Battle (baixo-direita): botao liga/desliga, vigor de 3h e peso
 	const float W = 170.f, H = 17.f + 52.f;
-	UCanvasPanel* Win = MakeWindow(FVector2D(1.f, 1.f), FVector2D(1.f, 1.f), FVector2D(-8.f, -8.f), FVector2D(W, H));
+	UCanvasPanel* Win = MakeWindow(FVector2D(1.f, 1.f), FVector2D(1.f, 1.f), FVector2D(-8.f, -26.f), FVector2D(W, H));
 	AddRounded(Win, ColWindow, ColWindowEdge, 0.f, 8.f, W, H - 8.f, 0.f, 7.f);
 	AddTitleBar(Win, W, TEXT("Auto-Battle"));
 
@@ -868,6 +869,7 @@ void UMythRoHUDWidget::RefreshStats()
 	BaseExpGauge.SetFraction(Stats->GetExpFraction());
 	const float JobFrac = NetStats && NetStats->NextJobExp > 0 ? static_cast<float>(static_cast<double>(NetStats->JobExp) / NetStats->NextJobExp) : 0.f;
 	JobExpGauge.SetFraction(JobFrac);
+	UpdateModernHud();
 	if (BaseExpPctText) { BaseExpPctText->SetText(FText::FromString(FString::Printf(TEXT("%.2f%%"), Stats->GetExpFraction() * 100.f))); }
 	if (JobExpPctText) { JobExpPctText->SetText(FText::FromString(FString::Printf(TEXT("%.2f%%"), JobFrac * 100.f))); }
 	// Como o cliente: "Peso : atual / max   Zeny : 29.743" (o rAthena manda o peso em decimos)
@@ -1251,6 +1253,7 @@ void UMythRoHUDWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime
 	{
 		WindowRefreshTimer = 0.25f;
 		RefreshWindows();
+		UpdateModernHud();
 	}
 }
 

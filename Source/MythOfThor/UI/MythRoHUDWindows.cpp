@@ -418,6 +418,12 @@ void UMythRoHUDWidget::BuildSkillsWindow()
 		if (UCanvasPanelSlot* LS = Cast<UCanvasPanelSlot>(LevelText->Slot)) { LS->SetAutoSize(false); LS->SetSize(FVector2D(RoTreeCellW, 12.f) * UIScale); }
 		SkillNames.Add(LevelText);
 		SkillLevels.Add(nullptr);
+		UImage* ArrL = AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("arw_left"))), X + 9.f, Y + 46.f, 11.f, 11.f);
+		UImage* ArrR = AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("arw_right"))), X + 48.f, Y + 46.f, 11.f, 11.f);
+		ArrL->SetVisibility(ESlateVisibility::Collapsed);
+		ArrR->SetVisibility(ESlateVisibility::Collapsed);
+		SkillArrowL.Add(ArrL);
+		SkillArrowR.Add(ArrR);
 		UImage* Up = AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("lv_up_on"))), X + 50.f, Y + 22.f, 14.f, 14.f);
 		Up->SetVisibility(ESlateVisibility::Collapsed);
 		SkillUpButtons.Add(Up);
@@ -902,6 +908,8 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 		{
 			SkillIcons[i]->SetVisibility(ESlateVisibility::Collapsed);
 			SkillUpButtons[i]->SetVisibility(ESlateVisibility::Collapsed);
+			SkillArrowL[i]->SetVisibility(ESlateVisibility::Collapsed);
+			SkillArrowR[i]->SetVisibility(ESlateVisibility::Collapsed);
 			SkillNames[i]->SetText(FText::GetEmpty());
 			continue;
 		}
@@ -923,8 +931,16 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 		// Aprendida: cor cheia; liberada (o servidor mandou com nivel 0): um pouco apagada; bloqueada: cinza
 		SkillIcons[i]->SetColorAndOpacity(Level > 0 ? FLinearColor::White : (Info ? FLinearColor(1.f, 1.f, 1.f, 0.7f) : FLinearColor(0.35f, 0.35f, 0.38f, 0.55f)));
 		const int32 Pending = PendingSkillUps.FindRef(*SkillID);
-		SkillNames[i]->SetText(FText::FromString(Pending > 0 ? FString::Printf(TEXT("%d+%d"), Level, Pending) : (Level > 1 ? FString::Printf(TEXT("< %d/%d >"), Sel, Level) : FString::Printf(TEXT("%d/%d"), Level, Tree ? Tree->MaxLevel : Level))));
+		SkillNames[i]->SetText(FText::FromString(Pending > 0 ? FString::Printf(TEXT("%d+%d"), Level, Pending) : (Level > 1 ? FString::Printf(TEXT("%d/%d"), Sel, Level) : FString::Printf(TEXT("%d/%d"), Level, Tree ? Tree->MaxLevel : Level))));
 		SkillNames[i]->SetColorAndOpacity(FSlateColor(Level > 0 ? RoWinText : RoWinLabel));
+		{
+			// Setas do nivel de uso: so com mais de um nivel aprendido e sem pontos pendentes; apagadas no limite
+			const bool bArrows = Level > 1 && Pending == 0;
+			SkillArrowL[i]->SetVisibility(bArrows ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+			SkillArrowR[i]->SetVisibility(bArrows ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+			SkillArrowL[i]->SetColorAndOpacity(Sel > 1 ? FLinearColor::White : FLinearColor(1.f, 1.f, 1.f, 0.35f));
+			SkillArrowR[i]->SetColorAndOpacity(Sel < Level ? FLinearColor::White : FLinearColor(1.f, 1.f, 1.f, 0.35f));
+		}
 		SkillUpButtons[i]->SetVisibility(Points > 0 && Info && Info->bUpgradable ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
 	}
 
@@ -966,6 +982,10 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 
 bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 {
+	if (HandleModernHudClick(ScreenPos))
+	{
+		return true;
+	}
 	if (HandleFriendPartySwitch(ScreenPos))
 	{
 		return true;
@@ -1199,10 +1219,11 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 					if (S.SkillID == SkillRowID[r]) { Learned = &S; break; }
 				}
 			}
-			if (SkillRowID[r] != 0 && Learned && Learned->Level > 1 && IsUnder(SkillNames[r], ScreenPos))
+			const bool bOnL = SkillArrowL.IsValidIndex(r) && SkillArrowL[r]->IsVisible() && IsUnder(SkillArrowL[r], ScreenPos);
+			const bool bOnR = SkillArrowR.IsValidIndex(r) && SkillArrowR[r]->IsVisible() && IsUnder(SkillArrowR[r], ScreenPos);
+			if (SkillRowID[r] != 0 && Learned && Learned->Level > 1 && (bOnL || bOnR))
 			{
-				const FGeometry& NGeo = SkillNames[r]->GetCachedGeometry();
-				const bool bLeft = NGeo.AbsoluteToLocal(ScreenPos).X < NGeo.GetLocalSize().X * 0.5f;
+				const bool bLeft = bOnL;
 				SkillSelLevel.Add(SkillRowID[r], FMath::Clamp(SkillRowLevel[r] + (bLeft ? -1 : 1), 1, Learned->Level));
 				RefreshSkillsWindow();
 				return true;
