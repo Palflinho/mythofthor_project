@@ -106,3 +106,17 @@ Contas de teste mexidas: ClaudeTester voltou ao estado de antes (Caçador 99/10)
   quest; o NPC de testes agora ensina as skills de quest das 2ªs classes). Os sprites `data/sprite/homun/` não estavam nos
   assets: extraí do `data.grf` do cliente com `tools/grf_extract.py` (o extrator regrava `grf/manifest.json`, que nada usa).
   ClaudeTester2 voltou a Mercador no fim.
+
+## Pedidos do dia 12 (tarde)
+
+- **Habilidades** (`456c344`): a descrição das skills nunca era carregada (o leitor ignorava o campo `description` do
+  `skills.json`). Agora aparece numa dica ao passar o mouse. As linhas de caminho saíram; numa skill não aprendida, os
+  pré-requisitos (a cadeia inteira) ficam com borda laranja (falta) ou verde (ok) e são listados em "Requer:".
+- **Caçador / ataques** (`3ba7090`): o servidor manda ao próprio personagem o ID do item da arma, não o tipo; por isso o
+  arco não era reconhecido (sem flecha, ataque errado). Tabela item → tipo (`tools/gen_weapon_types.py`) e tabela
+  classe/arma → animação de ataque do roBrowser (`tools/gen_weapon_action.py`: ATTACK1/2/3). Caçador com arco puxa a
+  corda; a flecha voa (conferido em câmera lenta). Falcão: companheiro próprio que voa uma altura de personagem acima
+  e segue o dono (como o roBrowser); o Ataque Aéreo ainda não faz ele voar até o alvo.
+- **Andar e Navegação** (`893794c`): o rAthena recusa rotas acima de 17 células (14 com obstáculo). O cliente agora tira a
+  rota inteira no .gat e manda trechos de 12 células à frente, então clique longe/atrás de obstáculo contorna e a
+  Navegação não para mais a cada trecho (Prontera → prt_fild08: 149 células direto). Rota em laranja no minimapa.
