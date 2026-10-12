@@ -459,6 +459,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnMonsterHp, int64, UnitID, int3
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStorageOpen, const TArray<FRagnarokInventoryItem>&, Items);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStorageChanged, const TArray<FRagnarokInventoryItem>&, Items);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnStorageClose);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCartChanged);
 
 /** Lojas de NPC (clif.cpp): 0x00c4 escolher comprar/vender, 0x0b77 lista de compra, 0x00c7 lista de venda, 0x00ca/0x00cb resultado. */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnShopDealType, int64, NpcID);
@@ -568,6 +569,15 @@ public:
 	/** Armazem: mover item da mochila (bToStorage) ou do armazem para a mochila; fechar. IDs da tabela embaralhada (0x0364, 0x0365) e 0x0193. */
 	bool SendStorageMove(bool bToStorage, int32 Index, int32 Amount);
 	bool SendStorageClose();
+	/** Carrinho do Mercador: mochila -> carrinho (CZ_MOVE_ITEM_FROM_BODY_TO_CART 0x0126) ou carrinho -> mochila (0x0127). */
+	bool SendCartMove(bool bToCart, int32 Index, int32 Amount);
+	const TArray<FRagnarokInventoryItem>& GetCartItems() const { return CartItems; }
+	int32 GetCartCount() const { return CartCount; }
+	int32 GetCartMax() const { return CartMax; }
+	int32 GetCartWeight() const { return CartWeight; }
+	int32 GetCartMaxWeight() const { return CartMaxWeight; }
+	/** Com carrinho (OPTION_CART*): o servidor mandou ZC_NOTIFY_CARTITEM_COUNTINFO e ainda nao tirou (ZC_CARTOFF). */
+	bool HasCart() const { return bHasCart; }
 
 	/** CZ_ITEM_THROW / DropItem (0x0363 neste PACKETVER: tabela embaralhada de clif_shuffle.hpp, bloco PACKETVER > 20180307): joga o item do indice no chao. */
 	bool SendDropItem(int32 Index, int32 Amount);
@@ -872,6 +882,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Storage") FOnStorageOpen OnStorageOpen;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Storage") FOnStorageChanged OnStorageChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Storage") FOnStorageClose OnStorageClose;
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Cart") FOnCartChanged OnCartChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Party") FOnPartyChanged OnPartyChanged;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Party") FOnPartyInvite OnPartyInvite;
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Trade") FOnTradeRequest OnTradeRequest;
@@ -1010,6 +1021,13 @@ private:
 	TArray<FRagnarokInventoryItem> StorageItems;
 	int32 StorageCount = 0;
 	int32 StorageMax = 300;
+	TArray<FRagnarokInventoryItem> CartItems;
+	int32 CartCount = 0;
+	int32 CartMax = 100;
+	int32 CartWeight = 0;
+	int32 CartMaxWeight = 8000;
+	bool bHasCart = false;
+	void HandleCartPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 
 	FString PartyName;
 	TArray<FRoFriend> Friends;

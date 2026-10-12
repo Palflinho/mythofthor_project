@@ -1005,6 +1005,13 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x00f8: // ZC_CLOSE_STORE
 				HandleStoragePacket(PacketData, ActualLen, PacketID);
 				break;
+			case 0x0b45: // ZC_ADD_ITEM_TO_CART (PACKETVER >= 20200916)
+			case 0x0125: // ZC_DELETE_ITEM_FROM_CART
+			case 0x0121: // ZC_NOTIFY_CARTITEM_COUNTINFO
+			case 0x012b: // ZC_CARTOFF
+			case 0x012c: // ZC_ACK_ADDITEM_TO_CART
+				HandleCartPacket(PacketData, ActualLen, PacketID);
+				break;
 			case 0x00d6: // ZC_ACK_CREATE_CHATROOM
 			case 0x00d7: // ZC_ROOM_NEWENTRY
 			case 0x00d8: // ZC_DESTROY_ROOM
@@ -2260,11 +2267,11 @@ void URagnarokNetworkSubsystem::HandleInventoryList(const uint8* PacketData, int
 	// 2 armazem, 3 armazem do cla). So a mochila mexe em InventoryItems; antes o armazem e o carrinho sobrescreviam a mochila.
 	const uint16 ListId = *reinterpret_cast<const uint16*>(PacketData);
 	const uint8 InvType = (ListId == 0x0b09 || ListId == 0x0b39) ? PacketData[4] : 0;
-	if (InvType == 1 || InvType == 3)
+	if (InvType == 3)
 	{
-		return; // carrinho e armazem do cla: ainda sem janela
+		return; // armazem do cla: ainda sem janela
 	}
-	TArray<FRagnarokInventoryItem>& Target = InvType == 2 ? StorageItems : InventoryItems;
+	TArray<FRagnarokInventoryItem>& Target = InvType == 2 ? StorageItems : (InvType == 1 ? CartItems : InventoryItems);
 	if (bIsEquip)
 	{
 		static constexpr int32 HEADER_SIZE = 5;
@@ -4297,16 +4304,24 @@ void URagnarokNetworkSubsystem::HandleStoragePacket(const uint8* PacketData, int
 {
 	switch (PacketID)
 	{
-	case 0x0b08: // <len>.W <invType>.B <name>: lista nova do armazem (invType 2) comeca
+	case 0x0b08: // <len>.W <invType>.B <name>: lista nova do armazem (invType 2) ou do carrinho (1) comeca
 		if (PacketSize >= 5 && PacketData[4] == 2)
 		{
 			StorageItems.Reset();
+		}
+		else if (PacketSize >= 5 && PacketData[4] == 1)
+		{
+			CartItems.Reset();
 		}
 		break;
 	case 0x0b0b: // <invType>.B <flag>.B: fim da lista
 		if (PacketSize >= 3 && PacketData[2] == 2)
 		{
 			OnStorageOpen.Broadcast(StorageItems);
+		}
+		else if (PacketSize >= 3 && PacketData[2] == 1)
+		{
+			OnCartChanged.Broadcast();
 		}
 		break;
 	case 0x0b44: // <index>.W <amount>.L <item id>.L <type>.B <identified>.B <damaged>.B <slots 16> <options 25> <refine>.B <grade>.B
@@ -4372,6 +4387,104 @@ void URagnarokNetworkSubsystem::HandleStoragePacket(const uint8* PacketData, int
 	default:
 		break;
 	}
+}
+
+void URagnarokNetworkSubsystem::HandleCartPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID)
+{
+	switch (PacketID)
+	{
+	case 0x0b45: // <index>.W <amount>.L <item id>.L <type>.B <identified>.B <damaged>.B <slots 16> <options 25> <refine>.B <grade>.B
+	{
+		if (PacketSize < 58)
+		{
+			break;
+		}
+		const int32 Index = *reinterpret_cast<const int16*>(PacketData + 2);
+		const int32 Amount = *reinterpret_cast<const int32*>(PacketData + 4);
+		if (FRagnarokInventoryItem* Found = CartItems.FindByPredicate([Index](const FRagnarokInventoryItem& I) { return I.Index == Index; }))
+		{
+			Found->Amount += Amount;
+		}
+		else
+		{
+			FRagnarokInventoryItem Item;
+			Item.Index = Index;
+			Item.Amount = Amount;
+			Item.ItemID = *reinterpret_cast<const uint32*>(PacketData + 8);
+			Item.Type = PacketData[12];
+			Item.bIdentified = PacketData[13] != 0;
+			Item.Slot1 = *reinterpret_cast<const uint32*>(PacketData + 15);
+			Item.Slot2 = *reinterpret_cast<const uint32*>(PacketData + 19);
+			Item.Slot3 = *reinterpret_cast<const uint32*>(PacketData + 23);
+			Item.Slot4 = *reinterpret_cast<const uint32*>(PacketData + 27);
+			Item.Refine = PacketData[56];
+			CartItems.Add(Item);
+		}
+		OnCartChanged.Broadcast();
+		break;
+	}
+	case 0x0125: // <index>.W <amount>.L
+		if (PacketSize >= 8)
+		{
+			const int32 Index = *reinterpret_cast<const uint16*>(PacketData + 2);
+			const int32 Amount = *reinterpret_cast<const int32*>(PacketData + 4);
+			for (int32 i = 0; i < CartItems.Num(); ++i)
+			{
+				if (CartItems[i].Index == Index)
+				{
+					CartItems[i].Amount -= Amount;
+					if (CartItems[i].Amount <= 0)
+					{
+						CartItems.RemoveAt(i);
+					}
+					break;
+				}
+			}
+			OnCartChanged.Broadcast();
+		}
+		break;
+	case 0x0121: // <itens>.W <max itens>.W <peso>.L <peso max>.L
+		if (PacketSize >= 14)
+		{
+			CartCount = *reinterpret_cast<const int16*>(PacketData + 2);
+			CartMax = *reinterpret_cast<const int16*>(PacketData + 4);
+			CartWeight = *reinterpret_cast<const int32*>(PacketData + 6);
+			CartMaxWeight = *reinterpret_cast<const int32*>(PacketData + 10);
+			bHasCart = true;
+			OnCartChanged.Broadcast();
+		}
+		break;
+	case 0x012b: // carrinho tirado
+		bHasCart = false;
+		CartItems.Reset();
+		CartCount = 0;
+		CartWeight = 0;
+		OnCartChanged.Broadcast();
+		break;
+	case 0x012c: // <resultado>.B: 0 pesado demais (msg 220), 1 itens demais (221)
+		if (PacketSize >= 3)
+		{
+			OnChatMessage.Broadcast(TEXT(""), FMythRoClientTables::Message(PacketData[2] == 0 ? 220 : 221), TEXT("#FF6060"));
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+bool URagnarokNetworkSubsystem::SendCartMove(bool bToCart, int32 Index, int32 Amount)
+{
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap || Amount <= 0)
+	{
+		return false;
+	}
+	// CZ_MOVE_ITEM_FROM_BODY_TO_CART 0x0126 / CZ_MOVE_ITEM_FROM_CART_TO_BODY 0x0127: <indice>.W <quantidade>.L (IDs fixos, sem embaralhar)
+	uint8 Packet[8] = { static_cast<uint8>(bToCart ? 0x26 : 0x27), 0x01 };
+	const uint16 Idx = static_cast<uint16>(Index);
+	FMemory::Memcpy(Packet + 2, &Idx, 2);
+	FMemory::Memcpy(Packet + 4, &Amount, 4);
+	SendData(Packet, sizeof(Packet));
+	return true;
 }
 
 bool URagnarokNetworkSubsystem::SendWhisper(const FString& TargetName, const FString& Message)

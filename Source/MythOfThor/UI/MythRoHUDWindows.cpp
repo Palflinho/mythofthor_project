@@ -287,6 +287,9 @@ void UMythRoHUDWidget::BuildEquipWindow()
 		NameSlot->SetSize(FVector2D(76.f, 12.f) * UIScale);
 	}
 	EquipMountBtn = AddImage(EquipWindow, FMythRoUITextures::Get(RoWinArt(TEXT("btn_off"))), 122.f, EqTop + 90.f, 36.f, 36.f);
+	// Itens do carrinho (btn_items, roBrowser EquipmentV4: no meio da coluna central), so com carrinho
+	EquipCartBtn = AddButtonEx(EquipWindow, RoWinArt(TEXT("btn_items_off")), RoWinArt(TEXT("btn_items_on")), RoWinArt(TEXT("btn_items_on")), 125.f, EqTop + 66.f);
+	EquipCartBtn->SetVisibility(ESlateVisibility::Collapsed);
 	EquipTabNote = AddText(EquipWindow, 0.f, EqTop + 56.f, 8, RoWinFaint);
 	EquipTabNote->SetJustification(ETextJustify::Center);
 	if (UCanvasPanelSlot* NS = Cast<UCanvasPanelSlot>(EquipTabNote->Slot)) { NS->SetAutoSize(false); NS->SetSize(FVector2D(280.f, 16.f) * UIScale); }
@@ -509,6 +512,7 @@ void UMythRoHUDWidget::RefreshWindows()
 	if (EquipWindow && EquipWindow->IsVisible()) { RefreshEquipWindow(); }
 	if (SkillsWindow && SkillsWindow->IsVisible()) { RefreshSkillsWindow(); }
 	if (StorageWindow && StorageWindow->IsVisible()) { RefreshStorage(); }
+	RefreshCart(); // tambem mostra ou esconde o botao do carrinho no Equipamento
 	if (PartyWindow && PartyWindow->IsVisible()) { RefreshParty(); }
 	if (EmotionWindow && EmotionWindow->IsVisible()) { RefreshEmotionList(); }
 	if (FriendsWindow && FriendsWindow->IsVisible()) { RefreshFriends(); }
@@ -909,6 +913,10 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 	{
 		return true;
 	}
+	if (HandleCartClick(ScreenPos))
+	{
+		return true;
+	}
 	if (HandleStorageClick(ScreenPos))
 	{
 		return true;
@@ -1243,6 +1251,10 @@ FReply UMythRoHUDWidget::NativeOnMouseWheel(const FGeometry& InGeometry, const F
 		return FReply::Handled();
 	}
 	if (HandleShopWheel(InMouseEvent.GetScreenSpacePosition(), InMouseEvent.GetWheelDelta()))
+	{
+		return FReply::Handled();
+	}
+	if (HandleCartWheel(InMouseEvent.GetScreenSpacePosition(), InMouseEvent.GetWheelDelta()))
 	{
 		return FReply::Handled();
 	}

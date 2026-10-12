@@ -919,6 +919,30 @@ protected:
 	int32 StoreScroll = 0;
 	int32 BagScroll = 0;
 
+	// Carrinho do Mercador (MythRoCart.cpp): mesma forma do armazem, com peso e quantidade do servidor (ZC_NOTIFY_CARTITEM_COUNTINFO)
+public:
+	void ToggleCartWindow();
+	void RefreshCart();
+	/** Teste: move o item da linha Row (bToCart: da mochila para o carrinho). */
+	void CartMove(bool bToCart, int32 Row, int32 Amount);
+protected:
+	void BuildCartWindow();
+	bool HandleCartClick(const FVector2D& ScreenPos);
+	bool HandleCartWheel(const FVector2D& ScreenPos, float Delta);
+	UPROPERTY() TObjectPtr<UCanvasPanel> CartWindow;
+	UPROPERTY() TArray<TObjectPtr<UImage>> CartHit;
+	UPROPERTY() TArray<TObjectPtr<UImage>> CartIcons;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> CartNames;
+	UPROPERTY() TArray<TObjectPtr<UImage>> CartBagHit;
+	UPROPERTY() TArray<TObjectPtr<UImage>> CartBagIcons;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> CartBagNames;
+	UPROPERTY() TObjectPtr<UTextBlock> CartInfoText;
+	UPROPERTY() TObjectPtr<UTextBlock> CartCloseLink;
+	/** Botao do carrinho na coluna do meio do Equipamento (btn_items), so com carrinho. */
+	UPROPERTY() TObjectPtr<UImage> EquipCartBtn;
+	int32 CartScroll = 0;
+	int32 CartBagScroll = 0;
+
 	// Loja de NPC (MythRoShop.cpp, docs/ref/14): escolher comprar/vender, vitrine e cesta
 public:
 	void ShowShopDealType(int64 NpcID);

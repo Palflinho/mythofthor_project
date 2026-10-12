@@ -152,6 +152,8 @@ public:
 	UFUNCTION(Exec) void MythEquip(int32 ItemID);
 	/** Teste: o botao "tirar tudo" da janela de Equipamento (aba Geral). */
 	UFUNCTION(Exec) void MythTakeOffAll();
+	/** Teste: abre/fecha o carrinho; com Row >= 0 move o item dessa linha (ToCart 1: mochila -> carrinho). */
+	UFUNCTION(Exec) void MythCart(int32 Row = -1, int32 ToCart = 1, int32 Amount = 1) { if (HudWidget) { if (Row < 0) { HudWidget->ToggleCartWindow(); } else { HudWidget->CartMove(ToCart != 0, Row, Amount); } } }
 	UFUNCTION(Exec) void MythGameMenu() { if (HudWidget) { HudWidget->ToggleGameMenu(); } }
 	UFUNCTION(Exec) void MythItemTab(int32 Tab) { if (HudWidget) { HudWidget->SetItemTab(Tab); } }
 	UFUNCTION(Exec) void MythNavi(const FString& Query, int32 Go = 0) { if (HudWidget) { HudWidget->OpenNaviWindow(Query); if (Go == 1) { HudWidget->NaviGoSelected(); } else if (Go == 2) { HudWidget->NaviFindSelected(); } } }
