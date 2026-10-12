@@ -277,6 +277,10 @@ void UMythRoHUDWidget::BuildSkillsWindow()
 	SkillBottomBar.Add(AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("skill_botbar_right"))), W - 12.f, BarY, 12.f, 32.f));
 	SkillPointsText = AddText(SkillsWindow, 12.f, BarY + 9.f, 8, RoWinText);
 	SkillBottomBar.Add(SkillPointsText);
+	SkillApplyImg = AddButton(SkillsWindow, TEXT("ok"), W - 96.f, BarY + 6.f);
+	SkillResetImg = AddButton(SkillsWindow, TEXT("reset"), W - 52.f, BarY + 6.f);
+	SkillBottomBar.Add(SkillApplyImg);
+	SkillBottomBar.Add(SkillResetImg);
 }
 
 void UMythRoHUDWidget::ResizeSkillTree(int32 Rows)
@@ -302,7 +306,7 @@ void UMythRoHUDWidget::ResizeSkillTree(int32 Rows)
 		if (UCanvasPanelSlot* S = Part ? Cast<UCanvasPanelSlot>(Part->Slot) : nullptr)
 		{
 			const FVector2D Pos = S->GetPosition();
-			S->SetPosition(FVector2D(Pos.X, (Part == SkillPointsText ? BarY + 9.f : BarY) * UIScale));
+			S->SetPosition(FVector2D(Pos.X, (Part == SkillPointsText ? BarY + 9.f : (Part == SkillApplyImg || Part == SkillResetImg ? BarY + 6.f : BarY)) * UIScale));
 		}
 	}
 }
@@ -581,7 +585,8 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 	SkillRowID.Init(0, Cells);
 	SkillRowLevel.Init(0, Cells);
 	const URagnarokNetworkSubsystem* Net = GetNet();
-	const int32 Points = Net ? Net->GetPlayerStats().SkillPoints : 0;
+	const int32 FreePoints = Net ? Net->GetPlayerStats().SkillPoints : 0;
+	const int32 Points = FMath::Max(0, FreePoints - PendingSkillTotal());
 	const int32 Job = Net ? Net->GetPlayerStats().JobClass : 0;
 
 	// Abas: uma por etapa da classe (Aprendiz, 1a, 2a, trans); sem escolha, abre na classe atual
@@ -643,7 +648,8 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 		SkillIcons[i]->SetVisibility(Icon ? ESlateVisibility::Visible : ESlateVisibility::Collapsed); // Visible: arrastavel
 		// Aprendida: cor cheia; liberada (o servidor mandou com nivel 0): um pouco apagada; bloqueada: cinza
 		SkillIcons[i]->SetColorAndOpacity(Level > 0 ? FLinearColor::White : (Info ? FLinearColor(1.f, 1.f, 1.f, 0.7f) : FLinearColor(0.35f, 0.35f, 0.38f, 0.55f)));
-		SkillNames[i]->SetText(FText::FromString(Level > 1 ? FString::Printf(TEXT("< %d/%d >"), Sel, Level) : FString::Printf(TEXT("%d/%d"), Level, Tree ? Tree->MaxLevel : Level)));
+		const int32 Pending = PendingSkillUps.FindRef(*SkillID);
+		SkillNames[i]->SetText(FText::FromString(Pending > 0 ? FString::Printf(TEXT("%d+%d"), Level, Pending) : (Level > 1 ? FString::Printf(TEXT("< %d/%d >"), Sel, Level) : FString::Printf(TEXT("%d/%d"), Level, Tree ? Tree->MaxLevel : Level))));
 		SkillNames[i]->SetColorAndOpacity(FSlateColor(Level > 0 ? RoWinText : RoWinLabel));
 		SkillUpButtons[i]->SetVisibility(Points > 0 && Info && Info->bUpgradable ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
 	}
@@ -707,14 +713,10 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 			const FMythTreeSkill* Tree = FMythRoSkillTree::Skill(Id);
 			const FRagnarokSkillInfo* Info = Known.FindRef(Id);
 			FString Name = Tree ? Tree->Name : FMythRoClientTables::SkillName(Id);
-			Line += FString::Printf(TEXT("     %s  Nv %d/%d"), *Name, SkillRowLevel[SkillScroll], Tree ? Tree->MaxLevel : 0);
-			if (Info && Info->SpCost > 0)
-			{
-				Line += FString::Printf(TEXT("  SP %d"), Info->SpCost);
-			}
+			Line += FString::Printf(TEXT("   %s %d/%d"), *Name.Left(13), SkillRowLevel[SkillScroll], Tree ? Tree->MaxLevel : 0); // curto: os botoes OK e Cancelar ocupam o canto
 			if (!Info && Tree && Tree->Need.Num() > 0)
 			{
-				Line += TEXT("  (requer: ");
+				Line += TEXT(" (req: ");
 				for (int32 n = 0; n < Tree->Need.Num(); ++n)
 				{
 					const FMythTreeSkill* Req = FMythRoSkillTree::Skill(Tree->Need[n].X);
@@ -722,6 +724,10 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 				}
 				Line += TEXT(")");
 			}
+		}
+		if (PendingSkillTotal() > 0)
+		{
+			Line += FString::Printf(TEXT("  (pendentes: %d)"), PendingSkillTotal());
 		}
 		SkillPointsText->SetText(FText::FromString(Line));
 	}
@@ -912,14 +918,31 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 				break;
 			}
 		}
+		if (IsUnder(SkillApplyImg, ScreenPos) && Net)
+		{
+			for (const TPair<int32, int32>& P : PendingSkillUps)
+			{
+				for (int32 n = 0; n < P.Value; ++n)
+				{
+					Net->SendSkillUp(P.Key); // CZ_UPGRADE_SKILLLEVEL: o servidor valida e devolve a skill atualizada
+				}
+			}
+			PendingSkillUps.Reset();
+			RefreshSkillsWindow();
+			return true;
+		}
+		if (IsUnder(SkillResetImg, ScreenPos))
+		{
+			PendingSkillUps.Reset();
+			RefreshSkillsWindow();
+			return true;
+		}
 		for (int32 r = 0; r < SkillUpButtons.Num() && r < SkillRowID.Num(); ++r)
 		{
 			if (SkillRowID[r] != 0 && SkillUpButtons[r]->IsVisible() && IsUnder(SkillUpButtons[r], ScreenPos))
 			{
-				if (Net)
-				{
-					Net->SendSkillUp(SkillRowID[r]); // CZ_UPGRADE_SKILLLEVEL: o servidor valida e devolve a skill atualizada
-				}
+				PendingSkillUps.FindOrAdd(SkillRowID[r])++; // so vira pacote no OK
+				RefreshSkillsWindow();
 				return true;
 			}
 		}

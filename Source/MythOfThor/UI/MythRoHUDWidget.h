@@ -345,6 +345,11 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> SkillNames;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> SkillLevels;
 	UPROPERTY() TObjectPtr<UTextBlock> SkillPointsText;
+	UPROPERTY() TObjectPtr<UImage> SkillApplyImg;
+	UPROPERTY() TObjectPtr<UImage> SkillResetImg;
+	/** Pontos de habilidade escolhidos mas ainda nao confirmados (OK envia, Cancelar descarta), como o Apply/Reset do cliente moderno. */
+	TMap<int32, int32> PendingSkillUps;
+	int32 PendingSkillTotal() const { int32 N = 0; for (const TPair<int32, int32>& P : PendingSkillUps) { N += P.Value; } return N; }
 	// Arvore de habilidades (skilltreeview.lub do cliente): celulas da grade 7 colunas, abas por etapa da classe e
 	// as linhas que ligam cada skill ao pre-requisito
 	UPROPERTY() TArray<TObjectPtr<UImage>> SkillCellFrames;
