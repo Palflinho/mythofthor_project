@@ -126,10 +126,10 @@ Prioridade: **P0** = laço básico do jogo (quem joga 1 hora precisa), **P1** = 
 
 | Função | Estado | Prio | Notas |
 |---|---|---|---|
-| Chat: normal, cochicho, grupo, guilda, global (broadcast), comandos `/` | 🟡 | P0 | guilda sem janela |
+| Chat: normal, cochicho, grupo, guilda, global (broadcast), comandos `/` | ✅ | P0 | janela de clã feita (7088f59) |
 | Emoções (`/e1`…) e emotes de ação (doridori, bingbing, /sit) | 🟡 | P0 | corrigidas camadas hoje; usuário reportou bugs, não reconfirmou |
 | Grupo (criar, convidar, EXP, HP dos membros, mapa) | 🟡 | P0 | |
-| **Guilda:** criar, janela (membros, cargos, habilidades, avisos), emblema, aliança/hostil | ⬜ | P1 | só o nome na unidade existe |
+| **Guilda:** criar, janela (membros, cargos, habilidades, avisos), emblema, aliança/hostil | 🟡 | P1 | Alt+G: Clã, Membros, Avisos, convite, sair, expulsar, /guild, /breakguild (7088f59); faltam Cargos, Habilidades, Expulsos, emblema, alianças |
 | Amigos, ignorar | 🟡 | P1 | |
 | Troca entre jogadores | 🟡 | P0 | testada com 2 clientes |
 | PvP (arena, placar) e `/duel` | ⬜ | P2 | |

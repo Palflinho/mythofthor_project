@@ -133,3 +133,4 @@ NOVO (rodada 25, mesma noite):
 - TITULOS: Equipamento > Titulo lista os titulos das conquistas com premio recebido (clique usa; "(sem titulo)" tira). Teste: Assistente de Testes > "Completar Conquista com Titulo", pegue o premio em Conquistas (Alt+Y) e escolha "Jovem".
 - MAPA-MUNDI: Ctrl+` (tecla abaixo do Esc). O seu mapa fica em vermelho; passe o mouse para ver o nome; clique num mapa abre a Navegacao com a rota.
 - Menus de NPC com muitas opcoes agora mostram todas (antes cortava em 10).
+- CLA (GUILDA): Alt+G (ou o icone Cla do menu). Sem cla: "Criar Cla" poe /guild no chat (o servidor pede 1 Emperium; GM pode usar @guild nome). Convidar: botao direito no jogador > "Convidar para o cla"; quem recebe ve a janela Concordo/Nao concordo. Abas Cla (dados), Membros (online primeiro, em verde; o lider escolhe a linha e clica Expulsar duas vezes) e Avisos (o lider escreve e clica OK). "Sair do Cla" pede o segundo clique. /breakguild nome desfaz (sem membros).

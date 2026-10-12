@@ -70,7 +70,7 @@ Contas de teste mexidas: ClaudeTester voltou ao estado de antes (Caçador 99/10)
    `titletable_ptbr.lub`. Não fiz: pouco uso no começo do jogo. Diga se quer agora.
 2. **Procura de grupo** (2 primeiros botões da barra do Grupo) e **Fonte de dano**: botões no lugar, ainda sem função.
 3. **NPCs no mapa da Navegação**: os nomes no arquivo do cliente vêm codificados e não achei a tabela; só mapas e monstros por enquanto.
-4. **Janelas funcionais que ainda faltam**: guilda, pets, homúnculo, mapa-múndi, Reparar arma.
+4. **Janelas funcionais que ainda faltam**: pets, homúnculo, Reparar arma (guilda e mapa-múndi feitos depois; ver abaixo). Na guilda faltam as abas Cargos, Habilidades e Expulsos, o emblema e alianças.
 5. **Arte do LATAM** no Carrinho e no Armazém (hoje as duas usam listas simples, funcionais).
 6. **Rastreador de missão**: "Job Change to Swordman" continuou na tela depois da troca de classe; conferir se o servidor apaga a missão.
 8. **3ª classe e Doram** ficaram bloqueados; o dia em que quiser abri-los é só tirar o `escopo_classes.conf` e ajustar `job_stats`.
@@ -84,3 +84,8 @@ Contas de teste mexidas: ClaudeTester voltou ao estado de antes (Caçador 99/10)
 - **Aba Título do Equipamento** (`4d887c9`): títulos das conquistas (nomes do LATAM, ligação conquista → título do banco do
   servidor); usar e tirar. Testado com "Jovem". Também: menus de NPC mostravam no máximo 10 opções; agora até 24.
 - **Mapa-múndi** (`9ce93a7`, Ctrl+`): imagem do cliente, mapa atual em vermelho, nome sob o mouse, clique abre a rota na Navegação.
+- **Clã (guilda)** (`7088f59`, Alt+G): janela no formato do cliente com as abas Clã, Membros e Avisos; convite pelo botão direito
+  no jogador; sair, expulsar, aviso do líder; /guild e /breakguild. Testado com dois clientes: criar (GM @guild), convidar,
+  aceitar, sair e expulsar, com as mensagens do LATAM dos dois lados ("Oferta aceita", "ClaudeTester2 foi expulso do Clã.").
+  Detalhe do servidor: quem acabou de entrar não recebe o pacote "você é de um clã"; o cliente pega o clã das informações.
+  Contas: ClaudeTester agora é líder do clã "Midgard" (o ClaudeTester2 foi expulso no teste).
