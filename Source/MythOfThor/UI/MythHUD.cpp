@@ -1,4 +1,5 @@
 #include "UI/MythHUD.h"
+#include "Sprites/MythSkillEffects.h"
 #include "Sprites/MythRoSpriteComponent.h"
 #include "UI/MythQuestTitles.h"
 
@@ -213,31 +214,6 @@ void UMythCombatText::ShowMiss(const UObject* WorldContextObject, const FVector&
 	ShowDamage(WorldContextObject, WorldLocation, 0, ECombatTextType::Miss);
 }
 
-namespace
-{
-	/** Config/skill_area.json (tools/gen_skill_area.py): raio em celulas da area de cada skill de chao. */
-	int32 SkillAreaRadius(int32 SkillID)
-	{
-		static TMap<int32, int32> Table;
-		static bool bLoaded = false;
-		if (!bLoaded)
-		{
-			bLoaded = true;
-			FString Text;
-			TSharedPtr<FJsonObject> Root;
-			if (FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("skill_area.json"))) && FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) && Root.IsValid())
-			{
-				for (const auto& Pair : Root->Values)
-				{
-					Table.Add(FCString::Atoi(*Pair.Key), FMath::Clamp(static_cast<int32>(Pair.Value->AsNumber()), 0, 5)); // limite: o raio de layouts especiais nao e uma area quadrada
-				}
-			}
-		}
-		const int32* R = Table.Find(SkillID);
-		return R ? *R : 0;
-	}
-}
-
 void AMythHUD::DrawCursorTile()
 {
 	AMythPlayerController* PC = Cast<AMythPlayerController>(PlayerOwner);
@@ -278,29 +254,51 @@ void AMythHUD::DrawCursorTile()
 		}
 	}
 
-	// Mirando skill de area: anel branco cobrindo a area e o nivel da skill ao lado (imagem 24 do doc 12)
+	// Mirando skill de area: a area inteira (quadrado de 2r+1 celulas, como o cursor do cliente) preenchida, com grade e borda,
+	// e o nivel da skill ao lado (imagem 24 do doc 12)
 	if (PC->IsTargetingSkill() && (PC->GetPendingSkillInf() & 0x02))
 	{
-		const float Radius = (SkillAreaRadius(PC->GetPendingSkillID()) + 0.5f) * 50.f;
-		constexpr int32 Segments = 40;
-		FVector2D Prev, Right(0.f, 0.f);
-		bool bHavePrev = false;
-		for (int32 i = 0; i <= Segments; ++i)
+		const int32 Side = FMythSkillEffects::AreaSize(PC->GetPendingSkillID(), PC->GetPendingSkillLevel());
+		const int32 R = Side / 2;
+		auto CellCorner = [&](int32 Dx, int32 Dy, FVector2D& Out)
 		{
-			const float A = (2.f * PI * i) / Segments;
-			FVector2D S;
-			if (!Project(Center + FVector(FMath::Cos(A), FMath::Sin(A), 0.f) * Radius, S))
+			// canto (Dx, Dy) em meias celulas a partir do centro: -Side..Side e impar
+			return Project(Center + FVector(Dx * Half, Dy * Half, 0.f), Out);
+		};
+		const FLinearColor Fill(0.35f, 0.55f, 1.f, 0.22f);
+		for (int32 cy = -R; cy <= R; ++cy)
+		{
+			for (int32 cx = -R; cx <= R; ++cx)
 			{
-				bHavePrev = false;
-				continue;
+				FVector2D P0, P1, P2, P3;
+				if (!CellCorner(2 * cx - 1, 2 * cy - 1, P0) || !CellCorner(2 * cx + 1, 2 * cy - 1, P1) || !CellCorner(2 * cx + 1, 2 * cy + 1, P2) || !CellCorner(2 * cx - 1, 2 * cy + 1, P3))
+				{
+					continue;
+				}
+				// Preenchimento: faixas de linha entre a borda de cima (P0-P1) e a de baixo (P3-P2), sem textura
+				constexpr int32 Strips = 8;
+				for (int32 k = 0; k <= Strips; ++k)
+				{
+					const float Tk = static_cast<float>(k) / Strips;
+					const FVector2D L = FMath::Lerp(P0, P3, Tk), Rr = FMath::Lerp(P1, P2, Tk);
+					DrawLine(L.X, L.Y, Rr.X, Rr.Y, Fill, 2.f);
+				}
+				const FLinearColor Grid(1.f, 1.f, 1.f, 0.35f);
+				DrawLine(P0.X, P0.Y, P1.X, P1.Y, Grid, 1.f);
+				DrawLine(P0.X, P0.Y, P3.X, P3.Y, Grid, 1.f);
 			}
-			if (bHavePrev)
+		}
+		// Borda da area
+		FVector2D Right(0.f, 0.f);
+		const int32 Edge[5][2] = { { -1, -1 }, { 1, -1 }, { 1, 1 }, { -1, 1 }, { -1, -1 } };
+		for (int32 i = 0; i < 4; ++i)
+		{
+			FVector2D A, B;
+			if (CellCorner(Edge[i][0] * Side, Edge[i][1] * Side, A) && CellCorner(Edge[i + 1][0] * Side, Edge[i + 1][1] * Side, B))
 			{
-				DrawLine(Prev.X, Prev.Y, S.X, S.Y, FLinearColor(1.f, 1.f, 1.f, 0.95f), 2.f);
+				DrawLine(A.X, A.Y, B.X, B.Y, FLinearColor(1.f, 1.f, 1.f, 0.95f), 2.f);
+				if (A.X > Right.X) { Right = A; }
 			}
-			if (S.X > Right.X) { Right = S; }
-			Prev = S;
-			bHavePrev = true;
 		}
 		if (UFont* Font = GEngine ? GEngine->GetLargeFont() : nullptr; Font && Right.X > 0.f)
 		{

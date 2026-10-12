@@ -6,6 +6,7 @@
 #include "Sprites/MythStrEffect.h"
 #include "Sprites/MythSprEffect.h"
 #include "Sprites/MythProcEffect.h"
+#include "Sprites/MythTrailEffect.h"
 #include "Player/MythPlayerCharacter.h"
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
@@ -32,12 +33,20 @@ namespace
 
 	struct FSkillEntry
 	{
-		int32 Effect = 0;
-		int32 Hit = 0;
-		int32 Ground = 0;
-		int32 Cast = 0;
+		/** Ids por estagio (EMythSkillEffectStage); algumas skills tem mais de um efeito no mesmo momento. */
+		TArray<int32> Stages[static_cast<int32>(EMythSkillEffectStage::Count)];
 		FString Element;
+		bool bHideCastAura = false;
 	};
+
+	/** Nome do campo no skill_effects_full.json (tools/gen_skill_effects_ro.py) para cada estagio. */
+	const TCHAR* StageField(int32 Stage)
+	{
+		static const TCHAR* Names[] = { TEXT("effect"), TEXT("hit"), TEXT("ground"), TEXT("cast"), TEXT("success"), TEXT("successCaster"),
+			TEXT("release"), TEXT("beforeHit"), TEXT("beforeHitCaster"), TEXT("hitCaster"), TEXT("beginCast") };
+		static_assert(UE_ARRAY_COUNT(Names) == static_cast<int32>(EMythSkillEffectStage::Count), "estagios");
+		return Names[Stage];
+	}
 
 	struct FTables
 	{
@@ -90,11 +99,24 @@ namespace
 			{
 				const TSharedPtr<FJsonObject> O = Pair.Value->AsObject();
 				FSkillEntry& S = T.Skills.Add(FCString::Atoi(*Pair.Key));
-				O->TryGetNumberField(TEXT("effect"), S.Effect);
-				O->TryGetNumberField(TEXT("hit"), S.Hit);
-				O->TryGetNumberField(TEXT("ground"), S.Ground);
-				O->TryGetNumberField(TEXT("cast"), S.Cast);
+				for (int32 Stage = 0; Stage < static_cast<int32>(EMythSkillEffectStage::Count); ++Stage)
+				{
+					const TSharedPtr<FJsonValue> V = O->TryGetField(StageField(Stage));
+					if (!V.IsValid())
+					{
+						continue;
+					}
+					if (V->Type == EJson::Array)
+					{
+						for (const TSharedPtr<FJsonValue>& Id : V->AsArray()) { S.Stages[Stage].Add(static_cast<int32>(Id->AsNumber())); }
+					}
+					else if (V->Type == EJson::Number)
+					{
+						S.Stages[Stage].Add(static_cast<int32>(V->AsNumber()));
+					}
+				}
 				O->TryGetStringField(TEXT("element"), S.Element);
+				O->TryGetBoolField(TEXT("hideCastAura"), S.bHideCastAura);
 			}
 		}
 		UE_LOG(LogTemp, Log, TEXT("MythSkillEffects: %d efeitos, %d skills"), T.Effects.Num(), T.Skills.Num());
@@ -198,6 +220,17 @@ bool FMythSkillEffects::PlayEffectId(UObject* WorldContext, int32 EffectID, AAct
 			UE_LOG(LogTemp, Verbose, TEXT("MythSkillEffects: efeito %d %s '%s' %s"), EffectID, *P.Type, *P.File, bProc ? TEXT("ok") : TEXT("falhou"));
 			bAny |= bProc;
 		}
+		// TRAIL (roBrowser Trail.js): pontas que nascem no caminho do conjurador ate o alvo (Rajada Congelante)
+		if (P.Type == TEXT("TRAIL") && P.Raw.IsValid())
+		{
+			const FVector From = Source ? FeetOf(Source, Source->GetActorLocation()) : Feet;
+			bAny |= AMythTrailEffect::Spawn(WorldContext, P.Raw, From, Feet);
+		}
+		// QuadHorn sozinho (pontas de gelo no alvo)
+		if (P.Type == TEXT("QuadHorn") && P.Raw.IsValid())
+		{
+			bAny |= AMythQuadHorn::Spawn(WorldContext, P.Raw, Feet);
+		}
 		// FUNC quake: tremor de tela (Magnum Break 50 ms, Impacto Explosivo...); so se o efeito e perto do jogador
 		if (P.Type == TEXT("FUNC") && P.Raw.IsValid() && P.Raw->GetStringField(TEXT("func")) == TEXT("quake"))
 		{
@@ -292,19 +325,27 @@ int32 FMythSkillEffects::EffectIdFor(int32 SkillID, EMythSkillEffectStage Stage)
 	{
 		return 0;
 	}
-	switch (Stage)
-	{
-	case EMythSkillEffectStage::Hit: return S->Hit;
-	case EMythSkillEffectStage::Ground: return S->Ground;
-	case EMythSkillEffectStage::Cast: return S->Cast;
-	default: return S->Effect;
-	}
+	const TArray<int32>& Ids = S->Stages[static_cast<int32>(Stage)];
+	return Ids.Num() > 0 ? Ids[0] : 0;
+}
+
+bool FMythSkillEffects::HidesCastAura(int32 SkillID)
+{
+	const FSkillEntry* S = Tables().Skills.Find(SkillID);
+	return S && S->bHideCastAura;
 }
 
 bool FMythSkillEffects::Play(UObject* WorldContext, int32 SkillID, EMythSkillEffectStage Stage, AActor* Target, const FVector& Location, bool bFlashIfMissing, AActor* Source)
 {
 	const int32 EffectID = EffectIdFor(SkillID, Stage);
-	const bool bPlayed = EffectID > 0 && PlayEffectId(WorldContext, EffectID, Target, Location, Source);
+	bool bPlayed = false;
+	if (const FSkillEntry* S = Tables().Skills.Find(SkillID))
+	{
+		for (const int32 Id : S->Stages[static_cast<int32>(Stage)])
+		{
+			bPlayed |= Id > 0 && PlayEffectId(WorldContext, Id, Target, Location, Source);
+		}
+	}
 	UE_LOG(LogTemp, Verbose, TEXT("MythSkillEffects: skill %d estagio %d -> efeito %d (%s)"), SkillID, static_cast<int32>(Stage), EffectID, bPlayed ? TEXT("tocou") : TEXT("sem efeito"));
 	// O .str ja traz a propria luz; sem ele, o clarao do elemento no impacto
 	if (!bPlayed && bFlashIfMissing && Stage != EMythSkillEffectStage::Ground)
@@ -312,4 +353,107 @@ bool FMythSkillEffects::Play(UObject* WorldContext, int32 SkillID, EMythSkillEff
 		AMythLightFlash::Flash(WorldContext, FeetOf(Target, Location) + FVector(0.f, 0.f, 70.f), ElementColor(SkillID), 55.f, 0.55f, Target);
 	}
 	return bPlayed;
+}
+
+int32 FMythSkillEffects::AreaSize(int32 SkillID, int32 Level)
+{
+	// Lado do quadrado, em celulas: Config/cast_size.json (roBrowser MagicTarget.js, por nivel) e, sem entrada, o raio de
+	// Config/skill_area.json (2r+1); sem nada, 1 celula como o cliente
+	static TMap<int32, TArray<int32>> Sizes;
+	static TMap<int32, int32> Radius;
+	static bool bLoaded = false;
+	if (!bLoaded)
+	{
+		bLoaded = true;
+		FString Text;
+		TSharedPtr<FJsonObject> Root;
+		if (FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("cast_size.json"))) && FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) && Root.IsValid())
+		{
+			for (const auto& Pair : Root->Values)
+			{
+				TArray<int32>& List = Sizes.Add(FCString::Atoi(*Pair.Key));
+				for (const TSharedPtr<FJsonValue>& V : Pair.Value->AsArray()) { List.Add(static_cast<int32>(V->AsNumber())); }
+			}
+		}
+		Root.Reset();
+		if (FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("skill_area.json"))) && FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) && Root.IsValid())
+		{
+			for (const auto& Pair : Root->Values)
+			{
+				Radius.Add(FCString::Atoi(*Pair.Key), FMath::Clamp(static_cast<int32>(Pair.Value->AsNumber()), 0, 5)); // layouts especiais nao sao quadrados
+			}
+		}
+	}
+	if (const TArray<int32>* List = Sizes.Find(SkillID); List && List->Num() > 0)
+	{
+		return (*List)[FMath::Clamp(Level - 1, 0, List->Num() - 1)];
+	}
+	const int32* R = Radius.Find(SkillID);
+	return R ? 2 * *R + 1 : 1;
+}
+
+void FMythSkillEffects::PlayCastAura(UObject* WorldContext, AActor* Caster, int32 SkillID, int32 CastMs, TArray<TWeakObjectPtr<AActor>>& OutActors)
+{
+	if (!Caster || CastMs <= 0 || HidesCastAura(SkillID) || !FMythOptions::Get(TEXT("ShowEffects")))
+	{
+		return;
+	}
+	// A propriedade do pacote e o elemento da skill (rAthena: skill_get_ele): 0 amarela, 1 agua, 2 terra, 3 fogo, 4 vento, 5 veneno, 6 sagrado, 7 sombra
+	int32 Effect = 12;
+	if (const FSkillEntry* S = Tables().Skills.Find(SkillID))
+	{
+		static const TMap<FString, int32> ByElement = { { TEXT("Water"), 54 }, { TEXT("Earth"), 57 }, { TEXT("Fire"), 55 }, { TEXT("Wind"), 56 },
+			{ TEXT("Poison"), 59 }, { TEXT("Holy"), 58 }, { TEXT("Dark"), 454 }, { TEXT("Ghost"), 58 }, { TEXT("Undead"), 454 } };
+		if (const int32* E = ByElement.Find(S->Element)) { Effect = *E; }
+	}
+	const TArray<FEffectPart>* Parts = Tables().Effects.Find(Effect);
+	if (!Parts)
+	{
+		return;
+	}
+	for (const FEffectPart& P : *Parts)
+	{
+		if (!P.Raw.IsValid())
+		{
+			continue;
+		}
+		// Os aneis duram a conjuracao inteira (o cliente passa o tempo do pacote ao efeito)
+		TSharedPtr<FJsonObject> Timed = MakeShared<FJsonObject>();
+		Timed->Values = P.Raw->Values;
+		Timed->SetNumberField(TEXT("duration"), CastMs);
+		AActor* Spawned = nullptr;
+		if (AMythProcEffect::Spawn(WorldContext, Timed, Caster, FeetOf(Caster, Caster->GetActorLocation()), nullptr, &Spawned) && Spawned)
+		{
+			OutActors.Add(Spawned);
+		}
+		if (!P.Wav.IsEmpty() && OutActors.Num() <= 1)
+		{
+			UMythRoSound::PlayWavAtLocation(WorldContext, P.Wav, Caster->GetActorLocation());
+		}
+	}
+}
+
+void FMythSkillEffects::PlayCastMarker(UObject* WorldContext, int32 SkillID, int32 Level, int32 CastMs, AActor* Target, const FVector& GroundLocation, TArray<TWeakObjectPtr<AActor>>& OutActors)
+{
+	if (CastMs <= 0 || !FMythOptions::Get(TEXT("ShowEffects")))
+	{
+		return;
+	}
+	const float Seconds = CastMs / 1000.f;
+	if (Target)
+	{
+		if (AMythCastRing* Ring = AMythCastRing::Spawn(WorldContext, true, FeetOf(Target, Target->GetActorLocation()), 1.f, Seconds, Target))
+		{
+			OutActors.Add(Ring);
+		}
+	}
+	else
+	{
+		// Skill de chao: o circulo cobre a area (raio em celulas -> quadrado de 2r+1; sem area conhecida, 1 celula como o cliente)
+		const float Size = static_cast<float>(AreaSize(SkillID, Level));
+		if (AMythCastRing* Ring = AMythCastRing::Spawn(WorldContext, false, GroundLocation, Size, Seconds, nullptr))
+		{
+			OutActors.Add(Ring);
+		}
+	}
 }

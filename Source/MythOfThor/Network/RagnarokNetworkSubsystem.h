@@ -899,6 +899,9 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
 	bool UseSkill(int32 SkillID, int32 SkillLevel, int64 TargetID = 0, int32 TargetX = 0, int32 TargetY = 0);
+	/** Ultima skill usada por este jogador (o circulo magico usa o nivel para o tamanho da area). */
+	int32 GetLastUsedSkillId() const { return LastUsedSkillId; }
+	int32 GetLastUsedSkillLevel() const { return LastUsedSkillLevel; }
 
 	/**
 	 * Distribui ponto de habilidade (CZ_UPGRADE_SKILLLEVEL 0x0112).
@@ -1238,6 +1241,8 @@ private:
 	bool bCapturing = false;
 	bool bPetAutoFeed = false;
 	void HandleGuildPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	int32 LastUsedSkillId = 0;
+	int32 LastUsedSkillLevel = 1;
 	void ClearGuild();
 	int32 GuildId = 0;
 	bool bGuildMaster = false;

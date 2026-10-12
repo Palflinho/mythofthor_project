@@ -220,6 +220,7 @@ void AMythPlayerController::SetupInputComponent()
 
 void AMythPlayerController::OnClickStarted(const FInputActionValue&)
 {
+	bSkillClickHeld = false; // clique novo
 	bForceNextMove = true; // clique novo: pede mesmo que seja a mesma celula
 	MoveToCursor();
 	bForceNextMove = false;
@@ -231,7 +232,15 @@ void AMythPlayerController::OnClickTriggered(const FInputActionValue&)
 	// Nao dispara enquanto o botao direito gira a camera.
 	if (!IsInputKeyDown(EKeys::RightMouseButton))
 	{
-		MoveToCursor();
+		if (!IsInputKeyDown(EKeys::LeftMouseButton))
+		{
+			bSkillClickHeld = false;
+		}
+		// O clique que escolheu o alvo de uma skill nao pode virar ataque comum nem andada nos quadros seguintes (botao segurado)
+		if (!bSkillClickHeld)
+		{
+			MoveToCursor();
+		}
 	}
 }
 
@@ -281,6 +290,7 @@ void AMythPlayerController::MoveToCursor()
 		}
 		if (PendingSkillID != 0 && HandleSkillTargetClick(Hit))
 		{
+			bSkillClickHeld = true; // o botao segurado nao repete como ataque/andar
 			return; // clique de mira de skill
 		}
 		if (AMythMonster* Monster = Cast<AMythMonster>(Hit.GetActor()); Monster && Monster->ActorHasTag(TEXT("MythWarp")))
@@ -298,6 +308,10 @@ void AMythPlayerController::MoveToCursor()
 				if (!bForceNextMove && (Monster->IsNpc() || FocusedTarget.Get() == Monster))
 				{
 					return; // botao segurado sobre o mesmo alvo/NPC: nao repete o pedido a cada quadro
+				}
+				if (IsSelfCasting())
+				{
+					return; // conjurando: clicar no monstro nao inicia ataque fisico (nem anda ate ele)
 				}
 				SetFocusedTarget(Monster);
 				return;

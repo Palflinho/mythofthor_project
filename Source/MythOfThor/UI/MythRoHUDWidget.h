@@ -407,6 +407,7 @@ protected:
 public:
 	/** Teste: poe o cursor do sistema sobre a skill (na aba aberta) para ver a dica e o destaque. */
 	void SkillTestHover(int32 SkillId);
+	void TestShowSkillInfo(int32 SkillId) { ShowSkillInfo(SkillId); }
 protected:
 	UPROPERTY() TArray<TObjectPtr<UWidget>> SkillBottomBar;
 	void ResizeSkillTree(int32 Rows);

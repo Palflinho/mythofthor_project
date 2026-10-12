@@ -115,7 +115,7 @@ AMythProcEffect::AMythProcEffect()
 	Mesh->SetCastShadow(false);
 }
 
-bool AMythProcEffect::Spawn(UObject* WorldContext, const TSharedPtr<FJsonObject>& Part, AActor* Target, const FVector& Feet, AActor* Source)
+bool AMythProcEffect::Spawn(UObject* WorldContext, const TSharedPtr<FJsonObject>& Part, AActor* Target, const FVector& Feet, AActor* Source, AActor** OutActor)
 {
 	UWorld* World = WorldContext ? WorldContext->GetWorld() : nullptr;
 	if (!World || !Part.IsValid())
@@ -172,6 +172,10 @@ bool AMythProcEffect::Spawn(UObject* WorldContext, const TSharedPtr<FJsonObject>
 	{
 		E->Destroy();
 		return false;
+	}
+	if (OutActor)
+	{
+		*OutActor = E;
 	}
 	return true;
 }

@@ -119,12 +119,27 @@ void UMythRoHUDWidget::ShowInfoLines(const FString& Name, UTexture2D* Illust, co
 		return;
 	}
 	ItemInfoName->SetText(FText::FromString(Name));
-	ItemInfoImage->SetBrushFromTexture(Illust);
+	// Ilustracao (75x100) para itens; icones pequenos (habilidades 24x24, itens sem ilustracao) ficam no tamanho natural
+	const bool bIcon = Illust && Illust->GetSizeX() <= 48;
+	const FVector2D ImgSize = bIcon ? FVector2D(Illust->GetSizeX(), Illust->GetSizeY()) : FVector2D(IllustW, IllustH);
+	{ FSlateBrush B; B.SetResourceObject(Illust); B.ImageSize = ImgSize * UIScale; B.DrawAs = ESlateBrushDrawType::Image; ItemInfoImage->SetBrush(B); }
+	if (UCanvasPanelSlot* IS = Cast<UCanvasPanelSlot>(ItemInfoImage->Slot))
+	{
+		IS->SetSize(ImgSize * UIScale);
+	}
 	ItemInfoImage->SetVisibility(Illust ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
+	// Com icone pequeno o texto sobe para perto dele (sem a coluna vazia de 75 px da ilustracao)
+	const float TextX = (Illust ? (bIcon ? ImgSize.X : IllustW) : 0.f) + 16.f;
+	if (UCanvasPanelSlot* NS = Cast<UCanvasPanelSlot>(ItemInfoName->Slot)) { NS->SetPosition(FVector2D(TextX, 22.f) * UIScale); }
+	if (UCanvasPanelSlot* BS = Cast<UCanvasPanelSlot>(ItemInfoBody->Slot))
+	{
+		BS->SetPosition(FVector2D(TextX, 40.f) * UIScale);
+		BS->SetSize(FVector2D(InfoW - TextX - 8.f, InfoH - 48.f) * UIScale);
+	}
 
 	ItemInfoBody->ClearChildren();
 	const int32 FontSize = FMath::RoundToInt(8 * UIScale);
-	const float WrapWidth = (InfoW - IllustW - 32.f) * UIScale;
+	const float WrapWidth = (InfoW - TextX - 16.f) * UIScale;
 	for (const FString& Line : Lines)
 	{
 		const TArray<TPair<FString, FLinearColor>> Parts = SplitColors(Line);
@@ -220,7 +235,7 @@ bool UMythRoHUDWidget::HandleItemInfoClick(const FVector2D& ScreenPos)
 
 void UMythRoHUDWidget::UpdateSkillHover()
 {
-	// Mouse sobre uma skill da arvore: dica com nome, nivel e a descricao do skilldesctable; se ainda nao foi aprendida, os
+	// Mouse sobre uma skill da arvore: dica curta com nome, nivel e, se ainda nao foi aprendida, os
 	// pre-requisitos (diretos e os deles) ficam com borda na arvore - laranja os que faltam, verde os ja cumpridos
 	int32 Hovered = 0;
 	if (SkillsWindow && SkillsWindow->IsVisible() && FSlateApplication::IsInitialized())
@@ -331,20 +346,9 @@ void UMythRoHUDWidget::UpdateSkillHover()
 		SkillTipBox->AddChild(Row);
 	};
 	AddLine(FString::Printf(TEXT("%s  ^777777Nv %d/%d^000000"), *Name, Level, Tree ? Tree->MaxLevel : FMath::Max(Level, 1)), true);
-	if (const TArray<FString>* Desc = FMythRoClientTables::SkillDescription(Hovered))
-	{
-		for (int32 i = 0; i < Desc->Num(); ++i)
-		{
-			if (i == 0 && (*Desc)[0].TrimStartAndEnd() == Name)
-			{
-				continue; // a primeira linha do skilldesctable repete o nome
-			}
-			AddLine((*Desc)[i]);
-		}
-	}
+	// So os pre-requisitos; a descricao fica no botao direito (ShowSkillInfo)
 	if (Needs.Num() > 0)
 	{
-		AddLine(TEXT(" "));
 		AddLine(TEXT("Requer:"), true);
 		for (const TPair<int32, int32>& N : Needs)
 		{

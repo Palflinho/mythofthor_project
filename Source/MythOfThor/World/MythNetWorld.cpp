@@ -7,6 +7,7 @@
 #include "Sprites/MythMonster.h"
 #include "Sprites/MythRoSpriteComponent.h"
 #include "Sprites/MythSkillEffects.h"
+#include "Sprites/MythFalcon.h"
 #include "Sprites/MythStrEffect.h"
 #include "Sprites/MythAura99.h"
 #include "Sprites/MythSpiritBalls.h"
@@ -1280,7 +1281,8 @@ void AMythNetWorld::HandleDamage(int64 SourceID, int64 TargetID, int32 Damage, u
 	// Monstros arqueiros (AttackEffectTable do roBrowser: PROJECTILE ef_arrow_projectile) tambem atiram flechas
 	static const TSet<FString> ArcherMobs = { TEXT("archer_skeleton"), TEXT("orc_archer"), TEXT("goblin_archer"), TEXT("raydric_archer"), TEXT("kobold_archer"), TEXT("gargoyle"), TEXT("archer_guardian") };
 	const bool bArcherMob = SrcSprite && !SrcSprite->MonsterSpriteName.IsEmpty() && ArcherMobs.Contains(SrcSprite->MonsterSpriteName.ToLower());
-	if (SrcSprite && ((SrcSprite->MonsterSpriteName.IsEmpty() && UMythRoSpriteComponent::WeaponTypeOf(SrcSprite->Weapon) == 11) || bArcherMob))
+	// So no ataque comum: as skills tem o proprio projetil (beforeHit) ou nenhum (Assalto do Falcao e o falcao)
+	if (!bSkillHitInProgress && SrcSprite && ((SrcSprite->MonsterSpriteName.IsEmpty() && UMythRoSpriteComponent::WeaponTypeOf(SrcSprite->Weapon) == 11) || bArcherMob))
 	{
 		const float Attack = FMath::Max(DelayMs, 1) / 1000.f;
 		TWeakObjectPtr<AActor> WSource(Source);
@@ -1485,67 +1487,102 @@ AMythHUD* AMythNetWorld::GetGameHud() const
 
 void AMythNetWorld::HandleSkillDamage(int64 SourceID, int64 TargetID, int32 SkillID, int32 Damage, int32 Hits, uint8 DamageType)
 {
+	ClearCastFx(SourceID); // a skill saiu: o circulo de conjuracao acaba
 	AActor* Source = ResolveActor(SourceID);
+	AActor* Target = ResolveActor(TargetID);
 	if (AMythHUD* Hud = GetGameHud(); Hud && Source)
 	{
 		Hud->AddSkillShout(Source, FMythRoClientTables::SkillName(SkillID));
 	}
-	// Efeitos como o cliente (SkillEffect): no conjurador uma vez por uso (Impacto Explosivo acerta varios monstros
-	// mas explode uma vez), depois no alvo e o de impacto, sem repetir o mesmo efeito
+	// Momentos do SkillEffect do roBrowser (Config/skill_effects_full.json, tools/gen_skill_effects_ro.py):
+	//   uma vez por uso: effectIdOnCaster (no conjurador), beginCast (sem conjuracao antes), release (do conjurador ao alvo)
+	//   e effectId (no alvo); em cada golpe: beforeHit (projetil; o golpe chega 200 ms depois) e hitEffectId.
+	const double Now = GetWorld()->GetTimeSeconds();
+	const TPair<int64, int32> Key(SourceID, SkillID);
+	const bool bNewUse = Now - LastCasterFx.FindRef(Key) > 0.3; // varios alvos (Impacto Explosivo) ou golpes = um uso so
+	bool bAnyFx = false;
+	if (bNewUse)
+	{
+		LastCasterFx.Add(Key, Now);
+		if (Source)
+		{
+			bAnyFx |= FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Cast, Source, Source->GetActorLocation(), false, Source);
+			if (Now - LastCastBegin.FindRef(Key) > 4.0) // com conjuracao, o beginCast ja tocou no HandleSkillCast
+			{
+				bAnyFx |= FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::BeginCast, Source, Source->GetActorLocation(), false, Source);
+			}
+		}
+		if (Target)
+		{
+			bAnyFx |= FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Release, Target, Target->GetActorLocation(), false, Source);
+		}
+		// Ataque Aereo / Assalto do Falcao: o falcao voa ate o alvo e volta (roBrowser: falcon.walkToNonWalkableGround)
+		if ((SkillID == 129 || SkillID == 381) && Source && Target)
+		{
+			if (const UMythRoSpriteComponent* SrcSprite = Source->FindComponentByClass<UMythRoSpriteComponent>(); SrcSprite && SrcSprite->GetFalcon())
+			{
+				SrcSprite->GetFalcon()->AttackTo(Target->GetActorLocation());
+			}
+		}
+	}
 	const int32 CastFx = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::Cast);
 	const int32 MainFx = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::Effect);
-	const int32 HitFx = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::Hit);
-	bool bAnyFx = false;
-	if (Source && CastFx > 0)
+	if (Target && MainFx > 0 && MainFx != CastFx && Now - LastGroundSkill.FindRef(SkillID) > 0.6)
 	{
-		const double Now = GetWorld()->GetTimeSeconds();
-		const TPair<int64, int32> Key(SourceID, SkillID);
-		if (Now - LastCasterFx.FindRef(Key) > 0.3)
+		bAnyFx |= FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Effect, Target, Target->GetActorLocation(), false, Source);
+	}
+	const bool bProjectile = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::BeforeHit) > 0;
+	const int32 HitFx = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::Hit);
+	const bool bOwnHitFx = HitFx > 0 && HitFx != CastFx && HitFx != MainFx;
+	bAnyFx |= bProjectile || bOwnHitFx;
+
+	// Golpes: um numero por golpe (Rajada de Flechas = 2), como o RO; o dano de skill nao dispara a flecha do ataque comum
+	const int32 Count = (Hits <= 1 || Damage <= 0) ? 1 : Hits;
+	const int32 PerHit = Count > 1 ? Damage / Count : Damage;
+	TWeakObjectPtr<AActor> WSource(Source);
+	for (int32 i = 0; i < Count; ++i)
+	{
+		const int32 Amount = (i == Count - 1) ? Damage - PerHit * (Count - 1) : PerHit;
+		auto Land = [this, SourceID, TargetID, SkillID, Amount, DamageType, bOwnHitFx, WSource]()
 		{
-			LastCasterFx.Add(Key, Now);
-			bAnyFx |= FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Cast, Source, Source->GetActorLocation(), false, Source);
+			if (AActor* T = ResolveActor(TargetID); T && bOwnHitFx && Amount > 0)
+			{
+				FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Hit, T, T->GetActorLocation(), false, WSource.Get());
+			}
+			TGuardValue<bool> SkillHit(bSkillHitInProgress, true);
+			HandleDamage(SourceID, TargetID, Amount, DamageType, 0);
+		};
+		auto Fire = [this, TargetID, SkillID, bProjectile, WSource, Land]()
+		{
+			AActor* T = ResolveActor(TargetID);
+			if (bProjectile && T)
+			{
+				FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::BeforeHit, T, T->GetActorLocation(), false, WSource.Get());
+				FTimerHandle LandHandle;
+				GetWorldTimerManager().SetTimer(LandHandle, FTimerDelegate::CreateWeakLambda(this, Land), 0.2f, false);
+				return;
+			}
+			Land();
+		};
+		if (i == 0)
+		{
+			Fire();
 		}
 		else
 		{
-			bAnyFx = true;
+			FTimerHandle Handle;
+			GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateWeakLambda(this, Fire), 0.15f * i, false);
 		}
 	}
-	if (AActor* Target = ResolveActor(TargetID))
+	if (!bAnyFx && Target)
 	{
-		if (MainFx > 0 && MainFx != CastFx && GetWorld()->GetTimeSeconds() - LastGroundSkill.FindRef(SkillID) > 0.6)
-		{
-			bAnyFx |= FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Effect, Target, Target->GetActorLocation(), false, Source);
-		}
-		if (HitFx > 0 && HitFx != CastFx && HitFx != MainFx)
-		{
-			bAnyFx |= FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Hit, Target, Target->GetActorLocation(), false, Source);
-		}
-		if (!bAnyFx)
-		{
-			FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Hit, Target, Target->GetActorLocation(), true, Source); // clarao do elemento
-		}
-	}
-	// Mesmo tratamento do ataque normal: golpe de quem usou, numeros classicos e reacao do alvo.
-	// Golpes multiplos (ex.: Rajada de Flechas) aparecem como um numero por golpe, como no RO.
-	if (Hits <= 1 || Damage <= 0)
-	{
-		HandleDamage(SourceID, TargetID, Damage, DamageType, 0);
-		return;
-	}
-	const int32 PerHit = Damage / Hits;
-	for (int32 i = 0; i < Hits; ++i)
-	{
-		FTimerHandle Handle;
-		const int32 Amount = (i == Hits - 1) ? Damage - PerHit * (Hits - 1) : PerHit;
-		GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateWeakLambda(this, [this, SourceID, TargetID, Amount, DamageType]()
-		{
-			HandleDamage(SourceID, TargetID, Amount, DamageType, 0);
-		}), 0.01f + 0.15f * i, false);
+		FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Hit, Target, Target->GetActorLocation(), true, Source); // clarao do elemento
 	}
 }
 
 void AMythNetWorld::HandleSkillEffect(int64 SourceID, int64 TargetID, int32 SkillID, int32 Value)
 {
+	ClearCastFx(SourceID); // a skill saiu: o circulo de conjuracao acaba
 	AActor* Source = ResolveActor(SourceID);
 	AActor* Target = ResolveActor(TargetID);
 	if (AMythHUD* Hud = GetGameHud(); Hud && Source)
@@ -1572,6 +1609,20 @@ void AMythNetWorld::HandleSkillEffect(int64 SourceID, int64 TargetID, int32 Skil
 			FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Effect, At, At->GetActorLocation(), CastFx == 0, Source);
 		}
 	}
+	// successEffectId no alvo e successEffectIdOnCaster no conjurador; beginCast de quem nao conjurou (instantaneas)
+	if (AActor* At = Target ? Target : Source)
+	{
+		FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Success, At, At->GetActorLocation(), false, Source);
+	}
+	if (Source)
+	{
+		FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::SuccessCaster, Source, Source->GetActorLocation(), false, Source);
+		const TPair<int64, int32> BeginKey(SourceID, SkillID);
+		if (GetWorld()->GetTimeSeconds() - LastCastBegin.FindRef(BeginKey) > 4.0)
+		{
+			FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::BeginCast, Source, Source->GetActorLocation(), false, Source);
+		}
+	}
 	// Curas (AL_HEAL 28, curar no aprendiz NV_FIRSTAID 142): numero verde de cura sobre o alvo
 	if ((SkillID == 28 || SkillID == 142) && Target && Value > 0)
 	{
@@ -1585,6 +1636,7 @@ void AMythNetWorld::HandleSkillEffect(int64 SourceID, int64 TargetID, int32 Skil
 
 void AMythNetWorld::HandleSkillGround(int64 SourceID, int32 SkillID, int32 Level, int32 CellX, int32 CellY)
 {
+	ClearCastFx(SourceID); // a skill saiu: o circulo de conjuracao acaba
 	AActor* Source = ResolveActor(SourceID);
 	const FVector At = CellToGround(CellX, CellY);
 	if (AMythHUD* Hud = GetGameHud(); Hud && Source)
@@ -1617,11 +1669,54 @@ void AMythNetWorld::HandleSkillCast(int64 SourceID, int64 TargetID, int32 SkillI
 	{
 		Hud->AddCastBar(Source, CastMs / 1000.f);
 	}
-	if (AActor* Target = ResolveActor(TargetID); Target && Source)
+	if (const URagnarokNetworkSubsystem* SelfNet = GetNet(); CastMs > 0 && SelfNet && SourceID == SelfNet->GetSelfID())
+	{
+		if (AMythPlayerController* CastPC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController())) { CastPC->NoteSelfCast(CastMs / 1000.f); }
+	}
+	if (Source && CastMs > 0)
+	{
+		// beginCastEffectId: no conjurador quando a conjuracao comeca
+		LastCastBegin.Add(TPair<int64, int32>(SourceID, SkillID), GetWorld()->GetTimeSeconds() + CastMs / 1000.0);
+		FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::BeginCast, Source, Source->GetActorLocation(), false, Source);
+	}
+	AActor* CastTarget = ResolveActor(TargetID);
+	if (CastTarget && Source)
 	{
 		if (AMythPlayerCharacter* Char = Cast<AMythPlayerCharacter>(Source); Char && Char->Sprite)
 		{
-			Char->Sprite->FaceLocation(Target->GetActorLocation());
+			Char->Sprite->FaceLocation(CastTarget->GetActorLocation());
+		}
+	}
+	// Circulo de conjuracao (roBrowser): aura do elemento embaixo de quem conjura, alvo travado ou circulo magico da area
+	if (Source && CastMs > 0)
+	{
+		ClearCastFx(SourceID);
+		TArray<TWeakObjectPtr<AActor>>& Fx = CastRings.FindOrAdd(SourceID);
+		FMythSkillEffects::PlayCastAura(this, Source, SkillID, CastMs, Fx);
+		if (CastTarget && CastTarget != Source)
+		{
+			FMythSkillEffects::PlayCastMarker(this, SkillID, 1, CastMs, CastTarget, FVector::ZeroVector, Fx);
+		}
+		else if (CellX > 0 || CellY > 0)
+		{
+			int32 CastLevel = 1;
+			if (const URagnarokNetworkSubsystem* LvNet = GetNet(); LvNet && SourceID == LvNet->GetSelfID() && LvNet->GetLastUsedSkillId() == SkillID)
+			{
+				CastLevel = LvNet->GetLastUsedSkillLevel(); // so o proprio jogador sabe o nivel (o cliente original tambem)
+			}
+			FMythSkillEffects::PlayCastMarker(this, SkillID, CastLevel, CastMs, nullptr, CellToGround(CellX, CellY), Fx);
+		}
+	}
+}
+
+void AMythNetWorld::ClearCastFx(int64 SourceID)
+{
+	TArray<TWeakObjectPtr<AActor>> Fx;
+	if (CastRings.RemoveAndCopyValue(SourceID, Fx))
+	{
+		for (const TWeakObjectPtr<AActor>& A : Fx)
+		{
+			if (A.IsValid()) { A->Destroy(); }
 		}
 	}
 }

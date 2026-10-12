@@ -184,6 +184,17 @@ public:
 	/** Teste: aba da janela de Habilidades (0 = 1a, 1 = 2a, 2 = 3a, 3 = Etc). */
 	UFUNCTION(Exec) void MythSkillTab(int32 Tab) { if (HudWidget) { HudWidget->SetSkillTab(Tab); } }
 	UFUNCTION(Exec) void MythSkillHover(int32 SkillId) { if (HudWidget) { HudWidget->SkillTestHover(SkillId); } }
+	UFUNCTION(Exec) void MythSkillInfo(int32 SkillId) { if (HudWidget) { HudWidget->TestShowSkillInfo(SkillId); } }
+	/** Teste: usa a skill (nivel Level) no monstro mais perto. */
+	UFUNCTION(Exec) void MythSkillOnNearest(int32 SkillId, int32 Level);
+	/** Teste: o falcao voa ate o monstro mais perto (como o Ataque Aereo). */
+	UFUNCTION(Exec) void MythFalconAttack();
+	/** Teste: cria o circulo de conjuracao (0 magico, 1 alvo travado) de Size celulas sob o personagem por 6 s. */
+	UFUNCTION(Exec) void MythCastRingTest(int32 LockOn, float Size);
+	/** Teste: entra no modo de mira da skill (como a tecla de atalho), para ver o cursor de area. */
+	UFUNCTION(Exec) void MythBeginSkill(int32 SkillId, int32 Level) { BeginSkill(SkillId, Level); int32 W = 0, H = 0; GetViewportSize(W, H); SetMouseLocation(W * 0.55f, H * 0.62f); }
+	/** Teste: usa a skill de chao na celula X,Y. */
+	UFUNCTION(Exec) void MythSkillAt(int32 SkillId, int32 Level, int32 X, int32 Y) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->UseSkill(SkillId, Level, 0, X, Y); } }
 	/** Teste: usa a skill em si mesmo (ou no alvo de rede Target, se dado). */
 	UFUNCTION(Exec) void MythUseSkill(int32 SkillId, int32 Level, int32 Target = 0) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->UseSkill(SkillId, Level, Target ? Target : N->GetSelfID()); } }
 	/** Teste: escolhe a linha Row da lista de escolha aberta (Portal, Lupa, carta...); Row < 0 cancela. */
@@ -304,6 +315,10 @@ public:
 
 	/** Verdadeiro so durante o clique inicial (forca o pedido de movimento). */
 	bool bForceNextMove = false;
+	/** O clique atual foi usado para escolher o alvo de uma skill: segurar o botao nao vira ataque nem andada. */
+	bool bSkillClickHeld = false;
+	/** Fim da conjuracao propria (tempo do mundo); 0 se nao esta conjurando. */
+	double CastUntil = 0.0;
 
 	/** Teste: toca data/texture/effect/<File>.str no personagem (sem servidor). */
 	UFUNCTION(Exec)
@@ -360,6 +375,9 @@ public:
 	 */
 	bool StartRoute(const FIntPoint& Dest);
 	void CancelRoute();
+	/** O servidor avisou que voce comecou a conjurar (ZC_USESKILL_ACK, CastMs): ate la, clicar num monstro nao ataca. */
+	void NoteSelfCast(float Seconds) { CastUntil = GetWorld()->GetTimeSeconds() + Seconds; }
+	bool IsSelfCasting() const { return GetWorld() && GetWorld()->GetTimeSeconds() < CastUntil; }
 	bool IsRouting() const { return RouteCells.Num() > 0; }
 	FIntPoint GetRouteDest() const { return RouteCells.Num() > 0 ? RouteCells.Last() : FIntPoint(-1, -1); }
 	/** Celulas da rota que ainda faltam (para desenhar o caminho no minimapa). */

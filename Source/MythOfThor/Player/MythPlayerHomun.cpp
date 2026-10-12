@@ -7,6 +7,9 @@
 
 #include "Network/RagnarokNetworkSubsystem.h"
 #include "Sprites/MythMonster.h"
+#include "Sprites/MythTrailEffect.h"
+#include "Sprites/MythFalcon.h"
+#include "Sprites/MythRoSpriteComponent.h"
 #include "UI/MythRoHUDWidget.h"
 
 #include "EngineUtils.h"
@@ -135,5 +138,59 @@ void AMythPlayerController::MythHomunAttackNearest()
 		HomunManualUntil = GetWorld()->GetTimeSeconds() + 3.0;
 		HomunLastTarget = Best->NetID;
 		Net->SendHomunAttack(static_cast<int32>(Best->NetID));
+	}
+}
+
+void AMythPlayerController::MythSkillOnNearest(int32 SkillId, int32 Level)
+{
+	URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr;
+	if (!Net || !GetPawn())
+	{
+		return;
+	}
+	const AMythMonster* Best = nullptr;
+	float BestDist = TNumericLimits<float>::Max();
+	for (TActorIterator<AMythMonster> It(GetWorld()); It; ++It)
+	{
+		const float D = FVector::DistSquared(It->GetActorLocation(), GetPawn()->GetActorLocation());
+		if (It->IsNetUnit() && It->NetObjectType == 5 && !It->IsDead() && D < BestDist)
+		{
+			BestDist = D;
+			Best = *It;
+		}
+	}
+	UE_LOG(LogTemp, Log, TEXT("MythSkillOnNearest: skill %d nivel %d alvo %s a %.1f celulas"), SkillId, Level, Best ? *Best->MonsterName : TEXT("nenhum"), Best ? FVector::Dist2D(Best->GetActorLocation(), GetPawn()->GetActorLocation()) / 50.f : 0.f);
+	if (Best)
+	{
+		Net->UseSkill(SkillId, Level, Best->NetID);
+	}
+}
+
+void AMythPlayerController::MythCastRingTest(int32 LockOn, float Size)
+{
+	if (APawn* P = GetPawn())
+	{
+		AMythCastRing* R = AMythCastRing::Spawn(this, LockOn != 0, P->GetActorLocation() - FVector(0.f, 0.f, 80.f), Size, 6.f, LockOn != 0 ? P : nullptr);
+		UE_LOG(LogTemp, Log, TEXT("MythCastRingTest: %s tamanho %.1f em %s"), R ? TEXT("criado") : TEXT("FALHOU"), Size, *P->GetActorLocation().ToString());
+	}
+}
+
+void AMythPlayerController::MythFalconAttack()
+{
+	const UMythRoSpriteComponent* S = GetPawn() ? GetPawn()->FindComponentByClass<UMythRoSpriteComponent>() : nullptr;
+	if (!S || !S->GetFalcon())
+	{
+		return;
+	}
+	const AMythMonster* Best = nullptr;
+	float BestDist = TNumericLimits<float>::Max();
+	for (TActorIterator<AMythMonster> It(GetWorld()); It; ++It)
+	{
+		const float D = FVector::DistSquared(It->GetActorLocation(), GetPawn()->GetActorLocation());
+		if (It->IsNetUnit() && It->NetObjectType == 5 && !It->IsDead() && D < BestDist) { BestDist = D; Best = *It; }
+	}
+	if (Best)
+	{
+		S->GetFalcon()->AttackTo(Best->GetActorLocation());
 	}
 }

@@ -114,6 +114,13 @@ private:
 	UFUNCTION() void HandleNotifyEffect(int64 UnitID, int32 Type);
 	/** Ultimo efeito "no conjurador" por (unidade, skill): uma skill em area acerta varios alvos mas explode uma vez. */
 	TMap<TPair<int64, int32>, double> LastCasterFx;
+	/** Quando cada (conjurador, skill) comecou a conjurar (fim previsto): o beginCast nao repete ao soltar. */
+	TMap<TPair<int64, int32>, double> LastCastBegin;
+	/** Aura, alvo travado e circulo magico de quem esta conjurando; somem quando a skill sai (ClearCastFx). */
+	TMap<int64, TArray<TWeakObjectPtr<AActor>>> CastRings;
+	void ClearCastFx(int64 SourceID);
+	/** Dano vindo de skill: o golpe nao dispara a flecha do ataque comum. */
+	bool bSkillHitInProgress = false;
 	/** Unidades de skill no chao (Muralha de Fogo, Santuario, Portal...): o efeito se repete enquanto a unidade existir. */
 	TMap<int64, FTimerHandle> SkillUnitTimers;
 	/** Quando cada skill de area foi usada no chao: o efeito do chao ja cobre o alvo, entao o do alvo nao repete. */

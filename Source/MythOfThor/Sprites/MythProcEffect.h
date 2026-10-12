@@ -26,7 +26,7 @@ public:
 	 * Cria a parte do efeito. Target: quem recebe (os pes viram a origem; segue se "attached"); Source: quem lancou
 	 * (projeteis "toSrc" saem dele). Retorna falso se o tipo nao e procedural ou falta a textura.
 	 */
-	static bool Spawn(UObject* WorldContext, const TSharedPtr<FJsonObject>& Part, AActor* Target, const FVector& Feet, AActor* Source = nullptr);
+	static bool Spawn(UObject* WorldContext, const TSharedPtr<FJsonObject>& Part, AActor* Target, const FVector& Feet, AActor* Source = nullptr, AActor** OutActor = nullptr);
 
 	virtual void Tick(float DeltaSeconds) override;
 

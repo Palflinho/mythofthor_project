@@ -573,6 +573,8 @@ bool URagnarokNetworkSubsystem::PickUpItem(int64 ItemGID)
 
 bool URagnarokNetworkSubsystem::UseSkill(int32 SkillID, int32 SkillLevel, int64 TargetID, int32 TargetX, int32 TargetY)
 {
+	LastUsedSkillId = SkillID;
+	LastUsedSkillLevel = SkillLevel;
 	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
 	{
 		return false;
