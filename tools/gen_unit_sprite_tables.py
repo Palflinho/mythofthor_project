@@ -5,7 +5,7 @@ O servidor manda so o "job"/class de cada unidade (pacotes 0x09fd/0x09fe/0x09ff)
 sprite pelas tabelas compiladas jobname.lub / npcidentity.lub; como elas sao bytecode, usamos as mesmas fontes de
 nomes que o rAthena:
   - NPCs:     enum JT_* de src/map/npc.hpp      -> data/sprite/npc/<nome minusculo>.spr
-  - Monstros: AegisName de db/pre-re/mob_db.yml  -> data/sprite/몬스터/<aegis minusculo>.spr
+  - Monstros: AegisName de db/re/mob_db.yml (Renovacao, desde 2026-10-12; --prere usa db/pre-re) -> data/sprite/몬스터/<aegis minusculo>.spr
 
 Uso (WSL):
   python3 tools/gen_unit_sprite_tables.py ~/mythofthor-server/rathena [--assets /mnt/e/Dev/Ragnarok_Assets/grf]
@@ -65,7 +65,28 @@ def main():
     rathena = os.path.expanduser(sys.argv[1])
     assets = sys.argv[sys.argv.index('--assets') + 1] if '--assets' in sys.argv else None
     npcs = parse_npc_enum(os.path.join(rathena, 'src/map/npc.hpp'))
-    mobs = parse_mob_db(os.path.join(rathena, 'db/pre-re/mob_db.yml'))
+    mobs = parse_mob_db(os.path.join(rathena, 'db/pre-re/mob_db.yml' if '--prere' in sys.argv else 'db/re/mob_db.yml'))
+
+    # Tabela do proprio cliente (npcidentity.lub + jobname.lub avaliados por tools/lub_eval.py): id -> nome do sprite.
+    # E o que o cliente original usa; o AegisName do rAthena nem sempre e o nome do arquivo (CHONCHON = chocho.spr).
+    if '--jobname' in sys.argv:
+        table = json.load(open(sys.argv[sys.argv.index('--jobname') + 1], encoding='utf-8')).get('JobNameTable', {})
+        def exists(folder, name):
+            return not assets or os.path.exists(os.path.join(assets, 'data', 'sprite', folder, name + '.spr'))
+        fixed = 0
+        for key, raw in table.items():
+            if not str(key).isdigit() or not isinstance(raw, str):
+                continue
+            uid, name = int(key), raw.lower()
+            if uid in mobs and exists('몬스터', name):
+                fixed += mobs[uid] != name
+                mobs[uid] = name
+            elif uid in npcs and exists('npc', name):
+                fixed += npcs[uid] != name
+                npcs[uid] = name
+            elif uid not in mobs and uid not in npcs and 1000 < uid < 4000 and exists('몬스터', name):
+                mobs[uid] = name
+        print('nomes corrigidos pela tabela do cliente:', fixed)
 
     if assets:
         def have(folder, name):
