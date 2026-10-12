@@ -106,3 +106,5 @@ NOVO (rodada 19, correcoes do seu teste): botao de minimizar (_) na barra de tit
 NOVO (rodada 20): Equipamento, aba Geral: a municao equipada aparece no meio, acima do personagem (duplo clique desequipa, botao direito mostra a descricao); para equipar continue dando duplo clique na flecha em Itens > Diversos. Abaixo do personagem aparece o botao "Soltar falcao" ou "Descer do Peco" quando voce esta com um deles. O estado do falcao/Peco/carrinho agora e guardado e reaplicado ao trocar de mapa (corrige o falcao que nao aparecia).
 
 NOVO (rodada 21): a municao equipada agora continua na lista de Itens > Diversos (antes sumia da lista ao equipar e nao havia como desequipar). Duplo clique na municao equipa ou desequipa; o slot no meio da janela de Equipamento tambem desequipa com duplo clique.
+
+NOVO (rodada 22): itens no chao agora tem sombra embaixo (como no cliente original), caem com a curva original (sobem um pouco e pousam em ~0,4 s, sem quique) e ficam na posicao exata dentro da celula que o servidor manda.

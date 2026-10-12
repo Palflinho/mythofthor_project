@@ -56,3 +56,11 @@ Formatos vistos: `mappostable.txt` = `região#mapa.rsw#x1#y1#x2#y2#` (140 linhas
 
 Próximos usos (em ordem de custo): (1) `fogparametertable` → névoa por mapa; (2) `viewpointtable` → limites de câmera por mapa; (3) `mappostable` + imagem do mapa-múndi → janela do mapa-múndi;
 (4) `skilldelaylist.lub` → cooldown por skill; (5) `effecttool\<mapa>.lub` → efeitos dos objetos do mapa; (6) `ridingspreditinfo` → camadas do sprite montado.
+
+## 6. A interface de 2026 é outra geração? (resposta: não)
+
+Comparando só `texture\유저인터페이스`: **457 alterados, 3.089 adicionados, 1.012 removidos**. Os adicionados são ícones de item/coleção (1.997), runas (226), cashshop (115), ilustrações, cartas e emoções de cash;
+os alterados são retoques em botões e janelas já existentes (`basic_interface` 90, `tipbox` 38, `map` 29, `login_interface` 29, `battle_field` 20, `select_character*`, `bank`, `guild_helper`, `statuswnd` 2).
+As pastas das janelas principais (`basic_interface`, `inventory`, `statuswnd`, `shortcut`, `minimap`, `navigation_interface`, `renew_questui`, `select_character_ver3`) são **as mesmas** do LATAM que já usamos.
+Novas janelas/pastas: `uiadventureragency` (11, Agência de Aventureiros), `clan_system` (5), `reformui` (3), `styleshop`, `runesystem`, `dancing_knife`, `cashemotion`, `group` (21).
+Conclusão: trocar a HUD "por completo" não traria ganho; a HUD de 2026 é a mesma família da nossa. O que vale é pegar seletivamente as versões atualizadas de arquivos (ex.: `win_bank`, `guild1-3`, `party1-3`, botões) e as janelas novas que quisermos.

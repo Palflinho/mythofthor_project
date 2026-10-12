@@ -23,7 +23,8 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 	/** Configura o item (antes do BeginPlay): ID no chao (servidor), ID do item e quantidade. */
-	void Setup(int64 InNetID, int32 InItemID, int32 InAmount, bool bJustDropped);
+	/** CellOffset: posicao dentro da celula (subX/subY do servidor, em unidades do mundo); sem ele usa um desvio fixo por item. */
+	void Setup(int64 InNetID, int32 InItemID, int32 InAmount, bool bJustDropped, const FVector& CellOffset = FVector::ZeroVector, bool bHasCellOffset = false);
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Item")
 	int64 NetID = 0;

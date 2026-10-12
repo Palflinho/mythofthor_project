@@ -27,7 +27,8 @@ AMythGroundItem::AMythGroundItem()
 	Sprite->SetupAttachment(Root);
 	Sprite->MonsterSpriteFolder = TEXT("아이템"); // 아이템
 	Sprite->bPlayActSounds = false;
-	Sprite->bBlobShadow = false;       // no cliente original o item no chao nao tem a sombra redonda
+	Sprite->bBlobShadow = true;        // o item no chao tem sombra (shadow.spr), como no cliente original (nostalro e goro)
+	Sprite->BlobShadowScale = 0.55f;
 	Sprite->bCastSpriteShadow = false;
 
 	// Area de clique sobre o sprite (que fica paralelo a tela), como nos monstros
@@ -59,7 +60,7 @@ AMythGroundItem::AMythGroundItem()
 	}
 }
 
-void AMythGroundItem::Setup(int64 InNetID, int32 InItemID, int32 InAmount, bool bJustDropped)
+void AMythGroundItem::Setup(int64 InNetID, int32 InItemID, int32 InAmount, bool bJustDropped, const FVector& CellOffset, bool bHasCellOffset)
 {
 	NetID = InNetID;
 	ItemID = InItemID;
@@ -72,7 +73,7 @@ void AMythGroundItem::Setup(int64 InNetID, int32 InItemID, int32 InAmount, bool 
 	const float JitterX = static_cast<float>(static_cast<int32>((Hash >> 8) % 5) - 2) * 7.f;
 	const float JitterY = static_cast<float>(static_cast<int32>((Hash >> 16) % 5) - 2) * 7.f;
 	Sprite->CameraDepthOffset += static_cast<float>((Hash >> 24) % 8) * 3.f;
-	RestLocation = GetActorLocation() + FVector(JitterX, JitterY, 0.f);
+	RestLocation = GetActorLocation() + (bHasCellOffset ? CellOffset : FVector(JitterX, JitterY, 0.f));
 	SetActorLocation(RestLocation);
 	DropTime = bJustDropped ? 0.f : -1.f;
 	Rarity = FMythRoClientTables::ItemRarity(ItemID);
@@ -131,13 +132,15 @@ void AMythGroundItem::Tick(float DeltaSeconds)
 	}
 	// Item recem-caido: sobe e cai com um quique, como o drop do cliente original
 	DropTime += DeltaSeconds;
-	const float T = FMath::Clamp(DropTime / ItemDropDuration, 0.f, 1.f);
-	const float Arc = 4.f * T * (1.f - T);                       // parabola 0..1..0
-	const float Bounce = T > 0.7f ? 0.15f * FMath::Sin((T - 0.7f) / 0.3f * PI) : 0.f;
-	SetActorLocation(RestLocation + FVector(0.f, 0.f, ItemDropHeight * (Arc + Bounce)));
-	if (T >= 1.f)
+	const float Step = DropTime * 1000.f / 24.f;
+	const float FallOffset = -15.f + (-0.6f + 0.083f * Step) * Step; // curva do cliente: sobe um pouco e cai em ~0,42 s, sem quique
+	if (FallOffset >= 0.f)
 	{
 		SetActorLocation(RestLocation);
 		DropTime = -1.f;
+	}
+	else
+	{
+		SetActorLocation(RestLocation + FVector(0.f, 0.f, -FallOffset * 5.f));
 	}
 }

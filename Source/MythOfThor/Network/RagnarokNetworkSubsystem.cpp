@@ -1894,6 +1894,7 @@ void URagnarokNetworkSubsystem::HandleItemFall(const uint8* PacketData, int32 Pa
 	int16 CellX = *reinterpret_cast<const int16*>(PacketData + 13);
 	int16 CellY = *reinterpret_cast<const int16*>(PacketData + 15);
 	int16 Count = *reinterpret_cast<const int16*>(PacketData + 19);
+	GroundItemSubs.Add(GID, FIntPoint(PacketData[17], PacketData[18])); // subX, subY (ZC_ITEM_FALL_ENTRY5)
 
 	OnGroundItemAppear.Broadcast(GID, ItemID, FMath::Max<int32>(1, Count), CellX, CellY);
 }

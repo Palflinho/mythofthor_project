@@ -556,6 +556,8 @@ public:
 	bool SendRemoveOption();
 	/** Ultimo estado (OPTION_*) do proprio jogador, vindo do servidor. */
 	int32 GetSelfOption() const { return SelfOption; }
+	/** Posicao dentro da celula (subX, subY, 0..15) do item no chao, do ZC_ITEM_FALL_ENTRY; falso se o servidor nao mandou. */
+	bool GetGroundItemSub(int64 GID, FIntPoint& Out) const { if (const FIntPoint* P = GroundItemSubs.Find(GID)) { Out = *P; return true; } return false; }
 
 	/** Armazem: mover item da mochila (bToStorage) ou do armazem para a mochila; fechar. IDs da tabela embaralhada (0x0364, 0x0365) e 0x0193. */
 	bool SendStorageMove(bool bToStorage, int32 Index, int32 Amount);
@@ -979,6 +981,7 @@ private:
 	FString SessionPass;
 	uint32 SavedAccountID;
 	int32 SelfOption = 0;
+	TMap<int64, FIntPoint> GroundItemSubs;
 	uint32 SavedLoginID1;
 	uint32 SavedLoginID2;
 	uint8 SavedSex;

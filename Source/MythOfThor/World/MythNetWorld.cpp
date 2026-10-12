@@ -1340,7 +1340,18 @@ void AMythNetWorld::HandleGroundItemAppear(int64 ID, int32 ItemID, int32 Amount,
 		return;
 	}
 	// Item novo perto de quem acabou de matar algo: toca o pulinho de queda (o ZC_ITEM_ENTRY e item ja parado)
-	Item->Setup(ID, ItemID, Amount, bInMap);
+	FVector CellOffset = FVector::ZeroVector;
+	FIntPoint Sub;
+	const bool bHasSub = GetNet() && GetNet()->GetGroundItemSub(ID, Sub);
+	if (bHasSub)
+	{
+		// subX/subY (0..15) = posicao dentro da celula: vetor de um passo de celula em X e Y, ponderado pela fracao
+		const FVector Gx = CellToGround(CellX + 1, CellY) - Ground;
+		const FVector Gy = CellToGround(CellX, CellY + 1) - Ground;
+		CellOffset = Gx * ((Sub.X - 8) / 16.f) + Gy * ((Sub.Y - 8) / 16.f);
+		CellOffset.Z = 0.f;
+	}
+	Item->Setup(ID, ItemID, Amount, bInMap, CellOffset, bHasSub);
 	Item->FinishSpawning(Xf);
 	GroundItems.Add(ID, Item);
 	UE_LOG(LogTemp, Log, TEXT("MythNetWorld: item %d x%d no chao em (%d, %d)"), ItemID, Amount, CellX, CellY);
