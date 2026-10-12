@@ -72,7 +72,7 @@ Prioridade: **P0** = laço básico do jogo (quem joga 1 hora precisa), **P1** = 
 | Função | Estado | Prio | Notas |
 |---|---|---|---|
 | **Pets:** capturar (0x01a0/0x01a2), ovo, janela do pet, alimentar, performance, fome, intimidade | 🟡 | P1 | df0a8dc: captura (mira), Incubadora, Alt+J com fome/lealdade, alimentar, brincar, voltar ao ovo, renomear, autoalimentar; o pet aparece e segue (sprite de monstro). Faltam: animação de "brincar", falas da pettalktable, sprite com acessório, evolução |
-| **Homúnculo:** criar, janela, alimentar, skills, evolução | ⬜ | P1 | zero código |
+| **Homúnculo:** criar, janela, alimentar, skills, evolução | 🟡 | P1 | ed5d026: chamar/descansar (skills do servidor), janela Alt+R com status, barras, alimentar, aguardar, autoalimentar e habilidades; IA básica (seguir e atacar o alvo do dono), Alt+botão direito, Alt+T; sprites homun/ extraídos do GRF. Faltam: evolução, IA personalizada (AI/USER_AI), apagar homúnculo |
 | **Mercenário:** contratar, janela, skills | ⬜ | P2 | |
 | Carrinho: sprite | ✅ | – | |
 | Falcão: sprite | ✅ | – | |

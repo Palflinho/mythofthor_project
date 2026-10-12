@@ -70,7 +70,7 @@ Contas de teste mexidas: ClaudeTester voltou ao estado de antes (Caçador 99/10)
    `titletable_ptbr.lub`. Não fiz: pouco uso no começo do jogo. Diga se quer agora.
 2. **Procura de grupo** (2 primeiros botões da barra do Grupo) e **Fonte de dano**: botões no lugar, ainda sem função.
 3. **NPCs no mapa da Navegação**: os nomes no arquivo do cliente vêm codificados e não achei a tabela; só mapas e monstros por enquanto.
-4. **Janelas funcionais que ainda faltam**: homúnculo (guilda, mapa-múndi, mascote e Reparar arma feitos depois; ver abaixo). Na guilda faltam as abas Cargos, Habilidades e Expulsos, o emblema e alianças.
+4. **Janelas funcionais que faltavam**: todas feitas depois (guilda, mapa-múndi, mascote, Reparar arma e homúnculo; ver abaixo). Na guilda faltam as abas Cargos, Habilidades e Expulsos, o emblema e alianças.
 5. **Arte do LATAM** no Carrinho e no Armazém (hoje as duas usam listas simples, funcionais).
 6. **Rastreador de missão** (resolvido, não era o cliente): "Job Change to Swordman" é a missão 1014, que só o script
    pré-renovação cria (`npc/pre-re/jobs/1-1/swordman.txt`). O ClaudeTester2 começou a troca quando o servidor ainda era
@@ -98,3 +98,11 @@ Contas de teste mexidas: ClaudeTester voltou ao estado de antes (Caçador 99/10)
   O "Job Change to Swordman" que ficava na tela era resto do pré-renovação (ver item 6).
 - **Reparar arma** (`177faa1`): a lista "Este item pode ser consertado" do Ferreiro e as mensagens de sucesso/falha e de
   equipamento danificado. Testado com uma Faca quebrada (ClaudeTester2 virou Ferreiro só no teste e voltou a Mercador).
+- **Homúnculo** (`ed5d026`): Alt+R abre "Informação do Homunculus" quando há um chamado (senão continua o correio): status,
+  barras de HP/SP/EXP, fome, lealdade, Alimentar, Aguardar, Autoalimentar e habilidades. Como o cliente original usa os
+  scripts AI/*.lua, fiz a IA padrão no cliente: segue o dono, ataca o alvo dele, Alt+botão direito manda andar/atacar e Alt+T
+  deixa aguardando. Testado com um Filir: chamou, matou um Poring (EXP 15/101), seguiu e descansou.
+  Detalhes: na Renovação, Chamar Homúnculo usa Germination_Breed (7140) + Seed_Of_Life (7142) e exige Bioética (skill de
+  quest; o NPC de testes agora ensina as skills de quest das 2ªs classes). Os sprites `data/sprite/homun/` não estavam nos
+  assets: extraí do `data.grf` do cliente com `tools/grf_extract.py` (o extrator regrava `grf/manifest.json`, que nada usa).
+  ClaudeTester2 voltou a Mercador no fim.
