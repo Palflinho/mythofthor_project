@@ -184,6 +184,7 @@ public:
 	/** Teste: aba da janela de Habilidades (0 = 1a, 1 = 2a, 2 = 3a, 3 = Etc). */
 	UFUNCTION(Exec) void MythSkillTab(int32 Tab) { if (HudWidget) { HudWidget->SetSkillTab(Tab); } }
 	UFUNCTION(Exec) void MythSkillHover(int32 SkillId) { if (HudWidget) { HudWidget->SkillTestHover(SkillId); } }
+	UFUNCTION(Exec) void MythMainMenu(int32 Index = -1) { if (HudWidget) { HudWidget->TestMainMenu(Index); } }
 	UFUNCTION(Exec) void MythSkillInfo(int32 SkillId) { if (HudWidget) { HudWidget->TestShowSkillInfo(SkillId); } }
 	/** Teste: usa a skill (nivel Level) no monstro mais perto. */
 	UFUNCTION(Exec) void MythSkillOnNearest(int32 SkillId, int32 Level);

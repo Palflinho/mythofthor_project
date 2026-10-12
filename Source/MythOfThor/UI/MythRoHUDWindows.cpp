@@ -982,6 +982,10 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 
 bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 {
+	if (HandleMainMenuClick(ScreenPos))
+	{
+		return true;
+	}
 	if (HandleModernHudClick(ScreenPos))
 	{
 		return true;

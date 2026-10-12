@@ -141,3 +141,10 @@ NOVO (rodada 27):
 - HABILIDADES: passe o mouse numa skill para ver a descricao (antes nao aparecia). Sem as linhas de caminho: numa skill que voce ainda nao aprendeu, as que ela exige ficam com borda laranja (falta) ou verde (ja tem) e aparecem em "Requer:".
 - CACADOR: com arco ele puxa a corda (antes parecia jogar a flecha) e a flecha voa ate o alvo. Cada classe usa a animacao de ataque certa para a arma dela. O falcao voa uma altura de personagem acima e segue voce.
 - ANDAR: clique longe ou atras de parede/fonte: o personagem contorna e vai ate la sem parar. A Navegacao (Mover) anda direto, sem o "anda e para", e a rota aparece no minimapa em laranja.
+
+## Rodada 28 (2026-10-12, toque pessoal na HUD)
+- **Painel do personagem** (canto superior esquerdo): avatar, nome, classe/nível, barras de HP e SP com "atual / máx" e % (HP muda de cor com a vida). Sem barra de AP (só existe na 4ª classe).
+- **Barras de EXP** embaixo (Base e Classe) com marcas a cada 10%; passe o mouse para ver a % exata. Com pontos pendentes aparece o botão de level up acima de "Base" (abre Status) e de "Job" (abre Habilidades).
+- **Menu Principal**: botão de 3 barras ao lado do minimapa abre um painel central com Inventário, Equipamentos, Status, Habilidades, Grupo, Missões, Correio, Mapa e Configurações. Fecha ao escolher, a menos que "Manter aberto" esteja marcado. Comando de teste: `MythMainMenu [N]`.
+- **Habilidades**: o nível usado nas skills agora tem setas < > de verdade (botões do cliente) ao lado de "n/máx".
+- A janela de Informações Básicas desceu para dar espaço ao painel novo; chat e Auto-Battle subiram acima da faixa de EXP.

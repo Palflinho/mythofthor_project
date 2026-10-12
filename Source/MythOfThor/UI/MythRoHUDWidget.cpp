@@ -378,6 +378,7 @@ void UMythRoHUDWidget::BuildLayout()
 
 	BuildBasicInfo();
 	BuildModernHud();
+	BuildMainMenu();
 	BuildMinimap();
 	BuildHotbar();
 	BuildChat();

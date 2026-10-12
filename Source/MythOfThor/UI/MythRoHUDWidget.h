@@ -127,6 +127,8 @@ public:
 	/** Abre/fecha uma janela classica (atalhos Alt do cliente original). */
 	UFUNCTION(BlueprintCallable, Category = "Myth|HUD")
 	void ToggleWindow(EMythRoWindow Window);
+	/** Teste: Index < 0 abre/fecha o menu principal; senao escolhe o botao Index da grade. */
+	void TestMainMenu(int32 Index);
 
 	// ---- Dialogo de NPC (ZC_SAY_DIALOG / ZC_WAIT_DIALOG / ZC_CLOSE_DIALOG / ZC_MENU_LIST do rAthena)
 
@@ -263,6 +265,19 @@ protected:
 	void BuildBasicInfo();
 	// HUD propria: painel do personagem (avatar, HP, SP) e barras de EXP embaixo (MythRoModernHud.cpp)
 	void BuildModernHud();
+	// Menu Principal centralizado (MythRoMainMenu.cpp)
+	void BuildMainMenu();
+	void ToggleMainMenu();
+	void MainMenuPick(int32 Index);
+	bool HandleMainMenuClick(const FVector2D& ScreenPos);
+	UPROPERTY() TObjectPtr<UCanvasPanel> MainMenuButton;
+	UPROPERTY() TObjectPtr<UImage> MainMenuButtonBack;
+	UPROPERTY() TObjectPtr<UCanvasPanel> MainMenuPanel;
+	UPROPERTY() TObjectPtr<UImage> MainMenuClose;
+	UPROPERTY() TObjectPtr<UImage> MainMenuPinBox;
+	UPROPERTY() TObjectPtr<UImage> MainMenuPinMark;
+	UPROPERTY() TArray<TObjectPtr<UImage>> MainMenuCells;
+	bool bMainMenuKeepOpen = false;
 	void UpdateModernHud();
 	bool HandleModernHudClick(const FVector2D& ScreenPos);
 	UPROPERTY() TObjectPtr<UCanvasPanel> ModernPanel;
