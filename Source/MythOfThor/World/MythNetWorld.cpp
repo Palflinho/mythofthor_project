@@ -393,8 +393,8 @@ void AMythNetWorld::Login(const FString& User, const FString& Password)
 	{
 		return;
 	}
-	FString Host = TEXT("127.0.0.1"), CfgUser, CfgPass;
-	GConfig->GetString(TEXT("Myth"), TEXT("NetHost"), Host, GGameIni);
+	const FString Host = URagnarokNetworkSubsystem::ResolveHost();
+	FString CfgUser, CfgPass;
 	GConfig->GetString(TEXT("Myth"), TEXT("NetUser"), CfgUser, GGameIni);
 	GConfig->GetString(TEXT("Myth"), TEXT("NetPassword"), CfgPass, GGameIni);
 	const FString U = User.IsEmpty() ? CfgUser : User;

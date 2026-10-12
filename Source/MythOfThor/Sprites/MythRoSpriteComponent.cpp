@@ -193,13 +193,28 @@ UMythRoSpriteComponent::UMythRoSpriteComponent(const FObjectInitializer& ObjectI
 
 FString UMythRoSpriteComponent::GetAssetsRoot()
 {
-	FString Root;
-	if (GConfig && GConfig->GetString(TEXT("Myth"), TEXT("AssetsRoot"), Root, GGameIni) && !Root.IsEmpty())
+	// Ordem: -MythAssets=<pasta> na linha de comando, a pasta RagnarokAssets/grf ao lado do jogo (pacote para jogar em outro
+	// PC, tools/make_friend_build.ps1), AssetsRoot do DefaultGame.ini e por fim a variavel MYTH_ASSETS
+	static const FString Cached = []
 	{
-		return Root;
-	}
-	const FString Env = FPlatformMisc::GetEnvironmentVariable(TEXT("MYTH_ASSETS"));
-	return Env.IsEmpty() ? FString() : FPaths::Combine(Env, TEXT("grf"));
+		FString Root;
+		if (FParse::Value(FCommandLine::Get(), TEXT("MythAssets="), Root) && !Root.IsEmpty())
+		{
+			return Root;
+		}
+		const FString Packaged = FPaths::ConvertRelativePathToFull(FPaths::Combine(FPaths::RootDir(), TEXT("RagnarokAssets"), TEXT("grf")));
+		if (FPaths::DirectoryExists(FPaths::Combine(Packaged, TEXT("data"))))
+		{
+			return Packaged;
+		}
+		if (GConfig && GConfig->GetString(TEXT("Myth"), TEXT("AssetsRoot"), Root, GGameIni) && !Root.IsEmpty())
+		{
+			return Root;
+		}
+		const FString Env = FPlatformMisc::GetEnvironmentVariable(TEXT("MYTH_ASSETS"));
+		return Env.IsEmpty() ? FString() : FPaths::Combine(Env, TEXT("grf"));
+	}();
+	return Cached;
 }
 
 void UMythRoSpriteComponent::BeginPlay()

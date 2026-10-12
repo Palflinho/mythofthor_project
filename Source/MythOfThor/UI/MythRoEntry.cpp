@@ -282,8 +282,7 @@ void UMythRoHUDWidget::SubmitEntryLogin()
 		GConfig->SetString(EntrySection, TEXT("User"), *User, GGameUserSettingsIni);
 		GConfig->Flush(false, GGameUserSettingsIni);
 	}
-	FString Host = TEXT("127.0.0.1");
-	GConfig->GetString(TEXT("Myth"), TEXT("NetHost"), Host, GGameIni);
+	const FString Host = URagnarokNetworkSubsystem::ResolveHost();
 	SetEntryPanel(2);
 	EntryStatus->SetText(FText::FromString(TEXT("Conectando...")));
 	EntryStatus->SetColorAndOpacity(FSlateColor(EnGray));

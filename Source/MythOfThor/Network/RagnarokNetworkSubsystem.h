@@ -655,6 +655,8 @@ public:
 	 * Conecta ao Login-Server do rAthena e autentica a conta (CA_LOGIN 0x0064).
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Ragnarok|Network")
+	/** Endereco do servidor: -MythHost=<ip> na linha de comando (pacote para jogar em outro PC) ou NetHost do DefaultGame.ini. */
+	static FString ResolveHost();
 	bool ConnectAndLogin(const FString& ServerHost, const FString& Username, const FString& Password);
 	/** Login da sessao (so na memoria): usado pelo menu Esc "Selecao de personagem" para entrar de novo sem pedir a senha. */
 	const FString& GetSessionUser() const { return SessionUser; }

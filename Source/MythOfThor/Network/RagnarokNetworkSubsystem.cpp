@@ -4806,3 +4806,18 @@ bool URagnarokNetworkSubsystem::SendShowEquipConfig(bool bShow)
 	SendData(Packet, sizeof(Packet));
 	return true;
 }
+
+FString URagnarokNetworkSubsystem::ResolveHost()
+{
+	FString Host;
+	if (FParse::Value(FCommandLine::Get(), TEXT("MythHost="), Host) && !Host.IsEmpty())
+	{
+		return Host;
+	}
+	Host = TEXT("127.0.0.1");
+	if (GConfig)
+	{
+		GConfig->GetString(TEXT("Myth"), TEXT("NetHost"), Host, GGameIni);
+	}
+	return Host;
+}
