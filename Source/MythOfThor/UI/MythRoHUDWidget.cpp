@@ -626,7 +626,7 @@ void UMythRoHUDWidget::BuildHotbar()
 	// Barra de atalhos do LATAM (print 03): no topo, colada a direita das informacoes basicas. Duas linhas de 9 espacos
 	// (moldura shortcut_frame 290x34), o numero da linha a esquerda (azul a ativa) e as setas para subir e descer
 	constexpr float RowH = 34.f;
-	UCanvasPanel* Win = MakeWindow(FVector2D(0.f, 0.f), FVector2D(0.f, 0.f), FVector2D(250.f * UIScale, 2.f), FVector2D(306.f, RowH * 2.f));
+	UCanvasPanel* Win = MakeWindow(FVector2D(0.f, 0.f), FVector2D(0.f, 0.f), FVector2D(234.f * UIScale, 2.f), FVector2D(306.f, RowH * 2.f));
 	HotbarWindow = Win;
 	for (int32 r = 0; r < 2; ++r)
 	{

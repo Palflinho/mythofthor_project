@@ -15,9 +15,9 @@
 
 namespace
 {
-	constexpr float MhPanelW = 236.f;
+	constexpr float MhPanelW = 214.f;
 	constexpr float MhPanelH = 56.f;
-	constexpr float MhBarX = 76.f;
+	constexpr float MhBarX = 54.f;
 	constexpr float MhBarW = 118.f;
 	constexpr float MhBarH = 10.f;
 	constexpr float MhExpHalfW = 330.f;
@@ -52,9 +52,7 @@ void UMythRoHUDWidget::BuildModernHud()
 	ModernPanel = MakeWindow(FVector2D(0.f, 0.f), FVector2D(0.f, 0.f), FVector2D(6.f * UIScale, 6.f * UIScale), FVector2D(MhPanelW, MhPanelH));
 	AddRounded(ModernPanel, FLinearColor(0.05f, 0.06f, 0.11f, 0.78f), FLinearColor(0.5f, 0.55f, 0.7f, 0.7f), 0.f, 0.f, MhPanelW, MhPanelH, 8.f, 8.f)->SetVisibility(ESlateVisibility::Visible);
 	AddRounded(ModernPanel, FLinearColor(0.13f, 0.15f, 0.25f, 0.95f), FLinearColor(0.7f, 0.75f, 0.9f, 1.f), 4.f, 4.f, 36.f, 36.f, 18.f, 18.f);
-	ModernAvatar = AddImage(ModernPanel, nullptr, 6.f, 6.f, 32.f, 32.f);
-	ModernAvatar->SetVisibility(ESlateVisibility::Collapsed);
-	ModernClassIcon = AddImage(ModernPanel, nullptr, 46.f, 15.f, 24.f, 24.f); // simbolo da classe, o mesmo da janela do grupo
+	ModernClassIcon = AddImage(ModernPanel, nullptr, 8.f, 12.f, 28.f, 28.f); // simbolo da classe (o mesmo da janela do grupo) no lugar do retrato
 	ModernClassIcon->SetVisibility(ESlateVisibility::Collapsed);
 
 	ModernName = AddText(ModernPanel, MhBarX, 3.f, 8, MhText, true);
@@ -136,23 +134,6 @@ void UMythRoHUDWidget::UpdateModernHud()
 		ModernWeightZeny->SetText(FText::FromString(TEXT("Peso 0%   Zeny 0")));
 	}
 
-	// Avatar: retrato do sprite do jogador (refeito quando o visual muda)
-	const APawn* Pawn = GetOwningPlayerPawn();
-	const UMythRoSpriteComponent* Sprite = Pawn ? Pawn->FindComponentByClass<UMythRoSpriteComponent>() : nullptr;
-	if (Sprite && Sprite->GetLoadVersion() != ModernAvatarVersion)
-	{
-		ModernAvatarVersion = Sprite->GetLoadVersion();
-		ModernAvatarTex = Sprite->RenderPortrait(32, 32, 34);
-		if (ModernAvatarTex)
-		{
-			FSlateBrush Brush;
-			Brush.SetResourceObject(ModernAvatarTex);
-			Brush.ImageSize = FVector2D(32.f, 32.f) * UIScale;
-			ModernAvatar->SetBrush(Brush);
-		}
-	}
-	ModernAvatar->SetVisibility(ModernAvatarTex ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
-
 	if (NetStats)
 	{
 		UTexture2D* JobIcon = FMythRoUITextures::Get(FString::Printf(TEXT("renewalparty/icon_jobs_%d.bmp"), NetStats->JobClass));
@@ -160,7 +141,7 @@ void UMythRoHUDWidget::UpdateModernHud()
 		{
 			FSlateBrush IconBrush;
 			IconBrush.SetResourceObject(JobIcon);
-			IconBrush.ImageSize = FVector2D(24.f, 24.f) * UIScale;
+			IconBrush.ImageSize = FVector2D(28.f, 28.f) * UIScale;
 			ModernClassIcon->SetBrush(IconBrush);
 		}
 		ModernClassIcon->SetVisibility(JobIcon ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
