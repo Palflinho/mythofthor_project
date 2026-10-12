@@ -571,26 +571,54 @@ public:
 	void OpenNaviWindow(const FString& Query = FString());
 	/** Teste e atalho: inicia a navegacao automatica ate o mapa escolhido na janela. */
 	void NaviGoSelected() { StartNaviAuto(); }
+	/** Teste: o mesmo que o botao Procurar (mostra a rota na lista da direita). */
+	void NaviFindSelected() { if (!NaviSelected.IsEmpty()) { ShowNaviRoute(NaviSelected); bNaviShowRoute = true; RefreshNaviLists(); } }
 	void SetCurrentMapId(const FString& MapId) { CurrentMapId = MapId; }
 protected:
 	void BuildNaviWindow();
 	void SearchNavi(const FString& Query);
+	/** Escolhe o mapa (painel direito: nome, imagem e monstros) e calcula a rota pelos portais a partir do mapa atual. */
 	void ShowNaviRoute(const FString& Destination);
+	/** Redesenha as duas listas (resultados a esquerda; monstros ou rota a direita) com a rolagem atual. */
+	void RefreshNaviLists();
 	bool HandleNaviClick(const FVector2D& ScreenPos);
+	bool HandleNaviWheel(const FVector2D& ScreenPos, float Delta);
 	UFUNCTION() void OnNaviCommitted(const FText& Text, ETextCommit::Type CommitMethod);
 	UPROPERTY() TObjectPtr<UCanvasPanel> NaviWindow;
 	UPROPERTY() TObjectPtr<UEditableTextBox> NaviBox;
-	UPROPERTY() TArray<TObjectPtr<UTextBlock>> NaviRows;
-	UPROPERTY() TArray<TObjectPtr<UTextBlock>> NaviRoute;
-	UPROPERTY() TObjectPtr<UImage> NaviPreview;
-	UPROPERTY() TObjectPtr<UTextBlock> NaviTitle;
+	// Linha de busca: voltar, filtro (Todos / Mapas / Monstros) com a lista suspensa, lupa
+	UPROPERTY() TObjectPtr<UImage> NaviBackBtn;
+	UPROPERTY() TObjectPtr<UImage> NaviFilterBtn;
+	UPROPERTY() TObjectPtr<UTextBlock> NaviFilterText;
+	UPROPERTY() TObjectPtr<UImage> NaviFilterMenuBack;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> NaviFilterItems;
+	UPROPERTY() TObjectPtr<UImage> NaviSearchBtn;
+	// Esquerda: "Resultado[n]" e a lista
 	UPROPERTY() TObjectPtr<UTextBlock> NaviCount;
-	UPROPERTY() TObjectPtr<UTextBlock> NaviFind;
-	UPROPERTY() TObjectPtr<UTextBlock> NaviGo;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> NaviRows;
+	UPROPERTY() TArray<TObjectPtr<UImage>> NaviRowIcons;
+	// Direita: nome do mapa, imagem, lista (o mapa e seus monstros, ou a rota depois de "Procurar") e os botoes
+	UPROPERTY() TObjectPtr<UTextBlock> NaviTitle;
+	UPROPERTY() TObjectPtr<UImage> NaviPreview;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> NaviListRows;
+	UPROPERTY() TArray<TObjectPtr<UImage>> NaviListIcons;
+	UPROPERTY() TObjectPtr<UImage> NaviListSel;
+	UPROPERTY() TObjectPtr<UImage> NaviScrollUp;
+	UPROPERTY() TObjectPtr<UImage> NaviScrollDown;
+	UPROPERTY() TObjectPtr<UImage> NaviShareBtn;
+	UPROPERTY() TObjectPtr<UImage> NaviFindBtn;
+	UPROPERTY() TObjectPtr<UImage> NaviMoveBtn;
+	int32 NaviFilter = 0; // 0 todos, 1 mapas, 2 monstros
+	struct FNaviResult { uint8 Type = 0; FString MapId; FString Label; }; // Type 0 mapa, 1 monstro
+	TArray<FNaviResult> NaviResults;
+	int32 NaviResultScroll = 0;
+	int32 NaviListScroll = 0;
+	bool bNaviShowRoute = false;
+	TArray<FString> NaviHistory;
 	FString NaviSelected;
 	struct FNaviStep { FString From; int32 X = 0, Y = 0; FString To; };
 	TArray<FNaviStep> NaviSteps; // rota da selecao a partir do mapa atual
-	UPROPERTY() TObjectPtr<UTextBlock> NaviAutoBtn;
+	UPROPERTY() TObjectPtr<UTextBlock> NaviAutoBtn; // texto do botao Mover ("Mover" / "Parar")
 	bool bNaviAuto = false;
 	FString NaviAutoDest;
 	float NaviAutoTimer = 0.f;
@@ -600,7 +628,6 @@ protected:
 	int32 NaviProbe = 0;
 	void StartNaviAuto();
 	void TickNaviAuto(float DeltaTime);
-	TArray<FString> NaviMatches;
 	FString CurrentMapId;
 
 	// Troca rapida (MythRoEquipSwitch.cpp)

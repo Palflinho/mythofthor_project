@@ -1289,7 +1289,11 @@ void UMythRoHUDWidget::UpdateButtons()
 		}
 		else if (Tex)
 		{
-			Img->SetBrush(TextureBrush(Tex, FVector2D(Tex->GetSizeX(), Tex->GetSizeY()) * UIScale));
+			// So troca a textura: botoes desenhados como caixa (9 fatias, ex. Compartilhar/Procurar da Navegacao) mantem as margens
+			FSlateBrush Brush = Img->GetBrush();
+			Brush.SetResourceObject(Tex);
+			Brush.ImageSize = FVector2D(Tex->GetSizeX(), Tex->GetSizeY()) * UIScale;
+			Img->SetBrush(Brush);
 		}
 		B.Shown = Want;
 	}

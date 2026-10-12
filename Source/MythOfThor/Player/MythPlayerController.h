@@ -152,7 +152,7 @@ public:
 	UFUNCTION(Exec) void MythEquip(int32 ItemID);
 	UFUNCTION(Exec) void MythGameMenu() { if (HudWidget) { HudWidget->ToggleGameMenu(); } }
 	UFUNCTION(Exec) void MythItemTab(int32 Tab) { if (HudWidget) { HudWidget->SetItemTab(Tab); } }
-	UFUNCTION(Exec) void MythNavi(const FString& Query, int32 Go = 0) { if (HudWidget) { HudWidget->OpenNaviWindow(Query); if (Go) { HudWidget->NaviGoSelected(); } } }
+	UFUNCTION(Exec) void MythNavi(const FString& Query, int32 Go = 0) { if (HudWidget) { HudWidget->OpenNaviWindow(Query); if (Go == 1) { HudWidget->NaviGoSelected(); } else if (Go == 2) { HudWidget->NaviFindSelected(); } } }
 	UFUNCTION(Exec) void MythRoom(int32 Create, const FString& Title);
 	UFUNCTION(Exec) void MythEntryLogin(const FString& User, const FString& Pass);
 	UFUNCTION(Exec) void MythEntryAction(int32 Action, const FString& Name);
