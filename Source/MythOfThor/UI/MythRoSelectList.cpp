@@ -81,6 +81,7 @@ void UMythRoHUDWidget::OpenSelectList(uint8 ListType, const TArray<int32>& Value
 	case EMythSelectList::Autospell: Title = TEXT("Autoconjurar"); break;
 	case EMythSelectList::Refine: Title = TEXT("Refinar arma"); break;
 	case EMythSelectList::PetEgg: Title = FMythRoClientTables::Message(599).TrimEnd(); break;
+	case EMythSelectList::Repair: Title = FMythRoClientTables::Message(812).TrimEnd(); break;
 	}
 	if (SelectTitle)
 	{
@@ -139,6 +140,7 @@ void UMythRoHUDWidget::RefreshSelectList()
 				break;
 			case EMythSelectList::Arrow:
 			case EMythSelectList::Produce:
+			case EMythSelectList::Repair:
 				Label = FMythRoClientTables::ItemName(Value);
 				Icon = FMythRoClientTables::ItemIcon(Value);
 				break;

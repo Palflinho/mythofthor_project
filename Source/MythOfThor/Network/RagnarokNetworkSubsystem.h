@@ -540,7 +540,8 @@ enum class EMythSelectList : uint8
 	Produce,    // ZC_MAKABLEITEMLIST 0x018d -> CZ_REQMAKINGITEM 0x018e
 	Autospell,  // ZC_AUTOSPELLLIST 0x0afb -> CZ_SELECTAUTOSPELL 0x01ce
 	Refine,     // ZC_NOTIFY_WEAPONITEMLIST 0x0221 -> CZ_REQ_WEAPONREFINE 0x0222
-	PetEgg      // ZC_PETEGG_LIST 0x01a6 -> CZ_SELECT_PETEGG 0x01a7 (Incubadora)
+	PetEgg,     // ZC_PETEGG_LIST 0x01a6 -> CZ_SELECT_PETEGG 0x01a7 (Incubadora)
+	Repair      // ZC_REPAIRITEMLIST 0x0b65 -> CZ_REQ_ITEMREPAIR2 0x0b66 (Reparar arma; Values = ID do item)
 };
 
 /** Lojas de NPC (clif.cpp): 0x00c4 escolher comprar/vender, 0x0b77 lista de compra, 0x00c7 lista de venda, 0x00ca/0x00cb resultado. */
@@ -1169,6 +1170,7 @@ private:
 	/** Listas de escolha e as respostas delas (RagnarokNetworkSelectLists.cpp). */
 	void HandleSelectListPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	int32 PendingCardIndex = -1;
+	TArray<TArray<uint8>> RepairEntries; // entradas de 24 bytes do ZC_REPAIRITEMLIST, devolvidas como vieram
 	void HandlePetPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	int64 PetGID = 0;
 	FRoPetInfo PetInfo;

@@ -1040,6 +1040,7 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x0abe: // ZC_WARPLIST (Portal)
 			case 0x0177: // ZC_ITEMIDENTIFY_LIST (Lupa)
 			case 0x01a6: // ZC_PETEGG_LIST (Incubadora)
+			case 0x0b65: // ZC_REPAIRITEMLIST (Reparar arma)
 			case 0x017b: // ZC_ITEMCOMPOSITION_LIST (carta)
 			case 0x01ad: // ZC_MAKINGARROW_LIST
 			case 0x018d: // ZC_MAKABLEITEMLIST (Forjar, Farmacologia)
@@ -1148,6 +1149,15 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 					bPetAutoFeed = *reinterpret_cast<const uint32*>(PacketData + 6) != 0;
 					OnPet.Broadcast(1);
 				}
+				break;
+			case 0x01fe: // ZC_ACK_ITEMREPAIR <indice>.W <falhou>.B (msgs 813/814)
+				if (ActualLen >= 5)
+				{
+					OnChatMessage.Broadcast(TEXT(""), FMythRoClientTables::Message(PacketData[4] ? 814 : 813).TrimEnd(), PacketData[4] ? TEXT("#FF8080") : TEXT("#80FF80"));
+				}
+				break;
+			case 0x02bb: // ZC_EQUIPITEM_DAMAGED <local>.W <conta>.L (msg 699)
+				OnChatMessage.Broadcast(TEXT(""), FMythRoClientTables::Message(699).TrimEnd(), TEXT("#FF8080"));
 				break;
 			case 0x0bae: // ZC_ACK_TAKEOFF_EQUIP_ALL <falhou>.B: os itens voltam pela lista normal de desequipar
 				break;

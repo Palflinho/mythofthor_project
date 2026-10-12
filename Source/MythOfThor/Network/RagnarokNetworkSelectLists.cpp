@@ -54,6 +54,15 @@ void URagnarokNetworkSubsystem::HandleSelectListPacket(const uint8* PacketData, 
 		}
 		Emit(PacketID == 0x0177 ? EMythSelectList::Identify : EMythSelectList::Card);
 		break;
+	case 0x0b65: // ZC_REPAIRITEMLIST <len>.W { <indice>.W <item>.L <cartas>.16B <refino>.B <grau>.B }* (24 bytes)
+		RepairEntries.Reset();
+		for (int32 Off = 4; Off + 24 <= PacketSize; Off += 24)
+		{
+			RepairEntries.Emplace(PacketData + Off, 24);
+			Values.Add(ReadAt<int32>(PacketData, Off + 2));
+		}
+		Emit(EMythSelectList::Repair);
+		break;
 	case 0x01a6: // ZC_PETEGG_LIST <len>.W { <indice>.W }* (ovos para chocar)
 		for (int32 Off = 4; Off + 2 <= PacketSize; Off += 2)
 		{
@@ -202,6 +211,16 @@ bool URagnarokNetworkSubsystem::SendSelectListChoice(EMythSelectList Type, int32
 		Put16(0x0222);
 		Put32(Value);
 		break;
+	case EMythSelectList::Repair: // CZ_REQ_ITEMREPAIR2 <a entrada da lista>.24B (o indice e do inventario de quem sera consertado)
+	{
+		if (bCancel) { RepairEntries.Reset(); return true; }
+		const int32 Found = RepairEntries.IndexOfByPredicate([Value](const TArray<uint8>& E) { return ReadAt<int32>(E.GetData(), 2) == Value; });
+		if (Found == INDEX_NONE) { return true; }
+		Put16(0x0b66);
+		Packet.Append(RepairEntries[Found]);
+		RepairEntries.Reset();
+		break;
+	}
 	case EMythSelectList::PetEgg: // CZ_SELECT_PETEGG <indice>.W
 		if (bCancel) { return true; }
 		Put16(0x01a7);
