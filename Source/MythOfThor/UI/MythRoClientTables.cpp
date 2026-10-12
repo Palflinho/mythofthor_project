@@ -203,3 +203,30 @@ const TArray<FString>* FMythRoClientTables::SkillDescription(int32 SkillID)
 	const FRoTableEntry* E = RoSkills().Find(SkillID);
 	return E && E->Desc.Num() > 0 ? &E->Desc : nullptr;
 }
+
+FString FMythRoClientTables::Message(int32 Index)
+{
+	// msgstringtable do cliente LATAM (Config/messages.json, tools/extract_client_tables.py): "<indice>" -> {"text": ...}
+	static TMap<int32, FString> Messages;
+	static bool bLoaded = false;
+	if (!bLoaded)
+	{
+		bLoaded = true;
+		FString Text;
+		TSharedPtr<FJsonObject> Root;
+		if (FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("messages.json")))
+			&& FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) && Root.IsValid())
+		{
+			for (const TPair<FString, TSharedPtr<FJsonValue>>& P : Root->Values)
+			{
+				const TSharedPtr<FJsonObject>* Obj = nullptr;
+				if (P.Key.IsNumeric() && P.Value->TryGetObject(Obj))
+				{
+					Messages.Add(FCString::Atoi(*P.Key), (*Obj)->GetStringField(TEXT("text")));
+				}
+			}
+		}
+	}
+	const FString* Found = Messages.Find(Index);
+	return Found ? *Found : FString();
+}

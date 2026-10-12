@@ -1,5 +1,6 @@
 #include "RagnarokNetworkSubsystem.h"
 #include "RagnarokPacketDatabase.h"
+#include "UI/MythRoClientTables.h"
 #include "Common/TcpSocketBuilder.h"
 #include "Dom/JsonObject.h"
 #include "Misc/FileHelper.h"
@@ -1099,6 +1100,53 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 				}
 				break;
 			case 0x0bae: // ZC_ACK_TAKEOFF_EQUIP_ALL <falhou>.B: os itens voltam pela lista normal de desequipar
+				break;
+			case 0x013b: // ZC_ACTION_FAILURE <tipo>.W: 0 sem flechas, 1 peso (ataque), 2 peso (skill), 3 flecha equipada (msg 242..245)
+				if (ActualLen >= 4)
+				{
+					const uint16 Type = *reinterpret_cast<const uint16*>(PacketData + 2);
+					const FString Msg = FMythRoClientTables::Message(242 + FMath::Min<int32>(Type, 3));
+					if (!Msg.IsEmpty())
+					{
+						OnChatMessage.Broadcast(TEXT(""), Msg, Type == 3 ? TEXT("#FFFFFF") : TEXT("#FF6060"));
+					}
+				}
+				break;
+			case 0x013c: // ZC_EQUIP_ARROW <indice>.W: municao equipada (o rAthena nao manda o ZC_REQ_WEAR_EQUIP_ACK para ela)
+				if (ActualLen >= 4)
+				{
+					const uint16 ArrowIndex = *reinterpret_cast<const uint16*>(PacketData + 2);
+					for (FRagnarokInventoryItem& Item : InventoryItems)
+					{
+						if (Item.bIsEquipped && (static_cast<uint32>(Item.EquipLocation) & 0x8000u) != 0 && Item.Index != ArrowIndex)
+						{
+							Item.bIsEquipped = false; // a municao anterior volta para a mochila
+							Item.WearState = 0;
+						}
+						if (Item.Index == ArrowIndex)
+						{
+							Item.bIsEquipped = true;
+							Item.WearState = 0x8000;
+							Item.EquipLocation = 0x8000;
+						}
+					}
+					OnEquipResult.Broadcast(ArrowIndex, 0x8000, true);
+					OnInventory.Broadcast(InventoryItems);
+				}
+				break;
+			case 0x011e: // ZC_ACK_REMEMBER_WARPPOINT <erro>.B: 0 ponto salvo (217), 1 nivel baixo (214), 2 sem Portal (216)
+				if (ActualLen >= 3)
+				{
+					static const int32 MemoMsg[3] = { 217, 214, 216 };
+					const uint8 Err = FMath::Min<uint8>(PacketData[2], 2);
+					OnChatMessage.Broadcast(TEXT(""), FMythRoClientTables::Message(MemoMsg[Err]), Err == 0 ? TEXT("#00FFFF") : TEXT("#FF6060"));
+				}
+				break;
+			case 0x013a: // ZC_ATTACK_RANGE <alcance>.W: so guardado (o rAthena aproxima o personagem sozinho)
+				if (ActualLen >= 4)
+				{
+					SelfAttackRange = *reinterpret_cast<const uint16*>(PacketData + 2);
+				}
 				break;
 			case 0x0977: // ZC_HP_INFO <id>.L <pv>.L <pv max>.L
 				if (ActualLen >= 14)
@@ -2272,12 +2320,13 @@ void URagnarokNetworkSubsystem::HandleInventoryList(const uint8* PacketData, int
 			Item.ItemID = *reinterpret_cast<const uint32*>(Ptr + 2);
 			Item.Type = Ptr[6];
 			Item.Amount = *reinterpret_cast<const int16*>(Ptr + 7);
-			// Municao (tipo 10) vem nesta lista; WearState (+9) diz se esta equipada (0x8000), senao o destino e 0x8000
+			// Municao (tipo 10) vem nesta lista. O WearState (+9) daqui e o lugar onde o item PODE ser equipado (clif_item_normal:
+			// id->equip, 0x8000 em toda flecha), nao se esta equipado: a municao equipada chega depois pelo ZC_EQUIP_ARROW (0x013c)
 			const uint32 Wear = *reinterpret_cast<const uint32*>(Ptr + 9);
-			Item.WearState = Wear;
+			Item.WearState = 0;
 			Item.Location = Item.Type == 10 ? 0x8000 : 0;
 			Item.EquipLocation = Wear != 0 ? Wear : Item.Location;
-			Item.bIsEquipped = Wear != 0;
+			Item.bIsEquipped = false;
 
 			Item.Slot1 = *reinterpret_cast<const uint32*>(Ptr + 13);
 			Item.Slot2 = *reinterpret_cast<const uint32*>(Ptr + 17);

@@ -317,8 +317,7 @@ void UMythRoHUDWidget::UpdateEquipPreview()
 	if (bShow && Sprite->GetLoadVersion() != EquipPreviewVersion)
 	{
 		EquipPreviewVersion = Sprite->GetLoadVersion();
-		EquipPreviewTex = Sprite->RenderPortrait(static_cast<int32>(EqPreviewW), 130, 114);
-		EquipPreview->SetBrush(RoWinBrush(EquipPreviewTex, FVector2D(EqPreviewW, 130.f) * UIScale));
+		EquipPreviewTex = Sprite->RenderPortrait(static_cast<int32>(EqPreviewW), 130, 114);		EquipPreview->SetBrush(RoWinBrush(EquipPreviewTex, FVector2D(EqPreviewW, 130.f) * UIScale));
 	}
 	EquipPreview->SetVisibility(bShow && EquipPreviewTex ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
 }

@@ -991,6 +991,8 @@ private:
 	uint32 SavedAccountID;
 	int32 SelfOption = 0;
 	bool bShowEquip = false;
+	/** Alcance de ataque do proprio personagem em celulas (ZC_ATTACK_RANGE): 1 corpo a corpo, 9+ arco. */
+	int32 SelfAttackRange = 1;
 	TMap<int64, FIntPoint> GroundItemSubs;
 	uint32 SavedLoginID1;
 	uint32 SavedLoginID2;

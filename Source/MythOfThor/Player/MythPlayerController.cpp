@@ -1949,3 +1949,11 @@ void AMythPlayerController::MythEquip(int32 ItemID)
 		}
 	}
 }
+
+void AMythPlayerController::MythTakeOffAll()
+{
+	if (URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr)
+	{
+		Net->SendTakeOffAll(0x0003FFu | 0x8000u); // equipamento da aba Geral e a municao
+	}
+}
