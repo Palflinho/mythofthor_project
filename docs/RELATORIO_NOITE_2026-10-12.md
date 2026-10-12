@@ -81,3 +81,6 @@ Contas de teste mexidas: ClaudeTester voltou ao estado de antes (Caçador 99/10)
 - **Loja de jogador (Vending)** (`f219741`): abrir a loja com os itens do carrinho, placa sobre a cabeça, comprar na loja de
   outro jogador. Testado com dois clientes ao mesmo tempo (ClaudeTester comprou 2 Poções Vermelhas do ClaudeTester2).
   Observação: o servidor não deixa abrir loja perto de NPCs (aparece a mensagem do cliente para isso).
+- **Aba Título do Equipamento** (`4d887c9`): títulos das conquistas (nomes do LATAM, ligação conquista → título do banco do
+  servidor); usar e tirar. Testado com "Jovem". Também: menus de NPC mostravam no máximo 10 opções; agora até 24.
+- **Mapa-múndi** (`9ce93a7`, Ctrl+`): imagem do cliente, mapa atual em vermelho, nome sob o mouse, clique abre a rota na Navegação.

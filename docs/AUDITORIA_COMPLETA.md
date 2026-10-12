@@ -115,7 +115,7 @@ Prioridade: **P0** = laço básico do jogo (quem joga 1 hora precisa), **P1** = 
 | **Sons ambientes do mapa** (RSW) | ⬜ | P1 | só a BGM por mapa existe |
 | BGM por mapa, trocas de volume | 🟡 | P0 | |
 | Clima por mapa (neve, chuva, sakura) | 🟡 | P1 | já no backlog do HD-2D |
-| Mapa-múndi e posição no minimapa | 🟡 | P1 | mapa-múndi gráfico falta |
+| Mapa-múndi e posição no minimapa | 🟡 | P1 | mapa-múndi gráfico (Ctrl+`) em 2026-10-13 (`9ce93a7`): mapa atual marcado, nome sob o mouse, clique abre a rota; faltam membros do grupo no mapa |
 | Castelos e Guerra do Emperium (WoE), emblemas nos castelos | ⬜ | P2 | |
 | Eventos sazonais (natal, verão...) | ➖ | P2 | |
 | Quests (menu e rastreador) | 🟡 | P0 | |
@@ -253,7 +253,7 @@ pet, guilda) para completar a lista.
 | Contador e alvo de PvP clássico; WoE com comportamento do cliente 2008 | ⬜ | P2 |
 | Lightmaps, névoa do RSW (perto/longe), modelos animados do mapa, modelos 3D Granny de NPC | 🟡 / ⬜ | P1 |
 | Carregamento: mapa coberto de preto, 1º quadro pré-aquecido e fade | ⬜ | P1 |
-| Mapa-múndi clássico com jogadores/grupo e prévias do minimapa; marcadores de NPC/guilda no minimapa | ⬜ | P1 |
+| Mapa-múndi clássico com jogadores/grupo e prévias do minimapa; marcadores de NPC/guilda no minimapa | 🟡 | P1 |
 | Journal de missão com descrição, progresso de caçada e limite de tempo | 🟡 | P1 |
 | Barra de atalhos de várias linhas com teclas clássicas; `/bm` (Battle Mode), digitar direto, F12 troca a linha | 🟡 | P1 |
 | Console (janela de log de sistema) e medidor de FPS | ⬜ | P2 |
