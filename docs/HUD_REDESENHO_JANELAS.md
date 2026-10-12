@@ -71,3 +71,30 @@ barra de HP de 5 px de altura, 8 px de margem e contorno de 1 px; sem barra de S
 
 **Onde olhar para o resto:** o goro tem `ui/skill*window.go` (a lista dele ficou truncada), `making_item_window`, `making_arrow_window`, `auto_spell_window`, `cart_window`, `guild_window`, `pet_*`, `homunculus_*`, `mercenary_*`, `mail_window`, `minimap`, `monster_info_window` e `npc_cutins`: servem para as janelas funcionais que ainda não existem (Etapa C da auditoria).
 Limite honesto: **nem goro nem nostalro reproduzem as janelas modernas do LATAM** (abas Title/Damage, ilustração na árvore de skills, Navigation com filtro); para essas só temos os prints e as peças de arte. O roBrowser (GPL; só olhar medidas, não copiar código) também recria as janelas originais, mas as de 2008-2012.
+
+## Medidas tiradas do roBrowserLegacy (GPL: só números, nada de código; CSS em `src/UI/Components/*`, lido em 2026-10-12)
+
+O roBrowser tem **versões modernas** das janelas (EquipmentV4, SkillListV2, PartyFriendsV1) e usa os mesmos bitmaps do cliente. O CSS dele não cita os nomes dos bmp (a arte vem do JS), então: números daqui, arte do nosso GRF.
+
+**Equipamento V4 (`EquipmentV4.css`):** janela **280** de largura; barra de título 17; **abas de 15 de altura e 60 de largura** (General, Special, Title, Damage); painel de 150; conteúdo **280 × 130**; colunas 1 e 3 de **115 × 24**;
+botão do item 24 × 24 e texto de 80 × 24 (linha 12); **munição absoluta a 30 px do topo**, texto de 45; **carrinho 36 × 36 em (14, 65)** e **"remover opção" (Peco/falcão) 36 × 36 em (12, 90)** (ou seja, **no meio da janela, abaixo da prévia**, como nos prints do LATAM);
+rodapé de 20: caixas "ver status" (9 × 14), "Show equip" e "show costume" (10 × 12) e botões **switch equip e remove equip de 40 × 20**; aba **Title**: lista 280 × 125 com 8 de margem; aba **Damage**: seletor de skin 280 de largura, opções 64 × 92 com ícone 36 × 36.
+
+**Habilidades V2 (`SkillListV2.css`):** conteúdo 270 × 200 com margem 5 (a versão larga do LATAM tem corpo de 375 de altura); **abas verticais de 18 de largura** coladas à esquerda (`left −23`); **células da grade 28 × 28 com borda tracejada**, margem 15/17, linha com `padding-left 40`;
+nome com 70 de largura; setas de nível 11 × 11 (`currentUp/currentDown`); botão de subir nível 24 × 24; **rodapé de 27** com texto à esquerda e botões **Apply (right 70) e Reset (right 20), 42 × 20**; ícone de expandir 13 × 13; botão de level up do job 43 × 43 no canto.
+
+**Grupo/Amigos V1 (`PartyFriendsV1.css`):** conteúdo **240 × 120** com rolagem; barra de título 17 com as duas abas Party/Friend (32 × 13); **faixa de ferramentas de 20 de altura com botões 26 × 20**; **rodapé de 21** com a troca Friend/Party à esquerda, **alça de redimensionar 13 × 13 no canto** e um contador de membros (caixa 48 × 19);
+**cartão de membro 38 de altura**, padding 3 × 5; **ícone da classe 24 × 24 com moldura 28 × 28 (−2, −2)**; **coroa do líder 25 × 25 a −14 do topo**; linha 2 de 12 com **barra de HP 75 × 5** (borda 1) e ícone de status 26 × 12; nome até 100 px, mapa até 80 px (fonte 10), **nível em laranja (11 px)**.
+
+**Menu Esc (`Escape.css`):** janela **280** de largura, altura automática; título a 18 px da esquerda; contêiner de **220 de largura com padding 20 30 6 30**; **botões 221 × 20 com 3 px entre eles** (equivale ao 252 × 200 do goro dentro da arte do LATAM).
+
+**Navegação (`Navigation.css`):** o roBrowser tem layout próprio e simples (300 × 300, mapa de 280 × 230, busca por lista suspensa), **não** a janela moderna do LATAM; serve só para o tamanho do mapa (280 × 230) e do campo de busca (altura 20). Para a janela do print continuam valendo os prints e a arte `navigation_interface3`.
+
+## Os outros projetos, resumo
+
+| Projeto | Licença | Tem as janelas modernas? | Para que serve |
+|---|---|---|---|
+| roBrowserLegacy (MrAntares) | GPL | **Sim**: Equipment V4, SkillList V2, PartyFriends V1, Bank, Rodex, Reputation, Achievement, Navigation (próprio), SwitchEquip, Roulette... | **medidas e comportamento** de quase todas as nossas janelas; a pasta `src/UI/Components` lista ~110 componentes |
+| goro (kivutar) | MIT | em parte (tema próprio) | medidas das janelas clássicas, janelas funcionais (carrinho, guilda, pets...) e a lista de lacunas |
+| nostalro-client | Apache-2.0 | em parte (tema próprio) | **fluxos** (fabricação, vending, cliques, estados) |
+| korangar, open-midgard | (a conferir) | a verificar | ainda não lidos; já listados na nossa memória como referências |
