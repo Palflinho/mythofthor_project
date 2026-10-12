@@ -71,7 +71,7 @@ Prioridade: **P0** = laço básico do jogo (quem joga 1 hora precisa), **P1** = 
 
 | Função | Estado | Prio | Notas |
 |---|---|---|---|
-| **Pets:** capturar (0x01a0/0x01a2), ovo, janela do pet, alimentar, performance, fome, intimidade | ⬜ | P1 | zero código; sprite do pet seguindo o dono também não existe |
+| **Pets:** capturar (0x01a0/0x01a2), ovo, janela do pet, alimentar, performance, fome, intimidade | 🟡 | P1 | df0a8dc: captura (mira), Incubadora, Alt+J com fome/lealdade, alimentar, brincar, voltar ao ovo, renomear, autoalimentar; o pet aparece e segue (sprite de monstro). Faltam: animação de "brincar", falas da pettalktable, sprite com acessório, evolução |
 | **Homúnculo:** criar, janela, alimentar, skills, evolução | ⬜ | P1 | zero código |
 | **Mercenário:** contratar, janela, skills | ⬜ | P2 | |
 | Carrinho: sprite | ✅ | – | |
@@ -89,7 +89,7 @@ Prioridade: **P0** = laço básico do jogo (quem joga 1 hora precisa), **P1** = 
 | **Munição** | 🟡 | P0 | munição real pelo 0x013c e aviso de falta (2026-10-13); falta troca automática ao acabar |
 | Cartas: encaixar (0x017a/0x017d) e nome composto ("Espada [Soldado]") | 🟡 | P0 | encaixar feito (0x017a/0x017b/0x017c/0x017d, testado); falta o nome composto |
 | Identificar item (0x0177 lista), Refinar (Oridecon), Reparar | 🟡 | P0 | Lupa/Avaliação de item e Refinar arma (skill) em 2026-10-13; falta Reparar e o refino do NPC |
-| Itens de ovo/pet, itens de invocação (Bolsa) | ⬜ | P1 | |
+| Itens de ovo/pet, itens de invocação (Bolsa) | 🟡 | P1 | ovo e Incubadora feitos (df0a8dc) |
 | Itens de evento / cash / disfarces | ➖ | P2 | ~96 itens sem recurso no cliente |
 | Dica do item com cores, slots e peso | 🟡 | P0 | |
 | Armazém (Kafra) | 🟡 | P0 | |

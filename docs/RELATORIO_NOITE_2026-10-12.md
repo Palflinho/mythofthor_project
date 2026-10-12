@@ -70,7 +70,7 @@ Contas de teste mexidas: ClaudeTester voltou ao estado de antes (Caçador 99/10)
    `titletable_ptbr.lub`. Não fiz: pouco uso no começo do jogo. Diga se quer agora.
 2. **Procura de grupo** (2 primeiros botões da barra do Grupo) e **Fonte de dano**: botões no lugar, ainda sem função.
 3. **NPCs no mapa da Navegação**: os nomes no arquivo do cliente vêm codificados e não achei a tabela; só mapas e monstros por enquanto.
-4. **Janelas funcionais que ainda faltam**: pets, homúnculo, Reparar arma (guilda e mapa-múndi feitos depois; ver abaixo). Na guilda faltam as abas Cargos, Habilidades e Expulsos, o emblema e alianças.
+4. **Janelas funcionais que ainda faltam**: homúnculo, Reparar arma (guilda, mapa-múndi e mascote feitos depois; ver abaixo). Na guilda faltam as abas Cargos, Habilidades e Expulsos, o emblema e alianças.
 5. **Arte do LATAM** no Carrinho e no Armazém (hoje as duas usam listas simples, funcionais).
 6. **Rastreador de missão** (resolvido, não era o cliente): "Job Change to Swordman" é a missão 1014, que só o script
    pré-renovação cria (`npc/pre-re/jobs/1-1/swordman.txt`). O ClaudeTester2 começou a troca quando o servidor ainda era
@@ -91,3 +91,8 @@ Contas de teste mexidas: ClaudeTester voltou ao estado de antes (Caçador 99/10)
   aceitar, sair e expulsar, com as mensagens do LATAM dos dois lados ("Oferta aceita", "ClaudeTester2 foi expulso do Clã.").
   Detalhe do servidor: quem acabou de entrar não recebe o pacote "você é de um clã"; o cliente pega o clã das informações.
   Contas: ClaudeTester agora é líder do clã "Midgard" (o ClaudeTester2 foi expulso no teste).
+- **Mascote** (`df0a8dc`, Alt+J): captura com a mira, Incubadora (lista de ovos), Janela de Mascote com retrato, fome e lealdade em
+  palavras do LATAM, Alimentar, Brincar, Voltar para o ovo, Desequipar, Renomear e Autoalimentação. Testado: chocar, alimentar,
+  renomear ("Nome alterado para Bolinha."), voltar ao ovo, captura (falhou por sorte duas vezes, o fluxo funciona).
+  Ainda faltam a animação de brincar, as falas do mascote, o sprite com acessório e a evolução.
+  O "Job Change to Swordman" que ficava na tela era resto do pré-renovação (ver item 6).
