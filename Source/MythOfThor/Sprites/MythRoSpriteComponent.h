@@ -247,6 +247,8 @@ public:
 	 */
 	void SetFacingRoDir(uint8 RoDir);
 	uint8 GetFacingRoDir() const;
+	/** Direcao atual do sprite (0 sul .. 7 sudeste, em relacao a camera): o falcao acompanha. */
+	uint8 GetSpriteDirection() const { return static_cast<uint8>(Direction); }
 
 	/** Cabeca parada ("doridori", docs/ref/03 4.3): 0 frente, 1 virada a direita (CW), 2 a esquerda (CCW). */
 	void SetHeadDir(uint8 NewHeadDir);

@@ -25,7 +25,7 @@ namespace
 	const FLinearColor NvText(0.12f, 0.12f, 0.12f);
 	const FLinearColor NvLink(0.12f, 0.3f, 0.65f);
 	const FLinearColor NvGray(0.55f, 0.55f, 0.55f);
-	const FLinearColor ColSystem(0.55f, 0.95f, 0.55f);
+	const FLinearColor NvSystem(0.55f, 0.95f, 0.55f);
 	constexpr float NvW = 292.f;
 	constexpr float NvRowH = 17.f;
 	constexpr int32 NvResults = 12;
@@ -276,7 +276,7 @@ void UMythRoHUDWidget::StartNaviAuto()
 	if (bNaviAuto)
 	{
 		bNaviAuto = false;
-		AddChatLine(TEXT("Navegação automática cancelada."), ColSystem);
+		AddChatLine(TEXT("Navegação automática cancelada."), NvSystem);
 		return;
 	}
 	if (NaviSteps.IsEmpty())
@@ -291,7 +291,7 @@ void UMythRoHUDWidget::StartNaviAuto()
 	NaviAutoDest = NaviSelected;
 	NaviAutoTimer = 0.f;
 	NaviProbe = 0;
-	AddChatLine(FString::Printf(TEXT("Navegação automática: %s."), *NaviLabelShort(NaviAutoDest)), ColSystem);
+	AddChatLine(FString::Printf(TEXT("Navegação automática: %s."), *NaviLabelShort(NaviAutoDest)), NvSystem);
 }
 
 void UMythRoHUDWidget::TickNaviAuto(float DeltaTime)
@@ -317,7 +317,7 @@ void UMythRoHUDWidget::TickNaviAuto(float DeltaTime)
 	if (CurrentMapId.ToLower() == NaviAutoDest)
 	{
 		bNaviAuto = false;
-		AddChatLine(TEXT("Você chegou ao destino."), ColSystem);
+		AddChatLine(TEXT("Você chegou ao destino."), NvSystem);
 		return;
 	}
 	NaviAutoTimer -= DeltaTime;
@@ -333,7 +333,7 @@ void UMythRoHUDWidget::TickNaviAuto(float DeltaTime)
 		if (NaviSteps.IsEmpty())
 		{
 			bNaviAuto = false;
-			AddChatLine(TEXT("Navegação automática: sem caminho a partir daqui."), ColSystem);
+			AddChatLine(TEXT("Navegação automática: sem caminho a partir daqui."), NvSystem);
 			return;
 		}
 	}
@@ -413,7 +413,7 @@ void UMythRoHUDWidget::TickNaviAuto(float DeltaTime)
 			}
 		}
 		bNaviAuto = false;
-		AddChatLine(FString::Printf(TEXT("Você chegou ao ponto da rota (%d, %d). Continue por aqui até %s."), Goal.X, Goal.Y, *NaviLabelShort(NaviSteps[0].To)), ColSystem);
+		AddChatLine(FString::Printf(TEXT("Você chegou ao ponto da rota (%d, %d). Continue por aqui até %s."), Goal.X, Goal.Y, *NaviLabelShort(NaviSteps[0].To)), NvSystem);
 		return;
 	}
 	if (Target == Goal && NaviLastTarget == Goal && Now - NaviLastSend < 4.f)

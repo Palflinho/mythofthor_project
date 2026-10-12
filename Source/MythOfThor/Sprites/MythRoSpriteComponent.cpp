@@ -628,7 +628,7 @@ void UMythRoSpriteComponent::SetEffectOption(int32 Option, bool bSelf)
 	bStatusHidden = bConcealed && !bSelf;
 	bStatusDim = bConcealed && bSelf;
 	SetVisibility(!bStatusHidden, true);
-	SetStatusAttachment(TEXT("falcon"), TEXT("매"), (Option & 0x10) != 0 && !bStatusHidden, false, 55.f, 55.f); // o falcao do Cacador acompanha ao lado
+	SetStatusAttachment(TEXT("falcon"), TEXT("매"), (Option & 0x10) != 0 && !bStatusHidden, true, 0.f, 12.f); // o falcao do Cacador fica sobre a cabeca e vira com o dono
 	RecomputeStatusTint();
 }
 

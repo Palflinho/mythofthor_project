@@ -191,7 +191,16 @@ void AMythSprEffect::Tick(float DeltaSeconds)
 		}
 		SetActorLocation(AMythStrEffect::FeetOf(FollowActor.Get()) + FVector(0.f, 0.f, HeightOffset) + CamRight * SideOffset);
 	}
-	const FRoActAction& Act = D->Act.Actions[0];
+	// Falcao: uma acao por direcao do dono (0..7); os demais efeitos usam so a acao 0
+	int32 ActionIdx = 0;
+	if (bMasked && FollowActor.IsValid())
+	{
+		if (const UMythRoSpriteComponent* OwnerSprite = FollowActor->FindComponentByClass<UMythRoSpriteComponent>())
+		{
+			ActionIdx = FMath::Min<int32>(OwnerSprite->GetSpriteDirection(), D->Act.Actions.Num() - 1);
+		}
+	}
+	const FRoActAction& Act = D->Act.Actions[ActionIdx];
 	const int32 Count = Act.Frames.Num();
 	const int32 Step = FMath::FloorToInt(Age * 1000.f / FMath::Max(Act.IntervalMs, 1.f));
 	const FRoActFrame& Frame = Act.Frames[bLoop ? Step % Count : FMath::Min(Step, Count - 1)];
