@@ -150,6 +150,10 @@ public:
 	void MythOptions(int32 Tab);
 	UFUNCTION(Exec) void MythFriendReply(int32 Accept);
 	UFUNCTION(Exec) void MythEquip(int32 ItemID);
+	/** Teste: escolhe a linha Row da lista de escolha aberta (Portal, Lupa, carta...); Row < 0 cancela. */
+	UFUNCTION(Exec) void MythSelect(int32 Row) { if (HudWidget) { HudWidget->SelectListChoose(Row); } }
+	/** Teste: usa o primeiro item com esse ID (carta: pede a lista de equipamentos, como o duplo clique). */
+	UFUNCTION(Exec) void MythUseItem(int32 ItemID);
 	/** Teste: o botao "tirar tudo" da janela de Equipamento (aba Geral). */
 	UFUNCTION(Exec) void MythTakeOffAll();
 	/** Teste: abre/fecha o carrinho; com Row >= 0 move o item dessa linha (ToCart 1: mochila -> carrinho). */

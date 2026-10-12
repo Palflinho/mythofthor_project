@@ -1950,6 +1950,21 @@ void AMythPlayerController::MythEquip(int32 ItemID)
 	}
 }
 
+void AMythPlayerController::MythUseItem(int32 ItemID)
+{
+	if (URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr)
+	{
+		for (const FRagnarokInventoryItem& Item : Net->GetInventoryItems())
+		{
+			if (static_cast<int32>(Item.ItemID) == ItemID)
+			{
+				if (Item.Type == 6) { Net->SendCardListRequest(Item.Index); } else { Net->UseItem(Item.Index); }
+				return;
+			}
+		}
+	}
+}
+
 void AMythPlayerController::MythTakeOffAll()
 {
 	if (URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr)

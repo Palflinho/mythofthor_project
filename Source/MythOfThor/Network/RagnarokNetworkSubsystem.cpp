@@ -1012,6 +1012,18 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x012c: // ZC_ACK_ADDITEM_TO_CART
 				HandleCartPacket(PacketData, ActualLen, PacketID);
 				break;
+			case 0x0abe: // ZC_WARPLIST (Portal)
+			case 0x0177: // ZC_ITEMIDENTIFY_LIST (Lupa)
+			case 0x017b: // ZC_ITEMCOMPOSITION_LIST (carta)
+			case 0x01ad: // ZC_MAKINGARROW_LIST
+			case 0x018d: // ZC_MAKABLEITEMLIST (Forjar, Farmacologia)
+			case 0x0afb: // ZC_AUTOSPELLLIST
+			case 0x0221: // ZC_NOTIFY_WEAPONITEMLIST (Refinar arma)
+			case 0x0179: // ZC_ACK_ITEMIDENTIFY
+			case 0x017d: // ZC_ACK_ITEMCOMPOSITION
+			case 0x0223: // ZC_ACK_WEAPONREFINE
+				HandleSelectListPacket(PacketData, ActualLen, PacketID);
+				break;
 			case 0x00d6: // ZC_ACK_CREATE_CHATROOM
 			case 0x00d7: // ZC_ROOM_NEWENTRY
 			case 0x00d8: // ZC_DESTROY_ROOM

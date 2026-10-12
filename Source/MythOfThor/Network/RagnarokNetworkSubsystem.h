@@ -460,6 +460,24 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStorageOpen, const TArray<FRagnar
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStorageChanged, const TArray<FRagnarokInventoryItem>&, Items);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnStorageClose);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCartChanged);
+/**
+ * Listas de escolha que o servidor abre depois de uma skill ou item (EMythSelectList): destinos do Portal, itens para
+ * identificar, equipamentos para a carta, flechas, itens para fabricar, magias do Autoconjurar e armas para refinar.
+ * Values: indice na mochila, ID de item ou de skill, conforme o tipo; Names: so os mapas do Portal.
+ */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnSelectList, uint8, ListType, const TArray<int32>&, Values, const TArray<FString>&, Names);
+
+/** Tipos de lista de escolha (FOnSelectList). */
+enum class EMythSelectList : uint8
+{
+	Warp,       // ZC_WARPLIST 0x0abe -> CZ_SELECT_WARPPOINT 0x011b
+	Identify,   // ZC_ITEMIDENTIFY_LIST 0x0177 -> CZ_REQ_ITEMIDENTIFY 0x0178
+	Card,       // ZC_ITEMCOMPOSITION_LIST 0x017b -> CZ_REQ_ITEMCOMPOSITION 0x017c
+	Arrow,      // ZC_MAKINGARROW_LIST 0x01ad -> CZ_REQ_MAKINGARROW 0x01ae
+	Produce,    // ZC_MAKABLEITEMLIST 0x018d -> CZ_REQMAKINGITEM 0x018e
+	Autospell,  // ZC_AUTOSPELLLIST 0x0afb -> CZ_SELECTAUTOSPELL 0x01ce
+	Refine      // ZC_NOTIFY_WEAPONITEMLIST 0x0221 -> CZ_REQ_WEAPONREFINE 0x0222
+};
 
 /** Lojas de NPC (clif.cpp): 0x00c4 escolher comprar/vender, 0x0b77 lista de compra, 0x00c7 lista de venda, 0x00ca/0x00cb resultado. */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnShopDealType, int64, NpcID);
@@ -569,6 +587,12 @@ public:
 	/** Armazem: mover item da mochila (bToStorage) ou do armazem para a mochila; fechar. IDs da tabela embaralhada (0x0364, 0x0365) e 0x0193. */
 	bool SendStorageMove(bool bToStorage, int32 Index, int32 Amount);
 	bool SendStorageClose();
+	/** Resposta a uma lista de escolha (EMythSelectList). Value: o valor escolhido (Values da lista); Name: mapa do Portal.
+	 * bCancel: fecha sem escolher (Portal manda "cancel", Identificar manda -1; as outras so fecham). */
+	bool SendSelectListChoice(EMythSelectList Type, int32 Value, const FString& Name, bool bCancel);
+	/** Usar uma carta: pede a lista de equipamentos que a aceitam (CZ_REQ_ITEMCOMPOSITION_LIST 0x017a). */
+	bool SendCardListRequest(int32 CardIndex);
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Skill") FOnSelectList OnSelectList;
 	/** Carrinho do Mercador: mochila -> carrinho (CZ_MOVE_ITEM_FROM_BODY_TO_CART 0x0126) ou carrinho -> mochila (0x0127). */
 	bool SendCartMove(bool bToCart, int32 Index, int32 Amount);
 	const TArray<FRagnarokInventoryItem>& GetCartItems() const { return CartItems; }
@@ -1028,6 +1052,10 @@ private:
 	int32 CartMaxWeight = 8000;
 	bool bHasCart = false;
 	void HandleCartPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	/** Listas de escolha e as respostas delas (RagnarokNetworkSelectLists.cpp). */
+	void HandleSelectListPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	int32 PendingCardIndex = -1;
+	int32 SelectSkillId = 0; // skill do Portal (vai de volta no CZ_SELECT_WARPPOINT)
 
 	FString PartyName;
 	TArray<FRoFriend> Friends;

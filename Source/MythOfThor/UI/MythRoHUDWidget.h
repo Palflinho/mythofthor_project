@@ -919,6 +919,29 @@ protected:
 	int32 StoreScroll = 0;
 	int32 BagScroll = 0;
 
+	// Lista de escolha depois de skill/item (MythRoSelectList.cpp): Portal, Lupa, carta, flechas, forja, Autoconjurar, refino
+public:
+	void OpenSelectList(uint8 ListType, const TArray<int32>& Values, const TArray<FString>& Names);
+	/** Teste: escolhe a linha Row (ou cancela com Row < 0). */
+	void SelectListChoose(int32 Row);
+protected:
+	void BuildSelectListWindow();
+	void RefreshSelectList();
+	bool HandleSelectListClick(const FVector2D& ScreenPos, bool bDouble);
+	bool HandleSelectListWheel(const FVector2D& ScreenPos, float Delta);
+	UPROPERTY() TObjectPtr<UCanvasPanel> SelectWindow;
+	UPROPERTY() TObjectPtr<UTextBlock> SelectTitle;
+	UPROPERTY() TArray<TObjectPtr<UImage>> SelectRowBacks;
+	UPROPERTY() TArray<TObjectPtr<UImage>> SelectIcons;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> SelectTexts;
+	UPROPERTY() TObjectPtr<UImage> SelectOk;
+	UPROPERTY() TObjectPtr<UImage> SelectCancel;
+	uint8 SelectType = 0;
+	TArray<int32> SelectValues;
+	TArray<FString> SelectNames;
+	int32 SelectScroll = 0;
+	int32 SelectRow = 0;
+
 	// Carrinho do Mercador (MythRoCart.cpp): mesma forma do armazem, com peso e quantidade do servidor (ZC_NOTIFY_CARTITEM_COUNTINFO)
 public:
 	void ToggleCartWindow();

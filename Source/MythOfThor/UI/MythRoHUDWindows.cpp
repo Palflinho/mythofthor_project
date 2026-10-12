@@ -913,6 +913,10 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 	{
 		return true;
 	}
+	if (HandleSelectListClick(ScreenPos, false))
+	{
+		return true;
+	}
 	if (HandleCartClick(ScreenPos))
 	{
 		return true;
@@ -1147,6 +1151,10 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDoubleClick(const FGeometry& InGeome
 	{
 		return FReply::Handled();
 	}
+	if (HandleSelectListClick(Screen, true))
+	{
+		return FReply::Handled();
+	}
 	URagnarokNetworkSubsystem* Net = GetNet();
 	if (Net && ItemsWindow && ItemsWindow->IsVisible())
 	{
@@ -1188,6 +1196,10 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDoubleClick(const FGeometry& InGeome
 					else if (Item.Type == 10)
 					{
 						if (Item.bIsEquipped) { Net->UnequipItem(Item.Index); } else { Net->EquipItem(Item.Index, 0x8000); } // municao: duplo clique equipa ou desequipa
+					}
+					else if (Item.Type == 6)
+					{
+						Net->SendCardListRequest(Item.Index); // carta: o servidor manda a lista de equipamentos que a aceitam
 					}
 					else if (RoItemTabOf(Item) == 0)
 					{
@@ -1251,6 +1263,10 @@ FReply UMythRoHUDWidget::NativeOnMouseWheel(const FGeometry& InGeometry, const F
 		return FReply::Handled();
 	}
 	if (HandleShopWheel(InMouseEvent.GetScreenSpacePosition(), InMouseEvent.GetWheelDelta()))
+	{
+		return FReply::Handled();
+	}
+	if (HandleSelectListWheel(InMouseEvent.GetScreenSpacePosition(), InMouseEvent.GetWheelDelta()))
 	{
 		return FReply::Handled();
 	}
