@@ -14,3 +14,12 @@ Registrado em 2026-10-12. Só leitura estática (nada foi executado). Origem: t�
 | Servidor | o rAthena oficial (commit `d4b8e7b`, 2026-10-06) é o mais novo existente e **não tem o Druida jogável**; `PACKETVER` padrão do código é 20211103 (usamos 20250402) |
 
 Não executar o exe fora de uma VM (DLL personalizada e proxy). Uso possível no futuro: referência de dados (sprites, efeitos, textos) se um dia criarmos classes novas por conta própria; fora do escopo atual (até a transclasse).
+
+## O que o post do fórum diz (colado pelo usuário em 2026-10-12; tópico 149414, autor VictorHug0)
+
+- Release do Ragexe de 2026-01-07 **desempacotado**, com o carregamento do `clientinfo` restaurado, mais uma versão do WARP compatível. Diz que **o cliente suporta nativamente as classes novas**.
+- O tamanho do exe informado no post (15,73 MB) bate com o do nosso arquivo (16.499.200 bytes = 15,73 MiB), na versão "DX7 Fix" (editada em 12 de agosto).
+- Perfis do WARP: `rAthena_Session.yml` (normal) e `rAthena_Session_SSOMode.yml` (SSO). Nós temos o do SSO.
+- Os dois hashes de VirusTotal citados no post (`bbbf2f61...` e `7eedee17...`) **não são** o SHA-256 do nosso arquivo (`0A4FBF90...`). Provavelmente são das versões anteriores à correção DX7. O "falso positivo" é a palavra do autor, não verificado.
+- **"Database Package"** (link do Google Drive no post): provavelmente os dados do **servidor** (rAthena) para as classes novas. É a peça que diria se existe Druida jogável no servidor. **Ainda não baixado nem lido.**
+- Pedem para não abrir issue sobre configuração de GRF/data; só bugs do exe e dos diffs.
