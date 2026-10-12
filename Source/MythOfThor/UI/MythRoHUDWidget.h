@@ -334,6 +334,10 @@ protected:
 	// Equipamento: icone + nome em cada um dos 10 encaixes
 	UPROPERTY() TArray<TObjectPtr<UImage>> EquipIcons;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EquipNames;
+	UPROPERTY() TObjectPtr<UImage> EquipBack;
+	UPROPERTY() TArray<TObjectPtr<UImage>> EquipTabBoxes;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EquipTabTexts;
+	int32 EquipTab = 0;
 	TArray<int32> EquipCellIndex;
 
 	// Habilidades: linhas com icone, nome e nivel

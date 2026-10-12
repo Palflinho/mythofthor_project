@@ -200,12 +200,24 @@ void UMythRoHUDWidget::BuildItemsWindow()
 
 void UMythRoHUDWidget::BuildEquipWindow()
 {
-	// Equipamento (Alt+Q): equipwin_bg (280x130) com os rotulos dos 10 encaixes; icone sobre o circulo e nome
-	EquipWindow = MakeRoPanel(TEXT("Equipamento"), FVector2D(280.f, 147.f), FVector2D(-340.f, 120.f));
-	AddImage(EquipWindow, FMythRoUITextures::Get(RoWinArt(TEXT("equipwin_bg"))), 0.f, 17.f);
+	// Equipamento (Alt+Q): abas Geral e Especial (print 08/09); equipwin_bg (280x130) com os rotulos dos 10 encaixes; icone sobre
+	// o circulo e nome. Especial: roupas de visual, municao e equipamentos sombrios
+	constexpr float TabH = 18.f;
+	EquipWindow = MakeRoPanel(TEXT("Equipamento"), FVector2D(280.f, 147.f + TabH), FVector2D(-340.f, 120.f));
+	const TCHAR* TabNames[2] = { TEXT("Geral"), TEXT("Especial") };
+	for (int32 t = 0; t < 2; ++t)
+	{
+		UImage* Box = AddRounded(EquipWindow, FLinearColor::White, FLinearColor(0.5f, 0.55f, 0.7f, 1.f), 6.f + t * 62.f, 19.f, 60.f, 18.f, 4.f, 0.f);
+		Box->SetVisibility(ESlateVisibility::Visible);
+		EquipTabBoxes.Add(Box);
+		UTextBlock* Label = AddText(EquipWindow, 16.f + t * 62.f, 21.f, 8, RoWinLabel);
+		Label->SetText(FText::FromString(TabNames[t]));
+		EquipTabTexts.Add(Label);
+	}
+	EquipBack = AddImage(EquipWindow, FMythRoUITextures::Get(RoWinArt(TEXT("equipwin_bg"))), 0.f, 17.f + TabH);
 	for (const FRoEquipSlot& S : RoEquipSlots)
 	{
-		const float Y = 17.f + S.CenterY;
+		const float Y = 17.f + TabH + S.CenterY;
 		// Fundo branco cobre o rotulo da arte quando ha item no encaixe
 		UImage* Back = AddColor(EquipWindow, RoWinBody, S.bRight ? 160.f : 32.f, Y - 8.f, 86.f, 14.f);
 		Back->SetVisibility(ESlateVisibility::Collapsed);
@@ -507,6 +519,20 @@ void UMythRoHUDWidget::RefreshItemsWindow()
 
 void UMythRoHUDWidget::RefreshEquipWindow()
 {
+	auto EquipMask = [this](int32 SlotNo) -> uint32
+	{
+		// Especial: esquerda costume topo/meio/baixo, capa de visual e municao; direita arma, armadura, escudo, botas e acessorio sombrios
+		static const uint32 Special[10] = { 0x0400, 0x0800, 0x1000, 0x2000, 0x8000, 0x20000, 0x10000, 0x40000, 0x80000, 0x100000 };
+		return EquipTab == 1 ? Special[SlotNo] : RoEquipSlots[SlotNo].Mask;
+	};
+	if (EquipBack)
+	{
+		EquipBack->SetBrush(RoWinBrush(FMythRoUITextures::Get(RoWinArt(EquipTab == 1 ? TEXT("equipwin_special") : TEXT("equipwin_bg"))), FVector2D(280.f, 130.f) * UIScale));
+	}
+	for (int32 t = 0; t < EquipTabBoxes.Num(); ++t)
+	{
+		EquipTabBoxes[t]->SetColorAndOpacity(t == EquipTab ? FLinearColor::White : FLinearColor(0.8f, 0.83f, 0.9f, 1.f));
+	}
 	const URagnarokNetworkSubsystem* Net = GetNet();
 	for (int32 i = 0; i < UE_ARRAY_COUNT(RoEquipSlots) && i < EquipNames.Num(); ++i)
 	{
@@ -515,7 +541,7 @@ void UMythRoHUDWidget::RefreshEquipWindow()
 		{
 			for (const FRagnarokInventoryItem& Item : Net->GetInventoryItems())
 			{
-				if (Item.bIsEquipped && (static_cast<uint32>(Item.EquipLocation) & RoEquipSlots[i].Mask) != 0)
+				if (Item.bIsEquipped && (static_cast<uint32>(Item.EquipLocation) & EquipMask(i)) != 0)
 				{
 					Found = &Item;
 					break;
@@ -704,6 +730,18 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 
 bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 {
+	if (EquipWindow && EquipWindow->IsVisible())
+	{
+		for (int32 t = 0; t < EquipTabBoxes.Num(); ++t)
+		{
+			if (IsUnder(EquipTabBoxes[t], ScreenPos))
+			{
+				EquipTab = t;
+				RefreshEquipWindow();
+				return true;
+			}
+		}
+	}
 	if (HandleMinimapClick(ScreenPos))
 	{
 		return true;
