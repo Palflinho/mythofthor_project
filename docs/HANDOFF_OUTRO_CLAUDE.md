@@ -79,3 +79,13 @@ Nenhum dos três foi analisado a fundo ainda (só a página principal do GitHub)
 Responder em pt-BR; commits locais sem push; sem atribuir sozinho aprovação do usuário; verificar o comportamento no cliente original antes de decidir;
 nada de reimplementar no cliente o que o rAthena já decide; o cliente é 1:1 com o RO e só acrescenta sombras/clima/dia-noite do HD-2D.
 Memória do projeto do Claude anterior: `C:\Users\palfn\.claude\projects\E--Documentos-Reposit-rios-mythofthor-project\memory\` (índice em `MEMORY.md`).
+
+## Atualização 2026-10-12 (fim da sessão)
+
+Feito depois do estado acima: `docs/AUDITORIA_COMPLETA.md` (lista de todas as funções do RO com estado), `docs/ref/REFERENCIAS_GORO_NOSTALRO.md`, `docs/ref/NOSTALRO_COMPARACAO.md`,
+`docs/ref/CLIENTE_2026.md` e `docs/ref/ANALISE_DATA2026.md`; o cliente grava pacotes sem tratamento em `Saved/Logs/pacotes_sem_tratamento.txt`;
+**tabelas e `.lub` do GRF LATAM extraídos** para `E:\Dev\Ragnarok_Assets\grf\data`; commits até `79d8606` (+ este).
+Próximos passos combinados com o usuário, em ordem: (1) sombra dos itens no chão e curva de queda do nostalro (o `MythGroundItem.cpp` desliga a sombra por engano);
+(2) conferir ordem dos cliques, cast (glifo/mira), tempo de ataque por ASPD, visual de arma/escudo ao chegar a lista de equipamento, reset ao trocar de mapa;
+(3) usar as tabelas extraídas (névoa, câmera, mapa-múndi, cooldown de skill, efeitos de mapa, camadas montadas); (4) itens P0 da auditoria (0x013b, 0x013a, input de número/texto de NPC, Peco Peco, falcão).
+O Druida e o cliente 2026 são só referência (fora do escopo até a transclasse; o rAthena oficial não tem a classe). O exe de 2026 é de terceiros: não executar fora de VM.

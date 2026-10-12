@@ -44,3 +44,15 @@ Raiz de `data\*.txt`: `buyingstoreitemlist`, `metalprocessitemlist/table` (refin
 2. **Não adotar o conteúdo novo agora:** classes de 3ª geração, runas, episódios e mapas de instância ficam fora do escopo "até a transclasse" e exigem servidor novo.
 3. **Ideias a aproveitar mesmo no pré-renovação:** `adventureguide` e `worldviewdata` como base do Códice de Mímir; `damageskin` como opção cosmética; `wndinfo` e `hotkey` para os padrões de janela e de teclas; `stylingshop`/`dressroom` para o provador (se um dia houver).
 4. Não substituir o cliente LATAM pelo de 2026: os arquivos do LATAM (traduções em português) são o que usamos; o 2026 é coreano com tradução em inglês opcional.
+
+## 5. Extração feita (2026-10-12)
+
+Do `C:\Gravity\Ragnarok\data.grf` para `E:\Dev\Ragnarok_Assets\grf\data`: 365 arquivos novos (+44 que já existiam; 2 falhas) = todos os `data\luafiles514\**\*.lub|lua`
+(inclui `effecttool` com 155 mapas, `skilldelaylist`, `mapskydata`, `footprinteffectinfo`, `ridingspreditinfo`, `spreditinfo`, `skilleffectinfolist`, `skillinfolist_ptbr`, `skilltreeview`, `hotkey`)
+e todos os `data\*.txt` da raiz (`mappostable`, `viewpointtable`, `fogparametertable`, `mapobjlighttable`, `indoorrswtable`...).
+Os `.txt` estão em cp949 (`iconv -f cp949 -t utf-8`); os `.lub` são Lua compilado (decompilar/avaliar com `tools/lub_eval.py`).
+Formatos vistos: `mappostable.txt` = `região#mapa.rsw#x1#y1#x2#y2#` (140 linhas, retângulo do mapa na imagem do mapa-múndi); `viewpointtable.txt` = faixas de zoom/rotação por mapa (41 linhas);
+`fogparametertable.txt` = `mapa.rsw#` seguido de perto, longe, cor `0xAARRGGBB`, densidade (15 KB); `mapobjlighttable.txt` = `mapa.rsw#on|off#`.
+
+Próximos usos (em ordem de custo): (1) `fogparametertable` → névoa por mapa; (2) `viewpointtable` → limites de câmera por mapa; (3) `mappostable` + imagem do mapa-múndi → janela do mapa-múndi;
+(4) `skilldelaylist.lub` → cooldown por skill; (5) `effecttool\<mapa>.lub` → efeitos dos objetos do mapa; (6) `ridingspreditinfo` → camadas do sprite montado.
