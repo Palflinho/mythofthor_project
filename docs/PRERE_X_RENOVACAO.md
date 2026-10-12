@@ -51,3 +51,25 @@ missões, banco). É a combinação que fecha com "até a transclasse": tudo o q
 balanceado para quem não existe no jogo.
 
 Escolher Renovação faz sentido se a ideia for, no futuro, abrir as 3ªs classes ou usar os mapas e episódios novos com outro nivelamento.
+
+## 5. Decisão do usuário (2026-10-12): Renovação, até a transclasse "por enquanto"
+
+| Regra | Valor |
+|---|---|
+| Modo do servidor | Renovação (`--enable-prere=no`, PACKETVER 20250402) |
+| Transclasse | nível base **125**, classe 70 (EXP 99→125 pela curva oficial da Renovação, a das 3ªs classes) |
+| 2ª classe | 99 / 50 (renascer continua exigindo 99/50) |
+| Classes expandidas | liberadas: Justiceiro, Ninja, Taekwon → Mestre Taekwon / Espiritualista, Super Aprendiz; as finais vão a 125 |
+| Atributos | máximo **110** (bebês ficam no padrão 80) |
+| Bloqueado | 3ª e 4ª classes, Kagerou/Oboro, Rebelde, Super Aprendiz Expandido, Doram (criação e NPCs de mudança) |
+| Aura | continua no nível 99, como no cliente oficial para essas classes |
+
+### Como foi aplicado
+
+Tudo em `server/renovacao/` (no repositório; o rAthena fica no WSL):
+- `aplicar.sh`: grava `conf/import/battle_conf.txt` (110), gera `db/import/job_stats.yml` (`gen_job_stats.sh`), põe
+  `allowed_job_flag: 1` no `char_conf` do docker e importa `escopo_classes.conf` (`delnpc` dos NPCs de 3ª classe etc.).
+  Rodar como root: `wsl.exe -d Ubuntu -u root -- bash "/mnt/e/Documentos/Repositórios/mythofthor_project/server/renovacao/aplicar.sh"`.
+- Recompilar: no `server/`, `docker compose --profile build run --rm builder sh -c './configure --enable-packetver=20250402 --enable-prere=no && make clean server'`
+  e reiniciar `mythofthor-login mythofthor-char mythofthor-map`. O `server/docker-compose.yml` já tem `--enable-prere=no`.
+- Cliente: a janela de Status mostra MATK como "atributo + equipamento" e o custo do próximo ponto vem do servidor.

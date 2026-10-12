@@ -499,10 +499,11 @@ void UMythRoHUDWidget::RefreshStatusWindow()
 	const URagnarokNetworkSubsystem* Net = GetNet();
 	const FRagnarokPlayerStats Ps = Net ? Net->GetPlayerStats() : FRagnarokPlayerStats();
 	const int32 Base[6] = { Ps.Str, Ps.Agi, Ps.Vit, Ps.Int, Ps.Dex, Ps.Luk };
+	const int32 Need[6] = { Ps.StrNeed, Ps.AgiNeed, Ps.VitNeed, Ps.IntNeed, Ps.DexNeed, Ps.LukNeed };
 	for (int32 i = 0; i < 6 && i < StatTexts.Num(); ++i)
 	{
 		StatTexts[i]->SetText(Ps.StatBonus[i] != 0 ? FText::FromString(FString::Printf(TEXT("%d+%d"), Base[i], Ps.StatBonus[i])) : FText::AsNumber(Base[i]));
-		StatCostTexts[i]->SetText(FText::AsNumber((FMath::Max(Base[i], 1) - 1) / 10 + 2)); // custo do proximo ponto (pre-renovacao)
+		StatCostTexts[i]->SetText(FText::AsNumber(Need[i])); // custo do proximo ponto como o servidor manda (Renovacao: sobe mais rapido acima de 100)
 		// A seta so aparece com pontos livres (o custo real e validado pelo servidor)
 		StatUpArrows[i]->SetVisibility(Ps.StatusPoints > 0 ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
 	}
@@ -511,7 +512,7 @@ void UMythRoHUDWidget::RefreshStatusWindow()
 	{
 		DerivedTexts[0]->SetText(Plus(Ps.Atk, Ps.Atk2));
 		DerivedTexts[1]->SetText(Plus(Ps.Def, Ps.Def2));
-		DerivedTexts[2]->SetText(FText::FromString(FString::Printf(TEXT("%d ~ %d"), Ps.MatkMin, Ps.MatkMax)));
+		DerivedTexts[2]->SetText(Plus(Ps.MatkMin, Ps.MatkMax)); // Renovacao: MATK de atributo + MATK de equipamento (pc_leftside/rightside_matk)
 		DerivedTexts[3]->SetText(Plus(Ps.Mdef, Ps.Mdef2));
 		DerivedTexts[4]->SetText(FText::AsNumber(Ps.Hit));
 		DerivedTexts[5]->SetText(Plus(Ps.Flee, Ps.Flee2));

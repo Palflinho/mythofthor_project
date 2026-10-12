@@ -1,4 +1,4 @@
-# Servidor rAthena (Pre-Renewal, PACKETVER 20211103) para desenvolvimento local.
+# Servidor rAthena (Renovacao ate a transclasse, PACKETVER 20250402) para desenvolvimento local.
 # Baseado em rathena/tools/docker/docker-compose.yml.
 #
 # O codigo do rAthena fica fora deste repositorio (no filesystem do WSL, para compilar rapido).
@@ -41,7 +41,7 @@ services:
     command: "/rathena/tools/docker/builder.sh"
     profiles: ["build"] # so roda com: docker compose --profile build run --rm builder
     environment:
-      BUILDER_CONFIGURE: "--enable-packetver=20250402 --enable-prere=yes"
+      BUILDER_CONFIGURE: "--enable-packetver=20250402 --enable-prere=no"
 
   login:
     <<: *rathena
