@@ -1145,7 +1145,6 @@ void AMythNetWorld::HandleDamage(int64 SourceID, int64 TargetID, int32 Damage, u
 		else if (UMythRoSpriteComponent* Picker = Source ? Source->FindComponentByClass<UMythRoSpriteComponent>() : nullptr; Picker && DamageType == 1)
 		{
 			Picker->PlayPickup();
-			UMythRoSound::PlayWavAtLocation(this, TEXT("effect/itempokjuk.wav"), Source->GetActorLocation());
 		}
 		return;
 	}

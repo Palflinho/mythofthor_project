@@ -188,6 +188,8 @@ protected:
 	UPROPERTY() TObjectPtr<UTextBlock> SPPctText;
 	UPROPERTY() TObjectPtr<UTextBlock> SPText;
 	UPROPERTY() TObjectPtr<UTextBlock> BaseLvText;
+	UPROPERTY() TObjectPtr<UTextBlock> BaseExpPctText;
+	UPROPERTY() TObjectPtr<UTextBlock> JobExpPctText;
 	UPROPERTY() TObjectPtr<UTextBlock> JobLvText;
 	UPROPERTY() TObjectPtr<UTextBlock> WeightZenyText;
 	UPROPERTY() FMythRoGauge HPGauge;
@@ -297,6 +299,7 @@ protected:
 	TMap<TWeakObjectPtr<UWidget>, ESlateVisibility> BasicSavedVisibility;
 	UPROPERTY() TObjectPtr<UTextBlock> BasicMini1;
 	UPROPERTY() TObjectPtr<UTextBlock> BasicMini2;
+	UPROPERTY() TObjectPtr<UImage> BasicMiniButton;
 	static constexpr float BasicFullH = 368.f;
 	/** Altura do quadro branco das informacoes (ate a barra de recolher); a grade do menu fica abaixo, sobre o fundo translucido. */
 	static constexpr float BasicInfoH = 134.f;
@@ -506,6 +509,10 @@ public:
 protected:
 	void BuildMailWindows();
 	bool HandleMailClick(const FVector2D& ScreenPos);
+	/** Botao de minimizar da barra de titulo: a janela encolhe para a barra e a segunda vez volta ao tamanho. */
+	struct FRoMinimize { TWeakObjectPtr<UCanvasPanel> Win; TWeakObjectPtr<UImage> Button; FVector2D FullSize = FVector2D::ZeroVector; bool bMin = false; };
+	TArray<FRoMinimize> Minimizables;
+	bool HandleMinimizeClick(const FVector2D& ScreenPos);
 	UPROPERTY() TObjectPtr<UCanvasPanel> MailWindow;
 	UPROPERTY() TObjectPtr<UCanvasPanel> MailWriteWindow;
 	UPROPERTY() TObjectPtr<UTextBlock> MailHeader;

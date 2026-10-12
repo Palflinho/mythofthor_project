@@ -398,6 +398,7 @@ void UMythRoHUDWidget::BuildBasicInfo()
 	BasicBody = AddRounded(Win, ColWindow, ColWindowEdge, 0.f, 8.f, W, BasicInfoH - 8.f, 0.f, 7.f);
 	BasicBody->SetVisibility(ESlateVisibility::Visible); // o clique na janela nao atravessa para o jogo
 	AddTitleBar(Win, W, TEXT("Informações Básicas"));
+	BasicMiniButton = AddButtonEx(Win, TEXT("basic_interface/sys_mini_off.bmp"), TEXT("basic_interface/sys_mini_on.bmp"), TEXT("basic_interface/sys_mini_on.bmp"), W - 15.f, 3.f);
 	BasicDetailStart = Win->GetChildrenCount(); // daqui para baixo: detalhes que somem na versao recolhida
 
 	NameText = AddText(Win, 6.f, 19.f, 8, ColText, true);
@@ -405,19 +406,28 @@ void UMythRoHUDWidget::BuildBasicInfo()
 
 	AddText(Win, 6.f, 48.f, 8, ColLabel)->SetText(FText::FromString(TEXT("HP")));
 	HPGauge = MakeGauge(Win, TEXT("red"), 24.f, 50.f, 166.f, false);
-	HPText = AddText(Win, 72.f, 47.f, 7, ColText);
+	HPText = AddText(Win, 72.f, 47.f, 7, FLinearColor(0.05f, 0.05f, 0.1f));
 	HPPctText = AddText(Win, 196.f, 48.f, 7, ColText);
 	AddText(Win, 6.f, 62.f, 8, ColLabel)->SetText(FText::FromString(TEXT("SP")));
 	SPGauge = MakeGauge(Win, TEXT("blue"), 24.f, 64.f, 166.f, false);
-	SPText = AddText(Win, 72.f, 61.f, 7, ColText);
+	SPText = AddText(Win, 72.f, 61.f, 7, FLinearColor(0.05f, 0.05f, 0.1f));
+	for (UTextBlock* Num : { HPText.Get(), SPText.Get() })
+	{
+		FSlateFontInfo NumFont = Num->GetFont(); // numeros sobre a barra: contorno branco para ler sobre o vermelho e o azul
+		NumFont.OutlineSettings.OutlineSize = 1;
+		NumFont.OutlineSettings.OutlineColor = FLinearColor::White;
+		Num->SetFont(NumFont);
+	}
 	SPPctText = AddText(Win, 196.f, 62.f, 7, ColText);
 
 	// Fundo cinza claro das linhas de nivel, como no print
 	AddColor(Win, FLinearColor(0.9f, 0.92f, 0.96f, 1.f), 2.f, 78.f, W - 4.f, 28.f);
 	BaseLvText = AddText(Win, 8.f, 79.f, 7, ColLabel);
-	BaseExpGauge = MakeGauge(Win, TEXT("blue"), 86.f, 82.f, 138.f);
+	BaseExpGauge = MakeGauge(Win, TEXT("blue"), 70.f, 82.f, 110.f);
+	BaseExpPctText = AddText(Win, 186.f, 79.f, 7, ColText);
 	JobLvText = AddText(Win, 8.f, 92.f, 7, ColLabel);
-	JobExpGauge = MakeGauge(Win, TEXT("blue"), 86.f, 95.f, 138.f);
+	JobExpGauge = MakeGauge(Win, TEXT("blue"), 70.f, 95.f, 110.f);
+	JobExpPctText = AddText(Win, 186.f, 92.f, 7, ColText);
 
 	WeightZenyText = AddText(Win, 8.f, 109.f, 7, ColText);
 
@@ -504,7 +514,7 @@ bool UMythRoHUDWidget::HandleBasicMenuClick(const FVector2D& ScreenPos)
 	{
 		return false;
 	}
-	if (IsUnder(MenuToggleBar, ScreenPos))
+	if (IsUnder(MenuToggleBar, ScreenPos) || IsUnder(BasicMiniButton, ScreenPos))
 	{
 		SetBasicMenuOpen(!bBasicMenuOpen);
 		return true;
@@ -828,7 +838,10 @@ void UMythRoHUDWidget::RefreshStats()
 	if (HPPctText) { HPPctText->SetText(FText::FromString(FString::Printf(TEXT("%d%%"), FMath::RoundToInt(HPFrac * 100.f)))); }
 	if (SPPctText) { SPPctText->SetText(FText::FromString(FString::Printf(TEXT("%d%%"), FMath::RoundToInt(SPFrac * 100.f)))); }
 	BaseExpGauge.SetFraction(Stats->GetExpFraction());
-	JobExpGauge.SetFraction(NetStats && NetStats->NextJobExp > 0 ? static_cast<float>(static_cast<double>(NetStats->JobExp) / NetStats->NextJobExp) : 0.f);
+	const float JobFrac = NetStats && NetStats->NextJobExp > 0 ? static_cast<float>(static_cast<double>(NetStats->JobExp) / NetStats->NextJobExp) : 0.f;
+	JobExpGauge.SetFraction(JobFrac);
+	if (BaseExpPctText) { BaseExpPctText->SetText(FText::FromString(FString::Printf(TEXT("%.2f%%"), Stats->GetExpFraction() * 100.f))); }
+	if (JobExpPctText) { JobExpPctText->SetText(FText::FromString(FString::Printf(TEXT("%.2f%%"), JobFrac * 100.f))); }
 	// Como o cliente: "Peso : atual / max   Zeny : 29.743" (o rAthena manda o peso em decimos)
 	const FString Zeny = FText::AsNumber(NetStats ? NetStats->Zeny : 0LL).ToString();
 	if (NetStats && NetStats->MaxWeight > 0)

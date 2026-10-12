@@ -75,7 +75,7 @@ public:
 	float MinPitch = -65.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
-	float MaxPitch = -25.f;
+	float MaxPitch = -45.f;
 
 	/** Distancia da camera (uu): padrao 500, de 150 a 700 unidades do RO fora; 350 / 150..420 dentro. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
@@ -85,7 +85,7 @@ public:
 	float MinArmLength = 1500.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
-	float MaxArmLength = 7000.f;
+	float MaxArmLength = 5000.f;
 
 	/** Por entalhe da roda: 60 unidades do RO. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")

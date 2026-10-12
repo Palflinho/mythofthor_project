@@ -88,11 +88,36 @@ URagnarokNetworkSubsystem* UMythRoHUDWidget::GetNet() const
 	return GI ? GI->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr;
 }
 
+namespace
+{
+	/** Janelas minimizadas (o botao da barra de titulo): so a barra de titulo recebe clique. */
+	TSet<const UWidget*>& MinimizedWindows()
+	{
+		static TSet<const UWidget*> Set;
+		return Set;
+	}
+}
+
 bool UMythRoHUDWidget::IsUnder(const UWidget* Widget, const FVector2D& ScreenPos)
 {
 	if (!Widget || !Widget->IsVisible())
 	{
 		return false;
+	}
+	if (MinimizedWindows().Num() > 0)
+	{
+		// Dentro de uma janela minimizada so a barra de titulo existe: o resto (cortado pela moldura) nao recebe clique
+		for (const UWidget* P = Widget->GetParent(); P; P = P->GetParent())
+		{
+			if (MinimizedWindows().Contains(P))
+			{
+				const FGeometry& PGeo = P->GetCachedGeometry();
+				if (PGeo.AbsoluteToLocal(ScreenPos).Y > PGeo.GetLocalSize().Y)
+				{
+					return false;
+				}
+			}
+		}
 	}
 	const FGeometry& Geo = Widget->GetCachedGeometry();
 	const FVector2D Local = Geo.AbsoluteToLocal(ScreenPos);
@@ -109,6 +134,12 @@ UCanvasPanel* UMythRoHUDWidget::MakeRoPanel(const FString& Title, const FVector2
 	// Botao de fechar (sys_close) por cima da alca de arrastar; o clique e testado antes do arrasto
 	UImage* Close = AddImage(Win, FMythRoUITextures::Get(RoWinArt(TEXT("sys_close_off"))), Size.X - 15.f, 3.f, 11.f, 11.f);
 	CloseButtons.Add(Close, Win);
+	FRoMinimize Mini;
+	Mini.Win = Win;
+	Mini.Button = AddButtonEx(Win, TEXT("basic_interface/sys_mini_off.bmp"), TEXT("basic_interface/sys_mini_on.bmp"), TEXT("basic_interface/sys_mini_on.bmp"), Size.X - 28.f, 3.f);
+	Mini.FullSize = Size;
+	Win->SetClipping(EWidgetClipping::ClipToBounds);
+	Minimizables.Add(Mini);
 	Win->SetVisibility(ESlateVisibility::Collapsed);
 	return Win;
 }
@@ -841,6 +872,10 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 	{
 		return true;
 	}
+	if (HandleMinimizeClick(ScreenPos))
+	{
+		return true;
+	}
 	for (const TPair<TWeakObjectPtr<UImage>, TWeakObjectPtr<UCanvasPanel>>& Pair : CloseButtons)
 	{
 		UCanvasPanel* Win = Pair.Value.Get();
@@ -1019,6 +1054,10 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDoubleClick(const FGeometry& InGeome
 							Net->EquipItem(Item.Index, Item.EquipLocation);
 						}
 					}
+					else if (Item.Type == 10)
+					{
+						Net->EquipItem(Item.Index, 0x8000); // municao (flechas, balas...): duplo clique equipa
+					}
 					else if (RoItemTabOf(Item) == 0)
 					{
 						Net->UseItem(Item.Index);
@@ -1095,4 +1134,24 @@ FReply UMythRoHUDWidget::NativeOnMouseWheel(const FGeometry& InGeometry, const F
 		return FReply::Handled();
 	}
 	return Super::NativeOnMouseWheel(InGeometry, InMouseEvent);
+}
+
+bool UMythRoHUDWidget::HandleMinimizeClick(const FVector2D& ScreenPos)
+{
+	for (FRoMinimize& M : Minimizables)
+	{
+		UCanvasPanel* Win = M.Win.Get();
+		if (!Win || !Win->IsVisible() || !IsUnder(M.Button.Get(), ScreenPos))
+		{
+			continue;
+		}
+		M.bMin = !M.bMin;
+		if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(Win->Slot))
+		{
+			S->SetSize(FVector2D(M.FullSize.X, M.bMin ? 17.f : M.FullSize.Y) * UIScale);
+		}
+		if (M.bMin) { MinimizedWindows().Add(Win); } else { MinimizedWindows().Remove(Win); }
+		return true;
+	}
+	return false;
 }

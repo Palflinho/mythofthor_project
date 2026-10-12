@@ -914,6 +914,8 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 				HandleLoginAccept(PacketData, ActualLen);
 				break;
 			case RagnarokPackets::HEADER_AC_REFUSE_LOGIN:
+				HandleLoginRefuse(PacketData, ActualLen);
+				break;
 			case RagnarokPackets::HEADER_SC_NOTIFY_BAN:
 				HandleNotifyBan(PacketData, ActualLen);
 				break;
@@ -1262,7 +1264,20 @@ void URagnarokNetworkSubsystem::HandleNotifyBan(const uint8* PacketData, int32 P
 
 void URagnarokNetworkSubsystem::HandleLoginRefuse(const uint8* PacketData, int32 PacketSize)
 {
-	OnLoginResult.Broadcast(false, TEXT("Login recusado pelo servidor."));
+	// AC_REFUSE_LOGIN (0x083e): error_code (4 bytes) em PacketData[2], do login-server
+	const uint8 Code = PacketSize >= 3 ? PacketData[2] : 0;
+	FString Reason;
+	switch (Code)
+	{
+	case 0: Reason = TEXT("Usuário não cadastrado."); break;
+	case 1: Reason = TEXT("Senha incorreta."); break;
+	case 2: Reason = TEXT("Esta conta expirou."); break;
+	case 3: Reason = TEXT("Conexão recusada pelo servidor."); break;
+	case 4: Reason = TEXT("Esta conta está bloqueada."); break;
+	case 6: Reason = TEXT("Esta conta está banida."); break;
+	default: Reason = FString::Printf(TEXT("Login recusado pelo servidor (código %d)."), Code); break;
+	}
+	OnLoginResult.Broadcast(false, Reason);
 	Disconnect();
 }
 
@@ -2140,7 +2155,7 @@ void URagnarokNetworkSubsystem::HandleInventoryList(const uint8* PacketData, int
 		int32 Available = PacketSize - HEADER_SIZE;
 		int32 Count = Available / EQUIP_INFO_SIZE;
 
-		if (InvType == 0) { InventoryItems.RemoveAll([](const FRagnarokInventoryItem& Item) { return Item.bIsEquipped; }); }
+		if (InvType == 0) { InventoryItems.RemoveAll([](const FRagnarokInventoryItem& Item) { return Item.bIsEquipped && Item.Type != 10; }); }
 
 		for (int32 i = 0; i < Count; ++i)
 		{
@@ -2177,7 +2192,7 @@ void URagnarokNetworkSubsystem::HandleInventoryList(const uint8* PacketData, int
 		int32 Available = PacketSize - HEADER_SIZE;
 		int32 Count = Available / NORMAL_INFO_SIZE;
 
-		if (InvType == 0) { InventoryItems.RemoveAll([](const FRagnarokInventoryItem& Item) { return !Item.bIsEquipped; }); }
+		if (InvType == 0) { InventoryItems.RemoveAll([](const FRagnarokInventoryItem& Item) { return !Item.bIsEquipped || Item.Type == 10; }); }
 
 		for (int32 i = 0; i < Count; ++i)
 		{
@@ -2187,8 +2202,12 @@ void URagnarokNetworkSubsystem::HandleInventoryList(const uint8* PacketData, int
 			Item.ItemID = *reinterpret_cast<const uint32*>(Ptr + 2);
 			Item.Type = Ptr[6];
 			Item.Amount = *reinterpret_cast<const int16*>(Ptr + 7);
-			Item.EquipLocation = 0;
-			Item.bIsEquipped = false;
+			// Municao (tipo 10) vem nesta lista; WearState (+9) diz se esta equipada (0x8000), senao o destino e 0x8000
+			const uint32 Wear = *reinterpret_cast<const uint32*>(Ptr + 9);
+			Item.WearState = Wear;
+			Item.Location = Item.Type == 10 ? 0x8000 : 0;
+			Item.EquipLocation = Wear != 0 ? Wear : Item.Location;
+			Item.bIsEquipped = Wear != 0;
 
 			Item.Slot1 = *reinterpret_cast<const uint32*>(Ptr + 13);
 			Item.Slot2 = *reinterpret_cast<const uint32*>(Ptr + 17);

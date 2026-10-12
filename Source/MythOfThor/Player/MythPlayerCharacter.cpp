@@ -85,9 +85,9 @@ void AMythPlayerCharacter::BeginPlay()
 		FixedYaw = -90.f + 45.f;
 		CameraPitch = -40.f;
 		MinPitch = -55.f;
-		MaxPitch = -35.f;
+		MaxPitch = -40.f;
 		DefaultArmLength = 3500.f;
-		MaxArmLength = 4200.f;
+		MaxArmLength = 3500.f;
 	}
 	const bool bIndoorMap = bCameraLockedByMap;
 	DestArm = CurrentArm = DefaultArmLength;
