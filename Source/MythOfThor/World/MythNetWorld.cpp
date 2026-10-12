@@ -137,6 +137,22 @@ namespace
 		return Name;
 	}
 
+	/**
+	 * Montado no Peco Peco (OPTION_RIDING 0x20): o servidor manda a classe a pe e o cliente troca pelo corpo montado, que
+	 * tem o proprio id de classe (Cavaleiro 7 -> 13, Templario 14 -> 21, Lorde 4008 -> 4014, Paladino 4015 -> 4022 e os
+	 * bebes). Tambem desfaz: com bRiding falso devolve a classe a pe.
+	 */
+	int32 NetRidingJob(int32 JobClass, bool bRiding)
+	{
+		static const TPair<int32, int32> Pairs[] = { {7, 13}, {14, 21}, {4008, 4014}, {4015, 4022}, {4030, 4036}, {4037, 4044} };
+		for (const TPair<int32, int32>& P : Pairs)
+		{
+			if (bRiding && JobClass == P.Key) { return P.Value; }
+			if (!bRiding && JobClass == P.Value) { return P.Key; }
+		}
+		return JobClass;
+	}
+
 	FLinearColor NetParseColor(const FString& Hex, const FLinearColor& Fallback)
 	{
 		FString H = Hex;
@@ -646,8 +662,8 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 		{
 			S->MonsterSpriteName.Empty();
 			S->bMale = Info.Sex != 0;
-			S->JobSpriteName = NetJobSprite(Info.JobClass, S->bMale);
-			S->JobClass = Info.JobClass;
+			S->JobClass = NetRidingJob(Info.JobClass, (Info.Option & 0x20) != 0);
+			S->JobSpriteName = NetJobSprite(S->JobClass, S->bMale);
 			S->HeadTop = Info.HeadTop;
 			S->HeadMid = Info.HeadMid;
 			S->HeadBottom = Info.HeadBottom;
@@ -779,10 +795,20 @@ void AMythNetWorld::HandleUnitOption(int64 ID, int32 Option)
 	const AActor* Actor = ResolveActor(ID);
 	UMythRoSpriteComponent* S = Actor ? Actor->FindComponentByClass<UMythRoSpriteComponent>() : nullptr;
 	const int32 Cart = UMythRoSpriteComponent::CartTypeFromOption(Option);
-	if (S && S->MonsterSpriteName.IsEmpty() && S->CartType != Cart)
+	if (S && S->MonsterSpriteName.IsEmpty())
 	{
-		S->CartType = Cart;
-		S->ReloadSprites();
+		// Peco Peco: troca o corpo pelo montado (ou volta a pe) quando o bit de montaria muda
+		const int32 Job = NetRidingJob(S->JobClass, (Option & 0x20) != 0);
+		if (S->CartType != Cart || Job != S->JobClass)
+		{
+			S->CartType = Cart;
+			if (Job != S->JobClass)
+			{
+				S->JobClass = Job;
+				S->JobSpriteName = NetJobSprite(Job, S->bMale);
+			}
+			S->ReloadSprites();
+		}
 	}
 }
 
@@ -1544,10 +1570,10 @@ void AMythNetWorld::ApplySelfAppearance()
 	UMythRoSpriteComponent* S = Char->Sprite;
 	const FRagnarokCharacterSlotInfo& Slot = Net->GetSelectedSlot();
 	S->bMale = Net->GetSelfSex() != 0;
-	S->JobSpriteName = NetJobSprite(Net->GetPlayerStats().JobClass, S->bMale);
+	S->JobClass = NetRidingJob(Net->GetPlayerStats().JobClass, (SelfOption & 0x20) != 0);
+	S->JobSpriteName = NetJobSprite(S->JobClass, S->bMale);
 	S->HairStyle = FMath::Max(Slot.HairStyle, 1);
 	S->HairColor = Slot.HairColor;
-	S->JobClass = Net->GetPlayerStats().JobClass;
 	S->HeadTop = Slot.HeadTop;
 	S->HeadMid = Slot.HeadMid;
 	S->HeadBottom = Slot.HeadBottom;
@@ -1606,13 +1632,16 @@ void AMythNetWorld::HandleEquipChanged(int64 UnitID, uint8 Look, int32 Value)
 	switch (Look)
 	{
 	case 0:
+	{
 		if (const URagnarokNetworkSubsystem* Net = GetNet(); Net && UnitID == Net->GetSelfID())
 		{
 			S->bMale = Net->GetSelfSex() != 0; // volta ao sexo da conta antes de checar classes de um sexo so
 		}
-		S->JobSpriteName = NetJobSprite(Value, S->bMale);
-		S->JobClass = Value;
+		const bool bWasRiding = NetRidingJob(S->JobClass, false) != S->JobClass; // continua montado se ja estava
+		S->JobClass = NetRidingJob(Value, bWasRiding);
+		S->JobSpriteName = NetJobSprite(S->JobClass, S->bMale);
 		break;
+	}
 	case 1: S->HairStyle = FMath::Max(Value, 1); break;
 	case 2: S->Weapon = Value; break;
 	case 3: S->HeadBottom = Value; break;
