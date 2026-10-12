@@ -2,7 +2,7 @@
 
 Escrito porque o limite semanal do plano estava em 90% (o usuário pediu o doc ao chegar a ~98%). Atualize a seção "Estado" ao
 terminar cada bloco de trabalho. Leia também `docs/ROADMAP.md` (fases e estado), `docs/HUD_MODERNA_PLANO.md`,
-`docs/TESTE_JOGADOR.md` (o que cada versão de teste trouxe) e `docs/FIDELIDADE.md`.
+`docs/TESTE_JOGADOR.md` (o que cada versão de teste trouxe), `docs/FIDELIDADE.md` e, para a HUD, `docs/HUD_REVISAO_COMPLETA.md`.
 
 ## O projeto
 
@@ -38,9 +38,20 @@ Autorizado: desenvolver sem pedir confirmação, commitar localmente (sem push),
 (HUD UMG: janelas, botões, cliques via `HandleWindowClick`/`IsUnder`), `UI/MythHUD.cpp` (canvas: rastreador, buffs, nomes no chão),
 `Sprites/` (sprites, efeitos, emoções, falcão), `Player/MythPlayerController.*` (hotkeys e comandos Exec), `Config/*.json` (tabelas do cliente).
 
-## Estado (fim de 2026-10-12)
+## Estado (atualizado 2026-10-12, até `0f213b1`)
 
-Feito e commitado até `706724b` (versão de teste em `E:\Dev\MythTeste` já inclui): minimizar janelas, % de EXP, HP/SP legíveis, câmera travada,
+**Agora:** redesenho das janelas no nível do LATAM. Spec: `docs/HUD_REDESENHO_JANELAS.md` (medidas do goro e do roBrowser); placar
+janela por janela, nosso tamanho × referência: `docs/HUD_REVISAO_COMPLETA.md` (seção "Andamento").
+- ✅ Menu Esc: 300 de largura, 5 botões de 262 (`d6399ab`). Abre no teste com `MythGameMenu`.
+- 🟡 Grupo: 286 de largura, cartões de 38, ícone da classe e coroa (`8e73c69`). Cartão **claro com texto escuro** (`3803830`):
+  decisão do usuário, fica assim, não voltar ao `bg_partymember`. Faltam barra de ferramentas e alça.
+- 🟡 Habilidades: abas verticais e grade 7 × 68 × 56 do print 13 (`c752514`, `a6ca270`). Faltam ilustração, abas 3a/Etc e "skill point : N".
+- ⬜ Próximo: **Equipamento** (rodapé, abas Title/Damage, encaixes de 115 × 24, prévia do personagem), depois Navegação.
+
+**Feito antes (2026-10-12):** `docs/AUDITORIA_COMPLETA.md` (todas as funções do RO com estado); análise das referências
+(`docs/ref/REFERENCIAS_GORO_NOSTALRO.md`, `NOSTALRO_COMPARACAO.md`, `CLIENTE_2026.md`, `ANALISE_DATA2026.md`); pacotes sem tratamento
+gravados em `Saved/Logs/pacotes_sem_tratamento.txt`; tabelas e `.lub` do GRF LATAM extraídos para `E:\Dev\Ragnarok_Assets\grf\data`;
+itens no chão com sombra, queda original e posição real na célula (`0cc0828`). Até `706724b` (a versão de teste em `E:\Dev\MythTeste` inclui): minimizar janelas, % de EXP, HP/SP legíveis, câmera travada,
 navegação automática (`/navi` + "Ir até o mapa", anda em trechos pelo A* do `.gat` e tenta células ao redor do ponto do portal),
 descrição da skill (botão direito), buffs com duração 9999 = sem duração, ícones de item corrigidos (`Config/items.json` reconstruído a
 partir de `idnum2itemresnametable.txt`), munição (fica em Itens > Diversos; slot no meio da aba Geral do Equipamento; duplo clique equipa/desequipa),
@@ -72,7 +83,8 @@ procura referências nos fóruns do rAthena.
 - https://rathena.org/board/topic/149611-a-complete-pre-renewal-client/ e https://rathena.org/board/topic/149414-2026-01-07-ragexe-clientinfo-warp/
   (Ragexe/clientinfo 2026-01-07, possivelmente com a classe nova Druida): o fórum devolve 403 para leitura automática e a tentativa pelo
   navegador embutido não concluiu. O usuário está lendo e trará o que for útil. Peça o conteúdo a ele.
-Nenhum dos três foi analisado a fundo ainda (só a página principal do GitHub). Ao analisar, cite a origem e não copie código GPL.
+nostalro e goro já foram analisados (`docs/ref/REFERENCIAS_GORO_NOSTALRO.md`, `NOSTALRO_COMPARACAO.md`; medidas do goro em `HUD_REDESENHO_JANELAS.md`).
+Os tópicos do fórum seguem sem leitura automática. Ao usar qualquer referência, cite a origem e não copie código GPL.
 
 ## Regras de trabalho que o usuário pediu
 
@@ -80,18 +92,8 @@ Responder em pt-BR; commits locais sem push; sem atribuir sozinho aprovação do
 nada de reimplementar no cliente o que o rAthena já decide; o cliente é 1:1 com o RO e só acrescenta sombras/clima/dia-noite do HD-2D.
 Memória do projeto do Claude anterior: `C:\Users\palfn\.claude\projects\E--Documentos-Reposit-rios-mythofthor-project\memory\` (índice em `MEMORY.md`).
 
-## Atualização 2026-10-12 (fim da sessão)
+## Fila depois do redesenho (combinada com o usuário)
 
-Feito depois do estado acima: `docs/AUDITORIA_COMPLETA.md` (lista de todas as funções do RO com estado), `docs/ref/REFERENCIAS_GORO_NOSTALRO.md`, `docs/ref/NOSTALRO_COMPARACAO.md`,
-`docs/ref/CLIENTE_2026.md` e `docs/ref/ANALISE_DATA2026.md`; o cliente grava pacotes sem tratamento em `Saved/Logs/pacotes_sem_tratamento.txt`;
-**tabelas e `.lub` do GRF LATAM extraídos** para `E:\Dev\Ragnarok_Assets\grf\data`; commits até `79d8606` (+ este).
-Próximos passos combinados com o usuário, em ordem: (1) sombra dos itens no chão e curva de queda do nostalro (o `MythGroundItem.cpp` desliga a sombra por engano);
-(2) conferir ordem dos cliques, cast (glifo/mira), tempo de ataque por ASPD, visual de arma/escudo ao chegar a lista de equipamento, reset ao trocar de mapa;
-(3) usar as tabelas extraídas (névoa, câmera, mapa-múndi, cooldown de skill, efeitos de mapa, camadas montadas); (4) itens P0 da auditoria (0x013b, 0x013a, input de número/texto de NPC, Peco Peco, falcão).
+(1) conferir ordem dos cliques, cast (glifo/mira), tempo de ataque por ASPD, visual de arma/escudo ao chegar a lista de equipamento, reset ao trocar de mapa;
+(2) usar as tabelas extraídas (névoa, câmera, mapa-múndi, cooldown de skill, efeitos de mapa, camadas montadas); (3) itens P0 da auditoria (0x013b, 0x013a, input de número/texto de NPC, Peco Peco, falcão).
 O Druida e o cliente 2026 são só referência (fora do escopo até a transclasse; o rAthena oficial não tem a classe). O exe de 2026 é de terceiros: não executar fora de VM.
-
-## Atualização 2026-10-12 (noite): janelas feias
-
-O usuário pediu para redesenhar Equipamento, Habilidades, Grupo e Menu Esc no nível do LATAM: spec em `docs/HUD_REDESENHO_JANELAS.md` (ordem sugerida: Grupo, Habilidades, Equipamento, Menu).
-Também feito: itens no chão com sombra, queda original e posição real na célula (commit `0cc0828`); tabelas/`.lub` do GRF LATAM extraídos; análise do Data2026.
-Uso semanal do plano estava em 93% nesta hora.

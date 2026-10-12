@@ -55,7 +55,7 @@ Carrinho, loja de jogador (vending), guilda, pets, homúnculo, mercenário, fabr
 5. **Navegação**: filtro, lista de monstros/NPCs (`navi_mob.lub`, `navi_npc.lub` já extraídos).
 6. Janelas funcionais da seção 3, na ordem de prioridade da auditoria.
 
-Cada item: abrir no jogo com `MythWindow` (precisa de um comando novo para o menu Esc) e comparar **lado a lado** com o print antes de entregar.
+Cada item: abrir no jogo com `MythWindow` (o menu Esc abre com `MythGameMenu`) e comparar **lado a lado** com o print antes de entregar.
 
 ## Andamento (atualizado 2026-10-12)
 
