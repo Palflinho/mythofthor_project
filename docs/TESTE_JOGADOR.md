@@ -121,3 +121,11 @@ NOVO (rodada 24, noite de 12 para 13/10 - detalhes em docs/RELATORIO_NOITE_2026-
 - Flechas: o jogo nao mostra mais flecha "fantasma" equipada; sem flecha aparece "Voce deve equipar flechas antes." em vermelho.
 - Listas depois de skill/item: Lupa/Avaliacao de item, ENCAIXAR CARTA (duplo clique na carta), Fabricar Flechas, Forjar, Autoconjurar, Refinar arma e o destino do Portal. Mensagens de falha de skill com o texto do cliente LATAM.
 - Monstros novos da Renovacao e varios antigos (Chonchon, Salgueiro...) agora tem sprite.
+
+NOVO (rodada 25, mesma noite):
+- MENSAGENS DO SERVIDOR EM PORTUGUES (ex.: "HP e SP foram recuperados."). Na primeira entrada aparece "O seu idioma agora esta definido para Portugues Brasileiro". Mensagens de sistema do cliente (ZC_MSG) com o texto do LATAM.
+- Peco Peco: Cavaleiro/Templario montado agora aparece montado (no mundo e na previa do Equipamento). Teste: @job 7 e @mount (de novo @mount desce; ou o botao "off" do Equipamento).
+- Habilidades (Alt+S): abas 1a (Aprendiz + 1a classe juntas), 2a, 3a e Etc como no LATAM; o personagem aparece no canto de baixo. Corrigido: a barra de baixo (OK/Cancelar) andava para a direita.
+- Grupo (Alt+Z): barra de ferramentas embaixo (cadeado trava a janela; criar/convidar poem o comando no chat; sair).
+- Skills de quest (Primeiros Socorros, Fabricar Flechas...) aprendidas por NPC agora funcionam no atalho. O Assistente de Testes tem a opcao "Aprender Skills de Quest".
+- Troca de classe pelo NPC original (Aprendiz -> Espadachim em Izlude) testada.
