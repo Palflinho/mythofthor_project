@@ -218,3 +218,23 @@ pet, guilda) para completar a lista.
 | Nuvens e neve/fogos/chuva por mapa; cores de céu especiais | ⬜ | P1 |
 | Alucinação (distorção de tela) e fade do tom noturno do Soul Link | ⬜ | P2 |
 | Cooking (0x025a/0x025b) e Cash NPC (0x0288) | ⬜/➖ | P2 |
+
+## Itens adicionados depois da leitura de `nostalro/client/src` (ver `docs/ref/NOSTALRO_COMPARACAO.md`)
+
+| Função | Estado | Prio |
+|---|---|---|
+| Itens no chão com **sombra** (desligada no nosso código por engano?) e curva de queda do cliente | 🟡 | P0 |
+| Sub-célula real do item (`subX/subY` do servidor) em vez de jitter inventado | 🟡 | P0 |
+| Ordem de prioridade dos cliques (diálogo aberto ignora o mundo, sentado vira, skill fora de alcance anda e lança, Shift, pet não é atacado) | 🟡 verificar | P0 |
+| Glifo de início de cast e mira vermelha/branca no chão; cooldown global/por skill; tabela de falhas de skill (inclui "precisa de item X") | 🟡 verificar | P0 |
+| Tempo de ataque por ASPD/arma; recarga de ataque; retomar a caminhada depois de apanhar | 🟡 verificar | P0 |
+| Arma/escudo: o servidor manda o visual da mão antes da lista de equipamento; reconstituir ao chegar a lista | 🟡 verificar | P0 |
+| Troca de mapa: limpar armazém, troca, skill pendente, números de dano; reaplicar falcão/carrinho/montaria | 🟡 | P0 |
+| Falcão: seguir atrás com suavização, voo de ataque (Blitz Beat), ciclo fixo de 500 ms | ⬜ | P1 |
+| Sons por transição de estado (congelar, pedra, atordoar, veneno, maldição, silêncio, confusão, cegueira) e cegueira com tela | 🟡 verificar | P1 |
+| Aura por bit de opt3 (e remoção com explosão), Blade Stop como raiz | ⬜ | P1 |
+| Chefe: aura, marca no minimapa e aviso no chat; auras de nível/detecção/rank PvP | ⬜ | P1 |
+| Fade ao sair de vista e "poof" ao teleportar/deslogar | ⬜ | P2 |
+| Janela única de lista de fabricação com contexto e **pré-carga dos ícones** (identificar, arrow making, autospell, refino, reparo, forja, poção) | ⬜ | P1 |
+| Opções `show_other_damage` e `show_miss`; efeito "Guard" de Kyrie/Parry | ⬜ | P2 |
+| Avisos: bind on equip, recusas de pegar item por código de peso/contagem | ⬜ | P1 |
