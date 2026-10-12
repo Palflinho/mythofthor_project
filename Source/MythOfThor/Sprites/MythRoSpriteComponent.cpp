@@ -3,6 +3,7 @@
 #include "World/MythDayNightActor.h"
 #include "World/MythNightLight.h"
 #include "Sprites/MythSprEffect.h"
+#include "Sprites/MythFalcon.h"
 #include "Sprites/MythRoSound.h"
 #include "Components/PointLightComponent.h"
 #include "EngineUtils.h"
@@ -122,6 +123,57 @@ namespace
 	constexpr int32 MobGroupAttack = 2;
 	constexpr int32 MobGroupHurt = 3;
 	constexpr int32 MobGroupDead = 4;
+
+	/**
+	 * Ataque do jogador: o corpo tem tres grupos (5 ATTACK1, 10 ATTACK2, 11 ATTACK3) e o cliente escolhe pela classe e pelo tipo
+	 * de arma (Config/weapon_action.json, tabela WeaponAction do roBrowserLegacy). Ex.: Cacador com arco puxa a corda (ATTACK3);
+	 * o ATTACK1 e o golpe sem arma.
+	 */
+	int32 PlayerAttackGroup(int32 JobClass, bool bMale, int32 WeaponType)
+	{
+		struct FTable { TMap<int32, TMap<int32, int32>> Jobs; TMap<int32, TMap<int32, int32>> Female; TMap<int32, TMap<int32, int32>> Male; };
+		static const FTable Table = []
+		{
+			FTable T;
+			FString Text;
+			TSharedPtr<FJsonObject> Root;
+			if (!FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("weapon_action.json")))
+				|| !FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) || !Root.IsValid())
+			{
+				UE_LOG(LogTemp, Warning, TEXT("MythRoSprite: Config/weapon_action.json ausente (tools/gen_weapon_action.py)"));
+				return T;
+			}
+			auto Read = [](const TSharedPtr<FJsonObject>& O, TMap<int32, int32>& Out)
+			{
+				for (const auto& P : O->Values) { Out.Add(FCString::Atoi(*P.Key), static_cast<int32>(P.Value->AsNumber())); }
+			};
+			const TSharedPtr<FJsonObject>* Jobs = nullptr;
+			if (Root->TryGetObjectField(TEXT("jobs"), Jobs))
+			{
+				for (const auto& J : (*Jobs)->Values) { Read(J.Value->AsObject(), T.Jobs.Add(FCString::Atoi(*J.Key))); }
+			}
+			const TSharedPtr<FJsonObject>* BySex = nullptr;
+			if (Root->TryGetObjectField(TEXT("jobs_sex"), BySex))
+			{
+				for (const auto& J : (*BySex)->Values)
+				{
+					const int32 Id = FCString::Atoi(*J.Key);
+					const TSharedPtr<FJsonObject> O = J.Value->AsObject();
+					Read(O->GetObjectField(TEXT("f")), T.Female.Add(Id));
+					Read(O->GetObjectField(TEXT("m")), T.Male.Add(Id));
+				}
+			}
+			return T;
+		}();
+		const TMap<int32, int32>* Weapons = Table.Jobs.Find(JobClass);
+		if (!Weapons)
+		{
+			Weapons = (bMale ? Table.Male : Table.Female).Find(JobClass);
+		}
+		const int32 Attack = Weapons ? Weapons->FindRef(WeaponType) : 0;
+		static const int32 Groups[3] = { 5, 10, 11 };
+		return Groups[FMath::Clamp(Attack, 0, 2)];
+	}
 
 	// Materiais de sprite do Paper2D: textura "SpriteTexture" x cor do vertice, mascarados (com e sem iluminacao).
 	const TCHAR* LitMaterialPath = TEXT("/Paper2D/MaskedLitSpriteMaterial.MaskedLitSpriteMaterial");
@@ -291,14 +343,47 @@ void UMythRoSpriteComponent::PlayFrameEvent(const FRoActFrame& Frame, int32 Acti
 	}
 	else if (Event.Equals(TEXT("atk"), ESearchCase::IgnoreCase) && !IsMonster())
 	{
-		// A arma vem como o "view" do item; nas armas comuns ele e o proprio tipo (W_DAGGER 1 ... W_2HSTAFF 23)
-		const int32 WeaponType = Weapon > 0 && Weapon <= 23 ? Weapon : (Weapon > 0 ? 2 : 0);
+		// Som do golpe pelo tipo da arma (W_DAGGER 1 ... W_2HSTAFF 23); o proprio personagem recebe o ID do item
+		const int32 Type = WeaponTypeOf(Weapon);
+		const int32 WeaponType = Type > 0 && Type <= 23 ? Type : (Weapon > 0 ? 2 : 0);
 		UMythRoSound::PlayWavAtLocation(this, UMythRoSound::WeaponSwingWav(WeaponType), GetOwner()->GetActorLocation());
 	}
 }
 
+
+int32 UMythRoSpriteComponent::WeaponTypeOf(int32 Weapon)
+{
+	Weapon &= 0xFFFF;
+	if (Weapon <= 30)
+	{
+		return FMath::Max(Weapon, 0);
+	}
+	static const TMap<int32, int32> Types = []
+	{
+		TMap<int32, int32> Out;
+		FString Text;
+		TSharedPtr<FJsonObject> Root;
+		if (FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("weapon_types.json")))
+			&& FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) && Root.IsValid())
+		{
+			for (const auto& P : Root->Values) { Out.Add(FCString::Atoi(*P.Key), static_cast<int32>(P.Value->AsNumber())); }
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("MythRoSprite: Config/weapon_types.json ausente (tools/gen_weapon_types.py)"));
+		}
+		return Out;
+	}();
+	return Types.FindRef(Weapon);
+}
+
 void UMythRoSpriteComponent::OnComponentDestroyed(bool bDestroyingHierarchy)
 {
+	if (Falcon.IsValid())
+	{
+		Falcon->Destroy();
+		Falcon = nullptr;
+	}
 	if (ShadowMesh)
 	{
 		ShadowMesh->DestroyComponent();
@@ -425,7 +510,7 @@ void UMythRoSpriteComponent::LoadEquipment(const FString& Root, const FString& S
 		const FString* Name = T.Weapons.Find(View);
 		return FPaths::Combine(SpriteRoot, HumanDir, Job, FString::Printf(TEXT("%s_%s%s"), *Job, *Sex, Name ? **Name : *FString::Printf(TEXT("_%d"), View)));
 	};
-	Load(WeaponSource, WeaponBase(Weapon));
+	Load(WeaponSource, WeaponBase(WeaponTypeOf(Weapon)));
 	// Escudo: ids fora de 2100-2200 acima de 500 sao a arma da mao esquerda (Mercenario com duas armas)
 	if (Shield > 500 && (Shield < 2100 || Shield > 2200))
 	{
@@ -629,7 +714,17 @@ void UMythRoSpriteComponent::SetEffectOption(int32 Option, bool bSelf)
 	bStatusHidden = bConcealed && !bSelf;
 	bStatusDim = bConcealed && bSelf;
 	SetVisibility(!bStatusHidden, true);
-	SetStatusAttachment(TEXT("falcon"), TEXT("매"), (Option & 0x10) != 0 && !bStatusHidden, true, 0.f, 12.f); // o falcao do Cacador fica sobre a cabeca e vira com o dono
+	// Falcao do Cacador: companheiro que voa e segue o dono (Sprites/MythFalcon), nao um adereco preso a cabeca
+	const bool bFalcon = (Option & 0x10) != 0 && !bStatusHidden;
+	if (bFalcon && !Falcon.IsValid())
+	{
+		Falcon = AMythFalcon::Spawn(GetOwner(), JobClass);
+	}
+	else if (!bFalcon && Falcon.IsValid())
+	{
+		Falcon->Destroy();
+		Falcon = nullptr;
+	}
 	RecomputeStatusTint();
 }
 
@@ -777,7 +872,7 @@ int32 UMythRoSpriteComponent::GetActionIndex() const
 	{
 	case EMythSpriteState::Idle:   Group = GroupIdle; break;
 	case EMythSpriteState::Walk:   Group = GroupWalk; break;
-	case EMythSpriteState::Attack: Group = bMob ? MobGroupAttack : GroupAttack; break;
+	case EMythSpriteState::Attack: Group = bMob ? MobGroupAttack : PlayerAttackGroup(JobClass, bMale, WeaponTypeOf(Weapon)); break;
 	case EMythSpriteState::Hit:    Group = bMob ? MobGroupHurt : GroupHurt; break;
 	case EMythSpriteState::Dead:   Group = bMob ? MobGroupDead : GroupDead; break;
 	case EMythSpriteState::Sit:    Group = bMob ? GroupIdle : GroupSit; break;

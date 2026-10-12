@@ -234,6 +234,13 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "RO Sprite")
 	void FaceLocation(const FVector& WorldLocation);
+	/**
+	 * Tipo de arma do cliente (1 adaga ... 11 arco ... 23 cajado de duas maos) a partir do que o servidor manda: ja o tipo
+	 * (ate 30) ou o ID do item (o proprio personagem recebe o ID; Config/weapon_types.json, tools/gen_weapon_types.py).
+	 */
+	static int32 WeaponTypeOf(int32 Weapon);
+	/** Falcao do dono (OPTION_FALCON), se houver: o Ataque Aereo manda ele voar ate o alvo. */
+	class AMythFalcon* GetFalcon() const { return Falcon.Get(); }
 
 	UFUNCTION(BlueprintPure, Category = "RO Sprite")
 	EMythSpriteState GetState() const { return State; }
@@ -319,6 +326,7 @@ private:
 	/** Segundos que o jogador ainda fica em postura de combate (acao 4 do .act) depois de bater ou apanhar. */
 	float ReadyTimeLeft = 0.f;
 	TMap<FName, TWeakObjectPtr<AActor>> StatusAttachments;
+	TWeakObjectPtr<class AMythFalcon> Falcon;
 	void SetStatusAttachment(FName Name, const TCHAR* SprFile, bool bOn, bool bAboveHead = true, float SideOffsetUU = 0.f, float UpOffsetUU = 0.f);
 	float SunVisibility = 1.f;
 	float SunTraceTimer = 0.f;

@@ -1280,7 +1280,7 @@ void AMythNetWorld::HandleDamage(int64 SourceID, int64 TargetID, int32 Damage, u
 	// Monstros arqueiros (AttackEffectTable do roBrowser: PROJECTILE ef_arrow_projectile) tambem atiram flechas
 	static const TSet<FString> ArcherMobs = { TEXT("archer_skeleton"), TEXT("orc_archer"), TEXT("goblin_archer"), TEXT("raydric_archer"), TEXT("kobold_archer"), TEXT("gargoyle"), TEXT("archer_guardian") };
 	const bool bArcherMob = SrcSprite && !SrcSprite->MonsterSpriteName.IsEmpty() && ArcherMobs.Contains(SrcSprite->MonsterSpriteName.ToLower());
-	if (SrcSprite && ((SrcSprite->MonsterSpriteName.IsEmpty() && SrcSprite->Weapon == 11) || bArcherMob))
+	if (SrcSprite && ((SrcSprite->MonsterSpriteName.IsEmpty() && UMythRoSpriteComponent::WeaponTypeOf(SrcSprite->Weapon) == 11) || bArcherMob))
 	{
 		const float Attack = FMath::Max(DelayMs, 1) / 1000.f;
 		TWeakObjectPtr<AActor> WSource(Source);
@@ -1290,7 +1290,8 @@ void AMythNetWorld::HandleDamage(int64 SourceID, int64 TargetID, int32 Damage, u
 		{
 			if (WSource.IsValid() && WTarget.IsValid())
 			{
-				FMythSkillEffects::PlayEffectId(this, 2003, WTarget.Get(), WTarget->GetActorLocation(), WSource.Get()); // ef_arrow_projectile
+				const bool bArrow = FMythSkillEffects::PlayEffectId(this, 2003, WTarget.Get(), WTarget->GetActorLocation(), WSource.Get()); // ef_arrow_projectile
+				UE_LOG(LogTemp, Log, TEXT("MythNetWorld: flecha %s"), bArrow ? TEXT("disparada") : TEXT("falhou (efeito 2003)"));
 			}
 		}), Attack + 0.05f, false);
 		FTimerHandle ImpactHandle;
