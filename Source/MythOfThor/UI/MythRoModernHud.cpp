@@ -15,9 +15,9 @@
 
 namespace
 {
-	constexpr float MhPanelW = 214.f;
-	constexpr float MhPanelH = 44.f;
-	constexpr float MhBarX = 54.f;
+	constexpr float MhPanelW = 236.f;
+	constexpr float MhPanelH = 56.f;
+	constexpr float MhBarX = 76.f;
 	constexpr float MhBarW = 118.f;
 	constexpr float MhBarH = 10.f;
 	constexpr float MhExpHalfW = 330.f;
@@ -54,6 +54,8 @@ void UMythRoHUDWidget::BuildModernHud()
 	AddRounded(ModernPanel, FLinearColor(0.13f, 0.15f, 0.25f, 0.95f), FLinearColor(0.7f, 0.75f, 0.9f, 1.f), 4.f, 4.f, 36.f, 36.f, 18.f, 18.f);
 	ModernAvatar = AddImage(ModernPanel, nullptr, 6.f, 6.f, 32.f, 32.f);
 	ModernAvatar->SetVisibility(ESlateVisibility::Collapsed);
+	ModernClassIcon = AddImage(ModernPanel, nullptr, 46.f, 15.f, 24.f, 24.f); // simbolo da classe, o mesmo da janela do grupo
+	ModernClassIcon->SetVisibility(ESlateVisibility::Collapsed);
 
 	ModernName = AddText(ModernPanel, MhBarX, 3.f, 8, MhText, true);
 	ModernJob = AddText(ModernPanel, MhBarX + MhBarW - 10.f, 4.f, 6, FLinearColor(0.7f, 0.78f, 1.f));
@@ -72,6 +74,7 @@ void UMythRoHUDWidget::BuildModernHud()
 	};
 	MakeBar(17.f, FLinearColor(0.2f, 0.78f, 0.28f), TEXT("HP"), ModernHPFill, ModernHPText, ModernHPPct);
 	MakeBar(29.f, FLinearColor(0.2f, 0.45f, 0.95f), TEXT("SP"), ModernSPFill, ModernSPText, ModernSPPct);
+	ModernWeightZeny = AddText(ModernPanel, MhBarX, 42.f, 6, FLinearColor(0.85f, 0.9f, 1.f));
 
 	// --- Barras de EXP embaixo (Base a esquerda, Classe a direita), com o botao de level up acima do rotulo
 	ModernExpStrip = MakeWindow(FVector2D(0.5f, 1.f), FVector2D(0.5f, 1.f), FVector2D(106.f, 0.f), FVector2D(2.f * MhExpHalfW + MhExpGap, 40.f));
@@ -122,6 +125,17 @@ void UMythRoHUDWidget::UpdateModernHud()
 	Bar(ModernHPFill, ModernHPText, ModernHPPct, 17.f, Stats->GetHP(), Stats->GetMaxHP(), HPColor);
 	Bar(ModernSPFill, ModernSPText, ModernSPPct, 29.f, Stats->GetSP(), Stats->GetMaxSP(), FLinearColor(0.2f, 0.45f, 0.95f));
 
+	if (NetStats && NetStats->MaxWeight > 0)
+	{
+		const int32 WeightPct = FMath::RoundToInt(100.f * NetStats->Weight / NetStats->MaxWeight);
+		ModernWeightZeny->SetText(FText::FromString(FString::Printf(TEXT("Peso %d%%   Zeny %s"), WeightPct, *FText::AsNumber(NetStats->Zeny).ToString())));
+		ModernWeightZeny->SetColorAndOpacity(FSlateColor(WeightPct >= 50 ? FLinearColor(1.f, 0.45f, 0.4f) : FLinearColor(0.85f, 0.9f, 1.f)));
+	}
+	else
+	{
+		ModernWeightZeny->SetText(FText::FromString(TEXT("Peso 0%   Zeny 0")));
+	}
+
 	// Avatar: retrato do sprite do jogador (refeito quando o visual muda)
 	const APawn* Pawn = GetOwningPlayerPawn();
 	const UMythRoSpriteComponent* Sprite = Pawn ? Pawn->FindComponentByClass<UMythRoSpriteComponent>() : nullptr;
@@ -138,6 +152,19 @@ void UMythRoHUDWidget::UpdateModernHud()
 		}
 	}
 	ModernAvatar->SetVisibility(ModernAvatarTex ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
+
+	if (NetStats)
+	{
+		UTexture2D* JobIcon = FMythRoUITextures::Get(FString::Printf(TEXT("renewalparty/icon_jobs_%d.bmp"), NetStats->JobClass));
+		if (JobIcon)
+		{
+			FSlateBrush IconBrush;
+			IconBrush.SetResourceObject(JobIcon);
+			IconBrush.ImageSize = FVector2D(24.f, 24.f) * UIScale;
+			ModernClassIcon->SetBrush(IconBrush);
+		}
+		ModernClassIcon->SetVisibility(JobIcon ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
+	}
 
 	// EXP de Base e de Classe
 	const float BaseFrac = Stats->GetExpFraction();

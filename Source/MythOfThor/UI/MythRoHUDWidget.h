@@ -283,10 +283,12 @@ protected:
 	UPROPERTY() TObjectPtr<UCanvasPanel> ModernPanel;
 	UPROPERTY() TObjectPtr<UCanvasPanel> ModernExpStrip;
 	UPROPERTY() TObjectPtr<UImage> ModernAvatar;
+	UPROPERTY() TObjectPtr<UImage> ModernClassIcon;
 	UPROPERTY() TObjectPtr<UTexture2D> ModernAvatarTex;
 	int32 ModernAvatarVersion = -1;
 	UPROPERTY() TObjectPtr<UTextBlock> ModernName;
 	UPROPERTY() TObjectPtr<UTextBlock> ModernJob;
+	UPROPERTY() TObjectPtr<UTextBlock> ModernWeightZeny;
 	UPROPERTY() TObjectPtr<UImage> ModernHPFill;
 	UPROPERTY() TObjectPtr<UImage> ModernSPFill;
 	UPROPERTY() TObjectPtr<UTextBlock> ModernHPText;

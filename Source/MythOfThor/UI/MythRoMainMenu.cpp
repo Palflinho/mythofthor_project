@@ -17,7 +17,7 @@ namespace
 	constexpr float HubPad = 14.f;
 	constexpr float HubTitleH = 26.f;
 	constexpr float HubFootH = 26.f;
-	constexpr int32 HubRows = 3;
+	constexpr int32 HubRows = 5;
 	constexpr float HubW = HubPad * 2.f + HubCols * HubCellW;
 	constexpr float HubH = HubTitleH + HubRows * HubCellH + HubFootH + HubPad;
 
@@ -38,6 +38,12 @@ namespace
 		{ TEXT("quest"), TEXT("Missões"), EMythRoWindow::Quests, false },
 		{ TEXT("mail"), TEXT("Correio"), EMythRoWindow::Mail, false },
 		{ TEXT("map"), TEXT("Mapa"), EMythRoWindow::Minimap, false },
+		{ TEXT("guild"), TEXT("Clã"), EMythRoWindow::Guild, false },
+		{ TEXT("navigation"), TEXT("Navegação"), EMythRoWindow::Navi, false },
+		{ TEXT("sns"), TEXT("Amigos"), EMythRoWindow::Friends, false },
+		{ TEXT("achievement"), TEXT("Conquistas"), EMythRoWindow::Achievements, false },
+		{ TEXT("bank"), TEXT("Banco"), EMythRoWindow::Bank, false },
+		{ TEXT("keyboard"), TEXT("Atalhos"), EMythRoWindow::Shortcuts, false },
 		{ TEXT("option"), TEXT("Configurações"), EMythRoWindow::Status, true },
 	};
 }
