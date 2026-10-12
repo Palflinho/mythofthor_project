@@ -110,3 +110,14 @@ NOVO (rodada 21): a municao equipada agora continua na lista de Itens > Diversos
 NOVO (rodada 22): itens no chao agora tem sombra embaixo (como no cliente original), caem com a curva original (sobem um pouco e pousam em ~0,4 s, sem quique) e ficam na posicao exata dentro da celula que o servidor manda.
 
 NOVO (rodada 23, HUD): o menu Esc agora tem 5 botoes largos (300 de largura) como no LATAM. A janela de Grupo tem cartoes de membro (fundo escuro, icone da classe, coroa no lider, nome, nivel, mapa e barra de HP); ainda faltam a barra de ferramentas e a alca de redimensionar. A fonte da interface passou a ser a do Windows (Tahoma, ou Arial) como no cliente original; se nao existir, usa a Roboto de antes. Itens no chao tem sombra e caem com a curva original.
+
+NOVO (rodada 24, noite de 12 para 13/10 - detalhes em docs/RELATORIO_NOITE_2026-10-12.md):
+- SERVIDOR EM RENOVACAO (ate a transclasse): transclasse vai ao nivel 125 (classe 70), atributos ate 110, classes expandidas liberadas, sem 3a classe. As formulas de dano, conjuracao e ASPD sao as da Renovacao. Personagens antigos podem ter pontos de atributo a mais ou a menos: use @streset (ou o NPC de teste) para redistribuir.
+- Atributos (Alt+A): MATK aparece como "atributo + equipamento", ASPD no numero do cliente (ex.: 147) e o custo do ponto vem do servidor (acima de 100 fica mais caro).
+- Equipamento (Alt+Q): 4 abas (Geral, Especial, Titulo, Fonte de dano), o PERSONAGEM aparece no meio e muda na hora ao trocar chapeu/arma, nomes em 2 linhas, botao redondo "off" para o falcao/Peco, rodape com "Mostrar equip." e os botoes Atributos, Troca rapida e TIRAR TUDO. Com carrinho aparece o botao "itens" no meio, que abre o CARRINHO.
+- Carrinho (Mercador com carrinho): janela com o carrinho a esquerda e a mochila a direita; clique move 1 (Shift: 10); mostra itens e peso.
+- Navegacao (Alt+N): filtro Todos/Mapas/Monstros (procure "poring" com Monstros), lista dos MONSTROS de cada mapa com o tamanho, "Procurar" mostra a rota, "Enviar" poe /navi no chat, "Mover" anda sozinho.
+- NPCs que pedem numero ou texto nao travam mais (caixa abaixo da fala). As falas saem uma por linha. Teste no Assistente de Testes de Prontera (156,191): "Definir Nivel" pede o nivel; "Testar Caixa de Texto".
+- Flechas: o jogo nao mostra mais flecha "fantasma" equipada; sem flecha aparece "Voce deve equipar flechas antes." em vermelho.
+- Listas depois de skill/item: Lupa/Avaliacao de item, ENCAIXAR CARTA (duplo clique na carta), Fabricar Flechas, Forjar, Autoconjurar, Refinar arma e o destino do Portal. Mensagens de falha de skill com o texto do cliente LATAM.
+- Monstros novos da Renovacao e varios antigos (Chonchon, Salgueiro...) agora tem sprite.
