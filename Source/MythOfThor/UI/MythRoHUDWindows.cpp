@@ -71,8 +71,8 @@ namespace
 	// Arvore de habilidades: grade de 7 colunas, celula de 40 x 46 (moldura 32, icone 24, nivel embaixo)
 	constexpr float RoTreeLeft = 32.f; // 24 de coluna de abas verticais (1a/2a/...) + 8 de margem, como no print 13
 	constexpr float RoTreeTop = 24.f;
-	constexpr float RoTreeCellW = 40.f;
-	constexpr float RoTreeCellH = 46.f;
+	constexpr float RoTreeCellW = 68.f; // print 13 do LATAM: 7 colunas a cada ~68
+	constexpr float RoTreeCellH = 56.f;
 	constexpr int32 RoTreeRows = 9;
 }
 
@@ -285,7 +285,7 @@ void UMythRoHUDWidget::BuildSkillsWindow()
 {
 	// Habilidades (Alt+S) em arvore, como a janela do cliente moderno: abas por etapa da classe, grade de 7 colunas
 	// na posicao do skilltreeview.lub, linhas ate os pre-requisitos e o nivel/"+" em cada skill
-	const float W = RoTreeLeft + 8.f + FMythRoSkillTree::Columns * RoTreeCellW;
+	const float W = RoTreeLeft + 24.f + FMythRoSkillTree::Columns * RoTreeCellW;
 	const float H = RoTreeTop + RoTreeRows * RoTreeCellH + 40.f;
 	SkillsWindow = MakeRoPanel(TEXT("Habilidades"), FVector2D(W, H), FVector2D(340.f, 110.f));
 	for (int32 t = 0; t < 4; ++t)
@@ -309,15 +309,23 @@ void UMythRoHUDWidget::BuildSkillsWindow()
 	{
 		const float X = RoTreeLeft + (i % FMythRoSkillTree::Columns) * RoTreeCellW;
 		const float Y = RoTreeTop + (i / FMythRoSkillTree::Columns) * RoTreeCellH;
-		UImage* Frame = AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("itemwin_mid"))), X + 5.f, Y, 32.f, 32.f);
+		// Celula do print 13: nome em cima (cortado com reticencias), moldura 32 x 32 com o icone, nivel embaixo e o "+" ao lado
+		UTextBlock* Title = AddText(SkillsWindow, X, Y, 7, RoWinLabel);
+		Title->SetJustification(ETextJustify::Center);
+		if (UCanvasPanelSlot* TS = Cast<UCanvasPanelSlot>(Title->Slot)) { TS->SetAutoSize(false); TS->SetSize(FVector2D(RoTreeCellW, 12.f) * UIScale); }
+		SkillTitles.Add(Title);
+		UImage* Frame = AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("itemwin_mid"))), X + 18.f, Y + 13.f, 32.f, 32.f);
 		Frame->SetVisibility(ESlateVisibility::Collapsed);
 		SkillCellFrames.Add(Frame);
-		UImage* Icon = AddImage(SkillsWindow, nullptr, X + 9.f, Y + 4.f, 24.f, 24.f);
+		UImage* Icon = AddImage(SkillsWindow, nullptr, X + 22.f, Y + 17.f, 24.f, 24.f);
 		Icon->SetVisibility(ESlateVisibility::Collapsed);
 		SkillIcons.Add(Icon);
-		SkillNames.Add(AddText(SkillsWindow, X + 7.f, Y + 32.f, 7, RoWinText)); // nivel "3/10"
+		UTextBlock* LevelText = AddText(SkillsWindow, X, Y + 45.f, 7, RoWinText); // nivel "3/10"
+		LevelText->SetJustification(ETextJustify::Center);
+		if (UCanvasPanelSlot* LS = Cast<UCanvasPanelSlot>(LevelText->Slot)) { LS->SetAutoSize(false); LS->SetSize(FVector2D(RoTreeCellW, 12.f) * UIScale); }
+		SkillNames.Add(LevelText);
 		SkillLevels.Add(nullptr);
-		UImage* Up = AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("lv_up_on"))), X + 27.f, Y + 18.f, 14.f, 14.f);
+		UImage* Up = AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("lv_up_on"))), X + 50.f, Y + 22.f, 14.f, 14.f);
 		Up->SetVisibility(ESlateVisibility::Collapsed);
 		SkillUpButtons.Add(Up);
 	}
@@ -340,7 +348,7 @@ void UMythRoHUDWidget::ResizeSkillTree(int32 Rows)
 	{
 		return;
 	}
-	const float W = RoTreeLeft + 8.f + FMythRoSkillTree::Columns * RoTreeCellW;
+	const float W = RoTreeLeft + 24.f + FMythRoSkillTree::Columns * RoTreeCellW;
 	const float H = RoTreeTop + Rows * RoTreeCellH + 40.f;
 	const float BarY = H - 32.f;
 	if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(SkillsWindow->Slot))
@@ -691,12 +699,15 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 			LastCell = FMath::Max(LastCell, Cell.Key);
 		}
 	}
-	ResizeSkillTree(FMath::Clamp(LastCell / FMythRoSkillTree::Columns + 1, 3, RoTreeRows));
+	ResizeSkillTree(FMath::Clamp(LastCell / FMythRoSkillTree::Columns + 1, 6, RoTreeRows));
 	for (int32 i = 0; i < Cells; ++i)
 	{
 		const int32* SkillID = Grid ? Grid->Find(i) : nullptr;
 		const bool bUsed = SkillID && *SkillID > 0;
-		SkillCellFrames[i]->SetVisibility(bUsed ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
+		// Celula sem skill: so a moldura apagada (o print mostra as casas vazias pontilhadas)
+		SkillCellFrames[i]->SetVisibility(ESlateVisibility::HitTestInvisible);
+		SkillCellFrames[i]->SetColorAndOpacity(bUsed ? FLinearColor::White : FLinearColor(1.f, 1.f, 1.f, 0.35f));
+		SkillTitles[i]->SetText(FText::GetEmpty());
 		if (!bUsed)
 		{
 			SkillIcons[i]->SetVisibility(ESlateVisibility::Collapsed);
@@ -705,6 +716,11 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 			continue;
 		}
 		CellOfSkill.Add(*SkillID, i);
+		{
+			const FMythTreeSkill* TitleTree = FMythRoSkillTree::Skill(*SkillID);
+			FString Title = TitleTree ? TitleTree->Name : FMythRoClientTables::SkillName(*SkillID);
+			SkillTitles[i]->SetText(FText::FromString(Title.Len() > 12 ? Title.Left(11) + TEXT("…") : Title));
+		}
 		const FRagnarokSkillInfo* Info = Known.FindRef(*SkillID);
 		const FMythTreeSkill* Tree = FMythRoSkillTree::Skill(*SkillID);
 		const int32 Level = Info ? Info->Level : 0;
@@ -751,17 +767,17 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 			}
 			const FRagnarokSkillInfo* Have = Known.FindRef(Need.X);
 			const FLinearColor Color = Have && Have->Level >= Need.Y ? FLinearColor(0.35f, 0.55f, 0.9f, 1.f) : FLinearColor(0.68f, 0.71f, 0.78f, 1.f);
-			const float FX = RoTreeLeft + (*From % FMythRoSkillTree::Columns) * RoTreeCellW + 20.f;
+			const float FX = RoTreeLeft + (*From % FMythRoSkillTree::Columns) * RoTreeCellW + 34.f;
 			const float FY = RoTreeTop + (*From / FMythRoSkillTree::Columns) * RoTreeCellH;
-			const float TX = RoTreeLeft + (Pair.Value % FMythRoSkillTree::Columns) * RoTreeCellW + 20.f;
+			const float TX = RoTreeLeft + (Pair.Value % FMythRoSkillTree::Columns) * RoTreeCellW + 34.f;
 			const float TY = RoTreeTop + (Pair.Value / FMythRoSkillTree::Columns) * RoTreeCellH;
 			if (FMath::IsNearlyEqual(FY, TY))
 			{
-				Place(SkillLinePool[Used++], FMath::Min(FX, TX), FY + 16.f, FMath::Abs(TX - FX), 2.f, Color); // mesma linha
+				Place(SkillLinePool[Used++], FMath::Min(FX, TX), FY + 29.f, FMath::Abs(TX - FX), 2.f, Color); // mesma linha
 				continue;
 			}
-			const float MidY = TY - 6.f; // vao entre a linha de cima e a skill
-			Place(SkillLinePool[Used++], FX - 1.f, FY + 32.f, 2.f, MidY - (FY + 32.f), Color);
+			const float MidY = TY + 8.f; // vao entre o nivel da linha de cima e o nome da skill
+			Place(SkillLinePool[Used++], FX - 1.f, FY + 45.f, 2.f, MidY - (FY + 45.f), Color);
 			Place(SkillLinePool[Used++], FMath::Min(FX, TX) - 1.f, MidY, FMath::Abs(TX - FX) + 2.f, 2.f, Color);
 			Place(SkillLinePool[Used++], TX - 1.f, MidY, 2.f, TY - MidY, Color);
 		}

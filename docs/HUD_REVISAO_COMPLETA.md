@@ -64,3 +64,4 @@ Cada item: abrir no jogo com `MythWindow` (precisa de um comando novo para o men
 - ✅ **Fonte:** UI usa Tahoma (Windows) com fallback para Arial e Roboto; conferir visualmente contra os prints. O SCDream fica só para o coreano.
 - ⬜ Habilidades, Equipamento, Navegação e janelas funcionais (ver a ordem acima).
 - 🟡 **Habilidades:** abas verticais na esquerda (Ap, 1a, 2a, Tr) no lugar da faixa superior, grade deslocada; faltam a ilustração do personagem, limitar a 6 linhas, e rodapé idêntico ao do print (Apply/Reset já existem). Conferido em jogo.
+- 🟡 **Habilidades (2ª passada):** grade de 7 colunas de 68 × 56 como no print 13, nome da skill em cima (cortado com reticências), nível embaixo, casas vazias com moldura apagada, mínimo de 6 linhas e abas verticais; faltam a ilustração do personagem, as abas "3a/Etc" e o texto "skill point : N" no estilo do print.

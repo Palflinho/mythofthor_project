@@ -363,6 +363,7 @@ protected:
 	// Arvore de habilidades (skilltreeview.lub do cliente): celulas da grade 7 colunas, abas por etapa da classe e
 	// as linhas que ligam cada skill ao pre-requisito
 	UPROPERTY() TArray<TObjectPtr<UImage>> SkillCellFrames;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> SkillTitles;
 	UPROPERTY() TArray<TObjectPtr<UImage>> SkillTabBacks;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> SkillTabTexts;
 	UPROPERTY() TArray<TObjectPtr<UImage>> SkillLinePool;
