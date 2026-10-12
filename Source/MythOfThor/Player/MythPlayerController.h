@@ -183,6 +183,7 @@ public:
 	UFUNCTION(Exec) void MythGuildNotice(const FString& Subject, const FString& Text) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendGuildNotice(Subject, Text); } }
 	/** Teste: aba da janela de Habilidades (0 = 1a, 1 = 2a, 2 = 3a, 3 = Etc). */
 	UFUNCTION(Exec) void MythSkillTab(int32 Tab) { if (HudWidget) { HudWidget->SetSkillTab(Tab); } }
+	UFUNCTION(Exec) void MythSkillHover(int32 SkillId) { if (HudWidget) { HudWidget->SkillTestHover(SkillId); } }
 	/** Teste: usa a skill em si mesmo (ou no alvo de rede Target, se dado). */
 	UFUNCTION(Exec) void MythUseSkill(int32 SkillId, int32 Level, int32 Target = 0) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->UseSkill(SkillId, Level, Target ? Target : N->GetSelfID()); } }
 	/** Teste: escolhe a linha Row da lista de escolha aberta (Portal, Lupa, carta...); Row < 0 cancela. */

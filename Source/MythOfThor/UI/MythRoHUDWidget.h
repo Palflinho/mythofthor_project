@@ -396,7 +396,17 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> SkillTitles;
 	UPROPERTY() TArray<TObjectPtr<UImage>> SkillTabBacks;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> SkillTabTexts;
-	UPROPERTY() TArray<TObjectPtr<UImage>> SkillLinePool;
+	UPROPERTY() TArray<TObjectPtr<UImage>> SkillNeedMarks; // borda de pre-requisito por celula
+	TMap<int32, int32> SkillCellOf;              // skill -> celula da aba atual
+	int32 SkillHoverID = -1;                     // skill sob o mouse (-1 refaz)
+	UPROPERTY() TObjectPtr<class UBorder> SkillTip;
+	UPROPERTY() TObjectPtr<class UVerticalBox> SkillTipBox;
+	/** Dica da skill sob o mouse (nome, nivel, descricao e pre-requisitos) e destaque dos pre-requisitos na arvore. */
+	void UpdateSkillHover();
+public:
+	/** Teste: poe o cursor do sistema sobre a skill (na aba aberta) para ver a dica e o destaque. */
+	void SkillTestHover(int32 SkillId);
+protected:
 	UPROPERTY() TArray<TObjectPtr<UWidget>> SkillBottomBar;
 	void ResizeSkillTree(int32 Rows);
 	/** Abas do LATAM (print 13): 1a = Aprendiz + 1a classe, 2a = 2a classe (+ transclasse), 3a e Etc vazias. Cada aba junta as

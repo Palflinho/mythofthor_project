@@ -10,10 +10,15 @@
 #include "Blueprint/WidgetTree.h"
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
+#include "Brushes/SlateRoundedBoxBrush.h"
+#include "Components/Border.h"
 #include "Components/HorizontalBox.h"
 #include "Components/Image.h"
 #include "Components/ScrollBox.h"
 #include "Components/TextBlock.h"
+#include "Components/VerticalBox.h"
+#include "Framework/Application/SlateApplication.h"
+#include "UI/MythRoSkillTree.h"
 
 namespace
 {
@@ -211,4 +216,152 @@ bool UMythRoHUDWidget::HandleItemInfoClick(const FVector2D& ScreenPos)
 		}
 	}
 	return false;
+}
+
+void UMythRoHUDWidget::UpdateSkillHover()
+{
+	// Mouse sobre uma skill da arvore: dica com nome, nivel e a descricao do skilldesctable; se ainda nao foi aprendida, os
+	// pre-requisitos (diretos e os deles) ficam com borda na arvore - laranja os que faltam, verde os ja cumpridos
+	int32 Hovered = 0;
+	if (SkillsWindow && SkillsWindow->IsVisible() && FSlateApplication::IsInitialized())
+	{
+		const FVector2D Mouse = FSlateApplication::Get().GetCursorPos();
+		for (int32 i = 0; i < SkillRowID.Num() && i < SkillCellFrames.Num(); ++i)
+		{
+			if (SkillRowID[i] != 0 && (IsUnder(SkillCellFrames[i], Mouse) || IsUnder(SkillIcons[i], Mouse)))
+			{
+				Hovered = SkillRowID[i];
+				break;
+			}
+		}
+	}
+	if (!SkillTip)
+	{
+		SkillTip = WidgetTree->ConstructWidget<UBorder>();
+		SkillTip->SetBrush(FSlateRoundedBoxBrush(FLinearColor(1.f, 1.f, 1.f, 0.97f), 3.f, FLinearColor(0.55f, 0.6f, 0.75f, 1.f), 1.f));
+		SkillTip->SetPadding(FMargin(8.f, 6.f));
+		SkillTip->SetVisibility(ESlateVisibility::Collapsed);
+		SkillTipBox = WidgetTree->ConstructWidget<UVerticalBox>();
+		SkillTip->SetContent(SkillTipBox);
+		if (UCanvasPanelSlot* S = Root->AddChildToCanvas(SkillTip))
+		{
+			S->SetAutoSize(true);
+			S->SetZOrder(100000);
+		}
+	}
+	if (Hovered == 0)
+	{
+		SkillTip->SetVisibility(ESlateVisibility::Collapsed);
+		if (SkillHoverID != 0)
+		{
+			for (UImage* M : SkillNeedMarks) { M->SetVisibility(ESlateVisibility::Collapsed); }
+			SkillHoverID = 0;
+		}
+		return;
+	}
+	// A dica acompanha o mouse (sem passar da borda da tela)
+	if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(SkillTip->Slot))
+	{
+		const FGeometry& RootGeo = Root->GetCachedGeometry();
+		FVector2D Pos = RootGeo.AbsoluteToLocal(FSlateApplication::Get().GetCursorPos()) + FVector2D(18.f, 18.f);
+		const FVector2D Size = SkillTip->GetDesiredSize();
+		const FVector2D View = RootGeo.GetLocalSize();
+		Pos.X = FMath::Min(Pos.X, View.X - Size.X - 4.f);
+		if (Pos.Y + Size.Y > View.Y - 4.f) { Pos.Y -= Size.Y + 30.f; }
+		S->SetPosition(Pos);
+	}
+	if (Hovered == SkillHoverID)
+	{
+		return;
+	}
+	SkillHoverID = Hovered;
+
+	const URagnarokNetworkSubsystem* Net = GetNet();
+	TMap<int32, int32> Have;
+	if (Net)
+	{
+		for (const FRagnarokSkillInfo& S : Net->GetSkillList()) { Have.Add(S.SkillID, S.Level); }
+	}
+	const FMythTreeSkill* Tree = FMythRoSkillTree::Skill(Hovered);
+	const int32 Level = Have.FindRef(Hovered);
+	FString Name = Tree ? Tree->Name : FMythRoClientTables::SkillName(Hovered);
+	if (Name.IsEmpty()) { Name = FMythRoClientTables::SkillName(Hovered); }
+
+	// Pre-requisitos: o mais alto pedido de cada skill na cadeia inteira
+	TMap<int32, int32> Needs;
+	if (Level == 0 && Tree)
+	{
+		TArray<FIntPoint> Stack = Tree->Need;
+		while (Stack.Num() > 0)
+		{
+			const FIntPoint N = Stack.Pop();
+			int32& Want = Needs.FindOrAdd(N.X);
+			if (N.Y <= Want) { continue; }
+			Want = N.Y;
+			if (const FMythTreeSkill* Sub = FMythRoSkillTree::Skill(N.X)) { Stack.Append(Sub->Need); }
+		}
+	}
+	for (int32 i = 0; i < SkillNeedMarks.Num(); ++i) { SkillNeedMarks[i]->SetVisibility(ESlateVisibility::Collapsed); }
+	for (const TPair<int32, int32>& N : Needs)
+	{
+		if (const int32* Cell = SkillCellOf.Find(N.Key); Cell && SkillNeedMarks.IsValidIndex(*Cell))
+		{
+			const bool bMet = Have.FindRef(N.Key) >= N.Value;
+			SkillNeedMarks[*Cell]->SetColorAndOpacity(bMet ? FLinearColor(0.3f, 0.75f, 0.35f, 1.f) : FLinearColor(1.f, 0.55f, 0.1f, 1.f));
+			SkillNeedMarks[*Cell]->SetVisibility(ESlateVisibility::HitTestInvisible);
+		}
+	}
+
+	// Conteudo da dica
+	SkillTipBox->ClearChildren();
+	const int32 FontSize = FMath::RoundToInt(8 * UIScale);
+	auto AddLine = [this, FontSize](const FString& Line, bool bBold = false)
+	{
+		const TArray<TPair<FString, FLinearColor>> Parts = SplitColors(Line);
+		UHorizontalBox* Row = WidgetTree->ConstructWidget<UHorizontalBox>();
+		for (const TPair<FString, FLinearColor>& P : Parts)
+		{
+			UTextBlock* T = WidgetTree->ConstructWidget<UTextBlock>();
+			T->SetFont(FMythRoUITextures::RoFont(FontSize, bBold));
+			T->SetColorAndOpacity(FSlateColor(P.Value));
+			T->SetText(FText::FromString(P.Key));
+			T->SetWrapTextAt(Parts.Num() == 1 ? 320.f * UIScale : 0.f); // largura fixa (o AutoWrap dentro da caixa horizontal quebrava cedo)
+			Row->AddChild(T);
+		}
+		SkillTipBox->AddChild(Row);
+	};
+	AddLine(FString::Printf(TEXT("%s  ^777777Nv %d/%d^000000"), *Name, Level, Tree ? Tree->MaxLevel : FMath::Max(Level, 1)), true);
+	if (const TArray<FString>* Desc = FMythRoClientTables::SkillDescription(Hovered))
+	{
+		for (int32 i = 0; i < Desc->Num(); ++i)
+		{
+			if (i == 0 && (*Desc)[0].TrimStartAndEnd() == Name)
+			{
+				continue; // a primeira linha do skilldesctable repete o nome
+			}
+			AddLine((*Desc)[i]);
+		}
+	}
+	if (Needs.Num() > 0)
+	{
+		AddLine(TEXT(" "));
+		AddLine(TEXT("Requer:"), true);
+		for (const TPair<int32, int32>& N : Needs)
+		{
+			const FMythTreeSkill* NeedTree = FMythRoSkillTree::Skill(N.Key);
+			const FString NeedName = NeedTree ? NeedTree->Name : FMythRoClientTables::SkillName(N.Key);
+			const bool bMet = Have.FindRef(N.Key) >= N.Value;
+			AddLine(FString::Printf(TEXT("%s%s Nv %d"), bMet ? TEXT("^2a8a2a") : TEXT("^d05000"), *NeedName, N.Value));
+		}
+	}
+	SkillTip->SetVisibility(ESlateVisibility::HitTestInvisible);
+}
+
+void UMythRoHUDWidget::SkillTestHover(int32 SkillId)
+{
+	if (const int32* Cell = SkillCellOf.Find(SkillId); Cell && SkillIcons.IsValidIndex(*Cell) && FSlateApplication::IsInitialized())
+	{
+		const FGeometry& G = SkillCellFrames[*Cell]->GetCachedGeometry();
+		FSlateApplication::Get().SetCursorPos(G.LocalToAbsolute(G.GetLocalSize() * 0.5f));
+	}
 }

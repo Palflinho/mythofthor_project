@@ -1245,6 +1245,7 @@ void UMythRoHUDWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime
 	}
 	UpdateMinimap();
 	UpdateButtons();
+	UpdateSkillHover();
 	WindowRefreshTimer -= InDeltaTime;
 	if (WindowRefreshTimer <= 0.f)
 	{

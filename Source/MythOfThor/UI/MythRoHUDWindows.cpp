@@ -380,7 +380,7 @@ void UMythRoHUDWidget::UpdateEquipPreview()
 void UMythRoHUDWidget::BuildSkillsWindow()
 {
 	// Habilidades (Alt+S) em arvore, como a janela do cliente moderno: abas por etapa da classe, grade de 7 colunas
-	// na posicao do skilltreeview.lub, linhas ate os pre-requisitos e o nivel/"+" em cada skill
+	// na posicao do skilltreeview.lub, pre-requisitos destacados ao passar o mouse e o nivel/"+" em cada skill
 	const float W = RoTreeLeft + 24.f + FMythRoSkillTree::Columns * RoTreeCellW;
 	const float H = RoTreeTop + RoTreeRows * RoTreeCellH + 40.f;
 	SkillsWindow = MakeRoPanel(TEXT("Habilidades"), FVector2D(W, H), FVector2D(340.f, 110.f));
@@ -394,13 +394,6 @@ void UMythRoHUDWidget::BuildSkillsWindow()
 		TabText->SetJustification(ETextJustify::Left);
 		SkillTabTexts.Add(TabText);
 	}
-	// Linhas primeiro (ficam por baixo dos icones)
-	for (int32 i = 0; i < 90; ++i)
-	{
-		UImage* Line = AddColor(SkillsWindow, FLinearColor(0.62f, 0.66f, 0.74f, 1.f), 0.f, 0.f, 1.f, 1.f);
-		Line->SetVisibility(ESlateVisibility::Collapsed);
-		SkillLinePool.Add(Line);
-	}
 	for (int32 i = 0; i < RoTreeRows * FMythRoSkillTree::Columns; ++i)
 	{
 		const float X = RoTreeLeft + (i % FMythRoSkillTree::Columns) * RoTreeCellW;
@@ -410,6 +403,10 @@ void UMythRoHUDWidget::BuildSkillsWindow()
 		Title->SetJustification(ETextJustify::Center);
 		if (UCanvasPanelSlot* TS = Cast<UCanvasPanelSlot>(Title->Slot)) { TS->SetAutoSize(false); TS->SetSize(FVector2D(RoTreeCellW, 12.f) * UIScale); }
 		SkillTitles.Add(Title);
+		// Destaque de pre-requisito (aparece como borda em volta da moldura ao passar o mouse numa skill nao aprendida)
+		UImage* Mark = AddColor(SkillsWindow, FLinearColor(1.f, 0.55f, 0.1f, 1.f), X + 15.f, Y + 10.f, 38.f, 38.f);
+		Mark->SetVisibility(ESlateVisibility::Collapsed);
+		SkillNeedMarks.Add(Mark);
 		UImage* Frame = AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("itemwin_mid"))), X + 18.f, Y + 13.f, 32.f, 32.f);
 		Frame->SetVisibility(ESlateVisibility::Collapsed);
 		SkillCellFrames.Add(Frame);
@@ -931,54 +928,9 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 		SkillUpButtons[i]->SetVisibility(Points > 0 && Info && Info->bUpgradable ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
 	}
 
-	// Linhas ate os pre-requisitos da mesma aba: desce do pre-requisito, anda na horizontal no vao acima da skill e
-	// desce ate ela. Azul quando o pre-requisito ja esta no nivel pedido
-	auto Place = [this](UImage* Img, float X, float Y, float W, float H, const FLinearColor& Color)
-	{
-		if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(Img->Slot))
-		{
-			S->SetPosition(FVector2D(X, Y) * UIScale);
-			S->SetSize(FVector2D(FMath::Max(W, 2.f), FMath::Max(H, 2.f)) * UIScale);
-		}
-		Img->SetColorAndOpacity(Color);
-		Img->SetVisibility(ESlateVisibility::HitTestInvisible);
-	};
-	int32 Used = 0;
-	for (const TPair<int32, int32>& Pair : CellOfSkill)
-	{
-		const FMythTreeSkill* Tree = FMythRoSkillTree::Skill(Pair.Key);
-		if (!Tree)
-		{
-			continue;
-		}
-		for (const FIntPoint& Need : Tree->Need)
-		{
-			const int32* From = CellOfSkill.Find(Need.X);
-			if (!From || Used + 3 > SkillLinePool.Num())
-			{
-				continue;
-			}
-			const FRagnarokSkillInfo* Have = Known.FindRef(Need.X);
-			const FLinearColor Color = Have && Have->Level >= Need.Y ? FLinearColor(0.35f, 0.55f, 0.9f, 1.f) : FLinearColor(0.68f, 0.71f, 0.78f, 1.f);
-			const float FX = RoTreeLeft + (*From % FMythRoSkillTree::Columns) * RoTreeCellW + 34.f;
-			const float FY = RoTreeTop + (*From / FMythRoSkillTree::Columns) * RoTreeCellH;
-			const float TX = RoTreeLeft + (Pair.Value % FMythRoSkillTree::Columns) * RoTreeCellW + 34.f;
-			const float TY = RoTreeTop + (Pair.Value / FMythRoSkillTree::Columns) * RoTreeCellH;
-			if (FMath::IsNearlyEqual(FY, TY))
-			{
-				Place(SkillLinePool[Used++], FMath::Min(FX, TX), FY + 29.f, FMath::Abs(TX - FX), 2.f, Color); // mesma linha
-				continue;
-			}
-			const float MidY = TY + 8.f; // vao entre o nivel da linha de cima e o nome da skill
-			Place(SkillLinePool[Used++], FX - 1.f, FY + 45.f, 2.f, MidY - (FY + 45.f), Color);
-			Place(SkillLinePool[Used++], FMath::Min(FX, TX) - 1.f, MidY, FMath::Abs(TX - FX) + 2.f, 2.f, Color);
-			Place(SkillLinePool[Used++], TX - 1.f, MidY, 2.f, TY - MidY, Color);
-		}
-	}
-	for (int32 i = Used; i < SkillLinePool.Num(); ++i)
-	{
-		SkillLinePool[i]->SetVisibility(ESlateVisibility::Collapsed);
-	}
+	// Sem linhas de caminho: os pre-requisitos aparecem destacados ao passar o mouse numa skill nao aprendida (UpdateSkillHover)
+	SkillCellOf = CellOfSkill;
+	SkillHoverID = -1; // refaz o destaque com os niveis novos
 
 	if (SkillPointsText)
 	{

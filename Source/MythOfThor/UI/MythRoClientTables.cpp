@@ -49,6 +49,15 @@ namespace
 			FRoTableEntry& E = Out.FindOrAdd(Id);
 			(*Obj)->TryGetStringField(TEXT("name"), E.Name);
 			(*Obj)->TryGetStringField(ResourceField, E.Resource);
+			const TArray<TSharedPtr<FJsonValue>>* Desc = nullptr;
+			if ((*Obj)->TryGetArrayField(TEXT("description"), Desc))
+			{
+				E.Desc.Reset(); // a mesma skill vem duas vezes (pelo id e pelo aegis_name)
+				for (const TSharedPtr<FJsonValue>& Line : *Desc)
+				{
+					E.Desc.Add(Line->AsString());
+				}
+			}
 		}
 		UE_LOG(LogTemp, Log, TEXT("MythRoClientTables: %s com %d entradas"), FileName, Out.Num());
 		return Out;
