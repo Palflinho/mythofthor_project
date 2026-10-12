@@ -72,7 +72,9 @@ Contas de teste mexidas: ClaudeTester voltou ao estado de antes (Caçador 99/10)
 3. **NPCs no mapa da Navegação**: os nomes no arquivo do cliente vêm codificados e não achei a tabela; só mapas e monstros por enquanto.
 4. **Janelas funcionais que ainda faltam**: pets, homúnculo, Reparar arma (guilda e mapa-múndi feitos depois; ver abaixo). Na guilda faltam as abas Cargos, Habilidades e Expulsos, o emblema e alianças.
 5. **Arte do LATAM** no Carrinho e no Armazém (hoje as duas usam listas simples, funcionais).
-6. **Rastreador de missão**: "Job Change to Swordman" continuou na tela depois da troca de classe; conferir se o servidor apaga a missão.
+6. **Rastreador de missão** (resolvido, não era o cliente): "Job Change to Swordman" é a missão 1014, que só o script
+   pré-renovação cria (`npc/pre-re/jobs/1-1/swordman.txt`). O ClaudeTester2 começou a troca quando o servidor ainda era
+   pré-renovação e terminou já na Renovação, cujo script não encerra a 1014. Só ele tinha o resto; apaguei a linha no banco.
 8. **3ª classe e Doram** ficaram bloqueados; o dia em que quiser abri-los é só tirar o `escopo_classes.conf` e ajustar `job_stats`.
 
 ## Depois do "pode prosseguir" (13/10)
