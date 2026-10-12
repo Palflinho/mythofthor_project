@@ -197,6 +197,7 @@ void AMythPlayerController::SetupInputComponent()
 	InputComponent->BindKey(FInputChord(EKeys::U, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyQuests);
 	InputComponent->BindKey(EKeys::F12, IE_Pressed, this, &AMythPlayerController::OnHotkeyShortcuts);
 	InputComponent->BindKey(FInputChord(EKeys::R, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyMail);
+	InputComponent->BindKey(FInputChord(EKeys::T, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyHomunStandby);
 	InputComponent->BindKey(FInputChord(EKeys::N, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyNavi);
 	InputComponent->BindKey(FInputChord(EKeys::Tilde, false, true, false, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyWorldMap); // Ctrl+` como no cliente
 	InputComponent->BindKey(FInputChord(EKeys::W, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyEquipSwitch);
@@ -446,6 +447,7 @@ void AMythPlayerController::PlayerTick(float DeltaTime)
 
 	UpdateCombat(DeltaTime);
 	UpdatePickup();
+	UpdateHomunAI(DeltaTime);
 	if (PendingSkillID != 0 && WasInputKeyJustPressed(EKeys::RightMouseButton))
 	{
 		CancelSkillTargeting(); // botao direito cancela a mira, como no cliente original
@@ -469,8 +471,9 @@ void AMythPlayerController::PlayerTick(float DeltaTime)
 		FHitResult RightHit;
 		if (GetHitResultUnderCursor(ECC_Visibility, false, RightHit) && RightHit.bBlockingHit)
 		{
+			const bool bHomunCommand = (IsInputKeyDown(EKeys::LeftAlt) || IsInputKeyDown(EKeys::RightAlt)) && HandleHomunCommandClick(RightHit);
 			const URagnarokNetworkSubsystem* RNet = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr;
-			if (const AMythMonster* Other = Cast<AMythMonster>(RightHit.GetActor()); Other && RNet && Other->IsNetUnit() && Other->NetObjectType == 0 && Other->NetID != RNet->GetSelfID())
+			if (const AMythMonster* Other = Cast<AMythMonster>(RightHit.GetActor()); !bHomunCommand && Other && RNet && Other->IsNetUnit() && Other->NetObjectType == 0 && Other->NetID != RNet->GetSelfID())
 			{
 				HudWidget->ShowPlayerMenu(Other->NetID, Other->GetDisplayName(), FSlateApplication::Get().GetCursorPos());
 			}
@@ -608,7 +611,12 @@ void AMythPlayerController::OnHotkeyAchievements() { ToggleHudWindow(EMythRoWind
 void AMythPlayerController::OnHotkeyEquipSwitch() { ToggleHudWindow(EMythRoWindow::EquipSwitch); }
 void AMythPlayerController::OnHotkeyNavi() { ToggleHudWindow(EMythRoWindow::Navi); }
 void AMythPlayerController::OnHotkeyWorldMap() { ToggleHudWindow(EMythRoWindow::WorldMap); }
-void AMythPlayerController::OnHotkeyMail() { ToggleHudWindow(EMythRoWindow::Mail); }
+void AMythPlayerController::OnHotkeyMail()
+{
+	// Alt+R e a janela do homunculo no cliente classico; sem homunculo chamado fica o correio
+	const URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr;
+	ToggleHudWindow(Net && Net->HasHomun() ? EMythRoWindow::Homun : EMythRoWindow::Mail);
+}
 void AMythPlayerController::OnHotkeyBank() { ToggleHudWindow(EMythRoWindow::Bank); }
 void AMythPlayerController::OnHotkeyShortcuts() { ToggleHudWindow(EMythRoWindow::Shortcuts); }
 void AMythPlayerController::OnHotkeyQuests() { ToggleHudWindow(EMythRoWindow::Quests); }

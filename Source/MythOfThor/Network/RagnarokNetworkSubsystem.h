@@ -467,6 +467,48 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCartChanged);
  */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnSelectList, uint8, ListType, const TArray<int32>&, Values, const TArray<FString>&, Names);
 
+/** Homunculo (ZC_PROPERTY_HOMUN 0x0ba4, ZC_HO_PAR_CHANGE 0x0ba5, ZC_CHANGESTATE_MER 0x0230). Lealdade 0..1000, fome 0..100. */
+struct FRoHomunInfo
+{
+	FString Name;
+	bool bRenamed = false;
+	bool bResting = false; // vaporizado (Descansar)
+	bool bAlive = false;
+	int32 Level = 0;
+	int32 Hunger = 0;
+	int32 Intimacy = 0;
+	int32 Atk = 0;
+	int32 Matk = 0;
+	int32 Hit = 0;
+	int32 Crit = 0;
+	int32 Def = 0;
+	int32 Mdef = 0;
+	int32 Flee = 0;
+	int32 Amotion = 0;
+	int64 Hp = 0;
+	int64 MaxHp = 0;
+	int64 Sp = 0;
+	int64 MaxSp = 0;
+	int64 Exp = 0;
+	int64 ExpNext = 0;
+	int32 SkillPoints = 0;
+	int32 Range = 0;
+};
+
+/** Habilidade do homunculo (ZC_HOSKILLINFO_LIST 0x0235, 37 bytes cada; ZC_HOSKILLINFO_UPDATE 0x0239). */
+struct FRoHomunSkill
+{
+	int32 Id = 0;
+	int32 Inf = 0;
+	int32 Level = 0;
+	int32 Sp = 0;
+	int32 Range = 0;
+	bool bUpgradable = false;
+};
+
+/** Homunculo: 1 dados mudaram, 2 sumiu (descansou, morreu ou foi apagado). */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHomun, uint8, Event);
+
 /** Mascote (ZC_PROPERTY_PET 0x01a2 e ZC_CHANGESTATE_PET 0x01a4). Fome 0..100, lealdade 0..1000. */
 struct FRoPetInfo
 {
@@ -668,6 +710,18 @@ public:
 	int32 GetVendBuyOwner() const { return VendBuyAID; }
 	const TArray<FRoVendItem>& GetMyVendItems() const { return MyVendItems; }
 	bool IsVending() const { return bVending; }
+	/** Homunculo (RagnarokNetworkHomun.cpp). Menu CZ_COMMAND_MER 0x022d: 0 informacoes, 1 alimentar, 2 apagar. */
+	bool SendHomunMenu(int32 Command);
+	bool SendHomunRename(const FString& Name);
+	bool SendHomunMove(int32 CellX, int32 CellY);
+	bool SendHomunAttack(int32 TargetId);
+	bool SendHomunToMaster();
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Homun") FOnHomun OnHomun;
+	bool HasHomun() const { return HomunGID != 0; }
+	int64 GetHomunId() const { return HomunGID; }
+	const FRoHomunInfo& GetHomunInfo() const { return HomunInfo; }
+	const TArray<FRoHomunSkill>& GetHomunSkills() const { return HomunSkills; }
+	bool IsHomunAutoFeed() const { return bHomunAutoFeed; }
 	/** Mascote (RagnarokNetworkPet.cpp). Menu: 0 informacoes, 1 alimentar, 2 brincar, 3 voltar para o ovo, 4 desequipar acessorio. */
 	bool SendPetMenu(int32 Command);
 	bool SendPetRename(const FString& Name);
@@ -1171,6 +1225,11 @@ private:
 	void HandleSelectListPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	int32 PendingCardIndex = -1;
 	TArray<TArray<uint8>> RepairEntries; // entradas de 24 bytes do ZC_REPAIRITEMLIST, devolvidas como vieram
+	void HandleHomunPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	int64 HomunGID = 0;
+	FRoHomunInfo HomunInfo;
+	TArray<FRoHomunSkill> HomunSkills;
+	bool bHomunAutoFeed = false;
 	void HandlePetPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	int64 PetGID = 0;
 	FRoPetInfo PetInfo;

@@ -62,7 +62,8 @@ enum class EMythRoWindow : uint8
 	Mail,     // Alt+R: correio
 	WorldMap, // Ctrl+`: mapa-mundi
 	Guild,    // Alt+G: cla
-	Pet       // Alt+J: mascote
+	Pet,      // Alt+J: mascote
+	Homun     // Alt+R com homunculo chamado: homunculo
 };
 
 /** Barra de medidor classica (gze*_left/mid/right sobre gze_bg): o meio estica conforme a fracao. */
@@ -1021,6 +1022,31 @@ protected:
 	UPROPERTY() TObjectPtr<UTextBlock> VendBuyCancelBtn;
 	TMap<int32, int32> VendBuyChosen; // indice na loja -> quantidade escolhida
 
+	// Homunculo (MythRoHomun.cpp): "Informacao do Homunculus" com status, barras, alimentar, aguardar e as habilidades
+public:
+	void OnHomunEvent(uint8 Event);
+protected:
+	void ToggleHomunWindow();
+	void BuildHomunWindow();
+	void RefreshHomun();
+	bool HandleHomunClick(const FVector2D& ScreenPos);
+	static constexpr int32 HomunSkillRows = 5;
+	UPROPERTY() TObjectPtr<UCanvasPanel> HomunWindow;
+	UPROPERTY() TObjectPtr<UImage> HomunPortrait;
+	UPROPERTY() TObjectPtr<UEditableTextBox> HomunNameBox;
+	UPROPERTY() TObjectPtr<UTextBlock> HomunRenameBtn;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> HomunLines;      // nivel, fome, lealdade, exp e os atributos
+	UPROPERTY() TArray<TObjectPtr<UImage>> HomunBarFill;        // HP, SP, EXP
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> HomunBarText;
+	UPROPERTY() TObjectPtr<UTextBlock> HomunFeedBtn;
+	UPROPERTY() TObjectPtr<UTextBlock> HomunWaitBtn;
+	UPROPERTY() TObjectPtr<UTextBlock> HomunAutoFeed;
+	UPROPERTY() TObjectPtr<UTextBlock> HomunSkillHeader;
+	UPROPERTY() TArray<TObjectPtr<UImage>> HomunSkillIcons;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> HomunSkillNames;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> HomunSkillUps;
+	FString HomunPortraitKey;
+	FString HomunShownName;
 	// Mascote (MythRoPet.cpp): janela Alt+J com retrato, nome, nivel, fome, lealdade, acessorio e os comandos
 public:
 	void OnPetEvent(uint8 Event);

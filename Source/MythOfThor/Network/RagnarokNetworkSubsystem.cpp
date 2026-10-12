@@ -1149,6 +1149,11 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 					bPetAutoFeed = *reinterpret_cast<const uint32*>(PacketData + 6) != 0;
 					OnPet.Broadcast(1);
 				}
+				else if (ActualLen >= 10 && *reinterpret_cast<const uint32*>(PacketData + 2) == 3) // CONFIG_HOMUNCULUS_AUTOFEED
+				{
+					bHomunAutoFeed = *reinterpret_cast<const uint32*>(PacketData + 6) != 0;
+					OnHomun.Broadcast(1);
+				}
 				break;
 			case 0x01fe: // ZC_ACK_ITEMREPAIR <indice>.W <falhou>.B (msgs 813/814)
 				if (ActualLen >= 5)
@@ -1274,7 +1279,21 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 					PetGID = 0;
 					OnPet.Broadcast(2);
 				}
+				if (ActualLen >= 7 && HomunGID != 0 && *reinterpret_cast<const uint32*>(PacketData + 2) == static_cast<uint32>(HomunGID))
+				{
+					// Descansar (vaporizar), morrer ou apagar: some do mapa. Ao chamar de novo o servidor manda o INIT outra vez
+					HomunGID = 0;
+					OnHomun.Broadcast(2);
+				}
 				HandleUnitVanish(PacketData, ActualLen);
+				break;
+			case 0x0ba4: // ZC_PROPERTY_HOMUN
+			case 0x0ba5: // ZC_HO_PAR_CHANGE
+			case 0x0230: // ZC_CHANGESTATE_MER
+			case 0x0235: // ZC_HOSKILLINFO_LIST
+			case 0x0239: // ZC_HOSKILLINFO_UPDATE
+			case 0x022f: // ZC_FEED_MER
+				HandleHomunPacket(PacketData, ActualLen, PacketID);
 				break;
 			case 0x019e: // ZC_START_CAPTURE
 			case 0x01a0: // ZC_TRYCAPTURE_MONSTER

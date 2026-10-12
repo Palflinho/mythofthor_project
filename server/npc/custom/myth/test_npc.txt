@@ -243,6 +243,22 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 			case Job_Merchant: skill "MC_CARTREVOLUTION", 1, SKILL_PERM; skill "MC_CHANGECART", 1, SKILL_PERM; skill "MC_LOUD", 1, SKILL_PERM; break;
 			case Job_Thief: skill "TF_SPRINKLESAND", 1, SKILL_PERM; skill "TF_BACKSLIDING", 1, SKILL_PERM; skill "TF_PICKSTONE", 1, SKILL_PERM; skill "TF_THROWSTONE", 1, SKILL_PERM; break;
 			}
+			// Skills de quest das 2as classes (e transclasses). Bioetica libera Chamar Homunculo: depois use @allskill de novo
+			switch (Class) {
+			case Job_Knight: case Job_Lord_Knight: skill "KN_CHARGEATK", 1, SKILL_PERM; break;
+			case Job_Crusader: case Job_Paladin: skill "CR_SHRINK", 1, SKILL_PERM; break;
+			case Job_Wizard: case Job_High_Wizard: skill "WZ_SIGHTBLASTER", 1, SKILL_PERM; break;
+			case Job_Sage: case Job_Professor: skill "SA_CREATECON", 1, SKILL_PERM; skill "SA_ELEMENTWATER", 1, SKILL_PERM; skill "SA_ELEMENTGROUND", 1, SKILL_PERM; skill "SA_ELEMENTFIRE", 1, SKILL_PERM; skill "SA_ELEMENTWIND", 1, SKILL_PERM; break;
+			case Job_Hunter: case Job_Sniper: skill "HT_PHANTASMIC", 1, SKILL_PERM; break;
+			case Job_Bard: case Job_Clown: skill "BA_PANGVOICE", 1, SKILL_PERM; break;
+			case Job_Dancer: case Job_Gypsy: skill "DC_WINKCHARM", 1, SKILL_PERM; break;
+			case Job_Priest: case Job_High_Priest: skill "PR_REDEMPTIO", 1, SKILL_PERM; break;
+			case Job_Monk: case Job_Champion: skill "MO_KITRANSLATION", 1, SKILL_PERM; skill "MO_BALKYOUNG", 1, SKILL_PERM; break;
+			case Job_Blacksmith: case Job_Whitesmith: skill "BS_UNFAIRLYTRICK", 1, SKILL_PERM; skill "BS_GREED", 1, SKILL_PERM; break;
+			case Job_Alchemist: case Job_Creator: skill "AM_BIOETHICS", 1, SKILL_PERM; break;
+			case Job_Assassin: case Job_Assassin_Cross: skill "AS_SONICACCEL", 1, SKILL_PERM; skill "AS_VENOMKNIFE", 1, SKILL_PERM; break;
+			case Job_Rogue: case Job_Stalker: skill "RG_CLOSECONFINE", 1, SKILL_PERM; break;
+			}
 			mes .@npc_name$;
 			mes "Skills de quest da sua classe aprendidas.";
 			next;

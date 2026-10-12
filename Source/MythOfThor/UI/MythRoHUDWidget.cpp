@@ -396,6 +396,7 @@ void UMythRoHUDWidget::BuildLayout()
 	BuildPartyWindow();
 	BuildGuildWindow();
 	BuildPetWindow();
+	BuildHomunWindow();
 	BuildOptionsWindow();
 	BuildEmotionWindows();
 	BuildTradeWindows();

@@ -71,6 +71,7 @@ private:
 	UFUNCTION() void HandleVending(uint8 Event);
 	UFUNCTION() void HandleGuild(uint8 Event);
 	UFUNCTION() void HandlePet(uint8 Event);
+	UFUNCTION() void HandleHomun(uint8 Event);
 	UFUNCTION() void HandleStorageChanged(const TArray<FRagnarokInventoryItem>& Items);
 	UFUNCTION() void HandlePartyChanged();
 	UFUNCTION() void HandleCharCreateResult(bool bSuccess, const FString& Message);

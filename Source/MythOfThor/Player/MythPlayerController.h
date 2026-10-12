@@ -170,6 +170,12 @@ public:
 	UFUNCTION(Exec) void MythPetCmd(int32 Command) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendPetMenu(Command); } }
 	UFUNCTION(Exec) void MythPetRename(const FString& Name) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendPetRename(Name); } }
 	UFUNCTION(Exec) void MythCaptureNearest();
+	/** Alt+T: o homunculo aguarda (volta para o dono e para de atacar sozinho) ou volta a ajudar. */
+	void OnHotkeyHomunStandby();
+	/** Testes do homunculo: janela, comando do menu (0 info, 1 alimentar), ataca o monstro mais perto. */
+	UFUNCTION(Exec) void MythHomun() { ToggleHudWindow(EMythRoWindow::Homun); }
+	UFUNCTION(Exec) void MythHomunCmd(int32 Command) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendHomunMenu(Command); } }
+	UFUNCTION(Exec) void MythHomunAttackNearest();
 	/** O servidor pediu o alvo da captura (ZC_START_CAPTURE): cursor de mira ate o clique. */
 	void BeginCapture();
 	UFUNCTION(Exec) void MythGuildLeave() { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendLeaveGuild(TEXT("teste")); } }
@@ -433,6 +439,14 @@ private:
 	void OnHotkeyShortcuts();
 	void OnHotkeyBank();
 	void OnHotkeyMail();
+	// Homunculo (MythPlayerHomun.cpp): IA basica no lugar dos scripts AI/*.lua do cliente original
+	void UpdateHomunAI(float DeltaTime);
+	/** Alt + botao direito: o homunculo anda ate a celula ou ataca o monstro clicado. */
+	bool HandleHomunCommandClick(const FHitResult& Hit);
+	float HomunAITimer = 0.f;
+	double HomunManualUntil = 0.0;
+	int64 HomunLastTarget = 0;
+	bool bHomunStandby = false;
 	void OnHotkeyNavi();
 	void OnHotkeyWorldMap();
 	void OnHotkeyEquipSwitch();

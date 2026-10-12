@@ -153,6 +153,23 @@ namespace
 		return JobClass;
 	}
 
+	/**
+	 * Homunculos (homunculus.hpp: MER_LIF = 6001 ... MER_VANILMIRTH_H2 = 6016, MER_EIRA = 6048 ... MER_ELEANOR = 6052): o
+	 * sprite fica em data/sprite/homun/ com o nome da tabela de classes do cliente. Vazio se nao for homunculo.
+	 */
+	FString NetHomunSprite(int32 JobClass)
+	{
+		static const TCHAR* Base[4] = { TEXT("lif"), TEXT("amistr"), TEXT("filir"), TEXT("vanilmirth") };
+		static const TCHAR* Suffix[4] = { TEXT(""), TEXT("2"), TEXT("_h"), TEXT("_h2") };
+		if (JobClass >= 6001 && JobClass <= 6016)
+		{
+			const int32 i = JobClass - 6001;
+			return FString(Base[i % 4]) + Suffix[i / 4];
+		}
+		static const TCHAR* Mutated[5] = { TEXT("mer_eira"), TEXT("mer_bayeri"), TEXT("mer_sera"), TEXT("mer_dieter"), TEXT("mer_eleanor") };
+		return JobClass >= 6048 && JobClass <= 6052 ? FString(Mutated[JobClass - 6048]) : FString();
+	}
+
 	FLinearColor NetParseColor(const FString& Hex, const FLinearColor& Fallback)
 	{
 		FString H = Hex;
@@ -227,6 +244,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnVending.AddDynamic(this, &AMythNetWorld::HandleVending);
 	Net->OnGuild.AddDynamic(this, &AMythNetWorld::HandleGuild);
 	Net->OnPet.AddDynamic(this, &AMythNetWorld::HandlePet);
+	Net->OnHomun.AddDynamic(this, &AMythNetWorld::HandleHomun);
 	Net->OnStorageChanged.AddDynamic(this, &AMythNetWorld::HandleStorageChanged);
 	Net->OnPartyChanged.AddDynamic(this, &AMythNetWorld::HandlePartyChanged);
 	Net->OnCharCreateResult.AddDynamic(this, &AMythNetWorld::HandleCharCreateResult);
@@ -322,6 +340,7 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnVending.RemoveAll(this);
 		Net->OnGuild.RemoveAll(this);
 		Net->OnPet.RemoveAll(this);
+		Net->OnHomun.RemoveAll(this);
 		Net->OnPartyChanged.RemoveAll(this);
 		Net->OnCharCreateResult.RemoveAll(this);
 		Net->OnTradeRequest.RemoveAll(this);
@@ -625,6 +644,11 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 			SpriteName = Tables.Mob[Info.JobClass];
 		}
 	}
+	else if (const FString Homun = NetHomunSprite(Info.JobClass); !bPlayer && !Homun.IsEmpty())
+	{
+		Folder = TEXT("homun");
+		SpriteName = Homun;
+	}
 	else if (!bPlayer)
 	{
 		if (const FString* N = Tables.Mob.Find(Info.JobClass)) { SpriteName = *N; }
@@ -853,6 +877,14 @@ void AMythNetWorld::HandleVending(uint8 Event)
 	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
 	{
 		PC->GetHud()->OnVendingEvent(Event);
+	}
+}
+
+void AMythNetWorld::HandleHomun(uint8 Event)
+{
+	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
+	{
+		PC->GetHud()->OnHomunEvent(Event);
 	}
 }
 
