@@ -3,6 +3,7 @@
 #include "Common/TcpSocketBuilder.h"
 #include "Dom/JsonObject.h"
 #include "Misc/FileHelper.h"
+#include "HAL/FileManager.h"
 #include "Misc/CommandLine.h"
 #include "Misc/Paths.h"
 #include "Serialization/JsonReader.h"
@@ -1182,6 +1183,17 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 				break;
 			default:
 				// Pacote conhecido mas sem tratamento visual imediato (ex.: slots, ticks, ping)
+				{
+					// Auditoria (docs/AUDITORIA_COMPLETA.md, etapa A): cada pacote sem tratamento e registrado uma vez com o tamanho,
+					// em Saved/Logs/pacotes_sem_tratamento.txt, para saber o que o servidor manda e o cliente ignora
+					static TSet<uint16> SeenUnhandled;
+					if (!SeenUnhandled.Contains(PacketID))
+					{
+						SeenUnhandled.Add(PacketID);
+						UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] pacote sem tratamento 0x%04x (%d bytes)"), PacketID, ActualLen);
+						FFileHelper::SaveStringToFile(FString::Printf(TEXT("0x%04x\t%d\n"), PacketID, ActualLen), *(FPaths::ProjectSavedDir() / TEXT("Logs/pacotes_sem_tratamento.txt")), FFileHelper::EEncodingOptions::AutoDetect, &IFileManager::Get(), FILEWRITE_Append);
+					}
+				}
 				break;
 		}
 

@@ -102,6 +102,8 @@ Ordem do que se vê o tempo todo jogando. Quem: Claude, salvo indicação.
 
 Conferência de cobertura das referências: `docs/COBERTURA_REFERENCIAS.md`.
 
+**Auditoria completa de todas as funções do RO (não só telas): [`AUDITORIA_COMPLETA.md`](AUDITORIA_COMPLETA.md).** Os itens P0 dela entram antes de seguir em F2/F3.
+
 Já conforme o spec e testado: movimento básico, combate e coleta, câmera, cursores, sons, números de dano, diálogo de NPC,
 portais e interiores de Prontera, sentar com Insert, chat em português, árvore de skills.
 
