@@ -60,7 +60,7 @@ Trabalho feito sem confirmação, como combinado. Cada item tem o commit e foi c
 
 ## Versão de teste
 
-`E:\Dev\MythTeste`, commit `5de32c7` (rodadas 24 e 25 no `COMO_TESTAR.txt`). Importante: o servidor agora é Renovação;
+`E:\Dev\MythTeste`, commit `f0a5d5c` (rodadas 24, 25 e 26 no `COMO_TESTAR.txt`; a 26 traz loja de jogador, títulos, mapa-múndi e clã). Importante: o servidor agora é Renovação;
 personagens antigos podem ficar com pontos de atributo a mais ou a menos — use `@streset` (ou o NPC de teste) e redistribua.
 Contas de teste mexidas: ClaudeTester voltou ao estado de antes (Caçador 99/10); o ClaudeTester2 virou Cavaleiro montado nos testes.
 
