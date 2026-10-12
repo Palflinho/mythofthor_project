@@ -1267,6 +1267,7 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case RagnarokPackets::HEADER_ZC_SKILL_INFO_LIST:
 			case RagnarokPackets::HEADER_ZC_SKILLINFO_LIST_RE:
 			case RagnarokPackets::HEADER_ZC_ADD_SKILL:
+			case 0x0111: // ZC_ADD_SKILL (clientes main)
 			case RagnarokPackets::HEADER_ZC_SKILLINFO_UPDATE2:
 				HandleSkillList(PacketData, ActualLen);
 				break;
@@ -2224,6 +2225,27 @@ void URagnarokNetworkSubsystem::HandleSkillList(const uint8* PacketData, int32 P
 				SkillList[ExistingIdx].bUpgradable = (Ptr[12] != 0);
 				OnSkillList.Broadcast(SkillList);
 			}
+		}
+	}
+	else if (PacketID == 0x0111) // ZC_ADD_SKILL dos clientes "main" (o nosso 20250402): <id>.W <inf>.L <nivel>.W <sp>.W <alcance>.W <nome>.24B <sobe>.B
+	{
+		// Skill ganha fora da arvore (quest de skill, script `skill`): o rAthena so usa o 0x0b31 para clientes RE
+		if (PacketSize >= 39)
+		{
+			const uint8* Ptr = PacketData + 2;
+			FRagnarokSkillInfo Info;
+			Info.SkillID = *reinterpret_cast<const uint16*>(Ptr + 0);
+			Info.Inf = *reinterpret_cast<const int32*>(Ptr + 2);
+			Info.Level = *reinterpret_cast<const uint16*>(Ptr + 6);
+			Info.SpCost = *reinterpret_cast<const uint16*>(Ptr + 8);
+			Info.Range = *reinterpret_cast<const uint16*>(Ptr + 10);
+			char NameBuf[25] = { 0 };
+			FMemory::Memcpy(NameBuf, Ptr + 12, 24);
+			Info.SkillName = UTF8_TO_TCHAR(NameBuf);
+			Info.bUpgradable = (Ptr[36] != 0);
+			const int32 ExistingIdx = SkillList.IndexOfByPredicate([&](const FRagnarokSkillInfo& Item) { return Item.SkillID == Info.SkillID; });
+			if (ExistingIdx != INDEX_NONE) { SkillList[ExistingIdx] = Info; } else { SkillList.Add(Info); }
+			OnSkillList.Broadcast(SkillList);
 		}
 	}
 	else if (PacketID == RagnarokPackets::HEADER_ZC_SKILLINFO_UPDATE) // 0x010e (11 bytes)

@@ -23,7 +23,7 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 	next;
 
 	while (1) {
-		switch(select("Mudar de Classe:Definir Nível / Job Máximo:Aprender Todas as Habilidades:Kit de Equipamentos:Poções e Asas:Resetar Atributos e Habilidades:Recuperar HP e SP:Encerrar:Testar Caixa de Texto")) {
+		switch(select("Mudar de Classe:Definir Nível / Job Máximo:Aprender Todas as Habilidades:Kit de Equipamentos:Poções e Asas:Resetar Atributos e Habilidades:Recuperar HP e SP:Encerrar:Testar Caixa de Texto:Aprender Skills de Quest")) {
 		case 1: // Mudar de Classe
 			mes .@npc_name$;
 			mes "Escolha a categoria da classe desejada:";
@@ -229,6 +229,22 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 			input .@texto$;
 			mes .@npc_name$;
 			mes "Você escreveu: ^0000FF" + .@texto$ + "^000000";
+			next;
+			break;
+
+		case 10: // Skills de quest das 1as classes (o @allskill nao da: quest_skill_learn = no). Aprende pelo script, como a quest
+			skill "NV_FIRSTAID", 1, SKILL_PERM;
+			skill "NV_TRICKDEAD", 1, SKILL_PERM;
+			switch (BaseClass) {
+			case Job_Swordman: skill "SM_MOVINGRECOVERY", 1, SKILL_PERM; skill "SM_FATALBLOW", 1, SKILL_PERM; skill "SM_AUTOBERSERK", 1, SKILL_PERM; break;
+			case Job_Mage: skill "MG_ENERGYCOAT", 1, SKILL_PERM; break;
+			case Job_Archer: skill "AC_MAKINGARROW", 1, SKILL_PERM; skill "AC_CHARGEARROW", 1, SKILL_PERM; break;
+			case Job_Acolyte: skill "AL_HOLYLIGHT", 1, SKILL_PERM; break;
+			case Job_Merchant: skill "MC_CARTREVOLUTION", 1, SKILL_PERM; skill "MC_CHANGECART", 1, SKILL_PERM; skill "MC_LOUD", 1, SKILL_PERM; break;
+			case Job_Thief: skill "TF_SPRINKLESAND", 1, SKILL_PERM; skill "TF_BACKSLIDING", 1, SKILL_PERM; skill "TF_PICKSTONE", 1, SKILL_PERM; skill "TF_THROWSTONE", 1, SKILL_PERM; break;
+			}
+			mes .@npc_name$;
+			mes "Skills de quest da sua classe aprendidas.";
 			next;
 			break;
 		}

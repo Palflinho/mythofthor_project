@@ -1664,17 +1664,28 @@ void AMythNetWorld::HandleSpecialEffect(int64 UnitID, int32 EffectID)
 
 void AMythNetWorld::HandleSkillFailed(int32 SkillID, int32 Cause)
 {
-	// Motivos do rAthena (e_useskill_fail): os mais comuns com a mensagem do cliente
-	FString Reason;
+	// Motivos do rAthena (e_useskill_fail) -> linha da msgstringtable do cliente (mesma tabela do roBrowser, Skill.js onSkillResult)
+	int32 MsgIndex = 0;
 	switch (Cause)
 	{
-	case 1: Reason = TEXT("SP insuficiente."); break;
-	case 2: Reason = TEXT("HP insuficiente."); break;
-	case 3: Reason = TEXT("Faltam itens para usar a habilidade."); break;
-	case 4: Reason = TEXT("Ainda nao e possivel usar a habilidade."); break;
-	case 9: Reason = TEXT("Peso acima de 90%."); break;
-	default: Reason = TEXT("Falha ao usar a habilidade."); break;
+	case 1: MsgIndex = 202; break;   // SP insuficiente
+	case 2: MsgIndex = 203; break;   // HP insuficiente
+	case 3: MsgIndex = 808; break;   // falta item/gema
+	case 4: MsgIndex = 219; break;   // ainda em espera (delay)
+	case 5: MsgIndex = 233; break;   // zeny insuficiente
+	case 6: MsgIndex = 239; break;   // arma errada
+	case 7: MsgIndex = 246; break;   // precisa de Gema Vermelha
+	case 8: MsgIndex = 247; break;   // precisa de Gema Azul
+	case 9: MsgIndex = 580; break;   // peso acima de 90%
+	case 10: MsgIndex = 285; break;  // falhou
+	case 13: MsgIndex = 1398; break;
+	case 83: MsgIndex = 661; break;
+	default: break;
 	}
-	const FString Name = FMythRoClientTables::SkillName(SkillID);
-	Chat(Name.IsEmpty() ? Reason : FString::Printf(TEXT("%s: %s"), *Name, *Reason), NetErrorColor);
+	FString Reason = MsgIndex > 0 ? FMythRoClientTables::Message(MsgIndex) : FString();
+	if (Reason.IsEmpty())
+	{
+		Reason = TEXT("Falha ao usar a habilidade.");
+	}
+	Chat(Reason, NetErrorColor);
 }
