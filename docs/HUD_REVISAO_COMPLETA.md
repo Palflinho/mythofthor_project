@@ -63,3 +63,4 @@ Cada item: abrir no jogo com `MythWindow` (precisa de um comando novo para o men
 - 🟡 **Grupo:** cartões de 38 com fundo `bg_partymember`, ícone da classe (`icon_jobs_<id>`), coroa do líder e texto claro; faltam barra de ferramentas, alça de redimensionar, contador de membros e a barra de SP.
 - ✅ **Fonte:** UI usa Tahoma (Windows) com fallback para Arial e Roboto; conferir visualmente contra os prints. O SCDream fica só para o coreano.
 - ⬜ Habilidades, Equipamento, Navegação e janelas funcionais (ver a ordem acima).
+- 🟡 **Habilidades:** abas verticais na esquerda (Ap, 1a, 2a, Tr) no lugar da faixa superior, grade deslocada; faltam a ilustração do personagem, limitar a 6 linhas, e rodapé idêntico ao do print (Apply/Reset já existem). Conferido em jogo.

@@ -69,8 +69,8 @@ namespace
 	constexpr int32 RoItemRows = 4;
 	constexpr int32 RoSkillRows = 7;
 	// Arvore de habilidades: grade de 7 colunas, celula de 40 x 46 (moldura 32, icone 24, nivel embaixo)
-	constexpr float RoTreeLeft = 8.f;
-	constexpr float RoTreeTop = 42.f;
+	constexpr float RoTreeLeft = 32.f; // 24 de coluna de abas verticais (1a/2a/...) + 8 de margem, como no print 13
+	constexpr float RoTreeTop = 24.f;
 	constexpr float RoTreeCellW = 40.f;
 	constexpr float RoTreeCellH = 46.f;
 	constexpr int32 RoTreeRows = 9;
@@ -285,18 +285,18 @@ void UMythRoHUDWidget::BuildSkillsWindow()
 {
 	// Habilidades (Alt+S) em arvore, como a janela do cliente moderno: abas por etapa da classe, grade de 7 colunas
 	// na posicao do skilltreeview.lub, linhas ate os pre-requisitos e o nivel/"+" em cada skill
-	const float W = RoTreeLeft * 2.f + FMythRoSkillTree::Columns * RoTreeCellW;
+	const float W = RoTreeLeft + 8.f + FMythRoSkillTree::Columns * RoTreeCellW;
 	const float H = RoTreeTop + RoTreeRows * RoTreeCellH + 40.f;
 	SkillsWindow = MakeRoPanel(TEXT("Habilidades"), FVector2D(W, H), FVector2D(340.f, 110.f));
-	AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("skill_upbar_left"))), 0.f, 17.f, 12.f, 20.f);
-	AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("skill_upbar_mid"))), 12.f, 17.f, W - 24.f, 20.f);
-	AddImage(SkillsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("skill_upbar_right"))), W - 12.f, 17.f, 12.f, 20.f);
 	for (int32 t = 0; t < 4; ++t)
 	{
-		UImage* Back = AddColor(SkillsWindow, FLinearColor::Transparent, 6.f + t * 78.f, 19.f, 76.f, 16.f);
+		// Aba vertical (print 13: "1a", "2a", "3a", "Etc" na lateral esquerda)
+		UImage* Back = AddColor(SkillsWindow, FLinearColor::Transparent, 3.f, RoTreeTop + 4.f + t * 54.f, 22.f, 50.f);
 		Back->SetVisibility(ESlateVisibility::Collapsed);
 		SkillTabBacks.Add(Back);
-		SkillTabTexts.Add(AddText(SkillsWindow, 12.f + t * 78.f, 20.f, 7, RoWinText));
+		UTextBlock* TabText = AddText(SkillsWindow, 6.f, RoTreeTop + 4.f + t * 54.f + 17.f, 8, RoWinText);
+		TabText->SetJustification(ETextJustify::Left);
+		SkillTabTexts.Add(TabText);
 	}
 	// Linhas primeiro (ficam por baixo dos icones)
 	for (int32 i = 0; i < 90; ++i)
@@ -340,7 +340,7 @@ void UMythRoHUDWidget::ResizeSkillTree(int32 Rows)
 	{
 		return;
 	}
-	const float W = RoTreeLeft * 2.f + FMythRoSkillTree::Columns * RoTreeCellW;
+	const float W = RoTreeLeft + 8.f + FMythRoSkillTree::Columns * RoTreeCellW;
 	const float H = RoTreeTop + Rows * RoTreeCellH + 40.f;
 	const float BarY = H - 32.f;
 	if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(SkillsWindow->Slot))
@@ -665,7 +665,8 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 	for (int32 t = 0; t < SkillTabTexts.Num(); ++t)
 	{
 		const bool bHas = SkillTabJobs.IsValidIndex(t);
-		SkillTabTexts[t]->SetText(bHas ? FText::FromString(FMythRoSkillTree::JobTabName(SkillTabJobs[t])) : FText::GetEmpty());
+		static const TCHAR* TabLabels[4] = { TEXT("Ap"), TEXT("1a"), TEXT("2a"), TEXT("Tr") };
+		SkillTabTexts[t]->SetText(bHas ? FText::FromString(TabLabels[FMath::Clamp(t, 0, 3)]) : FText::GetEmpty()); // o nome da classe vem na dica da etapa
 		SkillTabTexts[t]->SetColorAndOpacity(FSlateColor(t == SkillTab ? RoWinText : RoWinLabel));
 		SkillTabBacks[t]->SetVisibility(bHas ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
 		SkillTabBacks[t]->SetColorAndOpacity(t == SkillTab ? FLinearColor(1.f, 1.f, 1.f, 0.85f) : FLinearColor(0.85f, 0.88f, 0.94f, 0.6f));
