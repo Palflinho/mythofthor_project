@@ -136,6 +136,8 @@ public:
 	void NpcInput(int64 NpcID, bool bNumber);
 	/** Teste: preenche a caixa de entrada e confirma. */
 	void NpcInputSubmitText(const FString& Text);
+	/** Teste: aba da janela de Equipamento (0 Geral, 1 Especial, 2 Titulo, 3 Fonte de dano). */
+	void SetEquipTab(int32 Tab) { EquipTab = FMath::Clamp(Tab, 0, 3); RefreshEquipWindow(); }
 	/** Teste: troca a aba da janela de Habilidades (0 = 1a, 1 = 2a, 2 = 3a, 3 = Etc). */
 	void SetSkillTab(int32 Tab) { SkillTab = FMath::Clamp(Tab, 0, 3); RefreshSkillsWindow(); }
 	/** select(...) do script: lista de opcoes (vazias ficam ocultas, mas contam no indice enviado). */
@@ -368,6 +370,10 @@ protected:
 	UPROPERTY() TObjectPtr<UImage> EquipBtnOffAll;
 	/** Abas Titulo e Fonte de dano: texto no lugar dos encaixes. */
 	UPROPERTY() TObjectPtr<UTextBlock> EquipTabNote;
+	/** Aba Titulo: "(sem titulo)" e os titulos das conquistas com premio recebido (Config/titles.json); clique usa. */
+	UPROPERTY() TArray<TObjectPtr<UImage>> EquipTitleHits;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> EquipTitleTexts;
+	TArray<int32> EquipTitleIds;
 	void UpdateEquipPreview();
 
 	// Habilidades: linhas com icone, nome e nivel

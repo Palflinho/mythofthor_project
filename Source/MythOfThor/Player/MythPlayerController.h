@@ -153,6 +153,11 @@ public:
 	/** Testes da loja de jogador: abre a minha loja (itens do carrinho, mesmo preco), abre a primeira loja vista, compra a linha Row. */
 	UFUNCTION(Exec) void MythVendOpen(const FString& Title, int32 Price) { if (HudWidget) { HudWidget->VendTestOpen(Title.Replace(TEXT("+"), TEXT(" ")), Price); } }
 	UFUNCTION(Exec) void MythVendBrowse();
+	/** Teste: pega o premio da conquista (como o botao [Receber]). */
+	UFUNCTION(Exec) void MythAchReward(int32 AchievementId) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendAchievementReward(AchievementId); } }
+	UFUNCTION(Exec) void MythEquipTab(int32 Tab) { if (HudWidget) { HudWidget->SetEquipTab(Tab); } }
+	/** Teste: usa o titulo (0 tira). */
+	UFUNCTION(Exec) void MythTitle(int32 TitleId) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendChangeTitle(TitleId); } }
 	UFUNCTION(Exec) void MythVendBuy(int32 Row, int32 Count) { if (HudWidget) { HudWidget->VendTestBuy(Row, Count); } }
 	/** Teste: aba da janela de Habilidades (0 = 1a, 1 = 2a, 2 = 3a, 3 = Etc). */
 	UFUNCTION(Exec) void MythSkillTab(int32 Tab) { if (HudWidget) { HudWidget->SetSkillTab(Tab); } }

@@ -23,7 +23,7 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 	next;
 
 	while (1) {
-		switch(select("Mudar de Classe:Definir Nível / Job Máximo:Aprender Todas as Habilidades:Kit de Equipamentos:Poções e Asas:Resetar Atributos e Habilidades:Recuperar HP e SP:Encerrar:Testar Caixa de Texto:Aprender Skills de Quest")) {
+		switch(select("Mudar de Classe:Definir Nível / Job Máximo:Aprender Todas as Habilidades:Kit de Equipamentos:Poções e Asas:Resetar Atributos e Habilidades:Recuperar HP e SP:Encerrar:Testar Caixa de Texto:Aprender Skills de Quest:Completar Conquista com Título")) {
 		case 1: // Mudar de Classe
 			mes .@npc_name$;
 			mes "Escolha a categoria da classe desejada:";
@@ -245,6 +245,13 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 			}
 			mes .@npc_name$;
 			mes "Skills de quest da sua classe aprendidas.";
+			next;
+			break;
+
+		case 11: // Conquista 200000 ("Acquire the first aura!", titulo 1000 "Jovem"): pegue o premio em Conquistas (Alt+Y)
+			achievementcomplete 200000;
+			mes .@npc_name$;
+			mes "Conquista completada. Pegue o prêmio em Conquistas (Alt+Y) e escolha o título na janela de Equipamento.";
 			next;
 			break;
 		}

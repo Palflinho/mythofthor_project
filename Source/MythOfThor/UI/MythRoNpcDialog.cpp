@@ -32,7 +32,7 @@ namespace
 	constexpr float NpcBtnH = 20.f;
 	constexpr int32 NpcFontSize = 9;
 	constexpr float NpcRowH = 18.f;
-	constexpr int32 NpcMaxMenuRows = 10;
+	constexpr int32 NpcMaxMenuRows = 24; // menus longos (teleporte da Kafra, NPCs de teste) cabem; a caixa cresce com as opcoes
 
 	/** Caixa branca de cantos arredondados com borda, desenhada como no cliente (sem textura). */
 	void MakeRounded(UImage* Img, float Scale)

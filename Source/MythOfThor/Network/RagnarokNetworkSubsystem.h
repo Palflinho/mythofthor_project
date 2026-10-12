@@ -818,6 +818,9 @@ public:
 	const TArray<FRoQuest>& GetQuests() const { return Quests; }
 	int64 GetBankBalance() const { return BankBalance; }
 	const TArray<FRoAchievement>& GetAchievements() const { return Achievements; }
+	/** Titulo (aba Titulo do Equipamento): CZ_REQ_CHANGE_TITLE 0x0a2e (0 tira); o servidor confirma com ZC_ACK_CHANGE_TITLE 0x0a2f. */
+	bool SendChangeTitle(int32 TitleId);
+	int32 GetCurrentTitle() const { return CurrentTitle; }
 	int32 GetAchievementPoints() const { return AchievementPoints; }
 	int32 GetAchievementRank() const { return AchievementRank; }
 	/** Itens do segundo conjunto: X = indice (como no pacote), Y = posicao de equipar. */
@@ -1099,6 +1102,7 @@ private:
 	TArray<FRoQuest> Quests;
 	int64 BankBalance = 0;
 	TArray<FRoAchievement> Achievements;
+	int32 CurrentTitle = 0;
 	TArray<FIntPoint> EquipSwitch;
 	TArray<FRoMail> Mails;
 	int64 OpenMailId = 0;

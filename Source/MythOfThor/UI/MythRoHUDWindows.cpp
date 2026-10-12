@@ -17,6 +17,11 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "Engine/GameInstance.h"
+#include "Dom/JsonObject.h"
+#include "Misc/FileHelper.h"
+#include "Misc/Paths.h"
+#include "Serialization/JsonReader.h"
+#include "Serialization/JsonSerializer.h"
 
 namespace
 {
@@ -81,6 +86,42 @@ namespace
 	constexpr float EqPreviewW = 120.f;
 	// Personagem da janela de Habilidades: 80 x 100, subindo da barra de baixo
 	constexpr float SkillPortraitLift = 66.f;
+}
+
+namespace
+{
+	/** Config/titles.json (tools/gen_titles.py): nomes dos titulos (tabela do cliente) e qual conquista da cada um (servidor). */
+	struct FRoTitleTables
+	{
+		TMap<int32, FString> Names;
+		TMap<int32, int32> Achievements;
+	};
+
+	const FRoTitleTables& RoTitles()
+	{
+		static FRoTitleTables T;
+		static bool bLoaded = false;
+		if (!bLoaded)
+		{
+			bLoaded = true;
+			FString Text;
+			TSharedPtr<FJsonObject> Root;
+			if (FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("titles.json")))
+				&& FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) && Root.IsValid())
+			{
+				const TSharedPtr<FJsonObject>* Obj = nullptr;
+				if (Root->TryGetObjectField(TEXT("titles"), Obj))
+				{
+					for (const auto& P : (*Obj)->Values) { T.Names.Add(FCString::Atoi(*P.Key), P.Value->AsString()); }
+				}
+				if (Root->TryGetObjectField(TEXT("achievements"), Obj))
+				{
+					for (const auto& P : (*Obj)->Values) { T.Achievements.Add(FCString::Atoi(*P.Key), static_cast<int32>(P.Value->AsNumber())); }
+				}
+			}
+		}
+		return T;
+	}
 }
 
 // Aba da mochila de um item (print 04): 0 consumiveis, 1 equipamentos, 2 diversos e 3 favoritos (o servidor guarda a marca)
@@ -296,6 +337,15 @@ void UMythRoHUDWidget::BuildEquipWindow()
 	EquipTabNote->SetJustification(ETextJustify::Center);
 	if (UCanvasPanelSlot* NS = Cast<UCanvasPanelSlot>(EquipTabNote->Slot)) { NS->SetAutoSize(false); NS->SetSize(FVector2D(280.f, 16.f) * UIScale); }
 	EquipTabNote->SetVisibility(ESlateVisibility::Collapsed);
+	for (int32 i = 0; i < 8; ++i)
+	{
+		UImage* Hit = AddColor(EquipWindow, FLinearColor(0.f, 0.f, 0.f, 0.03f), 8.f, EqTop + 4.f + i * 16.f, 264.f, 15.f);
+		Hit->SetVisibility(ESlateVisibility::Collapsed);
+		EquipTitleHits.Add(Hit);
+		UTextBlock* T = AddText(EquipWindow, 14.f, EqTop + 5.f + i * 16.f, 8, RoWinText);
+		T->SetVisibility(ESlateVisibility::Collapsed);
+		EquipTitleTexts.Add(T);
+	}
 
 	// Rodape: linha fina em cima, caixa "Mostrar equip." a esquerda; atributos (23 x 20), troca rapida e tirar tudo (40 x 20) a direita
 	const float FootY = EqTop + 130.f;
@@ -670,10 +720,42 @@ void UMythRoHUDWidget::RefreshEquipWindow()
 	{
 		EquipTabBoxes[t]->SetColorAndOpacity(t == EquipTab ? FLinearColor::White : FLinearColor(0.84f, 0.86f, 0.91f, 1.f));
 	}
+	// Aba Titulo: "(sem titulo)" + os titulos das conquistas com o premio recebido; o atual fica marcado
+	EquipTitleIds.Reset();
+	if (EquipTab == 2)
+	{
+		EquipTitleIds.Add(0);
+		if (const URagnarokNetworkSubsystem* TitleNet = GetNet())
+		{
+			for (const FRoAchievement& A : TitleNet->GetAchievements())
+			{
+				if (const int32* Title = RoTitles().Achievements.Find(A.Id); Title && A.bRewardTaken)
+				{
+					EquipTitleIds.AddUnique(*Title);
+				}
+			}
+		}
+	}
+	const int32 CurrentTitle = GetNet() ? GetNet()->GetCurrentTitle() : 0;
+	for (int32 i = 0; i < EquipTitleTexts.Num(); ++i)
+	{
+		const bool bRow = EquipTitleIds.IsValidIndex(i);
+		EquipTitleHits[i]->SetVisibility(bRow ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+		EquipTitleTexts[i]->SetVisibility(bRow ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
+		if (bRow)
+		{
+			const int32 Id = EquipTitleIds[i];
+			const FString* Name = RoTitles().Names.Find(Id);
+			EquipTitleTexts[i]->SetText(FText::FromString(Id == 0 ? FString(TEXT("(sem título)")) : (Name ? *Name : FString::Printf(TEXT("Título %d"), Id))));
+			EquipTitleHits[i]->SetColorAndOpacity(Id == CurrentTitle ? FLinearColor(0.78f, 0.86f, 0.98f, 1.f) : FLinearColor(0.f, 0.f, 0.f, 0.03f));
+		}
+	}
 	if (EquipTabNote)
 	{
-		EquipTabNote->SetText(FText::FromString(EquipTab == 2 ? TEXT("Nenhum título conquistado.") : TEXT("Fonte de dano: padrão.")));
-		EquipTabNote->SetVisibility(bSlots ? ESlateVisibility::Collapsed : ESlateVisibility::HitTestInvisible);
+		// Titulo: aviso so quando nao ha nenhum titulo ganho (fica abaixo da linha "sem titulo")
+		const bool bNote = EquipTab == 3 || (EquipTab == 2 && EquipTitleIds.Num() <= 1);
+		EquipTabNote->SetText(FText::FromString(EquipTab == 2 ? TEXT("Nenhum título conquistado ainda.") : TEXT("Fonte de dano: padrão.")));
+		EquipTabNote->SetVisibility(bNote ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
 	}
 	if (EquipShowCheck)
 	{
@@ -1031,6 +1113,14 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 		{
 			if (EqNet) { EqNet->SendRemoveOption(); } // o servidor tira o falcao ou o Peco e avisa pelo estado
 			return true;
+		}
+		for (int32 i = 0; i < EquipTitleIds.Num() && i < EquipTitleHits.Num(); ++i)
+		{
+			if (IsUnder(EquipTitleHits[i], ScreenPos))
+			{
+				if (EqNet) { EqNet->SendChangeTitle(EquipTitleIds[i]); } // a marca muda quando o servidor confirma
+				return true;
+			}
 		}
 		if (IsUnder(EquipShowCheck, ScreenPos))
 		{

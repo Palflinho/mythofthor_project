@@ -1167,6 +1167,19 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 					OnChatMessage.Broadcast(TEXT(""), Msg, Color);
 				}
 				break;
+			case 0x0a2f: // ZC_ACK_CHANGE_TITLE <resultado>.B <titulo>.L (0 trocou)
+				if (ActualLen >= 7)
+				{
+					if (PacketData[2] == 0)
+					{
+						CurrentTitle = *reinterpret_cast<const int32*>(PacketData + 3);
+					}
+					else
+					{
+						OnChatMessage.Broadcast(TEXT(""), TEXT("Você ainda não tem esse título."), TEXT("#FF6060"));
+					}
+				}
+				break;
 			case 0x013c: // ZC_EQUIP_ARROW <indice>.W: municao equipada (o rAthena nao manda o ZC_REQ_WEAR_EQUIP_ACK para ela)
 				if (ActualLen >= 4)
 				{
@@ -4682,6 +4695,22 @@ bool URagnarokNetworkSubsystem::SendRemoveOption()
 	}
 	const uint8 Packet[2] = { 0x2a, 0x01 };
 	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendChangeTitle(int32 TitleId)
+{
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	uint8 Packet[6] = { 0x2e, 0x0a }; // CZ_REQ_CHANGE_TITLE <titulo>.L
+	FMemory::Memcpy(Packet + 2, &TitleId, 4);
+	SendData(Packet, sizeof(Packet));
+	if (TitleId == 0)
+	{
+		CurrentTitle = 0; // tirar o titulo nao tem resposta do servidor
+	}
 	return true;
 }
 
