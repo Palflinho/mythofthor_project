@@ -226,6 +226,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnSelectList.AddDynamic(this, &AMythNetWorld::HandleSelectList);
 	Net->OnVending.AddDynamic(this, &AMythNetWorld::HandleVending);
 	Net->OnGuild.AddDynamic(this, &AMythNetWorld::HandleGuild);
+	Net->OnPet.AddDynamic(this, &AMythNetWorld::HandlePet);
 	Net->OnStorageChanged.AddDynamic(this, &AMythNetWorld::HandleStorageChanged);
 	Net->OnPartyChanged.AddDynamic(this, &AMythNetWorld::HandlePartyChanged);
 	Net->OnCharCreateResult.AddDynamic(this, &AMythNetWorld::HandleCharCreateResult);
@@ -320,6 +321,7 @@ void AMythNetWorld::EndPlay(const EEndPlayReason::Type EndPlayReason)
 		Net->OnSelectList.RemoveAll(this);
 		Net->OnVending.RemoveAll(this);
 		Net->OnGuild.RemoveAll(this);
+		Net->OnPet.RemoveAll(this);
 		Net->OnPartyChanged.RemoveAll(this);
 		Net->OnCharCreateResult.RemoveAll(this);
 		Net->OnTradeRequest.RemoveAll(this);
@@ -851,6 +853,19 @@ void AMythNetWorld::HandleVending(uint8 Event)
 	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
 	{
 		PC->GetHud()->OnVendingEvent(Event);
+	}
+}
+
+void AMythNetWorld::HandlePet(uint8 Event)
+{
+	if (AMythPlayerController* PC = Cast<AMythPlayerController>(GetWorld()->GetFirstPlayerController()); PC && PC->GetHud())
+	{
+		if (Event == 0)
+		{
+			PC->BeginCapture();
+			return;
+		}
+		PC->GetHud()->OnPetEvent(Event);
 	}
 }
 

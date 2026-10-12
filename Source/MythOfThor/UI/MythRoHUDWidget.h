@@ -61,7 +61,8 @@ enum class EMythRoWindow : uint8
 	Navi,     // Alt+N: navegacao
 	Mail,     // Alt+R: correio
 	WorldMap, // Ctrl+`: mapa-mundi
-	Guild     // Alt+G: cla
+	Guild,    // Alt+G: cla
+	Pet       // Alt+J: mascote
 };
 
 /** Barra de medidor classica (gze*_left/mid/right sobre gze_bg): o meio estica conforme a fracao. */
@@ -1019,6 +1020,24 @@ protected:
 	UPROPERTY() TObjectPtr<UTextBlock> VendBuyBtn;
 	UPROPERTY() TObjectPtr<UTextBlock> VendBuyCancelBtn;
 	TMap<int32, int32> VendBuyChosen; // indice na loja -> quantidade escolhida
+
+	// Mascote (MythRoPet.cpp): janela Alt+J com retrato, nome, nivel, fome, lealdade, acessorio e os comandos
+public:
+	void OnPetEvent(uint8 Event);
+protected:
+	void TogglePetWindow();
+	void BuildPetWindow();
+	void RefreshPet();
+	bool HandlePetClick(const FVector2D& ScreenPos);
+	UPROPERTY() TObjectPtr<UCanvasPanel> PetWindow;
+	UPROPERTY() TObjectPtr<UImage> PetPortrait;
+	UPROPERTY() TObjectPtr<UEditableTextBox> PetNameBox;
+	UPROPERTY() TObjectPtr<UTextBlock> PetRenameBtn;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> PetLines;   // nivel, fome, lealdade, acessorio
+	UPROPERTY() TObjectPtr<UTextBlock> PetAutoFeed;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> PetCmdBtns;  // alimentar, brincar, voltar para o ovo, desequipar
+	FString PetPortraitKey;
+	FString PetShownName; // nome que a caixa mostra (o servidor confirma a troca mandando o ZC_PROPERTY_PET de novo)
 
 	// Cla (MythRoGuild.cpp): janela Alt+G com as abas do cliente (Cla, Membros, Cargos, Habil., Expulsos, Avisos) e o convite
 public:

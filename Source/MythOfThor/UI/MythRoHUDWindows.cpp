@@ -494,6 +494,7 @@ void UMythRoHUDWidget::ToggleWindow(EMythRoWindow Window)
 	case EMythRoWindow::Mail: OpenMailWindow(); return;
 	case EMythRoWindow::WorldMap: ToggleWorldMap(); return;
 	case EMythRoWindow::Guild: ToggleGuildWindow(); return;
+	case EMythRoWindow::Pet: TogglePetWindow(); return;
 	case EMythRoWindow::Navi:
 		if (NaviWindow && NaviWindow->IsVisible()) { NaviWindow->SetVisibility(ESlateVisibility::Collapsed); } else { OpenNaviWindow(); }
 		return;
@@ -580,6 +581,7 @@ void UMythRoHUDWidget::RefreshWindows()
 	RefreshVending();
 	if (PartyWindow && PartyWindow->IsVisible()) { RefreshParty(); }
 	if (GuildWindow && GuildWindow->IsVisible()) { RefreshGuild(); }
+	if (PetWindow && PetWindow->IsVisible()) { RefreshPet(); }
 	if (EmotionWindow && EmotionWindow->IsVisible()) { RefreshEmotionList(); }
 	if (FriendsWindow && FriendsWindow->IsVisible()) { RefreshFriends(); }
 	if (QuestWindow && QuestWindow->IsVisible()) { RefreshQuests(); }
@@ -1067,6 +1069,10 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 		return true;
 	}
 	if (HandleGuildClick(ScreenPos))
+	{
+		return true;
+	}
+	if (HandlePetClick(ScreenPos))
 	{
 		return true;
 	}

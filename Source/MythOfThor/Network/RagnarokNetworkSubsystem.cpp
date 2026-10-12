@@ -1039,6 +1039,7 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 				break;
 			case 0x0abe: // ZC_WARPLIST (Portal)
 			case 0x0177: // ZC_ITEMIDENTIFY_LIST (Lupa)
+			case 0x01a6: // ZC_PETEGG_LIST (Incubadora)
 			case 0x017b: // ZC_ITEMCOMPOSITION_LIST (carta)
 			case 0x01ad: // ZC_MAKINGARROW_LIST
 			case 0x018d: // ZC_MAKABLEITEMLIST (Forjar, Farmacologia)
@@ -1141,6 +1142,11 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 				if (ActualLen >= 10 && *reinterpret_cast<const uint32*>(PacketData + 2) == 0)
 				{
 					bShowEquip = *reinterpret_cast<const uint32*>(PacketData + 6) != 0;
+				}
+				else if (ActualLen >= 10 && *reinterpret_cast<const uint32*>(PacketData + 2) == 2) // CONFIG_PET_AUTOFEED
+				{
+					bPetAutoFeed = *reinterpret_cast<const uint32*>(PacketData + 6) != 0;
+					OnPet.Broadcast(1);
 				}
 				break;
 			case 0x0bae: // ZC_ACK_TAKEOFF_EQUIP_ALL <falhou>.B: os itens voltam pela lista normal de desequipar
@@ -1252,7 +1258,21 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 				HandleOptionChange(PacketData, ActualLen, PacketID);
 				break;
 			case RagnarokPackets::HEADER_ZC_NOTIFY_VANISH:
+				if (ActualLen >= 7 && PetGID != 0 && *reinterpret_cast<const uint32*>(PacketData + 2) == static_cast<uint32>(PetGID))
+				{
+					// O mascote some ao voltar para o ovo (unit_free); ao trocar de mapa o servidor manda tudo de novo
+					PetGID = 0;
+					OnPet.Broadcast(2);
+				}
 				HandleUnitVanish(PacketData, ActualLen);
+				break;
+			case 0x019e: // ZC_START_CAPTURE
+			case 0x01a0: // ZC_TRYCAPTURE_MONSTER
+			case 0x01a2: // ZC_PROPERTY_PET
+			case 0x01a3: // ZC_FEED_PET
+			case 0x01a4: // ZC_CHANGESTATE_PET
+			case 0x01aa: // ZC_PET_ACT
+				HandlePetPacket(PacketData, ActualLen, PacketID);
 				break;
 			case RagnarokPackets::HEADER_ZC_NOTIFY_ACT:
 				HandleActionNotify(PacketData, ActualLen);

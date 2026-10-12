@@ -189,6 +189,7 @@ void AMythPlayerController::SetupInputComponent()
 	InputComponent->BindKey(FInputChord(EKeys::V, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyBasic);
 	InputComponent->BindKey(FInputChord(EKeys::Z, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyParty);
 	InputComponent->BindKey(FInputChord(EKeys::G, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyGuild);
+	InputComponent->BindKey(FInputChord(EKeys::J, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyPet);
 	InputComponent->BindKey(FInputChord(EKeys::L, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyEmotions);
 	InputComponent->BindKey(FInputChord(EKeys::M, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyMacros);
 	InputComponent->BindKey(FInputChord(EKeys::H, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyFriends);
@@ -269,6 +270,14 @@ void AMythPlayerController::MoveToCursor()
 	FHitResult Hit;
 	if (GetHitResultUnderCursor(ECC_Visibility, false, Hit) && Hit.bBlockingHit)
 	{
+		if (URagnarokNetworkSubsystem* CapNet = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>(); CapNet && CapNet->IsCapturing())
+		{
+			// Captura de mascote: o clique escolhe o monstro (fora dele, desiste)
+			const AMythMonster* Mob = Cast<AMythMonster>(Hit.GetActor());
+			CapNet->SendCatchPet(Mob && Mob->IsNetUnit() && Mob->NetObjectType == 5 ? static_cast<int32>(Mob->NetID) : 0);
+			CurrentMouseCursor = EMouseCursor::Default;
+			return;
+		}
 		if (PendingSkillID != 0 && HandleSkillTargetClick(Hit))
 		{
 			return; // clique de mira de skill
@@ -441,6 +450,14 @@ void AMythPlayerController::PlayerTick(float DeltaTime)
 	{
 		CancelSkillTargeting(); // botao direito cancela a mira, como no cliente original
 	}
+	if (WasInputKeyJustPressed(EKeys::RightMouseButton))
+	{
+		if (URagnarokNetworkSubsystem* CapNet = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>(); CapNet && CapNet->IsCapturing())
+		{
+			CapNet->SendCatchPet(0); // botao direito desiste da captura
+			CurrentMouseCursor = EMouseCursor::Default;
+		}
+	}
 	// Botao direito rapido (sem arrastar a camera) sobre outro jogador: menu Trocar / Convidar / Cochichar
 	if (WasInputKeyJustPressed(EKeys::RightMouseButton))
 	{
@@ -600,6 +617,38 @@ void AMythPlayerController::OnHotkeyFriends() { ToggleHudWindow(EMythRoWindow::F
 void AMythPlayerController::OnHotkeyMacros() { ToggleHudWindow(EMythRoWindow::Macros); }
 void AMythPlayerController::OnHotkeyParty() { ToggleHudWindow(EMythRoWindow::Party); }
 void AMythPlayerController::OnHotkeyGuild() { ToggleHudWindow(EMythRoWindow::Guild); }
+void AMythPlayerController::OnHotkeyPet() { ToggleHudWindow(EMythRoWindow::Pet); }
+
+void AMythPlayerController::BeginCapture()
+{
+	CurrentMouseCursor = EMouseCursor::Crosshairs;
+	if (HudWidget)
+	{
+		HudWidget->AddChatLine(TEXT("Clique no monstro que deseja capturar (botão direito desiste)."), FLinearColor(1.f, 0.85f, 0.4f));
+	}
+}
+
+void AMythPlayerController::MythCaptureNearest()
+{
+	URagnarokNetworkSubsystem* Net = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>();
+	if (!Net || !Net->IsCapturing() || !GetPawn())
+	{
+		return;
+	}
+	const AMythMonster* Best = nullptr;
+	float BestDist = TNumericLimits<float>::Max();
+	for (TActorIterator<AMythMonster> It(GetWorld()); It; ++It)
+	{
+		const float D = FVector::DistSquared(It->GetActorLocation(), GetPawn()->GetActorLocation());
+		if (It->IsNetUnit() && It->NetObjectType == 5 && !It->IsDead() && D < BestDist)
+		{
+			BestDist = D;
+			Best = *It;
+		}
+	}
+	Net->SendCatchPet(Best ? static_cast<int32>(Best->NetID) : 0);
+	CurrentMouseCursor = EMouseCursor::Default;
+}
 void AMythPlayerController::OnHotkeyStatus() { ToggleHudWindow(EMythRoWindow::Status); }
 void AMythPlayerController::OnHotkeyItems() { ToggleHudWindow(EMythRoWindow::Items); }
 void AMythPlayerController::OnHotkeyEquip() { ToggleHudWindow(EMythRoWindow::Equip); }

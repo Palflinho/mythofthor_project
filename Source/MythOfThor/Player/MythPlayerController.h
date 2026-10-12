@@ -165,6 +165,13 @@ public:
 	UFUNCTION(Exec) void MythGuildInvite(const FString& Name) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendGuildInvite(Name); } }
 	UFUNCTION(Exec) void MythGuildSelect(int32 Row) { if (HudWidget) { HudWidget->GuildTestSelect(Row); } }
 	UFUNCTION(Exec) void MythGuild() { ToggleHudWindow(EMythRoWindow::Guild); }
+	/** Testes do mascote: abre a janela, comando (1 alimentar, 2 brincar, 3 voltar ao ovo, 4 desequipar), renomeia, captura o monstro mais perto. */
+	UFUNCTION(Exec) void MythPet() { ToggleHudWindow(EMythRoWindow::Pet); }
+	UFUNCTION(Exec) void MythPetCmd(int32 Command) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendPetMenu(Command); } }
+	UFUNCTION(Exec) void MythPetRename(const FString& Name) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendPetRename(Name); } }
+	UFUNCTION(Exec) void MythCaptureNearest();
+	/** O servidor pediu o alvo da captura (ZC_START_CAPTURE): cursor de mira ate o clique. */
+	void BeginCapture();
 	UFUNCTION(Exec) void MythGuildLeave() { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendLeaveGuild(TEXT("teste")); } }
 	UFUNCTION(Exec) void MythGuildExpel(const FString& Name) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { for (const FRoGuildMember& M : N->GetGuildMembers()) { if (M.Name == Name) { N->SendGuildExpel(M.AccountId, M.CharId, TEXT("teste")); } } } }
 	UFUNCTION(Exec) void MythGuildNotice(const FString& Subject, const FString& Text) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendGuildNotice(Subject, Text); } }
@@ -415,6 +422,7 @@ private:
 	void OnHotkeyStatus();
 	void OnHotkeyParty();
 	void OnHotkeyGuild();
+	void OnHotkeyPet();
 	void OnHotkeyEmotions();
 	void OnHotkeyMacros();
 	void OnHotkeyFriends();

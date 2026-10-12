@@ -70,6 +70,7 @@ private:
 	UFUNCTION() void HandleSelectList(uint8 ListType, const TArray<int32>& Values, const TArray<FString>& Names);
 	UFUNCTION() void HandleVending(uint8 Event);
 	UFUNCTION() void HandleGuild(uint8 Event);
+	UFUNCTION() void HandlePet(uint8 Event);
 	UFUNCTION() void HandleStorageChanged(const TArray<FRagnarokInventoryItem>& Items);
 	UFUNCTION() void HandlePartyChanged();
 	UFUNCTION() void HandleCharCreateResult(bool bSuccess, const FString& Message);

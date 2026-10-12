@@ -467,6 +467,21 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCartChanged);
  */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnSelectList, uint8, ListType, const TArray<int32>&, Values, const TArray<FString>&, Names);
 
+/** Mascote (ZC_PROPERTY_PET 0x01a2 e ZC_CHANGESTATE_PET 0x01a4). Fome 0..100, lealdade 0..1000. */
+struct FRoPetInfo
+{
+	FString Name;
+	bool bRenamed = false;
+	int32 Level = 0;
+	int32 Hunger = 0;
+	int32 Intimacy = 0;
+	int32 Accessory = 0;
+	int32 ClassId = 0;
+};
+
+/** Mascote: 0 comecou a captura (escolher o monstro), 1 dados mudaram, 2 voltou para o ovo. */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPet, uint8, Event);
+
 /** Cla (guilda): dados do ZC_GUILD_INFO 0x0b7b. */
 struct FRoGuildInfo
 {
@@ -524,7 +539,8 @@ enum class EMythSelectList : uint8
 	Arrow,      // ZC_MAKINGARROW_LIST 0x01ad -> CZ_REQ_MAKINGARROW 0x01ae
 	Produce,    // ZC_MAKABLEITEMLIST 0x018d -> CZ_REQMAKINGITEM 0x018e
 	Autospell,  // ZC_AUTOSPELLLIST 0x0afb -> CZ_SELECTAUTOSPELL 0x01ce
-	Refine      // ZC_NOTIFY_WEAPONITEMLIST 0x0221 -> CZ_REQ_WEAPONREFINE 0x0222
+	Refine,     // ZC_NOTIFY_WEAPONITEMLIST 0x0221 -> CZ_REQ_WEAPONREFINE 0x0222
+	PetEgg      // ZC_PETEGG_LIST 0x01a6 -> CZ_SELECT_PETEGG 0x01a7 (Incubadora)
 };
 
 /** Lojas de NPC (clif.cpp): 0x00c4 escolher comprar/vender, 0x0b77 lista de compra, 0x00c7 lista de venda, 0x00ca/0x00cb resultado. */
@@ -651,6 +667,19 @@ public:
 	int32 GetVendBuyOwner() const { return VendBuyAID; }
 	const TArray<FRoVendItem>& GetMyVendItems() const { return MyVendItems; }
 	bool IsVending() const { return bVending; }
+	/** Mascote (RagnarokNetworkPet.cpp). Menu: 0 informacoes, 1 alimentar, 2 brincar, 3 voltar para o ovo, 4 desequipar acessorio. */
+	bool SendPetMenu(int32 Command);
+	bool SendPetRename(const FString& Name);
+	/** Captura: o monstro escolhido depois do ZC_START_CAPTURE (0 desiste). */
+	bool SendCatchPet(int32 TargetId);
+	/** CZ_CONFIG 0x02d8: 2 = autoalimentar o mascote. */
+	bool SendConfig(int32 Type, bool bOn);
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Pet") FOnPet OnPet;
+	bool HasPet() const { return PetGID != 0; }
+	int64 GetPetId() const { return PetGID; }
+	const FRoPetInfo& GetPetInfo() const { return PetInfo; }
+	bool IsCapturing() const { return bCapturing; }
+	bool IsPetAutoFeed() const { return bPetAutoFeed; }
 	/** Cla (RagnarokNetworkGuild.cpp). CZ_REQ_GUILD_MENU: 0 informacoes, 1 membros, 2 cargos, 3 habilidades, 4 expulsos. */
 	bool SendGuildMenuRequest(int32 Type);
 	bool SendCreateGuild(const FString& Name);
@@ -1140,6 +1169,11 @@ private:
 	/** Listas de escolha e as respostas delas (RagnarokNetworkSelectLists.cpp). */
 	void HandleSelectListPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	int32 PendingCardIndex = -1;
+	void HandlePetPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	int64 PetGID = 0;
+	FRoPetInfo PetInfo;
+	bool bCapturing = false;
+	bool bPetAutoFeed = false;
 	void HandleGuildPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
 	void ClearGuild();
 	int32 GuildId = 0;

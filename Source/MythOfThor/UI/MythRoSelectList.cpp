@@ -80,6 +80,7 @@ void UMythRoHUDWidget::OpenSelectList(uint8 ListType, const TArray<int32>& Value
 	case EMythSelectList::Produce: Title = TEXT("Fabricar"); break;
 	case EMythSelectList::Autospell: Title = TEXT("Autoconjurar"); break;
 	case EMythSelectList::Refine: Title = TEXT("Refinar arma"); break;
+	case EMythSelectList::PetEgg: Title = FMythRoClientTables::Message(599).TrimEnd(); break;
 	}
 	if (SelectTitle)
 	{
@@ -116,6 +117,7 @@ void UMythRoHUDWidget::RefreshSelectList()
 			case EMythSelectList::Identify:
 			case EMythSelectList::Card:
 			case EMythSelectList::Refine:
+			case EMythSelectList::PetEgg:
 				// Valor = indice na mochila
 				if (Net)
 				{

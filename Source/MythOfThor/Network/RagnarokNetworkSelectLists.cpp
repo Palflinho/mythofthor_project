@@ -54,6 +54,13 @@ void URagnarokNetworkSubsystem::HandleSelectListPacket(const uint8* PacketData, 
 		}
 		Emit(PacketID == 0x0177 ? EMythSelectList::Identify : EMythSelectList::Card);
 		break;
+	case 0x01a6: // ZC_PETEGG_LIST <len>.W { <indice>.W }* (ovos para chocar)
+		for (int32 Off = 4; Off + 2 <= PacketSize; Off += 2)
+		{
+			Values.Add(ReadAt<uint16>(PacketData, Off));
+		}
+		Emit(EMythSelectList::PetEgg);
+		break;
 	case 0x01ad: // ZC_MAKINGARROW_LIST <len>.W { <item>.L }*
 		for (int32 Off = 4; Off + 4 <= PacketSize; Off += 4)
 		{
@@ -194,6 +201,11 @@ bool URagnarokNetworkSubsystem::SendSelectListChoice(EMythSelectList Type, int32
 		if (bCancel) { return true; }
 		Put16(0x0222);
 		Put32(Value);
+		break;
+	case EMythSelectList::PetEgg: // CZ_SELECT_PETEGG <indice>.W
+		if (bCancel) { return true; }
+		Put16(0x01a7);
+		Put16(static_cast<uint16>(Value));
 		break;
 	}
 	SendData(Packet.GetData(), Packet.Num());
