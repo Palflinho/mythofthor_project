@@ -89,3 +89,9 @@ Próximos passos combinados com o usuário, em ordem: (1) sombra dos itens no ch
 (2) conferir ordem dos cliques, cast (glifo/mira), tempo de ataque por ASPD, visual de arma/escudo ao chegar a lista de equipamento, reset ao trocar de mapa;
 (3) usar as tabelas extraídas (névoa, câmera, mapa-múndi, cooldown de skill, efeitos de mapa, camadas montadas); (4) itens P0 da auditoria (0x013b, 0x013a, input de número/texto de NPC, Peco Peco, falcão).
 O Druida e o cliente 2026 são só referência (fora do escopo até a transclasse; o rAthena oficial não tem a classe). O exe de 2026 é de terceiros: não executar fora de VM.
+
+## Atualização 2026-10-12 (noite): janelas feias
+
+O usuário pediu para redesenhar Equipamento, Habilidades, Grupo e Menu Esc no nível do LATAM: spec em `docs/HUD_REDESENHO_JANELAS.md` (ordem sugerida: Grupo, Habilidades, Equipamento, Menu).
+Também feito: itens no chão com sombra, queda original e posição real na célula (commit `0cc0828`); tabelas/`.lub` do GRF LATAM extraídos; análise do Data2026.
+Uso semanal do plano estava em 93% nesta hora.
