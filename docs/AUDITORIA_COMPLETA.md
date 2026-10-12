@@ -48,8 +48,8 @@ Prioridade: **P0** = laço básico do jogo (quem joga 1 hora precisa), **P1** = 
 | **Ferreiro: reparar** (0x01fc/0x01fe) | ⬜ | P1 | |
 | Ferreiro: ranking, pontos de ranking (0x0219/0x021b) | ⬜ | P2 | |
 | **Alquimista: poções** (Pharmacy, Bioethics, Marine Sphere, Cannibalize) | ⬜ | P1 | mesma lista de materiais |
-| **Alquimista: carrinho, vender no carrinho (Vending)** | ⬜ | P1 | só o sprite do carrinho existe |
-| **Mercador: carrinho** (janela, mover itens 0x0121/0x0124/0x0125) | 🟡 | P0 | janela de carrinho (listas, mover, peso/itens) em 2026-10-13 (`e3211c2`); falta a arte do LATAM e vender (Vending) |
+| **Alquimista: carrinho, vender no carrinho (Vending)** | 🟡 | P1 | carrinho e loja de jogador feitos em 2026-10-13 (`e3211c2`, `f219741`), testados com 2 clientes; falta a arte do LATAM |
+| **Mercador: carrinho** (janela, mover itens 0x0121/0x0124/0x0125) | 🟡 | P0 | janela de carrinho (listas, mover, peso/itens) em 2026-10-13 (`e3211c2`); loja de jogador (Vending) feita em 2026-10-13 (`f219741`); falta a arte do LATAM |
 | **Mercador: loja do jogador** (abrir, comprar de outros) | ⬜ | P1 | 0x012d/0x0131/0x0136 |
 | Mercador: Buying Store (0x0812) | ⬜ | P2 | |
 | **Caçador: falcão** (aparecer, comando Blitz Beat, Detect, Steel Crow) | 🟡 | P0 | aparece e vira; **botão de soltar** feito hoje; faltam o ataque do falcão (Blitz Beat) e o aviso de "falcão voltou" |

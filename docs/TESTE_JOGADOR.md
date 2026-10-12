@@ -129,3 +129,4 @@ NOVO (rodada 25, mesma noite):
 - Grupo (Alt+Z): barra de ferramentas embaixo (cadeado trava a janela; criar/convidar poem o comando no chat; sair).
 - Skills de quest (Primeiros Socorros, Fabricar Flechas...) aprendidas por NPC agora funcionam no atalho. O Assistente de Testes tem a opcao "Aprender Skills de Quest".
 - Troca de classe pelo NPC original (Aprendiz -> Espadachim em Izlude) testada.
+- LOJA DE JOGADOR (Mercador com carrinho e a skill Venda): use a skill longe de NPCs (o servidor nao deixa perto deles). Abre "Abrir loja": digite o nome e o preco, clique nos itens do carrinho para por na loja (quantidade vazia = a pilha toda), "Abrir". A placa com o nome aparece sobre a cabeca; outro jogador clica nela, escolhe (clique +1, Shift +10) e "Comprar". Quem vende ve "Vendido: ..." e o que resta em "Minha loja".

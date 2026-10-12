@@ -70,7 +70,14 @@ Contas de teste mexidas: ClaudeTester voltou ao estado de antes (Caçador 99/10)
    `titletable_ptbr.lub`. Não fiz: pouco uso no começo do jogo. Diga se quer agora.
 2. **Procura de grupo** (2 primeiros botões da barra do Grupo) e **Fonte de dano**: botões no lugar, ainda sem função.
 3. **NPCs no mapa da Navegação**: os nomes no arquivo do cliente vêm codificados e não achei a tabela; só mapas e monstros por enquanto.
-4. **Janelas funcionais que ainda faltam**: loja de jogador (Vending), guilda, pets, homúnculo, mapa-múndi, Reparar arma.
+4. **Janelas funcionais que ainda faltam**: guilda, pets, homúnculo, mapa-múndi, Reparar arma.
 5. **Arte do LATAM** no Carrinho e no Armazém (hoje as duas usam listas simples, funcionais).
 6. **Rastreador de missão**: "Job Change to Swordman" continuou na tela depois da troca de classe; conferir se o servidor apaga a missão.
-7. **3ª classe e Doram** ficaram bloqueados; o dia em que quiser abri-los é só tirar o `escopo_classes.conf` e ajustar `job_stats`.
+8. **3ª classe e Doram** ficaram bloqueados; o dia em que quiser abri-los é só tirar o `escopo_classes.conf` e ajustar `job_stats`.
+
+## Depois do "pode prosseguir" (13/10)
+
+- **Mensagens do servidor em português** e mensagens de sistema do cliente (`e67229d`) — ver acima.
+- **Loja de jogador (Vending)** (`f219741`): abrir a loja com os itens do carrinho, placa sobre a cabeça, comprar na loja de
+  outro jogador. Testado com dois clientes ao mesmo tempo (ClaudeTester comprou 2 Poções Vermelhas do ClaudeTester2).
+  Observação: o servidor não deixa abrir loja perto de NPCs (aparece a mensagem do cliente para isso).
