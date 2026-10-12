@@ -5,7 +5,10 @@
 
 #include "Network/RagnarokNetworkSubsystem.h"
 
+#include "UI/MythRoUITextures.h"
 #include "Components/CanvasPanel.h"
+#include "Components/CanvasPanelSlot.h"
+#include "Components/Image.h"
 #include "Components/TextBlock.h"
 
 namespace
@@ -23,6 +26,7 @@ void UMythRoHUDWidget::BuildFriendsWindow()
 {
 	const float H = FrListY + FriendRowCount * FrRowH + 36.f;
 	FriendsWindow = MakeRoPanel(TEXT("Amigos"), FVector2D(FrW, H), FVector2D(-330.f, 40.f));
+	AddFriendPartySwitch(FriendsWindow, H, false);
 	FriendsTitle = AddText(FriendsWindow, 10.f, 22.f, 8, FrGray);
 	for (int32 i = 0; i < FriendRowCount; ++i)
 	{
@@ -33,12 +37,61 @@ void UMythRoHUDWidget::BuildFriendsWindow()
 		Del->SetText(FText::FromString(TEXT("Remover")));
 		FriendDelete.Add(Del);
 	}
-	AddText(FriendsWindow, 12.f, H - 24.f, 7, FrGray)->SetText(FText::FromString(TEXT("Para adicionar: /friend Nome ou botão direito no jogador.")));
+	AddText(FriendsWindow, 12.f, H - 40.f, 7, FrGray)->SetText(FText::FromString(TEXT("Para adicionar: /friend Nome ou botão direito no jogador.")));
 
 	FriendAskWindow = MakeRoPanel(TEXT("Pedido de amizade"), FVector2D(300.f, 92.f), FVector2D(0.f, -180.f));
 	FriendAskText = AddText(FriendAskWindow, 10.f, 26.f, 9, FrText);
 	FriendAcceptLink = AddButtonHit(FriendAskWindow, TEXT("agree"), 50.f, 58.f);
 	FriendDeclineLink = AddButtonHit(FriendAskWindow, TEXT("disagree"), 170.f, 58.f);
+}
+
+void UMythRoHUDWidget::AddFriendPartySwitch(UCanvasPanel* Win, float H, bool bParty)
+{
+	// Radio "Amigos" / "Grupo" no pe da janela (print 19): o da janela atual aparece marcado
+	UTexture2D* On = FMythRoUITextures::Get(TEXT("achievement_re/btn_radio_on.bmp"));
+	UTexture2D* Off = FMythRoUITextures::Get(TEXT("achievement_re/btn_radio_off.bmp"));
+	UImage* Friend = AddImage(Win, bParty ? Off : On, 10.f, H - 20.f, 12.f, 12.f);
+	UImage* Party = AddImage(Win, bParty ? On : Off, 90.f, H - 20.f, 12.f, 12.f);
+	AddText(Win, 26.f, H - 21.f, 7, FrText)->SetText(FText::FromString(TEXT("Amigos")));
+	AddText(Win, 106.f, H - 21.f, 7, FrText)->SetText(FText::FromString(TEXT("Grupo")));
+	Friend->SetVisibility(ESlateVisibility::Visible);
+	Party->SetVisibility(ESlateVisibility::Visible);
+	(bParty ? PartySwitchFriend : FriendsSwitchParty) = bParty ? Friend : Party;
+}
+
+bool UMythRoHUDWidget::HandleFriendPartySwitch(const FVector2D& ScreenPos)
+{
+	UCanvasPanel* From = nullptr;
+	EMythRoWindow To = EMythRoWindow::Friends;
+	if (PartyWindow && PartyWindow->IsVisible() && IsUnder(PartySwitchFriend, ScreenPos))
+	{
+		From = PartyWindow;
+		To = EMythRoWindow::Friends;
+	}
+	else if (FriendsWindow && FriendsWindow->IsVisible() && IsUnder(FriendsSwitchParty, ScreenPos))
+	{
+		From = FriendsWindow;
+		To = EMythRoWindow::Party;
+	}
+	if (!From)
+	{
+		return false;
+	}
+	UCanvasPanel* Dest = To == EMythRoWindow::Friends ? FriendsWindow.Get() : PartyWindow.Get();
+	// A janela nova abre onde a antiga estava
+	if (UCanvasPanelSlot* FromSlot = Cast<UCanvasPanelSlot>(From->Slot); FromSlot && Root)
+	{
+		const FVector2D Local = Root->GetCachedGeometry().AbsoluteToLocal(From->GetCachedGeometry().GetAbsolutePosition());
+		if (UCanvasPanelSlot* DestSlot = Cast<UCanvasPanelSlot>(Dest->Slot))
+		{
+			DestSlot->SetAnchors(FAnchors(0.f, 0.f));
+			DestSlot->SetAlignment(FVector2D::ZeroVector);
+			DestSlot->SetPosition(Local);
+		}
+	}
+	From->SetVisibility(ESlateVisibility::Collapsed);
+	ToggleWindow(To);
+	return true;
 }
 
 void UMythRoHUDWidget::RefreshFriends()

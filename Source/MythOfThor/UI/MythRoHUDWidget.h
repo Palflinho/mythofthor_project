@@ -679,6 +679,11 @@ protected:
 	bool RoomNewPublic = true;
 	int32 PendingRoomId = 0;
 
+	// Amigos e Grupo dividem o cliente moderno numa janela so: o par de botoes de radio troca de uma para a outra
+	void AddFriendPartySwitch(UCanvasPanel* Win, float H, bool bParty);
+	bool HandleFriendPartySwitch(const FVector2D& ScreenPos);
+	UPROPERTY() TObjectPtr<UImage> PartySwitchFriend;
+	UPROPERTY() TObjectPtr<UImage> FriendsSwitchParty;
 	// Amigos (MythRoFriends.cpp)
 public:
 	void RefreshFriends();

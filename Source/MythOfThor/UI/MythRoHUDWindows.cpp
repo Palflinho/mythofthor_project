@@ -730,6 +730,10 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 
 bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 {
+	if (HandleFriendPartySwitch(ScreenPos))
+	{
+		return true;
+	}
 	if (EquipWindow && EquipWindow->IsVisible())
 	{
 		for (int32 t = 0; t < EquipTabBoxes.Num(); ++t)

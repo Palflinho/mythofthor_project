@@ -27,6 +27,7 @@ void UMythRoHUDWidget::BuildPartyWindow()
 {
 	const float H = PartyListY + PartyRowCount * PartyRowH + 34.f;
 	PartyWindow = MakeRoPanel(TEXT("Grupo"), FVector2D(PartyW, H), FVector2D(330.f, -60.f));
+	AddFriendPartySwitch(PartyWindow, H, true);
 	PartyNameText = AddText(PartyWindow, 8.f, 22.f, 9, PartyText);
 	for (int32 i = 0; i < PartyRowCount; ++i)
 	{
@@ -39,7 +40,7 @@ void UMythRoHUDWidget::BuildPartyWindow()
 		Expel->SetText(FText::FromString(TEXT("Expulsar")));
 		PartyExpelLinks.Add(Expel);
 	}
-	PartyLeaveLink = AddButtonHit(PartyWindow, TEXT("exit"), 8.f, H - 30.f);
+	PartyLeaveLink = AddButtonHit(PartyWindow, TEXT("exit"), 160.f, H - 28.f);
 
 	// Convite recebido
 	PartyInviteWindow = MakeRoPanel(TEXT("Convite de grupo"), FVector2D(300.f, 92.f), FVector2D(0.f, -120.f));
