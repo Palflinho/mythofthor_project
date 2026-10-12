@@ -554,6 +554,12 @@ public:
 	bool SendRestart(uint8 Type);
 	/** CZ_REQ_CARTOFF (0x012a): tira falcao, Peco Peco, dragao ou Madogear (o carrinho so se nao houver os outros). */
 	bool SendRemoveOption();
+	/** Tira todos os equipamentos dos encaixes de Location (mascara EQP_*): CZ_REQ_TAKEOFF_EQUIP_ALL 0x0bf5. */
+	bool SendTakeOffAll(uint32 Location = 0xFFFFFFFF);
+	/** "Mostrar equipamento" (outros jogadores podem abrir sua janela de equipamento): CZ_CONFIG tipo 0. */
+	bool SendShowEquipConfig(bool bShow);
+	/** Estado de "mostrar equipamento" que o servidor guardou (ZC_CONFIG_NOTIFY / ZC_CONFIG). */
+	bool IsShowEquip() const { return bShowEquip; }
 	/** Ultimo estado (OPTION_*) do proprio jogador, vindo do servidor. */
 	int32 GetSelfOption() const { return SelfOption; }
 	/** Posicao dentro da celula (subX, subY, 0..15) do item no chao, do ZC_ITEM_FALL_ENTRY; falso se o servidor nao mandou. */
@@ -981,6 +987,7 @@ private:
 	FString SessionPass;
 	uint32 SavedAccountID;
 	int32 SelfOption = 0;
+	bool bShowEquip = false;
 	TMap<int64, FIntPoint> GroundItemSubs;
 	uint32 SavedLoginID1;
 	uint32 SavedLoginID2;

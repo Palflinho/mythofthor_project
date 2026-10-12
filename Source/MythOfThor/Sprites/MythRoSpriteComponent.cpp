@@ -353,6 +353,7 @@ void UMythRoSpriteComponent::UpdateShadowTransform(const FVector& Feet)
 
 void UMythRoSpriteComponent::ReloadSprites()
 {
+	++LoadVersion;
 	const FString Root = GetAssetsRoot();
 	if (IsMonster())
 	{
@@ -1179,4 +1180,121 @@ void UMythRoSpriteComponent::AddLayerQuads(const FMythRoSpriteSource& Source, co
 		}
 		++Section;
 	}
+}
+
+// ------------------------------------------------------------------------------------------- previa 2D
+
+namespace
+{
+	/** Desenha as camadas de um quadro do .act numa tela RGBA (Y para baixo), como o cliente: offset, espelho, escala,
+	 * rotacao e cor da camada, "por cima" (alpha normal). Amostragem pelo pixel mais proximo. */
+	void BlitActFrame(TArray<FColor>& Canvas, int32 W, int32 H, const FIntPoint& Origin, const FRoSpr& Spr, const FRoActFrame& Frame, const FIntPoint& Offset)
+	{
+		for (const FRoActLayer& L : Frame.Layers)
+		{
+			const FRoSprImage* Img = Spr.Find(L.SprIndex, L.SprType);
+			if (!Img || Img->Width <= 0 || Img->Height <= 0)
+			{
+				continue;
+			}
+			const float Sx = FMath::Max(FMath::Abs(L.Scale.X), 0.01f);
+			const float Sy = FMath::Max(FMath::Abs(L.Scale.Y), 0.01f);
+			const float Cx = Origin.X + L.Offset.X + Offset.X;
+			const float Cy = Origin.Y + L.Offset.Y + Offset.Y;
+			const float Rad = FMath::DegreesToRadians(static_cast<float>(L.RotationDeg));
+			const float C = FMath::Cos(Rad), Sn = FMath::Sin(Rad);
+			const float Reach = FMath::Sqrt(FMath::Square(Img->Width * Sx) + FMath::Square(Img->Height * Sy)) * 0.5f + 1.f;
+			const int32 X0 = FMath::Max(0, FMath::FloorToInt(Cx - Reach)), X1 = FMath::Min(W - 1, FMath::CeilToInt(Cx + Reach));
+			const int32 Y0 = FMath::Max(0, FMath::FloorToInt(Cy - Reach)), Y1 = FMath::Min(H - 1, FMath::CeilToInt(Cy + Reach));
+			for (int32 y = Y0; y <= Y1; ++y)
+			{
+				for (int32 x = X0; x <= X1; ++x)
+				{
+					// Inverso da rotacao do mundo (AddLayerQuads): volta ao espaco da imagem
+					const float Dx = x + 0.5f - Cx, Dy = y + 0.5f - Cy;
+					float U = (Dx * C + Dy * Sn) / Sx + Img->Width * 0.5f;
+					const float V = (-Dx * Sn + Dy * C) / Sy + Img->Height * 0.5f;
+					if (L.bMirror)
+					{
+						U = Img->Width - U;
+					}
+					const int32 Iu = FMath::FloorToInt(U), Iv = FMath::FloorToInt(V);
+					if (Iu < 0 || Iv < 0 || Iu >= Img->Width || Iv >= Img->Height)
+					{
+						continue;
+					}
+					const FColor P = Img->Pixels[Iv * Img->Width + Iu];
+					const int32 A = P.A * L.Color.A / 255;
+					if (A == 0)
+					{
+						continue;
+					}
+					FColor& D = Canvas[y * W + x];
+					const int32 R = P.R * L.Color.R / 255, G = P.G * L.Color.G / 255, B = P.B * L.Color.B / 255;
+					const int32 OutA = A + D.A * (255 - A) / 255;
+					auto Mix = [A, OutA, &D](int32 Src, uint8 Dst) { return static_cast<uint8>((Src * A + Dst * D.A * (255 - A) / 255) / FMath::Max(OutA, 1)); };
+					D = FColor(Mix(R, D.R), Mix(G, D.G), Mix(B, D.B), static_cast<uint8>(OutA));
+				}
+			}
+		}
+	}
+}
+
+UTexture2D* UMythRoSpriteComponent::RenderPortrait(int32 Width, int32 Height, int32 FeetY, uint8 Dir) const
+{
+	const int32 ActionIndex = GroupIdle * 8 + (Dir & 7);
+	if (IsMonster() || Width <= 0 || Height <= 0 || !Body.Act.Actions.IsValidIndex(ActionIndex) || Body.Act.Actions[ActionIndex].Frames.Num() == 0)
+	{
+		return nullptr;
+	}
+	const FRoActFrame& BodyFrame = Body.Act.Actions[ActionIndex].Frames[0];
+	// Mesma ordem de RebuildMesh (a "profundidade" de cada camada decide quem fica na frente)
+	const bool bBack = Dir >= 3 && Dir <= 5;
+	struct FPart { float Depth; const FMythRoSpriteSource* Source; bool bHead; };
+	TArray<FPart> Parts = {
+		{ bBack ? 1.f : -1.f, &RobeSource, false },
+		{ 0.f, &Body, false },
+		{ 2.f, &Head, true },
+		{ 3.f, &HatBottom, true },
+		{ 4.f, &HatMid, true },
+		{ 5.f, &HatTop, true },
+		{ (Dir > 2 && Dir < 6) ? -2.f : 6.5f, &WeaponSource, false },
+		{ (Dir > 1 && Dir < 6) ? -3.f : 8.f, &ShieldSource, false },
+	};
+	Parts.StableSort([](const FPart& A, const FPart& B) { return A.Depth < B.Depth; });
+
+	TArray<FColor> Canvas;
+	Canvas.Init(FColor(0, 0, 0, 0), Width * Height);
+	const FIntPoint Origin(Width / 2, FeetY);
+	for (const FPart& Part : Parts)
+	{
+		const FMythRoSpriteSource& S = *Part.Source;
+		if (!S.IsValid() || !S.Act.Actions.IsValidIndex(ActionIndex) || S.Act.Actions[ActionIndex].Frames.Num() == 0)
+		{
+			continue;
+		}
+		const FRoActFrame& Frame = S.Act.Actions[ActionIndex].Frames[0]; // quadro 0 = cabeca reta (doridori na frente)
+		FIntPoint Offset = FIntPoint::ZeroValue;
+		if (Part.bHead && BodyFrame.Anchors.Num() > 0 && Frame.Anchors.Num() > 0)
+		{
+			Offset = BodyFrame.Anchors[0] - Frame.Anchors[0];
+		}
+		BlitActFrame(Canvas, Width, Height, Origin, S.Spr, Frame, Offset);
+	}
+
+	UTexture2D* Tex = UTexture2D::CreateTransient(Width, Height, PF_B8G8R8A8);
+	if (!Tex)
+	{
+		return nullptr;
+	}
+	Tex->Filter = TF_Nearest; // a previa fica em pixel duro, como no print da janela
+	Tex->SRGB = true;
+	Tex->NeverStream = true;
+	Tex->LODGroup = TEXTUREGROUP_Pixels2D;
+	FTexture2DMipMap& Mip = Tex->GetPlatformData()->Mips[0];
+	void* Data = Mip.BulkData.Lock(LOCK_READ_WRITE);
+	FMemory::Memcpy(Data, Canvas.GetData(), Canvas.Num() * sizeof(FColor));
+	Mip.BulkData.Unlock();
+	Tex->UpdateResource();
+	return Tex;
 }

@@ -1212,6 +1212,7 @@ void UMythRoHUDWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime
 	if (EquipWindow && EquipWindow->IsVisible())
 	{
 		UpdateEquipMount(); // municao e falcao/montaria mudam sem avisar a janela
+		UpdateEquipPreview(); // o sprite do jogador recarrega depois do pacote de visual (ZC_SPRITE_CHANGE)
 	}
 	UpdateMinimap();
 	UpdateButtons();

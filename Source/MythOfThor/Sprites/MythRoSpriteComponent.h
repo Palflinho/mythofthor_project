@@ -257,6 +257,16 @@ public:
 	/** Raiz dos assets extraidos do GRF (pasta que contem 'data'). */
 	static FString GetAssetsRoot();
 
+	/**
+	 * Previa 2D do personagem (janela de Equipamento): o primeiro quadro parado na direcao Dir (0 = de frente), com as mesmas
+	 * camadas e a mesma ordem do mundo (capa, corpo, cabelo, acessorios, arma e escudo), sem luz nem estados. Os pes ficam em
+	 * (Width / 2, FeetY). Textura nova a cada chamada; compare GetLoadVersion() para so redesenhar quando o visual mudar.
+	 */
+	UTexture2D* RenderPortrait(int32 Width, int32 Height, int32 FeetY, uint8 Dir = 0) const;
+
+	/** Sobe a cada ReloadSprites (classe, cabelo ou equipamento visivel mudaram). */
+	int32 GetLoadVersion() const { return LoadVersion; }
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void OnComponentDestroyed(bool bDestroyingHierarchy) override;
@@ -273,6 +283,7 @@ private:
 	UPROPERTY() FMythRoSpriteSource ShieldSource;
 	UPROPERTY() FMythRoSpriteSource RobeSource;
 	UPROPERTY() FMythRoSpriteSource CartSource;
+	int32 LoadVersion = 0;
 	void LoadEquipment(const FString& Root, const FString& Sex);
 	/** Camada que acompanha a cabeca (cabelo e acessorios): encaixa pela ancora do corpo. */
 	void AddHeadLayer(const FMythRoSpriteSource& Source, const FRoActFrame& BodyFrame, int32 ActionIndex, int32 FrameIndex, float DepthBase, int32& Section);

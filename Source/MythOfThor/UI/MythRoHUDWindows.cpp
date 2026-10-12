@@ -9,6 +9,7 @@
 #include "UI/MythRoUITextures.h"
 #include "Network/RagnarokNetworkSubsystem.h"
 #include "Player/MythPlayerController.h"
+#include "Sprites/MythRoSpriteComponent.h"
 
 #include "Blueprint/WidgetTree.h"
 #include "Components/CanvasPanel.h"
@@ -74,6 +75,10 @@ namespace
 	constexpr float RoTreeCellW = 68.f; // print 13 do LATAM: 7 colunas a cada ~68
 	constexpr float RoTreeCellH = 56.f;
 	constexpr int32 RoTreeRows = 9;
+	// Janela de equipamento: topo da arte (titulo 17 + abas 17), rodape e largura da previa do personagem
+	constexpr float EqTop = 34.f;
+	constexpr float EqFootH = 22.f;
+	constexpr float EqPreviewW = 120.f;
 }
 
 // Aba da mochila de um item (print 04): 0 consumiveis, 1 equipamentos, 2 diversos e 3 favoritos (o servidor guarda a marca)
@@ -231,54 +236,91 @@ void UMythRoHUDWidget::BuildItemsWindow()
 
 void UMythRoHUDWidget::BuildEquipWindow()
 {
-	// Equipamento (Alt+Q): abas Geral e Especial (print 08/09); equipwin_bg (280x130) com os rotulos dos 10 encaixes; icone sobre
-	// o circulo e nome. Especial: roupas de visual, municao e equipamentos sombrios
-	constexpr float TabH = 18.f;
-	EquipWindow = MakeRoPanel(TEXT("Equipamento"), FVector2D(280.f, 147.f + TabH), FVector2D(-340.f, 120.f));
-	const TCHAR* TabNames[2] = { TEXT("Geral"), TEXT("Especial") };
-	for (int32 t = 0; t < 2; ++t)
+	// Equipamento (Alt+Q), print 08 do LATAM e EquipmentV4 do roBrowser: 280 de largura, 4 abas de 70 (Geral, Especial, Titulo,
+	// Fonte de dano), arte equipwin_bg (280 x 130) com os 10 encaixes em linhas de 26, o personagem no centro e o rodape de 22 com
+	// "Mostrar equip." e os botoes de atributos, troca rapida e tirar tudo
+	EquipWindow = MakeRoPanel(TEXT("Equipamento"), FVector2D(280.f, EqTop + 130.f + EqFootH), FVector2D(-340.f, 120.f));
+	const TCHAR* TabNames[4] = { TEXT("Geral"), TEXT("Especial"), TEXT("Título"), TEXT("Fonte de dano") };
+	for (int32 t = 0; t < 4; ++t)
 	{
-		UImage* Box = AddRounded(EquipWindow, FLinearColor::White, FLinearColor(0.5f, 0.55f, 0.7f, 1.f), 6.f + t * 62.f, 19.f, 60.f, 18.f, 4.f, 0.f);
+		UImage* Box = AddRounded(EquipWindow, FLinearColor::White, FLinearColor(0.62f, 0.66f, 0.76f, 1.f), 1.f + t * 70.f, 18.f, 69.f, EqTop - 18.f, 4.f, 0.f);
 		Box->SetVisibility(ESlateVisibility::Visible);
 		EquipTabBoxes.Add(Box);
-		UTextBlock* Label = AddText(EquipWindow, 16.f + t * 62.f, 21.f, 8, RoWinLabel);
+		UTextBlock* Label = AddText(EquipWindow, 1.f + t * 70.f, 19.f, 8, RoWinText);
 		Label->SetText(FText::FromString(TabNames[t]));
+		Label->SetJustification(ETextJustify::Center);
+		if (UCanvasPanelSlot* LS = Cast<UCanvasPanelSlot>(Label->Slot)) { LS->SetAutoSize(false); LS->SetSize(FVector2D(69.f, 14.f) * UIScale); }
 		EquipTabTexts.Add(Label);
 	}
-	EquipBack = AddImage(EquipWindow, FMythRoUITextures::Get(RoWinArt(TEXT("equipwin_bg"))), 0.f, 17.f + TabH);
+	EquipBack = AddImage(EquipWindow, FMythRoUITextures::Get(RoWinArt(TEXT("equipwin_bg"))), 0.f, EqTop);
+	// Personagem no centro (feito por RenderPortrait): por baixo dos nomes, os pes sobre a sombra desenhada na arte
+	EquipPreview = AddImage(EquipWindow, nullptr, 140.f - EqPreviewW * 0.5f, EqTop, EqPreviewW, 130.f);
+	EquipPreview->SetVisibility(ESlateVisibility::Collapsed);
 	for (const FRoEquipSlot& S : RoEquipSlots)
 	{
-		const float Y = 17.f + TabH + S.CenterY;
-		// Fundo branco cobre o rotulo da arte quando ha item no encaixe
-		UImage* Back = AddColor(EquipWindow, RoWinBody, S.bRight ? 160.f : 32.f, Y - 8.f, 86.f, 14.f);
+		const float Y = EqTop + S.CenterY;
+		// O rotulo da arte ("cabeça", "mão dir"...) continua visivel, apagado, por baixo do nome (como no print)
+		UImage* Back = AddColor(EquipWindow, RoWinBody, 0.f, 0.f, 1.f, 1.f);
 		Back->SetVisibility(ESlateVisibility::Collapsed);
-		UImage* Icon = AddImage(EquipWindow, nullptr, S.bRight ? 250.f : 6.f, Y - 12.f, 24.f, 24.f);
+		UImage* Icon = AddImage(EquipWindow, nullptr, S.bRight ? 252.f : 4.f, Y - 12.f, 24.f, 24.f);
 		Icon->SetVisibility(ESlateVisibility::Collapsed);
 		EquipIcons.Add(Icon);
-		UTextBlock* Name = AddText(EquipWindow, S.bRight ? 162.f : 34.f, Y - 7.f, 7, RoWinText);
+		// Nome em ate 2 linhas de 80: esquerda alinhada a esquerda, direita alinhada a direita
+		UTextBlock* Name = AddText(EquipWindow, S.bRight ? 168.f : 32.f, Y - 12.f, 8, RoWinText);
+		Name->SetAutoWrapText(true);
+		Name->SetJustification(S.bRight ? ETextJustify::Right : ETextJustify::Left);
+		Name->SetClipping(EWidgetClipping::ClipToBounds);
+		if (UCanvasPanelSlot* NS = Cast<UCanvasPanelSlot>(Name->Slot)) { NS->SetAutoSize(false); NS->SetSize(FVector2D(80.f, 26.f) * UIScale); }
 		EquipNames.Add(Name);
 		EquipIcons.Add(Back); // pares (icone, fundo) no mesmo array: indice 2*i e 2*i+1
 		EquipCellIndex.Add(-1);
 	}
-	// Coluna do meio da aba Geral: a municao equipada em cima do personagem e, embaixo, soltar o falcao / descer do Peco Peco
-	EquipAmmoFrame = AddImage(EquipWindow, FMythRoUITextures::Get(RoWinArt(TEXT("itemwin_mid"))), 136.f, 17.f + TabH + 4.f, 32.f, 32.f);
-	EquipAmmoIcon = AddImage(EquipWindow, nullptr, 140.f, 17.f + TabH + 8.f, 24.f, 24.f);
+	// Coluna do meio: municao equipada em cima (so aparece com municao) e o botao redondo "off" do falcao/Peco embaixo
+	EquipAmmoFrame = AddImage(EquipWindow, FMythRoUITextures::Get(RoWinArt(TEXT("itemwin_mid"))), 124.f, EqTop + 2.f, 32.f, 32.f);
+	EquipAmmoIcon = AddImage(EquipWindow, nullptr, 128.f, EqTop + 6.f, 24.f, 24.f);
 	EquipAmmoIcon->SetVisibility(ESlateVisibility::Collapsed);
-	EquipAmmoName = AddText(EquipWindow, 114.f, 17.f + TabH + 38.f, 6, RoWinText);
+	EquipAmmoName = AddText(EquipWindow, 102.f, EqTop + 34.f, 6, RoWinText);
 	EquipAmmoName->SetJustification(ETextJustify::Center);
 	if (UCanvasPanelSlot* NameSlot = Cast<UCanvasPanelSlot>(EquipAmmoName->Slot))
 	{
 		NameSlot->SetAutoSize(false);
 		NameSlot->SetSize(FVector2D(76.f, 12.f) * UIScale);
 	}
-	EquipMountBtn = AddTextButton(EquipWindow, TEXT("Soltar falcão"), 116.f, 17.f + TabH + 98.f, 72.f);
-	if (RoButtons.Num() > 0)
-	{
-		EquipMountParts[0] = RoButtons.Last().Left;
-		EquipMountParts[1] = RoButtons.Last().Image;
-		EquipMountParts[2] = RoButtons.Last().Right;
-	}
+	EquipMountBtn = AddImage(EquipWindow, FMythRoUITextures::Get(RoWinArt(TEXT("btn_off"))), 122.f, EqTop + 90.f, 36.f, 36.f);
+	EquipTabNote = AddText(EquipWindow, 0.f, EqTop + 56.f, 8, RoWinFaint);
+	EquipTabNote->SetJustification(ETextJustify::Center);
+	if (UCanvasPanelSlot* NS = Cast<UCanvasPanelSlot>(EquipTabNote->Slot)) { NS->SetAutoSize(false); NS->SetSize(FVector2D(280.f, 16.f) * UIScale); }
+	EquipTabNote->SetVisibility(ESlateVisibility::Collapsed);
+
+	// Rodape: linha fina em cima, caixa "Mostrar equip." a esquerda; atributos (23 x 20), troca rapida e tirar tudo (40 x 20) a direita
+	const float FootY = EqTop + 130.f;
+	AddColor(EquipWindow, FLinearColor(0.78f, 0.8f, 0.86f, 1.f), 0.f, FootY, 280.f, 1.f);
+	EquipShowCheck = AddImage(EquipWindow, FMythRoUITextures::Get(TEXT("checkbox_0.bmp")), 8.f, FootY + 6.f, 10.f, 10.f);
+	EquipShowCheck->SetVisibility(ESlateVisibility::Visible);
+	AddText(EquipWindow, 22.f, FootY + 4.f, 8, RoWinText)->SetText(FText::FromString(TEXT("Mostrar equip.")));
+	EquipBtnStatus = AddButtonEx(EquipWindow, RoWinArt(TEXT("btn_e_ability_a")), RoWinArt(TEXT("btn_e_ability_b")), RoWinArt(TEXT("btn_e_ability_b")), 168.f, FootY + 1.f);
+	EquipBtnSwitch = AddButtonEx(EquipWindow, RoWinArt(TEXT("btn_e_change_a")), RoWinArt(TEXT("btn_e_change_b")), RoWinArt(TEXT("btn_e_change_c")), 193.f, FootY + 1.f);
+	EquipBtnOffAll = AddButtonEx(EquipWindow, RoWinArt(TEXT("btn_e_off_a")), RoWinArt(TEXT("btn_e_off_b")), RoWinArt(TEXT("btn_e_off_c")), 236.f, FootY + 1.f);
 	UpdateEquipMount();
+}
+
+void UMythRoHUDWidget::UpdateEquipPreview()
+{
+	// Redesenha so quando o sprite do jogador recarregou (classe, cabelo, acessorios, arma, escudo ou capa mudaram)
+	if (!EquipPreview || !EquipWindow || !EquipWindow->IsVisible())
+	{
+		return;
+	}
+	const APawn* Pawn = GetOwningPlayerPawn();
+	const UMythRoSpriteComponent* Sprite = Pawn ? Pawn->FindComponentByClass<UMythRoSpriteComponent>() : nullptr;
+	const bool bShow = Sprite && EquipTab <= 1;
+	if (bShow && Sprite->GetLoadVersion() != EquipPreviewVersion)
+	{
+		EquipPreviewVersion = Sprite->GetLoadVersion();
+		EquipPreviewTex = Sprite->RenderPortrait(static_cast<int32>(EqPreviewW), 130, 114);
+		EquipPreview->SetBrush(RoWinBrush(EquipPreviewTex, FVector2D(EqPreviewW, 130.f) * UIScale));
+	}
+	EquipPreview->SetVisibility(bShow && EquipPreviewTex ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
 }
 
 void UMythRoHUDWidget::BuildSkillsWindow()
@@ -517,7 +559,7 @@ void UMythRoHUDWidget::RefreshStatusWindow()
 		DerivedTexts[4]->SetText(FText::AsNumber(Ps.Hit));
 		DerivedTexts[5]->SetText(Plus(Ps.Flee, Ps.Flee2));
 		DerivedTexts[6]->SetText(FText::AsNumber(Ps.Critical));
-		DerivedTexts[7]->SetText(FText::AsNumber(Ps.Aspd));
+		DerivedTexts[7]->SetText(FText::AsNumber(Ps.Aspd > 0 ? (2000 - Ps.Aspd) / 10 : 0)); // o servidor manda o amotion (ms x 10); o cliente mostra 200 - amotion / 10
 		DerivedTexts[8]->SetText(FText::AsNumber(Ps.StatusPoints));
 		DerivedTexts[9]->SetText(FText::FromString(TEXT("-")));
 	}
@@ -606,19 +648,33 @@ void UMythRoHUDWidget::RefreshEquipWindow()
 		static const uint32 Special[10] = { 0x0400, 0x0800, 0x1000, 0x2000, 0x8000, 0x20000, 0x10000, 0x40000, 0x80000, 0x100000 };
 		return EquipTab == 1 ? Special[SlotNo] : RoEquipSlots[SlotNo].Mask;
 	};
+	// Abas 0 Geral e 1 Especial mostram encaixes; 2 Titulo e 3 Fonte de dano so um aviso (o servidor nao manda esses dados ainda)
+	const bool bSlots = EquipTab <= 1;
 	if (EquipBack)
 	{
 		EquipBack->SetBrush(RoWinBrush(FMythRoUITextures::Get(RoWinArt(EquipTab == 1 ? TEXT("equipwin_special") : TEXT("equipwin_bg"))), FVector2D(280.f, 130.f) * UIScale));
+		EquipBack->SetVisibility(bSlots ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
 	}
 	for (int32 t = 0; t < EquipTabBoxes.Num(); ++t)
 	{
-		EquipTabBoxes[t]->SetColorAndOpacity(t == EquipTab ? FLinearColor::White : FLinearColor(0.8f, 0.83f, 0.9f, 1.f));
+		EquipTabBoxes[t]->SetColorAndOpacity(t == EquipTab ? FLinearColor::White : FLinearColor(0.84f, 0.86f, 0.91f, 1.f));
 	}
+	if (EquipTabNote)
+	{
+		EquipTabNote->SetText(FText::FromString(EquipTab == 2 ? TEXT("Nenhum título conquistado.") : TEXT("Fonte de dano: padrão.")));
+		EquipTabNote->SetVisibility(bSlots ? ESlateVisibility::Collapsed : ESlateVisibility::HitTestInvisible);
+	}
+	if (EquipShowCheck)
+	{
+		const URagnarokNetworkSubsystem* CheckNet = GetNet();
+		EquipShowCheck->SetBrush(RoWinBrush(FMythRoUITextures::Get(CheckNet && CheckNet->IsShowEquip() ? TEXT("checkbox_1.bmp") : TEXT("checkbox_0.bmp")), FVector2D(10.f, 10.f) * UIScale));
+	}
+	UpdateEquipPreview();
 	const URagnarokNetworkSubsystem* Net = GetNet();
 	for (int32 i = 0; i < UE_ARRAY_COUNT(RoEquipSlots) && i < EquipNames.Num(); ++i)
 	{
 		const FRagnarokInventoryItem* Found = nullptr;
-		if (Net)
+		if (Net && bSlots)
 		{
 			for (const FRagnarokInventoryItem& Item : Net->GetInventoryItems())
 			{
@@ -636,13 +692,13 @@ void UMythRoHUDWidget::RefreshEquipWindow()
 			UTexture2D* Tex = FMythRoClientTables::ItemIcon(Found->ItemID);
 			Icon->SetBrush(RoWinBrush(Tex, FVector2D(24.f, 24.f) * UIScale));
 			Icon->SetVisibility(Tex ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
-			Back->SetVisibility(ESlateVisibility::HitTestInvisible);
+			Back->SetVisibility(ESlateVisibility::Collapsed);
 			FString Name = FMythRoClientTables::ItemName(Found->ItemID);
 			if (Found->Refine > 0)
 			{
 				Name = FString::Printf(TEXT("+%d %s"), Found->Refine, *Name);
 			}
-			EquipNames[i]->SetText(FText::FromString(Name.Left(16)));
+			EquipNames[i]->SetText(FText::FromString(Name)); // quebra em 2 linhas de 80 (o resto e cortado), como no print
 			EquipCellIndex[i] = Found->Index;
 		}
 		else
@@ -914,10 +970,35 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 	{
 		return true;
 	}
-	if (EquipWindow && EquipWindow->IsVisible() && EquipMountBtn && IsUnder(EquipMountBtn, ScreenPos))
+	if (EquipWindow && EquipWindow->IsVisible())
 	{
-		if (URagnarokNetworkSubsystem* MountNet = GetNet()) { MountNet->SendRemoveOption(); } // o servidor tira o falcao ou o Peco e avisa pelo estado
-		return true;
+		URagnarokNetworkSubsystem* EqNet = GetNet();
+		if (IsUnder(EquipMountBtn, ScreenPos))
+		{
+			if (EqNet) { EqNet->SendRemoveOption(); } // o servidor tira o falcao ou o Peco e avisa pelo estado
+			return true;
+		}
+		if (IsUnder(EquipShowCheck, ScreenPos))
+		{
+			if (EqNet) { EqNet->SendShowEquipConfig(!EqNet->IsShowEquip()); } // a caixa muda quando o servidor confirma (ZC_CONFIG)
+			return true;
+		}
+		if (IsUnder(EquipBtnStatus, ScreenPos))
+		{
+			ToggleWindow(EMythRoWindow::Status);
+			return true;
+		}
+		if (IsUnder(EquipBtnSwitch, ScreenPos))
+		{
+			ToggleWindow(EMythRoWindow::EquipSwitch);
+			return true;
+		}
+		if (IsUnder(EquipBtnOffAll, ScreenPos))
+		{
+			// Tirar tudo: so os encaixes da aba aberta (Geral = equipamento, Especial = visual e sombrios), como o cliente
+			if (EqNet) { EqNet->SendTakeOffAll(EquipTab == 1 ? 0x1F3C00u : 0x0003FFu); }
+			return true;
+		}
 	}
 	for (const TPair<TWeakObjectPtr<UImage>, TWeakObjectPtr<UCanvasPanel>>& Pair : CloseButtons)
 	{
@@ -1222,7 +1303,7 @@ void UMythRoHUDWidget::UpdateEquipMount()
 		}
 	}
 	EquipAmmoIndex = Ammo ? Ammo->Index : -1;
-	if (EquipAmmoFrame) { EquipAmmoFrame->SetVisibility(bGeneral ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed); }
+	if (EquipAmmoFrame) { EquipAmmoFrame->SetVisibility(bGeneral && Ammo ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed); }
 	if (EquipAmmoIcon)
 	{
 		UTexture2D* Tex = Ammo ? FMythRoClientTables::ItemIcon(Ammo->ItemID) : nullptr;
@@ -1236,15 +1317,9 @@ void UMythRoHUDWidget::UpdateEquipMount()
 	const int32 Option = Net ? Net->GetSelfOption() : 0;
 	const bool bFalcon = (Option & 0x10) != 0;
 	const bool bRiding = (Option & 0x20) != 0;
-	const bool bShowMount = bGeneral && (bFalcon || bRiding);
-	for (const TWeakObjectPtr<UImage>& Part : EquipMountParts)
-	{
-		if (UImage* P = Part.Get()) { P->SetVisibility(bShowMount ? ESlateVisibility::Visible : ESlateVisibility::Collapsed); }
-	}
+	// Botao "off" (btn_off) so com falcao ou montaria, como no print 08
 	if (EquipMountBtn)
 	{
-		EquipMountBtn->SetVisibility(bShowMount ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
-		const FString Want = bRiding ? TEXT("Descer do Peco") : TEXT("Soltar falcão");
-		if (EquipMountBtn->GetText().ToString() != Want) { EquipMountBtn->SetText(FText::FromString(Want)); }
+		EquipMountBtn->SetVisibility(bGeneral && (bFalcon || bRiding) ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
 	}
 }

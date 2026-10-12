@@ -347,8 +347,20 @@ protected:
 	UPROPERTY() TObjectPtr<UImage> EquipAmmoIcon;
 	UPROPERTY() TObjectPtr<UTextBlock> EquipAmmoName;
 	int32 EquipAmmoIndex = -1;
-	UPROPERTY() TObjectPtr<UTextBlock> EquipMountBtn;
-	TWeakObjectPtr<UImage> EquipMountParts[3];
+	/** Botao redondo "off" sob o personagem (btn_off): solta o falcao / desce do Peco Peco. */
+	UPROPERTY() TObjectPtr<UImage> EquipMountBtn;
+	/** Previa do personagem no centro (UMythRoSpriteComponent::RenderPortrait), redesenhada quando o visual muda. */
+	UPROPERTY() TObjectPtr<UImage> EquipPreview;
+	UPROPERTY() TObjectPtr<UTexture2D> EquipPreviewTex;
+	int32 EquipPreviewVersion = -1;
+	/** Rodape: caixa "Mostrar equip." (CZ_CONFIG) e os botoes atributos / troca rapida / tirar tudo. */
+	UPROPERTY() TObjectPtr<UImage> EquipShowCheck;
+	UPROPERTY() TObjectPtr<UImage> EquipBtnStatus;
+	UPROPERTY() TObjectPtr<UImage> EquipBtnSwitch;
+	UPROPERTY() TObjectPtr<UImage> EquipBtnOffAll;
+	/** Abas Titulo e Fonte de dano: texto no lugar dos encaixes. */
+	UPROPERTY() TObjectPtr<UTextBlock> EquipTabNote;
+	void UpdateEquipPreview();
 
 	// Habilidades: linhas com icone, nome e nivel
 	UPROPERTY() TArray<TObjectPtr<UImage>> SkillIcons;

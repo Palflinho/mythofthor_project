@@ -1050,6 +1050,20 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x00c0: // ZC_EMOTION
 				HandleChatExtras(PacketData, ActualLen, PacketID);
 				break;
+			case 0x02da: // ZC_CONFIG_NOTIFY <mostrar equipamento>.B (ao entrar no mapa)
+				if (ActualLen >= 3)
+				{
+					bShowEquip = PacketData[2] != 0;
+				}
+				break;
+			case 0x02d9: // ZC_CONFIG <tipo>.L <ligado>.L (resposta do CZ_CONFIG; tipo 0 = mostrar equipamento)
+				if (ActualLen >= 10 && *reinterpret_cast<const uint32*>(PacketData + 2) == 0)
+				{
+					bShowEquip = *reinterpret_cast<const uint32*>(PacketData + 6) != 0;
+				}
+				break;
+			case 0x0bae: // ZC_ACK_TAKEOFF_EQUIP_ALL <falhou>.B: os itens voltam pela lista normal de desequipar
+				break;
 			case 0x0977: // ZC_HP_INFO <id>.L <pv>.L <pv max>.L
 				if (ActualLen >= 14)
 				{
@@ -4392,6 +4406,34 @@ bool URagnarokNetworkSubsystem::SendRemoveOption()
 		return false;
 	}
 	const uint8 Packet[2] = { 0x2a, 0x01 };
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendTakeOffAll(uint32 Location)
+{
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	// CZ_REQ_TAKEOFF_EQUIP_ALL (clif_parse_unequipall; 0x0bf5 com a mascara de encaixes a partir do PACKETVER 20230906)
+	uint8 Packet[6] = { 0xf5, 0x0b };
+	FMemory::Memcpy(Packet + 2, &Location, 4);
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendShowEquipConfig(bool bShow)
+{
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap)
+	{
+		return false;
+	}
+	// CZ_CONFIG (0x02d8, clif_parse_configuration): <tipo>.L (0 = CONFIG_OPEN_EQUIPMENT_WINDOW) <ligado>.L; o servidor responde ZC_CONFIG
+	uint8 Packet[10] = { 0xd8, 0x02 };
+	const uint32 Type = 0, Flag = bShow ? 1 : 0;
+	FMemory::Memcpy(Packet + 2, &Type, 4);
+	FMemory::Memcpy(Packet + 6, &Flag, 4);
 	SendData(Packet, sizeof(Packet));
 	return true;
 }
