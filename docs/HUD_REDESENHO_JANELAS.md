@@ -52,3 +52,22 @@ Alvo (print):
 - Rodapé da direita: caixa "service", botões **Share**, **Find** e **Move** (o "Move" é o nosso "Ir até o mapa", já funcionando), caixa "Minimize" e dois ícones (histórico e destino fixo) embaixo.
 - Dados: `navi_map`, `navi_mob`, `navi_npc`, `navi_link`, `navi_linkdistance`, `navi_npcdistance` e `navi_picknpc` do `luafiles514\lua files\navigation\*.lub` (já extraídos para `E:\Dev\Ragnarok_Assets\grf\data\luafiles514\...`; decompilar com `tools/lub_eval.py`). Hoje só usamos mapas e ligações; faltam monstros e NPCs por mapa, que enchem o painel direito.
 - Arte: `navigation_interface3/*` (`btn_find_*`, `btn_share_*`, `btn_getdirections_*`, `dropdown_*`, `icon_list_map/mob/npc`, `bg_search`, `navi_bar_*`).
+
+## Medidas tiradas do goro (MIT, `ui/*.go`, lidas em 2026-10-12)
+
+O goro desenha as janelas com tema próprio, então os números abaixo servem de **proporção e comportamento**, não de arte; a arte e as abas continuam as do LATAM.
+
+**Equipamento (`equipment_window.go`):** janela 300 px de largura, conteúdo de 280 × 130 com 10 px de margem; **3 colunas: esquerda 112, centro 56, direita 112** (x = 0, 112, 168); **linhas de 24 px**.
+Esquerda (de cima para baixo): cabeça alta, cabeça baixa, arma, capa, acessório. Direita: cabeça média, armadura, escudo, calçados, acessório. **Munição no centro, embaixo da prévia** (56 × 24, y = 106); a prévia ocupa x=112, y=0, 56 × 106.
+Texto: slot vazio mostra o nome do encaixe em cinza; slot cheio mostra o item (prefixo `+N` do refino; munição com a quantidade); até 14 caracteres nas laterais e 8 no centro; esquerda alinha à esquerda, direita à direita; ícone a 4 px da borda e texto 8 px depois;
+divisória de 1 px entre linhas; dica a Y+18 do mouse; **duplo clique (até 360 ms)** equipa/tira; clique direito abre a descrição. Rodapé: caixa **"Show Equip"** (120 × 20, liga/desliga o envio de configuração), botão **Cart** (se houver carrinho) e **"Peco Off"/"Cart Off"** (só aparece se estiver montado/com carrinho).
+→ Nosso slot de munição fica em x=136 y≈39, quase o mesmo lugar; falta a prévia embaixo/acima, a caixa "Show Equip" e mover o botão de soltar para o rodapé.
+
+**Grupo/Amigos (`friends_window.go`):** janela 286 × 256; duas abas "Friends"/"Party" de 72 × 24 (nós usamos bolinhas, como no print do LATAM); linhas de **286 × 24** alternando cor; nome a 8 px, até 20 caracteres, " *" marca o líder; mapa/status à direita (largura 64);
+barra de HP de 5 px de altura, 8 px de margem e contorno de 1 px; sem barra de SP; rodapé: Criar / Convidar (líder) / Configurações / Sair.
+
+**Menu Esc (`escape_menu.go`):** janela **252 × 200** (252 × 238 com "voltar à vida"), título "Menu", sem botão de fechar, botões em coluna com **16 px de margem e 8 px entre eles**, largura total; Esc abre/fecha; ao morrer vira o menu de morte com "Voltar à vida / Voltar ao ponto salvo / Seleção de personagem / Sair / Cancelar".
+→ Nosso menu tem 5 itens (print do LATAM); conferir se o tamanho e a margem batem com 252 e 16/8.
+
+**Onde olhar para o resto:** o goro tem `ui/skill*window.go` (a lista dele ficou truncada), `making_item_window`, `making_arrow_window`, `auto_spell_window`, `cart_window`, `guild_window`, `pet_*`, `homunculus_*`, `mercenary_*`, `mail_window`, `minimap`, `monster_info_window` e `npc_cutins`: servem para as janelas funcionais que ainda não existem (Etapa C da auditoria).
+Limite honesto: **nem goro nem nostalro reproduzem as janelas modernas do LATAM** (abas Title/Damage, ilustração na árvore de skills, Navigation com filtro); para essas só temos os prints e as peças de arte. O roBrowser (GPL; só olhar medidas, não copiar código) também recria as janelas originais, mas as de 2008-2012.
