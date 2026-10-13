@@ -4,8 +4,8 @@
 //= appear near the player. No announcement. The client shows the leading star in gold and draws the
 //= monster 35% bigger (Source/MythOfThor/Sprites/MythMonster.h, IsRare).
 //=
-//= Rare monster: HP x4, ATK x1.5, HIT/FLEE +15. Rewards on death: EXP x6 in total (the normal EXP
-//= already comes from the server; this adds x5) and 2 extra rolls of every drop (3x drops in total).
+//= Rare monster: HP x6 (600%), ATK x1.5, HIT/FLEE +15. Rewards on death: EXP x8 in total (the normal EXP
+//= already comes from the server; this adds x7), item drops x4 (3 extra rolls) and card drops x2 (1 extra roll).
 //= Never spawns from MVPs/bosses, from monsters that cannot move or attack, in towns or in instances.
 //= The monsters spawned with the OnRareDead label do not fire OnNPCKillEvent, so rares do not chain.
 //= GM command for tests: @rare <mob id>  (spawns a rare next to you).
@@ -53,7 +53,7 @@ L_Spawn:
 	areamonster .@m$, max(1, .@x - 3), max(1, .@y - 3), .@x + 3, .@y + 3, "★ " + getmonsterinfo(.@id, MOB_NAME), .@id, 1, "MythRare::OnRareDead";
 	.@g = $@mobid[0];
 	if (!.@g) return;
-	.@hp = getunitdata(.@g, UMOB_MAXHP) * 4;
+	.@hp = getunitdata(.@g, UMOB_MAXHP) * 6;
 	setunitdata .@g, UMOB_MAXHP, .@hp;
 	setunitdata .@g, UMOB_HP, .@hp;
 	setunitdata .@g, UMOB_ATKMIN, getunitdata(.@g, UMOB_ATKMIN) * 3 / 2;
@@ -67,13 +67,14 @@ OnRareDead:
 	.@m$ = strcharinfo(PC_MAP);
 	.@i = inarray(.rmaps$, .@m$);
 	if (.@i >= 0 && .rcnt[.@i] > 0) .rcnt[.@i]--;
-	getexp getmonsterinfo(killedrid, MOB_BASEEXP) * 5, getmonsterinfo(killedrid, MOB_JOBEXP) * 5;
+	getexp getmonsterinfo(killedrid, MOB_BASEEXP) * 7, getmonsterinfo(killedrid, MOB_JOBEXP) * 7;
 	@mimir_mob = killedrid; // rares count for the Mimir Codex too
 	doevent "MythMimirTracker::OnMimirKill";
 	if (getmobdrops(killedrid)) {
 		getmapxy(.@m$, .@x, .@y, BL_PC);
 		for (.@d = 0; .@d < $@MobDrop_count; .@d++) {
-			for (.@r = 0; .@r < 2; .@r++) {
+			.@rolls = (getiteminfo($@MobDrop_item[.@d], ITEMINFO_TYPE) == IT_CARD) ? 1 : 3; // extra rolls: cards x2 in total, other items x4
+			for (.@r = 0; .@r < .@rolls; .@r++) {
 				if (rand(10000) < $@MobDrop_rate[.@d])
 					makeitem $@MobDrop_item[.@d], 1, .@m$, .@x + rand(-2, 2), .@y + rand(-2, 2);
 			}
