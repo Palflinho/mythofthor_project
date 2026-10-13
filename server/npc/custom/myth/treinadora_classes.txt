@@ -1,0 +1,115 @@
+//===== rAthena Script =======================================
+//= Myth of Thor - Treinadora de Classes (so para testes)
+//===== Descricao: ===========================================
+//= NPC em Prontera (152, 190) que troca de classe so conversando, sem as quests originais, mas exigindo os niveis minimos:
+//=   Aprendiz (Job 10)  -> 1as classes, Taekwon, Atirador/Ninja (Super Aprendiz: Base 45)
+//=   1a classe (Job 40) -> 2as classes;   2a classe (Base 99 + Job 50) -> renascer (Aprendiz Avancado)
+//=   Aprendiz Avancado (Job 10) -> 1as avancadas;   1a avancada (Job 40) -> transclasses
+//=   Taekwon (Job 40) -> Mestre das Estrelas / Linker;   Ninja ou Pistoleiro (Base 99 + Job 70) -> Kagero/Oboro/Rebelde
+//= As quests originais (NPCs do rAthena) continuam funcionando; este NPC e um atalho para testar as classes.
+//============================================================
+
+prontera,152,190,4	script	Treinadora de Classes	4_F_EDEN_OFFICER,{
+	.@n$ = "[Treinadora de Classes]";
+	.@c = Class;
+	.@j = JobLevel;
+	.@b = BaseLevel;
+	deletearray .@name$;
+	deletearray .@to;
+	.@need$ = "";
+
+	// ---- Aprendiz
+	if (.@c == Job_Novice) {
+		if (.@j < 10) { .@need$ = "Voce precisa do nivel de classe 10."; }
+		else {
+			setarray .@to, Job_Swordman, Job_Mage, Job_Archer, Job_Acolyte, Job_Merchant, Job_Thief, Job_Taekwon, Job_Gunslinger, Job_Ninja;
+			setarray .@name$, "Espadachim", "Mago", "Arqueiro", "Noviço", "Mercador", "Gatuno", "Taekwon", "Pistoleiro", "Ninja";
+			if (.@b >= 45) {
+				.@k = getarraysize(.@to);
+				.@to[.@k] = Job_Super_Novice;
+				.@name$[.@k] = "Super Aprendiz";
+			}
+		}
+	}
+	// ---- 1as classes -> 2as classes (classe 40)
+	else if (.@c == Job_Swordman || .@c == Job_Mage || .@c == Job_Archer || .@c == Job_Acolyte || .@c == Job_Merchant || .@c == Job_Thief) {
+		if (.@j < 40) { .@need$ = "Voce precisa do nivel de classe 40."; }
+		else if (.@c == Job_Swordman) { setarray .@to, Job_Knight, Job_Crusader; setarray .@name$, "Cavaleiro", "Templário"; }
+		else if (.@c == Job_Mage) { setarray .@to, Job_Wizard, Job_Sage; setarray .@name$, "Bruxo", "Sábio"; }
+		else if (.@c == Job_Archer) {
+			if (Sex == SEX_MALE) { setarray .@to, Job_Hunter, Job_Bard; setarray .@name$, "Caçador", "Bardo"; }
+			else { setarray .@to, Job_Hunter, Job_Dancer; setarray .@name$, "Caçador", "Odalisca"; }
+		}
+		else if (.@c == Job_Acolyte) { setarray .@to, Job_Priest, Job_Monk; setarray .@name$, "Sacerdote", "Monge"; }
+		else if (.@c == Job_Merchant) { setarray .@to, Job_Blacksmith, Job_Alchemist; setarray .@name$, "Ferreiro", "Alquimista"; }
+		else { setarray .@to, Job_Assassin, Job_Rogue; setarray .@name$, "Mercenário", "Arruaceiro"; }
+	}
+	// ---- 2as classes -> renascer (Valhalla)
+	else if (.@c == Job_Knight || .@c == Job_Crusader || .@c == Job_Wizard || .@c == Job_Sage || .@c == Job_Hunter || .@c == Job_Bard || .@c == Job_Dancer
+			|| .@c == Job_Priest || .@c == Job_Monk || .@c == Job_Blacksmith || .@c == Job_Alchemist || .@c == Job_Assassin || .@c == Job_Rogue) {
+		if (.@b < 99 || .@j < 50) { .@need$ = "Para renascer voce precisa do nivel de base 99 e de classe 50."; }
+		else { setarray .@to, Job_Novice_High; setarray .@name$, "Renascer (Aprendiz Avançado)"; }
+	}
+	// ---- Aprendiz Avancado -> 1as avancadas
+	else if (.@c == Job_Novice_High) {
+		if (.@j < 10) { .@need$ = "Voce precisa do nivel de classe 10."; }
+		else {
+			setarray .@to, Job_Swordman_High, Job_Mage_High, Job_Archer_High, Job_Acolyte_High, Job_Merchant_High, Job_Thief_High;
+			setarray .@name$, "Espadachim Avançado", "Mago Avançado", "Arqueiro Avançado", "Noviço Avançado", "Mercador Avançado", "Gatuno Avançado";
+		}
+	}
+	// ---- 1as avancadas -> transclasses (classe 40)
+	else if (.@c == Job_Swordman_High || .@c == Job_Mage_High || .@c == Job_Archer_High || .@c == Job_Acolyte_High || .@c == Job_Merchant_High || .@c == Job_Thief_High) {
+		if (.@j < 40) { .@need$ = "Voce precisa do nivel de classe 40."; }
+		else if (.@c == Job_Swordman_High) { setarray .@to, Job_Lord_Knight, Job_Paladin; setarray .@name$, "Lorde Cavaleiro", "Paladino"; }
+		else if (.@c == Job_Mage_High) { setarray .@to, Job_High_Wizard, Job_Professor; setarray .@name$, "Arquimago", "Professor"; }
+		else if (.@c == Job_Archer_High) {
+			if (Sex == SEX_MALE) { setarray .@to, Job_Sniper, Job_Clown; setarray .@name$, "Atirador de Elite", "Menestrel"; }
+			else { setarray .@to, Job_Sniper, Job_Gypsy; setarray .@name$, "Atirador de Elite", "Cigana"; }
+		}
+		else if (.@c == Job_Acolyte_High) { setarray .@to, Job_High_Priest, Job_Champion; setarray .@name$, "Sumo Sacerdote", "Campeão"; }
+		else if (.@c == Job_Merchant_High) { setarray .@to, Job_Whitesmith, Job_Creator; setarray .@name$, "Mestre-Ferreiro", "Criador"; }
+		else { setarray .@to, Job_Assassin_Cross, Job_Stalker; setarray .@name$, "Executor", "Fantasma"; }
+	}
+	// ---- Taekwon
+	else if (.@c == Job_Taekwon) {
+		if (.@j < 40) { .@need$ = "Voce precisa do nivel de classe 40."; }
+		else { setarray .@to, Job_Star_Gladiator, Job_Soul_Linker; setarray .@name$, "Mestre Taekwon", "Espiritualista"; }
+	}
+	// ---- Ninja e Pistoleiro -> classes expandidas finais
+	else if (.@c == Job_Ninja) {
+		if (.@b < 99 || .@j < 70) { .@need$ = "Voce precisa do nivel de base 99 e de classe 70."; }
+		else if (Sex == SEX_MALE) { setarray .@to, Job_Kagerou; setarray .@name$, "Kagerou"; }
+		else { setarray .@to, Job_Oboro; setarray .@name$, "Oboro"; }
+	}
+	else if (.@c == Job_Gunslinger) {
+		if (.@b < 99 || .@j < 70) { .@need$ = "Voce precisa do nivel de base 99 e de classe 70."; }
+		else { setarray .@to, Job_Rebellion; setarray .@name$, "Rebelde"; }
+	}
+	else {
+		mes .@n$;
+		mes "Sua classe atual nao tem mais trocas por aqui.";
+		close;
+	}
+
+	mes .@n$;
+	if (.@need$ != "") {
+		mes .@need$;
+		mes "Nivel atual: base " + .@b + ", classe " + .@j + ".";
+		close;
+	}
+	mes "Para qual classe voce quer trocar?";
+	.@menu$ = "";
+	for (.@i = 0; .@i < getarraysize(.@to); .@i++)
+		.@menu$ += .@name$[.@i] + ":";
+	.@s = select(.@menu$ + "Cancelar") - 1;
+	if (.@s < 0 || .@s >= getarraysize(.@to))
+		close;
+	mes .@n$;
+	mes "Pronto! Agora voce e " + .@name$[.@s] + ".";
+	jobchange .@to[.@s];
+	if (.@to[.@s] == Job_Novice_High)
+		resetlvl(1);
+	specialeffect2 EF_BASH;
+	close;
+}

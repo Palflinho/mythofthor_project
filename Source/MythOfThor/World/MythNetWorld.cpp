@@ -679,6 +679,7 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 	Unit->NetID = Info.GID;
 	Unit->NetObjectType = Info.ObjectType;
 	Unit->MonsterName = Info.Name;
+	Unit->BaseLevel = FMath::Max(Info.BaseLevel, 1); // nivel real do monstro (clevel do pacote da unidade)
 	Unit->MaxHP = FMath::Max(Info.MaxHP, 1);
 	Unit->AIControllerClass = AAIController::StaticClass();
 	Unit->AutoPossessAI = EAutoPossessAI::Spawned;

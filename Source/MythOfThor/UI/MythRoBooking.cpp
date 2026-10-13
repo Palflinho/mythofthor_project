@@ -17,20 +17,20 @@
 
 namespace
 {
-	constexpr float BkW = 300.f;
-	constexpr float BkRowH = 20.f;
-	constexpr int32 BkRows = 9;
-	constexpr float BkHeadY = 48.f;
-	constexpr float BkListY = 62.f;
-	constexpr float BkH = BkListY + BkRows * BkRowH + 24.f;
-	const FLinearColor BkText(0.08f, 0.10f, 0.18f);
-	const FLinearColor BkGray(0.45f, 0.45f, 0.45f);
+	constexpr float PbW = 300.f;
+	constexpr float PbRowH = 20.f;
+	constexpr int32 PbRows = 9;
+	constexpr float PbHeadY = 48.f;
+	constexpr float PbListY = 62.f;
+	constexpr float PbH = PbListY + PbRows * PbRowH + 24.f;
+	const FLinearColor PbText(0.08f, 0.10f, 0.18f);
+	const FLinearColor PbGray(0.45f, 0.45f, 0.45f);
 }
 
 void UMythRoHUDWidget::BuildBookingWindow()
 {
-	BookingWindow = MakeRoPanel(TEXT("Procura de Grupo"), FVector2D(BkW, BkH), FVector2D(-120.f, 10.f));
-	AddText(BookingWindow, 8.f, 25.f, 8, BkText)->SetText(FText::FromString(TEXT("Nível")));
+	BookingWindow = MakeRoPanel(TEXT("Procura de Grupo"), FVector2D(PbW, PbH), FVector2D(-120.f, 10.f));
+	AddText(BookingWindow, 8.f, 25.f, 8, PbText)->SetText(FText::FromString(TEXT("Nível")));
 	BookingLevelBox = WidgetTree->ConstructWidget<UEditableTextBox>();
 	BookingLevelBox->SetText(FText::FromString(TEXT("1")));
 	if (UCanvasPanelSlot* S = BookingWindow->AddChildToCanvas(BookingLevelBox))
@@ -45,19 +45,19 @@ void UMythRoHUDWidget::BuildBookingWindow()
 	static const float HeadX[3] = { 10.f, 130.f, 172.f };
 	for (int32 c = 0; c < 3; ++c)
 	{
-		AddText(BookingWindow, HeadX[c], BkHeadY, 8, BkGray)->SetText(FText::FromString(Heads[c]));
+		AddText(BookingWindow, HeadX[c], PbHeadY, 8, PbGray)->SetText(FText::FromString(Heads[c]));
 	}
-	for (int32 i = 0; i < BkRows; ++i)
+	for (int32 i = 0; i < PbRows; ++i)
 	{
-		const float Y = BkListY + i * BkRowH;
-		UImage* Back = AddColor(BookingWindow, FLinearColor::Transparent, 4.f, Y, BkW - 8.f, BkRowH - 1.f);
+		const float Y = PbListY + i * PbRowH;
+		UImage* Back = AddColor(BookingWindow, FLinearColor::Transparent, 4.f, Y, PbW - 8.f, PbRowH - 1.f);
 		Back->SetVisibility(ESlateVisibility::Visible);
 		BookingRowBacks.Add(Back);
-		BookingRowTexts.Add(AddText(BookingWindow, 10.f, Y + 4.f, 8, BkText));
-		BookingRowTexts.Add(AddText(BookingWindow, 130.f, Y + 4.f, 8, BkText));
-		BookingRowTexts.Add(AddText(BookingWindow, 172.f, Y + 4.f, 8, BkText));
+		BookingRowTexts.Add(AddText(BookingWindow, 10.f, Y + 4.f, 8, PbText));
+		BookingRowTexts.Add(AddText(BookingWindow, 130.f, Y + 4.f, 8, PbText));
+		BookingRowTexts.Add(AddText(BookingWindow, 172.f, Y + 4.f, 8, PbText));
 	}
-	BookingFooter = AddText(BookingWindow, 8.f, BkH - 20.f, 7, FLinearColor(0.12f, 0.27f, 0.55f));
+	BookingFooter = AddText(BookingWindow, 8.f, PbH - 20.f, 7, FLinearColor(0.12f, 0.27f, 0.55f));
 	BookingFooter->SetText(FText::FromString(TEXT("Clique num anúncio para falar com o jogador.")));
 }
 
@@ -99,7 +99,7 @@ void UMythRoHUDWidget::UpdateBooking()
 	else if (R == 10) { AddChatLine(TEXT("Anúncio de grupo removido."), FLinearColor(0.7f, 1.f, 0.7f)); }
 	else if (R == 12 || R == 13) { AddChatLine(TEXT("Você não tem anúncio de grupo."), FLinearColor(1.f, 0.85f, 0.4f)); }
 	const TArray<FRoPartyBookingAd>& Ads = Net->GetBookingAds();
-	for (int32 i = 0; i < BkRows; ++i)
+	for (int32 i = 0; i < PbRows; ++i)
 	{
 		const FRoPartyBookingAd* Ad = Ads.IsValidIndex(i) ? &Ads[i] : nullptr;
 		BookingRowBacks[i]->SetVisibility(Ad ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
