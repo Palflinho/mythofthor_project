@@ -254,8 +254,7 @@ bool UMythRoHUDWidget::EndHotDrag(const FVector2D& ScreenPos)
 	// Item da mochila largado fora de qualquer janela: joga no chao (1; com Shift a pilha toda)
 	if (!bDragIsSkill && DragFromHotbar == INDEX_NONE && DragItemIndex != INDEX_NONE && HotbarSlotAt(ScreenPos) == INDEX_NONE && !IsOverAnyWindow(ScreenPos))
 	{
-		const bool bShift = GetOwningPlayer() && (GetOwningPlayer()->IsInputKeyDown(EKeys::LeftShift) || GetOwningPlayer()->IsInputKeyDown(EKeys::RightShift));
-		Net->SendDropItem(DragItemIndex, bShift ? DragCount : 1);
+		AskDropAmount(DragItemIndex, DragCount); // 1 item: dropped at once; a stack asks how many
 		DragItemIndex = INDEX_NONE;
 		return true;
 	}

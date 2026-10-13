@@ -50,7 +50,7 @@ namespace
 		return B;
 	}
 	FString NvArtS(const TCHAR* Name) { return FString::Printf(TEXT("navigation_interface3/%s.bmp"), Name); }
-	const TCHAR* NvFilterNames[3] = { TEXT("Todos"), TEXT("Maps"), TEXT("Monstros") };
+	const TCHAR* NvFilterNames[3] = { TEXT("All"), TEXT("Maps"), TEXT("Monstros") };
 	const TCHAR* NvSizeNames[3] = { TEXT("pequeno"), TEXT("medium"), TEXT("grande") };
 
 	struct FNaviLink { FString To; int32 X = 0, Y = 0; };

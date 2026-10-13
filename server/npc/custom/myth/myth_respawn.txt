@@ -1,0 +1,13 @@
+//===== Myth of Thor =========================================
+//= Save point fix: the new character starts in the Training Grounds (new_1-1) and its save point is set there.
+//= If the player left the Training Grounds without a Kafra save (walked out through a warp) and dies, the
+//= respawn would send them back inside. On death outside the new_1-* maps, a save point still inside them is
+//= moved to Prontera.
+//============================================================
+-	script	MythRespawnFix	-1,{
+OnPCDieEvent:
+	.@sp$ = getsavepoint(0);
+	if (compare(.@sp$, "new_1-") && !compare(strcharinfo(PC_MAP), "new_1-"))
+		savepoint "prontera", 156, 191;
+	end;
+}

@@ -186,7 +186,7 @@ void UMythRoHUDWidget::RefreshShop()
 	ShopTotalText->SetText(FText::FromString(bShopSell
 		? FString::Printf(TEXT("You receive: %s"), *Zeny(Total))
 		: FString::Printf(TEXT("Total: %s   (you have %s)"), *Zeny(Total), *Zeny(Have))));
-	ShopConfirmLink->SetText(FText::FromString(bShopSell ? TEXT("Vender") : TEXT("Comprar")));
+	ShopConfirmLink->SetText(FText::FromString(bShopSell ? TEXT("Sell") : TEXT("Buy")));
 }
 
 bool UMythRoHUDWidget::HandleShopClick(const FVector2D& ScreenPos)
@@ -267,7 +267,7 @@ void UMythRoHUDWidget::ShopResult(bool bSell, int32 Result)
 	if (bSell)
 	{
 		bOk = Result == 0;
-		Msg = bOk ? TEXT("Sale completed.") : TEXT("A venda falhou.");
+		Msg = bOk ? TEXT("Sale completed.") : TEXT("The sale failed.");
 	}
 	else
 	{
@@ -280,7 +280,7 @@ void UMythRoHUDWidget::ShopResult(bool bSell, int32 Result)
 		case 3: Msg = TEXT("You are already carrying too many items."); break;
 		case 9: Msg = TEXT("Quantity above what can be bought."); break;
 		case 13: Msg = TEXT("The item is sold out."); break;
-		default: Msg = FString::Printf(TEXT("A compra falhou (%d)."), Result); break;
+		default: Msg = FString::Printf(TEXT("The purchase failed (%d)."), Result); break;
 		}
 	}
 	AddChatLine(Msg, bOk ? FLinearColor(0.5f, 0.8f, 1.f) : FLinearColor(1.f, 0.4f, 0.4f));
@@ -304,6 +304,15 @@ void UMythRoHUDWidget::CloseShop(bool bNotifyServer)
 		if (URagnarokNetworkSubsystem* Net = GetNet())
 		{
 			Net->SendShopClose(); // CZ_NPC_SHOP_CLOSED: libera o NPC
+		}
+	}
+	if (bWasOpen && ShopNpcID != 0)
+	{
+		// A script shop (callshop) keeps the NPC dialog state on the server until the client closes it, like the original client
+		// does; otherwise walking says "finish this process first (Dialog, Refine, etc.)"
+		if (URagnarokNetworkSubsystem* Net = GetNet())
+		{
+			Net->CloseNpcDialog(ShopNpcID);
 		}
 	}
 }

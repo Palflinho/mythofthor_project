@@ -127,8 +127,16 @@ namespace
 				for (const auto& Pair : Root2026->Values)
 				{
 					const int32 Id = FCString::Atoi(*Pair.Key);
-					if (Table.Contains(Id))
+					if (FMythRoItemInfo* Existing = Table.Find(Id))
 					{
+						// LATAM sometimes keeps the raw Korean (CP949) name, which shows as mojibake: take the 2026 name then
+						int32 Odd = 0;
+						for (const TCHAR C : Existing->Name) { Odd += (C >= 0xA1 && C <= 0xBF && C != 0xAA && C != 0xBA) ? 1 : 0; }
+						if (Odd >= 2)
+						{
+							FString Fixed;
+							if (Pair.Value->AsObject()->TryGetStringField(TEXT("name"), Fixed) && !Fixed.IsEmpty()) { Existing->Name = Fixed; }
+						}
 						continue;
 					}
 					const TSharedPtr<FJsonObject> O = Pair.Value->AsObject();

@@ -66,7 +66,7 @@ void UMythRoHUDWidget::BuildMailWindows()
 	}
 	MailPrev = AddButtonEx(MailWindow, MlPath(TEXT("btn_prev_out")), MlPath(TEXT("btn_prev_over")), MlPath(TEXT("btn_prev_press")), 254.f, 384.f);
 	MailNext = AddButtonEx(MailWindow, MlPath(TEXT("btn_next_out")), MlPath(TEXT("btn_next_over")), MlPath(TEXT("btn_next_press")), 278.f, 384.f);
-	MailDelete = AddTextButton(MailWindow, TEXT("Excluir"), 10.f, 386.f, 70.f);
+	MailDelete = AddTextButton(MailWindow, TEXT("Delete"), 10.f, 386.f, 70.f);
 	MailClose = AddButtonHit(MailWindow, TEXT("close"), 96.f, 386.f);
 	MakeDraggable(MailWindow, MlW, 22.f);
 

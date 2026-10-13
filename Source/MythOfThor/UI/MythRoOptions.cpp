@@ -34,11 +34,11 @@ namespace
 	const TArray<FOptionDef>& OptionsOfTab(int32 Tab)
 	{
 		static const TArray<FOptionDef> Effect = {
-			{ TEXT("ShowAura"), TEXT("Mostrar aura"), TEXT("Shows the aura (level 99)."), false },
+			{ TEXT("ShowAura"), TEXT("Show aura"), TEXT("Shows the aura (level 99)."), false },
 			{ TEXT("AuraDisplay"), TEXT("Aura simplificada"), TEXT("Shows the aura in a simplified way."), false },
-			{ TEXT("ShowEffects"), TEXT("Mostrar efeitos"), TEXT("Shows skill and item effects."), false },
+			{ TEXT("ShowEffects"), TEXT("Show effects"), TEXT("Shows skill and item effects."), false },
 			{ TEXT("ModernWater"), TEXT("Modern water"), TEXT("Water with reflections, waves and depth (off: classic RO water)."), false },
-			{ TEXT("ShowShading"), TEXT("Mostrar sombreado"), TEXT("Shows shading."), false },
+			{ TEXT("ShowShading"), TEXT("Show shading"), TEXT("Shows shading."), false },
 			{ TEXT("DamageDisplay"), TEXT("Dano estendido"), TEXT("Shows damage in extended format."), false },
 			{ TEXT("MapName"), TEXT("Map name"), TEXT("Shows the map name when entering an area."), false },
 			{ TEXT("Fog"), TEXT("Fog effect"), TEXT("Shows fog effects."), false },
@@ -160,7 +160,7 @@ void UMythRoHUDWidget::RefreshOptions()
 		OptRowDesc[i]->SetText(FText::FromString(D->Desc));
 		if (D->bApply)
 		{
-			OptRowToggle[i]->SetText(FText::FromString(TEXT("[aplicar]")));
+			OptRowToggle[i]->SetText(FText::FromString(TEXT("[apply]")));
 			OptRowToggle[i]->SetColorAndOpacity(FSlateColor(OptLink));
 		}
 		else

@@ -633,19 +633,19 @@ bool URagnarokNetworkSubsystem::SendSkillUp(int32 SkillID)
 
 FString URagnarokNetworkSubsystem::GetJobNameFromClass(int32 JobClass)
 {
-	// IDs do enum e_job (rathena/src/common/mmo.hpp); nomes do bRO
+	// e_job IDs (rathena/src/common/mmo.hpp); English names as in iRO
 	static const TCHAR* Base[] = {
-		TEXT("Aprendiz"), TEXT("Espadachim"), TEXT("Mago"), TEXT("Arqueiro"), TEXT("Acolyte"), TEXT("Mercador"), TEXT("Gatuno"),
-		TEXT("Cavaleiro"), TEXT("Sacerdote"), TEXT("Bruxo"), TEXT("Ferreiro"), TEXT("Hunter"), TEXT("Assassin"),
-		TEXT("Cavaleiro"), TEXT("Crusader"), TEXT("Monge"), TEXT("Sage"), TEXT("Arruaceiro"), TEXT("Alquimista"),
-		TEXT("Bardo"), TEXT("Odalisca"), TEXT("Crusader"), TEXT("Casamento"), TEXT("Super Aprendiz"), TEXT("Justiceiro"),
-		TEXT("Ninja"), TEXT("Natal") };
-	// 4001..4022: transclasses (a 1a classe transcendental leva "T.")
+		TEXT("Novice"), TEXT("Swordman"), TEXT("Mage"), TEXT("Archer"), TEXT("Acolyte"), TEXT("Merchant"), TEXT("Thief"),
+		TEXT("Knight"), TEXT("Priest"), TEXT("Wizard"), TEXT("Blacksmith"), TEXT("Hunter"), TEXT("Assassin"),
+		TEXT("Knight"), TEXT("Crusader"), TEXT("Monk"), TEXT("Sage"), TEXT("Rogue"), TEXT("Alchemist"),
+		TEXT("Bard"), TEXT("Dancer"), TEXT("Crusader"), TEXT("Wedding"), TEXT("Super Novice"), TEXT("Gunslinger"),
+		TEXT("Ninja"), TEXT("Xmas") };
+	// 4001..4022: transcendent classes
 	static const TCHAR* Trans[] = {
-		TEXT("Aprendiz T."), TEXT("Espadachim T."), TEXT("Mago T."), TEXT("Arqueiro T."), TEXT("High Acolyte"), TEXT("Mercador T."),
-		TEXT("Gatuno T."), TEXT("Lorde"), TEXT("Sumo Sacerdote"), TEXT("Arquimago"), TEXT("Mestre-Ferreiro"),
-		TEXT("Sniper"), TEXT("Algoz"), TEXT("Lorde"), TEXT("Paladino"), TEXT("Mestre"), TEXT("Professor"),
-		TEXT("Desordeiro"), TEXT("Criador"), TEXT("Menestrel"), TEXT("Cigana"), TEXT("Paladino") };
+		TEXT("Novice High"), TEXT("Swordman High"), TEXT("Mage High"), TEXT("Archer High"), TEXT("Acolyte High"), TEXT("Merchant High"),
+		TEXT("Thief High"), TEXT("Lord Knight"), TEXT("High Priest"), TEXT("High Wizard"), TEXT("Whitesmith"),
+		TEXT("Sniper"), TEXT("Assassin Cross"), TEXT("Lord Knight"), TEXT("Paladin"), TEXT("Champion"), TEXT("Professor"),
+		TEXT("Stalker"), TEXT("Creator"), TEXT("Clown"), TEXT("Gypsy"), TEXT("Paladin") };
 	if (JobClass >= 0 && JobClass < UE_ARRAY_COUNT(Base))
 	{
 		return Base[JobClass];
@@ -654,7 +654,7 @@ FString URagnarokNetworkSubsystem::GetJobNameFromClass(int32 JobClass)
 	{
 		return Trans[JobClass - 4001];
 	}
-	if (JobClass >= 4023 && JobClass <= 4044) // bebes: 4023 = Aprendiz ... na mesma ordem das classes basicas
+	if (JobClass >= 4023 && JobClass <= 4044) // baby classes: 4023 = Novice ... same order as the base classes
 	{
 		return FString::Printf(TEXT("Baby %s"), Base[JobClass - 4023]);
 	}
@@ -662,8 +662,12 @@ FString URagnarokNetworkSubsystem::GetJobNameFromClass(int32 JobClass)
 	{
 		case 4045: return TEXT("Baby Super Novice");
 		case 4046: return TEXT("Taekwon");
-		case 4047: case 4048: return TEXT("Mestre Taekwon");
-		case 4049: return TEXT("Espiritualista");
+		case 4047: case 4048: return TEXT("Star Gladiator");
+		case 4049: return TEXT("Soul Linker");
+		case 4190: case 4191: return TEXT("Expanded Super Novice");
+		case 4211: return TEXT("Kagerou");
+		case 4212: return TEXT("Oboro");
+		case 4215: return TEXT("Rebellion");
 		default: return FString::Printf(TEXT("Class %d"), JobClass);
 	}
 }
@@ -1358,6 +1362,19 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 				break;
 			case 0x00af: // ZC_ITEM_THROW_ACK: index +2, count +4
 				RemoveInventoryAmount(*reinterpret_cast<const uint16*>(PacketData + 2), *reinterpret_cast<const uint16*>(PacketData + 4));
+				break;
+			case 0x01c8: // ZC_USE_ITEM_ACK: index +2, item id +4 (u32), AID +8, remaining amount +12, result +14
+				if (ActualLen >= 15 && PacketData[14] != 0)
+				{
+					const int32 Idx = *reinterpret_cast<const int16*>(PacketData + 2);
+					const int32 Left = *reinterpret_cast<const int16*>(PacketData + 12);
+					const int32 Pos = InventoryItems.IndexOfByPredicate([Idx](const FRagnarokInventoryItem& I) { return I.Index == Idx; });
+					if (Pos != INDEX_NONE)
+					{
+						if (Left <= 0) { InventoryItems.RemoveAt(Pos); } else { InventoryItems[Pos].Amount = Left; }
+						OnInventory.Broadcast(InventoryItems);
+					}
+				}
 				break;
 			case 0x07fa: // ZC_DELETE_ITEM_FROM_BODY: deleteType +2, index +4, count +6
 				RemoveInventoryAmount(*reinterpret_cast<const uint16*>(PacketData + 4), *reinterpret_cast<const int16*>(PacketData + 6));

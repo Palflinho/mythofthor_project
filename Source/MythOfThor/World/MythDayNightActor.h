@@ -47,17 +47,17 @@ public:
 	float SunIntensityLux = 10.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight|Light")
-	float MoonIntensityLux = 1.6f; // luar claro o bastante para enxergar a cidade (o RO a noite e azulado, nao preto)
+	float MoonIntensityLux = 3.6f; // luar claro o bastante para enxergar a cidade (o RO a noite e azulado, nao preto)
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight|Light")
 	float DaySkyLightIntensity = 1.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight|Light")
-	float NightSkyLightIntensity = 0.4f;
+	float NightSkyLightIntensity = 1.1f;
 
 	/** Ajuste de exposicao em plena noite (EV, negativo = mais escuro): impede a camera de "clarear" a noite. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight|Light")
-	float NightExposureBias = -2.f;
+	float NightExposureBias = -0.8f;
 
 	/** Tom da noite (ganho de cor RGB): frio na rua; os mapas internos usam um tom quente de lamparina. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight")

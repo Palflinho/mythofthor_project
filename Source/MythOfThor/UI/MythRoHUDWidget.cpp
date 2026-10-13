@@ -412,6 +412,7 @@ void UMythRoHUDWidget::BuildLayout()
 	BuildBankWindow();
 	BuildAchievementWindow();
 	BuildMimirWindow();
+	BuildDropPrompt();
 	BuildEquipSwitchWindow();
 	BuildNaviWindow();
 	BuildMailWindows();
@@ -687,7 +688,7 @@ void UMythRoHUDWidget::BuildChat()
 	const float W = 350.f, H = 21.f + 98.f + 20.f; // chat estreito no canto: termina antes das barras de EXP
 	UCanvasPanel* Win = MakeWindow(FVector2D(0.f, 1.f), FVector2D(0.f, 1.f), FVector2D(8.f, -26.f), FVector2D(W, H));
 	ChatWindow = Win;
-	const TCHAR* TabNames[2] = { TEXT("Geral"), TEXT("Batalha") };
+	const TCHAR* TabNames[2] = { TEXT("General"), TEXT("Battle") };
 	for (int32 t = 0; t < 2; ++t)
 	{
 		UImage* Box = AddRounded(Win, FLinearColor::White, FLinearColor(0.3f, 0.3f, 0.3f, 1.f), 76.f * t, 3.f, 76.f, 18.f, 4.f, 0.f);
@@ -873,7 +874,7 @@ void UMythRoHUDWidget::RefreshStats()
 	const URagnarokNetworkSubsystem* Net = GetNet();
 	const bool bOnline = Net && Net->GetNetworkState() == ERagnarokNetworkState::ConnectedMap;
 	const FRagnarokPlayerStats* NetStats = bOnline ? &Net->GetPlayerStats() : nullptr;
-	JobText->SetText(FText::FromString(NetStats ? NetStats->JobName : FString(TEXT("Aprendiz"))));
+	JobText->SetText(FText::FromString(NetStats ? NetStats->JobName : FString(TEXT("Novice"))));
 	BaseLvText->SetText(FText::FromString(FString::Printf(TEXT("Base Lv. %d"), Stats->GetBaseLevel())));
 	JobLvText->SetText(FText::FromString(FString::Printf(TEXT("Job Lv. %d"), NetStats ? NetStats->JobLevel : 1)));
 
@@ -886,7 +887,7 @@ void UMythRoHUDWidget::RefreshStats()
 	if (BasicMini1 && BasicMini2)
 	{
 		BasicMini1->SetText(FText::FromString(FString::Printf(TEXT("Nv. %d / %s / Nv. %d / Exp. %d %%"), Stats->GetBaseLevel(),
-			NetStats ? *NetStats->JobName : TEXT("Aprendiz"), NetStats ? NetStats->JobLevel : 1, FMath::RoundToInt(Stats->GetExpFraction() * 100.f))));
+			NetStats ? *NetStats->JobName : TEXT("Novice"), NetStats ? NetStats->JobLevel : 1, FMath::RoundToInt(Stats->GetExpFraction() * 100.f))));
 		BasicMini2->SetText(FText::FromString(FString::Printf(TEXT("HP. %d / %d  |  SP. %d / %d"), Stats->GetHP(), Stats->GetMaxHP(), Stats->GetSP(), Stats->GetMaxSP())));
 	}
 	if (HPPctText) { HPPctText->SetText(FText::FromString(FString::Printf(TEXT("%d%%"), FMath::RoundToInt(HPFrac * 100.f)))); }

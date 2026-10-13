@@ -144,7 +144,7 @@ void UMythRoHUDWidget::BuildGameMenu()
 	GameMenuWindow->SetVisibility(ESlateVisibility::Collapsed);
 
 	// Configuracoes graficas: "rotulo   <  valor  >" por linha
-	const TCHAR* Labels[GfxRowCount] = { TEXT("Screen mode"), TEXT("Resolution"), TEXT("Qualidade geral"), TEXT("Sombras"),
+	const TCHAR* Labels[GfxRowCount] = { TEXT("Screen mode"), TEXT("Resolution"), TEXT("Overall quality"), TEXT("Sombras"),
 		TEXT("Lighting (Lumen)"), TEXT("Anti-aliasing"), TEXT("Resolution scale"), TEXT("FPS limit"), TEXT("V-Sync") };
 	const FVector2D Size(470.f, 17.f + 22.f + GfxRowCount * 24.f + 44.f);
 	GraphicsWindow = MakeRoPanel(TEXT("Settings"), Size, FVector2D::ZeroVector);
@@ -172,7 +172,7 @@ void UMythRoHUDWidget::BuildGameMenu()
 	LoadGraphicsOptions();
 
 	// Som e interface
-	const TCHAR* SndLabels[SndRowCount] = { TEXT("Volume geral"), TEXT("Music"), TEXT("Efeitos"), TEXT("Interface scale") };
+	const TCHAR* SndLabels[SndRowCount] = { TEXT("Master volume"), TEXT("Music"), TEXT("Efeitos"), TEXT("Interface scale") };
 	const FVector2D SSize = Size; // mesmo tamanho: troca de aba sem a janela "pular"
 	SoundWindow = MakeRoPanel(TEXT("Settings"), SSize, FVector2D::ZeroVector);
 	AddSettingsTabs(SoundWindow);

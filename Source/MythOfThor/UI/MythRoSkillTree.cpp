@@ -1,4 +1,5 @@
 #include "UI/MythRoSkillTree.h"
+#include "Network/RagnarokNetworkSubsystem.h"
 
 #include "Dom/JsonObject.h"
 #include "Misc/FileHelper.h"
@@ -119,6 +120,18 @@ TArray<int32> FMythRoSkillTree::JobChain(int32 JobClass)
 		Chain.Add(23);
 		return Chain;
 	}
+	// Classes outside the 1st/2nd/trans scheme: Gunslinger, Ninja, Taekwon line and the expanded classes
+	switch (Job)
+	{
+	case 24: case 25: return { 0, Job };
+	case 4046: return { 0, 4046 };
+	case 4047: case 4048: return { 0, 4046, 4047 };
+	case 4049: return { 0, 4046, 4049 };
+	case 4190: case 4191: return { 0, 23, 4190 };
+	case 4211: case 4212: return { 0, 25, Job };
+	case 4215: return { 0, 24, 4215 };
+	default: break;
+	}
 	const bool bTrans = Job >= 4001 && Job <= 4022;
 	const int32 Base = bTrans ? Job - 4001 : Job;
 	const int32 Novice = bTrans ? 4001 : 0;
@@ -142,26 +155,5 @@ TArray<int32> FMythRoSkillTree::JobChain(int32 JobClass)
 
 FString FMythRoSkillTree::JobTabName(int32 JobClass)
 {
-	static const TMap<int32, FString> Names = {
-		{ 0, TEXT("Aprendiz") }, { 1, TEXT("Espadachim") }, { 2, TEXT("Mago") }, { 3, TEXT("Arqueiro") },
-		{ 4, TEXT("Novico") }, { 5, TEXT("Mercador") }, { 6, TEXT("Gatuno") }, { 7, TEXT("Cavaleiro") },
-		{ 8, TEXT("Sacerdote") }, { 9, TEXT("Bruxo") }, { 10, TEXT("Ferreiro") }, { 11, TEXT("Cacador") },
-		{ 12, TEXT("Mercenario") }, { 14, TEXT("Templario") }, { 15, TEXT("Monge") }, { 16, TEXT("Sabio") },
-		{ 17, TEXT("Arruaceiro") }, { 18, TEXT("Alquimista") }, { 19, TEXT("Bardo") }, { 20, TEXT("Odalisca") },
-		{ 23, TEXT("Super Aprendiz") }, { 4001, TEXT("Aprendiz T.") }, { 4008, TEXT("Lorde") },
-		{ 4009, TEXT("Sumo Sacerdote") }, { 4010, TEXT("Arquimago") }, { 4011, TEXT("Mestre-Ferreiro") },
-		{ 4012, TEXT("Atirador") }, { 4013, TEXT("Algoz") }, { 4015, TEXT("Paladino") }, { 4016, TEXT("Mestre") },
-		{ 4017, TEXT("Professor") }, { 4018, TEXT("Desordeiro") }, { 4019, TEXT("Criador") }, { 4020, TEXT("Menestrel") },
-		{ 4021, TEXT("Cigana") },
-	};
-	const int32 Job = Unmounted(JobClass);
-	if (const FString* N = Names.Find(Job))
-	{
-		return *N;
-	}
-	if (Job >= 4002 && Job <= 4007)
-	{
-		return JobTabName(Job - 4001) + TEXT(" T.");
-	}
-	return FString::Printf(TEXT("Class %d"), Job);
+	return URagnarokNetworkSubsystem::GetJobNameFromClass(Unmounted(JobClass));
 }

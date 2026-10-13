@@ -25,7 +25,7 @@ void UMythRoHUDWidget::BuildBankWindow()
 	// Janela do banco (print "Bank Window"): depositado e zeny atual em cima, a faixa cinza com o saco de zeny, a quantia, os botoes
 	// Depositar e Sacar e os atalhos de valor (Max, 10M, 1M, 100K)
 	BankWindow = MakeRoPanel(TEXT("Bank"), FVector2D(290.f, 17.f + 138.f), FVector2D(-280.f, 60.f));
-	AddText(BankWindow, 14.f, 24.f, 8, BkText, true)->SetText(FText::FromString(TEXT("Depositado")));
+	AddText(BankWindow, 14.f, 24.f, 8, BkText, true)->SetText(FText::FromString(TEXT("Deposited")));
 	AddText(BankWindow, 14.f, 42.f, 8, BkText, true)->SetText(FText::FromString(TEXT("Current zeny")));
 	for (int32 i = 0; i < 2; ++i)
 	{
@@ -46,8 +46,8 @@ void UMythRoHUDWidget::BuildBankWindow()
 		S->SetPosition(FVector2D(56.f, 17.f + 66.f) * UIScale);
 		S->SetSize(FVector2D(116.f, 20.f) * UIScale);
 	}
-	BankDepositLink = AddTextButton(BankWindow, TEXT("Depositar"), 188.f, 17.f + 54.f, 90.f);
-	BankWithdrawLink = AddTextButton(BankWindow, TEXT("Sacar"), 188.f, 17.f + 80.f, 90.f);
+	BankDepositLink = AddTextButton(BankWindow, TEXT("Deposit"), 188.f, 17.f + 54.f, 90.f);
+	BankWithdrawLink = AddTextButton(BankWindow, TEXT("Withdraw"), 188.f, 17.f + 80.f, 90.f);
 	// Atalhos de valor: Max :: 10M :: 1M :: 100K
 	const TCHAR* Quick[4] = { TEXT("Max"), TEXT("10M"), TEXT("1M"), TEXT("100K") };
 	for (int32 i = 0; i < 4; ++i)

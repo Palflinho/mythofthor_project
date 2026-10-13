@@ -59,7 +59,7 @@ void UMythRoHUDWidget::BuildChatRoomWindows()
 	RoomLeaveLink = AddButtonHit(ChatRoomWindow, TEXT("exit"), 14.f, 17.f + 14 * 18.f + 30.f - 4.f);
 
 	// Senha para entrar
-	ChatRoomEnterWindow = MakeRoPanel(TEXT("Sala privada"), FVector2D(260.f, 17.f + 84.f), FVector2D(0.f, -150.f));
+	ChatRoomEnterWindow = MakeRoPanel(TEXT("Private room"), FVector2D(260.f, 17.f + 84.f), FVector2D(0.f, -150.f));
 	AddText(ChatRoomEnterWindow, 12.f, 26.f, 9, CrText)->SetText(FText::FromString(TEXT("Room password")));
 	RoomEnterPassBox = WidgetTree->ConstructWidget<UEditableTextBox>();
 	if (UCanvasPanelSlot* S = ChatRoomEnterWindow->AddChildToCanvas(RoomEnterPassBox))

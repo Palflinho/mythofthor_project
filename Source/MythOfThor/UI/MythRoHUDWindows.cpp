@@ -288,7 +288,7 @@ void UMythRoHUDWidget::BuildEquipWindow()
 	// Fonte de dano), arte equipwin_bg (280 x 130) com os 10 encaixes em linhas de 26, o personagem no centro e o rodape de 22 com
 	// "Mostrar equip." e os botoes de atributos, troca rapida e tirar tudo
 	EquipWindow = MakeRoPanel(TEXT("Equipment"), FVector2D(280.f, EqTop + 130.f + EqFootH), FVector2D(-340.f, 120.f));
-	const TCHAR* TabNames[4] = { TEXT("Geral"), TEXT("Especial"), TEXT("Title"), TEXT("Damage font") };
+	const TCHAR* TabNames[4] = { TEXT("General"), TEXT("Especial"), TEXT("Title"), TEXT("Damage font") };
 	for (int32 t = 0; t < 4; ++t)
 	{
 		UImage* Box = AddRounded(EquipWindow, FLinearColor::White, FLinearColor(0.62f, 0.66f, 0.76f, 1.f), 1.f + t * 70.f, 18.f, 69.f, EqTop - 18.f, 4.f, 0.f);
@@ -357,7 +357,7 @@ void UMythRoHUDWidget::BuildEquipWindow()
 	AddColor(EquipWindow, FLinearColor(0.78f, 0.8f, 0.86f, 1.f), 0.f, FootY, 280.f, 1.f);
 	EquipShowCheck = AddImage(EquipWindow, FMythRoUITextures::Get(TEXT("checkbox_0.bmp")), 8.f, FootY + 6.f, 10.f, 10.f);
 	EquipShowCheck->SetVisibility(ESlateVisibility::Visible);
-	AddText(EquipWindow, 22.f, FootY + 4.f, 8, RoWinText)->SetText(FText::FromString(TEXT("Mostrar equip.")));
+	AddText(EquipWindow, 22.f, FootY + 4.f, 8, RoWinText)->SetText(FText::FromString(TEXT("Show equip.")));
 	EquipBtnStatus = AddButtonEx(EquipWindow, RoWinArt(TEXT("btn_e_ability_a")), RoWinArt(TEXT("btn_e_ability_b")), RoWinArt(TEXT("btn_e_ability_b")), 168.f, FootY + 1.f);
 	EquipBtnSwitch = AddButtonEx(EquipWindow, RoWinArt(TEXT("btn_e_change_a")), RoWinArt(TEXT("btn_e_change_b")), RoWinArt(TEXT("btn_e_change_c")), 193.f, FootY + 1.f);
 	EquipBtnOffAll = AddButtonEx(EquipWindow, RoWinArt(TEXT("btn_e_off_a")), RoWinArt(TEXT("btn_e_off_b")), RoWinArt(TEXT("btn_e_off_c")), 236.f, FootY + 1.f);
@@ -1112,6 +1112,10 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 	{
 		return true;
 	}
+	if (HandleDropPromptClick(ScreenPos))
+	{
+		return true;
+	}
 	if (HandleMimirClick(ScreenPos))
 	{
 		return true;
@@ -1290,6 +1294,7 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 			if (SkillRowID[r] != 0 && IsUnder(SkillIcons[r], ScreenPos) && !IsUnder(SkillUpButtons[r], ScreenPos))
 			{
 				SkillScroll = r; // selecionada: nome, nivel e requisitos na barra de baixo (o arrasto continua valendo)
+				AutoAllocateSkill(SkillRowID[r]); // locked advanced skill: puts the points into its prerequisites (original client behavior)
 				RefreshSkillsWindow();
 				break;
 			}
@@ -1562,4 +1567,69 @@ void UMythRoHUDWidget::TestStatPending(int32 Index, int32 N)
 	if (Index >= 0 && Index < 6) { PendingStats[Index] += N; }
 	else if (Index == 98) { for (int32& V : PendingStats) { V = 0; } }
 	RefreshStatusWindow();
+}
+
+void UMythRoHUDWidget::AutoAllocateSkill(int32 SkillID)
+{
+	// Clicking an advanced skill that is not learned yet spreads the missing points over its prerequisite chain and then the skill
+	// itself (pending points: they are only sent with OK). Aborts if the free points do not cover the whole chain.
+	const URagnarokNetworkSubsystem* Net = GetNet();
+	if (!Net)
+	{
+		return;
+	}
+	TMap<int32, int32> Level;
+	for (const FRagnarokSkillInfo& S : Net->GetSkillList())
+	{
+		Level.Add(S.SkillID, S.Level);
+	}
+	for (const TPair<int32, int32>& P : PendingSkillUps)
+	{
+		Level.FindOrAdd(P.Key) += P.Value;
+	}
+	if (Level.FindRef(SkillID) > 0)
+	{
+		return; // already learned (or pending): only locked skills auto-distribute
+	}
+	const int32 Budget = FMath::Max(0, Net->GetPlayerStats().SkillPoints - PendingSkillTotal());
+	TMap<int32, int32> Plan; // skill -> points to add
+	TFunction<bool(int32, int32, int32)> Need = [&](int32 Id, int32 WantLevel, int32 Depth) -> bool
+	{
+		const FMythTreeSkill* Tree = FMythRoSkillTree::Skill(Id);
+		if (!Tree || Depth > 8)
+		{
+			return false;
+		}
+		WantLevel = FMath::Min(WantLevel, Tree->MaxLevel);
+		for (const FIntPoint& Req : Tree->Need)
+		{
+			const int32 Have = Level.FindRef(Req.X) + Plan.FindRef(Req.X);
+			if (Have < Req.Y && !Need(Req.X, Req.Y, Depth + 1))
+			{
+				return false;
+			}
+		}
+		const int32 Have = Level.FindRef(Id) + Plan.FindRef(Id);
+		if (Have < WantLevel)
+		{
+			Plan.FindOrAdd(Id) += WantLevel - Have;
+		}
+		return true;
+	};
+	if (!Need(SkillID, Level.FindRef(SkillID) + 1, 0))
+	{
+		return;
+	}
+	int32 Total = 0;
+	for (const TPair<int32, int32>& P : Plan) { Total += P.Value; }
+	if (Total <= 0 || Total > Budget)
+	{
+		AddChatLine(Total > Budget ? TEXT("Not enough skill points for the prerequisites.") : TEXT("Nothing to distribute."), FLinearColor(1.f, 0.5f, 0.4f));
+		return;
+	}
+	for (const TPair<int32, int32>& P : Plan)
+	{
+		PendingSkillUps.FindOrAdd(P.Key) += P.Value;
+	}
+	RefreshSkillsWindow();
 }

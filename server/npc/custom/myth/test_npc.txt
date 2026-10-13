@@ -9,7 +9,7 @@
 //============================================================
 
 prontera,156,191,4	script	Test Assistant#gm	4_F_EDEN_OFFICER,{
-	.@npc_name$ = "[Assistente de Testes]";
+	.@npc_name$ = "[Test Assistant]";
 
 	// Apenas contas de Game Master podem usar o assistente
 	if (getgmlevel() == 0) {

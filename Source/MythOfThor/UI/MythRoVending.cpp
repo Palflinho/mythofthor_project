@@ -111,7 +111,7 @@ void UMythRoHUDWidget::BuildVendingWindows()
 		VendBuyNames.Add(AddText(VendBuyWindow, 12.f, Y + 3.f, 8, VendText));
 	}
 	VendBuyTotal = AddText(VendBuyWindow, 8.f, BuyH - 24.f, 8, VendText);
-	VendBuyBtn = AddTextButton(VendBuyWindow, TEXT("Comprar"), 380.f - 160.f, BuyH - 28.f, 72.f);
+	VendBuyBtn = AddTextButton(VendBuyWindow, TEXT("Buy"), 380.f - 160.f, BuyH - 28.f, 72.f);
 	VendBuyCancelBtn = AddTextButton(VendBuyWindow, TEXT("Cancel"), 380.f - 82.f, BuyH - 28.f, 74.f);
 }
 
@@ -193,7 +193,7 @@ void UMythRoHUDWidget::RefreshVending()
 			VendBuyHit[i]->SetVisibility(VI ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
 			VendBuyHit[i]->SetColorAndOpacity(Chosen > 0 ? FLinearColor(0.78f, 0.86f, 0.98f, 1.f) : FLinearColor(0.f, 0.f, 0.f, 0.03f));
 			VendBuyNames[i]->SetText(VI ? FText::FromString(FString::Printf(TEXT("%s  -  %s z  (resta %d)%s"), *VendItemName(VI->ItemID, VI->Refine), *VendZeny(VI->Price), VI->Amount,
-				Chosen > 0 ? *FString::Printf(TEXT("   comprar: %d"), Chosen) : TEXT(""))) : FText::GetEmpty());
+				Chosen > 0 ? *FString::Printf(TEXT("   buy: %d"), Chosen) : TEXT(""))) : FText::GetEmpty());
 		}
 		for (const FRoVendItem& VI : Items)
 		{

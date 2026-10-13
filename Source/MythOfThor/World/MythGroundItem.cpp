@@ -34,7 +34,7 @@ AMythGroundItem::AMythGroundItem()
 	// Area de clique sobre o sprite (que fica paralelo a tela), como nos monstros
 	ClickBox = CreateDefaultSubobject<UBoxComponent>(TEXT("ClickBox"));
 	ClickBox->SetupAttachment(Sprite);
-	ClickBox->SetBoxExtent(FVector(22.f, 10.f, 22.f));
+	ClickBox->SetBoxExtent(FVector(50.f, 40.f, 40.f)); // generous: the cursor "snaps" to a dropped item (friend feedback: pixel-perfect clicks were needed)
 	ClickBox->SetRelativeLocation(FVector(0.f, 0.f, 20.f));
 	ClickBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	ClickBox->SetCollisionResponseToAllChannels(ECR_Ignore);

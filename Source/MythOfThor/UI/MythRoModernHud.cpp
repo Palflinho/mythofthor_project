@@ -131,7 +131,7 @@ void UMythRoHUDWidget::UpdateModernHud()
 
 	ModernName->SetText(FText::FromString(Stats->GetCharName()));
 	{
-		const FString ClassName = NetStats ? NetStats->JobName : FString(TEXT("Aprendiz"));
+		const FString ClassName = NetStats ? NetStats->JobName : FString(TEXT("Novice"));
 		ModernClassName->SetText(FText::FromString(ClassName.Len() > 11 ? ClassName.Left(10) + TEXT("…") : ClassName));
 	}
 	ModernJob->SetText(FText::FromString(FString::Printf(TEXT("Nv. %d"), Stats->GetBaseLevel()))); // a classe fica embaixo do simbolo

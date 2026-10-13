@@ -55,3 +55,9 @@ cp "$HERE/../npc/custom/myth/monstro_raro.txt" npc/custom/myth/monstro_raro.txt
 grep -q "myth/monstro_raro.txt" npc/scripts_custom.conf || echo "npc: npc/custom/myth/monstro_raro.txt" >> npc/scripts_custom.conf
 cp "$HERE/../npc/custom/myth/mimir_codex_npc.txt" npc/custom/myth/mimir_codex_npc.txt
 grep -q "myth/mimir_codex_npc.txt" npc/scripts_custom.conf || echo "npc: npc/custom/myth/mimir_codex_npc.txt" >> npc/scripts_custom.conf
+cp "$HERE/../npc/custom/myth/myth_respawn.txt" npc/custom/myth/myth_respawn.txt
+grep -q "myth/myth_respawn.txt" npc/scripts_custom.conf || echo "npc: npc/custom/myth/myth_respawn.txt" >> npc/scripts_custom.conf
+
+# The Renewal "academy" script (Izlude academy and its Training Instructor NPCs on new_1-*) duplicates the old Training Grounds
+# NPCs from treino_novice.txt and warps the player to Izlude (iz_int, not imported): do not load it.
+sed -i 's|^npc: npc/re/jobs/novice/academy.txt|// npc: npc/re/jobs/novice/academy.txt|' npc/re/scripts_jobs.conf

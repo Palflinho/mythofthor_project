@@ -38,7 +38,7 @@ namespace
 	struct FAchReward { int32 Item = 0; int32 Amount = 0; int32 Title = 0; };
 	struct FAchInfo { FString Name; FString Group; int32 Score = 0; int32 Total = 0; TArray<FAchReward> Rewards; };
 
-	const TCHAR* AcTabNames[AcTabs] = { TEXT("Overview"), TEXT("Basic"), TEXT("Aventura"), TEXT("Batalha"), TEXT("Mission"), TEXT("Masmorra"), TEXT("Grandes") };
+	const TCHAR* AcTabNames[AcTabs] = { TEXT("Overview"), TEXT("Basic"), TEXT("Adventure"), TEXT("Battle"), TEXT("Mission"), TEXT("Dungeon"), TEXT("Grand") };
 
 	/** Aba (1 a 6) de um grupo do banco do servidor. */
 	int32 AcTabOfGroup(const FString& Group)
@@ -229,7 +229,7 @@ void UMythRoHUDWidget::RefreshAchievements()
 		AchNames[i]->SetText(FText::FromString(AcShort(Info ? Info->Name : FString::Printf(TEXT("Achievement %d"), A->Id), 28)));
 		int32 Count = 0;
 		for (int32 v : A->Objective) { Count += v; }
-		AchProgress[i]->SetText(FText::FromString(A->bCompleted ? FString(TEXT("Completed")) : (Info && Info->Total > 0 ? FString::Printf(TEXT("Progresso %d / %d"), Count, Info->Total) : FString(TEXT("Em andamento")))));
+		AchProgress[i]->SetText(FText::FromString(A->bCompleted ? FString(TEXT("Completed")) : (Info && Info->Total > 0 ? FString::Printf(TEXT("Progress %d / %d"), Count, Info->Total) : FString(TEXT("In progress")))));
 		AchScores[i]->SetText(FText::AsNumber(Info ? Info->Score : 0));
 		AchClaim[i]->SetText(FText::FromString(A->bCompleted && !A->bRewardTaken ? TEXT("Reward available") : TEXT("")));
 	}
@@ -252,7 +252,7 @@ void UMythRoHUDWidget::RefreshAchievements()
 		{
 			if (Sel->Objective[j] > 0)
 			{
-				AchDetailLines[j + 1]->SetText(FText::FromString(FString::Printf(TEXT("• Objetivo %d: %d"), j + 1, Sel->Objective[j])));
+				AchDetailLines[j + 1]->SetText(FText::FromString(FString::Printf(TEXT("• Objective %d: %d"), j + 1, Sel->Objective[j])));
 			}
 		}
 		// Premios (do achievement_db do rAthena; quem entrega e o servidor ao clicar em Receber)
