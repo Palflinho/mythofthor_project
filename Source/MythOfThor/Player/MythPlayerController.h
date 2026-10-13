@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UI/MythOptions.h"
 #include "GameFramework/PlayerController.h"
 #include "InputActionValue.h"
 #include "UI/MythRoHUDWidget.h"
@@ -190,6 +191,7 @@ public:
 	UFUNCTION(Exec) void MythBookingReg(int32 Level = 50) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendPartyBookingRegister(Level, 0, TArray<int32>()); } }
 	UFUNCTION(Exec) void MythBookingDel() { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendPartyBookingDelete(); } }
 	UFUNCTION(Exec) void MythBookingSearch() { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendPartyBookingSearch(0, 0, -1, 0, 9); } }
+	UFUNCTION(Exec) void MythOpt(const FString& Key, int32 On) { FMythOptions::Set(FName(*Key), On != 0); if (HudWidget) { HudWidget->ApplyOptionEffectsPublic(); } }
 	UFUNCTION(Exec) void MythMainMenu(int32 Index = -1) { if (HudWidget) { HudWidget->TestMainMenu(Index); } }
 	UFUNCTION(Exec) void MythSkillInfo(int32 SkillId) { if (HudWidget) { HudWidget->TestShowSkillInfo(SkillId); } }
 	/** Teste: usa a skill (nivel Level) no monstro mais perto. */

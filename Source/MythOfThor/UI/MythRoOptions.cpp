@@ -6,6 +6,7 @@
 
 #include "Sprites/MythAura99.h"
 #include "UI/MythOptions.h"
+#include "World/MythWater.h"
 
 #include "Components/CanvasPanel.h"
 #include "Components/TextBlock.h"
@@ -36,6 +37,7 @@ namespace
 			{ TEXT("ShowAura"), TEXT("Mostrar aura"), TEXT("Mostra a aura (nível 99)."), false },
 			{ TEXT("AuraDisplay"), TEXT("Aura simplificada"), TEXT("Mostra a aura de forma simplificada."), false },
 			{ TEXT("ShowEffects"), TEXT("Mostrar efeitos"), TEXT("Mostra os efeitos de skills e itens."), false },
+			{ TEXT("ModernWater"), TEXT("Água moderna"), TEXT("Água com reflexo, ondas e profundidade (desligada: água clássica do RO)."), false },
 			{ TEXT("ShowShading"), TEXT("Mostrar sombreado"), TEXT("Mostra o sombreado."), false },
 			{ TEXT("DamageDisplay"), TEXT("Dano estendido"), TEXT("Mostra o dano em formato estendido."), false },
 			{ TEXT("MapName"), TEXT("Nome do mapa"), TEXT("Mostra o nome do mapa ao entrar em uma área."), false },
@@ -110,6 +112,7 @@ void UMythRoHUDWidget::BuildOptionsWindow()
 void UMythRoHUDWidget::ApplyOptionEffects()
 {
 	// Aura: Mostrar aura desligada = nada; ligada com "simplificada" = so os brilhos; ligada = normal
+	AMythWater::ApplyStyleToAll(GetWorld());
 	AMythAura99::SetMode(!FMythOptions::Get(TEXT("ShowAura")) ? 0 : (FMythOptions::Get(TEXT("AuraDisplay")) ? 1 : 2));
 }
 

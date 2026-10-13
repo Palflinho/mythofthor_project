@@ -129,6 +129,8 @@ public:
 	/** Abre/fecha uma janela classica (atalhos Alt do cliente original). */
 	UFUNCTION(BlueprintCallable, Category = "Myth|HUD")
 	void ToggleWindow(EMythRoWindow Window);
+	/** Teste: reaplica os efeitos das opcoes (aura, agua moderna...). */
+	void ApplyOptionEffectsPublic() { ApplyOptionEffects(); }
 	/** Teste: Index < 0 abre/fecha o menu principal; senao escolhe o botao Index da grade. */
 	void TestMainMenu(int32 Index);
 

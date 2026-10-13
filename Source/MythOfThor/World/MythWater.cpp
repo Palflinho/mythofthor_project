@@ -1,6 +1,8 @@
 #include "World/MythWater.h"
 
 #include "World/MythMapInfo.h"
+#include "UI/MythOptions.h"
+#include "EngineUtils.h"
 #include "UI/MythRoUITextures.h"
 
 #include "Dom/JsonObject.h"
@@ -58,11 +60,6 @@ bool AMythWater::Build(const FString& MapName, const FVector2D& Origin)
 	const float TileUU = static_cast<float>(Root->GetNumberField(TEXT("scale"))) * 10.f; // tile do GND (10) * escala do importador
 	const float Z = -Level * 10.f;
 
-	UMaterialInterface* Base = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Myth/M_Water.M_Water"));
-	if (!Base)
-	{
-		return false;
-	}
 	for (int32 i = 0; i < 32; ++i)
 	{
 		UTexture2D* Tex = FMythRoUITextures::Get(FString::Printf(TEXT("../워터/water%d%02d.jpg"), Type, i));
@@ -115,13 +112,8 @@ bool AMythWater::Build(const FString& MapName, const FVector2D& Origin)
 		return false;
 	}
 	Mesh->CreateMeshSection(0, Verts, Tris, Normals, UVs, TArray<FColor>(), TArray<FProcMeshTangent>(), false);
-	Material = UMaterialInstanceDynamic::Create(Base, this);
-	Material->SetScalarParameterValue(TEXT("Opacity"), (Type == 4 || Type == 6) ? 1.f : 0.78f);
-	Material->SetScalarParameterValue(TEXT("Brightness"), 1.1f);
-	Material->SetTextureParameterValue(TEXT("Tex"), Frames[0]);
-	Mesh->SetMaterial(0, Material); // depois do CreateMeshSection: o material colocado antes se perde
-	LastFrame = 0;
-	UE_LOG(LogTemp, Log, TEXT("MythWater: %s agua nivel %.1f tipo %d, %d blocos"), *MapName, Level, Type, Verts.Num() / 4);
+	BaseOpacity = (Type == 4 || Type == 6) ? 1.f : 0.78f;
+	ApplyStyle(); // material depois do CreateMeshSection: o colocado antes se perde	UE_LOG(LogTemp, Log, TEXT("MythWater: %s agua nivel %.1f tipo %d, %d blocos"), *MapName, Level, Type, Verts.Num() / 4);
 	return true;
 }
 
@@ -139,5 +131,37 @@ void AMythWater::Tick(float DeltaSeconds)
 	{
 		LastFrame = Frame;
 		Material->SetTextureParameterValue(TEXT("Tex"), Frames[Frame]);
+	}
+}
+
+void AMythWater::ApplyStyle()
+{
+	const bool bModern = FMythOptions::Get(TEXT("ModernWater"));
+	UMaterialInterface* Base = LoadObject<UMaterialInterface>(nullptr, bModern ? TEXT("/Game/Myth/M_WaterModern.M_WaterModern") : TEXT("/Game/Myth/M_Water.M_Water"));
+	if (!Base)
+	{
+		Base = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Myth/M_Water.M_Water"));
+	}
+	if (!Base || Frames.Num() == 0)
+	{
+		return;
+	}
+	Material = UMaterialInstanceDynamic::Create(Base, this);
+	Material->SetScalarParameterValue(TEXT("Opacity"), bModern ? 0.9f : BaseOpacity);
+	Material->SetScalarParameterValue(TEXT("Brightness"), 1.1f);
+	Material->SetTextureParameterValue(TEXT("Tex"), Frames[FMath::Clamp(LastFrame, 0, Frames.Num() - 1)]);
+	Mesh->SetMaterial(0, Material);
+	if (LastFrame < 0) { LastFrame = 0; }
+}
+
+void AMythWater::ApplyStyleToAll(UWorld* World)
+{
+	if (!World)
+	{
+		return;
+	}
+	for (TActorIterator<AMythWater> It(World); It; ++It)
+	{
+		It->ApplyStyle();
 	}
 }

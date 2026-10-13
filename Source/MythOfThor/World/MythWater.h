@@ -26,11 +26,16 @@ public:
 
 	virtual void Tick(float DeltaSeconds) override;
 
+	/** Liga a agua moderna (Single Layer Water) ou a classica do RO; aplica em todas as aguas do mundo (opcao ModernWater). */
+	static void ApplyStyleToAll(UWorld* World);
+	void ApplyStyle();
+
 private:
 	UPROPERTY() TObjectPtr<UProceduralMeshComponent> Mesh;
 	UPROPERTY() TObjectPtr<UMaterialInstanceDynamic> Material;
 	UPROPERTY() TArray<TObjectPtr<UTexture2D>> Frames;
 	int32 LastFrame = -1;
+	float BaseOpacity = 0.78f;
 	float AnimSpeed = 3.f;
 	float Time = 0.f;
 
