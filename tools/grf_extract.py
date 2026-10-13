@@ -217,6 +217,10 @@ class GrfArchive:
 
         os.makedirs(parent_dir, exist_ok=True)
 
+        # MYTH_SKIP_EXISTING=1: retoma uma extracao interrompida sem refazer o que ja esta no disco (mesmo tamanho)
+        if os.environ.get('MYTH_SKIP_EXISTING') and os.path.exists(out_path) and os.path.getsize(out_path) == entry.rsize:
+            return out_path
+
         data = self.extract_entry(entry)
 
         with open(out_path, 'wb') as f:
