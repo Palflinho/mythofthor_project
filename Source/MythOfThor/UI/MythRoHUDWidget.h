@@ -129,6 +129,9 @@ public:
 	/** Abre/fecha uma janela classica (atalhos Alt do cliente original). */
 	UFUNCTION(BlueprintCallable, Category = "Myth|HUD")
 	void ToggleWindow(EMythRoWindow Window);
+	/** F12: soma uma barra de atalhos (de 4 volta para 1). */
+	void CycleHotbarRows();
+	void SetHotbarRows(int32 Rows);
 	/** Teste: reaplica os efeitos das opcoes (aura, agua moderna...). */
 	void ApplyOptionEffectsPublic() { ApplyOptionEffects(); }
 	/** Teste: Index < 0 abre/fecha o menu principal; senao escolhe o botao Index da grade. */
@@ -517,6 +520,9 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> HotbarCdTexts;
 	void UpdateCooldowns();
 	UPROPERTY() TArray<TObjectPtr<UImage>> HotbarRowBoxes;
+	UPROPERTY() TArray<TObjectPtr<UImage>> HotbarFrames;
+	/** Quantas das 4 barras de atalho aparecem (1 a 4); os botoes - e + e o F12 mudam. */
+	int32 HotbarVisibleRows = 2;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> HotbarRowTexts;
 	UPROPERTY() TObjectPtr<UImage> HotbarUp;
 	UPROPERTY() TObjectPtr<UImage> HotbarDown;

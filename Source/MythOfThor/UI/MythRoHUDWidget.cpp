@@ -625,22 +625,28 @@ bool UMythRoHUDWidget::HandleMinimapClick(const FVector2D& ScreenPos)
 
 void UMythRoHUDWidget::BuildHotbar()
 {
-	// Barra de atalhos do LATAM (print 03): no topo, colada a direita das informacoes basicas. Duas linhas de 9 espacos
-	// (moldura shortcut_frame 290x34), o numero da linha a esquerda (azul a ativa) e as setas para subir e descer
+	// Barra de atalhos do LATAM (print 03): no topo, colada a direita das informacoes basicas. Ate 4 linhas de 9 espacos
+	// (moldura shortcut_frame 290x34), o numero da linha a esquerda (azul a ativa) e os botoes - e + que tiram e poem linhas
+	// (o F12 faz o mesmo, de 1 a 4); as linhas escondidas ficam fora da tela e a janela encolhe.
 	constexpr float RowH = 34.f;
-	UCanvasPanel* Win = MakeWindow(FVector2D(0.f, 0.f), FVector2D(0.f, 0.f), FVector2D(234.f * UIScale, 2.f), FVector2D(306.f, RowH * 2.f));
+	constexpr int32 MaxRows = 4;
+	UCanvasPanel* Win = MakeWindow(FVector2D(0.f, 0.f), FVector2D(0.f, 0.f), FVector2D(234.f * UIScale, 2.f), FVector2D(306.f, RowH * MaxRows));
 	HotbarWindow = Win;
-	for (int32 r = 0; r < 2; ++r)
+	int32 Saved = 2;
+	if (GConfig) { GConfig->GetInt(TEXT("Myth.Hotbar"), TEXT("Rows"), Saved, GGameUserSettingsIni); }
+	HotbarVisibleRows = FMath::Clamp(Saved, 1, MaxRows);
+	for (int32 r = 0; r < MaxRows; ++r)
 	{
-		AddImage(Win, FMythRoUITextures::Get(TEXT("shortcut/shortcut_frame.bmp")), 0.f, r * RowH, 290.f, RowH);
+		HotbarFrames.Add(AddImage(Win, FMythRoUITextures::Get(TEXT("shortcut/shortcut_frame.bmp")), 0.f, r * RowH, 290.f, RowH));
 		UImage* Box = AddColor(Win, FLinearColor(0.93f, 0.85f, 0.9f, 1.f), 4.f, r * RowH + 9.f, 8.f, 14.f);
 		HotbarRowBoxes.Add(Box);
 		UTextBlock* Num = AddText(Win, 5.f, r * RowH + 10.f, 6, FLinearColor(0.4f, 0.3f, 0.4f));
 		HotbarRowTexts.Add(Num);
 	}
-	for (int32 i = 0; i < 18; ++i)
+	for (int32 i = 0; i < 9 * MaxRows; ++i)
 	{
-		// Espaco do atalho: area de soltar (recebe o mouse), icone 24x24 e quantidade/nivel no canto
+		// Espaco do atalho: area de soltar (recebe o mouse), icone 24x24 e quantidade/nivel no canto. O interior de cada espaco do
+		// shortcut_frame.bmp comeca em x=16 (passo 29) e y=5, 24x24
 		const float X = 16.f + 29.f * (i % 9);
 		const float Y = (i / 9) * RowH;
 		UImage* HotSlot = AddColor(Win, FLinearColor::Transparent, X, Y + 5.f, 24.f, 24.f);
@@ -665,10 +671,11 @@ void UMythRoHUDWidget::BuildHotbar()
 		CdText->SetFont(CdFont);
 		HotbarCdTexts.Add(CdText);
 	}
+	// - tira uma linha, + poe uma (empilhados ao lado da primeira linha)
 	HotbarUp = AddButtonEx(Win, TEXT("shortcut/btn_minus_normal.bmp"), TEXT("shortcut/btn_minus_over.bmp"), TEXT("shortcut/btn_minus_press.bmp"), 292.f, 3.f);
-	HotbarDown = AddButtonEx(Win, TEXT("shortcut/btn_plus_normal.bmp"), TEXT("shortcut/btn_plus_over.bmp"), TEXT("shortcut/btn_plus_press.bmp"), 292.f, RowH + 3.f);
+	HotbarDown = AddButtonEx(Win, TEXT("shortcut/btn_plus_normal.bmp"), TEXT("shortcut/btn_plus_over.bmp"), TEXT("shortcut/btn_plus_press.bmp"), 292.f, 18.f);
 	// So a borda esquerda arrasta a barra: o resto recebe os atalhos arrastados
-	MakeDraggable(Win, 4.f, RowH * 2.f);
+	MakeDraggable(Win, 4.f, RowH * MaxRows);
 }
 
 void UMythRoHUDWidget::BuildChat()

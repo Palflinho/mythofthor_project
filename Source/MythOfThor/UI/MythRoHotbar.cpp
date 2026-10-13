@@ -33,9 +33,9 @@ bool UMythRoHUDWidget::HandleHotbarClick(const FVector2D& ScreenPos)
 	{
 		return false;
 	}
-	if (IsUnder(HotbarUp, ScreenPos)) { HotbarFirstRow = FMath::Max(0, HotbarFirstRow - 1); RefreshHotbar(); return true; }
-	if (IsUnder(HotbarDown, ScreenPos)) { HotbarFirstRow = FMath::Min(2, HotbarFirstRow + 1); RefreshHotbar(); return true; }
-	for (int32 r = 0; r < HotbarRowBoxes.Num(); ++r)
+	if (IsUnder(HotbarUp, ScreenPos)) { SetHotbarRows(HotbarVisibleRows - 1); return true; }
+	if (IsUnder(HotbarDown, ScreenPos)) { SetHotbarRows(HotbarVisibleRows + 1); return true; }
+	for (int32 r = 0; r < HotbarRowBoxes.Num() && r < HotbarVisibleRows; ++r)
 	{
 		if (IsUnder(HotbarRowBoxes[r], ScreenPos))
 		{
@@ -49,7 +49,7 @@ bool UMythRoHUDWidget::HandleHotbarClick(const FVector2D& ScreenPos)
 
 int32 UMythRoHUDWidget::HotbarSlotAt(const FVector2D& ScreenPos) const
 {
-	for (int32 i = 0; i < HotbarSlots.Num(); ++i)
+	for (int32 i = 0; i < HotbarSlots.Num() && i < HotbarVisibleRows * 9; ++i)
 	{
 		if (IsUnder(HotbarSlots[i], ScreenPos))
 		{
@@ -59,12 +59,45 @@ int32 UMythRoHUDWidget::HotbarSlotAt(const FVector2D& ScreenPos) const
 	return INDEX_NONE;
 }
 
+void UMythRoHUDWidget::SetHotbarRows(int32 Rows)
+{
+	HotbarVisibleRows = FMath::Clamp(Rows, 1, 4);
+	HotbarActiveRow = FMath::Min(HotbarActiveRow, HotbarVisibleRows - 1);
+	if (GConfig)
+	{
+		GConfig->SetInt(TEXT("Myth.Hotbar"), TEXT("Rows"), HotbarVisibleRows, GGameUserSettingsIni);
+		GConfig->Flush(false, GGameUserSettingsIni);
+	}
+	RefreshHotbar();
+}
+
+void UMythRoHUDWidget::CycleHotbarRows()
+{
+	SetHotbarRows(HotbarVisibleRows >= 4 ? 1 : HotbarVisibleRows + 1);
+}
+
 void UMythRoHUDWidget::RefreshHotbar()
 {
+	// Linhas visiveis: a janela e a moldura de cada linha acompanham a quantidade (1 a 4)
+	if (UCanvasPanelSlot* WinSlot = HotbarWindow ? Cast<UCanvasPanelSlot>(HotbarWindow->Slot) : nullptr)
+	{
+		WinSlot->SetSize(FVector2D(306.f, 34.f * HotbarVisibleRows) * UIScale);
+	}
+	for (int32 r = 0; r < HotbarFrames.Num(); ++r)
+	{
+		const bool bShow = r < HotbarVisibleRows;
+		HotbarFrames[r]->SetVisibility(bShow ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
+		HotbarRowBoxes[r]->SetVisibility(bShow ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
+		HotbarRowTexts[r]->SetVisibility(bShow ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
+	}
+	for (int32 i = 0; i < HotbarSlots.Num(); ++i)
+	{
+		HotbarSlots[i]->SetVisibility(i < HotbarVisibleRows * 9 ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+	}
 	const URagnarokNetworkSubsystem* Net = GetNet();
 	for (int32 r = 0; r < HotbarRowTexts.Num(); ++r)
 	{
-		const int32 Row = HotbarFirstRow + r;
+		const int32 Row = r;
 		HotbarRowTexts[r]->SetText(FText::AsNumber(Row + 1));
 		HotbarRowBoxes[r]->SetColorAndOpacity(Row == HotbarActiveRow ? FLinearColor(0.35f, 0.55f, 0.9f, 1.f) : FLinearColor(0.93f, 0.85f, 0.9f, 1.f));
 		HotbarRowTexts[r]->SetColorAndOpacity(FSlateColor(Row == HotbarActiveRow ? FLinearColor::White : FLinearColor(0.4f, 0.3f, 0.4f)));
@@ -97,8 +130,8 @@ void UMythRoHUDWidget::RefreshHotbar()
 			}
 		}
 		HotbarIcons[i]->SetBrush(HotbarBrush(Icon, FVector2D(24.f, 24.f) * UIScale));
-		HotbarIcons[i]->SetVisibility(Icon ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
-		HotbarCounts[i]->SetText(Icon ? FText::FromString(Count) : FText::GetEmpty());
+		HotbarIcons[i]->SetVisibility(Icon && i < HotbarVisibleRows * 9 ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
+		HotbarCounts[i]->SetText(Icon && i < HotbarVisibleRows * 9 ? FText::FromString(Count) : FText::GetEmpty());
 	}
 }
 
@@ -283,7 +316,7 @@ void UMythRoHUDWidget::UpdateCooldowns()
 		{
 			Left = Net->GetSkillCooldown(Net->GetHotkeys()[SlotIndex].ID, &Total);
 		}
-		if (Left <= 0.f || Total <= 0.f)
+		if (i >= HotbarVisibleRows * 9 || Left <= 0.f || Total <= 0.f)
 		{
 			HotbarCdBacks[i]->SetVisibility(ESlateVisibility::Collapsed);
 			HotbarCdTexts[i]->SetText(FText::GetEmpty());

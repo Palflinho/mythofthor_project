@@ -642,7 +642,7 @@ void AMythPlayerController::OnHotkeyMail()
 	ToggleHudWindow(Net && Net->HasHomun() ? EMythRoWindow::Homun : EMythRoWindow::Mail);
 }
 void AMythPlayerController::OnHotkeyBank() { ToggleHudWindow(EMythRoWindow::Bank); }
-void AMythPlayerController::OnHotkeyShortcuts() { ToggleHudWindow(EMythRoWindow::Shortcuts); }
+void AMythPlayerController::OnHotkeyShortcuts() { if (HudWidget) { HudWidget->CycleHotbarRows(); } } // F12: soma uma barra de atalhos (a tabela de teclas abre pelo Menu Principal)
 void AMythPlayerController::OnHotkeyQuests() { ToggleHudWindow(EMythRoWindow::Quests); }
 void AMythPlayerController::OnHotkeyChatRoom() { ToggleHudWindow(EMythRoWindow::ChatRoom); }
 void AMythPlayerController::OnHotkeyFriends() { ToggleHudWindow(EMythRoWindow::Friends); }
