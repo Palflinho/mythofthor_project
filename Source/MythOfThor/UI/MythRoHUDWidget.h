@@ -63,7 +63,8 @@ enum class EMythRoWindow : uint8
 	WorldMap, // Ctrl+`: mapa-mundi
 	Guild,    // Alt+G: cla
 	Pet,      // Alt+J: mascote
-	Homun     // Alt+R com homunculo chamado: homunculo
+	Homun,    // Alt+R com homunculo chamado: homunculo
+	TestShop  // Loja de Testes (GM)
 };
 
 /** Barra de medidor classica (gze*_left/mid/right sobre gze_bg): o meio estica conforme a fracao. */
@@ -267,6 +268,27 @@ protected:
 	void BuildModernHud();
 	// Menu Principal centralizado (MythRoMainMenu.cpp)
 	void BuildMainMenu();
+	// Loja de Testes de GM (MythRoTestShop.cpp)
+	void BuildTestShopWindow();
+	void TestShopRefilter();
+	void RefreshTestShop();
+	bool HandleTestShopClick(const FVector2D& ScreenPos, bool bShift);
+	bool HandleTestShopWheel(const FVector2D& ScreenPos, float Delta);
+	UFUNCTION() void OnTestShopSearch(const FText& Text);
+public:
+	/** Teste: abre a Loja de Testes na aba Tab (0 equip, 1 cartas, 2 consumiveis, 3 outros) com a busca Query. */
+	void TestTestShop(int32 Tab, const FString& Query);
+protected:
+	UPROPERTY() TObjectPtr<UCanvasPanel> TestShopWindow;
+	UPROPERTY() TObjectPtr<UEditableTextBox> TestShopSearch;
+	UPROPERTY() TObjectPtr<UTextBlock> TestShopHint;
+	UPROPERTY() TArray<TObjectPtr<UImage>> TestShopTabBacks;
+	UPROPERTY() TArray<TObjectPtr<UImage>> TestShopRowBacks;
+	UPROPERTY() TArray<TObjectPtr<UImage>> TestShopIcons;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> TestShopTexts;
+	TArray<int32> TestShopFiltered;
+	int32 TestShopTab = 0;
+	int32 TestShopScroll = 0;
 	void ToggleMainMenu();
 	void MainMenuPick(int32 Index);
 	bool HandleMainMenuClick(const FVector2D& ScreenPos);

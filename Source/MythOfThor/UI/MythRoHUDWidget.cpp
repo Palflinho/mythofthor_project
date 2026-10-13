@@ -393,6 +393,7 @@ void UMythRoHUDWidget::BuildLayout()
 	BuildStorageWindow();
 	BuildCartWindow();
 	BuildSelectListWindow();
+	BuildTestShopWindow();
 	BuildVendingWindows();
 	BuildWorldMapWindow();
 	BuildPartyWindow();

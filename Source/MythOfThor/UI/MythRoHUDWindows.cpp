@@ -504,6 +504,7 @@ void UMythRoHUDWidget::ToggleWindow(EMythRoWindow Window)
 		return;
 	case EMythRoWindow::Quests: Target = QuestWindow; break;
 	case EMythRoWindow::Shortcuts: Target = ShortcutWindow; break;
+	case EMythRoWindow::TestShop: Target = TestShopWindow; break;
 	}
 	if (!Target)
 	{
@@ -982,6 +983,10 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 
 bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 {
+	if (HandleTestShopClick(ScreenPos, FSlateApplication::Get().GetModifierKeys().IsShiftDown()))
+	{
+		return true;
+	}
 	if (HandleMainMenuClick(ScreenPos))
 	{
 		return true;
@@ -1405,6 +1410,10 @@ FReply UMythRoHUDWidget::NativeOnMouseWheel(const FGeometry& InGeometry, const F
 		return FReply::Handled();
 	}
 	if (HandleShopWheel(InMouseEvent.GetScreenSpacePosition(), InMouseEvent.GetWheelDelta()))
+	{
+		return FReply::Handled();
+	}
+	if (HandleTestShopWheel(InMouseEvent.GetScreenSpacePosition(), InMouseEvent.GetWheelDelta()))
 	{
 		return FReply::Handled();
 	}

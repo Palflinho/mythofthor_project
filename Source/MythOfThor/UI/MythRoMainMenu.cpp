@@ -17,7 +17,7 @@ namespace
 	constexpr float HubPad = 14.f;
 	constexpr float HubTitleH = 26.f;
 	constexpr float HubFootH = 26.f;
-	constexpr int32 HubRows = 5;
+	constexpr int32 HubRows = 6;
 	constexpr float HubW = HubPad * 2.f + HubCols * HubCellW;
 	constexpr float HubH = HubTitleH + HubRows * HubCellH + HubFootH + HubPad;
 
@@ -44,6 +44,7 @@ namespace
 		{ TEXT("achievement"), TEXT("Conquistas"), EMythRoWindow::Achievements, false },
 		{ TEXT("bank"), TEXT("Banco"), EMythRoWindow::Bank, false },
 		{ TEXT("keyboard"), TEXT("Atalhos"), EMythRoWindow::Shortcuts, false },
+		{ TEXT("shop"), TEXT("Loja de Testes"), EMythRoWindow::TestShop, false },
 		{ TEXT("option"), TEXT("Configurações"), EMythRoWindow::Status, true },
 	};
 }
