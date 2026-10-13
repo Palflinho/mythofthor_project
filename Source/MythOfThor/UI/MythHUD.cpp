@@ -65,6 +65,7 @@ void AMythHUD::DrawHUD()
 	DrawQuestTracker();
 	DrawStatusVignette();
 	DrawTargetRing();
+	DrawHoverPlate();
 	DrawSelfBars();
 	DrawGroundItemLabels();
 	DrawCastBarsAndShouts();
@@ -265,29 +266,6 @@ void AMythHUD::DrawCursorTile()
 			// canto (Dx, Dy) em meias celulas a partir do centro: -Side..Side e impar
 			return Project(Center + FVector(Dx * Half, Dy * Half, 0.f), Out);
 		};
-		const FLinearColor Fill(0.35f, 0.55f, 1.f, 0.22f);
-		for (int32 cy = -R; cy <= R; ++cy)
-		{
-			for (int32 cx = -R; cx <= R; ++cx)
-			{
-				FVector2D P0, P1, P2, P3;
-				if (!CellCorner(2 * cx - 1, 2 * cy - 1, P0) || !CellCorner(2 * cx + 1, 2 * cy - 1, P1) || !CellCorner(2 * cx + 1, 2 * cy + 1, P2) || !CellCorner(2 * cx - 1, 2 * cy + 1, P3))
-				{
-					continue;
-				}
-				// Preenchimento: faixas de linha entre a borda de cima (P0-P1) e a de baixo (P3-P2), sem textura
-				constexpr int32 Strips = 8;
-				for (int32 k = 0; k <= Strips; ++k)
-				{
-					const float Tk = static_cast<float>(k) / Strips;
-					const FVector2D L = FMath::Lerp(P0, P3, Tk), Rr = FMath::Lerp(P1, P2, Tk);
-					DrawLine(L.X, L.Y, Rr.X, Rr.Y, Fill, 2.f);
-				}
-				const FLinearColor Grid(1.f, 1.f, 1.f, 0.35f);
-				DrawLine(P0.X, P0.Y, P1.X, P1.Y, Grid, 1.f);
-				DrawLine(P0.X, P0.Y, P3.X, P3.Y, Grid, 1.f);
-			}
-		}
 		// Borda da area
 		FVector2D Right(0.f, 0.f);
 		const int32 Edge[5][2] = { { -1, -1 }, { 1, -1 }, { 1, 1 }, { -1, 1 }, { -1, -1 } };
@@ -296,8 +274,7 @@ void AMythHUD::DrawCursorTile()
 			FVector2D A, B;
 			if (CellCorner(Edge[i][0] * Side, Edge[i][1] * Side, A) && CellCorner(Edge[i + 1][0] * Side, Edge[i + 1][1] * Side, B))
 			{
-				DrawLine(A.X, A.Y, B.X, B.Y, FLinearColor(1.f, 1.f, 1.f, 0.95f), 2.f);
-				if (A.X > Right.X) { Right = A; }
+				if (A.X > Right.X) { Right = A; } // sem borda nem grade: o circulo magico no chao ja mostra a area
 			}
 		}
 		if (UFont* Font = GEngine ? GEngine->GetLargeFont() : nullptr; Font && Right.X > 0.f)
@@ -641,6 +618,59 @@ void AMythHUD::DrawTargetRing()
 	DrawRect(FLinearColor(0.f, 0.f, 0.f, 0.85f), X - 1.f, Y - 1.f, BarW + 2.f, BarH + 2.f);
 	DrawRect(FLinearColor(0.22f, 0.08f, 0.3f, 1.f), X, Y, BarW, BarH);
 	DrawRect(FLinearColor(0.2f, 0.9f, 0.25f, 1.f), X, Y, BarW * Frac, BarH);
+}
+
+void AMythHUD::DrawHoverPlate()
+{
+	AMythPlayerController* PC = Cast<AMythPlayerController>(PlayerOwner);
+	if (!Canvas || !PC || !PC->GetWorld() || (PC->GetHud() && PC->GetHud()->IsPointerOverUi()) || PC->IsTargetingSkill())
+	{
+		return;
+	}
+	FHitResult Hit;
+	if (!PC->GetHitResultUnderCursor(ECC_Visibility, false, Hit) || !Hit.bBlockingHit)
+	{
+		return;
+	}
+	const AMythMonster* Unit = Cast<AMythMonster>(Hit.GetActor());
+	if (!Unit || Unit->IsDead() || Unit == PC->GetFocusedTarget())
+	{
+		return; // o alvo ja marcado tem a placa propria (DrawTargetRing)
+	}
+	const UCapsuleComponent* Cap = Unit->GetCapsuleComponent();
+	FVector2D Head;
+	if (!Cap || !PC->ProjectWorldLocationToScreen(Unit->GetActorLocation() + FVector(0.f, 0.f, Cap->GetScaledCapsuleHalfHeight() + 70.f), Head, false))
+	{
+		return;
+	}
+	UFont* Font = GEngine->GetLargeFont();
+	FFontRenderInfo Info;
+	Info.bEnableShadow = true;
+	FString Name = Unit->IsNpc() ? Unit->MonsterName : Unit->GetDisplayName();
+	int32 Hash = INDEX_NONE;
+	if (Name.FindChar(TEXT('#'), Hash)) { Name = Name.Left(Hash); } // "Guia#01prontera" mostra so "Guia"
+	float TW = 0.f, TH = 0.f;
+	Canvas->TextSize(Font, Name, TW, TH, 0.8f, 0.8f);
+	Canvas->SetDrawColor(Unit->IsNpc() ? FColor(255, 240, 150) : (Unit->IsAttackable() ? FColor::White : FColor(190, 225, 255)));
+	Canvas->DrawText(Font, Name, Head.X - TW * 0.5f, Head.Y - TH - 8.f, 0.8f, 0.8f, Info);
+	if (Unit->IsNpc())
+	{
+		return; // NPC: so o nome
+	}
+	// Monstro e jogador: barra de vida embaixo dos pes
+	FVector2D Feet;
+	FVector Center = Unit->GetActorLocation();
+	Center.Z -= Cap->GetScaledCapsuleHalfHeight() - 2.f;
+	if (!PC->ProjectWorldLocationToScreen(Center, Feet, false))
+	{
+		return;
+	}
+	constexpr float BarW = 64.f, BarH = 5.f;
+	const float X = Feet.X - BarW * 0.5f;
+	const float Y = Feet.Y + 8.f;
+	DrawRect(FLinearColor(0.f, 0.f, 0.f, 0.85f), X - 1.f, Y - 1.f, BarW + 2.f, BarH + 2.f);
+	DrawRect(FLinearColor(0.22f, 0.08f, 0.3f, 1.f), X, Y, BarW, BarH);
+	DrawRect(FLinearColor(0.2f, 0.9f, 0.25f, 1.f), X, Y, BarW * Unit->GetHealthFraction(), BarH);
 }
 
 void AMythHUD::DrawGroundItemLabels()

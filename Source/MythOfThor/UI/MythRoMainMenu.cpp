@@ -4,6 +4,7 @@
 #include "Components/CanvasPanelSlot.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
+#include "Framework/Application/SlateApplication.h"
 
 // Menu Principal centralizado (hub): botao flutuante no canto superior direito, ao lado do minimapa, que abre/fecha um painel
 // modal no centro da tela com uma grade de atalhos para as janelas do jogo. Escolher uma janela a abre e fecha o menu, a menos
@@ -144,6 +145,33 @@ void UMythRoHUDWidget::MainMenuPick(int32 i)
 	if (!bMainMenuKeepOpen)
 	{
 		MainMenuPanel->SetVisibility(ESlateVisibility::Collapsed);
+	}
+}
+
+void UMythRoHUDWidget::UpdateMainMenuHover()
+{
+	if (!MainMenuPanel)
+	{
+		return;
+	}
+	const FVector2D MouseAt = FSlateApplication::Get().GetCursorPos();
+	const bool bOpen = MainMenuPanel->IsVisible();
+	if (MainMenuButtonBack)
+	{
+		MainMenuButtonBack->SetColorAndOpacity(IsUnder(MainMenuButtonBack, MouseAt) || bOpen ? FLinearColor(0.45f, 0.55f, 0.95f, 1.f) : FLinearColor(0.05f, 0.06f, 0.11f, 0.82f));
+	}
+	if (!bOpen)
+	{
+		return;
+	}
+	for (int32 i = 0; i < MainMenuCells.Num(); ++i)
+	{
+		const bool bHot = IsUnder(MainMenuCells[i], MouseAt);
+		MainMenuCells[i]->SetColorAndOpacity(bHot ? FLinearColor(0.35f, 0.5f, 0.95f, 1.f) : FLinearColor(0.12f, 0.14f, 0.24f, 0.85f));
+	}
+	if (MainMenuClose)
+	{
+		MainMenuClose->SetColorAndOpacity(IsUnder(MainMenuClose, MouseAt) ? FLinearColor(1.f, 0.6f, 0.6f, 1.f) : FLinearColor::White);
 	}
 }
 

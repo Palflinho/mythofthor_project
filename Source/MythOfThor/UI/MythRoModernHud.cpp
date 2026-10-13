@@ -55,7 +55,11 @@ void UMythRoHUDWidget::BuildModernHud()
 	ModernClassIcon = AddImage(ModernPanel, nullptr, 8.f, 12.f, 28.f, 28.f); // simbolo da classe (o mesmo da janela do grupo) no lugar do retrato
 	ModernClassIcon->SetVisibility(ESlateVisibility::Collapsed);
 
+	// nome do personagem no cabecalho; o nome da CLASSE fica embaixo do simbolo dela
 	ModernName = AddText(ModernPanel, MhBarX, 3.f, 8, MhText, true);
+	ModernClassName = AddText(ModernPanel, 1.f, 42.f, 6, FLinearColor(0.75f, 0.82f, 1.f), true);
+	ModernClassName->SetJustification(ETextJustify::Center);
+	if (UCanvasPanelSlot* NS = Cast<UCanvasPanelSlot>(ModernClassName->Slot)) { NS->SetAutoSize(false); NS->SetSize(FVector2D(50.f, 11.f) * UIScale); }
 	ModernJob = AddText(ModernPanel, MhBarX + MhBarW - 10.f, 4.f, 6, FLinearColor(0.7f, 0.78f, 1.f));
 	ModernJob->SetJustification(ETextJustify::Right);
 
@@ -85,11 +89,17 @@ void UMythRoHUDWidget::BuildModernHud()
 		{
 			AddColor(ModernExpStrip, FLinearColor(1.f, 1.f, 1.f, 0.35f), X0 + MhExpHalfW * t / 10.f, MhExpBarY, 1.f, MhExpBarH);
 		}
-		UTextBlock* Label = AddText(ModernExpStrip, X0 + 4.f, MhExpBarY - 1.f, 7, MhText);
+		UTextBlock* Label = AddText(ModernExpStrip, Side == 0 ? X0 + 4.f : X0 + MhExpHalfW - 74.f, MhExpBarY - 1.f, 7, MhText);
 		OutlineText(Label);
+		if (Side == 1)
+		{
+			Label->SetJustification(ETextJustify::Right);
+			if (UCanvasPanelSlot* LS = Cast<UCanvasPanelSlot>(Label->Slot)) { LS->SetAutoSize(false); LS->SetSize(FVector2D(70.f, 12.f) * UIScale); }
+		}
 		UImage* Hover = AddColor(ModernExpStrip, FLinearColor::Transparent, X0, MhExpBarY, MhExpHalfW, MhExpBarH);
 		Hover->SetVisibility(ESlateVisibility::Visible); // precisa ser clicavel para mostrar a dica ao passar o mouse
-		UImage* LvUp = AddImage(ModernExpStrip, FMythRoUITextures::Get(TEXT("basic_interface/lv_up_on.bmp")), X0 + 2.f, 2.f, 22.f, 22.f);
+		// o botao de level up fica acima do rotulo (Base: canto esquerdo; Classe: canto direito, espelhado)
+		UImage* LvUp = AddImage(ModernExpStrip, FMythRoUITextures::Get(TEXT("basic_interface/lv_up_on.bmp")), Side == 0 ? X0 + 2.f : X0 + MhExpHalfW - 24.f, 2.f, 22.f, 22.f);
 		LvUp->SetVisibility(ESlateVisibility::Collapsed);
 		if (Side == 0) { ModernBaseFill = Fill; ModernBaseLabel = Label; ModernBaseHover = Hover; ModernBaseLvUp = LvUp; }
 		else { ModernJobFill = Fill; ModernJobLabel = Label; ModernJobHover = Hover; ModernJobLvUp = LvUp; }
@@ -108,7 +118,11 @@ void UMythRoHUDWidget::UpdateModernHud()
 	const FRagnarokPlayerStats* NetStats = bOnline ? &Net->GetPlayerStats() : nullptr;
 
 	ModernName->SetText(FText::FromString(Stats->GetCharName()));
-	ModernJob->SetText(FText::FromString(FString::Printf(TEXT("%s Nv.%d"), NetStats ? *NetStats->JobName : TEXT("Aprendiz"), Stats->GetBaseLevel())));
+	{
+		const FString ClassName = NetStats ? NetStats->JobName : FString(TEXT("Aprendiz"));
+		ModernClassName->SetText(FText::FromString(ClassName.Len() > 11 ? ClassName.Left(10) + TEXT("…") : ClassName));
+	}
+	ModernJob->SetText(FText::FromString(FString::Printf(TEXT("Nv. %d"), Stats->GetBaseLevel()))); // a classe fica embaixo do simbolo
 
 	auto Bar = [this](UImage* Fill, UTextBlock* Text, UTextBlock* Pct, float Y, int32 Cur, int32 Max, const FLinearColor& Color)
 	{
@@ -151,7 +165,7 @@ void UMythRoHUDWidget::UpdateModernHud()
 	const float BaseFrac = Stats->GetExpFraction();
 	const float JobFrac = NetStats && NetStats->NextJobExp > 0 ? static_cast<float>(static_cast<double>(NetStats->JobExp) / NetStats->NextJobExp) : 0.f;
 	SetBox(ModernBaseFill, 0.f, MhExpBarY, MhExpHalfW * BaseFrac, MhExpBarH, UIScale);
-	SetBox(ModernJobFill, MhExpHalfW + MhExpGap, MhExpBarY, MhExpHalfW * JobFrac, MhExpBarH, UIScale);
+	SetBox(ModernJobFill, MhExpHalfW + MhExpGap + MhExpHalfW * (1.f - JobFrac), MhExpBarY, MhExpHalfW * JobFrac, MhExpBarH, UIScale); // cresce da direita para o centro
 	ModernBaseLabel->SetText(FText::FromString(FString::Printf(TEXT("Base %d"), Stats->GetBaseLevel())));
 	ModernJobLabel->SetText(FText::FromString(FString::Printf(TEXT("Job %d"), NetStats ? NetStats->JobLevel : 1)));
 	ModernBaseHover->SetToolTipText(FText::FromString(FString::Printf(TEXT("EXP de Base: %.2f%%"), BaseFrac * 100.f)));

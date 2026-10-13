@@ -74,6 +74,8 @@ private:
 	TArray<FStatusIcon> StatusIcons;
 
 	void DrawTargetRing();
+	/** Nome (e barra de vida de monstro e jogador) da unidade sob o mouse. */
+	void DrawHoverPlate();
 	void DrawMapBanner();
 	void DrawChatRoomTitles();
 	void DrawQuestTracker();

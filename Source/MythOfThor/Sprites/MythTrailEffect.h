@@ -98,6 +98,10 @@ public:
 
 	virtual void Tick(float DeltaSeconds) override;
 
+	/** Move o circulo (o da selecao de area acompanha o cursor). */
+	void MoveTo(const FVector& NewCenter) { Center = NewCenter; }
+	void SetSizeCells(float Cells) { SizeCells = FMath::Max(Cells, 1.f); }
+
 private:
 	UPROPERTY() TObjectPtr<UProceduralMeshComponent> Mesh;
 	UPROPERTY() TObjectPtr<UMaterialInstanceDynamic> Material;

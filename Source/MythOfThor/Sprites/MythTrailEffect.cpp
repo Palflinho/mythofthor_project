@@ -252,6 +252,13 @@ AMythCastRing* AMythCastRing::Spawn(UObject* WorldContext, bool bInLockOn, const
 	{
 		return nullptr;
 	}
+	if (Tex->AddressX != TA_Clamp)
+	{
+		// A textura gira dentro do quadrado pelas UVs: com repeticao os cantos mostravam copias da borda
+		Tex->AddressX = TA_Clamp;
+		Tex->AddressY = TA_Clamp;
+		Tex->UpdateResource();
+	}
 	FActorSpawnParameters P;
 	P.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	AMythCastRing* R = World->SpawnActor<AMythCastRing>(InCenter, FRotator::ZeroRotator, P);
@@ -268,7 +275,7 @@ AMythCastRing* AMythCastRing::Spawn(UObject* WorldContext, bool bInLockOn, const
 	R->Material->SetTextureParameterValue(TEXT("Tex"), Tex);
 	R->Material->SetScalarParameterValue(TEXT("Brightness"), bInLockOn ? 1.5f : 2.5f);
 	R->Mesh->SetMaterial(0, R->Material);
-	R->Rebuild(R->SizeCells * TrailCell * 0.5f, 0.f, 1.f);
+	R->Rebuild(R->SizeCells * TrailCell * 0.5f * (bInLockOn ? 1.f : 1.2f), 0.f, 1.f);
 	return R;
 }
 
@@ -295,7 +302,7 @@ void AMythCastRing::Tick(float DeltaSeconds)
 	}
 	else
 	{
-		Rebuild(SizeCells * TrailCell * 0.5f, FMath::DegreesToRadians(Time * 40.f), 1.f);
+		Rebuild(SizeCells * TrailCell * 0.5f * 1.2f, FMath::DegreesToRadians(Time * 40.f), 1.f);
 	}
 }
 

@@ -641,22 +641,22 @@ void UMythRoHUDWidget::BuildHotbar()
 	for (int32 i = 0; i < 18; ++i)
 	{
 		// Espaco do atalho: area de soltar (recebe o mouse), icone 24x24 e quantidade/nivel no canto
-		const float X = 12.f + 30.6f * (i % 9);
+		const float X = 16.f + 29.f * (i % 9);
 		const float Y = (i / 9) * RowH;
-		UImage* HotSlot = AddColor(Win, FLinearColor::Transparent, X, Y + 3.f, 28.f, 28.f);
+		UImage* HotSlot = AddColor(Win, FLinearColor::Transparent, X, Y + 5.f, 24.f, 24.f);
 		HotSlot->SetVisibility(ESlateVisibility::Visible);
 		HotbarSlots.Add(HotSlot);
-		UImage* Icon = AddImage(Win, nullptr, X + 2.f, Y + 5.f, 24.f, 24.f);
+		UImage* Icon = AddImage(Win, nullptr, X, Y + 5.f, 24.f, 24.f);
 		Icon->SetVisibility(ESlateVisibility::Collapsed);
 		HotbarIcons.Add(Icon);
-		UTextBlock* Count = AddText(Win, X + 15.f, Y + 20.f, 6, ColText);
+		UTextBlock* Count = AddText(Win, X + 13.f, Y + 20.f, 6, ColText);
 		Count->SetShadowOffset(FVector2D(1.f, 1.f));
 		Count->SetShadowColorAndOpacity(FLinearColor(1.f, 1.f, 1.f, 0.9f));
 		HotbarCounts.Add(Count);
-		UImage* CdBack = AddColor(Win, FLinearColor(0.f, 0.f, 0.f, 0.62f), X + 2.f, Y + 5.f, 24.f, 24.f);
+		UImage* CdBack = AddColor(Win, FLinearColor(0.f, 0.f, 0.f, 0.62f), X, Y + 5.f, 24.f, 24.f);
 		CdBack->SetVisibility(ESlateVisibility::Collapsed);
 		HotbarCdBacks.Add(CdBack);
-		UTextBlock* CdText = AddText(Win, X, Y + 11.f, 7, FLinearColor::White);
+		UTextBlock* CdText = AddText(Win, X - 2.f, Y + 11.f, 7, FLinearColor::White);
 		CdText->SetJustification(ETextJustify::Center);
 		if (UCanvasPanelSlot* CdSlot = Cast<UCanvasPanelSlot>(CdText->Slot)) { CdSlot->SetAutoSize(false); CdSlot->SetSize(FVector2D(28.f, 12.f) * UIScale); }
 		FSlateFontInfo CdFont = CdText->GetFont();
@@ -675,7 +675,7 @@ void UMythRoHUDWidget::BuildChat()
 {
 	// Chat (baixo-esquerda, print 18): abas "Regular Message" (branca, ativa) e "Battle Message" (escura), corpo translucido
 	// com as linhas, barra de rolagem a direita e o campo de digitacao
-	const float W = 440.f, H = 21.f + 98.f + 20.f; // largura do chat do LATAM (~60% da tela no print)
+	const float W = 350.f, H = 21.f + 98.f + 20.f; // chat estreito no canto: termina antes das barras de EXP
 	UCanvasPanel* Win = MakeWindow(FVector2D(0.f, 1.f), FVector2D(0.f, 1.f), FVector2D(8.f, -26.f), FVector2D(W, H));
 	ChatWindow = Win;
 	const TCHAR* TabNames[2] = { TEXT("Geral"), TEXT("Batalha") };
@@ -756,7 +756,7 @@ void UMythRoHUDWidget::RebuildChatView()
 	{
 		const float Range = FMath::Max(1, Shown.Num() - MaxChatLines);
 		const float Frac = Shown.Num() > MaxChatLines ? 1.f - ChatScroll / Range : 1.f;
-		S->SetPosition(FVector2D(440.f - 13.f, 34.f + Frac * (106.f - 14.f - 34.f)) * UIScale);
+		S->SetPosition(FVector2D(350.f - 13.f, 34.f + Frac * (106.f - 14.f - 34.f)) * UIScale);
 	}
 }
 

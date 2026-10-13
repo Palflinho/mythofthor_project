@@ -268,6 +268,7 @@ bool UMythRoHUDWidget::IsOverAnyWindow(const FVector2D& ScreenPos) const
 void UMythRoHUDWidget::UpdateCooldowns()
 {
 	UpdateBooking();
+	UpdateMainMenuHover();
 	if (GuildSkillRefreshAt > 0.0 && FPlatformTime::Seconds() >= GuildSkillRefreshAt)
 	{
 		GuildSkillRefreshAt = 0.0;
@@ -290,11 +291,11 @@ void UMythRoHUDWidget::UpdateCooldowns()
 		}
 		// O escurecimento encolhe de cima para baixo conforme a recarga passa
 		const float Frac = FMath::Clamp(Left / Total, 0.f, 1.f);
-		const float X = 12.f + 30.6f * (i % 9);
+		const float X = 16.f + 29.f * (i % 9);
 		const float Y = (i / 9) * 34.f;
 		if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(HotbarCdBacks[i]->Slot))
 		{
-			S->SetPosition(FVector2D(X + 2.f, Y + 5.f + 24.f * (1.f - Frac)) * UIScale);
+			S->SetPosition(FVector2D(X, Y + 5.f + 24.f * (1.f - Frac)) * UIScale);
 			S->SetSize(FVector2D(24.f, 24.f * Frac) * UIScale);
 		}
 		HotbarCdBacks[i]->SetVisibility(ESlateVisibility::HitTestInvisible);

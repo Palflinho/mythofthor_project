@@ -33,6 +33,7 @@
 #include "TimerManager.h"
 #include "GameFramework/PlayerInput.h"
 #include "Sprites/MythSkillEffects.h"
+#include "Sprites/MythTrailEffect.h"
 #include "World/MythCellMoverComponent.h"
 #include "World/MythWarpPortal.h"
 #include "Sprites/MythStrEffect.h"
@@ -457,6 +458,7 @@ void AMythPlayerController::OnMoveCompleted(const FInputActionValue&)
 
 void AMythPlayerController::PlayerTick(float DeltaTime)
 {
+	UpdateSkillSelectRing();
 	Super::PlayerTick(DeltaTime);
 
 	AMythPlayerCharacter* Char = GetMythCharacter();
@@ -2067,5 +2069,29 @@ void AMythPlayerController::MythTakeOffAll()
 	if (URagnarokNetworkSubsystem* Net = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr)
 	{
 		Net->SendTakeOffAll(0x0003FFu | 0x8000u); // equipamento da aba Geral e a municao
+	}
+}
+
+void AMythPlayerController::UpdateSkillSelectRing()
+{
+	const bool bWanted = PendingSkillID != 0 && (PendingSkillInf & 0x02) && !(GetHud() && GetHud()->IsPointerOverUi());
+	FHitResult Hit;
+	if (!bWanted || !GetHitResultUnderCursor(ECC_Visibility, false, Hit) || !Hit.bBlockingHit)
+	{
+		if (AMythCastRing* Old = SelectRing.Get()) { Old->Destroy(); }
+		SelectRing.Reset();
+		return;
+	}
+	const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld());
+	const FVector Center = Info ? Info->CellToWorld(WorldToCell(Hit.ImpactPoint), Hit.ImpactPoint.Z) : Hit.ImpactPoint;
+	const float Side = static_cast<float>(FMath::Max(1, FMythSkillEffects::AreaSize(PendingSkillID, PendingSkillLevel)));
+	if (AMythCastRing* Ring = SelectRing.Get())
+	{
+		Ring->MoveTo(Center);
+		Ring->SetSizeCells(Side);
+	}
+	else
+	{
+		SelectRing = AMythCastRing::Spawn(this, false, Center, Side, 100000.f, nullptr);
 	}
 }

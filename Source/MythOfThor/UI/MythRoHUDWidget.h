@@ -309,6 +309,7 @@ protected:
 	int32 TestShopTab = 0;
 	int32 TestShopScroll = 0;
 	void ToggleMainMenu();
+	void UpdateMainMenuHover();
 	void MainMenuPick(int32 Index);
 	bool HandleMainMenuClick(const FVector2D& ScreenPos);
 	UPROPERTY() TObjectPtr<UCanvasPanel> MainMenuButton;
@@ -329,6 +330,7 @@ protected:
 	int32 ModernAvatarVersion = -1;
 	UPROPERTY() TObjectPtr<UTextBlock> ModernName;
 	UPROPERTY() TObjectPtr<UTextBlock> ModernJob;
+	UPROPERTY() TObjectPtr<UTextBlock> ModernClassName;
 	UPROPERTY() TObjectPtr<UTextBlock> ModernWeightZeny;
 	UPROPERTY() TObjectPtr<UImage> ModernHPFill;
 	UPROPERTY() TObjectPtr<UImage> ModernSPFill;

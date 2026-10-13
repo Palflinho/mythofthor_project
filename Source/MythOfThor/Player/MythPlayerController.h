@@ -357,6 +357,9 @@ public:
 	void UseHotkey(int32 Index);
 
 	bool IsTargetingSkill() const { return PendingSkillID != 0; }
+	/** Circulo magico de selecao de area que acompanha o cursor (cria, move e remove sozinho). */
+	void UpdateSkillSelectRing();
+	TWeakObjectPtr<class AMythCastRing> SelectRing;
 	int32 GetPendingSkillID() const { return PendingSkillID; }
 	int32 GetPendingSkillLevel() const { return PendingSkillLevel; }
 	int32 GetPendingSkillInf() const { return PendingSkillInf; }
