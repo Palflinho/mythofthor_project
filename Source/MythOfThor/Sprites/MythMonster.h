@@ -100,9 +100,13 @@ public:
 	/** Tipo da unidade no pacote (0 jogador, 5 monstro, 6 NPC, 7 pet...). */
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Network")
 	uint8 NetObjectType = 5;
+	/** Monster class id (mob_db Id) of a server unit; the Mimir Codex knowledge level is looked up by it. */
+	int32 MobClass = 0;
 
 	bool IsNetUnit() const { return NetID != 0; }
 	bool IsNpc() const { return IsNetUnit() && (NetObjectType == 6 || NetObjectType == 0xC); }
+	/** Rare monster: the server names it with a leading star (see server/npc/custom/myth/monstro_raro.txt). */
+	bool IsRare() const { return IsNetUnit() && !IsNpc() && MonsterName.StartsWith(TEXT("\x2605")); }
 	bool IsAttackable() const { return !IsNetUnit() || NetObjectType == 5; }
 
 	/** Golpe confirmado pelo servidor: so a animacao e o som (HP e morte tambem vem do servidor). */

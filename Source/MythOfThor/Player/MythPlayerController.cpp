@@ -204,6 +204,7 @@ void AMythPlayerController::SetupInputComponent()
 	InputComponent->BindKey(FInputChord(EKeys::Tilde, false, true, false, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyWorldMap); // Ctrl+` como no cliente
 	InputComponent->BindKey(FInputChord(EKeys::W, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyEquipSwitch);
 	InputComponent->BindKey(FInputChord(EKeys::Y, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyAchievements);
+	InputComponent->BindKey(FInputChord(EKeys::K, false, false, true, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyMimir);
 	InputComponent->BindKey(FInputChord(EKeys::B, false, true, false, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyBank);
 	InputComponent->BindKey(FInputChord(EKeys::Tab, false, true, false, false), IE_Pressed, this, &AMythPlayerController::OnHotkeyMinimap);
 	InputComponent->BindKey(EKeys::Escape, IE_Pressed, this, &AMythPlayerController::OnHotkeyEscape);
@@ -632,6 +633,7 @@ void AMythPlayerController::ToggleHudWindow(EMythRoWindow Window)
 
 void AMythPlayerController::OnHotkeyEmotions() { ToggleHudWindow(EMythRoWindow::Emotions); }
 void AMythPlayerController::OnHotkeyAchievements() { ToggleHudWindow(EMythRoWindow::Achievements); }
+void AMythPlayerController::OnHotkeyMimir() { ToggleHudWindow(EMythRoWindow::Mimir); }
 void AMythPlayerController::OnHotkeyEquipSwitch() { ToggleHudWindow(EMythRoWindow::EquipSwitch); }
 void AMythPlayerController::OnHotkeyNavi() { ToggleHudWindow(EMythRoWindow::Navi); }
 void AMythPlayerController::OnHotkeyWorldMap() { ToggleHudWindow(EMythRoWindow::WorldMap); }

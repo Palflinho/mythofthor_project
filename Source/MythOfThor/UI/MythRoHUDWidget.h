@@ -65,7 +65,8 @@ enum class EMythRoWindow : uint8
 	Pet,      // Alt+J: mascote
 	Homun,    // Alt+R com homunculo chamado: homunculo
 	TestShop, // Loja de Testes (GM)
-	Booking   // Procura de grupo
+	Booking,  // Procura de grupo
+	Mimir     // Alt+K: Mimir Codex (bestiary)
 };
 
 /** Barra de medidor classica (gze*_left/mid/right sobre gze_bg): o meio estica conforme a fracao. */
@@ -821,6 +822,26 @@ protected:
 	int32 AchScroll = 0;
 	int32 AchSelectedId = 0;
 	bool HandleAchievementWheel(const FVector2D& ScreenPos, float Delta);
+
+	// Mimir Codex (MythRoMimir.cpp)
+public:
+	void OpenMimirWindow();
+	void RefreshMimir();
+protected:
+	void BuildMimirWindow();
+	bool HandleMimirClick(const FVector2D& ScreenPos);
+	bool HandleMimirWheel(const FVector2D& ScreenPos, float Delta);
+	static constexpr int32 MimirRows = 15;
+	UPROPERTY() TObjectPtr<UCanvasPanel> MimirWindow;
+	UPROPERTY() TObjectPtr<UTextBlock> MimirHeader;
+	UPROPERTY() TObjectPtr<UTextBlock> MimirNext;
+	UPROPERTY() TObjectPtr<UTextBlock> MimirDetailTitle;
+	UPROPERTY() TObjectPtr<UTextBlock> MimirEmpty;
+	UPROPERTY() TArray<TObjectPtr<UImage>> MimirRowBack;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> MimirRowText;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> MimirDetail;
+	int32 MimirScroll = 0;
+	int32 MimirSelected = 0;
 
 	// Banco (MythRoBank.cpp)
 public:

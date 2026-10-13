@@ -681,6 +681,7 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 	}
 	Unit->NetID = Info.GID;
 	Unit->NetObjectType = Info.ObjectType;
+	Unit->MobClass = Info.JobClass;
 	Unit->MonsterName = Info.Name;
 	Unit->BaseLevel = FMath::Max(Info.BaseLevel, 1); // nivel real do monstro (clevel do pacote da unidade)
 	Unit->MaxHP = FMath::Max(Info.MaxHP, 1);
@@ -721,6 +722,10 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 		}
 	}
 	Unit->FinishSpawning(Xf);
+	if (Unit->IsRare())
+	{
+		Unit->SetActorScale3D(FVector(1.35f)); // rare monster (name starts with the star): bigger sprite
+	}
 	if (bAuraWanted)
 	{
 		AMythAura99::Ensure(Unit, true); // outros jogadores nivel 99 tambem brilham (docs/ref/13 2.1)

@@ -498,6 +498,7 @@ void UMythRoHUDWidget::ToggleWindow(EMythRoWindow Window)
 	case EMythRoWindow::ChatRoom: OpenChatRoomWindow(); return;
 	case EMythRoWindow::Bank: OpenBankWindow(); return;
 	case EMythRoWindow::Achievements: OpenAchievementWindow(); return;
+	case EMythRoWindow::Mimir: OpenMimirWindow(); return;
 	case EMythRoWindow::EquipSwitch: Target = EquipSwitchWindow; break;
 	case EMythRoWindow::Mail: OpenMailWindow(); return;
 	case EMythRoWindow::WorldMap: ToggleWorldMap(); return;
@@ -616,6 +617,7 @@ void UMythRoHUDWidget::RefreshWindows()
 	}
 	if (BankWindow && BankWindow->IsVisible()) { RefreshBank(); }
 	if (AchievementWindow && AchievementWindow->IsVisible()) { RefreshAchievements(); }
+	if (MimirWindow && MimirWindow->IsVisible()) { RefreshMimir(); }
 	if (EquipSwitchWindow && EquipSwitchWindow->IsVisible()) { RefreshEquipSwitch(); }
 }
 
@@ -1110,6 +1112,10 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 	{
 		return true;
 	}
+	if (HandleMimirClick(ScreenPos))
+	{
+		return true;
+	}
 	if (HandleEquipSwitchClick(ScreenPos))
 	{
 		return true;
@@ -1431,6 +1437,10 @@ FReply UMythRoHUDWidget::NativeOnMouseButtonDoubleClick(const FGeometry& InGeome
 FReply UMythRoHUDWidget::NativeOnMouseWheel(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
 	if (HandleAchievementWheel(InMouseEvent.GetScreenSpacePosition(), InMouseEvent.GetWheelDelta()))
+	{
+		return FReply::Handled();
+	}
+	if (HandleMimirWheel(InMouseEvent.GetScreenSpacePosition(), InMouseEvent.GetWheelDelta()))
 	{
 		return FReply::Handled();
 	}

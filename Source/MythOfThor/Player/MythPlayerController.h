@@ -495,6 +495,7 @@ private:
 	void OnHotkeyWorldMap();
 	void OnHotkeyEquipSwitch();
 	void OnHotkeyAchievements();
+	void OnHotkeyMimir();
 	void OnHotkeyItems();
 	void OnHotkeyEquip();
 	void OnHotkeySkills();

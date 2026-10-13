@@ -1940,6 +1940,10 @@ void URagnarokNetworkSubsystem::HandleChatMessage(const uint8* PacketData, int32
 			CleanBuf.Append(PacketData + 4, StrLen);
 			CleanBuf.Add(0);
 			FString FullMsg = UTF8_TO_TCHAR(reinterpret_cast<const char*>(CleanBuf.GetData()));
+			if (ConsumeMimirLine(FullMsg))
+			{
+				return; // hidden Mimir Codex data line, not chat
+			}
 
 			int32 ColonIdx = INDEX_NONE;
 			if (FullMsg.FindChar(TEXT(':'), ColonIdx) && ColonIdx > 0)
@@ -1968,6 +1972,10 @@ void URagnarokNetworkSubsystem::HandleChatMessage(const uint8* PacketData, int32
 			CleanBuf.Append(PacketData + 12, StrLen);
 			CleanBuf.Add(0);
 			Text = UTF8_TO_TCHAR(reinterpret_cast<const char*>(CleanBuf.GetData()));
+			if (ConsumeMimirLine(Text))
+			{
+				return;
+			}
 		}
 	}
 	else if (PacketID == RagnarokPackets::HEADER_ZC_DISP_MESSAGE2) // 0x017f
@@ -4859,4 +4867,32 @@ float URagnarokNetworkSubsystem::GetSkillCooldown(int32 SkillID, float* OutTotal
 	const float Left = static_cast<float>(Cd->Key - FPlatformTime::Seconds());
 	if (OutTotal) { *OutTotal = Cd->Value; }
 	return FMath::Max(0.f, Left);
+}
+
+bool URagnarokNetworkSubsystem::ConsumeMimirLine(const FString& Raw)
+{
+	// "~MIMIR~id:kills,id:kills,..." (kill counts) and "~MIMIRP~points": hidden data from the Mimir tracker NPC script
+	FString Data;
+	if (Raw.StartsWith(TEXT("~MIMIRP~")))
+	{
+		MimirPoints = FCString::Atoi(*Raw.Mid(8));
+		OnMimirUpdated.Broadcast();
+		return true;
+	}
+	if (!Raw.StartsWith(TEXT("~MIMIR~")))
+	{
+		return false;
+	}
+	TArray<FString> Pairs;
+	Raw.Mid(7).ParseIntoArray(Pairs, TEXT(","));
+	for (const FString& Pair : Pairs)
+	{
+		FString Id, Kills;
+		if (Pair.Split(TEXT(":"), &Id, &Kills))
+		{
+			MimirKills.Add(FCString::Atoi(*Id), FCString::Atoi(*Kills));
+		}
+	}
+	OnMimirUpdated.Broadcast();
+	return true;
 }

@@ -43,6 +43,7 @@ namespace
 		{ TEXT("navigation"), TEXT("Navigation"), EMythRoWindow::Navi, false },
 		{ TEXT("sns"), TEXT("Friends"), EMythRoWindow::Friends, false },
 		{ TEXT("achievement"), TEXT("Achievements"), EMythRoWindow::Achievements, false },
+		{ TEXT("adventureguide"), TEXT("Mimir Codex"), EMythRoWindow::Mimir, false },
 		{ TEXT("bank"), TEXT("Bank"), EMythRoWindow::Bank, false },
 		{ TEXT("keyboard"), TEXT("Shortcuts"), EMythRoWindow::Shortcuts, false },
 		{ TEXT("shop"), TEXT("Test Shop"), EMythRoWindow::TestShop, false },

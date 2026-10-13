@@ -411,6 +411,7 @@ void UMythRoHUDWidget::BuildLayout()
 	BuildShortcutWindow();
 	BuildBankWindow();
 	BuildAchievementWindow();
+	BuildMimirWindow();
 	BuildEquipSwitchWindow();
 	BuildNaviWindow();
 	BuildMailWindows();

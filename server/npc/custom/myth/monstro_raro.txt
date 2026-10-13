@@ -1,0 +1,95 @@
+//===== Myth of Thor =========================================
+//= Rare monsters (star monsters).
+//= On average 1 in every .Chance monsters killed by a player makes a rare copy of that monster
+//= appear near the player. No announcement. The client shows the leading star in gold and draws the
+//= monster 35% bigger (Source/MythOfThor/Sprites/MythMonster.h, IsRare).
+//=
+//= Rare monster: HP x4, ATK x1.5, HIT/FLEE +15. Rewards on death: EXP x6 in total (the normal EXP
+//= already comes from the server; this adds x5) and 2 extra rolls of every drop (3x drops in total).
+//= Never spawns from MVPs/bosses, from monsters that cannot move or attack, in towns or in instances.
+//= The monsters spawned with the OnRareDead label do not fire OnNPCKillEvent, so rares do not chain.
+//= GM command for tests: @rare <mob id>  (spawns a rare next to you).
+//============================================================
+-	script	MythRare	-1,{
+OnInit:
+	.Chance = 20;     // 1 in .Chance kills
+	.Cap = 5;         // rares alive at once per map
+	.LifeMin = 30;    // minutes until an unattended rare is removed (checked every 10 minutes)
+	bindatcmd("rare", strnpcinfo(0) + "::OnRareCmd", 60, 60);
+	initnpctimer;
+	end;
+
+OnRareCmd:
+	.@id = atoi(.@atcmd_parameters$[0]);
+	if (.@id < 1001 || !getmonsterinfo(.@id, MOB_LV)) { dispbottom "Usage: @rare <mob id>"; end; }
+	getmapxy(.@m$, .@x, .@y, BL_PC);
+	callsub L_Spawn, .@id, .@m$, .@x, .@y;
+	end;
+
+OnNPCKillEvent:
+	if (rand(.Chance)) end;
+	if (getmonsterinfo(killedrid, MOB_MVPEXP) > 0) end;
+	.@mode = getmonsterinfo(killedrid, MOB_MODE);
+	if (!(.@mode & MD_CANMOVE) || !(.@mode & MD_CANATTACK)) end;
+	getmapxy(.@m$, .@x, .@y, BL_PC);
+	if (compare(.@m$, "@") || getmapflag(.@m$, mf_town)) end;
+	.@i = inarray(.rmaps$, .@m$);
+	if (.@i < 0) {
+		.@i = getarraysize(.rmaps$);
+		.rmaps$[.@i] = .@m$;
+		.rcnt[.@i] = 0;
+	}
+	if (.rcnt[.@i] >= .Cap) end;
+	.rcnt[.@i]++;
+	.rtime[.@i] = gettimetick(2);
+	callsub L_Spawn, killedrid, .@m$, .@x, .@y;
+	end;
+
+L_Spawn:
+	.@id = getarg(0);
+	.@m$ = getarg(1);
+	.@x = getarg(2);
+	.@y = getarg(3);
+	areamonster .@m$, max(1, .@x - 3), max(1, .@y - 3), .@x + 3, .@y + 3, "★ " + getmonsterinfo(.@id, MOB_NAME), .@id, 1, "MythRare::OnRareDead";
+	.@g = $@mobid[0];
+	if (!.@g) return;
+	.@hp = getunitdata(.@g, UMOB_MAXHP) * 4;
+	setunitdata .@g, UMOB_MAXHP, .@hp;
+	setunitdata .@g, UMOB_HP, .@hp;
+	setunitdata .@g, UMOB_ATKMIN, getunitdata(.@g, UMOB_ATKMIN) * 3 / 2;
+	setunitdata .@g, UMOB_ATKMAX, getunitdata(.@g, UMOB_ATKMAX) * 3 / 2;
+	setunitdata .@g, UMOB_HIT, getunitdata(.@g, UMOB_HIT) + 15;
+	setunitdata .@g, UMOB_FLEE, getunitdata(.@g, UMOB_FLEE) + 15;
+	return;
+
+OnRareDead:
+	if (!playerattached()) end;
+	.@m$ = strcharinfo(PC_MAP);
+	.@i = inarray(.rmaps$, .@m$);
+	if (.@i >= 0 && .rcnt[.@i] > 0) .rcnt[.@i]--;
+	getexp getmonsterinfo(killedrid, MOB_BASEEXP) * 5, getmonsterinfo(killedrid, MOB_JOBEXP) * 5;
+	@mimir_mob = killedrid; // rares count for the Mimir Codex too
+	doevent "MythMimirTracker::OnMimirKill";
+	if (getmobdrops(killedrid)) {
+		getmapxy(.@m$, .@x, .@y, BL_PC);
+		for (.@d = 0; .@d < $@MobDrop_count; .@d++) {
+			for (.@r = 0; .@r < 2; .@r++) {
+				if (rand(10000) < $@MobDrop_rate[.@d])
+					makeitem $@MobDrop_item[.@d], 1, .@m$, .@x + rand(-2, 2), .@y + rand(-2, 2);
+			}
+		}
+	}
+	end;
+
+// Cleanup: rares nobody is near are removed after .LifeMin minutes so the per-map cap never stays full
+OnTimer600000:
+	for (.@i = 0; .@i < getarraysize(.rmaps$); .@i++) {
+		if (.rcnt[.@i] > 0 && getmapusers(.rmaps$[.@i]) == 0 && gettimetick(2) - .rtime[.@i] >= .LifeMin * 60) {
+			killmonster .rmaps$[.@i], "MythRare::OnRareDead";
+			.rcnt[.@i] = 0;
+		}
+	}
+	stopnpctimer;
+	initnpctimer;
+	end;
+}

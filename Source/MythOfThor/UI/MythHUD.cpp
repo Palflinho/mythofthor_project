@@ -602,11 +602,24 @@ void AMythHUD::DrawTargetRing()
 	const FString Name = Target->GetDisplayName();
 	float TW = 0.f, TH = 0.f;
 	Canvas->TextSize(Font, Name, TW, TH, 0.8f, 0.8f);
-	Canvas->SetDrawColor(FColor::White);
+	Canvas->SetDrawColor(Target->IsRare() ? FColor(255, 215, 0) : FColor::White);
 	Canvas->DrawText(Font, Name, Head.X - TW * 0.5f, Head.Y - TH - 8.f, 0.8f, 0.8f, Info);
 
 	constexpr float BarW = 64.f, BarH = 5.f;
 	const float Frac = Target->GetHealthFraction();
+	// Mimir Codex knowledge level 2 (50 kills of the species): exact HP above the name
+	if (Target->IsNetUnit() && Target->MobClass > 0 && Target->MaxHP > 1)
+	{
+		const URagnarokNetworkSubsystem* NetSub = GetGameInstance() ? GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>() : nullptr;
+		if (NetSub && NetSub->GetMimirTier(Target->MobClass) >= 2)
+		{
+			const FString HpText = FString::Printf(TEXT("HP %d / %d"), FMath::RoundToInt(Frac * Target->MaxHP), Target->MaxHP);
+			float HW = 0.f, HH = 0.f;
+			Canvas->TextSize(Font, HpText, HW, HH, 0.65f, 0.65f);
+			Canvas->SetDrawColor(FColor(150, 255, 170));
+			Canvas->DrawText(Font, HpText, Head.X - HW * 0.5f, Head.Y - TH - HH - 10.f, 0.65f, 0.65f, Info);
+		}
+	}
 	// Barra de HP do monstro atingido ABAIXO dos pes (docs/ref/12): verde sobre fundo roxo escuro
 	FVector2D FeetScreen;
 	if (!PC->ProjectWorldLocationToScreen(Center, FeetScreen, false))
@@ -651,7 +664,7 @@ void AMythHUD::DrawHoverPlate()
 	if (Name.FindChar(TEXT('#'), Hash)) { Name = Name.Left(Hash); } // "Guia#01prontera" mostra so "Guia"
 	float TW = 0.f, TH = 0.f;
 	Canvas->TextSize(Font, Name, TW, TH, 0.8f, 0.8f);
-	Canvas->SetDrawColor(Unit->IsNpc() ? FColor(255, 240, 150) : (Unit->IsAttackable() ? FColor::White : FColor(190, 225, 255)));
+	Canvas->SetDrawColor(Unit->IsRare() ? FColor(255, 215, 0) : Unit->IsNpc() ? FColor(255, 240, 150) : (Unit->IsAttackable() ? FColor::White : FColor(190, 225, 255)));
 	Canvas->DrawText(Font, Name, Head.X - TW * 0.5f, Head.Y - TH - 8.f, 0.8f, 0.8f, Info);
 	if (Unit->IsNpc())
 	{

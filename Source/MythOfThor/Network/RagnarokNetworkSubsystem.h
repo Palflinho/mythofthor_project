@@ -1021,6 +1021,13 @@ public:
 	const TArray<FRoFriend>& GetFriends() const { return Friends; }
 	const TArray<FRoQuest>& GetQuests() const { return Quests; }
 	int64 GetBankBalance() const { return BankBalance; }
+	/** Mimir Codex: kills per monster id and Knowledge Points, sent by the server as hidden "~MIMIR~" chat lines (server/npc/custom/myth/mimir_codex_npc.txt). */
+	const TMap<int32, int32>& GetMimirKills() const { return MimirKills; }
+	int32 GetMimirPoints() const { return MimirPoints; }
+	int32 GetMimirKillCount(int32 MobId) const { const int32* K = MimirKills.Find(MobId); return K ? *K : 0; }
+	/** Mastery level of a species: 0 unknown, 1 (1 kill), 2 (50 kills), 3 (250 kills). */
+	int32 GetMimirTier(int32 MobId) const { const int32 K = GetMimirKillCount(MobId); return K >= 250 ? 3 : (K >= 50 ? 2 : (K >= 1 ? 1 : 0)); }
+	bool ConsumeMimirLine(const FString& Raw);
 	const TArray<FRoAchievement>& GetAchievements() const { return Achievements; }
 	/** Titulo (aba Titulo do Equipamento): CZ_REQ_CHANGE_TITLE 0x0a2e (0 tira); o servidor confirma com ZC_ACK_CHANGE_TITLE 0x0a2f. */
 	bool SendChangeTitle(int32 TitleId);
@@ -1349,6 +1356,11 @@ private:
 	TArray<FRoFriend> Friends;
 	TArray<FRoQuest> Quests;
 	int64 BankBalance = 0;
+	TMap<int32, int32> MimirKills;
+	int32 MimirPoints = 0;
+public:
+	FSimpleMulticastDelegate OnMimirUpdated;
+private:
 	TArray<FRoAchievement> Achievements;
 	int32 CurrentTitle = 0;
 	TArray<FIntPoint> EquipSwitch;

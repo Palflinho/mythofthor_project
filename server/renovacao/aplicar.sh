@@ -49,3 +49,9 @@ echo "  cd /mnt/e/Documentos/Repositórios/mythofthor_project/server && docker c
 cp "$HERE/../npc/custom/myth/treino_novice.txt" npc/custom/myth/treino_novice.txt
 grep -q "myth/treino_novice.txt" npc/scripts_custom.conf || echo "npc: npc/custom/myth/treino_novice.txt" >> npc/scripts_custom.conf
 grep -q "^start_point:" tools/docker/asset/char_conf.txt || printf "\nstart_point: new_1-1,53,111\n" >> tools/docker/asset/char_conf.txt
+
+# Rare monsters (1 in 20 kills spawns a star copy) and Mimir Codex kill tracking
+cp "$HERE/../npc/custom/myth/monstro_raro.txt" npc/custom/myth/monstro_raro.txt
+grep -q "myth/monstro_raro.txt" npc/scripts_custom.conf || echo "npc: npc/custom/myth/monstro_raro.txt" >> npc/scripts_custom.conf
+cp "$HERE/../npc/custom/myth/mimir_codex_npc.txt" npc/custom/myth/mimir_codex_npc.txt
+grep -q "myth/mimir_codex_npc.txt" npc/scripts_custom.conf || echo "npc: npc/custom/myth/mimir_codex_npc.txt" >> npc/scripts_custom.conf

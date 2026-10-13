@@ -1,10 +1,78 @@
 //=============================================================================
-// Myth of Thor - Guardião do Códice de Mímir (Bestiário e Relíquias)
+// Myth of Thor - Mimir Codex (monster bestiary)
+//
+// MythMimirTracker counts the monsters each character kills (char variable array MIMIR_K[<mob id>]) and tells
+// the client through hidden chat lines that start with "~MIMIR~" (the client swallows them and fills the
+// Mimir Codex window, Source/MythOfThor/UI/MythRoMimir.cpp):
+//   ~MIMIR~<mob id>:<kills>,<mob id>:<kills>,...   kill counts (all of them on login, one entry per kill)
+//   ~MIMIRP~<points>                                 Mimir Knowledge Points
+// Mastery levels per species: 1 = 1 kill, 2 = 50 kills, 3 = 250 kills. Level 3 gives 1 Knowledge Point.
+// Milestones (claimed at the Mimir Guardian): 10 pts +100 MaxHP | 30 pts +100 MaxHP +50 MaxSP |
+//   60 pts +1 all stats | 100 pts +1 all stats and +2% resistance to every element.
+// Rare monsters (monstro_raro.txt) also count: they call MythMimirTracker::OnMimirKill.
 //=============================================================================
+-	script	MythMimirTracker	-1,{
+OnNPCKillEvent:
+	callsub L_Kill, killedrid;
+	end;
+
+OnMimirKill:
+	callsub L_Kill, @mimir_mob;
+	end;
+
+OnPCLoginEvent:
+	callsub L_SendAll;
+	end;
+
+OnPCStatCalcEvent:
+	if (MIMIR_REWARD & 1) bonus bMaxHP, 100;
+	if (MIMIR_REWARD & 2) { bonus bMaxHP, 100; bonus bMaxSP, 50; }
+	if (MIMIR_REWARD & 4) bonus bAllStats, 1;
+	if (MIMIR_REWARD & 8) {
+		bonus bAllStats, 1;
+		for (.@e = 0; .@e < 10; .@e++)
+			bonus2 bSubEle, .@e, 2;
+	}
+	end;
+
+L_Kill:
+	.@id = getarg(0);
+	if (.@id < 1000) return;
+	.@n = MIMIR_K[.@id] + 1;
+	MIMIR_K[.@id] = .@n;
+	dispbottom "~MIMIR~" + .@id + ":" + .@n;
+	if (.@n == 1 || .@n == 50 || .@n == 250) {
+		.@tier = (.@n == 1) ? 1 : ((.@n == 50) ? 2 : 3);
+		dispbottom "[Mimir Codex] You reached knowledge level " + .@tier + " about: " + getmonsterinfo(.@id, MOB_NAME), 0x66FF99;
+		if (.@tier == 3) {
+			MIMIR_PTS++;
+			dispbottom "~MIMIRP~" + MIMIR_PTS;
+			dispbottom "[Mimir Codex] Mastery! +1 Mimir Knowledge Point (" + MIMIR_PTS + ").", 0x66FF99;
+		}
+	}
+	return;
+
+L_SendAll:
+	.@max = getarraysize(MIMIR_K);
+	.@line$ = "";
+	for (.@i = 1000; .@i < .@max; .@i++) {
+		if (MIMIR_K[.@i] > 0) {
+			.@line$ += (.@line$ == "" ? "" : ",") + .@i + ":" + MIMIR_K[.@i];
+			if (getstrlen(.@line$) > 170) {
+				dispbottom "~MIMIR~" + .@line$;
+				.@line$ = "";
+			}
+		}
+	}
+	if (.@line$ != "") dispbottom "~MIMIR~" + .@line$;
+	dispbottom "~MIMIRP~" + MIMIR_PTS;
+	return;
+}
+
 prontera,156,185,5	script	Mimir Guardian#myth	4_M_SAGE_A,{
 	mes "[Mimir]";
 	mes "I keep the memories of the nine realms beneath the crown of Yggdrasil.";
-	mes "Your journeys and battles are recorded in this great tome.";
+	mes "Your journeys and battles are recorded in this great tome (Mimir Codex, Alt+K).";
 	next;
 	switch(select("View Accumulated Knowledge:Claim Milestone Rewards:How does the Codex work?:Cancel")) {
 	case 1:
@@ -18,25 +86,31 @@ prontera,156,185,5	script	Mimir Guardian#myth	4_M_SAGE_A,{
 		mes "Checking your knowledge milestones...";
 		if (MIMIR_PTS >= 10 && !(MIMIR_REWARD & 1)) {
 			MIMIR_REWARD = MIMIR_REWARD | 1;
-			mes "Congratulations! You reached the 10 Point Milestone: [Midgard Observer]!";
-			specialeffect2 EF_LEVELUP;
-			close;
-		}
-		if (MIMIR_PTS >= 30 && !(MIMIR_REWARD & 2)) {
+			mes "Congratulations! You reached the 10 Point Milestone: [Midgard Observer]! (+100 MaxHP)";
+		} else if (MIMIR_PTS >= 30 && !(MIMIR_REWARD & 2)) {
 			MIMIR_REWARD = MIMIR_REWARD | 2;
-			mes "Congratulations! You reached the 30 Point Milestone: [Prontera Scholar]!";
-			specialeffect2 EF_LEVELUP;
+			mes "Congratulations! You reached the 30 Point Milestone: [Prontera Scholar]! (+100 MaxHP, +50 MaxSP)";
+		} else if (MIMIR_PTS >= 60 && !(MIMIR_REWARD & 4)) {
+			MIMIR_REWARD = MIMIR_REWARD | 4;
+			mes "Congratulations! You reached the 60 Point Milestone: [Seasoned Hunter]! (+1 to all stats)";
+		} else if (MIMIR_PTS >= 100 && !(MIMIR_REWARD & 8)) {
+			MIMIR_REWARD = MIMIR_REWARD | 8;
+			mes "Congratulations! You reached the 100 Point Milestone: [Keeper of Knowledge]! (+1 to all stats, +2% elemental resistance)";
+		} else {
+			mes "No new milestone reached at the moment.";
 			close;
 		}
-		mes "No new milestone reached at the moment.";
+		recalculatestat;
+		specialeffect2 EF_LEVELUP;
 		close;
 
 	case 3:
 		mes "[Mimir]";
 		mes "Each monster species has 3 mastery levels:";
-		mes "- Level 1 (1 kill): Basic identification.";
-		mes "- Level 2 (50 kills): HP shown on the target bar.";
-		mes "- Level 3 (250 kills): Drop table and a permanent +1% damage against the species.";
+		mes "- Level 1 (1 kill): name, element, race, size and level.";
+		mes "- Level 2 (50 kills): exact HP shown on the target bar.";
+		mes "- Level 3 (250 kills): full drop table. Also grants 1 Knowledge Point.";
+		mes "Milestones: 10, 30, 60 and 100 points.";
 		close;
 
 	case 4:
