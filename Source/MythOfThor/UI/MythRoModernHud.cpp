@@ -103,7 +103,9 @@ void UMythRoHUDWidget::BuildModernHud()
 			AddColor(ModernExpStrip, FLinearColor(0.1f, 0.15f, 0.3f, 0.3f), BarX + MhExpHalfW * t / 10.f, MhExpBarY, 1.f, MhExpBarH);
 		}
 		// caixa azul com o nivel
-		AddRounded(ModernExpStrip, FLinearColor(0.2f, 0.4f, 0.85f, 1.f), FLinearColor(0.1f, 0.25f, 0.6f, 1.f), BoxX, MhExpBarY - 1.f, MhExpBox, MhExpBarH + 2.f, 3.f, 3.f);
+		// tampa da barra: bloco azul rente a ponta da barra (mesma altura), com uma linha escura na juncao
+		AddColor(ModernExpStrip, FLinearColor(0.2f, 0.4f, 0.85f, 1.f), BoxX, MhExpBarY, MhExpBox, MhExpBarH);
+		AddColor(ModernExpStrip, FLinearColor(0.08f, 0.2f, 0.5f, 1.f), Side == 0 ? BoxX : BoxX + MhExpBox - 1.f, MhExpBarY, 1.f, MhExpBarH);
 		UTextBlock* Label = AddText(ModernExpStrip, BoxX, MhExpBarY - 1.f, 7, FLinearColor::White, true);
 		Label->SetJustification(ETextJustify::Center);
 		if (UCanvasPanelSlot* LS = Cast<UCanvasPanelSlot>(Label->Slot)) { LS->SetAutoSize(false); LS->SetSize(FVector2D(MhExpBox, 12.f) * UIScale); }
