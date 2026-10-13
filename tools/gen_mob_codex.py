@@ -6,6 +6,7 @@ Usage (WSL): python3 tools/gen_mob_codex.py [rathena=~/mythofthor-server/rathena
 """
 import json
 import os
+import re
 import sys
 
 import yaml
@@ -28,6 +29,20 @@ def main():
     for name in ('item_db_etc.yml', 'item_db_usable.yml', 'item_db_equip.yml'):
         for it in load(os.path.join(db, name)).get('Body', []):
             aegis[it['AegisName']] = it['Id']
+    spawns = {}
+    mobdir = os.path.join(rath, "npc", "re", "mobs")
+    for dp, _, files in os.walk(mobdir):
+        for fn in files:
+            if not fn.endswith(".txt"):
+                continue
+            with open(os.path.join(dp, fn), encoding="utf-8", errors="replace") as f:
+                for line in f:
+                    if line.startswith("//"):
+                        continue
+                    m = re.match(r"^([\w@-]+)[^\t]*\t(?:boss_)?monster\t[^\t]+\t(\d+),(\d+)", line)
+                    if m:
+                        d = spawns.setdefault(m.group(2), {})
+                        d[m.group(1)] = d.get(m.group(1), 0) + int(m.group(3))
     mobs = {}
     for src in (os.path.join(db, 'mob_db.yml'), os.path.join(rath, 'db', 'import', 'mob_db.yml')):
         if not os.path.exists(src):
@@ -50,7 +65,8 @@ def main():
                 'r': m.get('Race', 'Formless'),
                 's': m.get('Size', 'Small'),
                 'm': 1 if (m.get('MvpExp') or 'Boss' in (m.get('Class') or '')) else 0,
-                'd': drops,
+                "d": drops,
+                "p": sorted(([k, v] for k, v in spawns.get(str(mid), {}).items()), key=lambda t: -t[1]),
             }
     dest = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'Config', 'mob_codex.json')
     with open(dest, 'w', encoding='utf-8', newline='\n') as f:

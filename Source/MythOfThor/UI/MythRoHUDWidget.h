@@ -831,7 +831,7 @@ protected:
 	void BuildMimirWindow();
 	bool HandleMimirClick(const FVector2D& ScreenPos);
 	bool HandleMimirWheel(const FVector2D& ScreenPos, float Delta);
-	static constexpr int32 MimirRows = 15;
+	static constexpr int32 MimirRows = 24;
 	UPROPERTY() TObjectPtr<UCanvasPanel> MimirWindow;
 	UPROPERTY() TObjectPtr<UTextBlock> MimirHeader;
 	UPROPERTY() TObjectPtr<UTextBlock> MimirNext;

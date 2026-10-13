@@ -27,7 +27,7 @@ namespace
 	const FLinearColor MmGreen(0.1f, 0.5f, 0.25f);
 	const FLinearColor MmGray(0.5f, 0.5f, 0.55f);
 	constexpr float MmW = 560.f;
-	constexpr float MmH = 392.f;
+	constexpr float MmH = 560.f;
 	constexpr float MmListX = 10.f;
 	constexpr float MmListY = 62.f;
 	constexpr float MmRowH = 20.f;
@@ -42,6 +42,7 @@ namespace
 		int32 Exp = 0;
 		bool bBoss = false;
 		TArray<TPair<int32, int32>> Drops; // item id, rate (1 = 0.01%)
+		TArray<TPair<FString, int32>> Spawns; // map id, monsters spawned there
 	};
 
 	const TMap<int32, FMimirMob>& MimirTable()
@@ -80,12 +81,52 @@ namespace
 							M.Drops.Emplace(static_cast<int32>(P[0]->AsNumber()), static_cast<int32>(P[1]->AsNumber()));
 						}
 					}
+					const TArray<TSharedPtr<FJsonValue>>* Sp = nullptr;
+					if ((*Obj)->TryGetArrayField(TEXT("p"), Sp))
+					{
+						for (const TSharedPtr<FJsonValue>& S : *Sp)
+						{
+							const TArray<TSharedPtr<FJsonValue>>& P = S->AsArray();
+							if (P.Num() == 2)
+							{
+								M.Spawns.Emplace(P[0]->AsString(), static_cast<int32>(P[1]->AsNumber()));
+							}
+						}
+					}
 					Table.Add(FCString::Atoi(*Pair.Key), MoveTemp(M));
 				}
 			}
 			UE_LOG(LogTemp, Log, TEXT("MythRoMimir: %d monsters from Config/mob_codex.json"), Table.Num());
 		}
 		return Table;
+	}
+
+	/** Map display name from Config/maps.json (falls back to the map id). */
+	FString MmMapName(const FString& MapId)
+	{
+		static TMap<FString, FString> Names;
+		static bool bLoaded = false;
+		if (!bLoaded)
+		{
+			bLoaded = true;
+			FString Text;
+			TSharedPtr<FJsonObject> Root;
+			if (FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("maps.json"))) && FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) && Root.IsValid())
+			{
+				for (const TPair<FString, TSharedPtr<FJsonValue>>& Pair : Root->Values)
+				{
+					const TSharedPtr<FJsonObject>* Obj = nullptr;
+					FString N;
+					if (Pair.Value->TryGetObject(Obj) && (*Obj)->TryGetStringField(TEXT("name"), N))
+					{
+						N.TrimStartAndEndInline();
+						Names.Add(Pair.Key, N);
+					}
+				}
+			}
+		}
+		const FString* F = Names.Find(MapId);
+		return F ? *F : MapId;
 	}
 
 	FString MmShort(const FString& S, int32 Max) { return S.Len() > Max ? S.Left(Max - 1) + TEXT("…") : S; }
@@ -115,7 +156,7 @@ void UMythRoHUDWidget::BuildMimirWindow()
 		MimirRowText.Add(AddText(MimirWindow, MmListX + 6.f, MmListY + 3.f + i * MmRowH, 8, MmText));
 	}
 	MimirDetailTitle = AddText(MimirWindow, MmDetailX, 62.f, 11, MmTitle, true);
-	for (int32 i = 0; i < 17; ++i)
+	for (int32 i = 0; i < 28; ++i)
 	{
 		MimirDetail.Add(AddText(MimirWindow, MmDetailX, 88.f + i * 16.f, 8, MmText));
 	}
@@ -212,10 +253,20 @@ void UMythRoHUDWidget::RefreshMimir()
 	if (Tier >= 2)
 	{
 		MimirDetail[L++]->SetText(FText::FromString(FString::Printf(TEXT("HP: %d      Base EXP: %d"), M.Hp, M.Exp)));
+		++L;
+		MimirDetail[L++]->SetText(FText::FromString(M.Spawns.Num() > 0 ? TEXT("Found in (monsters per map):") : TEXT("Found in: no regular spawn")));
+		for (int32 s = 0; s < M.Spawns.Num() && s < 8; ++s)
+		{
+			MimirDetail[L++]->SetText(FText::FromString(FString::Printf(TEXT("  %s: %d"), *MmShort(MmMapName(M.Spawns[s].Key), 40), M.Spawns[s].Value)));
+		}
+		if (M.Spawns.Num() > 8)
+		{
+			MimirDetail[L++]->SetText(FText::FromString(FString::Printf(TEXT("  ...and %d more maps"), M.Spawns.Num() - 8)));
+		}
 	}
 	else
 	{
-		MimirDetail[L++]->SetText(FText::FromString(TEXT("HP / EXP: ???  (50 kills)")));
+		MimirDetail[L++]->SetText(FText::FromString(TEXT("HP / EXP / maps: ???  (50 kills)")));
 	}
 	++L;
 	if (Tier >= 3)
