@@ -84,8 +84,8 @@ namespace
 
 void UMythRoHUDWidget::BuildTestShopWindow()
 {
-	TestShopWindow = MakeRoPanel(TEXT("Loja de Testes (GM)"), FVector2D(TsW, TsH), FVector2D(-200.f, -20.f));
-	static const TCHAR* Tabs[] = { TEXT("Equipamentos"), TEXT("Cartas"), TEXT("Consumíveis"), TEXT("Outros") };
+	TestShopWindow = MakeRoPanel(TEXT("Test Shop (GM)"), FVector2D(TsW, TsH), FVector2D(-200.f, -20.f));
+	static const TCHAR* Tabs[] = { TEXT("Equipment"), TEXT("Cartas"), TEXT("Consumables"), TEXT("Outros") };
 	for (int32 t = 0; t < 4; ++t)
 	{
 		const float W = TsW / 4.f;
@@ -98,7 +98,7 @@ void UMythRoHUDWidget::BuildTestShopWindow()
 		if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(Label->Slot)) { S->SetAutoSize(false); S->SetSize(FVector2D(W - 2.f, 14.f) * UIScale); }
 	}
 	TestShopSearch = WidgetTree->ConstructWidget<UEditableTextBox>();
-	TestShopSearch->SetHintText(FText::FromString(TEXT("Buscar por nome ou ID")));
+	TestShopSearch->SetHintText(FText::FromString(TEXT("Search by name or ID")));
 	TestShopSearch->OnTextChanged.AddDynamic(this, &UMythRoHUDWidget::OnTestShopSearch);
 	if (UCanvasPanelSlot* S = TestShopWindow->AddChildToCanvas(TestShopSearch))
 	{
@@ -187,7 +187,7 @@ void UMythRoHUDWidget::RefreshTestShop()
 	}
 	if (TestShopHint)
 	{
-		TestShopHint->SetText(FText::FromString(FString::Printf(TEXT("%d itens  |  clique pega 1, Shift pega 10  |  roda do mouse rola"), TestShopFiltered.Num())));
+		TestShopHint->SetText(FText::FromString(FString::Printf(TEXT("%d items  |  click takes 1, Shift takes 10  |  mouse wheel scrolls"), TestShopFiltered.Num())));
 	}
 }
 

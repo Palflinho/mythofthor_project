@@ -36,7 +36,7 @@ void URagnarokNetworkSubsystem::HandleVendingPacket(const uint8* PacketData, int
 	case 0x0a28: // ZC_ACK_OPENSTORE2 <resultado>.B (0 abriu)
 		if (PacketSize >= 3 && PacketData[2] != 0)
 		{
-			OnChatMessage.Broadcast(TEXT(""), TEXT("Não foi possível abrir a loja."), TEXT("#FF6060"));
+			OnChatMessage.Broadcast(TEXT(""), TEXT("Could not open the shop."), TEXT("#FF6060"));
 		}
 		break;
 	case 0x0131: // ZC_STORE_ENTRY <dono>.L <titulo>.80B
@@ -133,15 +133,15 @@ void URagnarokNetworkSubsystem::HandleVendingPacket(const uint8* PacketData, int
 	case 0x0135: // ZC_PC_PURCHASE_RESULT_FROMMC <indice>.W <quantidade>.W <resultado>.B
 		if (PacketSize >= 7 && PacketData[6] != 0)
 		{
-			const TCHAR* Why = TEXT("A compra não foi feita.");
+			const TCHAR* Why = TEXT("The purchase was not made.");
 			switch (PacketData[6])
 			{
-			case 1: Why = TEXT("Zeny insuficiente."); break;
-			case 2: Why = TEXT("Peso acima do limite."); break;
-			case 4: Why = TEXT("Item esgotado na loja."); break;
-			case 5: Why = TEXT("Não é possível comprar durante uma troca."); break;
-			case 6: Why = TEXT("A loja mudou; a compra não foi feita."); break;
-			case 7: Why = TEXT("A loja não está mais vendendo."); break;
+			case 1: Why = TEXT("Not enough zeny."); break;
+			case 2: Why = TEXT("Weight above the limit."); break;
+			case 4: Why = TEXT("Item sold out in the shop."); break;
+			case 5: Why = TEXT("Cannot buy during a trade."); break;
+			case 6: Why = TEXT("The shop changed; the purchase was not made."); break;
+			case 7: Why = TEXT("The shop is no longer selling."); break;
 			default: break;
 			}
 			OnChatMessage.Broadcast(TEXT(""), Why, TEXT("#FF6060"));

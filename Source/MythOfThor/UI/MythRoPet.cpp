@@ -82,7 +82,7 @@ void UMythRoHUDWidget::TogglePetWindow()
 	}
 	if (!Net->HasPet())
 	{
-		AddChatLine(TEXT("Você não tem um mascote chocado."), FLinearColor(1.f, 0.85f, 0.4f));
+		AddChatLine(TEXT("You do not have a hatched pet."), FLinearColor(1.f, 0.85f, 0.4f));
 		return;
 	}
 	PetWindow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);

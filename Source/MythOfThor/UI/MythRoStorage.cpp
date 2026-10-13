@@ -42,9 +42,9 @@ namespace
 void UMythRoHUDWidget::BuildStorageWindow()
 {
 	const float H = StoreListY + StorageRowCount * StoreRowH + 40.f;
-	StorageWindow = MakeRoPanel(TEXT("Armazém"), FVector2D(StoreW, H), FVector2D(0.f, -20.f));
-	AddText(StorageWindow, StoreColA, 22.f, 8, StoreGray)->SetText(FText::FromString(TEXT("No armazém (clique: pega 1; Shift: 10)")));
-	AddText(StorageWindow, StoreColB, 22.f, 8, StoreGray)->SetText(FText::FromString(TEXT("Na mochila (clique: guarda 1; Shift: 10)")));
+	StorageWindow = MakeRoPanel(TEXT("Storage"), FVector2D(StoreW, H), FVector2D(0.f, -20.f));
+	AddText(StorageWindow, StoreColA, 22.f, 8, StoreGray)->SetText(FText::FromString(TEXT("In storage (click: take 1; Shift: 10)")));
+	AddText(StorageWindow, StoreColB, 22.f, 8, StoreGray)->SetText(FText::FromString(TEXT("In the backpack (click: store 1; Shift: 10)")));
 	for (int32 i = 0; i < StorageRowCount; ++i)
 	{
 		const float Y = StoreListY + i * StoreRowH;
@@ -119,7 +119,7 @@ void UMythRoHUDWidget::RefreshStorage()
 		if (BIcon) { BagIcons[i]->SetBrushFromTexture(BIcon); }
 		BagIcons[i]->SetVisibility(BIcon ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
 	}
-	StorageCountText->SetText(FText::FromString(FString::Printf(TEXT("%d / %d espaços usados"), Store.Num(), Net->GetStorageMax())));
+	StorageCountText->SetText(FText::FromString(FString::Printf(TEXT("%d / %d slots used"), Store.Num(), Net->GetStorageMax())));
 }
 
 void UMythRoHUDWidget::StorageMove(bool bToStorage, int32 Row, int32 Amount)

@@ -176,8 +176,8 @@ void UMythRoHUDWidget::RefreshHomun()
 		FString::Printf(TEXT("%s: %s"), *HomMsg(586), *Loyalty),
 		FString::Printf(TEXT("Atq: %d"), H.Atk),
 		FString::Printf(TEXT("Matq: %d"), H.Matk),
-		FString::Printf(TEXT("Precisão: %d"), H.Hit),
-		FString::Printf(TEXT("Crítico: %d"), H.Crit),
+		FString::Printf(TEXT("Accuracy: %d"), H.Hit),
+		FString::Printf(TEXT("Critical: %d"), H.Crit),
 		FString::Printf(TEXT("Def: %d"), H.Def),
 		FString::Printf(TEXT("Mdef: %d"), H.Mdef),
 		FString::Printf(TEXT("Esquiva: %d"), H.Flee),
@@ -201,7 +201,7 @@ void UMythRoHUDWidget::RefreshHomun()
 	}
 	// Habilidades
 	const TArray<FRoHomunSkill>& Skills = Net->GetHomunSkills();
-	HomunSkillHeader->SetText(FText::FromString(FString::Printf(TEXT("%s  (pontos: %d)"), *HomMsg(937), H.SkillPoints)));
+	HomunSkillHeader->SetText(FText::FromString(FString::Printf(TEXT("%s  (points: %d)"), *HomMsg(937), H.SkillPoints)));
 	for (int32 i = 0; i < HomunSkillRows; ++i)
 	{
 		const FRoHomunSkill* S = Skills.IsValidIndex(i) ? &Skills[i] : nullptr;
@@ -221,12 +221,12 @@ void UMythRoHUDWidget::RefreshHomun()
 		FString Name = FMythRoClientTables::SkillName(S->Id);
 		if (Name.IsEmpty())
 		{
-			Name = FString::Printf(TEXT("Habilidade %d"), S->Id);
+			Name = FString::Printf(TEXT("Skill %d"), S->Id);
 		}
 		const bool bPassive = S->Inf == 0;
 		HomunSkillNames[i]->SetText(FText::FromString(S->Level > 0
 			? FString::Printf(TEXT("%s  Nv %d%s"), *Name, S->Level, bPassive ? TEXT("  (passiva)") : *FString::Printf(TEXT("  (%d SP)"), S->Sp))
-			: FString::Printf(TEXT("%s  (não aprendida)"), *Name)));
+			: FString::Printf(TEXT("%s  (not learned)"), *Name)));
 		HomunSkillNames[i]->SetColorAndOpacity(FSlateColor(S->Level > 0 && !bPassive ? HomLink : HomGray));
 	}
 	SetTextButtonShown(HomunFeedBtn, true);

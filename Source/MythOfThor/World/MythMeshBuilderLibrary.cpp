@@ -62,7 +62,7 @@ bool UMythMeshBuilderLibrary::BuildStaticMeshFromTriangles(UStaticMesh* Mesh, co
 			const int32 V = CornerVertex[C];
 			if (!VertexIds.IsValidIndex(V))
 			{
-				UE_LOG(LogTemp, Error, TEXT("BuildStaticMeshFromTriangles: indice de vertice invalido %d"), V);
+				UE_LOG(LogTemp, Error, TEXT("BuildStaticMeshFromTriangles: invalid vertex index %d"), V);
 				return false;
 			}
 			const FVertexInstanceID VI = MD.CreateVertexInstance(VertexIds[V]);

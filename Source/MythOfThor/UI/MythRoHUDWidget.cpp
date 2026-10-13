@@ -429,7 +429,7 @@ void UMythRoHUDWidget::BuildBasicInfo()
 	BasicWindow = Win;
 	BasicBody = AddRounded(Win, ColWindow, ColWindowEdge, 0.f, 8.f, W, BasicInfoH - 8.f, 0.f, 7.f);
 	BasicBody->SetVisibility(ESlateVisibility::Visible); // o clique na janela nao atravessa para o jogo
-	AddTitleBar(Win, W, TEXT("Informações Básicas"));
+	AddTitleBar(Win, W, TEXT("Basic Information"));
 	BasicMiniButton = AddButtonEx(Win, TEXT("basic_interface/sys_mini_off.bmp"), TEXT("basic_interface/sys_mini_on.bmp"), TEXT("basic_interface/sys_mini_on.bmp"), W - 15.f, 3.f);
 	BasicDetailStart = Win->GetChildrenCount(); // daqui para baixo: detalhes que somem na versao recolhida
 
@@ -575,7 +575,7 @@ bool UMythRoHUDWidget::HandleBasicMenuClick(const FVector2D& ScreenPos)
 		else if (Name == TEXT("achievement")) { ToggleWindow(EMythRoWindow::Achievements); }
 		else if (Name == TEXT("keyboard")) { ToggleWindow(EMythRoWindow::Shortcuts); }
 		else if (Name == TEXT("bank")) { ToggleWindow(EMythRoWindow::Bank); }
-		else { AddChatLine(TEXT("Esta janela ainda não existe no Myth of Thor."), ColSystem); }
+		else { AddChatLine(TEXT("This window does not exist yet in Myth of Thor."), ColSystem); }
 		return true;
 	}
 	return false;
@@ -714,7 +714,7 @@ void UMythRoHUDWidget::BuildChat()
 	ChatThumb = AddColor(Win, FLinearColor(0.8f, 0.82f, 0.9f, 1.f), W - 13.f, 34.f, 10.f, 14.f);
 
 	ChatInput = WidgetTree->ConstructWidget<UEditableTextBox>();
-	ChatInput->SetHintText(FText::FromString(TEXT("Enter para falar  |  @comando")));
+	ChatInput->SetHintText(FText::FromString(TEXT("Enter to talk  |  @command")));
 	ChatInput->OnTextCommitted.AddDynamic(this, &UMythRoHUDWidget::OnChatCommitted);
 	if (UCanvasPanelSlot* S = Win->AddChildToCanvas(ChatInput))
 	{
@@ -822,7 +822,7 @@ void UMythRoHUDWidget::BuildAutoBattle()
 	StaminaGauge = MakeGauge(Win, TEXT("blue"), 72.f, 26.f, 92.f);
 	StaminaText = AddText(Win, 72.f, 36.f, 6, ColText);
 	UTextBlock* Hint = AddText(Win, 6.f, 52.f, 6, ColLabel);
-	Hint->SetText(FText::FromString(TEXT("Vigor diario: 3h  |  trava com peso >= 90%")));
+	Hint->SetText(FText::FromString(TEXT("Daily vigor: 3h  |  locks at weight >= 90%")));
 	MakeDraggable(Win, W, 17.f);
 	// O cliente do RO nao tem esta janela na tela: fica escondida ate a HUD nova dar um lugar para ela
 	Win->SetVisibility(ESlateVisibility::Collapsed);
@@ -900,13 +900,13 @@ void UMythRoHUDWidget::RefreshStats()
 	const FString Zeny = FText::AsNumber(NetStats ? NetStats->Zeny : 0LL).ToString();
 	if (NetStats && NetStats->MaxWeight > 0)
 	{
-		WeightZenyText->SetText(FText::FromString(FString::Printf(TEXT("Peso : %d / %d     Zeny : %s"), NetStats->Weight / 10, NetStats->MaxWeight / 10, *Zeny)));
+		WeightZenyText->SetText(FText::FromString(FString::Printf(TEXT("Weight : %d / %d     Zeny : %s"), NetStats->Weight / 10, NetStats->MaxWeight / 10, *Zeny)));
 		// Como o cliente: passou de 50% o peso fica vermelho (o servidor decide o efeito: regeneracao parada, 90% sem combate)
 		WeightZenyText->SetColorAndOpacity(FSlateColor(NetStats->Weight * 2 >= NetStats->MaxWeight ? FLinearColor(0.85f, 0.1f, 0.1f) : ColText));
 	}
 	else
 	{
-		WeightZenyText->SetText(FText::FromString(FString::Printf(TEXT("Peso : %.0f%%     Zeny : %s"), WeightPercent, *Zeny)));
+		WeightZenyText->SetText(FText::FromString(FString::Printf(TEXT("Weight : %.0f%%     Zeny : %s"), WeightPercent, *Zeny)));
 	}
 }
 
@@ -1064,10 +1064,10 @@ void UMythRoHUDWidget::SubmitChat(const FString& Msg)
 	if (Msg.StartsWith(TEXT("@")))
 	{
 		// Comandos de GM sao do servidor (regra: o cliente nao reimplementa): so funcionam com a rede ligada.
-		AddChatLine(FString::Printf(TEXT("%s  (comandos @ precisam da conexao com o servidor)"), *Msg), ColError);
+		AddChatLine(FString::Printf(TEXT("%s  (@ commands need the server connection)"), *Msg), ColError);
 		return;
 	}
-	const FString Name = Stats ? Stats->GetCharName() : TEXT("Voce");
+	const FString Name = Stats ? Stats->GetCharName() : TEXT("You");
 	AddChatLine(FString::Printf(TEXT("%s : %s"), *Name, *Msg), FLinearColor::White);
 }
 
@@ -1077,7 +1077,7 @@ void UMythRoHUDWidget::OnStatusClicked() { ToggleWindow(EMythRoWindow::Status); 
 void UMythRoHUDWidget::OnItemsClicked()  { ToggleWindow(EMythRoWindow::Items); }
 void UMythRoHUDWidget::OnEquipClicked()  { ToggleWindow(EMythRoWindow::Equip); }
 void UMythRoHUDWidget::OnSkillClicked()  { ToggleWindow(EMythRoWindow::Skills); }
-void UMythRoHUDWidget::OnOptionClicked() { AddChatLine(TEXT("Configuracoes: em construcao."), ColSystem); }
+void UMythRoHUDWidget::OnOptionClicked() { AddChatLine(TEXT("Settings: under construction."), ColSystem); }
 
 void UMythRoHUDWidget::OnMapClicked()
 {

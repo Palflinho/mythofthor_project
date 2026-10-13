@@ -27,7 +27,7 @@ namespace
 void UMythRoHUDWidget::BuildEmotionWindows()
 {
 	const float H = EmoGridY + 6 * EmoCell + 40.f;
-	EmotionWindow = MakeRoPanel(TEXT("Lista de emoções"), FVector2D(EmoW, H), FVector2D(-300.f, 0.f));
+	EmotionWindow = MakeRoPanel(TEXT("Emotion list"), FVector2D(EmoW, H), FVector2D(-300.f, 0.f));
 	for (int32 i = 0; i < EmotionCellCount; ++i)
 	{
 		const float X = EmoGridX + (i % 5) * EmoCell;
@@ -40,7 +40,7 @@ void UMythRoHUDWidget::BuildEmotionWindows()
 	EmotionPageText = AddText(EmotionWindow, EmoW * 0.5f - 12.f, H - 24.f, 9, EmoText);
 	EmotionNext = AddButtonHit(EmotionWindow, TEXT("next"), EmoW - 64.f, H - 28.f);
 
-	MacroWindow = MakeRoPanel(TEXT("Lista de atalhos"), FVector2D(340.f, 17.f + 10 * 20.f + 38.f), FVector2D(-300.f, 0.f));
+	MacroWindow = MakeRoPanel(TEXT("Shortcut list"), FVector2D(340.f, 17.f + 10 * 20.f + 38.f), FVector2D(-300.f, 0.f));
 	for (int32 i = 0; i < 10; ++i)
 	{
 		const float Y = 22.f + i * 20.f;

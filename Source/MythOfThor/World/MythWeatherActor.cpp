@@ -51,7 +51,7 @@ void AMythWeatherActor::BeginPlay()
 	SnowMaterial = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Weather/M_SnowFlake.M_SnowFlake"));
 	if (!RainMaterial || !SnowMaterial)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("MythWeather: materiais do clima ausentes; rode tools/ue_setup_weather.py"));
+		UE_LOG(LogTemp, Warning, TEXT("MythWeather: weather materials missing; run tools/ue_setup_weather.py"));
 	}
 	for (TActorIterator<AExponentialHeightFog> It(GetWorld()); It; ++It)
 	{

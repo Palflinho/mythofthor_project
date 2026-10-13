@@ -43,7 +43,7 @@ void UMythRoHUDWidget::BuildShopWindows()
 {
 	// Escolha comprar / vender / cancelar (UIChooseSellBuyWnd, 180 x 110)
 	const FVector2D DealSize(180.f, 17.f + 3 * 24.f + 14.f);
-	DealWindow = MakeRoPanel(TEXT("Loja"), DealSize, FVector2D(0.f, -60.f));
+	DealWindow = MakeRoPanel(TEXT("Shop"), DealSize, FVector2D(0.f, -60.f));
 	DealBuyLink = AddButtonHit(DealWindow, TEXT("buy"), 68.f, 26.f);
 	DealSellLink = AddButtonHit(DealWindow, TEXT("sell"), 68.f, 50.f);
 	DealCancelLink = AddButtonHit(DealWindow, TEXT("cancel"), 68.f, 74.f);
@@ -51,9 +51,9 @@ void UMythRoHUDWidget::BuildShopWindows()
 
 	// Vitrine (esquerda) e cesta (direita)
 	const float H = ShopListY + ShopRowCount * ShopRowH + 58.f;
-	ShopWindow = MakeRoPanel(TEXT("Loja"), FVector2D(ShopW, H), FVector2D(0.f, -20.f));
+	ShopWindow = MakeRoPanel(TEXT("Shop"), FVector2D(ShopW, H), FVector2D(0.f, -20.f));
 	ShopHeaderText = AddText(ShopWindow, 10.f, 22.f, 8, ShopGray);
-	AddText(ShopWindow, ShopBasketX, 22.f, 8, ShopGray)->SetText(FText::FromString(TEXT("Cesta (clique para tirar)")));
+	AddText(ShopWindow, ShopBasketX, 22.f, 8, ShopGray)->SetText(FText::FromString(TEXT("Basket (click to remove)")));
 	for (int32 i = 0; i < ShopRowCount; ++i)
 	{
 		const float Y = ShopListY + i * ShopRowH;
@@ -69,7 +69,7 @@ void UMythRoHUDWidget::BuildShopWindows()
 	}
 	ShopTotalText = AddText(ShopWindow, ShopBasketX, H - 50.f, 9, ShopText);
 	ShopHintText = AddText(ShopWindow, 10.f, H - 50.f, 7, ShopGray);
-	ShopConfirmLink = AddTextButton(ShopWindow, TEXT("Confirmar"), ShopBasketX, H - 32.f, 84.f);
+	ShopConfirmLink = AddTextButton(ShopWindow, TEXT("Confirm"), ShopBasketX, H - 32.f, 84.f);
 	ShopCancelLink = AddButtonHit(ShopWindow, TEXT("cancel"), ShopBasketX + 100.f, H - 32.f);
 	ShopWindow->SetVisibility(ESlateVisibility::Collapsed);
 }
@@ -138,8 +138,8 @@ void UMythRoHUDWidget::RefreshShop()
 	{
 		return;
 	}
-	ShopHeaderText->SetText(FText::FromString(bShopSell ? TEXT("Seus itens (clique para vender 1; Shift: 10)") : TEXT("À venda (clique para comprar 1; Shift: 10)")));
-	ShopHintText->SetText(FText::FromString(ShopRows.Num() > ShopRowCount ? TEXT("Roda do mouse: rolar a lista") : TEXT("")));
+	ShopHeaderText->SetText(FText::FromString(bShopSell ? TEXT("Your items (click to sell 1; Shift: 10)") : TEXT("For sale (click to buy 1; Shift: 10)")));
+	ShopHintText->SetText(FText::FromString(ShopRows.Num() > ShopRowCount ? TEXT("Mouse wheel: scroll the list") : TEXT("")));
 	int64 Total = 0;
 	TArray<int32> BasketOrder;
 	ShopBasket.GetKeys(BasketOrder);
@@ -184,8 +184,8 @@ void UMythRoHUDWidget::RefreshShop()
 	const URagnarokNetworkSubsystem* Net = GetNet();
 	const int64 Have = Net ? Net->GetPlayerStats().Zeny : 0;
 	ShopTotalText->SetText(FText::FromString(bShopSell
-		? FString::Printf(TEXT("Você recebe: %s"), *Zeny(Total))
-		: FString::Printf(TEXT("Total: %s   (você tem %s)"), *Zeny(Total), *Zeny(Have))));
+		? FString::Printf(TEXT("You receive: %s"), *Zeny(Total))
+		: FString::Printf(TEXT("Total: %s   (you have %s)"), *Zeny(Total), *Zeny(Have))));
 	ShopConfirmLink->SetText(FText::FromString(bShopSell ? TEXT("Vender") : TEXT("Comprar")));
 }
 
@@ -267,19 +267,19 @@ void UMythRoHUDWidget::ShopResult(bool bSell, int32 Result)
 	if (bSell)
 	{
 		bOk = Result == 0;
-		Msg = bOk ? TEXT("Venda concluída.") : TEXT("A venda falhou.");
+		Msg = bOk ? TEXT("Sale completed.") : TEXT("A venda falhou.");
 	}
 	else
 	{
 		bOk = Result == 0 || Result == 12;
 		switch (Result)
 		{
-		case 0: Msg = TEXT("Compra concluída."); break;
-		case 1: Msg = TEXT("Você não tem zeny suficiente."); break;
-		case 2: Msg = TEXT("Você está com peso demais."); break;
-		case 3: Msg = TEXT("Você já carrega itens demais."); break;
-		case 9: Msg = TEXT("Quantidade acima do que se pode comprar."); break;
-		case 13: Msg = TEXT("O item está esgotado."); break;
+		case 0: Msg = TEXT("Purchase completed."); break;
+		case 1: Msg = TEXT("You do not have enough zeny."); break;
+		case 2: Msg = TEXT("You are carrying too much weight."); break;
+		case 3: Msg = TEXT("You are already carrying too many items."); break;
+		case 9: Msg = TEXT("Quantity above what can be bought."); break;
+		case 13: Msg = TEXT("The item is sold out."); break;
 		default: Msg = FString::Printf(TEXT("A compra falhou (%d)."), Result); break;
 		}
 	}

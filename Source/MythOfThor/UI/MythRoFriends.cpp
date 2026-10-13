@@ -25,7 +25,7 @@ namespace
 void UMythRoHUDWidget::BuildFriendsWindow()
 {
 	const float H = FrListY + FriendRowCount * FrRowH + 36.f;
-	FriendsWindow = MakeRoPanel(TEXT("Amigos"), FVector2D(FrW, H), FVector2D(-330.f, 40.f));
+	FriendsWindow = MakeRoPanel(TEXT("Friends"), FVector2D(FrW, H), FVector2D(-330.f, 40.f));
 	AddFriendPartySwitch(FriendsWindow, H, false);
 	FriendsTitle = AddText(FriendsWindow, 10.f, 22.f, 8, FrGray);
 	for (int32 i = 0; i < FriendRowCount; ++i)
@@ -34,12 +34,12 @@ void UMythRoHUDWidget::BuildFriendsWindow()
 		FriendNames.Add(AddText(FriendsWindow, 12.f, Y, 8, FrText));
 		FriendStates.Add(AddText(FriendsWindow, 150.f, Y, 7, FrGray));
 		UTextBlock* Del = AddText(FriendsWindow, FrW - 62.f, Y, 7, FrLink);
-		Del->SetText(FText::FromString(TEXT("Remover")));
+		Del->SetText(FText::FromString(TEXT("Remove")));
 		FriendDelete.Add(Del);
 	}
-	AddText(FriendsWindow, 12.f, H - 40.f, 7, FrGray)->SetText(FText::FromString(TEXT("Para adicionar: /friend Nome ou botão direito no jogador.")));
+	AddText(FriendsWindow, 12.f, H - 40.f, 7, FrGray)->SetText(FText::FromString(TEXT("To add: /friend Name or right-click the player.")));
 
-	FriendAskWindow = MakeRoPanel(TEXT("Pedido de amizade"), FVector2D(300.f, 92.f), FVector2D(0.f, -180.f));
+	FriendAskWindow = MakeRoPanel(TEXT("Friend request"), FVector2D(300.f, 92.f), FVector2D(0.f, -180.f));
 	FriendAskText = AddText(FriendAskWindow, 10.f, 26.f, 9, FrText);
 	FriendAcceptLink = AddButtonHit(FriendAskWindow, TEXT("agree"), 50.f, 58.f);
 	FriendDeclineLink = AddButtonHit(FriendAskWindow, TEXT("disagree"), 170.f, 58.f);
@@ -52,8 +52,8 @@ void UMythRoHUDWidget::AddFriendPartySwitch(UCanvasPanel* Win, float H, bool bPa
 	UTexture2D* Off = FMythRoUITextures::Get(TEXT("achievement_re/btn_radio_off.bmp"));
 	UImage* Friend = AddImage(Win, bParty ? Off : On, 10.f, H - 20.f, 12.f, 12.f);
 	UImage* Party = AddImage(Win, bParty ? On : Off, 90.f, H - 20.f, 12.f, 12.f);
-	AddText(Win, 26.f, H - 21.f, 7, FrText)->SetText(FText::FromString(TEXT("Amigos")));
-	AddText(Win, 106.f, H - 21.f, 7, FrText)->SetText(FText::FromString(TEXT("Grupo")));
+	AddText(Win, 26.f, H - 21.f, 7, FrText)->SetText(FText::FromString(TEXT("Friends")));
+	AddText(Win, 106.f, H - 21.f, 7, FrText)->SetText(FText::FromString(TEXT("Party")));
 	Friend->SetVisibility(ESlateVisibility::Visible);
 	Party->SetVisibility(ESlateVisibility::Visible);
 	(bParty ? PartySwitchFriend : FriendsSwitchParty) = bParty ? Friend : Party;
@@ -104,7 +104,7 @@ void UMythRoHUDWidget::RefreshFriends()
 	const TArray<FRoFriend>& List = Net->GetFriends();
 	int32 Online = 0;
 	for (const FRoFriend& F : List) { Online += F.bOnline ? 1 : 0; }
-	FriendsTitle->SetText(FText::FromString(FString::Printf(TEXT("%d amigos, %d online"), List.Num(), Online)));
+	FriendsTitle->SetText(FText::FromString(FString::Printf(TEXT("%d friends, %d online"), List.Num(), Online)));
 	for (int32 i = 0; i < FriendRowCount; ++i)
 	{
 		const FRoFriend* F = List.IsValidIndex(i) ? &List[i] : nullptr;
@@ -131,7 +131,7 @@ void UMythRoHUDWidget::OnFriendRequestReceived(int32 AccountId, int32 CharId, co
 	}
 	PendingFriendAid = AccountId;
 	PendingFriendCid = CharId;
-	FriendAskText->SetText(FText::FromString(FString::Printf(TEXT("%s quer ser seu amigo."), *Name)));
+	FriendAskText->SetText(FText::FromString(FString::Printf(TEXT("%s wants to be your friend."), *Name)));
 	FriendAskWindow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 	OpenOrder.Remove(FriendAskWindow);
 	OpenOrder.Add(FriendAskWindow);

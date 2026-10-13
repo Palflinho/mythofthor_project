@@ -38,7 +38,7 @@ bool AMythPlayerController::RunSlashCommand(const FString& Command, const FStrin
 			{
 				Net->SendGlobalMessage(Gm);
 			}
-			Say(TEXT("Personagem reiniciado: Aprendiz 1/1 (comandos de GM enviados)."));
+			Say(TEXT("Character reset: Novice 1/1 (GM commands sent)."));
 		}
 		return true;
 	}
@@ -60,12 +60,12 @@ bool AMythPlayerController::RunSlashCommand(const FString& Command, const FStrin
 	if (Cmd == TEXT("noctrl") || Cmd == TEXT("nc"))
 	{
 		bContinuousAttack = !bContinuousAttack;
-		Say(bContinuousAttack ? TEXT("Ataque contínuo: ligado.") : TEXT("Ataque contínuo: desligado (um golpe por clique)."));
+		Say(bContinuousAttack ? TEXT("Continuous attack: on.") : TEXT("Continuous attack: off (one hit per click)."));
 		return true;
 	}
 	if (Cmd == TEXT("noshift") || Cmd == TEXT("ns"))
 	{
-		Say(TEXT("/noshift: as magias de suporte já podem ser lançadas sem segurar Shift."));
+		Say(TEXT("/noshift: support spells can already be cast without holding Shift."));
 		return true;
 	}
 	if (Cmd == TEXT("doridori"))
@@ -91,13 +91,13 @@ bool AMythPlayerController::RunSlashCommand(const FString& Command, const FStrin
 	{
 		// /aura alterna entre simplificada (1) e normal (2)
 		AMythAura99::SetMode(AMythAura99::GetMode() == 2 ? 1 : 2);
-		Say(AMythAura99::GetMode() == 2 ? TEXT("O efeito de aura está normal.") : TEXT("O efeito de aura está reduzido."));
+		Say(AMythAura99::GetMode() == 2 ? TEXT("The aura effect is normal.") : TEXT("The aura effect is reduced."));
 		return true;
 	}
 	if (Cmd == TEXT("aura2"))
 	{
 		AMythAura99::SetMode(AMythAura99::GetMode() == 0 ? 2 : 0);
-		Say(AMythAura99::GetMode() == 0 ? TEXT("O efeito de aura está desligado.") : TEXT("O efeito de aura está ligado."));
+		Say(AMythAura99::GetMode() == 0 ? TEXT("The aura effect is off.") : TEXT("The aura effect is on."));
 		return true;
 	}
 	if (Cmd == TEXT("sound") || Cmd == TEXT("bgm"))
@@ -110,7 +110,7 @@ bool AMythPlayerController::RunSlashCommand(const FString& Command, const FStrin
 		float& Current = bSound ? Effects : Music;
 		if (Current > 0.f) { Saved = Current; Current = 0.f; } else { Current = Saved > 0.f ? Saved : 1.f; }
 		UMythRoSound::SetVolumes(Music, Effects);
-		Say(FString::Printf(TEXT("%s: %s."), bSound ? TEXT("Efeitos sonoros") : TEXT("Música"), Current > 0.f ? TEXT("ligados") : TEXT("desligados")));
+		Say(FString::Printf(TEXT("%s: %s."), bSound ? TEXT("Efeitos sonoros") : TEXT("Music"), Current > 0.f ? TEXT("ligados") : TEXT("desligados")));
 		return true;
 	}
 	return false;

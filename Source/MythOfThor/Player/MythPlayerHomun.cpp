@@ -45,7 +45,7 @@ void AMythPlayerController::OnHotkeyHomunStandby()
 	Net->SendHomunToMaster();
 	if (HudWidget)
 	{
-		HudWidget->AddChatLine(bHomunStandby ? TEXT("Homunculus: aguardando (Alt+T de novo volta a ajudar).") : TEXT("Homunculus: ajudando no combate."),
+		HudWidget->AddChatLine(bHomunStandby ? TEXT("Homunculus: waiting (Alt+T again to help again).") : TEXT("Homunculus: ajudando no combate."),
 			FLinearColor(0.6f, 0.8f, 1.f));
 	}
 }
@@ -159,7 +159,7 @@ void AMythPlayerController::MythSkillOnNearest(int32 SkillId, int32 Level)
 			Best = *It;
 		}
 	}
-	UE_LOG(LogTemp, Log, TEXT("MythSkillOnNearest: skill %d nivel %d alvo %s a %.1f celulas"), SkillId, Level, Best ? *Best->MonsterName : TEXT("nenhum"), Best ? FVector::Dist2D(Best->GetActorLocation(), GetPawn()->GetActorLocation()) / 50.f : 0.f);
+	UE_LOG(LogTemp, Log, TEXT("MythSkillOnNearest: skill %d level %d target %s at %.1f cells"), SkillId, Level, Best ? *Best->MonsterName : TEXT("none"), Best ? FVector::Dist2D(Best->GetActorLocation(), GetPawn()->GetActorLocation()) / 50.f : 0.f);
 	if (Best)
 	{
 		Net->UseSkill(SkillId, Level, Best->NetID);

@@ -66,12 +66,12 @@ void UMythRoHUDWidget::BuildVendingWindows()
 
 	// Abrir loja
 	const float SetupH = VendListY + VendRows * VendRowH + 40.f;
-	VendSetupWindow = MakeRoPanel(TEXT("Abrir loja"), FVector2D(VendW, SetupH), FVector2D(0.f, -40.f));
-	VendTitleBox = Box(VendSetupWindow, 8.f, 22.f, 250.f, TEXT("Nome da loja"));
-	VendPriceBox = Box(VendSetupWindow, 270.f, 22.f, 120.f, TEXT("Preço (z)"));
+	VendSetupWindow = MakeRoPanel(TEXT("Open shop"), FVector2D(VendW, SetupH), FVector2D(0.f, -40.f));
+	VendTitleBox = Box(VendSetupWindow, 8.f, 22.f, 250.f, TEXT("Shop name"));
+	VendPriceBox = Box(VendSetupWindow, 270.f, 22.f, 120.f, TEXT("Price (z)"));
 	VendAmountBox = Box(VendSetupWindow, 398.f, 22.f, 114.f, TEXT("Qtd. (vazio: tudo)"));
-	AddText(VendSetupWindow, 8.f, 44.f, 8, VendGray)->SetText(FText::FromString(TEXT("No carrinho (clique: põe na loja)")));
-	AddText(VendSetupWindow, 266.f, 44.f, 8, VendGray)->SetText(FText::FromString(TEXT("Na loja (clique: tira)")));
+	AddText(VendSetupWindow, 8.f, 44.f, 8, VendGray)->SetText(FText::FromString(TEXT("In the cart (click: put in the shop)")));
+	AddText(VendSetupWindow, 266.f, 44.f, 8, VendGray)->SetText(FText::FromString(TEXT("In the shop (click: remove)")));
 	for (int32 i = 0; i < VendRows; ++i)
 	{
 		const float Y = VendListY + i * VendRowH;
@@ -86,22 +86,22 @@ void UMythRoHUDWidget::BuildVendingWindows()
 		}
 	}
 	VendSetupInfo = AddText(VendSetupWindow, 8.f, SetupH - 24.f, 8, VendGray);
-	VendOpenBtn = AddTextButton(VendSetupWindow, TEXT("Abrir"), VendW - 150.f, SetupH - 28.f, 64.f);
-	VendCancelBtn = AddTextButton(VendSetupWindow, TEXT("Cancelar"), VendW - 80.f, SetupH - 28.f, 72.f);
+	VendOpenBtn = AddTextButton(VendSetupWindow, TEXT("Open"), VendW - 150.f, SetupH - 28.f, 64.f);
+	VendCancelBtn = AddTextButton(VendSetupWindow, TEXT("Cancel"), VendW - 80.f, SetupH - 28.f, 72.f);
 
 	// Minha loja aberta
 	const float ShopH = 40.f + VendRows * VendRowH + 36.f;
-	VendShopWindow = MakeRoPanel(TEXT("Minha loja"), FVector2D(300.f, ShopH), FVector2D(-300.f, 0.f));
+	VendShopWindow = MakeRoPanel(TEXT("My shop"), FVector2D(300.f, ShopH), FVector2D(-300.f, 0.f));
 	for (int32 i = 0; i < VendRows; ++i)
 	{
 		VendMyNames.Add(AddText(VendShopWindow, 8.f, 24.f + i * VendRowH, 8, VendText));
 	}
-	VendCloseShopBtn = AddTextButton(VendShopWindow, TEXT("Fechar loja"), 300.f - 98.f, ShopH - 28.f, 90.f);
+	VendCloseShopBtn = AddTextButton(VendShopWindow, TEXT("Close shop"), 300.f - 98.f, ShopH - 28.f, 90.f);
 
 	// Loja de outro jogador
 	const float BuyH = 40.f + VendRows * VendRowH + 40.f;
-	VendBuyWindow = MakeRoPanel(TEXT("Loja"), FVector2D(380.f, BuyH), FVector2D(0.f, -40.f));
-	AddText(VendBuyWindow, 8.f, 22.f, 8, VendGray)->SetText(FText::FromString(TEXT("Clique: +1 (Shift: +10); clique com Ctrl: zera")));
+	VendBuyWindow = MakeRoPanel(TEXT("Shop"), FVector2D(380.f, BuyH), FVector2D(0.f, -40.f));
+	AddText(VendBuyWindow, 8.f, 22.f, 8, VendGray)->SetText(FText::FromString(TEXT("Click: +1 (Shift: +10); Ctrl+click: reset")));
 	for (int32 i = 0; i < VendRows; ++i)
 	{
 		const float Y = 40.f + i * VendRowH;
@@ -112,7 +112,7 @@ void UMythRoHUDWidget::BuildVendingWindows()
 	}
 	VendBuyTotal = AddText(VendBuyWindow, 8.f, BuyH - 24.f, 8, VendText);
 	VendBuyBtn = AddTextButton(VendBuyWindow, TEXT("Comprar"), 380.f - 160.f, BuyH - 28.f, 72.f);
-	VendBuyCancelBtn = AddTextButton(VendBuyWindow, TEXT("Cancelar"), 380.f - 82.f, BuyH - 28.f, 74.f);
+	VendBuyCancelBtn = AddTextButton(VendBuyWindow, TEXT("Cancel"), 380.f - 82.f, BuyH - 28.f, 74.f);
 }
 
 void UMythRoHUDWidget::OnVendingEvent(uint8 Event)
@@ -171,7 +171,7 @@ void UMythRoHUDWidget::RefreshVending()
 			VendShopHit[i]->SetVisibility(P ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
 			VendShopNames[i]->SetText(P ? FText::FromString(FString::Printf(TEXT("%s  x %d  -  %s z"), PlannedItem ? *VendItemName(PlannedItem->ItemID, PlannedItem->Refine) : TEXT("?"), P->Y, *VendZeny(P->Z))) : FText::GetEmpty());
 		}
-		VendSetupInfo->SetText(FText::FromString(FString::Printf(TEXT("Itens na loja: %d / %d"), VendPlanned.Num(), Net->GetVendMaxItems())));
+		VendSetupInfo->SetText(FText::FromString(FString::Printf(TEXT("Items in the shop: %d / %d"), VendPlanned.Num(), Net->GetVendMaxItems())));
 	}
 	if (VendShopWindow->IsVisible())
 	{
@@ -220,7 +220,7 @@ bool UMythRoHUDWidget::HandleVendingClick(const FVector2D& ScreenPos)
 			const FString Title = VendTitleBox->GetText().ToString().TrimStartAndEnd();
 			if (Title.IsEmpty() || VendPlanned.Num() == 0)
 			{
-				AddChatLine(TEXT("Dê um nome à loja e ponha pelo menos um item."), FLinearColor(1.f, 0.45f, 0.45f));
+				AddChatLine(TEXT("Give the shop a name and put in at least one item."), FLinearColor(1.f, 0.45f, 0.45f));
 				return true;
 			}
 			Net->SendOpenVending(Title, VendPlanned, true);
@@ -241,7 +241,7 @@ bool UMythRoHUDWidget::HandleVendingClick(const FVector2D& ScreenPos)
 				const int32 Wanted = FCString::Atoi(*VendAmountBox->GetText().ToString());
 				if (Price <= 0)
 				{
-					AddChatLine(TEXT("Digite o preço antes de pôr o item na loja."), FLinearColor(1.f, 0.45f, 0.45f));
+					AddChatLine(TEXT("Type the price before putting the item in the shop."), FLinearColor(1.f, 0.45f, 0.45f));
 					return true;
 				}
 				if (VendPlanned.Num() >= Net->GetVendMaxItems() || VendPlanned.ContainsByPredicate([&](const FIntVector& P) { return P.X == Cart[i].Index; }))

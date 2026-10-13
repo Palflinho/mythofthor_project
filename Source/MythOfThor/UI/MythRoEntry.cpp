@@ -67,7 +67,7 @@ void UMythRoHUDWidget::BuildEntryScreens()
 	UTextBlock* Foot = WidgetTree->ConstructWidget<UTextBlock>();
 	Foot->SetFont(FMythRoUITextures::RoFont(FMath::RoundToInt(8 * UIScale), false));
 	Foot->SetColorAndOpacity(FSlateColor(FLinearColor(0.55f, 0.6f, 0.75f, 1.f)));
-	Foot->SetText(FText::FromString(TEXT("Projeto de fãs, sem fins lucrativos. Ragnarok Online © Gravity Co., Ltd. / Lee MyoungJin.")));
+	Foot->SetText(FText::FromString(TEXT("Fan project, non-profit. Ragnarok Online © Gravity Co., Ltd. / Lee MyoungJin.")));
 	if (UCanvasPanelSlot* S = EntryBackdrop->AddChildToCanvas(Foot))
 	{
 		S->SetAnchors(FAnchors(0.5f, 0.97f));
@@ -87,8 +87,8 @@ void UMythRoHUDWidget::BuildEntryScreens()
 			S->SetSize(Size * UIScale);
 		}
 		AddRounded(EntryLoginPanel, FLinearColor(0.965f, 0.965f, 0.98f, 1.f), FLinearColor::Transparent, 0.f, 9.f, Size.X, Size.Y - 9.f, 0.f, 7.f)->SetVisibility(ESlateVisibility::Visible);
-		AddTitleBar(EntryLoginPanel, Size.X, TEXT("Entrar"));
-		AddText(EntryLoginPanel, 18.f, 30.f, 9, EnText)->SetText(FText::FromString(TEXT("Usuário")));
+		AddTitleBar(EntryLoginPanel, Size.X, TEXT("Login"));
+		AddText(EntryLoginPanel, 18.f, 30.f, 9, EnText)->SetText(FText::FromString(TEXT("Username")));
 		AddText(EntryLoginPanel, 18.f, 66.f, 9, EnText)->SetText(FText::FromString(TEXT("Senha")));
 		EntryUserBox = WidgetTree->ConstructWidget<UEditableTextBox>();
 		EntryUserBox->OnTextCommitted.AddDynamic(this, &UMythRoHUDWidget::OnEntryCommitted);
@@ -106,11 +106,11 @@ void UMythRoHUDWidget::BuildEntryScreens()
 			S->SetSize(FVector2D(Size.X - 36.f, 20.f) * UIScale);
 		}
 		EntryStatus = AddText(EntryLoginPanel, 18.f, 108.f, 8, EnGray);
-		AddText(EntryLoginPanel, 18.f, 122.f, 7, EnGray)->SetText(FText::FromString(TEXT("Conta nova: usuário terminando em _M ou _F (se o servidor permitir).")));
+		AddText(EntryLoginPanel, 18.f, 122.f, 7, EnGray)->SetText(FText::FromString(TEXT("New account: username ending in _M or _F (if the server allows).")));
 		EntryLoginLink = AddButtonHit(EntryLoginPanel, TEXT("connect"), 60.f, 144.f);
-		EntryLoginLink->SetText(FText::FromString(TEXT("Entrar")));
+		EntryLoginLink->SetText(FText::FromString(TEXT("Login")));
 		EntryQuitLink = AddButtonHit(EntryLoginPanel, TEXT("exit"), 210.f, 144.f);
-		EntryQuitLink->SetText(FText::FromString(TEXT("Sair")));
+		EntryQuitLink->SetText(FText::FromString(TEXT("Exit")));
 	}
 
 	// ---- Escolha de personagem (print 02): cartoes img_slot_* do cliente em grade e o painel de dados do personagem a direita
@@ -147,7 +147,7 @@ void UMythRoHUDWidget::BuildEntryScreens()
 		EntryInfoTitle = AddText(EntryCharPanel, IX + 10.f, 10.f, 11, EnLink);
 		for (int32 r = 0; r < 6; ++r)
 		{
-			static const TCHAR* Names[6] = { TEXT("Classe"), TEXT("Nível base"), TEXT("Nível de classe"), TEXT("PV"), TEXT("PS"), TEXT("") };
+			static const TCHAR* Names[6] = { TEXT("Class"), TEXT("Base level"), TEXT("Job level"), TEXT("PV"), TEXT("PS"), TEXT("") };
 			AddText(EntryCharPanel, IX + 10.f, 40.f + r * 22.f, 8, EnGray)->SetText(FText::FromString(Names[r]));
 			EntryInfoValues.Add(AddText(EntryCharPanel, IX + 90.f, 40.f + r * 22.f, 8, EnText));
 		}
@@ -169,8 +169,8 @@ void UMythRoHUDWidget::BuildEntryScreens()
 			S->SetSize(Size * UIScale);
 		}
 		AddRounded(EntryCreatePanel, FLinearColor(0.965f, 0.965f, 0.98f, 1.f), FLinearColor::Transparent, 0.f, 9.f, Size.X, Size.Y - 9.f, 0.f, 7.f)->SetVisibility(ESlateVisibility::Visible);
-		AddTitleBar(EntryCreatePanel, Size.X, TEXT("Criar personagem"));
-		AddText(EntryCreatePanel, 18.f, 30.f, 9, EnText)->SetText(FText::FromString(TEXT("Nome")));
+		AddTitleBar(EntryCreatePanel, Size.X, TEXT("Create character"));
+		AddText(EntryCreatePanel, 18.f, 30.f, 9, EnText)->SetText(FText::FromString(TEXT("Name")));
 		EntryNameBox = WidgetTree->ConstructWidget<UEditableTextBox>();
 		EntryNameBox->OnTextCommitted.AddDynamic(this, &UMythRoHUDWidget::OnEntryCommitted);
 		if (UCanvasPanelSlot* S = EntryCreatePanel->AddChildToCanvas(EntryNameBox))
@@ -184,18 +184,18 @@ void UMythRoHUDWidget::BuildEntryScreens()
 		EntryHairText = AddText(EntryCreatePanel, 148.f, 78.f, 9, EnText);
 		EntryHairRight = AddText(EntryCreatePanel, 190.f, 78.f, 10, EnLink);
 		EntryHairRight->SetText(FText::FromString(TEXT("▶")));
-		AddText(EntryCreatePanel, 18.f, 104.f, 9, EnText)->SetText(FText::FromString(TEXT("Cor do cabelo")));
+		AddText(EntryCreatePanel, 18.f, 104.f, 9, EnText)->SetText(FText::FromString(TEXT("Hair color")));
 		EntryColorLeft = AddText(EntryCreatePanel, 120.f, 104.f, 10, EnLink);
 		EntryColorLeft->SetText(FText::FromString(TEXT("◀")));
 		EntryColorText = AddText(EntryCreatePanel, 148.f, 104.f, 9, EnText);
 		EntryColorRight = AddText(EntryCreatePanel, 190.f, 104.f, 10, EnLink);
 		EntryColorRight->SetText(FText::FromString(TEXT("▶")));
-		AddText(EntryCreatePanel, 18.f, 130.f, 8, EnGray)->SetText(FText::FromString(TEXT("Todo personagem começa como Aprendiz.")));
+		AddText(EntryCreatePanel, 18.f, 130.f, 8, EnGray)->SetText(FText::FromString(TEXT("Every character starts as a Novice.")));
 		EntryCreateStatus = AddText(EntryCreatePanel, 18.f, 148.f, 8, EnError);
 		EntryDoCreateLink = AddButtonHit(EntryCreatePanel, TEXT("make"), 60.f, 168.f);
-		EntryDoCreateLink->SetText(FText::FromString(TEXT("Criar")));
+		EntryDoCreateLink->SetText(FText::FromString(TEXT("Create")));
 		EntryCancelCreateLink = AddButtonHit(EntryCreatePanel, TEXT("cancel"), 210.f, 168.f);
-		EntryCancelCreateLink->SetText(FText::FromString(TEXT("Cancelar")));
+		EntryCancelCreateLink->SetText(FText::FromString(TEXT("Cancel")));
 	}
 }
 
@@ -258,7 +258,7 @@ void UMythRoHUDWidget::EntryLoginFailed(const FString& Message)
 {
 	if (EntryState != 0)
 	{
-		ShowEntryLogin(Message.IsEmpty() ? FString(TEXT("Usuário ou senha inválidos.")) : Message);
+		ShowEntryLogin(Message.IsEmpty() ? FString(TEXT("Invalid username or password.")) : Message);
 	}
 }
 
@@ -273,7 +273,7 @@ void UMythRoHUDWidget::SubmitEntryLogin()
 	const FString Pass = EntryPassBox->GetText().ToString();
 	if (User.IsEmpty() || Pass.IsEmpty())
 	{
-		EntryStatus->SetText(FText::FromString(TEXT("Digite o usuário e a senha.")));
+		EntryStatus->SetText(FText::FromString(TEXT("Enter the username and password.")));
 		EntryStatus->SetColorAndOpacity(FSlateColor(EnError));
 		return;
 	}
@@ -288,7 +288,7 @@ void UMythRoHUDWidget::SubmitEntryLogin()
 	EntryStatus->SetColorAndOpacity(FSlateColor(EnGray));
 	if (!Net->ConnectAndLogin(Host, User, Pass))
 	{
-		ShowEntryLogin(TEXT("Não foi possível conectar ao servidor."));
+		ShowEntryLogin(TEXT("Could not connect to the server."));
 	}
 }
 
@@ -353,7 +353,7 @@ void UMythRoHUDWidget::RefreshEntryCharacters()
 	{
 		EntryInfoValues[r]->SetText(FText::FromString(Values[r]));
 	}
-	EntryCharStatus->SetText(FText::FromString(Sel ? FString() : FString(TEXT("Escolha um personagem, ou um espaço com + para criar."))));
+	EntryCharStatus->SetText(FText::FromString(Sel ? FString() : FString(TEXT("Choose a character, or a slot with + to create one."))));
 }
 
 void UMythRoHUDWidget::ShowEntryCreate(int32 SlotIndex)
@@ -406,7 +406,7 @@ void UMythRoHUDWidget::OnEntryCommitted(const FText& Text, ETextCommit::Type Com
 			const FString Name = EntryNameBox->GetText().ToString().TrimStartAndEnd();
 			if (Name.Len() < 4)
 			{
-				EntryCreateStatus->SetText(FText::FromString(TEXT("O nome precisa ter pelo menos 4 letras.")));
+				EntryCreateStatus->SetText(FText::FromString(TEXT("The name needs at least 4 letters.")));
 			}
 			else
 			{

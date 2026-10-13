@@ -37,7 +37,7 @@ void URagnarokNetworkSubsystem::HandlePetPacket(const uint8* PacketData, int32 P
 		if (PacketSize >= 3)
 		{
 			bCapturing = false;
-			Say(PacketData[2] ? TEXT("Captura bem-sucedida! O ovo do mascote está na mochila.") : TEXT("A captura falhou."),
+			Say(PacketData[2] ? TEXT("Capture successful! The pet egg is in your backpack.") : TEXT("A captura falhou."),
 				PacketData[2] ? TEXT("#80FF80") : TEXT("#FF8080"));
 		}
 		break;

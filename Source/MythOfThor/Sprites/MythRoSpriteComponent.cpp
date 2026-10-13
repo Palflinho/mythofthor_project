@@ -429,7 +429,7 @@ int32 UMythRoSpriteComponent::WeaponTypeOf(int32 Weapon)
 		if (!Warned.Contains(Weapon))
 		{
 			Warned.Add(Weapon);
-			UE_LOG(LogTemp, Error, TEXT("MythWeapon: arma/item %d nao esta em Config/weapon_types.json (tools/gen_weapon_types.py); sem o tipo o sprite da arma nao e desenhado. Regenere a tabela com o item_db do rAthena."), Weapon);
+			UE_LOG(LogTemp, Error, TEXT("MythWeapon: weapon/item %d is not in Config/weapon_types.json (tools/gen_weapon_types.py); without the type the weapon sprite is not drawn. Regenerate the table from the rAthena item_db."), Weapon);
 		}
 		return 0;
 	}
@@ -524,7 +524,7 @@ void UMythRoSpriteComponent::ReloadSprites()
 		Head = FMythRoSpriteSource();
 		if (!LoadSource(Body, Base + TEXT(".spr"), Base + TEXT(".act"), FString()))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("MythRoSprite: falha ao carregar o monstro '%s' (raiz '%s')."), *MonsterSpriteName, *Root);
+			UE_LOG(LogTemp, Warning, TEXT("MythRoSprite: failed to load the monster '%s' (root '%s')."), *MonsterSpriteName, *Root);
 		}
 		return;
 	}
@@ -543,7 +543,7 @@ void UMythRoSpriteComponent::ReloadSprites()
 	LoadEquipment(Root, Sex);
 	if (!bBody || !bHead)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("MythRoSprite: falha ao carregar sprites (raiz '%s'). Corpo=%d Cabeca=%d. Configure [Myth] AssetsRoot no DefaultGame.ini."),
+		UE_LOG(LogTemp, Warning, TEXT("MythRoSprite: failed to load sprites (root '%s'). Body=%d Head=%d. Set [Myth] AssetsRoot in DefaultGame.ini."),
 			*Root, bBody, bHead);
 	}
 }
@@ -559,11 +559,11 @@ void UMythRoSpriteComponent::LoadEquipment(const FString& Root, const FString& S
 		if (!Base.IsEmpty() && FPaths::FileExists(Base + TEXT(".spr")))
 		{
 			const bool bOk = LoadSource(Source, Base + TEXT(".spr"), Base + TEXT(".act"), FString());
-			UE_LOG(LogTemp, Verbose, TEXT("MythRoSprite: equipamento %s: %s (%d acoes)"), bOk ? TEXT("ok") : TEXT("falhou"), *Base, Source.Act.Actions.Num());
+			UE_LOG(LogTemp, Verbose, TEXT("MythRoSprite: equipment %s: %s (%d actions)"), bOk ? TEXT("ok") : TEXT("falhou"), *Base, Source.Act.Actions.Num());
 		}
 		else if (!Base.IsEmpty())
 		{
-			UE_LOG(LogTemp, Verbose, TEXT("MythRoSprite: equipamento sem sprite: %s"), *Base);
+			UE_LOG(LogTemp, Verbose, TEXT("MythRoSprite: equipment without sprite: %s"), *Base);
 		}
 	};
 	auto HatBase = [&](int32 View)
@@ -631,7 +631,7 @@ bool UMythRoSpriteComponent::LoadSource(FMythRoSpriteSource& Source, const FStri
 	TArray<uint8> SprBytes, ActBytes, PalBytes;
 	if (!FFileHelper::LoadFileToArray(SprBytes, *SprPath) || !FFileHelper::LoadFileToArray(ActBytes, *ActPath))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("MythRoSprite: arquivo nao encontrado: %s"), *SprPath);
+		UE_LOG(LogTemp, Warning, TEXT("MythRoSprite: file not found: %s"), *SprPath);
 		return false;
 	}
 

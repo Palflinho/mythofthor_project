@@ -35,7 +35,7 @@ namespace
 void UMythRoHUDWidget::BuildPartyWindow()
 {
 	const float H = PartyListY + PartyRowCount * PartyRowH + 34.f + PartyToolH;
-	PartyWindow = MakeRoPanel(TEXT("Grupo"), FVector2D(PartyW, H), FVector2D(330.f, -60.f));
+	PartyWindow = MakeRoPanel(TEXT("Party"), FVector2D(PartyW, H), FVector2D(330.f, -60.f));
 	AddFriendPartySwitch(PartyWindow, H, true);
 	PartyNameText = AddText(PartyWindow, 8.f, 22.f, 9, PartyText);
 	for (int32 i = 0; i < PartyRowCount; ++i)
@@ -49,7 +49,7 @@ void UMythRoHUDWidget::BuildPartyWindow()
 		PartyBarBg.Add(AddColor(PartyWindow, FLinearColor(0.25f, 0.25f, 0.25f, 1.f), 40.f, Y + 28.f, PartyBarW, 5.f));
 		PartyBarFill.Add(AddColor(PartyWindow, FLinearColor(0.2f, 0.75f, 0.2f, 1.f), 40.f, Y + 28.f, PartyBarW, 5.f));
 		UTextBlock* Expel = AddText(PartyWindow, PartyW - 74.f, Y + 12.f, 8, PartyCardLink);
-		Expel->SetText(FText::FromString(TEXT("Expulsar")));
+		Expel->SetText(FText::FromString(TEXT("Expel")));
 		PartyExpelLinks.Add(Expel);
 	}
 	// Barra de ferramentas (print 19): faixa clara mesbtn_left/mid/right e botoes de 26 x 20 colados
@@ -70,7 +70,7 @@ void UMythRoHUDWidget::BuildPartyWindow()
 	PartyToolLeave = Tool(TEXT("09"), 114.f);
 
 	// Convite recebido
-	PartyInviteWindow = MakeRoPanel(TEXT("Convite de grupo"), FVector2D(300.f, 92.f), FVector2D(0.f, -120.f));
+	PartyInviteWindow = MakeRoPanel(TEXT("Party invitation"), FVector2D(300.f, 92.f), FVector2D(0.f, -120.f));
 	PartyInviteText = AddText(PartyInviteWindow, 10.f, 26.f, 9, PartyText);
 	PartyAcceptLink = AddButtonHit(PartyInviteWindow, TEXT("agree"), 50.f, 58.f);
 	PartyDeclineLink = AddButtonHit(PartyInviteWindow, TEXT("disagree"), 170.f, 58.f);
@@ -90,7 +90,7 @@ void UMythRoHUDWidget::RefreshParty()
 	{
 		bSelfLeader |= M.bLeader && M.AccountId == SelfId;
 	}
-	PartyNameText->SetText(FText::FromString(Net->IsInParty() ? Net->GetPartyName() : FString(TEXT("Você não está em um grupo. Use /organize \"nome\"."))));
+	PartyNameText->SetText(FText::FromString(Net->IsInParty() ? Net->GetPartyName() : FString(TEXT("You are not in a party. Use /organize \"name\"."))));
 	for (int32 i = 0; i < PartyRowCount; ++i)
 	{
 		const FRoPartyMember* M = Members.IsValidIndex(i) ? &Members[i] : nullptr;
@@ -129,7 +129,7 @@ void UMythRoHUDWidget::RefreshParty()
 		{
 			Info = FString::Printf(TEXT("Nv %d %s  -  %s"), M->Level, *URagnarokNetworkSubsystem::GetJobNameFromClass(M->ClassId), *Info);
 		}
-		if (M->bLeader) { Info += TEXT("  (líder)"); }
+		if (M->bLeader) { Info += TEXT("  (leader)"); }
 		if (M->bOffline) { Info += TEXT("  (desconectado)"); }
 		else if (bDead) { Info += TEXT("  (morto)"); }
 		PartyRowInfo[i]->SetText(FText::FromString(Info));
@@ -154,7 +154,7 @@ void UMythRoHUDWidget::ShowPartyInvite(int32 PartyId, const FString& PartyName)
 		return;
 	}
 	PendingPartyId = PartyId;
-	PartyInviteText->SetText(FText::FromString(FString::Printf(TEXT("Você foi convidado para o grupo \"%s\"."), *PartyName)));
+	PartyInviteText->SetText(FText::FromString(FString::Printf(TEXT("You were invited to the party \"%s\"."), *PartyName)));
 	PartyInviteWindow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 	OpenOrder.Remove(PartyInviteWindow);
 	OpenOrder.Add(PartyInviteWindow);

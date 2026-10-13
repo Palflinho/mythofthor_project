@@ -38,7 +38,7 @@ namespace
 	struct FAchReward { int32 Item = 0; int32 Amount = 0; int32 Title = 0; };
 	struct FAchInfo { FString Name; FString Group; int32 Score = 0; int32 Total = 0; TArray<FAchReward> Rewards; };
 
-	const TCHAR* AcTabNames[AcTabs] = { TEXT("Visão geral"), TEXT("Básico"), TEXT("Aventura"), TEXT("Batalha"), TEXT("Missão"), TEXT("Masmorra"), TEXT("Grandes") };
+	const TCHAR* AcTabNames[AcTabs] = { TEXT("Overview"), TEXT("Basic"), TEXT("Aventura"), TEXT("Batalha"), TEXT("Mission"), TEXT("Masmorra"), TEXT("Grandes") };
 
 	/** Aba (1 a 6) de um grupo do banco do servidor. */
 	int32 AcTabOfGroup(const FString& Group)
@@ -121,7 +121,7 @@ void UMythRoHUDWidget::BuildAchievementWindow()
 	AddImage(AchievementWindow, FMythRoUITextures::Get(TEXT("achievement_re/bg_tab.bmp")), 0.f, AcListY, AcTabW, 405.f);
 	AddImage(AchievementWindow, FMythRoUITextures::Get(TEXT("basic_interface/sys_close_off.bmp")), AcW - 16.f, 4.f, 11.f, 11.f);
 	UTextBlock* AchTitle = nullptr;
-	AddTitleBar(AchievementWindow, AcW, TEXT("Conquistas"), &AchTitle);
+	AddTitleBar(AchievementWindow, AcW, TEXT("Achievements"), &AchTitle);
 	if (AchTitle) { AchTitle->SetColorAndOpacity(FSlateColor(FLinearColor::Black)); AchTitle->SetShadowColorAndOpacity(FLinearColor::Transparent); }
 	AchHeader = AchTitle;
 	AddImage(AchievementWindow, FMythRoUITextures::Get(TEXT("basic_interface/sys_close_off.bmp")), AcW - 15.f, 3.f, 11.f, 11.f);
@@ -157,7 +157,7 @@ void UMythRoHUDWidget::BuildAchievementWindow()
 	}
 	AchReceive = AddButtonEx(AchievementWindow, TEXT("achievement_re/btn_receive_out.bmp"), TEXT("achievement_re/btn_receive_over.bmp"), TEXT("achievement_re/btn_receive_press.bmp"), AcDetailX + 90.f, AcListY + 340.f);
 	AchReceiveLabel = AddText(AchievementWindow, AcDetailX + 120.f, AcListY + 343.f, 8, AcText);
-	AchReceiveLabel->SetText(FText::FromString(TEXT("Receber prêmio")));
+	AchReceiveLabel->SetText(FText::FromString(TEXT("Claim reward")));
 	// Visao geral: contagens por aba
 	for (int32 i = 0; i < 6; ++i)
 	{
@@ -226,12 +226,12 @@ void UMythRoHUDWidget::RefreshAchievements()
 		}
 		const FAchInfo* Info = AcInfo(A->Id);
 		AchCards[i]->SetBrush(AcBrush(A->bCompleted ? TEXT("achievement_re/list_complete_out.bmp") : (A->Id == AchSelectedId ? TEXT("achievement_re/list_press.bmp") : TEXT("achievement_re/list_out.bmp")), FVector2D(309.f, AcCardH) * UIScale));
-		AchNames[i]->SetText(FText::FromString(AcShort(Info ? Info->Name : FString::Printf(TEXT("Conquista %d"), A->Id), 28)));
+		AchNames[i]->SetText(FText::FromString(AcShort(Info ? Info->Name : FString::Printf(TEXT("Achievement %d"), A->Id), 28)));
 		int32 Count = 0;
 		for (int32 v : A->Objective) { Count += v; }
-		AchProgress[i]->SetText(FText::FromString(A->bCompleted ? FString(TEXT("Concluída")) : (Info && Info->Total > 0 ? FString::Printf(TEXT("Progresso %d / %d"), Count, Info->Total) : FString(TEXT("Em andamento")))));
+		AchProgress[i]->SetText(FText::FromString(A->bCompleted ? FString(TEXT("Completed")) : (Info && Info->Total > 0 ? FString::Printf(TEXT("Progresso %d / %d"), Count, Info->Total) : FString(TEXT("Em andamento")))));
 		AchScores[i]->SetText(FText::AsNumber(Info ? Info->Score : 0));
-		AchClaim[i]->SetText(FText::FromString(A->bCompleted && !A->bRewardTaken ? TEXT("Prêmio disponível") : TEXT("")));
+		AchClaim[i]->SetText(FText::FromString(A->bCompleted && !A->bRewardTaken ? TEXT("Reward available") : TEXT("")));
 	}
 	// Detalhes da selecionada
 	const FRoAchievement* Sel = nullptr;
@@ -247,7 +247,7 @@ void UMythRoHUDWidget::RefreshAchievements()
 	{
 		const FAchInfo* Info = AcInfo(Sel->Id);
 		AchDetailTitle->SetText(FText::FromString(AcShort(Info ? Info->Name : FString(), 34)));
-		AchDetailLines[0]->SetText(FText::FromString(FString::Printf(TEXT("Pontos: %d"), Info ? Info->Score : 0)));
+		AchDetailLines[0]->SetText(FText::FromString(FString::Printf(TEXT("Points: %d"), Info ? Info->Score : 0)));
 		for (int32 j = 0; j < 4 && Info; ++j)
 		{
 			if (Sel->Objective[j] > 0)
@@ -257,7 +257,7 @@ void UMythRoHUDWidget::RefreshAchievements()
 		}
 		// Premios (do achievement_db do rAthena; quem entrega e o servidor ao clicar em Receber)
 		int32 Line = 6;
-		AchDetailLines[Line++]->SetText(FText::FromString(Info && Info->Rewards.Num() > 0 ? TEXT("Prêmios:") : TEXT("Sem prêmio de item.")));
+		AchDetailLines[Line++]->SetText(FText::FromString(Info && Info->Rewards.Num() > 0 ? TEXT("Rewards:") : TEXT("No item reward.")));
 		for (int32 r = 0; Info && r < Info->Rewards.Num() && Line < AchDetailLines.Num(); ++r)
 		{
 			const FAchReward& Rw = Info->Rewards[r];
@@ -269,7 +269,7 @@ void UMythRoHUDWidget::RefreshAchievements()
 			}
 			else if (Rw.Title > 0)
 			{
-				Text = FString::Printf(TEXT("  Título #%d"), Rw.Title);
+				Text = FString::Printf(TEXT("  Title #%d"), Rw.Title);
 			}
 			if (!Text.IsEmpty()) { AchDetailLines[Line++]->SetText(FText::FromString(Text)); }
 		}

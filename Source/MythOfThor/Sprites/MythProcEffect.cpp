@@ -134,7 +134,7 @@ bool AMythProcEffect::Spawn(UObject* WorldContext, const TSharedPtr<FJsonObject>
 	UTexture2D* Tex = bSprite ? LoadSpriteImage(FileName, ImagePixels) : LoadEffectTexture(FileName);
 	if (!Tex)
 	{
-		UE_LOG(LogTemp, Verbose, TEXT("MythProcEffect: sem textura '%s'"), *Part->GetStringField(TEXT("file")));
+		UE_LOG(LogTemp, Verbose, TEXT("MythProcEffect: no texture '%s'"), *Part->GetStringField(TEXT("file")));
 		return false;
 	}
 	FActorSpawnParameters P;

@@ -86,9 +86,9 @@ void UMythRoHUDWidget::BuildMailWindows()
 	MakeDraggable(MailReadWindow, 300.f, 22.f);
 
 	// Escrever
-	MailWriteWindow = MakeRoPanel(TEXT("Escrever correio"), FVector2D(340.f, 17.f + 150.f), FVector2D(60.f, -60.f));
-	AddText(MailWriteWindow, 12.f, 26.f, 8, MlText)->SetText(FText::FromString(TEXT("Para")));
-	AddText(MailWriteWindow, 12.f, 56.f, 8, MlText)->SetText(FText::FromString(TEXT("Título")));
+	MailWriteWindow = MakeRoPanel(TEXT("Write mail"), FVector2D(340.f, 17.f + 150.f), FVector2D(60.f, -60.f));
+	AddText(MailWriteWindow, 12.f, 26.f, 8, MlText)->SetText(FText::FromString(TEXT("To")));
+	AddText(MailWriteWindow, 12.f, 56.f, 8, MlText)->SetText(FText::FromString(TEXT("Title")));
 	AddText(MailWriteWindow, 12.f, 86.f, 8, MlText)->SetText(FText::FromString(TEXT("Texto")));
 	for (int32 i = 0; i < 3; ++i)
 	{
@@ -100,7 +100,7 @@ void UMythRoHUDWidget::BuildMailWindows()
 		}
 		(i == 0 ? MailToBox : (i == 1 ? MailTitleBox : MailTextBox)) = Box;
 	}
-	MailSend = AddTextButton(MailWriteWindow, TEXT("Enviar"), 80.f, 17.f + 116.f, 80.f);
+	MailSend = AddTextButton(MailWriteWindow, TEXT("Send"), 80.f, 17.f + 116.f, 80.f);
 	MailCancel = AddButtonHit(MailWriteWindow, TEXT("cancel"), 190.f, 17.f + 116.f);
 }
 
@@ -189,7 +189,7 @@ void UMythRoHUDWidget::RefreshMail()
 	}
 	if (Net->GetOpenMailItems() > 0)
 	{
-		MailTakeItems->SetText(FText::FromString(FString::Printf(TEXT("[Pegar %d itens]"), Net->GetOpenMailItems())));
+		MailTakeItems->SetText(FText::FromString(FString::Printf(TEXT("[Take %d items]"), Net->GetOpenMailItems())));
 	}
 }
 

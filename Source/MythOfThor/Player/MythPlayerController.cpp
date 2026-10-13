@@ -656,7 +656,7 @@ void AMythPlayerController::BeginCapture()
 	CurrentMouseCursor = EMouseCursor::Crosshairs;
 	if (HudWidget)
 	{
-		HudWidget->AddChatLine(TEXT("Clique no monstro que deseja capturar (botão direito desiste)."), FLinearColor(1.f, 0.85f, 0.4f));
+		HudWidget->AddChatLine(TEXT("Click the monster you want to capture (right click to give up)."), FLinearColor(1.f, 0.85f, 0.4f));
 	}
 }
 
@@ -1098,7 +1098,7 @@ void AMythPlayerController::MythTurn(int32 X, int32 Y)
 {
 	if (const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld()))
 	{
-		UE_LOG(LogTemp, Log, TEXT("MythTurn: virando para (%d, %d)"), X, Y);
+		UE_LOG(LogTemp, Log, TEXT("MythTurn: turning to (%d, %d)"), X, Y);
 		TurnToward(Info->CellToWorld(FIntPoint(X, Y), 0.f));
 	}
 }
@@ -1121,10 +1121,10 @@ void AMythPlayerController::MythPointAt(int32 X, int32 Y)
 			case EMouseCursor::Default: Name = TEXT("seta"); break;
 			case EMouseCursor::GrabHand: Name = TEXT("falar"); break;
 			case EMouseCursor::GrabHandClosed: Name = TEXT("atacar"); break;
-			case EMouseCursor::Hand: Name = TEXT("pegar item"); break;
+			case EMouseCursor::Hand: Name = TEXT("pick up item"); break;
 			case EMouseCursor::CardinalCross: Name = TEXT("portal"); break;
 			case EMouseCursor::SlashedCircle: Name = TEXT("proibido"); break;
-			case EMouseCursor::Crosshairs: Name = TEXT("mira de skill"); break;
+			case EMouseCursor::Crosshairs: Name = TEXT("skill targeting"); break;
 			case EMouseCursor::ResizeLeftRight: Name = TEXT("girar camera"); break;
 			default: break;
 			}
@@ -1473,7 +1473,7 @@ void AMythPlayerController::MythTalkNearest()
 	}
 	if (Best)
 	{
-		UE_LOG(LogTemp, Log, TEXT("MythNet: falando com %s"), *Best->MonsterName);
+		UE_LOG(LogTemp, Log, TEXT("MythNet: talking to %s"), *Best->MonsterName);
 		SetFocusedTarget(Best);
 	}
 	else
@@ -1483,10 +1483,10 @@ void AMythPlayerController::MythTalkNearest()
 		{
 			if (++Count <= 8)
 			{
-				UE_LOG(LogTemp, Log, TEXT("MythTalkNearest: sem NPC; unidade '%s' tipo %d rede %d"), *It->MonsterName, It->NetObjectType, It->IsNetUnit() ? 1 : 0);
+				UE_LOG(LogTemp, Log, TEXT("MythTalkNearest: no NPC; unit '%s' type %d net %d"), *It->MonsterName, It->NetObjectType, It->IsNetUnit() ? 1 : 0);
 			}
 		}
-		UE_LOG(LogTemp, Log, TEXT("MythTalkNearest: nenhum NPC entre %d unidades"), Count);
+		UE_LOG(LogTemp, Log, TEXT("MythTalkNearest: no NPC within %d units"), Count);
 	}
 }
 
@@ -1514,7 +1514,7 @@ void AMythPlayerController::MythPickNearest()
 	}
 	else
 	{
-		UE_LOG(LogTemp, Log, TEXT("MythPickNearest: nenhum item no chao"));
+		UE_LOG(LogTemp, Log, TEXT("MythPickNearest: no item on the ground"));
 	}
 }
 
@@ -1561,7 +1561,7 @@ void AMythPlayerController::MythAttackNearest()
 
 bool AMythPlayerController::TeleportToCell(int32 X, int32 Y)
 {
-	UE_LOG(LogTemp, Log, TEXT("MythMove: teleporte para (%d, %d)"), X, Y);
+	UE_LOG(LogTemp, Log, TEXT("MythMove: teleport to (%d, %d)"), X, Y);
 	APawn* P = GetPawn();
 	const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld());
 	if (!P || !Info)
@@ -1591,7 +1591,7 @@ bool AMythPlayerController::TeleportToCell(int32 X, int32 Y)
 					const ACharacter* Char = Cast<ACharacter>(P);
 					const float HalfHeight = Char && Char->GetCapsuleComponent() ? Char->GetCapsuleComponent()->GetScaledCapsuleHalfHeight() : 90.f;
 					P->SetActorLocation(FVector(At.X, At.Y, GroundZ + HalfHeight), false, nullptr, ETeleportType::TeleportPhysics);
-					UE_LOG(LogTemp, Log, TEXT("MythMove: no chao da celula (%d, %d) em %s"), X + DX, Y + DY, *P->GetActorLocation().ToString());
+					UE_LOG(LogTemp, Log, TEXT("MythMove: on the ground at cell (%d, %d) in %s"), X + DX, Y + DY, *P->GetActorLocation().ToString());
 					StopMovement();
 					bHasDirectTarget = false;
 					return true;
@@ -1599,7 +1599,7 @@ bool AMythPlayerController::TeleportToCell(int32 X, int32 Y)
 			}
 		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("MythGoto: nenhuma celula andavel perto de (%d,%d)"), X, Y);
+	UE_LOG(LogTemp, Warning, TEXT("MythGoto: no walkable cell near (%d,%d)"), X, Y);
 	return false;
 }
 
@@ -1899,19 +1899,19 @@ void AMythPlayerController::MythFloatCheck()
 		if (!bNear || FMath::Abs(Feet - Near) > 5.f)
 		{
 			++Off;
-			UE_LOG(LogTemp, Log, TEXT("MythFloat: %s '%s' em (%.0f,%.0f) pes %.0f | chao perto dos pes %s%.0f | chao mais alto %s%.0f"), Kind, *A->GetName(), A->GetActorLocation().X, A->GetActorLocation().Y, Feet, bNear ? TEXT("") : TEXT("(nenhum) "), Near, bTop ? TEXT("") : TEXT("(nenhum) "), Top);
+			UE_LOG(LogTemp, Log, TEXT("MythFloat: %s '%s' at (%.0f,%.0f) feet %.0f | ground near the feet %s%.0f | highest ground %s%.0f"), Kind, *A->GetName(), A->GetActorLocation().X, A->GetActorLocation().Y, Feet, bNear ? TEXT("") : TEXT("(none)"), Near, bTop ? TEXT("") : TEXT("(none)"), Top);
 		}
 	};
 	if (const APawn* P = GetPawn())
 	{
 		const UCapsuleComponent* Cap = P->FindComponentByClass<UCapsuleComponent>();
-		Check(P, Cap ? Cap->GetScaledCapsuleHalfHeight() : 90.f, TEXT("jogador"));
+		Check(P, Cap ? Cap->GetScaledCapsuleHalfHeight() : 90.f, TEXT("player"));
 	}
 	for (TActorIterator<AMythMonster> It(GetWorld()); It; ++It)
 	{
 		Check(*It, It->GetCapsuleComponent()->GetScaledCapsuleHalfHeight(), It->IsNpc() ? TEXT("npc") : TEXT("unidade"));
 	}
-	UE_LOG(LogTemp, Log, TEXT("MythFloat: %d unidades medidas, %d fora do chao"), Count, Off);
+	UE_LOG(LogTemp, Log, TEXT("MythFloat: %d units measured, %d off the ground"), Count, Off);
 	// Quem responde ao canal Visibility na vertical do jogador e do primeiro NPC (para achar o "chao" que o mover usa)
 	TArray<const AActor*> Probes;
 	if (GetPawn()) { Probes.Add(GetPawn()); }
@@ -1923,7 +1923,7 @@ void AMythPlayerController::MythFloatCheck()
 		GetWorld()->LineTraceMultiByChannel(Hits, FVector(A->GetActorLocation().X, A->GetActorLocation().Y, 20000.f), FVector(A->GetActorLocation().X, A->GetActorLocation().Y, -3000.f), ECC_Visibility, Q);
 		for (const FHitResult& H : Hits)
 		{
-			UE_LOG(LogTemp, Log, TEXT("MythFloat: sonda de '%s' (z %.0f): z %.0f ator '%s' comp '%s' mobilidade %d"), *A->GetName(), A->GetActorLocation().Z, H.ImpactPoint.Z, *GetNameSafe(H.GetActor()), *GetNameSafe(H.GetComponent()), H.GetComponent() ? static_cast<int32>(H.GetComponent()->Mobility) : -1);
+			UE_LOG(LogTemp, Log, TEXT("MythFloat: probe of '%s' (z %.0f): z %.0f actor '%s' comp '%s' mobility %d"), *A->GetName(), A->GetActorLocation().Z, H.ImpactPoint.Z, *GetNameSafe(H.GetActor()), *GetNameSafe(H.GetComponent()), H.GetComponent() ? static_cast<int32>(H.GetComponent()->Mobility) : -1);
 		}
 	}
 }
@@ -2042,11 +2042,11 @@ void AMythPlayerController::MythVendBrowse()
 	{
 		for (const TPair<int32, FString>& Board : Net->GetVendingBoards())
 		{
-			UE_LOG(LogTemp, Log, TEXT("MythVend: abrindo a loja '%s' de %d"), *Board.Value, Board.Key);
+			UE_LOG(LogTemp, Log, TEXT("MythVend: opening the shop '%s' of %d"), *Board.Value, Board.Key);
 			Net->SendVendingListReq(Board.Key);
 			return;
 		}
-		UE_LOG(LogTemp, Log, TEXT("MythVend: nenhuma loja por perto"));
+		UE_LOG(LogTemp, Log, TEXT("MythVend: no shop nearby"));
 	}
 }
 

@@ -108,7 +108,7 @@ bool AMythMonster::ReceiveMythDamage(int32 Amount)
 	}
 
 	HP = FMath::Max(0, HP - Amount);
-	UE_LOG(LogTemp, Log, TEXT("[Monster] %s recebeu %d de dano: HP %d/%d"), *GetDisplayName(), Amount, HP, MaxHP);
+	UE_LOG(LogTemp, Log, TEXT("[Monster] %s took %d damage: HP %d/%d"), *GetDisplayName(), Amount, HP, MaxHP);
 	if (HP == 0)
 	{
 		Kill();

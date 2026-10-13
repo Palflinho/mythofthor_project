@@ -29,7 +29,7 @@ bool UMythRoHUDWidget::HandleChatCommand(const FString& Msg)
 	URagnarokNetworkSubsystem* Net = GetNet();
 	AMythPlayerController* PC = Cast<AMythPlayerController>(GetOwningPlayer());
 	const bool bOnline = Net && Net->GetNetworkState() == ERagnarokNetworkState::ConnectedMap;
-	auto Offline = [this]() { AddChatLine(TEXT("Sem conexão com o servidor."), FLinearColor(1.f, 0.4f, 0.4f)); };
+	auto Offline = [this]() { AddChatLine(TEXT("No connection to the server."), FLinearColor(1.f, 0.4f, 0.4f)); };
 
 	// Cochicho: "Nome mensagem  (aspas na frente) ou /w Nome mensagem
 	if (Msg.StartsWith(TEXT("\"")) || Msg.StartsWith(TEXT("/w ")) || Msg.StartsWith(TEXT("/W ")) || Msg.StartsWith(TEXT("/whisper ")))
@@ -39,12 +39,12 @@ bool UMythRoHUDWidget::HandleChatCommand(const FString& Msg)
 		FString Name, Text;
 		if (!Body.Split(TEXT(" "), &Name, &Text) || Name.IsEmpty() || Text.IsEmpty())
 		{
-			AddChatLine(TEXT("Uso: /w Nome mensagem"), FLinearColor(1.f, 0.4f, 0.4f));
+			AddChatLine(TEXT("Usage: /w Name message"), FLinearColor(1.f, 0.4f, 0.4f));
 			return true;
 		}
 		if (!bOnline) { Offline(); return true; }
 		Net->SendWhisper(Name, Text);
-		AddChatLine(FString::Printf(TEXT("(para %s) %s"), *Name, *Text), FLinearColor(1.f, 1.f, 0.4f));
+		AddChatLine(FString::Printf(TEXT("(to %s) %s"), *Name, *Text), FLinearColor(1.f, 1.f, 0.4f));
 		LastWhisperFrom = Name;
 		return true;
 	}
@@ -52,13 +52,13 @@ bool UMythRoHUDWidget::HandleChatCommand(const FString& Msg)
 	{
 		if (LastWhisperFrom.IsEmpty())
 		{
-			AddChatLine(TEXT("Ninguém cochichou com você ainda."), FLinearColor(1.f, 0.4f, 0.4f));
+			AddChatLine(TEXT("Nobody has whispered to you yet."), FLinearColor(1.f, 0.4f, 0.4f));
 			return true;
 		}
 		const FString Text = Msg.Mid(3).TrimStartAndEnd();
 		if (!bOnline) { Offline(); return true; }
 		Net->SendWhisper(LastWhisperFrom, Text);
-		AddChatLine(FString::Printf(TEXT("(para %s) %s"), *LastWhisperFrom, *Text), FLinearColor(1.f, 1.f, 0.4f));
+		AddChatLine(FString::Printf(TEXT("(to %s) %s"), *LastWhisperFrom, *Text), FLinearColor(1.f, 1.f, 0.4f));
 		return true;
 	}
 	// Canal do grupo (%) e da guilda ($, ainda sem guildas)
@@ -70,7 +70,7 @@ bool UMythRoHUDWidget::HandleChatCommand(const FString& Msg)
 	}
 	if (Msg.StartsWith(TEXT("$")))
 	{
-		AddChatLine(TEXT("O canal da guilda ainda não existe."), FLinearColor(1.f, 0.4f, 0.4f));
+		AddChatLine(TEXT("The guild channel does not exist yet."), FLinearColor(1.f, 0.4f, 0.4f));
 		return true;
 	}
 	if (!Msg.StartsWith(TEXT("/")))
@@ -137,7 +137,7 @@ bool UMythRoHUDWidget::HandleChatCommand(const FString& Msg)
 		}
 		else
 		{
-			AddChatLine(TEXT("Uso: /exchange NomeDoJogador (o jogador precisa estar por perto)."), FLinearColor(1.f, 0.4f, 0.4f));
+			AddChatLine(TEXT("Usage: /exchange PlayerName (the player must be nearby)."), FLinearColor(1.f, 0.4f, 0.4f));
 		}
 		return true;
 	}
@@ -153,7 +153,7 @@ bool UMythRoHUDWidget::HandleChatCommand(const FString& Msg)
 		}
 		else if (Arg.IsEmpty())
 		{
-			AddChatLine(Cmd == TEXT("organize") ? TEXT("Uso: /organize \"nome do grupo\"") : TEXT("Uso: /invite nome do personagem"), FLinearColor(1.f, 0.4f, 0.4f));
+			AddChatLine(Cmd == TEXT("organize") ? TEXT("Usage: /organize \"party name\"") : TEXT("Usage: /invite character name"), FLinearColor(1.f, 0.4f, 0.4f));
 		}
 		else if (Cmd == TEXT("organize"))
 		{
@@ -169,7 +169,7 @@ bool UMythRoHUDWidget::HandleChatCommand(const FString& Msg)
 		}
 		else
 		{
-			AddChatLine(TEXT("Esse personagem não está no seu grupo."), FLinearColor(1.f, 0.4f, 0.4f));
+			AddChatLine(TEXT("That character is not in your party."), FLinearColor(1.f, 0.4f, 0.4f));
 		}
 		return true;
 	}
@@ -182,7 +182,7 @@ bool UMythRoHUDWidget::HandleChatCommand(const FString& Msg)
 		Arg.TrimStartAndEndInline();
 		if (Arg.IsEmpty())
 		{
-			AddChatLine(Cmd == TEXT("guild") ? TEXT("Uso: /guild \"nome do clã\"") : TEXT("Uso: /breakguild nome do clã"), FLinearColor(1.f, 0.4f, 0.4f));
+			AddChatLine(Cmd == TEXT("guild") ? TEXT("Usage: /guild \"guild name\"") : TEXT("Usage: /breakguild guild name"), FLinearColor(1.f, 0.4f, 0.4f));
 		}
 		else if (Cmd == TEXT("guild"))
 		{

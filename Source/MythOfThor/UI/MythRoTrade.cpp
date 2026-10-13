@@ -60,14 +60,14 @@ void UMythRoHUDWidget::BuildTradeWindows()
 	TradeCancelLink = AddButtonHit(TradeWindow, TEXT("cancel"), 290.f, BY + 10.f);
 
 	// Pedido recebido
-	TradeAskWindow = MakeRoPanel(TEXT("Pedido de troca"), FVector2D(300.f, 92.f), FVector2D(0.f, -150.f));
+	TradeAskWindow = MakeRoPanel(TEXT("Trade request"), FVector2D(300.f, 92.f), FVector2D(0.f, -150.f));
 	TradeAskText = AddText(TradeAskWindow, 10.f, 26.f, 9, TrText);
 	TradeAcceptLink = AddButtonHit(TradeAskWindow, TEXT("agree"), 50.f, 58.f);
 	TradeDeclineLink = AddButtonHit(TradeAskWindow, TEXT("disagree"), 170.f, 58.f);
 
 	// Menu do botao direito sobre um jogador
-	PlayerMenuWindow = MakeRoPanel(TEXT("Jogador"), FVector2D(170.f, 17.f + 6 * 20.f + 10.f), FVector2D::ZeroVector);
-	const TCHAR* Labels[6] = { TEXT("Trocar"), TEXT("Convidar para o grupo"), TEXT("Cochichar"), TEXT("Adicionar amigo"), TEXT("Convidar para o clã"), TEXT("Cancelar") };
+	PlayerMenuWindow = MakeRoPanel(TEXT("Player"), FVector2D(170.f, 17.f + 6 * 20.f + 10.f), FVector2D::ZeroVector);
+	const TCHAR* Labels[6] = { TEXT("Trade"), TEXT("Invite to party"), TEXT("Cochichar"), TEXT("Adicionar amigo"), TEXT("Invite to guild"), TEXT("Cancel") };
 	for (int32 i = 0; i < 6; ++i)
 	{
 		UTextBlock* T = AddText(PlayerMenuWindow, 14.f, 24.f + i * 20.f, 9, TrLink);
@@ -82,7 +82,7 @@ void UMythRoHUDWidget::OnTradeRequestReceived(const FString& FromName)
 	{
 		return;
 	}
-	TradeAskText->SetText(FText::FromString(FString::Printf(TEXT("%s quer trocar com você."), *FromName)));
+	TradeAskText->SetText(FText::FromString(FString::Printf(TEXT("%s wants to trade with you."), *FromName)));
 	TradeAskWindow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 	OpenOrder.Remove(TradeAskWindow);
 	OpenOrder.Add(TradeAskWindow);
@@ -108,8 +108,8 @@ void UMythRoHUDWidget::RefreshTrade()
 		OpenOrder.Add(TradeWindow);
 		if (TradeAskWindow) { TradeAskWindow->SetVisibility(ESlateVisibility::Collapsed); }
 	}
-	TradeMineTitle->SetText(FText::FromString(Net->IsTradeLockedMine() ? TEXT("Você (travado)") : TEXT("Você")));
-	TradeTheirTitle->SetText(FText::FromString(FString::Printf(TEXT("%s%s"), Net->GetTradePartner().IsEmpty() ? TEXT("Jogador") : *Net->GetTradePartner(), Net->IsTradeLockedTheirs() ? TEXT(" (travado)") : TEXT(""))));
+	TradeMineTitle->SetText(FText::FromString(Net->IsTradeLockedMine() ? TEXT("You (locked)") : TEXT("You")));
+	TradeTheirTitle->SetText(FText::FromString(FString::Printf(TEXT("%s%s"), Net->GetTradePartner().IsEmpty() ? TEXT("Player") : *Net->GetTradePartner(), Net->IsTradeLockedTheirs() ? TEXT(" (travado)") : TEXT(""))));
 	TradeMineTitle->SetColorAndOpacity(FSlateColor(Net->IsTradeLockedMine() ? TrGreen : TrText));
 	TradeTheirTitle->SetColorAndOpacity(FSlateColor(Net->IsTradeLockedTheirs() ? TrGreen : TrText));
 	for (int32 i = 0; i < TradeRowCount; ++i)
@@ -120,7 +120,7 @@ void UMythRoHUDWidget::RefreshTrade()
 	const bool bBoth = Net->IsTradeLockedMine() && Net->IsTradeLockedTheirs();
 	TradeLockLink->SetColorAndOpacity(FSlateColor(Net->IsTradeLockedMine() ? TrGray : TrLink));
 	TradeCommitLink->SetColorAndOpacity(FSlateColor(bBoth ? TrLink : TrGray));
-	TradeHint->SetText(FText::FromString(TEXT("Duplo clique num item do inventário para oferecer (Shift: todos). Travar quando terminar.")));
+	TradeHint->SetText(FText::FromString(TEXT("Double-click an inventory item to offer it (Shift: all). Lock when done.")));
 }
 
 bool UMythRoHUDWidget::TryTradeAddFromInventory(int32 InventoryIndex, int32 Amount)

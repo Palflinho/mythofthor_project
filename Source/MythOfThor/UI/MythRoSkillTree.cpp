@@ -163,5 +163,5 @@ FString FMythRoSkillTree::JobTabName(int32 JobClass)
 	{
 		return JobTabName(Job - 4001) + TEXT(" T.");
 	}
-	return FString::Printf(TEXT("Classe %d"), Job);
+	return FString::Printf(TEXT("Class %d"), Job);
 }

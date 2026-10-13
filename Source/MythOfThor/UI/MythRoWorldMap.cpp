@@ -48,7 +48,7 @@ namespace
 					Rects.Add({ Map, FBox2D(FVector2D(FCString::Atof(*F[2]), FCString::Atof(*F[3])), FVector2D(FCString::Atof(*F[4]), FCString::Atof(*F[5]))) });
 				}
 			}
-			UE_LOG(LogTemp, Log, TEXT("MythWorldMap: %d mapas no mappostable"), Rects.Num());
+			UE_LOG(LogTemp, Log, TEXT("MythWorldMap: %d maps in the mappostable"), Rects.Num());
 		}
 		return Rects;
 	}
@@ -79,7 +79,7 @@ namespace
 
 void UMythRoHUDWidget::BuildWorldMapWindow()
 {
-	WorldMapWindow = MakeRoPanel(TEXT("Mapa-múndi"), FVector2D(WmW, WmTop + WmH), FVector2D(0.f, 0.f));
+	WorldMapWindow = MakeRoPanel(TEXT("World map"), FVector2D(WmW, WmTop + WmH), FVector2D(0.f, 0.f));
 	WorldMapImage = AddImage(WorldMapWindow, FMythRoUITextures::Get(TEXT("worldmap.jpg")), 0.f, WmTop, WmW, WmH);
 	WorldMapImage->SetVisibility(ESlateVisibility::Visible); // recebe o clique
 	WorldMapHere = AddColor(WorldMapWindow, FLinearColor(1.f, 0.15f, 0.1f, 0.45f), 0.f, 0.f, 1.f, 1.f);
@@ -117,7 +117,7 @@ void UMythRoHUDWidget::ToggleWorldMap()
 		PlaceBox(WorldMapHere, Rect->Box, UIScale);
 	}
 	WorldMapHere->SetVisibility(Rect ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
-	WorldMapTitle->SetText(FText::FromString(FString::Printf(TEXT("Você está em: %s"), *NaviDisplayName(Here))));
+	WorldMapTitle->SetText(FText::FromString(FString::Printf(TEXT("You are in: %s"), *NaviDisplayName(Here))));
 	WorldMapHoverId.Reset();
 	TickWorldMap();
 }

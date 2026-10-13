@@ -61,7 +61,7 @@ namespace
 		}
 		else
 		{
-			UE_LOG(LogTemp, Error, TEXT("MythSkillManager: Config/skill_vfx_classes.json nao encontrado ou invalido; so a tabela do cliente original sera usada"));
+			UE_LOG(LogTemp, Error, TEXT("MythSkillManager: Config/skill_vfx_classes.json not found or invalid; only the original client table will be used"));
 		}
 		// Ajustes manuais opcionais: {"classes": {"buff_self": {"niagara": "/Game/..."}}, "skills": {"34": {"class": "heal", "niagara": "/Game/..."}}}
 		Root.Reset();
@@ -200,7 +200,7 @@ bool UMythSkillManager::PlayGeneric(UObject* WorldContext, int32 SkillID, EMythS
 				return true;
 			}
 		}
-		UE_LOG(LogTemp, Error, TEXT("MythSkillManager: Niagara '%s' da skill %d (%s) nao existe; usando o efeito generico da classe"), *NiagaraPath, SkillID, *Cls);
+		UE_LOG(LogTemp, Error, TEXT("MythSkillManager: Niagara '%s' of skill %d (%s) does not exist; using the generic class effect"), *NiagaraPath, SkillID, *Cls);
 	}
 
 	bool bAny = false;
@@ -242,6 +242,6 @@ bool UMythSkillManager::PlayGeneric(UObject* WorldContext, int32 SkillID, EMythS
 		Burst->SetBoolField(TEXT("rotate"), true);
 		Spawn(Burst);
 	}
-	UE_LOG(LogTemp, Verbose, TEXT("MythSkillManager: skill %d sem visual no cliente -> efeito generico '%s' (%s)"), SkillID, *Cls, *C->Element);
+	UE_LOG(LogTemp, Verbose, TEXT("MythSkillManager: skill %d has no client visual -> generic effect '%s' (%s)"), SkillID, *Cls, *C->Element);
 	return bAny;
 }

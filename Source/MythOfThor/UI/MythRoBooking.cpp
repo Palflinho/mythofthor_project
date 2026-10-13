@@ -29,8 +29,8 @@ namespace
 
 void UMythRoHUDWidget::BuildBookingWindow()
 {
-	BookingWindow = MakeRoPanel(TEXT("Procura de Grupo"), FVector2D(PbW, PbH), FVector2D(-120.f, 10.f));
-	AddText(BookingWindow, 8.f, 25.f, 8, PbText)->SetText(FText::FromString(TEXT("Nível")));
+	BookingWindow = MakeRoPanel(TEXT("Party Search"), FVector2D(PbW, PbH), FVector2D(-120.f, 10.f));
+	AddText(BookingWindow, 8.f, 25.f, 8, PbText)->SetText(FText::FromString(TEXT("Level")));
 	BookingLevelBox = WidgetTree->ConstructWidget<UEditableTextBox>();
 	BookingLevelBox->SetText(FText::FromString(TEXT("1")));
 	if (UCanvasPanelSlot* S = BookingWindow->AddChildToCanvas(BookingLevelBox))
@@ -38,10 +38,10 @@ void UMythRoHUDWidget::BuildBookingWindow()
 		S->SetPosition(FVector2D(44.f, 21.f) * UIScale);
 		S->SetSize(FVector2D(46.f, 20.f) * UIScale);
 	}
-	BookingSearchBtn = AddTextButton(BookingWindow, TEXT("Procurar"), 96.f, 21.f, 62.f);
-	BookingRegisterBtn = AddTextButton(BookingWindow, TEXT("Anunciar"), 162.f, 21.f, 62.f);
-	BookingDeleteBtn = AddTextButton(BookingWindow, TEXT("Remover"), 228.f, 21.f, 64.f);
-	static const TCHAR* Heads[3] = { TEXT("Nome"), TEXT("Nível"), TEXT("Classes") };
+	BookingSearchBtn = AddTextButton(BookingWindow, TEXT("Search"), 96.f, 21.f, 62.f);
+	BookingRegisterBtn = AddTextButton(BookingWindow, TEXT("Post"), 162.f, 21.f, 62.f);
+	BookingDeleteBtn = AddTextButton(BookingWindow, TEXT("Remove"), 228.f, 21.f, 64.f);
+	static const TCHAR* Heads[3] = { TEXT("Name"), TEXT("Level"), TEXT("Classes") };
 	static const float HeadX[3] = { 10.f, 130.f, 172.f };
 	for (int32 c = 0; c < 3; ++c)
 	{
@@ -58,7 +58,7 @@ void UMythRoHUDWidget::BuildBookingWindow()
 		BookingRowTexts.Add(AddText(BookingWindow, 172.f, Y + 4.f, 8, PbText));
 	}
 	BookingFooter = AddText(BookingWindow, 8.f, PbH - 20.f, 7, FLinearColor(0.12f, 0.27f, 0.55f));
-	BookingFooter->SetText(FText::FromString(TEXT("Clique num anúncio para falar com o jogador.")));
+	BookingFooter->SetText(FText::FromString(TEXT("Click an ad to talk to the player.")));
 }
 
 void UMythRoHUDWidget::ToggleBookingWindow()
@@ -93,11 +93,11 @@ void UMythRoHUDWidget::UpdateBooking()
 	}
 	BookingRevisionSeen = Net->GetBookingRevision();
 	const int32 R = Net->GetBookingLastResult();
-	if (R == 0) { AddChatLine(TEXT("Anúncio de grupo criado."), FLinearColor(0.7f, 1.f, 0.7f)); }
-	else if (R == 1) { AddChatLine(TEXT("Não foi possível criar o anúncio."), FLinearColor(1.f, 0.6f, 0.5f)); }
-	else if (R == 2) { AddChatLine(TEXT("Você já tem um anúncio de grupo."), FLinearColor(1.f, 0.85f, 0.4f)); }
-	else if (R == 10) { AddChatLine(TEXT("Anúncio de grupo removido."), FLinearColor(0.7f, 1.f, 0.7f)); }
-	else if (R == 12 || R == 13) { AddChatLine(TEXT("Você não tem anúncio de grupo."), FLinearColor(1.f, 0.85f, 0.4f)); }
+	if (R == 0) { AddChatLine(TEXT("Party ad created."), FLinearColor(0.7f, 1.f, 0.7f)); }
+	else if (R == 1) { AddChatLine(TEXT("Could not create the ad."), FLinearColor(1.f, 0.6f, 0.5f)); }
+	else if (R == 2) { AddChatLine(TEXT("You already have a party ad."), FLinearColor(1.f, 0.85f, 0.4f)); }
+	else if (R == 10) { AddChatLine(TEXT("Party ad removed."), FLinearColor(0.7f, 1.f, 0.7f)); }
+	else if (R == 12 || R == 13) { AddChatLine(TEXT("You have no party ad."), FLinearColor(1.f, 0.85f, 0.4f)); }
 	const TArray<FRoPartyBookingAd>& Ads = Net->GetBookingAds();
 	for (int32 i = 0; i < PbRows; ++i)
 	{
@@ -119,7 +119,7 @@ void UMythRoHUDWidget::UpdateBooking()
 	}
 	if (BookingFooter && Ads.Num() == 0 && R == 20)
 	{
-		BookingFooter->SetText(FText::FromString(TEXT("Nenhum anúncio de grupo no momento.")));
+		BookingFooter->SetText(FText::FromString(TEXT("No party ads at the moment.")));
 	}
 }
 

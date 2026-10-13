@@ -29,7 +29,7 @@ void UAutoBattleComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 		if (RemainingStaminaSeconds <= 0.0f)
 		{
 			ToggleAutoBattle(false);
-			OnAutoBattleError.Broadcast(TEXT("Seu limite diário de 3 horas de Auto-Battle foi concluído."));
+			OnAutoBattleError.Broadcast(TEXT("Your daily 3-hour Auto-Battle limit has been used up."));
 		}
 	}
 
@@ -51,19 +51,19 @@ bool UAutoBattleComponent::ToggleAutoBattle(bool bEnable)
 		// Validações de segurança antes de ativar
 		if (bIsDowned)
 		{
-			OnAutoBattleError.Broadcast(TEXT("Você não pode ativar o Auto-Battle enquanto estiver derrotado."));
+			OnAutoBattleError.Broadcast(TEXT("You cannot enable Auto-Battle while defeated."));
 			return false;
 		}
 
 		if (RemainingStaminaSeconds <= 0.0f)
 		{
-			OnAutoBattleError.Broadcast(TEXT("Limite diário de 3 horas de Auto-Battle esgotado."));
+			OnAutoBattleError.Broadcast(TEXT("Daily 3-hour Auto-Battle limit reached."));
 			return false;
 		}
 
 		if (InventoryWeightPercent >= OVERWEIGHT_THRESHOLD_PERCENT)
 		{
-			OnAutoBattleError.Broadcast(TEXT("Inventário com sobrepeso (>= 90%). Esvazie seu inventário para continuar."));
+			OnAutoBattleError.Broadcast(TEXT("Inventory overweight (>= 90%). Empty your inventory to continue."));
 			return false;
 		}
 
@@ -107,7 +107,7 @@ void UAutoBattleComponent::UpdateInventoryWeight(float CurrentWeightPercent)
 	if (bAutoBattleActive && InventoryWeightPercent >= OVERWEIGHT_THRESHOLD_PERCENT)
 	{
 		ToggleAutoBattle(false);
-		OnAutoBattleError.Broadcast(TEXT("Auto-Battle pausado: Inventário atingiu 90% de peso."));
+		OnAutoBattleError.Broadcast(TEXT("Auto-Battle paused: inventory reached 90% weight."));
 	}
 }
 

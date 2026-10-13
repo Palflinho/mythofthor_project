@@ -58,7 +58,7 @@ void UMythRoHUDWidget::BuildModernHud()
 	ModernPanel = MakeWindow(FVector2D(0.f, 0.f), FVector2D(0.f, 0.f), FVector2D(6.f * UIScale, 6.f * UIScale), FVector2D(MhPanelW, MhPanelH));
 	AddRounded(ModernPanel, MhBody, FLinearColor::Transparent, 0.f, 9.f, MhPanelW, MhPanelH - 9.f, 0.f, 7.f)->SetVisibility(ESlateVisibility::Visible);
 	UTextBlock* PanelTitle = nullptr;
-	AddTitleBar(ModernPanel, MhPanelW, TEXT("Personagem"), &PanelTitle);
+	AddTitleBar(ModernPanel, MhPanelW, TEXT("Character"), &PanelTitle);
 	if (PanelTitle) { PanelTitle->SetColorAndOpacity(FSlateColor(FLinearColor::Black)); PanelTitle->SetShadowColorAndOpacity(FLinearColor::Transparent); }
 	AddRounded(ModernPanel, FLinearColor(0.86f, 0.9f, 0.98f, 1.f), FLinearColor(0.45f, 0.55f, 0.8f, 1.f), 4.f, MhTitleH + 4.f, 36.f, 36.f, 18.f, 18.f);
 	ModernClassIcon = AddImage(ModernPanel, nullptr, 8.f, MhTitleH + 8.f, 28.f, 28.f); // simbolo da classe (o mesmo da janela do grupo)
@@ -152,12 +152,12 @@ void UMythRoHUDWidget::UpdateModernHud()
 	if (NetStats && NetStats->MaxWeight > 0)
 	{
 		const int32 WeightPct = FMath::RoundToInt(100.f * NetStats->Weight / NetStats->MaxWeight);
-		ModernWeightZeny->SetText(FText::FromString(FString::Printf(TEXT("Peso %d%%   Zeny %s"), WeightPct, *FText::AsNumber(NetStats->Zeny).ToString())));
+		ModernWeightZeny->SetText(FText::FromString(FString::Printf(TEXT("Weight %d%%   Zeny %s"), WeightPct, *FText::AsNumber(NetStats->Zeny).ToString())));
 		ModernWeightZeny->SetColorAndOpacity(FSlateColor(WeightPct >= 50 ? FLinearColor(0.8f, 0.15f, 0.1f) : MhInk));
 	}
 	else
 	{
-		ModernWeightZeny->SetText(FText::FromString(TEXT("Peso 0%   Zeny 0")));
+		ModernWeightZeny->SetText(FText::FromString(TEXT("Weight 0%   Zeny 0")));
 	}
 
 	if (NetStats)
@@ -181,16 +181,16 @@ void UMythRoHUDWidget::UpdateModernHud()
 	SetBox(ModernJobFill, MhExpHalfW + MhExpBox + MhExpGap + MhExpBox + MhExpHalfW * (1.f - JobFrac), MhExpBarY, MhExpHalfW * JobFrac, MhExpBarH, UIScale);
 	ModernBaseLabel->SetText(FText::FromString(FString::Printf(TEXT("Base %d"), Stats->GetBaseLevel())));
 	ModernJobLabel->SetText(FText::FromString(FString::Printf(TEXT("Job %d"), NetStats ? NetStats->JobLevel : 1)));
-	ModernBaseHover->SetToolTipText(FText::FromString(FString::Printf(TEXT("EXP de Base: %.2f%%"), BaseFrac * 100.f)));
-	ModernJobHover->SetToolTipText(FText::FromString(FString::Printf(TEXT("EXP de Classe: %.2f%%"), JobFrac * 100.f)));
+	ModernBaseHover->SetToolTipText(FText::FromString(FString::Printf(TEXT("Base EXP: %.2f%%"), BaseFrac * 100.f)));
+	ModernJobHover->SetToolTipText(FText::FromString(FString::Printf(TEXT("Job EXP: %.2f%%"), JobFrac * 100.f)));
 
 	// Botoes de level up: so com pontos pendentes (Base: atributos; Classe: habilidades)
 	ModernBaseLvUp->SetVisibility(NetStats && NetStats->StatusPoints > 0 ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
 	ModernJobLvUp->SetVisibility(NetStats && NetStats->SkillPoints > 0 ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
 	if (NetStats)
 	{
-		ModernBaseLvUp->SetToolTipText(FText::FromString(FString::Printf(TEXT("%d pontos de atributo para distribuir"), NetStats->StatusPoints)));
-		ModernJobLvUp->SetToolTipText(FText::FromString(FString::Printf(TEXT("%d pontos de habilidade para distribuir"), NetStats->SkillPoints)));
+		ModernBaseLvUp->SetToolTipText(FText::FromString(FString::Printf(TEXT("%d attribute points to distribute"), NetStats->StatusPoints)));
+		ModernJobLvUp->SetToolTipText(FText::FromString(FString::Printf(TEXT("%d skill points to distribute"), NetStats->SkillPoints)));
 	}
 }
 

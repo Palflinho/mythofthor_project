@@ -74,7 +74,7 @@ void UMythRoHUDWidget::OpenSelectList(uint8 ListType, const TArray<int32>& Value
 	switch (static_cast<EMythSelectList>(ListType))
 	{
 	case EMythSelectList::Warp: Title = TEXT("Portal"); break;
-	case EMythSelectList::Identify: Title = TEXT("Identificar item"); break;
+	case EMythSelectList::Identify: Title = TEXT("Identify item"); break;
 	case EMythSelectList::Card: Title = FMythRoClientTables::Message(522); if (Title.IsEmpty()) { Title = TEXT("Encaixar carta"); } break;
 	case EMythSelectList::Arrow: Title = TEXT("Fabricar flechas"); break;
 	case EMythSelectList::Produce: Title = TEXT("Fabricar"); break;

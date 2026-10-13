@@ -50,8 +50,8 @@ namespace
 		return B;
 	}
 	FString NvArtS(const TCHAR* Name) { return FString::Printf(TEXT("navigation_interface3/%s.bmp"), Name); }
-	const TCHAR* NvFilterNames[3] = { TEXT("Todos"), TEXT("Mapas"), TEXT("Monstros") };
-	const TCHAR* NvSizeNames[3] = { TEXT("pequeno"), TEXT("médio"), TEXT("grande") };
+	const TCHAR* NvFilterNames[3] = { TEXT("Todos"), TEXT("Maps"), TEXT("Monstros") };
+	const TCHAR* NvSizeNames[3] = { TEXT("pequeno"), TEXT("medium"), TEXT("grande") };
 
 	struct FNaviLink { FString To; int32 X = 0, Y = 0; };
 	struct FNaviMob { FString Name; int32 Level = 1; int32 Size = 0; };
@@ -102,7 +102,7 @@ namespace
 			if (FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("navi_mobs.json")))
 				&& FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), MobRoot) && MobRoot.IsValid())
 			{
-				if (const TSharedPtr<FJsonObject>* Maps; MobRoot->TryGetObjectField(TEXT("mapas"), Maps))
+				if (const TSharedPtr<FJsonObject>* Maps; MobRoot->TryGetObjectField(TEXT("maps"), Maps))
 				{
 					for (const TPair<FString, TSharedPtr<FJsonValue>>& P : (*Maps)->Values)
 					{
@@ -143,7 +143,7 @@ namespace
 
 void UMythRoHUDWidget::BuildNaviWindow()
 {
-	NaviWindow = MakeRoPanel(TEXT("Navegação"), FVector2D(NvW, NvH), FVector2D(-120.f, -40.f));
+	NaviWindow = MakeRoPanel(TEXT("Navigation"), FVector2D(NvW, NvH), FVector2D(-120.f, -40.f));
 	// Linha de busca (y 21): voltar, filtro com a seta da lista, campo de texto e lupa
 	NaviBackBtn = AddButtonEx(NaviWindow, NvArtS(TEXT("bt_back")), NvArtS(TEXT("bt_back_on")), NvArtS(TEXT("bt_back_on")), 4.f, 21.f);
 	NaviFilterBtn = AddImage(NaviWindow, FMythRoUITextures::Get(NvArtS(TEXT("bg_combo"))), 28.f, 21.f, 48.f, 18.f);
@@ -210,8 +210,8 @@ void UMythRoHUDWidget::BuildNaviWindow()
 		if (bKeepLabel) { NaviAutoBtn = T; }
 		return Img;
 	};
-	NaviShareBtn = NaviButton(TEXT("btn_share"), NvRightX, BtnY, 67.f, TEXT("Enviar"), false);
-	NaviFindBtn = NaviButton(TEXT("btn_find"), NvRightX + 71.f, BtnY, 67.f, TEXT("Procurar"), false);
+	NaviShareBtn = NaviButton(TEXT("btn_share"), NvRightX, BtnY, 67.f, TEXT("Send"), false);
+	NaviFindBtn = NaviButton(TEXT("btn_find"), NvRightX + 71.f, BtnY, 67.f, TEXT("Search"), false);
 	NaviMoveBtn = NaviButton(TEXT("btn_getdirections"), NvRightX, BtnY + 24.f, NvRightW, TEXT("Mover"), true);
 
 	// Lista suspensa do filtro (por cima de tudo, por isso criada por ultimo)
@@ -410,11 +410,11 @@ void UMythRoHUDWidget::RefreshNaviLists()
 			const FString From = CurrentMapId.ToLower();
 			if (From == NaviSelected)
 			{
-				Lines.Add({ TEXT("icon_list_target"), TEXT("Você já está nesse mapa."), NvText });
+				Lines.Add({ TEXT("icon_list_target"), TEXT("You are already on that map."), NvText });
 			}
 			else if (NaviSteps.IsEmpty())
 			{
-				Lines.Add({ TEXT("icon_list_target"), TEXT("Sem caminho conhecido daqui."), NvText });
+				Lines.Add({ TEXT("icon_list_target"), TEXT("No known path from here."), NvText });
 			}
 			else
 			{
@@ -466,7 +466,7 @@ void UMythRoHUDWidget::StartNaviAuto()
 	if (bNaviAuto)
 	{
 		bNaviAuto = false;
-		AddChatLine(TEXT("Navegação automática cancelada."), NvSystem);
+		AddChatLine(TEXT("Auto navigation canceled."), NvSystem);
 		return;
 	}
 	if (NaviSteps.IsEmpty())
@@ -481,7 +481,7 @@ void UMythRoHUDWidget::StartNaviAuto()
 	NaviAutoDest = NaviSelected;
 	NaviAutoTimer = 0.f;
 	NaviProbe = 0;
-	AddChatLine(FString::Printf(TEXT("Navegação automática: %s."), *NaviLabelShort(NaviAutoDest)), NvSystem);
+	AddChatLine(FString::Printf(TEXT("Auto navigation: %s."), *NaviLabelShort(NaviAutoDest)), NvSystem);
 }
 
 void UMythRoHUDWidget::TickNaviAuto(float DeltaTime)
@@ -507,7 +507,7 @@ void UMythRoHUDWidget::TickNaviAuto(float DeltaTime)
 	if (CurrentMapId.ToLower() == NaviAutoDest)
 	{
 		bNaviAuto = false;
-		AddChatLine(TEXT("Você chegou ao destino."), NvSystem);
+		AddChatLine(TEXT("You reached the destination."), NvSystem);
 		return;
 	}
 	NaviAutoTimer -= DeltaTime;
@@ -523,7 +523,7 @@ void UMythRoHUDWidget::TickNaviAuto(float DeltaTime)
 		if (NaviSteps.IsEmpty())
 		{
 			bNaviAuto = false;
-			AddChatLine(TEXT("Navegação automática: sem caminho a partir daqui."), NvSystem);
+			AddChatLine(TEXT("Auto navigation: no path from here."), NvSystem);
 			return;
 		}
 	}
@@ -552,7 +552,7 @@ void UMythRoHUDWidget::TickNaviAuto(float DeltaTime)
 		{
 			NaviLastTarget = Goal;
 			NaviLastSend = Now;
-			UE_LOG(LogTemp, Log, TEXT("MythNavi: de (%d,%d) para (%d,%d)"), Me.X, Me.Y, Goal.X, Goal.Y);
+			UE_LOG(LogTemp, Log, TEXT("MythNavi: from (%d,%d) to (%d,%d)"), Me.X, Me.Y, Goal.X, Goal.Y);
 			NaviPC->MythWalk(Goal.X, Goal.Y);
 		}
 		NaviAutoTimer = 0.3f;
@@ -578,7 +578,7 @@ void UMythRoHUDWidget::TickNaviAuto(float DeltaTime)
 			}
 		}
 		bNaviAuto = false;
-		AddChatLine(FString::Printf(TEXT("Você chegou ao ponto da rota (%d, %d). Continue por aqui até %s."), Goal.X, Goal.Y, *NaviLabelShort(NaviSteps[0].To)), NvSystem);
+		AddChatLine(FString::Printf(TEXT("You reached the route point (%d, %d). Continue this way to %s."), Goal.X, Goal.Y, *NaviLabelShort(NaviSteps[0].To)), NvSystem);
 		return;
 	}
 	NaviAutoTimer = 0.5f; // no ponto do portal: espera o aviso de mapa

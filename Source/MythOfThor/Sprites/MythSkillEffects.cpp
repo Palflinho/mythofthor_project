@@ -421,7 +421,7 @@ bool FMythSkillEffects::Play(UObject* WorldContext, int32 SkillID, EMythSkillEff
 			bPlayed |= Id > 0 && PlayEffectId(WorldContext, Id, Target, Location, Source);
 		}
 	}
-	UE_LOG(LogTemp, Verbose, TEXT("MythSkillEffects: skill %d estagio %d -> efeito %d (%s)"), SkillID, static_cast<int32>(Stage), EffectID, bPlayed ? TEXT("tocou") : TEXT("sem efeito"));
+	UE_LOG(LogTemp, Verbose, TEXT("MythSkillEffects: skill %d estagio %d -> efeito %d (%s)"), SkillID, static_cast<int32>(Stage), EffectID, bPlayed ? TEXT("tocou") : TEXT("no effect"));
 	// O .str ja traz a propria luz; sem ele, o clarao do elemento no impacto
 	if (!bPlayed && bFlashIfMissing && Stage != EMythSkillEffectStage::Ground)
 	{

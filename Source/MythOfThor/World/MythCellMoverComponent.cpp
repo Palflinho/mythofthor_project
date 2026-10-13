@@ -265,7 +265,7 @@ void UMythCellMoverComponent::ServerStop(const FIntPoint& Cell)
 	const FIntPoint Cur = GetCurrentCell();
 	if (const APawn* Pawn = Cast<APawn>(GetOwner()); Pawn && Pawn->IsPlayerControlled())
 	{
-		UE_LOG(LogTemp, Log, TEXT("MythMove: parada do servidor em (%d,%d), cliente em (%d,%d)"), Cell.X, Cell.Y, Cur.X, Cur.Y);
+		UE_LOG(LogTemp, Log, TEXT("MythMove: server stop at (%d,%d), client at (%d,%d)"), Cell.X, Cell.Y, Cur.X, Cur.Y);
 	}
 	if (IsMoving())
 	{

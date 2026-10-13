@@ -44,7 +44,7 @@ UTexture2D* FMythRoUITextures::Get(const FString& RelativePath)
 	TArray<uint8> Bytes;
 	if (!FFileHelper::LoadFileToArray(Bytes, *Path))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("MythRoUI: textura nao encontrada: %s"), *Path);
+		UE_LOG(LogTemp, Warning, TEXT("MythRoUI: texture not found: %s"), *Path);
 		UITextureCache().Add(Key, nullptr);
 		return nullptr;
 	}
@@ -117,7 +117,7 @@ UTexture2D* FMythRoUITextures::GetSpriteFrame(const FString& SprPath, int32 Inde
 	FRoSpr Spr;
 	if (!FFileHelper::LoadFileToArray(Bytes, *Path) || !Spr.Load(Bytes))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("MythRoUI: sprite nao encontrado: %s"), *Path);
+		UE_LOG(LogTemp, Warning, TEXT("MythRoUI: sprite not found: %s"), *Path);
 		return nullptr;
 	}
 	const bool bRgba = Index >= Spr.Indexed.Num();

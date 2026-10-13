@@ -36,7 +36,7 @@ namespace
 
 	const TArray<FString>& QualityNames()
 	{
-		static const TArray<FString> N = { TEXT("Baixa"), TEXT("Média"), TEXT("Alta"), TEXT("Épica"), TEXT("Cinemática") };
+		static const TArray<FString> N = { TEXT("Baixa"), TEXT("Medium"), TEXT("Alta"), TEXT("Epic"), TEXT("Cinematic") };
 		return N;
 	}
 }
@@ -135,7 +135,7 @@ void UMythRoHUDWidget::BuildGameMenu()
 	// com 6 px entre eles; ate aqui eram links de texto numa janela de 200
 	const FVector2D MenuSize(300.f, 17.f + 12.f + 5 * 26.f + 4.f);
 	GameMenuWindow = MakeRoPanel(TEXT("Menu"), MenuSize, FVector2D::ZeroVector);
-	const TCHAR* Items[5] = { TEXT("Seleção de personagem"), TEXT("Configurações do jogo"), TEXT("Atalhos"), TEXT("Sair do jogo"), TEXT("Voltar ao jogo") };
+	const TCHAR* Items[5] = { TEXT("Character select"), TEXT("Game settings"), TEXT("Shortcuts"), TEXT("Exit game"), TEXT("Back to game") };
 	for (int32 i = 0; i < 5; ++i)
 	{
 		UTextBlock* T = AddTextButton(GameMenuWindow, Items[i], 19.f, 17.f + 12.f + i * 26.f, 262.f);
@@ -144,10 +144,10 @@ void UMythRoHUDWidget::BuildGameMenu()
 	GameMenuWindow->SetVisibility(ESlateVisibility::Collapsed);
 
 	// Configuracoes graficas: "rotulo   <  valor  >" por linha
-	const TCHAR* Labels[GfxRowCount] = { TEXT("Modo de tela"), TEXT("Resolução"), TEXT("Qualidade geral"), TEXT("Sombras"),
-		TEXT("Iluminação (Lumen)"), TEXT("Anti-aliasing"), TEXT("Escala de resolução"), TEXT("Limite de FPS"), TEXT("V-Sync") };
+	const TCHAR* Labels[GfxRowCount] = { TEXT("Screen mode"), TEXT("Resolution"), TEXT("Qualidade geral"), TEXT("Sombras"),
+		TEXT("Lighting (Lumen)"), TEXT("Anti-aliasing"), TEXT("Resolution scale"), TEXT("FPS limit"), TEXT("V-Sync") };
 	const FVector2D Size(470.f, 17.f + 22.f + GfxRowCount * 24.f + 44.f);
-	GraphicsWindow = MakeRoPanel(TEXT("Configurações"), Size, FVector2D::ZeroVector);
+	GraphicsWindow = MakeRoPanel(TEXT("Settings"), Size, FVector2D::ZeroVector);
 	AddSettingsTabs(GraphicsWindow);
 	UTexture2D* Left = FMythRoUITextures::Get(MenuBasic(TEXT("arw_left")));
 	UTexture2D* Right = FMythRoUITextures::Get(MenuBasic(TEXT("arw_right")));
@@ -172,9 +172,9 @@ void UMythRoHUDWidget::BuildGameMenu()
 	LoadGraphicsOptions();
 
 	// Som e interface
-	const TCHAR* SndLabels[SndRowCount] = { TEXT("Volume geral"), TEXT("Música"), TEXT("Efeitos"), TEXT("Escala da interface") };
+	const TCHAR* SndLabels[SndRowCount] = { TEXT("Volume geral"), TEXT("Music"), TEXT("Efeitos"), TEXT("Interface scale") };
 	const FVector2D SSize = Size; // mesmo tamanho: troca de aba sem a janela "pular"
-	SoundWindow = MakeRoPanel(TEXT("Configurações"), SSize, FVector2D::ZeroVector);
+	SoundWindow = MakeRoPanel(TEXT("Settings"), SSize, FVector2D::ZeroVector);
 	AddSettingsTabs(SoundWindow);
 	for (int32 i = 0; i < SndRowCount; ++i)
 	{
@@ -194,10 +194,10 @@ void UMythRoHUDWidget::BuildGameMenu()
 
 	// Janela de morte: sempre oferece voltar ao ponto de salvamento (CZ_RESTART 0); o fechar/Aguardar so a esconde
 	const FVector2D DeathSize(260.f, 17.f + 74.f);
-	DeathWindow = MakeRoPanel(TEXT("Você morreu"), DeathSize, FVector2D(0.f, -120.f));
-	AddText(DeathWindow, 14.f, 26.f, 8, MenuText)->SetText(FText::FromString(TEXT("Você foi derrotado.")));
+	DeathWindow = MakeRoPanel(TEXT("You died"), DeathSize, FVector2D(0.f, -120.f));
+	AddText(DeathWindow, 14.f, 26.f, 8, MenuText)->SetText(FText::FromString(TEXT("You were defeated.")));
 	DeathSaveLink = AddText(DeathWindow, 14.f, 44.f, 9, MenuLink);
-	DeathSaveLink->SetText(FText::FromString(TEXT("Voltar ao ponto de salvamento")));
+	DeathSaveLink->SetText(FText::FromString(TEXT("Return to save point")));
 	DeathWaitLink = AddText(DeathWindow, 14.f, 64.f, 9, MenuLink);
 	DeathWaitLink->SetText(FText::FromString(TEXT("Aguardar socorro")));
 	DeathWindow->SetVisibility(ESlateVisibility::Collapsed);
@@ -217,7 +217,7 @@ void UMythRoHUDWidget::RefreshSoundWindow()
 	SndValues[1]->SetText(FText::FromString(FString::Printf(TEXT("%d%%"), SndMusic * 10)));
 	SndValues[2]->SetText(FText::FromString(FString::Printf(TEXT("%d%%"), SndEffects * 10)));
 	SndValues[3]->SetText(FText::FromString(FString::Printf(TEXT("%d%%"), FMath::RoundToInt(SndUIScale * 100.f))));
-	SndHint->SetText(FText::FromString(FMath::IsNearlyEqual(SndUIScale, UIScale) ? TEXT("") : TEXT("A escala vale ao abrir o jogo de novo.")));
+	SndHint->SetText(FText::FromString(FMath::IsNearlyEqual(SndUIScale, UIScale) ? TEXT("") : TEXT("The scale applies the next time the game starts.")));
 }
 
 void UMythRoHUDWidget::StepSoundOption(int32 Row, int32 Delta)
@@ -249,9 +249,9 @@ void UMythRoHUDWidget::RefreshGraphicsWindow()
 	{
 		return;
 	}
-	static const TCHAR* Modes[3] = { TEXT("Janela"), TEXT("Tela cheia (sem borda)"), TEXT("Tela cheia") };
-	static const TCHAR* AA[4] = { TEXT("Nenhum"), TEXT("FXAA (recomendado)"), TEXT("TAA"), TEXT("TSR") };
-	static const TCHAR* Fps[5] = { TEXT("30"), TEXT("60"), TEXT("120"), TEXT("144"), TEXT("Sem limite") };
+	static const TCHAR* Modes[3] = { TEXT("Window"), TEXT("Fullscreen (borderless)"), TEXT("Tela cheia") };
+	static const TCHAR* AA[4] = { TEXT("None"), TEXT("FXAA (recomendado)"), TEXT("TAA"), TEXT("TSR") };
+	static const TCHAR* Fps[5] = { TEXT("30"), TEXT("60"), TEXT("120"), TEXT("144"), TEXT("Unlimited") };
 	const FIntPoint Res = Gfx.Resolutions.IsValidIndex(Gfx.ResolutionIndex) ? Gfx.Resolutions[Gfx.ResolutionIndex] : FIntPoint(1600, 900);
 	const FString Values[GfxRowCount] = {
 		Modes[FMath::Clamp(Gfx.WindowMode, 0, 2)],
@@ -267,7 +267,7 @@ void UMythRoHUDWidget::RefreshGraphicsWindow()
 	{
 		GfxValues[i]->SetText(FText::FromString(Values[i]));
 	}
-	GfxHint->SetText(FText::FromString(bGfxDirty ? TEXT("Clique em Aplicar para salvar.") : TEXT("")));
+	GfxHint->SetText(FText::FromString(bGfxDirty ? TEXT("Click Apply to save.") : TEXT("")));
 }
 
 void UMythRoHUDWidget::StepGraphicsOption(int32 Row, int32 Delta)

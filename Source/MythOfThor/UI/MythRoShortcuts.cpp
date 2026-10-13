@@ -14,27 +14,27 @@ namespace
 
 	struct FShortcutRow { const TCHAR* Function; const TCHAR* Key; };
 	const FShortcutRow ShortcutRows[] = {
-		{ TEXT("Atributos"), TEXT("Alt+A") },
-		{ TEXT("Itens"), TEXT("Alt+E") },
-		{ TEXT("Equipamento"), TEXT("Alt+Q") },
-		{ TEXT("Habilidades"), TEXT("Alt+S") },
-		{ TEXT("Informação básica"), TEXT("Alt+V") },
-		{ TEXT("Grupo"), TEXT("Alt+Z") },
-		{ TEXT("Amigos"), TEXT("Alt+H") },
-		{ TEXT("Sala de chat"), TEXT("Alt+C") },
-		{ TEXT("Missões"), TEXT("Alt+U") },
-		{ TEXT("Lista de emoções"), TEXT("Alt+L") },
-		{ TEXT("Lista de atalhos"), TEXT("Alt+M") },
-		{ TEXT("Conquistas"), TEXT("Alt+Y") },
-		{ TEXT("Troca rápida de equipamento"), TEXT("Alt+W") },
-		{ TEXT("Banco"), TEXT("Ctrl+B") },
-		{ TEXT("Correio"), TEXT("Alt+R") },
-		{ TEXT("Navegação (também /navi)"), TEXT("Alt+N") },
+		{ TEXT("Attributes"), TEXT("Alt+A") },
+		{ TEXT("Items"), TEXT("Alt+E") },
+		{ TEXT("Equipment"), TEXT("Alt+Q") },
+		{ TEXT("Skills"), TEXT("Alt+S") },
+		{ TEXT("Basic information"), TEXT("Alt+V") },
+		{ TEXT("Party"), TEXT("Alt+Z") },
+		{ TEXT("Friends"), TEXT("Alt+H") },
+		{ TEXT("Chat room"), TEXT("Alt+C") },
+		{ TEXT("Missions"), TEXT("Alt+U") },
+		{ TEXT("Emotion list"), TEXT("Alt+L") },
+		{ TEXT("Shortcut list"), TEXT("Alt+M") },
+		{ TEXT("Achievements"), TEXT("Alt+Y") },
+		{ TEXT("Quick equipment swap"), TEXT("Alt+W") },
+		{ TEXT("Bank"), TEXT("Ctrl+B") },
+		{ TEXT("Mail"), TEXT("Alt+R") },
+		{ TEXT("Navigation (also /navi)"), TEXT("Alt+N") },
 		{ TEXT("Minimapa"), TEXT("Ctrl+Tab") },
 		{ TEXT("Sentar / levantar"), TEXT("Insert") },
-		{ TEXT("Atalhos da barra"), TEXT("F1 a F9") },
-		{ TEXT("Menu do jogo"), TEXT("Esc") },
-		{ TEXT("Esta janela"), TEXT("F12") },
+		{ TEXT("Bar shortcuts"), TEXT("F1 a F9") },
+		{ TEXT("Game menu"), TEXT("Esc") },
+		{ TEXT("This window"), TEXT("F12") },
 	};
 }
 
@@ -42,7 +42,7 @@ void UMythRoHUDWidget::BuildShortcutWindow()
 {
 	constexpr float RowH = 17.f;
 	const int32 Count = UE_ARRAY_COUNT(ShortcutRows);
-	ShortcutWindow = MakeRoPanel(TEXT("Atalhos de teclado"), FVector2D(250.f, 17.f + 12.f + Count * RowH + 8.f), FVector2D(300.f, -150.f));
+	ShortcutWindow = MakeRoPanel(TEXT("Keyboard shortcuts"), FVector2D(250.f, 17.f + 12.f + Count * RowH + 8.f), FVector2D(300.f, -150.f));
 	for (int32 i = 0; i < Count; ++i)
 	{
 		const float Y = 24.f + i * RowH;

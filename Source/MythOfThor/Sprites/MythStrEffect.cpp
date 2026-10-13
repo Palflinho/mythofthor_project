@@ -131,7 +131,7 @@ bool AMythStrEffect::Setup(const FString& StrFile)
 		const FString Path = FPaths::Combine(UMythRoSpriteComponent::GetAssetsRoot(), TEXT("data"), TEXT("texture"), TEXT("effect"), Rel + TEXT(".str"));
 		if (!Loaded->Load(Path))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("MythStrEffect: nao consegui ler %s"), *Path);
+			UE_LOG(LogTemp, Warning, TEXT("MythStrEffect: could not read %s"), *Path);
 			return false;
 		}
 		Cached = Loaded;
@@ -368,7 +368,7 @@ void AMythStrEffect::Tick(float DeltaSeconds)
 	if (!bLoggedFirstFrame && LightWeight > 0.f)
 	{
 		bLoggedFirstFrame = true;
-		UE_LOG(LogTemp, Verbose, TEXT("MythStrEffect: quadro %.1f de %d com camadas visiveis (%d camadas, luz %.2f)"), Frame, Str->MaxKey, Str->Layers.Num(), LightWeight);
+		UE_LOG(LogTemp, Verbose, TEXT("MythStrEffect: frame %.1f of %d with visible layers (%d layers, light %.2f)"), Frame, Str->MaxKey, Str->Layers.Num(), LightWeight);
 	}
 	if (LightWeight > 0.01f)
 	{

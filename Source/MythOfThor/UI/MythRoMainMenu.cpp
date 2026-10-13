@@ -31,22 +31,22 @@ namespace
 	};
 
 	const FHubEntry HubEntries[] = {
-		{ TEXT("item"), TEXT("Inventário"), EMythRoWindow::Items, false },
-		{ TEXT("equip"), TEXT("Equipamentos"), EMythRoWindow::Equip, false },
+		{ TEXT("item"), TEXT("Inventory"), EMythRoWindow::Items, false },
+		{ TEXT("equip"), TEXT("Equipment"), EMythRoWindow::Equip, false },
 		{ TEXT("status"), TEXT("Status"), EMythRoWindow::Status, false },
-		{ TEXT("skill"), TEXT("Habilidades"), EMythRoWindow::Skills, false },
-		{ TEXT("party"), TEXT("Grupo"), EMythRoWindow::Party, false },
-		{ TEXT("quest"), TEXT("Missões"), EMythRoWindow::Quests, false },
-		{ TEXT("mail"), TEXT("Correio"), EMythRoWindow::Mail, false },
-		{ TEXT("map"), TEXT("Mapa"), EMythRoWindow::Minimap, false },
-		{ TEXT("guild"), TEXT("Clã"), EMythRoWindow::Guild, false },
-		{ TEXT("navigation"), TEXT("Navegação"), EMythRoWindow::Navi, false },
-		{ TEXT("sns"), TEXT("Amigos"), EMythRoWindow::Friends, false },
-		{ TEXT("achievement"), TEXT("Conquistas"), EMythRoWindow::Achievements, false },
-		{ TEXT("bank"), TEXT("Banco"), EMythRoWindow::Bank, false },
-		{ TEXT("keyboard"), TEXT("Atalhos"), EMythRoWindow::Shortcuts, false },
-		{ TEXT("shop"), TEXT("Loja de Testes"), EMythRoWindow::TestShop, false },
-		{ TEXT("option"), TEXT("Configurações"), EMythRoWindow::Status, true },
+		{ TEXT("skill"), TEXT("Skills"), EMythRoWindow::Skills, false },
+		{ TEXT("party"), TEXT("Party"), EMythRoWindow::Party, false },
+		{ TEXT("quest"), TEXT("Missions"), EMythRoWindow::Quests, false },
+		{ TEXT("mail"), TEXT("Mail"), EMythRoWindow::Mail, false },
+		{ TEXT("map"), TEXT("Map"), EMythRoWindow::Minimap, false },
+		{ TEXT("guild"), TEXT("Guild"), EMythRoWindow::Guild, false },
+		{ TEXT("navigation"), TEXT("Navigation"), EMythRoWindow::Navi, false },
+		{ TEXT("sns"), TEXT("Friends"), EMythRoWindow::Friends, false },
+		{ TEXT("achievement"), TEXT("Achievements"), EMythRoWindow::Achievements, false },
+		{ TEXT("bank"), TEXT("Bank"), EMythRoWindow::Bank, false },
+		{ TEXT("keyboard"), TEXT("Shortcuts"), EMythRoWindow::Shortcuts, false },
+		{ TEXT("shop"), TEXT("Test Shop"), EMythRoWindow::TestShop, false },
+		{ TEXT("option"), TEXT("Settings"), EMythRoWindow::Status, true },
 	};
 }
 

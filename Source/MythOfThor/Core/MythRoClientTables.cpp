@@ -25,7 +25,7 @@ namespace
 		const FString Path = FPaths::Combine(FPaths::ProjectConfigDir(), FileName);
 		if (!FFileHelper::LoadFileToString(Text, *Path))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("MythRoClientTables: %s nao encontrado"), *Path);
+			UE_LOG(LogTemp, Warning, TEXT("MythRoClientTables: %s not found"), *Path);
 			return Out;
 		}
 		TSharedPtr<FJsonObject> Root;
@@ -59,7 +59,7 @@ namespace
 				}
 			}
 		}
-		UE_LOG(LogTemp, Log, TEXT("MythRoClientTables: %s com %d entradas"), FileName, Out.Num());
+		UE_LOG(LogTemp, Log, TEXT("MythRoClientTables: %s with %d entries"), FileName, Out.Num());
 		return Out;
 	}
 
@@ -92,7 +92,7 @@ namespace
 		if (!FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("item_info.json")))
 			|| !FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) || !Root.IsValid())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("MythRoClientTables: Config/item_info.json ausente (tools/gen_item_info.py)"));
+			UE_LOG(LogTemp, Warning, TEXT("MythRoClientTables: Config/item_info.json missing (tools/gen_item_info.py)"));
 			return Table;
 		}
 		auto Lines = [](const TSharedPtr<FJsonObject>& O, const TCHAR* Key)
@@ -141,7 +141,7 @@ namespace
 					I.Slots = static_cast<int32>(O->GetNumberField(TEXT("slots")));
 					++Added;
 				}
-				UE_LOG(LogTemp, Log, TEXT("MythRoClientTables: %d itens vindos da tabela 2026 (sem entrada no LATAM)"), Added);
+				UE_LOG(LogTemp, Log, TEXT("MythRoClientTables: %d items from the 2026 table (no entry in LATAM)"), Added);
 			}
 		}
 		return Table;
@@ -316,20 +316,20 @@ TArray<FString> FMythRoClientTables::ItemDescriptionLines(int32 ItemID, bool bId
 	if (!Warned.Contains(ItemID))
 	{
 		Warned.Add(ItemID);
-		UE_LOG(LogTemp, Error, TEXT("MythItem: item %d sem descricao em Config/item_info.json nem items.json; mostrando o resumo do catalogo do rAthena"), ItemID);
+		UE_LOG(LogTemp, Error, TEXT("MythItem: item %d has no description in Config/item_info.json or items.json; showing the rAthena catalog summary"), ItemID);
 	}
 	TArray<FString> Out;
 	if (const FCatalogLite* C = CatalogLite().Find(ItemID))
 	{
 		Out.Add(FString::Printf(TEXT("%s"), *C->NameEn));
-		const TCHAR* Kind = C->Kind == TEXT("equip") ? TEXT("Equipamento") : (C->Kind == TEXT("card") ? TEXT("Carta") : (C->Kind == TEXT("use") ? TEXT("Consumível") : TEXT("Diversos")));
+		const TCHAR* Kind = C->Kind == TEXT("equip") ? TEXT("Equipment") : (C->Kind == TEXT("card") ? TEXT("Carta") : (C->Kind == TEXT("use") ? TEXT("Consumable") : TEXT("Diversos")));
 		Out.Add(FString::Printf(TEXT("Tipo: %s%s"), Kind, C->Sub.IsEmpty() ? TEXT("") : *FString::Printf(TEXT(" (%s)"), *C->Sub)));
-		Out.Add(TEXT("Descrição não disponível no cliente."));
+		Out.Add(TEXT("Description not available in the client."));
 	}
 	else
 	{
 		Out.Add(FString::Printf(TEXT("Item #%d"), ItemID));
-		Out.Add(TEXT("Descrição não disponível no cliente."));
+		Out.Add(TEXT("Description not available in the client."));
 	}
 	return Out;
 }

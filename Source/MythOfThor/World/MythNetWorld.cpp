@@ -85,7 +85,7 @@ namespace
 				Fill(TEXT("npc"), T.Npc);
 				Fill(TEXT("mob"), T.Mob);
 			}
-			UE_LOG(LogTemp, Log, TEXT("MythNetWorld: tabelas de sprite com %d NPCs e %d monstros"), T.Npc.Num(), T.Mob.Num());
+			UE_LOG(LogTemp, Log, TEXT("MythNetWorld: sprite tables with %d NPCs and %d monsters"), T.Npc.Num(), T.Mob.Num());
 			return T;
 		}();
 		return Tables;
@@ -114,7 +114,7 @@ namespace
 					Table.Add(FCString::Atoi(*Pair.Key), Pair.Value->AsString());
 				}
 			}
-			UE_LOG(LogTemp, Log, TEXT("MythNetWorld: %d sprites de classe"), Table.Num());
+			UE_LOG(LogTemp, Log, TEXT("MythNetWorld: %d class sprites"), Table.Num());
 		}
 		return Table;
 	}
@@ -405,13 +405,13 @@ void AMythNetWorld::Login(const FString& User, const FString& Password)
 	const FString P = Password.IsEmpty() ? CfgPass : Password;
 	if (U.IsEmpty())
 	{
-		Chat(TEXT("Sem conta configurada ([Myth] NetUser no DefaultGame.ini)."), NetErrorColor);
+		Chat(TEXT("No account configured ([Myth] NetUser in DefaultGame.ini)."), NetErrorColor);
 		return;
 	}
 	Chat(FString::Printf(TEXT("Conectando a %s como %s..."), *Host, *U), NetSystemColor);
 	if (!Net->ConnectAndLogin(Host, U, P))
 	{
-		Chat(TEXT("Falha ao conectar no servidor de login (6900)."), NetErrorColor);
+		Chat(TEXT("Failed to connect to the login server (6900)."), NetErrorColor);
 	}
 }
 
@@ -447,12 +447,12 @@ void AMythNetWorld::HandleCharacterList(const TArray<FRagnarokCharacterSlotInfo>
 	}
 	if (Characters.IsEmpty())
 	{
-		Chat(TEXT("Conta sem personagens (crie um no servidor)."), NetErrorColor);
+		Chat(TEXT("Account has no characters (create one on the server)."), NetErrorColor);
 		return;
 	}
 	// Tela de selecao classica ainda nao existe: entra com o primeiro personagem
 	const FRagnarokCharacterSlotInfo& C = Characters[0];
-	Chat(FString::Printf(TEXT("Personagem: %s (Nv %d)"), *C.Name, C.BaseLevel), NetSystemColor);
+	Chat(FString::Printf(TEXT("Character: %s (Lv %d)"), *C.Name, C.BaseLevel), NetSystemColor);
 	if (URagnarokNetworkSubsystem* Net = GetNet())
 	{
 		Net->SelectCharacter(C.Slot);
@@ -545,11 +545,11 @@ void AMythNetWorld::HandleMapEnter(const FString& MapName, int32 CellX, int32 Ce
 		if (FPackageName::DoesPackageExist(Level))
 		{
 			// Carrega o mapa novo; o AMythNetWorld de la posiciona o personagem e avisa o servidor (NotifyMapLoaded)
-			Chat(FString::Printf(TEXT("Indo para %s..."), *Map), NetSystemColor);
+			Chat(FString::Printf(TEXT("Going to %s..."), *Map), NetSystemColor);
 			UGameplayStatics::OpenLevel(this, FName(*Level));
 			return;
 		}
-		Chat(FString::Printf(TEXT("O servidor colocou voce em '%s', mas esse mapa ainda nao foi importado (%s)."), *Map, *Level), NetErrorColor);
+		Chat(FString::Printf(TEXT("The server put you in '%s', but that map has not been imported yet (%s)."), *Map, *Level), NetErrorColor);
 	}
 	FinishMapEnter(Map, CellX, CellY);
 }
@@ -666,7 +666,7 @@ void AMythNetWorld::HandleUnitAppear(const FRagnarokUnitVisualInfo& Info)
 		{
 			return;
 		}
-		UE_LOG(LogTemp, Warning, TEXT("MythNetWorld: sem sprite para classe %d (%s) tipo %d; usando poring"), Info.JobClass, *SpriteName, Info.ObjectType);
+		UE_LOG(LogTemp, Warning, TEXT("MythNetWorld: no sprite for class %d (%s) type %d; using poring"), Info.JobClass, *SpriteName, Info.ObjectType);
 		Folder = TEXT("몬스터");
 		SpriteName = TEXT("poring");
 	}
@@ -996,7 +996,7 @@ namespace
 void AMythNetWorld::HandleSkillUnitAppear(int64 UnitID, int64 OwnerID, int32 UnitType, int32 X, int32 Y)
 {
 	const FSkillUnitVisual* V = SkillUnitVisuals().Find(UnitType);
-	UE_LOG(LogTemp, Log, TEXT("MythNetWorld: unidade de skill %lld tipo %d em (%d,%d): %s"), UnitID, UnitType, X, Y, V ? TEXT("tem efeito") : TEXT("sem efeito"));
+	UE_LOG(LogTemp, Log, TEXT("MythNetWorld: skill unit %lld type %d at (%d,%d): %s"), UnitID, UnitType, X, Y, V ? TEXT("tem efeito") : TEXT("no effect"));
 	if (!V)
 	{
 		return;
@@ -1245,7 +1245,7 @@ void AMythNetWorld::HandleDamage(int64 SourceID, int64 TargetID, int32 Damage, u
 	const int64 Self = Net ? Net->GetSelfID() : 0;
 	AActor* Source = ResolveActor(SourceID);
 	AActor* Target = ResolveActor(TargetID);
-	UE_LOG(LogTemp, Log, TEXT("MythNetWorld: dano %d (tipo %d) de %lld em %lld"), Damage, DamageType, SourceID, TargetID);
+	UE_LOG(LogTemp, Log, TEXT("MythNetWorld: damage %d (type %d) from %lld on %lld"), Damage, DamageType, SourceID, TargetID);
 
 	// ZC_NOTIFY_ACT que nao e golpe (e_damage_type do rAthena): 1 pegou item, 2 sentou, 3 levantou
 	if (DamageType == 1 || DamageType == 2 || DamageType == 3)
@@ -1398,7 +1398,7 @@ void AMythNetWorld::HandleDisconnected(const FString& Reason)
 			EntryHud->ShowEntryLogin(FString::Printf(TEXT("Desconectado: %s"), *Reason));
 		}
 	}
-	Chat(FString::Printf(TEXT("Desconectado do servidor: %s"), *Reason), NetErrorColor);
+	Chat(FString::Printf(TEXT("Disconnected from the server: %s"), *Reason), NetErrorColor);
 }
 
 void AMythNetWorld::HandleNpcDialog(int64 NpcID, const FString& Text)
@@ -1468,7 +1468,7 @@ void AMythNetWorld::HandleGroundItemAppear(int64 ID, int32 ItemID, int32 Amount,
 	Item->Setup(ID, ItemID, Amount, bInMap, CellOffset, bHasSub);
 	Item->FinishSpawning(Xf);
 	GroundItems.Add(ID, Item);
-	UE_LOG(LogTemp, Log, TEXT("MythNetWorld: item %d x%d no chao em (%d, %d)"), ItemID, Amount, CellX, CellY);
+	UE_LOG(LogTemp, Log, TEXT("MythNetWorld: item %d x%d on the ground at (%d, %d)"), ItemID, Amount, CellX, CellY);
 }
 
 void AMythNetWorld::HandleGroundItemVanish(int64 ID)
@@ -1476,7 +1476,7 @@ void AMythNetWorld::HandleGroundItemVanish(int64 ID)
 	TObjectPtr<AMythGroundItem> Item;
 	if (GroundItems.RemoveAndCopyValue(ID, Item) && IsValid(Item))
 	{
-		UE_LOG(LogTemp, Log, TEXT("MythNetWorld: item %lld saiu do chao"), ID);
+		UE_LOG(LogTemp, Log, TEXT("MythNetWorld: item %lld left the ground"), ID);
 		Item->Destroy();
 	}
 }
@@ -1881,7 +1881,7 @@ void AMythNetWorld::HandleSkillFailed(int32 SkillID, int32 Cause)
 	FString Reason = MsgIndex > 0 ? FMythRoClientTables::Message(MsgIndex) : FString();
 	if (Reason.IsEmpty())
 	{
-		Reason = TEXT("Falha ao usar a habilidade.");
+		Reason = TEXT("Failed to use the skill.");
 	}
 	Chat(Reason, NetErrorColor);
 }

@@ -237,9 +237,9 @@ void UMythRoHUDWidget::BuildStatusWindow()
 		Label(196.f, Y, Right[i]);
 		DerivedTexts.Add(Box(196.f, Y, 78.f, ETextJustify::Right));
 	}
-	Label(110.f, 17.f + 5.f + 64.f, TEXT("Pontos de Atributo"));
+	Label(110.f, 17.f + 5.f + 64.f, TEXT("Attribute Points"));
 	DerivedTexts.Add(Box(110.f, 17.f + 5.f + 64.f, 164.f, ETextJustify::Right));
-	Label(110.f, 17.f + 5.f + 80.f, TEXT("Clã"));
+	Label(110.f, 17.f + 5.f + 80.f, TEXT("Guild"));
 	DerivedTexts.Add(Box(110.f, 17.f + 5.f + 80.f, 164.f, ETextJustify::Right));
 	// OK e Cancelar: so aparecem com atributos adicionados e ainda nao confirmados
 	StatOkImg = AddButton(StatusWindow, TEXT("ok"), 280.f - 96.f, 17.f + 124.f + 3.f);
@@ -254,7 +254,7 @@ void UMythRoHUDWidget::BuildItemsWindow()
 	// (itemwin_mid) e o rodape com a contagem de itens (48/100), o cadeado de descarte e a busca
 	const float W = 24.f + RoItemCols * 32.f + 6.f;
 	const float H = 17.f + RoItemRows * 32.f + 6.f + 24.f;
-	ItemsWindow = MakeRoPanel(TEXT("Itens"), FVector2D(W, H), FVector2D(340.f, -170.f));
+	ItemsWindow = MakeRoPanel(TEXT("Items"), FVector2D(W, H), FVector2D(340.f, -170.f));
 	ItemTabImage = AddImage(ItemsWindow, FMythRoUITextures::Get(RoWinArt(TEXT("tab_pri_01"))), 0.f, 19.f, 21.f, 134.f);
 	UTexture2D* CellTex = FMythRoUITextures::Get(RoWinArt(TEXT("itemwin_mid")));
 	for (int32 i = 0; i < RoItemCols * RoItemRows; ++i)
@@ -287,8 +287,8 @@ void UMythRoHUDWidget::BuildEquipWindow()
 	// Equipamento (Alt+Q), print 08 do LATAM e EquipmentV4 do roBrowser: 280 de largura, 4 abas de 70 (Geral, Especial, Titulo,
 	// Fonte de dano), arte equipwin_bg (280 x 130) com os 10 encaixes em linhas de 26, o personagem no centro e o rodape de 22 com
 	// "Mostrar equip." e os botoes de atributos, troca rapida e tirar tudo
-	EquipWindow = MakeRoPanel(TEXT("Equipamento"), FVector2D(280.f, EqTop + 130.f + EqFootH), FVector2D(-340.f, 120.f));
-	const TCHAR* TabNames[4] = { TEXT("Geral"), TEXT("Especial"), TEXT("Título"), TEXT("Fonte de dano") };
+	EquipWindow = MakeRoPanel(TEXT("Equipment"), FVector2D(280.f, EqTop + 130.f + EqFootH), FVector2D(-340.f, 120.f));
+	const TCHAR* TabNames[4] = { TEXT("Geral"), TEXT("Especial"), TEXT("Title"), TEXT("Damage font") };
 	for (int32 t = 0; t < 4; ++t)
 	{
 		UImage* Box = AddRounded(EquipWindow, FLinearColor::White, FLinearColor(0.62f, 0.66f, 0.76f, 1.f), 1.f + t * 70.f, 18.f, 69.f, EqTop - 18.f, 4.f, 0.f);
@@ -388,7 +388,7 @@ void UMythRoHUDWidget::BuildSkillsWindow()
 	// na posicao do skilltreeview.lub, pre-requisitos destacados ao passar o mouse e o nivel/"+" em cada skill
 	const float W = RoTreeLeft + 24.f + FMythRoSkillTree::Columns * RoTreeCellW;
 	const float H = RoTreeTop + RoTreeRows * RoTreeCellH + 40.f;
-	SkillsWindow = MakeRoPanel(TEXT("Habilidades"), FVector2D(W, H), FVector2D(340.f, 110.f));
+	SkillsWindow = MakeRoPanel(TEXT("Skills"), FVector2D(W, H), FVector2D(340.f, 110.f));
 	for (int32 t = 0; t < 4; ++t)
 	{
 		// Aba vertical (print 13: "1a", "2a", "3a", "Etc" na lateral esquerda)
@@ -701,7 +701,7 @@ void UMythRoHUDWidget::RefreshItemsWindow()
 	FString Info;
 	if (!Net || Net->GetNetworkState() != ERagnarokNetworkState::ConnectedMap)
 	{
-		Info = TEXT("Inventario vem do servidor (desconectado)");
+		Info = TEXT("Inventory comes from the server (disconnected)");
 	}
 	for (int32 i = 0; i < ItemCells.Num() && Net; ++i)
 	{
@@ -777,7 +777,7 @@ void UMythRoHUDWidget::RefreshEquipWindow()
 		{
 			const int32 Id = EquipTitleIds[i];
 			const FString* Name = RoTitles().Names.Find(Id);
-			EquipTitleTexts[i]->SetText(FText::FromString(Id == 0 ? FString(TEXT("(sem título)")) : (Name ? *Name : FString::Printf(TEXT("Título %d"), Id))));
+			EquipTitleTexts[i]->SetText(FText::FromString(Id == 0 ? FString(TEXT("(untitled)")) : (Name ? *Name : FString::Printf(TEXT("Title %d"), Id))));
 			EquipTitleHits[i]->SetColorAndOpacity(Id == CurrentTitle ? FLinearColor(0.78f, 0.86f, 0.98f, 1.f) : FLinearColor(0.f, 0.f, 0.f, 0.03f));
 		}
 	}
@@ -785,7 +785,7 @@ void UMythRoHUDWidget::RefreshEquipWindow()
 	{
 		// Titulo: aviso so quando nao ha nenhum titulo ganho (fica abaixo da linha "sem titulo")
 		const bool bNote = EquipTab == 3 || (EquipTab == 2 && EquipTitleIds.Num() <= 1);
-		EquipTabNote->SetText(FText::FromString(EquipTab == 2 ? TEXT("Nenhum título conquistado ainda.") : TEXT("Fonte de dano: padrão.")));
+		EquipTabNote->SetText(FText::FromString(EquipTab == 2 ? TEXT("No title earned yet.") : TEXT("Damage font: default.")));
 		EquipTabNote->SetVisibility(bNote ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
 	}
 	if (EquipShowCheck)
@@ -967,7 +967,7 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 	if (SkillPointsText)
 	{
 		// Barra de baixo: pontos e a skill selecionada (clique) com nome, nivel e SP
-		FString Line = FString::Printf(TEXT("Pontos: %d"), Points);
+		FString Line = FString::Printf(TEXT("Points: %d"), Points);
 		if (SkillRowID.IsValidIndex(SkillScroll) && SkillRowID[SkillScroll] > 0)
 		{
 			const int32 Id = SkillRowID[SkillScroll];

@@ -80,7 +80,7 @@ void UMythRoHUDWidget::BuildGuildWindow()
 	for (int32 c = 0; c < 5; ++c)
 	{
 		UTextBlock* H = AddText(GuildWindow, Cols[c], GuildTop + 2.f, 8, GuildGray);
-		H->SetText(FText::FromString(c == 2 ? FString(TEXT("Classe")) : GuildMsg(HeaderMsgs[c])));
+		H->SetText(FText::FromString(c == 2 ? FString(TEXT("Class")) : GuildMsg(HeaderMsgs[c])));
 		GuildHeader.Add(H);
 	}
 	for (int32 i = 0; i < GuildRows; ++i)
@@ -109,10 +109,10 @@ void UMythRoHUDWidget::BuildGuildWindow()
 		return B;
 	};
 	GuildNoticeLabel1 = AddText(GuildWindow, 10.f, GuildTop + 13.f, 8, GuildText);
-	GuildNoticeLabel1->SetText(FText::FromString(TEXT("Título")));
+	GuildNoticeLabel1->SetText(FText::FromString(TEXT("Title")));
 	GuildSubjectBox = Box(60.f, GuildTop + 10.f, 328.f);
 	GuildNoticeLabel2 = AddText(GuildWindow, 10.f, GuildTop + 40.f, 8, GuildText);
-	GuildNoticeLabel2->SetText(FText::FromString(TEXT("Conteúdo")));
+	GuildNoticeLabel2->SetText(FText::FromString(TEXT("Content")));
 	GuildNoticeBox = Box(10.f, GuildTop + 56.f, 378.f);
 
 	// Rodape
@@ -294,7 +294,7 @@ void UMythRoHUDWidget::RefreshGuild()
 	FString Heads[5];
 	if (bList && GuildTab == 1)
 	{
-		Heads[0] = GuildMsg(328); Heads[1] = GuildMsg(342); Heads[2] = TEXT("Classe"); Heads[3] = GuildMsg(329); Heads[4] = GuildMsg(335);
+		Heads[0] = GuildMsg(328); Heads[1] = GuildMsg(342); Heads[2] = TEXT("Class"); Heads[3] = GuildMsg(329); Heads[4] = GuildMsg(335);
 		for (const FRoGuildMember& M : Members)
 		{
 			FGuildRowData R;
@@ -311,14 +311,14 @@ void UMythRoHUDWidget::RefreshGuild()
 	else if (bList && GuildTab == 2)
 	{
 		Heads[0] = GuildMsg(340 + 2); Heads[1] = TEXT("Direitos"); Heads[2] = TEXT("Imposto");
-		Heads[0] = TEXT("Cargo");
+		Heads[0] = TEXT("Position");
 		for (const FRoGuildPosition& P : Net->GetGuildPositionInfos())
 		{
 			FGuildRowData R;
 			R.C[0] = FString::Printf(TEXT("%d. %s"), P.Id + 1, *Net->GetGuildPositionName(P.Id));
 			FString Rights;
-			if (P.Rights & 0x01) { Rights += TEXT("Convidar "); }
-			if (P.Rights & 0x10) { Rights += TEXT("Expulsar"); }
+			if (P.Rights & 0x01) { Rights += TEXT("Invite"); }
+			if (P.Rights & 0x10) { Rights += TEXT("Expel"); }
 			R.C[1] = Rights.IsEmpty() ? FString(TEXT("-")) : Rights.TrimEnd();
 			R.C[2] = FString::Printf(TEXT("%d%%"), P.PayRate);
 			Data.Add(R);
@@ -326,7 +326,7 @@ void UMythRoHUDWidget::RefreshGuild()
 	}
 	else if (bList && GuildTab == 3)
 	{
-		Heads[0] = TEXT("Habilidade"); Heads[1] = TEXT("Nível"); Heads[2] = TEXT("SP"); Heads[3] = TEXT("Alcance"); Heads[4] = Net->IsGuildMaster() ? TEXT("Subir") : TEXT("");
+		Heads[0] = TEXT("Skill"); Heads[1] = TEXT("Level"); Heads[2] = TEXT("SP"); Heads[3] = TEXT("Alcance"); Heads[4] = Net->IsGuildMaster() ? TEXT("Subir") : TEXT("");
 		for (const FRoGuildSkill& S : Net->GetGuildSkills())
 		{
 			FGuildRowData R;
@@ -431,8 +431,8 @@ void UMythRoHUDWidget::RefreshGuild()
 	SetTextButtonShown(GuildLeaveBtn, bIn && !Net->IsGuildMaster() && !bNotice);
 	SetTextButtonShown(GuildDisbandBtn, bIn && Net->IsGuildMaster() && !bNotice);
 	FString Footer;
-	if (GuildConfirm == 1) { Footer = TEXT("Clique de novo para sair do clã."); }
-	else if (GuildConfirm == 2 && Picked) { Footer = FString::Printf(TEXT("Clique de novo para expulsar %s."), *Picked->Name); }
+	if (GuildConfirm == 1) { Footer = TEXT("Click again to leave the guild."); }
+	else if (GuildConfirm == 2 && Picked) { Footer = FString::Printf(TEXT("Click again to expel %s."), *Picked->Name); }
 	else if (bMembers)
 	{
 		int32 On = 0;
@@ -441,7 +441,7 @@ void UMythRoHUDWidget::RefreshGuild()
 	}
 	else if (bList && GuildTab == 3)
 	{
-		Footer = FString::Printf(TEXT("Pontos de habilidade do clã: %d"), Net->GetGuildSkillPoints());
+		Footer = FString::Printf(TEXT("Guild skill points: %d"), Net->GetGuildSkillPoints());
 	}
 	GuildFooterText->SetText(FText::FromString(Footer));
 }
@@ -475,7 +475,7 @@ bool UMythRoHUDWidget::HandleGuildClick(const FVector2D& ScreenPos)
 		}
 		else if (Net->IsInGuild())
 		{
-			AddChatLine(TEXT("Esta aba ainda não existe no Myth of Thor."), FLinearColor(1.f, 0.85f, 0.4f));
+			AddChatLine(TEXT("This tab does not exist yet in Myth of Thor."), FLinearColor(1.f, 0.85f, 0.4f));
 		}
 		return true;
 	}

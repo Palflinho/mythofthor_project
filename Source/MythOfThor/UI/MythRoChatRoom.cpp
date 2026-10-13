@@ -21,8 +21,8 @@ namespace
 void UMythRoHUDWidget::BuildChatRoomWindows()
 {
 	// Criar
-	ChatRoomCreateWindow = MakeRoPanel(TEXT("Criar sala"), FVector2D(340.f, 17.f + 160.f), FVector2D(-200.f, -100.f));
-	AddText(ChatRoomCreateWindow, 14.f, 26.f, 9, CrText)->SetText(FText::FromString(TEXT("Título")));
+	ChatRoomCreateWindow = MakeRoPanel(TEXT("Create room"), FVector2D(340.f, 17.f + 160.f), FVector2D(-200.f, -100.f));
+	AddText(ChatRoomCreateWindow, 14.f, 26.f, 9, CrText)->SetText(FText::FromString(TEXT("Title")));
 	RoomTitleBox = WidgetTree->ConstructWidget<UEditableTextBox>();
 	if (UCanvasPanelSlot* S = ChatRoomCreateWindow->AddChildToCanvas(RoomTitleBox))
 	{
@@ -47,20 +47,20 @@ void UMythRoHUDWidget::BuildChatRoomWindows()
 	RoomCancelLink = AddButtonHit(ChatRoomCreateWindow, TEXT("cancel"), 180.f, 128.f);
 
 	// Sala atual
-	ChatRoomWindow = MakeRoPanel(TEXT("Sala de chat"), FVector2D(280.f, 17.f + 14 * 18.f + 52.f), FVector2D(-200.f, -60.f));
+	ChatRoomWindow = MakeRoPanel(TEXT("Chat room"), FVector2D(280.f, 17.f + 14 * 18.f + 52.f), FVector2D(-200.f, -60.f));
 	RoomTitleText = AddText(ChatRoomWindow, 12.f, 24.f, 9, CrText);
 	for (int32 i = 0; i < RoomRowCount; ++i)
 	{
 		RoomMemberRows.Add(AddText(ChatRoomWindow, 14.f, 46.f + i * 18.f, 8, CrText));
 		UTextBlock* Kick = AddText(ChatRoomWindow, 210.f, 46.f + i * 18.f, 7, CrLink);
-		Kick->SetText(FText::FromString(TEXT("Expulsar")));
+		Kick->SetText(FText::FromString(TEXT("Expel")));
 		RoomKickLinks.Add(Kick);
 	}
 	RoomLeaveLink = AddButtonHit(ChatRoomWindow, TEXT("exit"), 14.f, 17.f + 14 * 18.f + 30.f - 4.f);
 
 	// Senha para entrar
 	ChatRoomEnterWindow = MakeRoPanel(TEXT("Sala privada"), FVector2D(260.f, 17.f + 84.f), FVector2D(0.f, -150.f));
-	AddText(ChatRoomEnterWindow, 12.f, 26.f, 9, CrText)->SetText(FText::FromString(TEXT("Senha da sala")));
+	AddText(ChatRoomEnterWindow, 12.f, 26.f, 9, CrText)->SetText(FText::FromString(TEXT("Room password")));
 	RoomEnterPassBox = WidgetTree->ConstructWidget<UEditableTextBox>();
 	if (UCanvasPanelSlot* S = ChatRoomEnterWindow->AddChildToCanvas(RoomEnterPassBox))
 	{
@@ -124,7 +124,7 @@ void UMythRoHUDWidget::RefreshChatRoom()
 	if (ChatRoomCreateWindow->IsVisible())
 	{
 		RoomLimitText->SetText(FText::FromString(FString::Printf(TEXT("%d pessoas"), RoomNewLimit)));
-		RoomTypeLink->SetText(FText::FromString(RoomNewPublic ? TEXT("[ Pública ]") : TEXT("[ Privada ]")));
+		RoomTypeLink->SetText(FText::FromString(RoomNewPublic ? TEXT("[ Public ]") : TEXT("[ Privada ]")));
 	}
 	if (ChatRoomWindow->IsVisible())
 	{

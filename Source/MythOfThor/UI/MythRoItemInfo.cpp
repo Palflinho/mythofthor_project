@@ -58,7 +58,7 @@ namespace
 
 void UMythRoHUDWidget::BuildItemInfoWindow()
 {
-	ItemInfoWindow = MakeRoPanel(TEXT("Informações do item"), FVector2D(InfoW, InfoH), FVector2D(-120.f, -60.f));
+	ItemInfoWindow = MakeRoPanel(TEXT("Item information"), FVector2D(InfoW, InfoH), FVector2D(-120.f, -60.f));
 	ItemInfoImage = AddImage(ItemInfoWindow, nullptr, 8.f, 24.f, IllustW, IllustH);
 	ItemInfoName = AddText(ItemInfoWindow, IllustW + 16.f, 22.f, 9, InfoText);
 	ItemInfoBody = WidgetTree->ConstructWidget<UScrollBox>();
@@ -106,7 +106,7 @@ void UMythRoHUDWidget::ShowSkillInfo(int32 SkillID)
 	FString Name = FMythRoClientTables::SkillName(SkillID);
 	if (Name.IsEmpty())
 	{
-		Name = FString::Printf(TEXT("Habilidade %d"), SkillID);
+		Name = FString::Printf(TEXT("Skill %d"), SkillID);
 	}
 	ShowInfoLines(Name, FMythRoClientTables::SkillIcon(SkillID), Desc ? *Desc : Empty);
 }

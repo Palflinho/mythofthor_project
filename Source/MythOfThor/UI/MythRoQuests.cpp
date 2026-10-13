@@ -75,7 +75,7 @@ namespace MythQuests
 			}
 		}
 		const FString* Found = Titles.Find(QuestId);
-		return Found ? *Found : FString::Printf(TEXT("Missão %d"), QuestId);
+		return Found ? *Found : FString::Printf(TEXT("Mission %d"), QuestId);
 	}
 }
 
@@ -86,7 +86,7 @@ void UMythRoHUDWidget::BuildQuestWindow()
 	QuestBack = AddImage(QuestWindow, FMythRoUITextures::Get(TEXT("renew_questui/bg_quest1.bmp")), 0.f, 0.f, QsW, QsH);
 	QuestBack->SetVisibility(ESlateVisibility::Visible); // o clique na janela nao anda o personagem
 	QuestHeader = AddText(QuestWindow, 62.f, 2.f, 8, FLinearColor::White, true);
-	QuestHeader->SetText(FText::FromString(TEXT("Missões")));
+	QuestHeader->SetText(FText::FromString(TEXT("Missions")));
 	for (int32 i = 0; i < QsRows; ++i)
 	{
 		const float Y = QsCardY + i * QsCardH;
@@ -104,12 +104,12 @@ void UMythRoHUDWidget::BuildQuestWindow()
 	QuestEmpty = AddText(QuestWindow, QsCardX + 70.f, QsCardY + 40.f, 8, QsGray);
 	QuestViewBox = AddImage(QuestWindow, FMythRoUITextures::Get(TEXT("renew_questui/checkbox_on.bmp")), 56.f, QsH - 21.f, 10.f, 10.f);
 	QuestViewBox->SetVisibility(ESlateVisibility::Visible);
-	AddText(QuestWindow, 70.f, QsH - 23.f, 7, QsText)->SetText(FText::FromString(TEXT("Mostrar missões na tela")));
+	AddText(QuestWindow, 70.f, QsH - 23.f, 7, QsText)->SetText(FText::FromString(TEXT("Show missions on screen")));
 	QuestClose = AddButtonHit(QuestWindow, TEXT("close"), QsW - 52.f, QsH - 26.f);
 	MakeDraggable(QuestWindow, QsW, 18.f);
 
 	// Detalhes: janela ao lado com o titulo e os objetivos (o "olho" do cartao)
-	QuestDetailWindow = MakeRoPanel(TEXT("Missão"), FVector2D(300.f, 17.f + 14.f + QsDetailLines * 18.f + 36.f), FVector2D(160.f, -40.f));
+	QuestDetailWindow = MakeRoPanel(TEXT("Mission"), FVector2D(300.f, 17.f + 14.f + QsDetailLines * 18.f + 36.f), FVector2D(160.f, -40.f));
 	for (int32 i = 0; i < QsDetailLines; ++i)
 	{
 		QuestDetail.Add(AddText(QuestDetailWindow, 14.f, 28.f + i * 18.f, 8, QsText));
@@ -153,7 +153,7 @@ void UMythRoHUDWidget::RefreshQuests()
 			continue;
 		}
 		QuestTitles[i]->SetText(FText::FromString(Short(MythQuests::TitleFor(Q->Id), 40)));
-		FString Objective = Q->Objectives.IsEmpty() ? FString(TEXT("Fale com o NPC para continuar.")) : FString();
+		FString Objective = Q->Objectives.IsEmpty() ? FString(TEXT("Talk to the NPC to continue.")) : FString();
 		for (const FRoQuestObjective& O : Q->Objectives)
 		{
 			Objective += (Objective.IsEmpty() ? TEXT("") : TEXT(", ")) + FString::Printf(TEXT("%s %d/%d"), *O.Name, O.Count, O.Total);
@@ -161,7 +161,7 @@ void UMythRoHUDWidget::RefreshQuests()
 		QuestObjectives[i]->SetText(FText::FromString(Short(Objective, 52)));
 		QuestChecks[i]->SetBrush(RoQuestBrush(Q->bActive ? TEXT("renew_questui/bt_check_on.bmp") : TEXT("renew_questui/bt_check_off.bmp"), FVector2D(14.f, 14.f) * UIScale));
 	}
-	QuestEmpty->SetText(FText::FromString(Shown.IsEmpty() ? (QuestTab == 1 ? TEXT("Aqui ficam as informações das missões.") : TEXT("Nenhuma missão nesta aba.")) : TEXT("")));
+	QuestEmpty->SetText(FText::FromString(Shown.IsEmpty() ? (QuestTab == 1 ? TEXT("Mission information appears here.") : TEXT("No missions in this tab.")) : TEXT("")));
 	QuestViewBox->SetBrush(RoQuestBrush(MythQuests::TrackerVisible() ? TEXT("renew_questui/checkbox_on.bmp") : TEXT("renew_questui/checkbox_off.bmp"), FVector2D(10.f, 10.f) * UIScale));
 	// Detalhes da selecionada
 	if (QuestDetailWindow->IsVisible())
@@ -181,7 +181,7 @@ void UMythRoHUDWidget::RefreshQuests()
 			}
 			if (Sel->Objectives.IsEmpty())
 			{
-				QuestDetail[2]->SetText(FText::FromString(TEXT("Fale com o NPC para continuar.")));
+				QuestDetail[2]->SetText(FText::FromString(TEXT("Talk to the NPC to continue.")));
 			}
 		}
 	}

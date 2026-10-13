@@ -41,7 +41,7 @@ void URagnarokNetworkSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	PacketLengths.FindOrAdd(0x0ac2) = -1;
 	PacketLengths.FindOrAdd(0x0b63) = -1;
 	PacketLengths.FindOrAdd(0x0ae5) = -1;
-	UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] %d tamanhos de pacote carregados de %s"), PacketLengths.Num(), *Path);
+	UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] %d packet sizes loaded from %s"), PacketLengths.Num(), *Path);
 	bLogPackets = FParse::Param(FCommandLine::Get(), TEXT("MythNetLog"));
 }
 
@@ -65,7 +65,7 @@ void URagnarokNetworkSubsystem::Tick(float DeltaTime)
 		// Servidor fechou a conexao (timeout, kick): avisa em vez de seguir "enviando" para um socket morto
 		if (CurrentSocket && CurrentSocket->GetConnectionState() == SCS_ConnectionError)
 		{
-			DisconnectReason = TEXT("A conexão com o servidor caiu.");
+			DisconnectReason = TEXT("The connection to the server was lost.");
 			Disconnect();
 		}
 	}
@@ -117,7 +117,7 @@ bool URagnarokNetworkSubsystem::ConnectToPort(const FString& Host, int32 Port, E
 	ISocketSubsystem* const SocketSubsystem = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM);
 	if (!SocketSubsystem)
 	{
-		OnNetworkDisconnected.Broadcast(TEXT("Falha ao obter subsistema de sockets."));
+		OnNetworkDisconnected.Broadcast(TEXT("Failed to get the socket subsystem."));
 		CurrentState = ERagnarokNetworkState::Disconnected;
 		return false;
 	}
@@ -137,7 +137,7 @@ bool URagnarokNetworkSubsystem::ConnectToPort(const FString& Host, int32 Port, E
 		}
 		else
 		{
-			OnNetworkDisconnected.Broadcast(FString::Printf(TEXT("Endereço IP inválido: %s"), *Host));
+			OnNetworkDisconnected.Broadcast(FString::Printf(TEXT("Invalid IP address: %s"), *Host));
 			CurrentState = ERagnarokNetworkState::Disconnected;
 			return false;
 		}
@@ -152,7 +152,7 @@ bool URagnarokNetworkSubsystem::ConnectToPort(const FString& Host, int32 Port, E
 
 	if (!CurrentSocket)
 	{
-		OnNetworkDisconnected.Broadcast(TEXT("Falha ao instanciar socket TCP."));
+		OnNetworkDisconnected.Broadcast(TEXT("Failed to create TCP socket."));
 		CurrentState = ERagnarokNetworkState::Disconnected;
 		return false;
 	}
@@ -635,16 +635,16 @@ FString URagnarokNetworkSubsystem::GetJobNameFromClass(int32 JobClass)
 {
 	// IDs do enum e_job (rathena/src/common/mmo.hpp); nomes do bRO
 	static const TCHAR* Base[] = {
-		TEXT("Aprendiz"), TEXT("Espadachim"), TEXT("Mago"), TEXT("Arqueiro"), TEXT("Noviço"), TEXT("Mercador"), TEXT("Gatuno"),
-		TEXT("Cavaleiro"), TEXT("Sacerdote"), TEXT("Bruxo"), TEXT("Ferreiro"), TEXT("Caçador"), TEXT("Mercenário"),
-		TEXT("Cavaleiro"), TEXT("Templário"), TEXT("Monge"), TEXT("Sábio"), TEXT("Arruaceiro"), TEXT("Alquimista"),
-		TEXT("Bardo"), TEXT("Odalisca"), TEXT("Templário"), TEXT("Casamento"), TEXT("Super Aprendiz"), TEXT("Justiceiro"),
+		TEXT("Aprendiz"), TEXT("Espadachim"), TEXT("Mago"), TEXT("Arqueiro"), TEXT("Acolyte"), TEXT("Mercador"), TEXT("Gatuno"),
+		TEXT("Cavaleiro"), TEXT("Sacerdote"), TEXT("Bruxo"), TEXT("Ferreiro"), TEXT("Hunter"), TEXT("Assassin"),
+		TEXT("Cavaleiro"), TEXT("Crusader"), TEXT("Monge"), TEXT("Sage"), TEXT("Arruaceiro"), TEXT("Alquimista"),
+		TEXT("Bardo"), TEXT("Odalisca"), TEXT("Crusader"), TEXT("Casamento"), TEXT("Super Aprendiz"), TEXT("Justiceiro"),
 		TEXT("Ninja"), TEXT("Natal") };
 	// 4001..4022: transclasses (a 1a classe transcendental leva "T.")
 	static const TCHAR* Trans[] = {
-		TEXT("Aprendiz T."), TEXT("Espadachim T."), TEXT("Mago T."), TEXT("Arqueiro T."), TEXT("Noviço T."), TEXT("Mercador T."),
+		TEXT("Aprendiz T."), TEXT("Espadachim T."), TEXT("Mago T."), TEXT("Arqueiro T."), TEXT("High Acolyte"), TEXT("Mercador T."),
 		TEXT("Gatuno T."), TEXT("Lorde"), TEXT("Sumo Sacerdote"), TEXT("Arquimago"), TEXT("Mestre-Ferreiro"),
-		TEXT("Atirador de Elite"), TEXT("Algoz"), TEXT("Lorde"), TEXT("Paladino"), TEXT("Mestre"), TEXT("Professor"),
+		TEXT("Sniper"), TEXT("Algoz"), TEXT("Lorde"), TEXT("Paladino"), TEXT("Mestre"), TEXT("Professor"),
 		TEXT("Desordeiro"), TEXT("Criador"), TEXT("Menestrel"), TEXT("Cigana"), TEXT("Paladino") };
 	if (JobClass >= 0 && JobClass < UE_ARRAY_COUNT(Base))
 	{
@@ -656,15 +656,15 @@ FString URagnarokNetworkSubsystem::GetJobNameFromClass(int32 JobClass)
 	}
 	if (JobClass >= 4023 && JobClass <= 4044) // bebes: 4023 = Aprendiz ... na mesma ordem das classes basicas
 	{
-		return FString::Printf(TEXT("%s Bebê"), Base[JobClass - 4023]);
+		return FString::Printf(TEXT("Baby %s"), Base[JobClass - 4023]);
 	}
 	switch (JobClass)
 	{
-		case 4045: return TEXT("Super Aprendiz Bebê");
+		case 4045: return TEXT("Baby Super Novice");
 		case 4046: return TEXT("Taekwon");
 		case 4047: case 4048: return TEXT("Mestre Taekwon");
 		case 4049: return TEXT("Espiritualista");
-		default: return FString::Printf(TEXT("Classe %d"), JobClass);
+		default: return FString::Printf(TEXT("Class %d"), JobClass);
 	}
 }
 
@@ -834,7 +834,7 @@ void URagnarokNetworkSubsystem::FlushPendingSend()
 	const ESocketConnectionState State = CurrentSocket->GetConnectionState();
 	if (State == SCS_ConnectionError)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("[RagnarokNetwork] Falha de conexao (estado %d)"), (int32)CurrentState);
+		UE_LOG(LogTemp, Warning, TEXT("[RagnarokNetwork] Connection failure (state %d)"), (int32)CurrentState);
 		PendingSend.Empty();
 		Disconnect();
 		return;
@@ -859,7 +859,7 @@ void URagnarokNetworkSubsystem::Disconnect()
 		CurrentSocket = nullptr;
 		CurrentState = ERagnarokNetworkState::Disconnected;
 		ReceiveBuffer.Empty();
-		const FString Reason = DisconnectReason.IsEmpty() ? FString(TEXT("Conexão encerrada pelo cliente.")) : DisconnectReason;
+		const FString Reason = DisconnectReason.IsEmpty() ? FString(TEXT("Connection closed by the client.")) : DisconnectReason;
 		DisconnectReason.Reset();
 		OnNetworkDisconnected.Broadcast(Reason);
 	}
@@ -912,7 +912,7 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			// Pacote não reconhecido ou dessincronizado no fluxo TCP
 			if (LastGoodPacketID != 0)
 			{
-				UE_LOG(LogTemp, Warning, TEXT("[RagnarokNetwork] Pacote desconhecido 0x%04x no estado %d (ultimo valido: 0x%04x com %d bytes). Descartando 1 byte."), PacketID, (int32)CurrentState, LastGoodPacketID, LastGoodPacketLen);
+				UE_LOG(LogTemp, Warning, TEXT("[RagnarokNetwork] Unknown packet 0x%04x in state %d (last valid: 0x%04x with %d bytes). Discarding 1 byte."), PacketID, (int32)CurrentState, LastGoodPacketID, LastGoodPacketLen);
 				LastGoodPacketID = 0;
 			}
 			ReceiveBuffer.RemoveAt(0, 1);
@@ -929,7 +929,7 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			ActualLen = *reinterpret_cast<const uint16*>(ReceiveBuffer.GetData() + 2);
 			if (ActualLen < 4 || ActualLen > 65535)
 			{
-				UE_LOG(LogTemp, Error, TEXT("[RagnarokNetwork] Tamanho de pacote dinâmico inválido (%d) para 0x%04x"), ActualLen, PacketID);
+				UE_LOG(LogTemp, Error, TEXT("[RagnarokNetwork] Invalid dynamic packet size (%d) for 0x%04x"), ActualLen, PacketID);
 				ReceiveBuffer.Empty();
 				break;
 			}
@@ -1223,7 +1223,7 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 					}
 					else
 					{
-						OnChatMessage.Broadcast(TEXT(""), TEXT("Você ainda não tem esse título."), TEXT("#FF6060"));
+						OnChatMessage.Broadcast(TEXT(""), TEXT("You do not have that title yet."), TEXT("#FF6060"));
 					}
 				}
 				break;
@@ -1440,8 +1440,8 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 					if (!SeenUnhandled.Contains(PacketID))
 					{
 						SeenUnhandled.Add(PacketID);
-						UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] pacote sem tratamento 0x%04x (%d bytes)"), PacketID, ActualLen);
-						FFileHelper::SaveStringToFile(FString::Printf(TEXT("0x%04x\t%d\n"), PacketID, ActualLen), *(FPaths::ProjectSavedDir() / TEXT("Logs/pacotes_sem_tratamento.txt")), FFileHelper::EEncodingOptions::AutoDetect, &IFileManager::Get(), FILEWRITE_Append);
+						UE_LOG(LogTemp, Log, TEXT("[RagnarokNetwork] unhandled packet 0x%04x (%d bytes)"), PacketID, ActualLen);
+						FFileHelper::SaveStringToFile(FString::Printf(TEXT("0x%04x\t%d\n"), PacketID, ActualLen), *(FPaths::ProjectSavedDir() / TEXT("Logs/unhandled_packets.txt")), FFileHelper::EEncodingOptions::AutoDetect, &IFileManager::Get(), FILEWRITE_Append);
 					}
 				}
 				break;
@@ -1473,7 +1473,7 @@ void URagnarokNetworkSubsystem::HandleLoginAccept(const uint8* PacketData, int32
 		SavedCharPort = (CharPort != 0) ? CharPort : CHAR_SERVER_PORT;
 	}
 
-	OnLoginResult.Broadcast(true, TEXT("Login aceito com sucesso pelo rAthena."));
+	OnLoginResult.Broadcast(true, TEXT("Login accepted by rAthena."));
 
 	// Transição automática para o Char-Server
 	if (ConnectToPort(SavedHost, SavedCharPort, ERagnarokNetworkState::ConnectingChar))
@@ -1509,13 +1509,13 @@ void URagnarokNetworkSubsystem::HandleNotifyBan(const uint8* PacketData, int32 P
 	const uint8 Code = PacketSize >= 3 ? PacketData[2] : 0;
 	switch (Code)
 	{
-	case 1: DisconnectReason = TEXT("Servidor fechado para manutenção."); break;
-	case 2: DisconnectReason = TEXT("Alguém entrou com esta conta em outro lugar."); break;
-	case 3: DisconnectReason = TEXT("Desconectado por atraso na conexão."); break;
-	case 4: DisconnectReason = TEXT("O servidor está cheio."); break;
-	case 8: DisconnectReason = TEXT("O servidor ainda reconhece a conexão anterior. Tente de novo em instantes."); break;
-	case 15: DisconnectReason = TEXT("Você foi desconectado por um GM."); break;
-	default: DisconnectReason = FString::Printf(TEXT("Desconectado pelo servidor (código %d)."), Code); break;
+	case 1: DisconnectReason = TEXT("Server closed for maintenance."); break;
+	case 2: DisconnectReason = TEXT("Someone logged in with this account elsewhere."); break;
+	case 3: DisconnectReason = TEXT("Disconnected because of connection delay."); break;
+	case 4: DisconnectReason = TEXT("The server is full."); break;
+	case 8: DisconnectReason = TEXT("The server still recognizes the previous connection. Try again in a moment."); break;
+	case 15: DisconnectReason = TEXT("You were disconnected by a GM."); break;
+	default: DisconnectReason = FString::Printf(TEXT("Disconnected by the server (code %d)."), Code); break;
 	}
 	if (CurrentState != ERagnarokNetworkState::ConnectedMap && CurrentState != ERagnarokNetworkState::ConnectedChar)
 	{
@@ -1531,13 +1531,13 @@ void URagnarokNetworkSubsystem::HandleLoginRefuse(const uint8* PacketData, int32
 	FString Reason;
 	switch (Code)
 	{
-	case 0: Reason = TEXT("Usuário não cadastrado."); break;
+	case 0: Reason = TEXT("Unregistered user."); break;
 	case 1: Reason = TEXT("Senha incorreta."); break;
-	case 2: Reason = TEXT("Esta conta expirou."); break;
-	case 3: Reason = TEXT("Conexão recusada pelo servidor."); break;
-	case 4: Reason = TEXT("Esta conta está bloqueada."); break;
-	case 6: Reason = TEXT("Esta conta está banida."); break;
-	default: Reason = FString::Printf(TEXT("Login recusado pelo servidor (código %d)."), Code); break;
+	case 2: Reason = TEXT("This account has expired."); break;
+	case 3: Reason = TEXT("Connection refused by the server."); break;
+	case 4: Reason = TEXT("This account is blocked."); break;
+	case 6: Reason = TEXT("This account is banned."); break;
+	default: Reason = FString::Printf(TEXT("Login refused by the server (code %d)."), Code); break;
 	}
 	OnLoginResult.Broadcast(false, Reason);
 	Disconnect();
@@ -1597,13 +1597,13 @@ void URagnarokNetworkSubsystem::HandleCharMakeResult(const uint8* PacketData, in
 		// rAthena (chclif_refuse_makechar): 0 nome ja existe, 1 recusado (conta cheia ou nome invalido), 2 menor de idade,
 		// 3 simbolos no nome, 0xff nome invalido
 		const uint8 Err = PacketSize >= 3 ? PacketData[2] : 1;
-		const TCHAR* Msg = TEXT("O servidor recusou a criação do personagem.");
+		const TCHAR* Msg = TEXT("The server refused to create the character.");
 		switch (Err)
 		{
-		case 0: Msg = TEXT("Esse nome já existe."); break;
-		case 2: Msg = TEXT("Você não tem idade para criar personagens."); break;
-		case 3: Msg = TEXT("O nome tem símbolos que não são permitidos."); break;
-		case 0xff: Msg = TEXT("Nome inválido."); break;
+		case 0: Msg = TEXT("That name already exists."); break;
+		case 2: Msg = TEXT("You are not old enough to create characters."); break;
+		case 3: Msg = TEXT("The name has symbols that are not allowed."); break;
+		case 0xff: Msg = TEXT("Invalid name."); break;
 		default: break;
 		}
 		OnCharCreateResult.Broadcast(false, Msg);
@@ -3188,10 +3188,10 @@ void URagnarokNetworkSubsystem::HandlePartyPacket(const uint8* PacketData, int32
 		const uint8 R = PacketSize >= 3 ? PacketData[2] : 0;
 		switch (R)
 		{
-		case 0: Say(TEXT("Grupo criado.")); break;
-		case 1: Say(TEXT("Já existe um grupo com esse nome.")); break;
-		case 2: Say(TEXT("Você já está em um grupo.")); break;
-		case 3: Say(TEXT("Não é possível criar um grupo neste mapa.")); break;
+		case 0: Say(TEXT("Party created.")); break;
+		case 1: Say(TEXT("A party with that name already exists.")); break;
+		case 2: Say(TEXT("You are already in a party.")); break;
+		case 3: Say(TEXT("Cannot create a party on this map.")); break;
 		default: break;
 		}
 		break;
@@ -3259,17 +3259,17 @@ void URagnarokNetworkSubsystem::HandlePartyPacket(const uint8* PacketData, int32
 			FString Text;
 			switch (*reinterpret_cast<const int32*>(PacketData + 26))
 			{
-			case 0: Text = FString::Printf(TEXT("%s já está em um grupo."), *Who); break;
-			case 1: Text = FString::Printf(TEXT("%s recusou o convite."), *Who); break;
-			case 2: Text = FString::Printf(TEXT("%s aceitou o convite."), *Who); break;
-			case 3: Text = TEXT("O grupo está cheio."); break;
-			case 4: Text = FString::Printf(TEXT("Outro personagem da conta de %s já está no grupo."), *Who); break;
-			case 5: Text = FString::Printf(TEXT("%s não aceita convites de grupo."), *Who); break;
-			case 7: Text = TEXT("Esse jogador não está conectado."); break;
-			case 8: Text = FString::Printf(TEXT("%s está em um mapa onde não se pode entrar em grupo."), *Who); break;
-			case 9: Text = TEXT("Não é possível entrar em grupo neste mapa."); break;
-			case 10: Text = TEXT("Não é possível convidar ou expulsar em uma masmorra de memória."); break;
-			case 11: Text = FString::Printf(TEXT("%s tem um nível que não pode entrar no grupo."), *Who); break;
+			case 0: Text = FString::Printf(TEXT("%s is already in a party."), *Who); break;
+			case 1: Text = FString::Printf(TEXT("%s declined the invitation."), *Who); break;
+			case 2: Text = FString::Printf(TEXT("%s accepted the invitation."), *Who); break;
+			case 3: Text = TEXT("The party is full."); break;
+			case 4: Text = FString::Printf(TEXT("Another character from %s's account is already in the party."), *Who); break;
+			case 5: Text = FString::Printf(TEXT("%s does not accept party invitations."), *Who); break;
+			case 7: Text = TEXT("That player is not connected."); break;
+			case 8: Text = FString::Printf(TEXT("%s is on a map where parties are not allowed."), *Who); break;
+			case 9: Text = TEXT("Cannot join a party on this map."); break;
+			case 10: Text = TEXT("Cannot invite or expel in a memory dungeon."); break;
+			case 11: Text = FString::Printf(TEXT("%s has a level that cannot join the party."), *Who); break;
 			default: break;
 			}
 			if (!Text.IsEmpty())
@@ -3288,12 +3288,12 @@ void URagnarokNetworkSubsystem::HandlePartyPacket(const uint8* PacketData, int32
 			{
 				PartyMembers.Reset();
 				PartyName.Reset();
-				Say(bExpelled ? TEXT("Você foi expulso do grupo.") : TEXT("Você saiu do grupo."));
+				Say(bExpelled ? TEXT("You were expelled from the party.") : TEXT("You left the party."));
 			}
 			else
 			{
 				PartyMembers.RemoveAll([Aid](const FRoPartyMember& M) { return M.AccountId == Aid; });
-				Say(bExpelled ? FString::Printf(TEXT("%s foi expulso do grupo."), *Who) : FString::Printf(TEXT("%s saiu do grupo."), *Who));
+				Say(bExpelled ? FString::Printf(TEXT("%s was expelled from the party."), *Who) : FString::Printf(TEXT("%s left the party."), *Who));
 			}
 			OnPartyChanged.Broadcast();
 		}
@@ -3439,8 +3439,8 @@ void URagnarokNetworkSubsystem::HandleTradePacket(const uint8* PacketData, int32
 		{
 			switch (PacketData[2])
 			{
-			case 0: Say(TEXT("O jogador está longe demais para trocar.")); break;
-			case 1: Say(TEXT("Esse jogador não existe.")); break;
+			case 0: Say(TEXT("The player is too far away to trade.")); break;
+			case 1: Say(TEXT("That player does not exist.")); break;
 			case 2: Say(TEXT("A troca falhou.")); break;
 			case 3:
 				bTradeOpen = true;
@@ -3450,7 +3450,7 @@ void URagnarokNetworkSubsystem::HandleTradePacket(const uint8* PacketData, int32
 				OnTradeChanged.Broadcast();
 				break;
 			case 4: Say(TEXT("A troca foi recusada.")); Close(); break;
-			case 5: Say(TEXT("O outro jogador está ocupado.")); break;
+			case 5: Say(TEXT("The other player is busy.")); break;
 			default: break;
 			}
 		}
@@ -3507,7 +3507,7 @@ void URagnarokNetworkSubsystem::HandleTradePacket(const uint8* PacketData, int32
 			}
 			else
 			{
-				static const TCHAR* Reasons[5] = { TEXT(""), TEXT("Peso excedido."), TEXT("A troca foi cancelada."), TEXT("Inventário cheio."), TEXT("Quantidade máxima da pilha excedida.") };
+				static const TCHAR* Reasons[5] = { TEXT(""), TEXT("Weight limit exceeded."), TEXT("A troca foi cancelada."), TEXT("Inventory full."), TEXT("Maximum stack size exceeded.") };
 				const uint8 R = PacketData[4];
 				if (R > 0 && R < 5)
 				{
@@ -3528,7 +3528,7 @@ void URagnarokNetworkSubsystem::HandleTradePacket(const uint8* PacketData, int32
 		Close();
 		break;
 	case 0x00f0: // <resultado>.B (0 = sucesso)
-		Say(PacketSize >= 3 && PacketData[2] == 0 ? TEXT("Troca concluída.") : TEXT("A troca falhou."));
+		Say(PacketSize >= 3 && PacketData[2] == 0 ? TEXT("Trade completed.") : TEXT("A troca falhou."));
 		Close();
 		break;
 	default:
@@ -3797,7 +3797,7 @@ void URagnarokNetworkSubsystem::HandleMailPacket(const uint8* PacketData, int32 
 	case 0x09ed: // <resultado>.B (0 = enviado)
 		if (PacketSize >= 3)
 		{
-			Say(PacketData[2] == 0 ? TEXT("Correio enviado.") : (PacketData[2] == 1 ? TEXT("O destinatário não existe.") : TEXT("Não foi possível enviar o correio.")));
+			Say(PacketData[2] == 0 ? TEXT("Mail sent.") : (PacketData[2] == 1 ? TEXT("The recipient does not exist.") : TEXT("Could not send the mail.")));
 			OnMailChanged.Broadcast();
 		}
 		break;
@@ -3805,7 +3805,7 @@ void URagnarokNetworkSubsystem::HandleMailPacket(const uint8* PacketData, int32 
 		bMailWriting = PacketSize >= 27 && PacketData[26] != 0;
 		if (!bMailWriting)
 		{
-			Say(TEXT("Não é possível escrever um correio agora."));
+			Say(TEXT("Cannot write mail right now."));
 		}
 		OnMailChanged.Broadcast();
 		break;
@@ -3822,7 +3822,7 @@ void URagnarokNetworkSubsystem::HandleMailPacket(const uint8* PacketData, int32 
 	case 0x09f4: // pegou os itens
 		if (PacketSize >= 12)
 		{
-			Say(PacketData[11] == 0 ? (PacketID == 0x09f2 ? TEXT("Zeny recebido do correio.") : TEXT("Itens recebidos do correio.")) : TEXT("Não foi possível receber do correio."));
+			Say(PacketData[11] == 0 ? (PacketID == 0x09f2 ? TEXT("Zeny received from mail.") : TEXT("Items received from mail.")) : TEXT("Could not receive from mail."));
 			if (PacketData[11] == 0)
 			{
 				const int64 Id = *reinterpret_cast<const int64*>(PacketData + 2);
@@ -3838,7 +3838,7 @@ void URagnarokNetworkSubsystem::HandleMailPacket(const uint8* PacketData, int32 
 		bMailUnreadFlag = PacketSize >= 3 && PacketData[2] != 0;
 		if (PacketSize >= 3 && PacketData[2] != 0)
 		{
-			Say(TEXT("Você tem correio novo (Alt+R)."));
+			Say(TEXT("You have new mail (Alt+R)."));
 		}
 		break;
 	default:
@@ -3904,7 +3904,7 @@ void URagnarokNetworkSubsystem::HandleEquipSwitchPacket(const uint8* PacketData,
 			}
 			else
 			{
-				Say(TEXT("Não foi possível colocar esse item na troca rápida."));
+				Say(TEXT("Could not put that item in the quick swap."));
 			}
 			OnEquipSwitchChanged.Broadcast();
 		}
@@ -3920,7 +3920,7 @@ void URagnarokNetworkSubsystem::HandleEquipSwitchPacket(const uint8* PacketData,
 	case 0x0a9d: // resultado da troca completa: <falhou>.W
 		if (PacketSize >= 4 && *reinterpret_cast<const uint16*>(PacketData + 2) != 0)
 		{
-			Say(TEXT("Não há item para trocar."));
+			Say(TEXT("There is no item to swap."));
 		}
 		break;
 	default:
@@ -4017,11 +4017,11 @@ void URagnarokNetworkSubsystem::HandleBankPacket(const uint8* PacketData, int32 
 			}
 			else if (PacketID == 0x09a8)
 			{
-				Say(Reason == 2 ? TEXT("Zeny insuficiente para depositar.") : (Reason == 3 ? TEXT("O banco não aceita tanto zeny.") : TEXT("Não foi possível depositar.")));
+				Say(Reason == 2 ? TEXT("Not enough zeny to deposit.") : (Reason == 3 ? TEXT("The bank does not accept that much zeny.") : TEXT("Could not deposit.")));
 			}
 			else
 			{
-				Say(Reason == 1 ? TEXT("Saldo insuficiente no banco.") : TEXT("Não foi possível sacar."));
+				Say(Reason == 1 ? TEXT("Insufficient bank balance.") : TEXT("Could not withdraw."));
 			}
 			OnBankChanged.Broadcast();
 		}
@@ -4152,7 +4152,7 @@ void URagnarokNetworkSubsystem::HandleFriendsPacket(const uint8* PacketData, int
 				F->bOnline = bOnline;
 				Name = F->Name;
 			}
-			Say(bOnline ? FString::Printf(TEXT("%s entrou no jogo."), *Name) : FString::Printf(TEXT("%s saiu do jogo."), *Name));
+			Say(bOnline ? FString::Printf(TEXT("%s entrou no jogo."), *Name) : FString::Printf(TEXT("%s left the game."), *Name));
 			OnFriendsChanged.Broadcast();
 		}
 		break;
@@ -4177,13 +4177,13 @@ void URagnarokNetworkSubsystem::HandleFriendsPacket(const uint8* PacketData, int
 				F.bOnline = true;
 				Friends.RemoveAll([&F](const FRoFriend& X) { return X.CharId == F.CharId; });
 				Friends.Add(F);
-				Say(FString::Printf(TEXT("Você agora é amigo de %s."), *Name));
+				Say(FString::Printf(TEXT("You are now friends with %s."), *Name));
 				OnFriendsChanged.Broadcast();
 				break;
 			}
-			case 1: Say(FString::Printf(TEXT("%s não quer ser seu amigo."), *Name)); break;
-			case 2: Say(TEXT("Sua lista de amigos está cheia.")); break;
-			case 3: Say(FString::Printf(TEXT("A lista de amigos de %s está cheia."), *Name)); break;
+			case 1: Say(FString::Printf(TEXT("%s does not want to be your friend."), *Name)); break;
+			case 2: Say(TEXT("Your friend list is full.")); break;
+			case 3: Say(FString::Printf(TEXT("%s's friend list is full."), *Name)); break;
 			default: break;
 			}
 		}
@@ -4283,7 +4283,7 @@ void URagnarokNetworkSubsystem::HandleChatRoomPacket(const uint8* PacketData, in
 	case 0x00d6: // <resultado>.B (0 criada)
 		if (PacketSize >= 3 && PacketData[2] != 0)
 		{
-			Say(PacketData[2] == 1 ? TEXT("Limite de salas excedido.") : TEXT("Já existe uma sala igual."));
+			Say(PacketData[2] == 1 ? TEXT("Room limit exceeded.") : TEXT("An identical room already exists."));
 		}
 		else if (PacketSize >= 3)
 		{
@@ -4323,7 +4323,7 @@ void URagnarokNetworkSubsystem::HandleChatRoomPacket(const uint8* PacketData, in
 		break;
 	case 0x00da: // <resultado>.B: 0 cheia, 1 senha errada, 2 expulso, 4 sem zeny, 5 nivel baixo, 6 nivel alto, 7 classe
 	{
-		static const TCHAR* Reasons[8] = { TEXT("A sala está cheia."), TEXT("Senha errada."), TEXT("Você foi expulso dessa sala."), TEXT(""), TEXT("Zeny insuficiente."), TEXT("Nível muito baixo."), TEXT("Nível muito alto."), TEXT("Classe não permitida.") };
+		static const TCHAR* Reasons[8] = { TEXT("The room is full."), TEXT("Senha errada."), TEXT("You were expelled from that room."), TEXT(""), TEXT("Not enough zeny."), TEXT("Level too low."), TEXT("Level too high."), TEXT("Class not allowed.") };
 		if (PacketSize >= 3 && PacketData[2] < 8 && PacketData[2] != 3)
 		{
 			Say(Reasons[PacketData[2]]);
@@ -4361,7 +4361,7 @@ void URagnarokNetworkSubsystem::HandleChatRoomPacket(const uint8* PacketData, in
 			{
 				bInChatRoom = false;
 				ChatRoomMembers.Reset();
-				Say(PacketData[28] == 1 ? TEXT("Você foi expulso da sala.") : TEXT("Você saiu da sala."));
+				Say(PacketData[28] == 1 ? TEXT("You were expelled from the room.") : TEXT("You left the room."));
 			}
 			else
 			{
@@ -4754,7 +4754,7 @@ void URagnarokNetworkSubsystem::HandleChatExtras(const uint8* PacketData, int32 
 		int32 Colon = INDEX_NONE;
 		if (Full.FindChar(TEXT(':'), Colon) && Colon > 0)
 		{
-			Sender = FString::Printf(TEXT("[Grupo] %s"), *Full.Left(Colon).TrimStartAndEnd());
+			Sender = FString::Printf(TEXT("[Party] %s"), *Full.Left(Colon).TrimStartAndEnd());
 			Text = Full.Mid(Colon + 1).TrimStartAndEnd();
 		}
 		OnChatMessage.Broadcast(Sender, Text, TEXT("#33CCFF"));
@@ -4763,9 +4763,9 @@ void URagnarokNetworkSubsystem::HandleChatExtras(const uint8* PacketData, int32 
 	case 0x09df: // <resultado>.B <cid>.L (e_ack_whisper: 0 ok, 1 nao esta conectado, 2 ignorado, 3 todos ignorados)
 	{
 		const uint8 Result = PacketSize >= 3 ? PacketData[2] : 0;
-		if (Result == 1) { OnChatMessage.Broadcast(TEXT(""), TEXT("Esse jogador não está conectado."), TEXT("#FF3333")); }
-		else if (Result == 2) { OnChatMessage.Broadcast(TEXT(""), TEXT("Esse jogador está ignorando você."), TEXT("#FF3333")); }
-		else if (Result == 3) { OnChatMessage.Broadcast(TEXT(""), TEXT("Esse jogador está ignorando todos os cochichos."), TEXT("#FF3333")); }
+		if (Result == 1) { OnChatMessage.Broadcast(TEXT(""), TEXT("That player is not connected."), TEXT("#FF3333")); }
+		else if (Result == 2) { OnChatMessage.Broadcast(TEXT(""), TEXT("That player is ignoring you."), TEXT("#FF3333")); }
+		else if (Result == 3) { OnChatMessage.Broadcast(TEXT(""), TEXT("That player is ignoring all whispers."), TEXT("#FF3333")); }
 		break;
 	}
 	case 0x00c0: // <gid>.L <tipo>.B

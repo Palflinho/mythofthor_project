@@ -113,7 +113,7 @@ bool AMythWater::Build(const FString& MapName, const FVector2D& Origin)
 	}
 	Mesh->CreateMeshSection(0, Verts, Tris, Normals, UVs, TArray<FColor>(), TArray<FProcMeshTangent>(), false);
 	BaseOpacity = (Type == 4 || Type == 6) ? 1.f : 0.78f;
-	ApplyStyle(); // material depois do CreateMeshSection: o colocado antes se perde	UE_LOG(LogTemp, Log, TEXT("MythWater: %s agua nivel %.1f tipo %d, %d blocos"), *MapName, Level, Type, Verts.Num() / 4);
+	ApplyStyle(); // material depois do CreateMeshSection: o colocado antes se perde	UE_LOG(LogTemp, Log, TEXT("MythWater: %s water level %.1f type %d, %d blocks"), *MapName, Level, Type, Verts.Num() / 4);
 	return true;
 }
 

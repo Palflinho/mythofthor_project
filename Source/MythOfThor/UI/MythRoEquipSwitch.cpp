@@ -24,15 +24,15 @@ namespace
 void UMythRoHUDWidget::BuildEquipSwitchWindow()
 {
 	const float H = EsListY + EsRows * EsRowH + 38.f;
-	EquipSwitchWindow = MakeRoPanel(TEXT("Troca rápida"), FVector2D(EsW, H), FVector2D(-60.f, 140.f));
-	AddText(EquipSwitchWindow, 10.f, 22.f, 7, EsGray)->SetText(FText::FromString(TEXT("Ctrl + duplo clique num equipamento dos itens para incluir.")));
+	EquipSwitchWindow = MakeRoPanel(TEXT("Quick swap"), FVector2D(EsW, H), FVector2D(-60.f, 140.f));
+	AddText(EquipSwitchWindow, 10.f, 22.f, 7, EsGray)->SetText(FText::FromString(TEXT("Ctrl + double-click an equipment item in your items to add it.")));
 	for (int32 i = 0; i < EsRows; ++i)
 	{
 		const float Y = EsListY + i * EsRowH;
 		EsNames.Add(AddText(EquipSwitchWindow, 12.f, Y, 8, EsText));
 		EsRemove.Add(AddText(EquipSwitchWindow, EsW - 66.f, Y, 7, EsLink));
 	}
-	EsSwitchAll = AddTextButton(EquipSwitchWindow, TEXT("Trocar tudo"), 90.f, H - 30.f, 100.f);
+	EsSwitchAll = AddTextButton(EquipSwitchWindow, TEXT("Swap all"), 90.f, H - 30.f, 100.f);
 }
 
 void UMythRoHUDWidget::RefreshEquipSwitch()
@@ -63,7 +63,7 @@ void UMythRoHUDWidget::RefreshEquipSwitch()
 			}
 		}
 		EsNames[i]->SetText(FText::FromString(Name));
-		EsRemove[i]->SetText(FText::FromString(TEXT("[Remover]")));
+		EsRemove[i]->SetText(FText::FromString(TEXT("[Remove]")));
 	}
 }
 

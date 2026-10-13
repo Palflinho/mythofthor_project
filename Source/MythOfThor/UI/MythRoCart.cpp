@@ -56,9 +56,9 @@ namespace
 void UMythRoHUDWidget::BuildCartWindow()
 {
 	const float H = CartListY + CartRows * CartRowH + 40.f;
-	CartWindow = MakeRoPanel(TEXT("Carrinho"), FVector2D(CartW, H), FVector2D(40.f, -20.f));
-	AddText(CartWindow, CartColA, 22.f, 8, CartGray)->SetText(FText::FromString(TEXT("No carrinho (clique: pega 1; Shift: 10)")));
-	AddText(CartWindow, CartColB, 22.f, 8, CartGray)->SetText(FText::FromString(TEXT("Na mochila (clique: põe 1; Shift: 10)")));
+	CartWindow = MakeRoPanel(TEXT("Cart"), FVector2D(CartW, H), FVector2D(40.f, -20.f));
+	AddText(CartWindow, CartColA, 22.f, 8, CartGray)->SetText(FText::FromString(TEXT("In the cart (click: take 1; Shift: 10)")));
+	AddText(CartWindow, CartColB, 22.f, 8, CartGray)->SetText(FText::FromString(TEXT("In the backpack (click: put 1; Shift: 10)")));
 	for (int32 i = 0; i < CartRows; ++i)
 	{
 		const float Y = CartListY + i * CartRowH;
@@ -94,7 +94,7 @@ void UMythRoHUDWidget::ToggleCartWindow()
 	}
 	if (!Net || !Net->HasCart())
 	{
-		AddChatLine(TEXT("Você não tem um carrinho."), FLinearColor(1.f, 0.45f, 0.45f));
+		AddChatLine(TEXT("You do not have a cart."), FLinearColor(1.f, 0.45f, 0.45f));
 		return;
 	}
 	CartScroll = 0;
@@ -143,7 +143,7 @@ void UMythRoHUDWidget::RefreshCart()
 		CartBagIcons[i]->SetVisibility(BIcon ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
 	}
 	// Peso como o cliente mostra (o servidor manda em decimos)
-	CartInfoText->SetText(FText::FromString(FString::Printf(TEXT("Itens %d / %d    Peso %d / %d"),
+	CartInfoText->SetText(FText::FromString(FString::Printf(TEXT("Items %d / %d    Weight %d / %d"),
 		Net->GetCartCount(), Net->GetCartMax(), Net->GetCartWeight() / 10, Net->GetCartMaxWeight() / 10)));
 }
 
