@@ -652,6 +652,17 @@ void UMythRoHUDWidget::BuildHotbar()
 		Count->SetShadowOffset(FVector2D(1.f, 1.f));
 		Count->SetShadowColorAndOpacity(FLinearColor(1.f, 1.f, 1.f, 0.9f));
 		HotbarCounts.Add(Count);
+		UImage* CdBack = AddColor(Win, FLinearColor(0.f, 0.f, 0.f, 0.62f), X + 2.f, Y + 5.f, 24.f, 24.f);
+		CdBack->SetVisibility(ESlateVisibility::Collapsed);
+		HotbarCdBacks.Add(CdBack);
+		UTextBlock* CdText = AddText(Win, X, Y + 11.f, 7, FLinearColor::White);
+		CdText->SetJustification(ETextJustify::Center);
+		if (UCanvasPanelSlot* CdSlot = Cast<UCanvasPanelSlot>(CdText->Slot)) { CdSlot->SetAutoSize(false); CdSlot->SetSize(FVector2D(28.f, 12.f) * UIScale); }
+		FSlateFontInfo CdFont = CdText->GetFont();
+		CdFont.OutlineSettings.OutlineSize = 1;
+		CdFont.OutlineSettings.OutlineColor = FLinearColor::Black;
+		CdText->SetFont(CdFont);
+		HotbarCdTexts.Add(CdText);
 	}
 	HotbarUp = AddButtonEx(Win, TEXT("shortcut/btn_minus_normal.bmp"), TEXT("shortcut/btn_minus_over.bmp"), TEXT("shortcut/btn_minus_press.bmp"), 292.f, 3.f);
 	HotbarDown = AddButtonEx(Win, TEXT("shortcut/btn_plus_normal.bmp"), TEXT("shortcut/btn_plus_over.bmp"), TEXT("shortcut/btn_plus_press.bmp"), 292.f, RowH + 3.f);
@@ -1252,6 +1263,7 @@ void UMythRoHUDWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime
 	UpdateMinimap();
 	UpdateButtons();
 	UpdateSkillHover();
+	UpdateCooldowns();
 	WindowRefreshTimer -= InDeltaTime;
 	if (WindowRefreshTimer <= 0.f)
 	{

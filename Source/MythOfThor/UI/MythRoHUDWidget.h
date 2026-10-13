@@ -491,6 +491,10 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UImage>> HotbarSlots;
 	UPROPERTY() TArray<TObjectPtr<UImage>> HotbarIcons;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> HotbarCounts;
+	/** Escurecimento e segundos de recarga sobre cada atalho de skill (ZC_SKILL_POSTDELAY). */
+	UPROPERTY() TArray<TObjectPtr<UImage>> HotbarCdBacks;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> HotbarCdTexts;
+	void UpdateCooldowns();
 	UPROPERTY() TArray<TObjectPtr<UImage>> HotbarRowBoxes;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> HotbarRowTexts;
 	UPROPERTY() TObjectPtr<UImage> HotbarUp;

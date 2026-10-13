@@ -989,6 +989,15 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Ragnarok|Network")
 	const TArray<FRagnarokSkillInfo>& GetSkillList() const { return SkillList; }
 
+	/** Recarga restante da skill em segundos (ZC_SKILL_POSTDELAY 0x043d: o servidor manda a duracao ao usar). 0 = pronta. */
+	float GetSkillCooldown(int32 SkillID, float* OutTotal = nullptr) const;
+	/** Teste: simula o pacote de recarga (Skill 0 = a primeira skill da barra de atalhos). */
+	void DebugSetSkillCooldown(int32 SkillID, float Seconds)
+	{
+		if (SkillID == 0) { for (const FRagnarokHotkey& H : Hotkeys) { if (H.bIsSkill && H.ID != 0) { SkillID = H.ID; break; } } }
+		SkillCooldowns.Add(SkillID, TPair<double, float>(FPlatformTime::Seconds() + Seconds, Seconds));
+	}
+
 	/** ID do proprio jogador nos pacotes do map-server (AID da conta), para separar "eu" das outras unidades. */
 	int64 GetSelfID() const { return SavedAccountID; }
 	/** Sexo da conta (AC_ACCEPT_LOGIN): 0 = feminino, 1 = masculino. */
@@ -1298,6 +1307,7 @@ private:
 	TMap<int32, int32> TradePendingAmount; // indice -> quantidade pedida, confirmada pelo 0x00ea
 	TArray<FRoPartyMember> PartyMembers;
 	TArray<FRagnarokSkillInfo> SkillList;
+	TMap<int32, TPair<double, float>> SkillCooldowns; // skill -> (fim em segundos do relogio, duracao total)
 
 	bool ConnectToPort(const FString& Host, int32 Port, ERagnarokNetworkState NewState);
 	void SendData(const uint8* Data, int32 Size);

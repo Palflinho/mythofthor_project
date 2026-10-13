@@ -264,3 +264,34 @@ bool UMythRoHUDWidget::IsOverAnyWindow(const FVector2D& ScreenPos) const
 	}
 	return (BasicWindow && BasicWindow->IsVisible() && IsUnder(BasicWindow, ScreenPos)) || (MinimapWindow && MinimapWindow->IsVisible() && IsUnder(MinimapWindow, ScreenPos));
 }
+
+void UMythRoHUDWidget::UpdateCooldowns()
+{
+	const URagnarokNetworkSubsystem* Net = GetNet();
+	for (int32 i = 0; i < HotbarCdBacks.Num() && i < HotbarCdTexts.Num(); ++i)
+	{
+		float Left = 0.f, Total = 0.f;
+		const int32 SlotIndex = (HotbarFirstRow + i / 9) * 9 + i % 9;
+		if (Net && Net->GetHotkeys().IsValidIndex(SlotIndex) && Net->GetHotkeys()[SlotIndex].bIsSkill)
+		{
+			Left = Net->GetSkillCooldown(Net->GetHotkeys()[SlotIndex].ID, &Total);
+		}
+		if (Left <= 0.f || Total <= 0.f)
+		{
+			HotbarCdBacks[i]->SetVisibility(ESlateVisibility::Collapsed);
+			HotbarCdTexts[i]->SetText(FText::GetEmpty());
+			continue;
+		}
+		// O escurecimento encolhe de cima para baixo conforme a recarga passa
+		const float Frac = FMath::Clamp(Left / Total, 0.f, 1.f);
+		const float X = 12.f + 30.6f * (i % 9);
+		const float Y = (i / 9) * 34.f;
+		if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(HotbarCdBacks[i]->Slot))
+		{
+			S->SetPosition(FVector2D(X + 2.f, Y + 5.f + 24.f * (1.f - Frac)) * UIScale);
+			S->SetSize(FVector2D(24.f, 24.f * Frac) * UIScale);
+		}
+		HotbarCdBacks[i]->SetVisibility(ESlateVisibility::HitTestInvisible);
+		HotbarCdTexts[i]->SetText(FText::FromString(Left >= 10.f ? FString::FromInt(FMath::CeilToInt(Left)) : FString::Printf(TEXT("%.1f"), Left)));
+	}
+}

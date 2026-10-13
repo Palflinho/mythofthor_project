@@ -148,3 +148,4 @@ NOVO (rodada 27):
 - **Menu Principal**: botão de 3 barras ao lado do minimapa abre um painel central com Inventário, Equipamentos, Status, Habilidades, Grupo, Missões, Correio, Mapa e Configurações. Fecha ao escolher, a menos que "Manter aberto" esteja marcado. Comando de teste: `MythMainMenu [N]`.
 - **Habilidades**: o nível usado nas skills agora tem setas < > de verdade (botões do cliente) ao lado de "n/máx".
 - A janela de Informações Básicas desceu para dar espaço ao painel novo; chat e Auto-Battle subiram acima da faixa de EXP.
+- **Recarga (cooldown) das skills**: o servidor manda o tempo de recarga ao usar a skill (pacote ZC_SKILL_POSTDELAY); o atalho na barra escurece e mostra os segundos que faltam. Comando de teste: `MythCooldown [skill] [segundos]`.

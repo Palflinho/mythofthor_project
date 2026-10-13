@@ -1341,6 +1341,7 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x09cb: // ZC_USE_SKILL
 			case 0x0b1a: // ZC_USESKILL_ACK
 			case 0x0110: // ZC_ACK_TOUSESKILL
+			case 0x043d: // ZC_SKILL_POSTDELAY
 				HandleSkillResult(PacketData, ActualLen, PacketID);
 				break;
 			case 0x0b41: // ZC_ITEM_PICKUP_ACK (20211103)
@@ -2625,6 +2626,21 @@ void URagnarokNetworkSubsystem::HandleSkillResult(const uint8* PacketData, int32
 		if (PacketSize >= 24)
 		{
 			OnSkillCast.Broadcast(U32(2), U32(6), U16(14), I32(20), U16(10), U16(12));
+		}
+		break;
+	case 0x043d: // ZC_SKILL_POSTDELAY: SKID +2, tempo de recarga em ms +4 (0 = liberada)
+		if (PacketSize >= 8)
+		{
+			const int32 CdSkill = U16(2);
+			const float CdSeconds = U32(4) / 1000.f;
+			if (CdSeconds > 0.f)
+			{
+				SkillCooldowns.Add(CdSkill, TPair<double, float>(FPlatformTime::Seconds() + CdSeconds, CdSeconds));
+			}
+			else
+			{
+				SkillCooldowns.Remove(CdSkill);
+			}
 		}
 		break;
 	case 0x0110: // ZC_ACK_TOUSESKILL: skillId +2, btype +4, itemId +8, flag +12, cause +13
@@ -4822,4 +4838,16 @@ FString URagnarokNetworkSubsystem::ResolveHost()
 		GConfig->GetString(TEXT("Myth"), TEXT("NetHost"), Host, GGameIni);
 	}
 	return Host;
+}
+
+float URagnarokNetworkSubsystem::GetSkillCooldown(int32 SkillID, float* OutTotal) const
+{
+	const TPair<double, float>* Cd = SkillCooldowns.Find(SkillID);
+	if (!Cd)
+	{
+		return 0.f;
+	}
+	const float Left = static_cast<float>(Cd->Key - FPlatformTime::Seconds());
+	if (OutTotal) { *OutTotal = Cd->Value; }
+	return FMath::Max(0.f, Left);
 }
