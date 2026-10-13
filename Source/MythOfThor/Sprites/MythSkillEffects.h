@@ -50,6 +50,9 @@ struct MYTHOFTHOR_API FMythSkillEffects
 	static bool HidesCastAura(int32 SkillID);
 
 	/** Toca um efeito da EffectTable pelo id (os ZC_NOTIFY_EFFECT do servidor e os de cima). */
+	/** A tabela do cliente original desenha algo (STR, SPR, 3D, cilindro...) para a skill em algum momento, ou so toca som? */
+	static bool SkillHasVisual(int32 SkillID);
+
 	static bool PlayEffectId(UObject* WorldContext, int32 EffectID, AActor* Target, const FVector& Location, AActor* Source = nullptr);
 
 	/** Cor da luz do elemento da skill (branco morno para skills sem elemento). */

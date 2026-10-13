@@ -1,5 +1,6 @@
 #include "World/MythNetWorld.h"
 #include "World/MythWater.h"
+#include "Sprites/MythSkillManager.h"
 
 #include "World/MythMapInfo.h"
 #include "Player/MythPlayerController.h"
@@ -1509,15 +1510,15 @@ void AMythNetWorld::HandleSkillDamage(int64 SourceID, int64 TargetID, int32 Skil
 		LastCasterFx.Add(Key, Now);
 		if (Source)
 		{
-			bAnyFx |= FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Cast, Source, Source->GetActorLocation(), false, Source);
+			bAnyFx |= UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::Cast, Source, Source->GetActorLocation(), false, Source);
 			if (Now - LastCastBegin.FindRef(Key) > 4.0) // com conjuracao, o beginCast ja tocou no HandleSkillCast
 			{
-				bAnyFx |= FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::BeginCast, Source, Source->GetActorLocation(), false, Source);
+				bAnyFx |= UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::BeginCast, Source, Source->GetActorLocation(), false, Source);
 			}
 		}
 		if (Target)
 		{
-			bAnyFx |= FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Release, Target, Target->GetActorLocation(), false, Source);
+			bAnyFx |= UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::Release, Target, Target->GetActorLocation(), false, Source);
 		}
 		// Ataque Aereo / Assalto do Falcao: o falcao voa ate o alvo e volta (roBrowser: falcon.walkToNonWalkableGround)
 		if ((SkillID == 129 || SkillID == 381) && Source && Target)
@@ -1532,7 +1533,7 @@ void AMythNetWorld::HandleSkillDamage(int64 SourceID, int64 TargetID, int32 Skil
 	const int32 MainFx = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::Effect);
 	if (Target && MainFx > 0 && MainFx != CastFx && Now - LastGroundSkill.FindRef(SkillID) > 0.6)
 	{
-		bAnyFx |= FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Effect, Target, Target->GetActorLocation(), false, Source);
+		bAnyFx |= UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::Effect, Target, Target->GetActorLocation(), false, Source);
 	}
 	const bool bProjectile = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::BeforeHit) > 0;
 	const int32 HitFx = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::Hit);
@@ -1550,7 +1551,7 @@ void AMythNetWorld::HandleSkillDamage(int64 SourceID, int64 TargetID, int32 Skil
 		{
 			if (AActor* T = ResolveActor(TargetID); T && bOwnHitFx && Amount > 0)
 			{
-				FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Hit, T, T->GetActorLocation(), false, WSource.Get());
+				UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::Hit, T, T->GetActorLocation(), false, WSource.Get());
 			}
 			TGuardValue<bool> SkillHit(bSkillHitInProgress, true);
 			HandleDamage(SourceID, TargetID, Amount, DamageType, 0);
@@ -1560,7 +1561,7 @@ void AMythNetWorld::HandleSkillDamage(int64 SourceID, int64 TargetID, int32 Skil
 			AActor* T = ResolveActor(TargetID);
 			if (bProjectile && T)
 			{
-				FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::BeforeHit, T, T->GetActorLocation(), false, WSource.Get());
+				UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::BeforeHit, T, T->GetActorLocation(), false, WSource.Get());
 				FTimerHandle LandHandle;
 				GetWorldTimerManager().SetTimer(LandHandle, FTimerDelegate::CreateWeakLambda(this, Land), 0.2f, false);
 				return;
@@ -1579,7 +1580,7 @@ void AMythNetWorld::HandleSkillDamage(int64 SourceID, int64 TargetID, int32 Skil
 	}
 	if (!bAnyFx && Target)
 	{
-		FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Hit, Target, Target->GetActorLocation(), true, Source); // clarao do elemento
+		UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::Hit, Target, Target->GetActorLocation(), true, Source); // clarao do elemento
 	}
 }
 
@@ -1601,7 +1602,7 @@ void AMythNetWorld::HandleSkillEffect(int64 SourceID, int64 TargetID, int32 Skil
 		if (Now - LastCasterFx.FindRef(Key) > 0.3) // o dano da mesma skill chega junto e nao repete
 		{
 			LastCasterFx.Add(Key, Now);
-			FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Cast, Source, Source->GetActorLocation(), false, Source);
+			UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::Cast, Source, Source->GetActorLocation(), false, Source);
 		}
 	}
 	if (AActor* At = Target ? Target : Source)
@@ -1609,21 +1610,21 @@ void AMythNetWorld::HandleSkillEffect(int64 SourceID, int64 TargetID, int32 Skil
 		const int32 MainFx = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::Effect);
 		if (MainFx != CastFx || At != Source)
 		{
-			FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Effect, At, At->GetActorLocation(), CastFx == 0, Source);
+			UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::Effect, At, At->GetActorLocation(), CastFx == 0, Source);
 		}
 	}
 	// successEffectId no alvo e successEffectIdOnCaster no conjurador; beginCast de quem nao conjurou (instantaneas)
 	if (AActor* At = Target ? Target : Source)
 	{
-		FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::Success, At, At->GetActorLocation(), false, Source);
+		UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::Success, At, At->GetActorLocation(), false, Source);
 	}
 	if (Source)
 	{
-		FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::SuccessCaster, Source, Source->GetActorLocation(), false, Source);
+		UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::SuccessCaster, Source, Source->GetActorLocation(), false, Source);
 		const TPair<int64, int32> BeginKey(SourceID, SkillID);
 		if (GetWorld()->GetTimeSeconds() - LastCastBegin.FindRef(BeginKey) > 4.0)
 		{
-			FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::BeginCast, Source, Source->GetActorLocation(), false, Source);
+			UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::BeginCast, Source, Source->GetActorLocation(), false, Source);
 		}
 	}
 	// Curas (AL_HEAL 28, curar no aprendiz NV_FIRSTAID 142): numero verde de cura sobre o alvo
@@ -1680,7 +1681,7 @@ void AMythNetWorld::HandleSkillCast(int64 SourceID, int64 TargetID, int32 SkillI
 	{
 		// beginCastEffectId: no conjurador quando a conjuracao comeca
 		LastCastBegin.Add(TPair<int64, int32>(SourceID, SkillID), GetWorld()->GetTimeSeconds() + CastMs / 1000.0);
-		FMythSkillEffects::Play(this, SkillID, EMythSkillEffectStage::BeginCast, Source, Source->GetActorLocation(), false, Source);
+		UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::BeginCast, Source, Source->GetActorLocation(), false, Source);
 	}
 	AActor* CastTarget = ResolveActor(TargetID);
 	if (CastTarget && Source)

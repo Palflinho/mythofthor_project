@@ -26,7 +26,8 @@ public class MythOfThor : ModuleRules
 			"NavigationSystem",
 			"Sockets",
 			"Networking",
-			"Json"
+			"Json",
+			"Niagara"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { });

@@ -377,6 +377,33 @@ int32 FMythSkillEffects::EffectIdFor(int32 SkillID, EMythSkillEffectStage Stage)
 	return Ids.Num() > 0 ? Ids[0] : 0;
 }
 
+bool FMythSkillEffects::SkillHasVisual(int32 SkillID)
+{
+	const FSkillEntry* S = Tables().Skills.Find(SkillID);
+	if (!S)
+	{
+		return false;
+	}
+	static const TSet<FString> Visual = { TEXT("STR"), TEXT("SPR"), TEXT("3D"), TEXT("2D"), TEXT("CYLINDER"), TEXT("TRAIL"), TEXT("QuadHorn") };
+	for (const TArray<int32>& Ids : S->Stages)
+	{
+		for (const int32 Id : Ids)
+		{
+			if (const TArray<FEffectPart>* Parts = Tables().Effects.Find(Id))
+			{
+				for (const FEffectPart& P : *Parts)
+				{
+					if (Visual.Contains(P.Type))
+					{
+						return true;
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
+
 bool FMythSkillEffects::HidesCastAura(int32 SkillID)
 {
 	const FSkillEntry* S = Tables().Skills.Find(SkillID);

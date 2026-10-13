@@ -34,6 +34,7 @@
 #include "GameFramework/PlayerInput.h"
 #include "Sprites/MythSkillEffects.h"
 #include "Sprites/MythTrailEffect.h"
+#include "Sprites/MythSkillManager.h"
 #include "World/MythCellMoverComponent.h"
 #include "World/MythWarpPortal.h"
 #include "Sprites/MythStrEffect.h"
@@ -1779,7 +1780,7 @@ void AMythPlayerController::MythPlaySkill(int32 SkillID, int32 Stage)
 {
 	if (APawn* P = GetPawn())
 	{
-		FMythSkillEffects::Play(this, SkillID, static_cast<EMythSkillEffectStage>(FMath::Clamp(Stage, 0, 10)), P, P->GetActorLocation());
+		UMythSkillManager::Play(this, SkillID, static_cast<EMythSkillEffectStage>(FMath::Clamp(Stage, 0, 10)), P, P->GetActorLocation());
 	}
 }
 
