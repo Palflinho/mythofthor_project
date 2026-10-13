@@ -25,19 +25,24 @@ def main():
         it = info.get(str(e['i'])) or n26.get(str(e['i']))
         if it and it.get('resource'):
             resources.add(it['resource'])
+    dirs = [UI + 'item', 'sprite/아이템', UI + 'collection', UI + 'cardbmp']
+    have_src = {d: {f.lower(): f for f in os.listdir(os.path.join(src, d))} if os.path.isdir(os.path.join(src, d)) else {} for d in dirs}
+    have_dst = {d: {f.lower() for f in os.listdir(os.path.join(dst, d))} if os.path.isdir(os.path.join(dst, d)) else set() for d in dirs}
     wanted = []
-    for r in resources:
-        wanted += [UI + 'item/' + r + '.bmp', 'sprite/아이템/' + r + '.spr', 'sprite/아이템/' + r + '.act',
-                   UI + 'collection/' + r + '.bmp', UI + 'cardbmp/' + r + '.bmp']
+    for r in resources:  # o cliente usa nomes sem diferenciar maiusculas (os arquivos extraidos estao em minusculas)
+        wanted += [(dirs[0], r + '.bmp'), (dirs[1], r + '.spr'), (dirs[1], r + '.act'), (dirs[2], r + '.bmp'), (dirs[3], r + '.bmp')]
     copied = missing = 0
-    for rel in wanted:
-        s, d = os.path.join(src, rel), os.path.join(dst, rel)
-        if os.path.exists(d) or not os.path.exists(s):
-            if not os.path.exists(d):
-                missing += 1
+    for d, name in wanted:
+        key = name.lower()
+        if key in have_dst[d]:
             continue
-        os.makedirs(os.path.dirname(d), exist_ok=True)
-        shutil.copyfile(s, d)
+        real = have_src[d].get(key)
+        if not real:
+            missing += 1
+            continue
+        os.makedirs(os.path.join(dst, d), exist_ok=True)
+        shutil.copyfile(os.path.join(src, d, real), os.path.join(dst, d, key))
+        have_dst[d].add(key)
         copied += 1
     print('recursos', len(resources), '| copiados', copied, '| ainda faltando em ambos', missing)
 
