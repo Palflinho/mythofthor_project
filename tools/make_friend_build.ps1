@@ -45,6 +45,7 @@ if (-not (Test-Path (Join-Path $game 'MythOfThor.exe'))) { "ERRO: MythOfThor.exe
 $cfg = Join-Path $game 'MythOfThor\Config'
 New-Item -ItemType Directory -Force $cfg | Out-Null
 Copy-Item (Join-Path $src 'Config\*.json') $cfg -Force
+robocopy (Join-Path $src 'Config\water') (Join-Path $cfg 'water') /MIR /NFL /NDL /NJH /NJS /NP | Out-Null
 
 # 3) Graficos do RO ao lado do jogo (UMythRoSpriteComponent::GetAssetsRoot acha RagnarokAssets\grf sozinho)
 if (-not $SkipAssets) {

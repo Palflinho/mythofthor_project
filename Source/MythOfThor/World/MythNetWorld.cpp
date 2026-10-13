@@ -1,4 +1,5 @@
 #include "World/MythNetWorld.h"
+#include "World/MythWater.h"
 
 #include "World/MythMapInfo.h"
 #include "Player/MythPlayerController.h"
@@ -222,6 +223,7 @@ void AMythNetWorld::Chat(const FString& Text, const FLinearColor& Color) const
 void AMythNetWorld::BeginPlay()
 {
 	Super::BeginPlay();
+	AMythWater::SpawnForMap(GetWorld()); // agua dos canais e lagos do mapa (Config/water/<mapa>.json)
 	URagnarokNetworkSubsystem* Net = GetNet();
 	if (!Net)
 	{

@@ -1,0 +1,38 @@
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
+#include "MythWater.generated.h"
+
+class UProceduralMeshComponent;
+class UMaterialInstanceDynamic;
+class UTexture2D;
+
+/**
+ * Agua dos mapas (canais, lagos, esgoto): o plano de agua do RSW desenhado so onde o chao esta abaixo dele, como o cliente
+ * original (criterio do roBrowser). Os dados vem de Config/water/<mapa>.json (tools/gen_water.py); o material e o
+ * /Game/Myth/M_Water (translucido) e a textura troca entre os 32 quadros water<tipo>NN.jpg do cliente.
+ */
+UCLASS()
+class MYTHOFTHOR_API AMythWater : public AActor
+{
+	GENERATED_BODY()
+
+public:
+	AMythWater();
+
+	/** Cria a agua do mapa atual (se Config/water/<mapa>.json existir); chamado quando o mundo comeca. */
+	static AMythWater* SpawnForMap(UWorld* World);
+
+	virtual void Tick(float DeltaSeconds) override;
+
+private:
+	UPROPERTY() TObjectPtr<UProceduralMeshComponent> Mesh;
+	UPROPERTY() TObjectPtr<UMaterialInstanceDynamic> Material;
+	UPROPERTY() TArray<TObjectPtr<UTexture2D>> Frames;
+	int32 LastFrame = -1;
+	float AnimSpeed = 3.f;
+	float Time = 0.f;
+
+	bool Build(const FString& MapName, const FVector2D& Origin);
+};
