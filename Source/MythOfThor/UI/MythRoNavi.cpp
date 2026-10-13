@@ -6,6 +6,7 @@
 
 #include "UI/MythRoHUDWidget.h"
 #include "UI/MythRoUITextures.h"
+#include "Core/MythRoClientTables.h"
 #include "World/MythCellMoverComponent.h"
 #include "GameFramework/Pawn.h"
 #include "Player/MythPlayerController.h"
@@ -324,7 +325,7 @@ void UMythRoHUDWidget::ShowNaviRoute(const FString& Destination)
 	const FNaviData& Data = Navi();
 	const FString* DestName = Data.Names.Find(Destination);
 	NaviTitle->SetText(FText::FromString(FString::Printf(TEXT("[%s]"), *NaviFit(DestName && !DestName->IsEmpty() ? *DestName : Destination, NvRightW - 8.f))));
-	if (UTexture2D* Tex = FMythRoUITextures::Get(FString::Printf(TEXT("map/%s.bmp"), *Destination)))
+	if (UTexture2D* Tex = FMythRoUITextures::Get(FString::Printf(TEXT("map/%s.bmp"), *FMythRoClientTables::MapImageName(Destination))))
 	{
 		FSlateBrush B;
 		B.SetResourceObject(Tex);

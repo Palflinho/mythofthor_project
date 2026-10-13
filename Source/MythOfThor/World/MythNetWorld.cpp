@@ -504,7 +504,7 @@ namespace
 	FString NetLevelPath(const FString& Map)
 	{
 		TArray<FString> Parts;
-		Map.ParseIntoArray(Parts, TEXT("_"), true);
+		Map.Replace(TEXT("-"), TEXT("_")).ParseIntoArray(Parts, TEXT("_"), true); // new_1-1 -> New11 (o importador troca - por _)
 		FString Title;
 		for (const FString& P : Parts)
 		{

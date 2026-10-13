@@ -1,6 +1,7 @@
 #include "UI/MythRoHUDWidget.h"
 
 #include "UI/MythRoUITextures.h"
+#include "Core/MythRoClientTables.h"
 #include "Gameplay/AutoBattleComponent.h"
 #include "Gameplay/MythStatsComponent.h"
 #include "World/MythMapInfo.h"
@@ -1367,7 +1368,7 @@ void UMythRoHUDWidget::UpdateMinimap()
 	{
 		LoadedMinimap = Info->MapName;
 		MapTitleText->SetText(FText::FromString(Info->MapName));
-		if (UTexture2D* Tex = FMythRoUITextures::Get(FString::Printf(TEXT("map/%s.bmp"), *Info->MapName)))
+		if (UTexture2D* Tex = FMythRoUITextures::Get(FString::Printf(TEXT("map/%s.bmp"), *FMythRoClientTables::MapImageName(Info->MapName))))
 		{
 			MinimapImage->SetColorAndOpacity(FLinearColor::White);
 		}
@@ -1402,7 +1403,7 @@ void UMythRoHUDWidget::UpdateMinimap()
 	{
 		MinimapShownSize = ImgSize;
 		LoadedMinimapBrush = Info->MapName;
-		if (UTexture2D* Tex = FMythRoUITextures::Get(FString::Printf(TEXT("map/%s.bmp"), *Info->MapName)))
+		if (UTexture2D* Tex = FMythRoUITextures::Get(FString::Printf(TEXT("map/%s.bmp"), *FMythRoClientTables::MapImageName(Info->MapName))))
 		{
 			MinimapImage->SetBrush(TextureBrush(Tex, FVector2D(ImgSize, ImgSize) * UIScale));
 		}

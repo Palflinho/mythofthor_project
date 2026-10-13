@@ -37,7 +37,7 @@ bool AMythMapInfo::IsIndoor() const
 	}
 	// Interiores do RO sem o sufixo _in
 	const FString Name = MapName.ToLower();
-	static const TSet<FString> KnownInteriors = { TEXT("prt_church"), TEXT("prt_castle") };
+	static const TSet<FString> KnownInteriors = { TEXT("prt_church"), TEXT("prt_castle"), TEXT("new_1-2"), TEXT("new_1-4") }; // Campo de Treinamento: salao e capela
 	if (KnownInteriors.Contains(Name))
 	{
 		return true;

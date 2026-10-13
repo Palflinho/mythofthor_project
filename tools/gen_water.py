@@ -72,10 +72,10 @@ def main():
                 runs = []
                 x = 0
                 while x < w:
-                    hs = g['tiles'][y * w + x]['heights']
-                    if max(hs) > limit:
+                    t = g['tiles'][y * w + x]
+                    if t['faces'][0] != -1 and max(t['heights']) > limit:  # so onde ha chao (face de cima) no tile, como o roBrowser
                         x0 = x
-                        while x < w and max(g['tiles'][y * w + x]['heights']) > limit:
+                        while x < w and g['tiles'][y * w + x]['faces'][0] != -1 and max(g['tiles'][y * w + x]['heights']) > limit:
                             x += 1
                         runs += [x0, x - x0]
                     else:

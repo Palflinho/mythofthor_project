@@ -58,6 +58,10 @@ struct MYTHOFTHOR_API FMythRoClientTables
 	/** Linhas de descricao da habilidade (skilldesctable do cliente, com cores ^RRGGBB); nulo se nao ha. */
 	static const TArray<FString>* SkillDescription(int32 SkillID);
 
+
+	/** Nome da imagem do minimapa de um mapa (map/<nome>.bmp): new_1-N usa new_zone0N, como no cliente. */
+	static FString MapImageName(const FString& MapName);
+
 	/** Linha da msgstringtable do cliente (Config/messages.json), pelo indice; vazio se nao existir. */
 	static FString Message(int32 Index);
 };

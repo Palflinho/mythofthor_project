@@ -44,3 +44,8 @@ grep -q "myth/treinadora_classes.txt" npc/scripts_custom.conf || echo "npc: npc/
 # 6. Compilacao em modo Renovacao (PRERE desligado) com o mesmo PACKETVER
 echo "Pronto. Recompile com:"
 echo "  cd /mnt/e/Documentos/Repositórios/mythofthor_project/server && docker compose --profile build run --rm builder sh -c './configure --enable-packetver=20250402 --enable-prere=no && make clean server'"
+
+# Campo de Treinamento (new_1-1 a new_1-4): NPCs do tutorial antigo (so os mapas new_1) e ponto inicial do personagem novo
+cp "$HERE/../npc/custom/myth/treino_novice.txt" npc/custom/myth/treino_novice.txt
+grep -q "myth/treino_novice.txt" npc/scripts_custom.conf || echo "npc: npc/custom/myth/treino_novice.txt" >> npc/scripts_custom.conf
+grep -q "^start_point:" tools/docker/asset/char_conf.txt || printf "\nstart_point: new_1-1,53,111\n" >> tools/docker/asset/char_conf.txt

@@ -333,3 +333,13 @@ TArray<FString> FMythRoClientTables::ItemDescriptionLines(int32 ItemID, bool bId
 	}
 	return Out;
 }
+
+FString FMythRoClientTables::MapImageName(const FString& MapName)
+{
+	const FString Lower = MapName.ToLower();
+	if (Lower.Len() == 7 && Lower.StartsWith(TEXT("new_1-")) && Lower[6] >= TEXT('1') && Lower[6] <= TEXT('4'))
+	{
+		return FString::Printf(TEXT("new_zone0%c"), Lower[6]);
+	}
+	return MapName;
+}
