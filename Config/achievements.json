@@ -3,7 +3,8 @@
 "name": "At this time I live to eat",
 "group": "Eat",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "110001": {
 "name": "A fan of this polarity",
@@ -17,883 +18,2052 @@
 1,
 1,
 1
-]
+],
+"rewards": []
 },
 "120001": {
 "name": "North Prontera Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120002": {
 "name": "North Prontera Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120003": {
 "name": "North Prontera Field Exploration(3)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120004": {
 "name": "West Prontera Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120005": {
 "name": "West Prontera Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120006": {
 "name": "East Prontera Field Exploration",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120007": {
 "name": "South Prontera Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120008": {
 "name": "South Prontera Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120009": {
 "name": "South Prontera Field Exploration(3)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120010": {
 "name": "South Prontera Field Exploration(4)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120011": {
 "name": "East Geffen Field Exploration",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120012": {
 "name": "Southeast Geffen Field Exploration",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120013": {
 "name": "Northwest Geffen Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120014": {
 "name": "Northwest Geffen Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120015": {
 "name": "Northwest Geffen Field Exploration(3)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120016": {
 "name": "South Geffen Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120017": {
 "name": "South Geffen Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120018": {
 "name": "Sograt Desert Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120019": {
 "name": "Sograt Desert Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120020": {
 "name": "Sograt Desert Field Exploration(3)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120021": {
 "name": "Sograt Desert Field Exploration(4)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120022": {
 "name": "Sograt Desert Field Exploration(5)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120023": {
 "name": "Sograt Desert Field Exploration(6)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120024": {
 "name": "Southwest Payon Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120025": {
 "name": "Southwest Payon Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120026": {
 "name": "Southwest Payon Field Exploration(3)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120027": {
 "name": "Southwest Payon Field Exploration(4)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120028": {
 "name": "East Payon Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120029": {
 "name": "East Payon Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120030": {
 "name": "East Payon Field Exploration(3)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120031": {
 "name": "East Payon Field Exploration(4)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120032": {
 "name": "North Mjolnir Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120033": {
 "name": "North Mjolnir Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120034": {
 "name": "North Mjolnir Field Exploration(3)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120035": {
 "name": "North Mjolnir Field Exploration(4)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120036": {
 "name": "North Mjolnir Field Exploration(5)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120037": {
 "name": "South Mjolnir Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120038": {
 "name": "South Mjolnir Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120039": {
 "name": "South Mjolnir Field Exploration(3)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120040": {
 "name": "South Mjolnir Field Exploration(4)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120041": {
 "name": "South Mjolnir Field Exploration(5)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120042": {
 "name": "South Mjolnir Field Exploration(6)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120043": {
 "name": "South Aldebaran Field Exploration",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120044": {
 "name": "Comodo Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120045": {
 "name": "Comodo Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120046": {
 "name": "Comodo Field Exploration(3)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120047": {
 "name": "Comodo Field Exploration(4)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120048": {
 "name": "Comodo Field Exploration(5)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120049": {
 "name": "Comodo Field Exploration(6)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120050": {
 "name": "Comodo Field Exploration(7)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120051": {
 "name": "Comodo Field Exploration(8)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120052": {
 "name": "Border Checkpoint Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120053": {
 "name": "Border Checkpoint Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120054": {
 "name": "Kiel Hyre Mansion Field Exploration",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120055": {
 "name": "El Mes Plateau Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120056": {
 "name": "El Mes Plateau Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120057": {
 "name": "El Mes Plateau Field Exploration(3)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120058": {
 "name": "El Mes Gorge Field Exploration",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120059": {
 "name": "Kiel Hyre Academy Field Exploration",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120060": {
 "name": "Guard Camp Field Exploration",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120061": {
 "name": "Juno Field Exploration",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120062": {
 "name": "Front of Thanatos Tower Field Exploration",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120063": {
 "name": "Hugel Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120064": {
 "name": "Hugel Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120065": {
 "name": "Hugel Field Exploration(3)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120066": {
 "name": "Abyss Lake Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120067": {
 "name": "Einbroch Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120068": {
 "name": "Einbroch Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120069": {
 "name": "Einbroch Field Exploration(3)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120070": {
 "name": "Einbroch Field Exploration(4)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120071": {
 "name": "Einbroch Field Exploration(5)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120072": {
 "name": "Einbroch Field Exploration(6)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120073": {
 "name": "Einbroch Field Exploration(7)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120074": {
 "name": "Einbroch Field Exploration(8)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120075": {
 "name": "Lighthalzen Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120076": {
 "name": "Lighthalzen Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120077": {
 "name": "Lighthalzen Field Exploration(3)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120078": {
 "name": "Rachel Audhumbla Plains Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120079": {
 "name": "Rachel Plains Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120080": {
 "name": "Rachel Plains Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120081": {
 "name": "Rachel Plains Field Exploration(3)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120082": {
 "name": "Rachel Audhumbla Grassland Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120083": {
 "name": "Rachel Audhumbla Grassland Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120084": {
 "name": "Portus Luna Field Exploration",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120085": {
 "name": "Veins Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120086": {
 "name": "Veins Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120087": {
 "name": "Veins Field Exploration(3)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120088": {
 "name": "Veins Field Exploration(4)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120089": {
 "name": "Veins Field Exploration(5)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120090": {
 "name": "Eclage Field Exploration",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120091": {
 "name": "North Bitfrost Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120092": {
 "name": "South Bitfrost Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120093": {
 "name": "Splendide Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120094": {
 "name": "Splendide Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120095": {
 "name": "Splendide Field Exploration(3)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120096": {
 "name": "Manuk Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120097": {
 "name": "Manuk Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120098": {
 "name": "Manuk Field Exploration(3)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120099": {
 "name": "Outskirts of Kamidal Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120100": {
 "name": "Outskirts of Kamidal Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120101": {
 "name": "Amatsu Field Exploration",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120102": {
 "name": "Kunlun Field Exploration",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120103": {
 "name": "Kunlun Field Exploration",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120104": {
 "name": "Ayothaya Field Exploration",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120105": {
 "name": "Moscovia Field Exploration",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120106": {
 "name": "Brasilis Field Exploration",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120107": {
 "name": "Dewata Field Exploration",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120108": {
 "name": "Malaya Field Exploration(1)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120109": {
 "name": "Malaya Field Exploration(2)",
 "group": "Adventure",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120110": {
 "name": "Abbey Underground Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120111": {
 "name": "Abyss Lake Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120112": {
 "name": "Clock Tower Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120113": {
 "name": "Amatsu Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120114": {
 "name": "Ant Hell Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120115": {
 "name": "Ayothaya Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120116": {
 "name": "Comodo Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120117": {
 "name": "Brasilis Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120118": {
 "name": "Clock Tower Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120119": {
 "name": "Istana Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120120": {
 "name": "Scaraba Hole Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120121": {
 "name": "Bitfrost Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120122": {
 "name": "Einbroch Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120123": {
 "name": "Geffen Underground Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120124": {
 "name": "Glastheim Dungeon Exploration(1)",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120125": {
 "name": "Glastheim Dungeon Exploration(2)",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120126": {
 "name": "Glastheim Dungeon Exploration(3)",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120127": {
 "name": "Glastheim Dungeon Exploration(4)",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120128": {
 "name": "Kunlun Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120129": {
 "name": "Rachel Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120130": {
 "name": "Sphinx Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120131": {
 "name": "Izlude Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120132": {
 "name": "Robot Factory Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120133": {
 "name": "Bio Lab Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120134": {
 "name": "Kunlun Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120135": {
 "name": "Nogg Road Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120136": {
 "name": "Coal Mine Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120137": {
 "name": "Pyramid Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120138": {
 "name": "Orc Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120139": {
 "name": "Payon Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120140": {
 "name": "Labyrinth Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120141": {
 "name": "Undersea Tunnel Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120142": {
 "name": "Thanatos Tower Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120143": {
 "name": "Thor Volcano Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120144": {
 "name": "Sunken Ship Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120145": {
 "name": "Turtle Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "120146": {
 "name": "Toy Factory Dungeon Exploration",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 22876,
+"n": 1,
+"title": 0,
+"aegis": "Shabby_Purse"
+}
+]
 },
 "127001": {
 "name": "Prontera Contribution",
@@ -905,7 +2075,8 @@
 12000,
 20000,
 1000
-]
+],
+"rewards": []
 },
 "127002": {
 "name": "Geffen Contribution",
@@ -917,7 +2088,8 @@
 12000,
 20000,
 1000
-]
+],
+"rewards": []
 },
 "127003": {
 "name": "Morocc Contribution",
@@ -929,7 +2101,8 @@
 12000,
 20000,
 1000
-]
+],
+"rewards": []
 },
 "127004": {
 "name": "Payon Contribution",
@@ -941,7 +2114,8 @@
 12000,
 20000,
 1000
-]
+],
+"rewards": []
 },
 "127005": {
 "name": "Juno Contribution",
@@ -953,7 +2127,8 @@
 12000,
 20000,
 1000
-]
+],
+"rewards": []
 },
 "127006": {
 "name": "Lighthalzen Contribution",
@@ -965,7 +2140,8 @@
 12000,
 20000,
 1000
-]
+],
+"rewards": []
 },
 "127007": {
 "name": "Einbroch Contribution",
@@ -977,7 +2153,8 @@
 12000,
 20000,
 1000
-]
+],
+"rewards": []
 },
 "127008": {
 "name": "Rachel Contribution",
@@ -989,7 +2166,8 @@
 12000,
 20000,
 1000
-]
+],
+"rewards": []
 },
 "127009": {
 "name": "Veins Contribution",
@@ -1001,61 +2179,83 @@
 12000,
 20000,
 1000
-]
+],
+"rewards": []
 },
 "128000": {
 "name": "Uninvited Guest",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128001": {
 "name": "Strange Guest",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [
+10
+],
+"rewards": []
 },
 "128002": {
 "name": "Get along with map...",
 "group": "Battle",
 "score": 20,
-"targets": []
+"targets": [
+25
+],
+"rewards": []
 },
 "128003": {
 "name": "Welcomed Guest",
 "group": "Battle",
 "score": 30,
-"targets": []
+"targets": [
+50
+],
+"rewards": []
 },
 "128004": {
 "name": "Kimmy's best friend",
 "group": "Battle",
 "score": 50,
-"targets": []
+"targets": [
+100
+],
+"rewards": []
 },
 "128005": {
 "name": "Novice Angler",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128006": {
 "name": "Juicy Hunter",
 "group": "Battle",
 "score": 20,
-"targets": []
+"targets": [
+10
+],
+"rewards": []
 },
 "128007": {
 "name": "Rhythm Master",
 "group": "Battle",
 "score": 50,
-"targets": []
+"targets": [
+50
+],
+"rewards": []
 },
 "128008": {
 "name": "Bold Adventurer",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128009": {
 "name": "Baphomet Hatred",
@@ -1063,7 +2263,8 @@
 "score": 20,
 "targets": [
 10
-]
+],
+"rewards": []
 },
 "128010": {
 "name": "Goat's Nemesis",
@@ -1071,229 +2272,295 @@
 "score": 50,
 "targets": [
 50
-]
+],
+"rewards": []
 },
 "128011": {
 "name": "Ordinary Tourist",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128012": {
 "name": "Backcountry Expert",
 "group": "Battle",
 "score": 20,
-"targets": []
+"targets": [
+10
+],
+"rewards": []
 },
 "128013": {
 "name": "Able to eat more like this",
 "group": "Battle",
 "score": 50,
-"targets": []
+"targets": [
+50
+],
+"rewards": []
 },
 "128014": {
 "name": "Digest hard meat",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128015": {
 "name": "Master of Escape",
 "group": "Battle",
 "score": 20,
-"targets": []
+"targets": [
+10
+],
+"rewards": []
 },
 "128016": {
 "name": "Immortal Hunter",
 "group": "Battle",
 "score": 50,
-"targets": []
+"targets": [
+50
+],
+"rewards": []
 },
 "128017": {
 "name": "Stood up and overcame despair",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128018": {
 "name": "Ember of Hope",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128019": {
 "name": "Pouring Aurora",
 "group": "Battle",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128020": {
 "name": "Who is desperate? I am hopeless!",
 "group": "Battle",
 "score": 30,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128021": {
 "name": "I know god will save the world",
 "group": "Battle",
 "score": 50,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128022": {
 "name": "There was mercy in Morocc army",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128023": {
 "name": "There was fear in Morocc army",
 "group": "Battle",
 "score": 20,
-"targets": []
+"targets": [
+10
+],
+"rewards": []
 },
 "128024": {
 "name": "Guard of weak army",
 "group": "Battle",
 "score": 50,
-"targets": []
+"targets": [
+50
+],
+"rewards": []
 },
 "128025": {
 "name": "Audience with the queen",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128026": {
 "name": "Warm earth",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128027": {
 "name": "Water is very good exactly",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128028": {
 "name": "Pleasant breeze",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128029": {
 "name": "Visitor of old castle",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128030": {
 "name": "Lord of old castle",
 "group": "Battle",
 "score": 20,
-"targets": []
+"targets": [
+10
+],
+"rewards": []
 },
 "128031": {
 "name": "Conqueror of old castle",
 "group": "Battle",
 "score": 50,
-"targets": []
+"targets": [
+50
+],
+"rewards": []
 },
 "128032": {
 "name": "Haggard sucker",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128033": {
 "name": "Hope of the Knight",
 "group": "Battle",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128034": {
 "name": "Guardian of the Dawn",
 "group": "Battle",
 "score": 50,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128035": {
 "name": "Time Traveler",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128036": {
 "name": "Restore ancient relic",
 "group": "Battle",
 "score": 20,
-"targets": []
+"targets": [
+10
+],
+"rewards": []
 },
 "128037": {
 "name": "Master of relic transport",
 "group": "Battle",
 "score": 50,
-"targets": []
+"targets": [
+50
+],
+"rewards": []
 },
 "128038": {
 "name": "Show Jailbreak to the captain",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128039": {
 "name": "Show Jailbreak to the weak captain",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128040": {
 "name": "Riot on board",
 "group": "Battle",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128041": {
 "name": "Turmoil on board",
 "group": "Battle",
 "score": 20,
-"targets": []
+"targets": [
+10
+],
+"rewards": []
 },
 "128042": {
 "name": "Rebellion on board",
 "group": "Battle",
 "score": 50,
-"targets": []
+"targets": [
+50
+],
+"rewards": []
 },
 "128043": {
 "name": "Revolt of Riot",
 "group": "Battle",
 "score": 50,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128044": {
 "name": "Magic tournament champion",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128045": {
 "name": "Gladiator of Coliseum",
 "group": "Battle",
 "score": 20,
-"targets": []
+"targets": [
+10
+],
+"rewards": []
 },
 "128046": {
 "name": "Slayer of Colosseum",
 "group": "Battle",
 "score": 50,
-"targets": []
+"targets": [
+50
+],
+"rewards": []
 },
 "128047": {
 "name": "Endless Tower challenger",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128048": {
 "name": "Endless Tower Slayer",
@@ -1301,7 +2568,8 @@
 "score": 20,
 "targets": [
 10
-]
+],
+"rewards": []
 },
 "128049": {
 "name": "Lord of the tower",
@@ -1309,154 +2577,329 @@
 "score": 50,
 "targets": [
 50
-]
+],
+"rewards": []
 },
 "128050": {
 "name": "Novice Exorcist",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "128051": {
 "name": "Experienced Exorcist",
 "group": "Battle",
 "score": 20,
-"targets": []
+"targets": [
+10
+],
+"rewards": []
 },
 "128052": {
 "name": "Legendary Exorcist",
 "group": "Battle",
 "score": 50,
-"targets": []
+"targets": [
+50
+],
+"rewards": []
 },
 "129001": {
 "name": "Prontera Explorer",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "129002": {
 "name": "Geffen Explorer",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "129003": {
 "name": "Sograt Desert Explorer",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "129004": {
 "name": "Payon Explorer",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "129005": {
 "name": "North Mjolnir Explorer",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "129006": {
 "name": "South Mjolnir Explorer",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "129007": {
 "name": "Comodo Explorer",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "129008": {
 "name": "Rune-Midgarts Explorer",
 "group": "Adventure",
 "score": 50,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 617,
+"n": 1,
+"title": 0,
+"aegis": "Old_Violet_Box"
+}
+]
 },
 "129009": {
 "name": "Juno Explorer",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "129010": {
 "name": "Hugel Explorer",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "129011": {
 "name": "Einbroch Explorer",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "129012": {
 "name": "Lighthalzen Explorer",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "129013": {
 "name": "Schwarzwald Explorer",
 "group": "Adventure",
 "score": 50,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 617,
+"n": 1,
+"title": 0,
+"aegis": "Old_Violet_Box"
+}
+]
 },
 "129014": {
 "name": "Rachel Explorer",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "129015": {
 "name": "Veins Explorer",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "129016": {
 "name": "Arunafeltz Explorer",
 "group": "Adventure",
 "score": 50,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 617,
+"n": 1,
+"title": 0,
+"aegis": "Old_Violet_Box"
+}
+]
 },
 "129017": {
 "name": "Laphine Explorer",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "129018": {
 "name": "Manuk Explorer",
 "group": "Adventure",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "129019": {
 "name": "Eclage Explorer",
 "group": "Adventure",
 "score": 50,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 617,
+"n": 1,
+"title": 0,
+"aegis": "Old_Violet_Box"
+}
+]
 },
 "129020": {
 "name": "Localizing fields explorer",
 "group": "Adventure",
 "score": 50,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 617,
+"n": 1,
+"title": 0,
+"aegis": "Old_Violet_Box"
+}
+]
 },
 "129021": {
 "name": "Glastheim Challenge Mode # Complete 100 times?",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 0,
+"n": 0,
+"title": 1045
+}
+]
 },
 "130000": {
-"name": "Socialite debut",
+"name": "Who made the king",
 "group": "Chatting",
 "score": 10,
 "targets": [
@@ -1467,6 +2910,18 @@
 1,
 1,
 1
+],
+"rewards": [
+{
+"item": 0,
+"n": 0,
+"title": 1034
+},
+{
+"item": 0,
+"n": 0,
+"title": 1046
+}
 ]
 },
 "170000": {
@@ -1475,7 +2930,8 @@
 "score": 10,
 "targets": [
 1
-]
+],
+"rewards": []
 },
 "190000": {
 "name": "Alliance workers of merchant city",
@@ -1486,271 +2942,485 @@
 10,
 30,
 100
-]
+],
+"rewards": []
 },
 "200000": {
 "name": "Acquire the first aura!",
 "group": "Goal_Level",
 "score": 50,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 12549,
+"n": 1,
+"title": 0,
+"aegis": "White_Slim_Pot_Box2"
+},
+{
+"item": 0,
+"n": 0,
+"title": 1000
+}
+]
 },
 "200001": {
 "name": "Acquire the second aura!",
 "group": "Goal_Level",
 "score": 60,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 5364,
+"n": 1,
+"title": 0,
+"aegis": "Dark_Snake_Lord_Hat"
+},
+{
+"item": 0,
+"n": 0,
+"title": 1001
+}
+]
 },
 "200002": {
 "name": "Acquire the third aura!",
 "group": "Goal_Level",
 "score": 70,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 18880,
+"n": 1,
+"title": 0,
+"aegis": "BLACKDEATHKING_GOLDEN"
+},
+{
+"item": 0,
+"n": 0,
+"title": 1002
+}
+]
 },
 "200003": {
 "name": "Master Job level!",
 "group": "Goal_Level",
 "score": 30,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 617,
+"n": 1,
+"title": 0,
+"aegis": "Old_Violet_Box"
+},
+{
+"item": 0,
+"n": 0,
+"title": 1003
+}
+]
 },
 "200004": {
 "name": "Grandmaster Job level!",
 "group": "Goal_Level",
 "score": 50,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 12817,
+"n": 1,
+"title": 0,
+"aegis": "Old_Card_Album_"
+},
+{
+"item": 0,
+"n": 0,
+"title": 1004
+}
+]
 },
 "200005": {
 "name": "Official Adventurer",
 "group": "Job_Change",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "200006": {
 "name": "First step of job change!",
 "group": "Job_Change",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "200007": {
 "name": "Veteran Adventurer! (1)",
 "group": "Job_Change",
 "score": 25,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "200008": {
 "name": "Veteran Adventurer! (2)",
 "group": "Job_Change",
 "score": 25,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "200009": {
 "name": "Warrior (1)",
 "group": "Job_Change",
 "score": 30,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "200010": {
 "name": "Warrior (2)",
 "group": "Job_Change",
 "score": 30,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "200011": {
 "name": "Elite Adventurer! (1)",
 "group": "Job_Change",
 "score": 50,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 16483,
+"n": 1,
+"title": 0,
+"aegis": "E_Abrasive_Box10"
+}
+]
 },
 "200012": {
 "name": "Transcendentaler! (1)",
 "group": "Job_Change",
 "score": 60,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 16483,
+"n": 1,
+"title": 0,
+"aegis": "E_Abrasive_Box10"
+}
+]
 },
 "200013": {
 "name": "Elite Adventurer! (2)",
 "group": "Job_Change",
 "score": 50,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 16483,
+"n": 1,
+"title": 0,
+"aegis": "E_Abrasive_Box10"
+}
+]
 },
 "200014": {
 "name": "Transcendentaler! (2)",
 "group": "Job_Change",
 "score": 60,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 16483,
+"n": 1,
+"title": 0,
+"aegis": "E_Abrasive_Box10"
+}
+]
 },
 "200015": {
 "name": "The way of exceptional character",
 "group": "Job_Change",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "200016": {
 "name": "This is My way!",
 "group": "Job_Change",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 16483,
+"n": 1,
+"title": 0,
+"aegis": "E_Abrasive_Box10"
+}
+]
 },
 "200017": {
 "name": "Bearish Power!",
 "group": "Goal_Status",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "200018": {
 "name": "Overflowing Magic!",
 "group": "Goal_Status",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "200019": {
 "name": "Healthy Body and Mental Health!",
 "group": "Goal_Status",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "200020": {
 "name": "Speed of Light",
 "group": "Goal_Status",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "200021": {
 "name": "Hawk Eyes",
 "group": "Goal_Status",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "200022": {
 "name": "Maximum Luck",
 "group": "Goal_Status",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "200023": {
 "name": "Dragonlike Power!",
 "group": "Goal_Status",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "200024": {
 "name": "Magic Insanity",
 "group": "Goal_Status",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "200025": {
 "name": "Rock Alloy",
 "group": "Goal_Status",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "200026": {
 "name": "Speed of Light",
 "group": "Goal_Status",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "200027": {
 "name": "Falcon's Eyes",
 "group": "Goal_Status",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "200028": {
 "name": "Lucky Fever",
 "group": "Goal_Status",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "200029": {
 "name": "Incarnation of Love and Hate",
 "group": "Goal_Status",
 "score": 30,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 16483,
+"n": 1,
+"title": 0,
+"aegis": "E_Abrasive_Box10"
+}
+]
 },
 "200030": {
 "name": "I really love it!",
 "group": "Goal_Status",
 "score": 30,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 101948,
+"n": 1,
+"title": 0,
+"aegis": "A_Bubble_Gum_Box10"
+}
+]
 },
 "200031": {
 "name": "Reborn in Valhalla!",
 "group": "Job_Change",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 23575,
+"n": 1,
+"title": 0,
+"aegis": "Adventurer_Box_1"
+}
+]
 },
 "200032": {
 "name": "The start of another adventure!",
 "group": "Goal_Level",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 23585,
+"n": 1,
+"title": 0,
+"aegis": "Rebeginer_Box_100"
+}
+]
 },
 "200033": {
 "name": "With a new mind!(1)",
 "group": "Goal_Level",
 "score": 50,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 6959,
+"n": 1,
+"title": 0,
+"aegis": "Costume_Ticket"
+}
+]
 },
 "200034": {
 "name": "With a new mind!(2)",
 "group": "Goal_Level",
 "score": 50,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 6959,
+"n": 1,
+"title": 0,
+"aegis": "Costume_Ticket"
+}
+]
+},
+"200035": {
+"name": "Level 200 achieved!",
+"group": "Goal_Level",
+"score": 100,
+"targets": [],
+"rewards": [
+{
+"item": 400124,
+"n": 1,
+"title": 0,
+"aegis": "C_Magestic_Goat2"
+}
+]
 },
 "220000": {
 "name": "Community begin",
 "group": "Chatting_Create",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220001": {
 "name": "A mouth only moment",
 "group": "Chatting_Dying",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220002": {
 "name": "Admiring the chatter",
 "group": "Chatting_Count",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220003": {
 "name": "My friend's friend~",
 "group": "Add_Friend",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220004": {
 "name": "A competition of popularity",
 "group": "Add_Friend",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220005": {
 "name": "Let's Party~",
 "group": "Party",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220006": {
 "name": "Married with who..?",
 "group": "Marry",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 0,
+"n": 0,
+"title": 1022
+}
+]
 },
 "220007": {
 "name": "Can you grow?",
 "group": "Baby",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 0,
+"n": 0,
+"title": 1032
+}
+]
 },
 "220008": {
 "name": "Being a parent",
 "group": "Baby",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 0,
+"n": 0,
+"title": 1033
+}
+]
 },
 "220009": {
 "name": "Activating the market economy (1)",
@@ -1758,7 +3428,8 @@
 "score": 10,
 "targets": [
 10000
-]
+],
+"rewards": []
 },
 "220010": {
 "name": "Activating the market economy (2)",
@@ -1766,7 +3437,8 @@
 "score": 15,
 "targets": [
 100000
-]
+],
+"rewards": []
 },
 "220011": {
 "name": "Activating the market economy (3)",
@@ -1774,7 +3446,8 @@
 "score": 20,
 "targets": [
 500000
-]
+],
+"rewards": []
 },
 "220012": {
 "name": "Activating the market economy (4)",
@@ -1782,7 +3455,8 @@
 "score": 30,
 "targets": [
 1000000
-]
+],
+"rewards": []
 },
 "220013": {
 "name": "Activating the market economy (5)",
@@ -1790,319 +3464,396 @@
 "score": 50,
 "targets": [
 5000000
-]
+],
+"rewards": []
 },
 "220014": {
 "name": "I can't quit from refining! (1)",
 "group": "Enchant_Success",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220015": {
 "name": "I can't quit from refining! (2)",
 "group": "Enchant_Success",
 "score": 15,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220016": {
 "name": "I can't quit from refining! (3)",
 "group": "Enchant_Success",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220017": {
 "name": "I can't quit from refining! (4)",
 "group": "Enchant_Success",
 "score": 15,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220018": {
 "name": "I can't quit from refining! (5)",
 "group": "Enchant_Success",
 "score": 15,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220019": {
 "name": "I can't quit from refining! (6)",
 "group": "Enchant_Success",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220020": {
 "name": "I can't quit from refining! (7)",
 "group": "Enchant_Success",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220021": {
 "name": "I can't quit from refining! (8)",
 "group": "Enchant_Success",
 "score": 30,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220022": {
 "name": "Human's greed has no ending..",
 "group": "Enchant_Fail",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220023": {
 "name": "I found it! (1)",
 "group": "Get_Item",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220024": {
 "name": "I found it! (2)",
 "group": "Get_Item",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220025": {
 "name": "I found it! (3)",
 "group": "Get_Item",
 "score": 15,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220026": {
 "name": "I found it! (4)",
 "group": "Get_Item",
 "score": 15,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220027": {
 "name": "I found it! (5)",
 "group": "Get_Item",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220028": {
 "name": "I found it! (6)",
 "group": "Get_Item",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220029": {
 "name": "I found it! (7)",
 "group": "Get_Item",
 "score": 30,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220030": {
 "name": "Rich King (1)",
 "group": "Get_Zeny",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220031": {
 "name": "Rich King (2)",
 "group": "Get_Zeny",
 "score": 15,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220032": {
 "name": "Rich King (3)",
 "group": "Get_Zeny",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220033": {
 "name": "Rich King (4)",
 "group": "Get_Zeny",
 "score": 25,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220034": {
 "name": "Rich King (5)",
 "group": "Get_Zeny",
 "score": 30,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "220035": {
 "name": "Rich King (6)",
 "group": "Get_Zeny",
 "score": 40,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230100": {
 "name": "Poring is Love",
 "group": "Taming",
 "score": 50,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 0,
+"n": 0,
+"title": 1025
+}
+]
 },
 "230110": {
 "name": "Entomologist",
 "group": "Taming",
 "score": 50,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 0,
+"n": 0,
+"title": 1026
+}
+]
 },
 "230120": {
 "name": "Animals are also our friend",
 "group": "Taming",
 "score": 50,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 0,
+"n": 0,
+"title": 1027
+}
+]
 },
 "230140": {
 "name": "Monster Girls Unite!!",
 "group": "Taming",
 "score": 50,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 0,
+"n": 0,
+"title": 1029
+}
+]
 },
 "230101": {
 "name": "Poring - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230102": {
 "name": "Drops - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230103": {
 "name": "Poporing - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230104": {
 "name": "Novice Poring - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230111": {
 "name": "Chonchon - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230112": {
 "name": "Steel Chonchon - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230113": {
 "name": "Hunter Fly - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230114": {
 "name": "Rocker - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230115": {
 "name": "Spore - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230116": {
 "name": "Poison Spore - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230121": {
 "name": "Lunatic - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230122": {
 "name": "Picky - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230123": {
 "name": "Savage Bebe - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230124": {
 "name": "Baby Desert Wolf - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230125": {
 "name": "Smokie - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230126": {
 "name": "Yoyo - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230127": {
 "name": "Peco Peco - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230128": {
 "name": "Petite - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230141": {
 "name": "Munak - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230142": {
 "name": "Isis - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230143": {
 "name": "Sohee - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230144": {
 "name": "Zherlthsh - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230145": {
 "name": "Alice - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230146": {
 "name": "Succubus - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230147": {
 "name": "Loli Ruri - taming",
 "group": "Taming",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230200": {
 "name": "Poring seeker",
 "group": "Battle",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230201": {
 "name": "Exploring Poring's life (1)",
@@ -2112,14 +3863,17 @@
 10,
 10,
 10,
+10,
 10
-]
+],
+"rewards": []
 },
 "230202": {
 "name": "Exploring Poring's life (2)",
 "group": "Battle",
 "score": 20,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "230203": {
 "name": "Exploring Poring's life (3)",
@@ -2129,132 +3883,304 @@
 5,
 5,
 5
-]
+],
+"rewards": []
 },
 "240000": {
 "name": "First Login after the introduction of Achievement Tasks",
 "group": "Goal_Level",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": []
 },
 "240001": {
 "name": "Reaching Level 1",
 "group": "Goal_Achieve",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "240002": {
 "name": "Reaching Level 2",
 "group": "Goal_Achieve",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "240003": {
 "name": "Reaching Level 3",
 "group": "Goal_Achieve",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "240004": {
 "name": "Reaching Level 4",
 "group": "Goal_Achieve",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "240005": {
 "name": "Reaching Level 5",
 "group": "Goal_Achieve",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "240006": {
 "name": "Reaching Level 6",
 "group": "Goal_Achieve",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "240007": {
 "name": "Reaching Level 7",
 "group": "Goal_Achieve",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "240008": {
 "name": "Reaching Level 8",
 "group": "Goal_Achieve",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "240009": {
 "name": "Reaching Level 9",
 "group": "Goal_Achieve",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "240010": {
 "name": "Reaching Level 10",
 "group": "Goal_Achieve",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+},
+{
+"item": 0,
+"n": 0,
+"title": 1023
+}
+]
 },
 "240011": {
 "name": "Reaching Level 11",
 "group": "Goal_Achieve",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "240012": {
 "name": "Reaching Level 12",
 "group": "Goal_Achieve",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "240013": {
 "name": "Reaching Level 13",
 "group": "Goal_Achieve",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "240014": {
 "name": "Reaching Level 14",
 "group": "Goal_Achieve",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "240015": {
 "name": "Reaching Level 15",
 "group": "Goal_Achieve",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "240016": {
 "name": "Reaching Level 16",
 "group": "Goal_Achieve",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "240017": {
 "name": "Reaching Level 17",
 "group": "Goal_Achieve",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "240018": {
 "name": "Reaching Level 18",
 "group": "Goal_Achieve",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "240019": {
 "name": "Reaching Level 19",
 "group": "Goal_Achieve",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+}
+]
 },
 "240020": {
 "name": "Reaching Level 20",
 "group": "Goal_Achieve",
 "score": 10,
-"targets": []
+"targets": [],
+"rewards": [
+{
+"item": 644,
+"n": 1,
+"title": 0,
+"aegis": "Gift_Box"
+},
+{
+"item": 0,
+"n": 0,
+"title": 1024
+}
+]
 }
 }

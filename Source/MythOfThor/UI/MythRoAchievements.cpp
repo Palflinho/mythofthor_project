@@ -6,6 +6,7 @@
 
 #include "UI/MythRoHUDWidget.h"
 #include "UI/MythRoUITextures.h"
+#include "Core/MythRoClientTables.h"
 
 #include "Network/RagnarokNetworkSubsystem.h"
 
@@ -34,7 +35,8 @@ namespace
 	constexpr float AcDetailX = 411.f;
 	constexpr int32 AcTabs = 7;
 
-	struct FAchInfo { FString Name; FString Group; int32 Score = 0; int32 Total = 0; };
+	struct FAchReward { int32 Item = 0; int32 Amount = 0; int32 Title = 0; };
+	struct FAchInfo { FString Name; FString Group; int32 Score = 0; int32 Total = 0; TArray<FAchReward> Rewards; };
 
 	const TCHAR* AcTabNames[AcTabs] = { TEXT("Visão geral"), TEXT("Básico"), TEXT("Aventura"), TEXT("Batalha"), TEXT("Missão"), TEXT("Masmorra"), TEXT("Grandes") };
 
@@ -74,6 +76,22 @@ namespace
 					{
 						Info.Total += static_cast<int32>(T->AsNumber());
 					}
+					const TArray<TSharedPtr<FJsonValue>>* Rw = nullptr;
+					if ((*Obj)->TryGetArrayField(TEXT("rewards"), Rw))
+					{
+						for (const TSharedPtr<FJsonValue>& RV : *Rw)
+						{
+							const TSharedPtr<FJsonObject>* RO = nullptr;
+							if (RV->TryGetObject(RO) && RO)
+							{
+								FAchReward Reward;
+								Reward.Item = static_cast<int32>((*RO)->GetNumberField(TEXT("item")));
+								Reward.Amount = static_cast<int32>((*RO)->GetNumberField(TEXT("n")));
+								Reward.Title = static_cast<int32>((*RO)->GetNumberField(TEXT("title")));
+								Info.Rewards.Add(Reward);
+							}
+						}
+					}
 					Table.Add(FCString::Atoi(*Pair.Key), Info);
 				}
 			}
@@ -102,8 +120,11 @@ void UMythRoHUDWidget::BuildAchievementWindow()
 	AddImage(AchievementWindow, FMythRoUITextures::Get(TEXT("achievement_re/bg_upper.bmp")), 0.f, 0.f, AcW, 46.f);
 	AddImage(AchievementWindow, FMythRoUITextures::Get(TEXT("achievement_re/bg_tab.bmp")), 0.f, AcListY, AcTabW, 405.f);
 	AddImage(AchievementWindow, FMythRoUITextures::Get(TEXT("basic_interface/sys_close_off.bmp")), AcW - 16.f, 4.f, 11.f, 11.f);
-	AchHeader = AddText(AchievementWindow, 22.f, 2.f, 8, FLinearColor::White, true);
-	AchHeader->SetText(FText::FromString(TEXT("Conquistas")));
+	UTextBlock* AchTitle = nullptr;
+	AddTitleBar(AchievementWindow, AcW, TEXT("Conquistas"), &AchTitle);
+	if (AchTitle) { AchTitle->SetColorAndOpacity(FSlateColor(FLinearColor::Black)); AchTitle->SetShadowColorAndOpacity(FLinearColor::Transparent); }
+	AchHeader = AchTitle;
+	AddImage(AchievementWindow, FMythRoUITextures::Get(TEXT("basic_interface/sys_close_off.bmp")), AcW - 15.f, 3.f, 11.f, 11.f);
 	AchPoints = AddText(AchievementWindow, AcW * 0.5f - 20.f, 18.f, 11, AcTitle);
 	AchRank = AddText(AchievementWindow, 17.f, 21.f, 10, AcTitle, true);
 	for (int32 t = 0; t < AcTabs; ++t)
@@ -130,9 +151,9 @@ void UMythRoHUDWidget::BuildAchievementWindow()
 	AddImage(AchievementWindow, FMythRoUITextures::Get(TEXT("achievement_re/bg_detail.bmp")), AcDetailX, AcListY, 328.f, 405.f);
 	AchDetailTitle = AddText(AchievementWindow, AcDetailX + 12.f, AcListY + 12.f, 9, AcTitle, true);
 	AchStamp = AddImage(AchievementWindow, FMythRoUITextures::Get(TEXT("achievement_re/detail_stamp.bmp")), AcDetailX + 250.f, AcListY + 6.f, 64.f, 54.f);
-	for (int32 i = 0; i < 6; ++i)
+	for (int32 i = 0; i < 10; ++i)
 	{
-		AchDetailLines.Add(AddText(AchievementWindow, AcDetailX + 22.f, AcListY + 76.f + i * 20.f, 8, AcText));
+		AchDetailLines.Add(AddText(AchievementWindow, AcDetailX + 22.f, AcListY + 70.f + i * 18.f, 8, AcText));
 	}
 	AchReceive = AddButtonEx(AchievementWindow, TEXT("achievement_re/btn_receive_out.bmp"), TEXT("achievement_re/btn_receive_over.bmp"), TEXT("achievement_re/btn_receive_press.bmp"), AcDetailX + 90.f, AcListY + 340.f);
 	AchReceiveLabel = AddText(AchievementWindow, AcDetailX + 120.f, AcListY + 343.f, 8, AcText);
@@ -231,8 +252,26 @@ void UMythRoHUDWidget::RefreshAchievements()
 		{
 			if (Sel->Objective[j] > 0)
 			{
-				AchDetailLines[j + 2]->SetText(FText::FromString(FString::Printf(TEXT("• Objetivo %d: %d"), j + 1, Sel->Objective[j])));
+				AchDetailLines[j + 1]->SetText(FText::FromString(FString::Printf(TEXT("• Objetivo %d: %d"), j + 1, Sel->Objective[j])));
 			}
+		}
+		// Premios (do achievement_db do rAthena; quem entrega e o servidor ao clicar em Receber)
+		int32 Line = 6;
+		AchDetailLines[Line++]->SetText(FText::FromString(Info && Info->Rewards.Num() > 0 ? TEXT("Prêmios:") : TEXT("Sem prêmio de item.")));
+		for (int32 r = 0; Info && r < Info->Rewards.Num() && Line < AchDetailLines.Num(); ++r)
+		{
+			const FAchReward& Rw = Info->Rewards[r];
+			FString Text;
+			if (Rw.Item > 0)
+			{
+				const FString ItemName = FMythRoClientTables::ItemName(Rw.Item);
+				Text = FString::Printf(TEXT("  %dx %s"), FMath::Max(1, Rw.Amount), ItemName.IsEmpty() ? *FString::Printf(TEXT("Item #%d"), Rw.Item) : *ItemName);
+			}
+			else if (Rw.Title > 0)
+			{
+				Text = FString::Printf(TEXT("  Título #%d"), Rw.Title);
+			}
+			if (!Text.IsEmpty()) { AchDetailLines[Line++]->SetText(FText::FromString(Text)); }
 		}
 	}
 }
