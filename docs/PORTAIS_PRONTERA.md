@@ -98,7 +98,7 @@ Portais que ligam um cômodo a outro dentro do próprio `prt_in`:
 
 1. **Esgotos de Prontera (`prt_sewb1` a `prt_sewb4`):**
    - No rAthena pre-re, a entrada dos Esgotos não é um portal de warp aberto direto em Prontera. O acesso é feito pelo **Guarda dos Esgotos** (`Recruit`) localizado em `prt_fild05 (270, 211)`.
-   - **Status no cliente:** Os mapas `prt_sewb1` a `prt_sewb4` ainda **não estão importados** no Unreal Engine.
+   - **Status no cliente:** Os mapas `prt_sewb1` a `prt_sewb4` estão importados no Unreal (andares 2 a 4 em 2026-10-13; conteúdo em `Content/Maps` não vai para o git, regerar com `tools/build_maps.sh` + `ue_import_map.py`).
 2. **Reino das Valquírias / Feudos (`prt_gld`):**
    - Conectado ao norte de `prt_castle` (portal `prtca002`) e ao sul de `prt_fild01` (portal `prtf001`).
    - **Status no cliente:** **Não importado**.
