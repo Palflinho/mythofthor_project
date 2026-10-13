@@ -64,6 +64,15 @@ void UMythRoHUDWidget::BuildMainMenu()
 
 	// --- Painel central no padrao das janelas (corpo claro, barra de titulo azul, fechar)
 	MainMenuPanel = MakeRoPanel(TEXT("Menu Principal"), FVector2D(HubW, HubH), FVector2D(0.f, 0.f));
+	for (int32 c = 0; c < MainMenuPanel->GetChildrenCount(); ++c) // o titulo e o primeiro texto do painel (preto, como pedido)
+	{
+		if (UTextBlock* TitleText = Cast<UTextBlock>(MainMenuPanel->GetChildAt(c)))
+		{
+			TitleText->SetColorAndOpacity(FSlateColor(FLinearColor::Black));
+			TitleText->SetShadowColorAndOpacity(FLinearColor::Transparent);
+			break;
+		}
+	}
 	MainMenuClose = AddImage(MainMenuPanel, nullptr, -10.f, -10.f, 1.f, 1.f); // o fechar e o padrao da janela (X da barra)
 	MainMenuClose->SetVisibility(ESlateVisibility::Collapsed);
 	for (int32 i = 0; i < UE_ARRAY_COUNT(HubEntries); ++i)

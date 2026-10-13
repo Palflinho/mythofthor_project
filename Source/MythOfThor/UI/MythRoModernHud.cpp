@@ -23,7 +23,8 @@ namespace
 	constexpr float MhBarX = 54.f;
 	constexpr float MhBarW = 118.f;
 	constexpr float MhBarH = 10.f;
-	constexpr float MhExpHalfW = 330.f;
+	constexpr float MhExpHalfW = 290.f;  // so a barra
+	constexpr float MhExpBox = 56.f;     // caixa azul com o nivel, depois da barra (do lado do centro)
 	constexpr float MhExpGap = 12.f;
 	constexpr float MhExpBarY = 26.f;
 	constexpr float MhExpBarH = 12.f;
@@ -56,7 +57,9 @@ void UMythRoHUDWidget::BuildModernHud()
 	// --- Painel do personagem (canto superior esquerdo)
 	ModernPanel = MakeWindow(FVector2D(0.f, 0.f), FVector2D(0.f, 0.f), FVector2D(6.f * UIScale, 6.f * UIScale), FVector2D(MhPanelW, MhPanelH));
 	AddRounded(ModernPanel, MhBody, FLinearColor::Transparent, 0.f, 9.f, MhPanelW, MhPanelH - 9.f, 0.f, 7.f)->SetVisibility(ESlateVisibility::Visible);
-	AddTitleBar(ModernPanel, MhPanelW, TEXT("Personagem"));
+	UTextBlock* PanelTitle = nullptr;
+	AddTitleBar(ModernPanel, MhPanelW, TEXT("Personagem"), &PanelTitle);
+	if (PanelTitle) { PanelTitle->SetColorAndOpacity(FSlateColor(FLinearColor::Black)); PanelTitle->SetShadowColorAndOpacity(FLinearColor::Transparent); }
 	AddRounded(ModernPanel, FLinearColor(0.86f, 0.9f, 0.98f, 1.f), FLinearColor(0.45f, 0.55f, 0.8f, 1.f), 4.f, MhTitleH + 4.f, 36.f, 36.f, 18.f, 18.f);
 	ModernClassIcon = AddImage(ModernPanel, nullptr, 8.f, MhTitleH + 8.f, 28.f, 28.f); // simbolo da classe (o mesmo da janela do grupo)
 	ModernClassIcon->SetVisibility(ESlateVisibility::Collapsed);
@@ -85,27 +88,29 @@ void UMythRoHUDWidget::BuildModernHud()
 	ModernWeightZeny = AddText(ModernPanel, MhBarX, MhTitleH + 42.f, 6, MhInk);
 
 	// --- Barras de EXP embaixo (Base a esquerda, Classe a direita), com o botao de level up acima do rotulo
-	ModernExpStrip = MakeWindow(FVector2D(0.5f, 1.f), FVector2D(0.5f, 1.f), FVector2D(106.f, 0.f), FVector2D(2.f * MhExpHalfW + MhExpGap, 40.f));
+	ModernExpStrip = MakeWindow(FVector2D(0.5f, 1.f), FVector2D(0.5f, 1.f), FVector2D(106.f, 0.f), FVector2D(2.f * (MhExpHalfW + MhExpBox) + MhExpGap, 40.f));
 	for (int32 Side = 0; Side < 2; ++Side)
 	{
-		const float X0 = Side * (MhExpHalfW + MhExpGap);
-		AddRounded(ModernExpStrip, MhBody, FLinearColor::Transparent, X0 - 3.f, MhExpBarY - 3.f, MhExpHalfW + 6.f, MhExpBarH + 6.f, 4.f, 4.f);
-		AddColor(ModernExpStrip, MhBarBack, X0, MhExpBarY, MhExpHalfW, MhExpBarH);
-		UImage* Fill = AddColor(ModernExpStrip, Side == 0 ? FLinearColor(0.95f, 0.75f, 0.2f) : FLinearColor(0.35f, 0.8f, 0.95f), X0, MhExpBarY, 1.f, MhExpBarH);
+		// Base: [barra][caixa azul]   Classe: [caixa azul][barra]  (espelhado: as duas caixas ficam no centro)
+		const float X0 = Side * (MhExpHalfW + MhExpBox + MhExpGap);
+		const float BarX = Side == 0 ? X0 : X0 + MhExpBox;
+		const float BoxX = Side == 0 ? X0 + MhExpHalfW : X0;
+		AddRounded(ModernExpStrip, MhBody, FLinearColor::Transparent, X0 - 3.f, MhExpBarY - 3.f, MhExpHalfW + MhExpBox + 6.f, MhExpBarH + 6.f, 4.f, 4.f);
+		AddColor(ModernExpStrip, MhBarBack, BarX, MhExpBarY, MhExpHalfW, MhExpBarH);
+		UImage* Fill = AddColor(ModernExpStrip, Side == 0 ? FLinearColor(0.95f, 0.75f, 0.2f) : FLinearColor(0.35f, 0.8f, 0.95f), BarX, MhExpBarY, 1.f, MhExpBarH);
 		for (int32 t = 1; t < 10; ++t) // divisoes a cada 10%
 		{
-			AddColor(ModernExpStrip, FLinearColor(0.1f, 0.15f, 0.3f, 0.3f), X0 + MhExpHalfW * t / 10.f, MhExpBarY, 1.f, MhExpBarH);
+			AddColor(ModernExpStrip, FLinearColor(0.1f, 0.15f, 0.3f, 0.3f), BarX + MhExpHalfW * t / 10.f, MhExpBarY, 1.f, MhExpBarH);
 		}
-		UTextBlock* Label = AddText(ModernExpStrip, Side == 0 ? X0 + 4.f : X0 + MhExpHalfW - 74.f, MhExpBarY - 1.f, 7, MhInk);
-		if (Side == 1)
-		{
-			Label->SetJustification(ETextJustify::Right);
-			if (UCanvasPanelSlot* LS = Cast<UCanvasPanelSlot>(Label->Slot)) { LS->SetAutoSize(false); LS->SetSize(FVector2D(70.f, 12.f) * UIScale); }
-		}
-		UImage* Hover = AddColor(ModernExpStrip, FLinearColor::Transparent, X0, MhExpBarY, MhExpHalfW, MhExpBarH);
+		// caixa azul com o nivel
+		AddRounded(ModernExpStrip, FLinearColor(0.2f, 0.4f, 0.85f, 1.f), FLinearColor(0.1f, 0.25f, 0.6f, 1.f), BoxX, MhExpBarY - 1.f, MhExpBox, MhExpBarH + 2.f, 3.f, 3.f);
+		UTextBlock* Label = AddText(ModernExpStrip, BoxX, MhExpBarY - 1.f, 7, FLinearColor::White, true);
+		Label->SetJustification(ETextJustify::Center);
+		if (UCanvasPanelSlot* LS = Cast<UCanvasPanelSlot>(Label->Slot)) { LS->SetAutoSize(false); LS->SetSize(FVector2D(MhExpBox, 12.f) * UIScale); }
+		UImage* Hover = AddColor(ModernExpStrip, FLinearColor::Transparent, BarX, MhExpBarY, MhExpHalfW, MhExpBarH);
 		Hover->SetVisibility(ESlateVisibility::Visible); // precisa ser clicavel para mostrar a dica ao passar o mouse
-		// o botao de level up fica acima do rotulo (Base: canto esquerdo; Classe: canto direito, espelhado)
-		UImage* LvUp = AddImage(ModernExpStrip, FMythRoUITextures::Get(TEXT("basic_interface/lv_up_on.bmp")), Side == 0 ? X0 + 2.f : X0 + MhExpHalfW - 24.f, 2.f, 22.f, 22.f);
+		// o botao de level up fica acima da caixa de nivel (a que aponta para o centro)
+		UImage* LvUp = AddImage(ModernExpStrip, FMythRoUITextures::Get(TEXT("basic_interface/lv_up_on.bmp")), BoxX + (MhExpBox - 22.f) * 0.5f, 2.f, 22.f, 22.f);
 		LvUp->SetVisibility(ESlateVisibility::Collapsed);
 		if (Side == 0) { ModernBaseFill = Fill; ModernBaseLabel = Label; ModernBaseHover = Hover; ModernBaseLvUp = LvUp; }
 		else { ModernJobFill = Fill; ModernJobLabel = Label; ModernJobHover = Hover; ModernJobLvUp = LvUp; }
@@ -171,7 +176,8 @@ void UMythRoHUDWidget::UpdateModernHud()
 	const float BaseFrac = Stats->GetExpFraction();
 	const float JobFrac = NetStats && NetStats->NextJobExp > 0 ? static_cast<float>(static_cast<double>(NetStats->JobExp) / NetStats->NextJobExp) : 0.f;
 	SetBox(ModernBaseFill, 0.f, MhExpBarY, MhExpHalfW * BaseFrac, MhExpBarH, UIScale);
-	SetBox(ModernJobFill, MhExpHalfW + MhExpGap + MhExpHalfW * (1.f - JobFrac), MhExpBarY, MhExpHalfW * JobFrac, MhExpBarH, UIScale); // cresce da direita para o centro
+	// barra de Classe: depois da caixa azul; cresce da direita para o centro
+	SetBox(ModernJobFill, MhExpHalfW + MhExpBox + MhExpGap + MhExpBox + MhExpHalfW * (1.f - JobFrac), MhExpBarY, MhExpHalfW * JobFrac, MhExpBarH, UIScale);
 	ModernBaseLabel->SetText(FText::FromString(FString::Printf(TEXT("Base %d"), Stats->GetBaseLevel())));
 	ModernJobLabel->SetText(FText::FromString(FString::Printf(TEXT("Job %d"), NetStats ? NetStats->JobLevel : 1)));
 	ModernBaseHover->SetToolTipText(FText::FromString(FString::Printf(TEXT("EXP de Base: %.2f%%"), BaseFrac * 100.f)));
