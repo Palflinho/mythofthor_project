@@ -16,7 +16,7 @@ namespace
 	constexpr float HubCellW = 86.f;
 	constexpr float HubCellH = 72.f;
 	constexpr float HubPad = 14.f;
-	constexpr float HubTitleH = 26.f;
+	constexpr float HubTitleH = 22.f;
 	constexpr float HubFootH = 26.f;
 	constexpr int32 HubRows = 6;
 	constexpr float HubW = HubPad * 2.f + HubCols * HubCellW;
@@ -52,42 +52,39 @@ namespace
 
 void UMythRoHUDWidget::BuildMainMenu()
 {
-	// --- Botao flutuante (tres barras), a esquerda do minimapa
+	// --- Botao flutuante (tres barras), a esquerda do minimapa: cartao claro com a borda das janelas
 	MainMenuButton = MakeWindow(FVector2D(1.f, 0.f), FVector2D(1.f, 0.f), FVector2D(-136.f * UIScale, 6.f * UIScale), FVector2D(30.f, 30.f));
-	MainMenuButtonBack = AddRounded(MainMenuButton, FLinearColor(0.05f, 0.06f, 0.11f, 0.82f), FLinearColor(0.5f, 0.55f, 0.7f, 0.8f), 0.f, 0.f, 30.f, 30.f, 7.f, 7.f);
+	MainMenuButtonBack = AddRounded(MainMenuButton, FLinearColor(0.965f, 0.965f, 0.98f, 1.f), FLinearColor(0.45f, 0.55f, 0.8f, 1.f), 0.f, 0.f, 30.f, 30.f, 6.f, 6.f);
 	MainMenuButtonBack->SetVisibility(ESlateVisibility::Visible);
 	MainMenuButtonBack->SetToolTipText(FText::FromString(TEXT("Menu principal")));
 	for (int32 i = 0; i < 3; ++i)
 	{
-		AddColor(MainMenuButton, FLinearColor(0.9f, 0.93f, 1.f), 7.f, 9.f + i * 5.f, 16.f, 2.f);
+		AddColor(MainMenuButton, FLinearColor(0.12f, 0.3f, 0.65f), 7.f, 9.f + i * 5.f, 16.f, 2.f);
 	}
 
-	// --- Painel modal central
-	MainMenuPanel = MakeWindow(FVector2D(0.5f, 0.5f), FVector2D(0.5f, 0.5f), FVector2D(0.f, 0.f), FVector2D(HubW, HubH));
-	UImage* Back = AddRounded(MainMenuPanel, FLinearColor(0.05f, 0.06f, 0.11f, 0.92f), FLinearColor(0.55f, 0.6f, 0.8f, 0.9f), 0.f, 0.f, HubW, HubH, 10.f, 10.f);
-	Back->SetVisibility(ESlateVisibility::Visible); // o clique no painel nao atravessa para o jogo
-	UTextBlock* Title = AddText(MainMenuPanel, HubPad, 6.f, 9, FLinearColor(0.95f, 0.96f, 1.f), true);
-	Title->SetText(FText::FromString(TEXT("Menu Principal")));
-	MainMenuClose = AddImage(MainMenuPanel, FMythRoUITextures::Get(TEXT("basic_interface/sys_close_off.bmp")), HubW - 24.f, 8.f, 11.f, 11.f);
-	MainMenuClose->SetVisibility(ESlateVisibility::Visible);
+	// --- Painel central no padrao das janelas (corpo claro, barra de titulo azul, fechar)
+	MainMenuPanel = MakeRoPanel(TEXT("Menu Principal"), FVector2D(HubW, HubH), FVector2D(0.f, 0.f));
+	MainMenuClose = AddImage(MainMenuPanel, nullptr, -10.f, -10.f, 1.f, 1.f); // o fechar e o padrao da janela (X da barra)
+	MainMenuClose->SetVisibility(ESlateVisibility::Collapsed);
 	for (int32 i = 0; i < UE_ARRAY_COUNT(HubEntries); ++i)
 	{
 		const float X = HubPad + (i % 3) * HubCellW;
 		const float Y = HubTitleH + (i / 3) * HubCellH;
-		UImage* Cell = AddRounded(MainMenuPanel, FLinearColor(0.12f, 0.14f, 0.24f, 0.85f), FLinearColor(0.4f, 0.45f, 0.65f, 0.8f), X + 3.f, Y + 3.f, HubCellW - 6.f, HubCellH - 6.f, 6.f, 6.f);
+		UImage* Cell = AddRounded(MainMenuPanel, FLinearColor(0.88f, 0.91f, 0.98f, 1.f), FLinearColor(0.45f, 0.55f, 0.8f, 1.f), X + 3.f, Y + 3.f, HubCellW - 6.f, HubCellH - 6.f, 6.f, 6.f);
 		Cell->SetVisibility(ESlateVisibility::Visible);
 		MainMenuCells.Add(Cell);
 		AddImage(MainMenuPanel, FMythRoUITextures::Get(FString::Printf(TEXT("menu_icon/bt_%s.bmp"), HubEntries[i].Icon)), X + (HubCellW - 32.f) * 0.5f, Y + 10.f, 32.f, 34.f);
-		UTextBlock* Label = AddText(MainMenuPanel, X, Y + 49.f, 7, FLinearColor(0.9f, 0.93f, 1.f));
+		UTextBlock* Label = AddText(MainMenuPanel, X, Y + 49.f, 7, FLinearColor(0.1f, 0.12f, 0.2f));
 		Label->SetText(FText::FromString(HubEntries[i].Label));
 		Label->SetJustification(ETextJustify::Center);
 		if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(Label->Slot)) { S->SetAutoSize(false); S->SetSize(FVector2D(HubCellW, 14.f) * UIScale); }
 	}
-	MainMenuPinBox = AddColor(MainMenuPanel, FLinearColor(0.9f, 0.93f, 1.f), HubPad + 2.f, HubH - HubFootH - 2.f + 6.f, 12.f, 12.f);
+	MainMenuPinBox = AddColor(MainMenuPanel, FLinearColor(0.55f, 0.6f, 0.75f), HubPad + 2.f, HubH - HubFootH - 2.f + 6.f, 12.f, 12.f);
 	MainMenuPinBox->SetVisibility(ESlateVisibility::Visible);
-	MainMenuPinMark = AddColor(MainMenuPanel, FLinearColor(0.15f, 0.55f, 0.95f), HubPad + 4.f, HubH - HubFootH - 2.f + 8.f, 8.f, 8.f);
+	AddColor(MainMenuPanel, FLinearColor::White, HubPad + 3.f, HubH - HubFootH - 2.f + 7.f, 10.f, 10.f);
+	MainMenuPinMark = AddColor(MainMenuPanel, FLinearColor(0.15f, 0.45f, 0.9f), HubPad + 4.f, HubH - HubFootH - 2.f + 8.f, 8.f, 8.f);
 	MainMenuPinMark->SetVisibility(ESlateVisibility::Collapsed);
-	UTextBlock* Pin = AddText(MainMenuPanel, HubPad + 20.f, HubH - HubFootH - 2.f + 6.f, 7, FLinearColor(0.85f, 0.88f, 1.f));
+	UTextBlock* Pin = AddText(MainMenuPanel, HubPad + 20.f, HubH - HubFootH - 2.f + 6.f, 7, FLinearColor(0.1f, 0.12f, 0.2f));
 	Pin->SetText(FText::FromString(TEXT("Manter aberto")));
 	MainMenuPanel->SetVisibility(ESlateVisibility::Collapsed);
 }
@@ -158,7 +155,7 @@ void UMythRoHUDWidget::UpdateMainMenuHover()
 	const bool bOpen = MainMenuPanel->IsVisible();
 	if (MainMenuButtonBack)
 	{
-		MainMenuButtonBack->SetColorAndOpacity(IsUnder(MainMenuButtonBack, MouseAt) || bOpen ? FLinearColor(0.45f, 0.55f, 0.95f, 1.f) : FLinearColor(0.05f, 0.06f, 0.11f, 0.82f));
+		MainMenuButtonBack->SetColorAndOpacity(IsUnder(MainMenuButtonBack, MouseAt) || bOpen ? FLinearColor(0.72f, 0.82f, 1.f, 1.f) : FLinearColor::White);
 	}
 	if (!bOpen)
 	{
@@ -167,7 +164,7 @@ void UMythRoHUDWidget::UpdateMainMenuHover()
 	for (int32 i = 0; i < MainMenuCells.Num(); ++i)
 	{
 		const bool bHot = IsUnder(MainMenuCells[i], MouseAt);
-		MainMenuCells[i]->SetColorAndOpacity(bHot ? FLinearColor(0.35f, 0.5f, 0.95f, 1.f) : FLinearColor(0.12f, 0.14f, 0.24f, 0.85f));
+		MainMenuCells[i]->SetColorAndOpacity(bHot ? FLinearColor(0.62f, 0.76f, 1.f, 1.f) : FLinearColor(0.88f, 0.91f, 0.98f, 1.f));
 	}
 	if (MainMenuClose)
 	{
