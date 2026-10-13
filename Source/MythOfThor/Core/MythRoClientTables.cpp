@@ -239,3 +239,69 @@ FString FMythRoClientTables::Message(int32 Index)
 	const FString* Found = Messages.Find(Index);
 	return Found ? *Found : FString();
 }
+
+namespace
+{
+	struct FCatalogLite { FString NameEn, Kind, Sub; };
+
+	const TMap<int32, FCatalogLite>& CatalogLite()
+	{
+		static const TMap<int32, FCatalogLite> Map = []
+		{
+			TMap<int32, FCatalogLite> Out;
+			FString Text;
+			TArray<TSharedPtr<FJsonValue>> Arr;
+			if (FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("item_catalog.json"))) && FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Arr))
+			{
+				for (const TSharedPtr<FJsonValue>& V : Arr)
+				{
+					const TSharedPtr<FJsonObject>* O = nullptr;
+					if (V->TryGetObject(O) && O)
+					{
+						FCatalogLite C;
+						C.NameEn = (*O)->GetStringField(TEXT("n"));
+						C.Kind = (*O)->GetStringField(TEXT("t"));
+						C.Sub = (*O)->GetStringField(TEXT("s"));
+						Out.Add((*O)->GetIntegerField(TEXT("i")), C);
+					}
+				}
+			}
+			return Out;
+		}();
+		return Map;
+	}
+}
+
+TArray<FString> FMythRoClientTables::ItemDescriptionLines(int32 ItemID, bool bIdentified)
+{
+	if (const FMythRoItemInfo* I = RoItemInfo().Find(ItemID))
+	{
+		const TArray<FString>& L = bIdentified ? I->Desc : I->UnidentifiedDesc;
+		if (L.Num() > 0) { return L; }
+		if (!bIdentified && I->Desc.Num() > 0) { return I->Desc; }
+	}
+	if (const FRoTableEntry* E = RoItems().Find(ItemID); E && E->Desc.Num() > 0)
+	{
+		return E->Desc;
+	}
+	static TSet<int32> Warned;
+	if (!Warned.Contains(ItemID))
+	{
+		Warned.Add(ItemID);
+		UE_LOG(LogTemp, Error, TEXT("MythItem: item %d sem descricao em Config/item_info.json nem items.json; mostrando o resumo do catalogo do rAthena"), ItemID);
+	}
+	TArray<FString> Out;
+	if (const FCatalogLite* C = CatalogLite().Find(ItemID))
+	{
+		Out.Add(FString::Printf(TEXT("%s"), *C->NameEn));
+		const TCHAR* Kind = C->Kind == TEXT("equip") ? TEXT("Equipamento") : (C->Kind == TEXT("card") ? TEXT("Carta") : (C->Kind == TEXT("use") ? TEXT("Consumível") : TEXT("Diversos")));
+		Out.Add(FString::Printf(TEXT("Tipo: %s%s"), Kind, C->Sub.IsEmpty() ? TEXT("") : *FString::Printf(TEXT(" (%s)"), *C->Sub)));
+		Out.Add(TEXT("Descrição não disponível no cliente."));
+	}
+	else
+	{
+		Out.Add(FString::Printf(TEXT("Item #%d"), ItemID));
+		Out.Add(TEXT("Descrição não disponível no cliente."));
+	}
+	return Out;
+}

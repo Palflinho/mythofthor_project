@@ -18,7 +18,7 @@
 
 namespace
 {
-	struct FVfxClass
+	struct FVfxSkill
 	{
 		FString Class;
 		FString Element;
@@ -28,12 +28,12 @@ namespace
 
 	struct FVfxTables
 	{
-		TMap<int32, FVfxClass> Skills;
+		TMap<int32, FVfxSkill> Skills;
 		TMap<FString, FString> ClassNiagara; // classe -> Niagara System (Config/skill_vfx_overrides.json)
 		bool bLoaded = false;
 	};
 
-	FVfxTables& Tables()
+	FVfxTables& VfxTables()
 	{
 		static FVfxTables T;
 		if (T.bLoaded)
@@ -52,7 +52,7 @@ namespace
 				{
 					continue;
 				}
-				FVfxClass C;
+				FVfxSkill C;
 				C.Class = (*O)->GetStringField(TEXT("class"));
 				C.Element = (*O)->GetStringField(TEXT("element"));
 				C.Area = static_cast<int32>((*O)->GetNumberField(TEXT("area")));
@@ -84,7 +84,7 @@ namespace
 				{
 					const TSharedPtr<FJsonObject>* O = nullptr;
 					if (!Pair.Value->TryGetObject(O) || !O) { continue; }
-					FVfxClass& C = T.Skills.FindOrAdd(FCString::Atoi(*Pair.Key));
+					FVfxSkill& C = T.Skills.FindOrAdd(FCString::Atoi(*Pair.Key));
 					FString S;
 					if ((*O)->TryGetStringField(TEXT("class"), S)) { C.Class = S; }
 					if ((*O)->TryGetStringField(TEXT("element"), S)) { C.Element = S; }
@@ -95,7 +95,7 @@ namespace
 		return T;
 	}
 
-	FLinearColor ElementTint(const FString& Element)
+	FLinearColor VfxElementTint(const FString& Element)
 	{
 		if (Element == TEXT("Fire"))   { return FLinearColor(1.f, 0.45f, 0.15f); }
 		if (Element == TEXT("Water"))  { return FLinearColor(0.35f, 0.65f, 1.f); }
@@ -109,7 +109,7 @@ namespace
 		return FLinearColor(0.75f, 0.88f, 1.f); // neutro: azul claro
 	}
 
-	TSharedPtr<FJsonObject> Part(const TCHAR* Type, const TCHAR* File, const FLinearColor& Tint, std::initializer_list<TPair<const TCHAR*, double>> Numbers, bool bAttached = true)
+	TSharedPtr<FJsonObject> VfxPart(const TCHAR* Type, const TCHAR* File, const FLinearColor& Tint, std::initializer_list<TPair<const TCHAR*, double>> Numbers, bool bAttached = true)
 	{
 		TSharedPtr<FJsonObject> P = MakeShared<FJsonObject>();
 		P->SetStringField(TEXT("type"), Type);
@@ -128,7 +128,7 @@ namespace
 	}
 
 	/** Visual da tabela do cliente original: alguma parte de algum momento da skill desenha algo (nao so som)? */
-	bool SkillHasVisual(int32 SkillID)
+	bool HasOriginalVisual(int32 SkillID)
 	{
 		return FMythSkillEffects::SkillHasVisual(SkillID);
 	}
@@ -136,14 +136,14 @@ namespace
 
 FString UMythSkillManager::EffectClassOf(int32 SkillID)
 {
-	const FVfxClass* C = Tables().Skills.Find(SkillID);
+	const FVfxSkill* C = VfxTables().Skills.Find(SkillID);
 	return C ? C->Class : FString();
 }
 
 bool UMythSkillManager::Play(UObject* WorldContext, int32 SkillID, EMythSkillEffectStage Stage, AActor* Target, const FVector& Location, bool bFlashIfMissing, AActor* Source)
 {
 	bool bPlayed = FMythSkillEffects::Play(WorldContext, SkillID, Stage, Target, Location, bFlashIfMissing, Source);
-	if (!SkillHasVisual(SkillID) && FMythOptions::Get(TEXT("ShowEffects")))
+	if (!HasOriginalVisual(SkillID) && FMythOptions::Get(TEXT("ShowEffects")))
 	{
 		bPlayed |= PlayGeneric(WorldContext, SkillID, Stage, Target, Location, Source);
 	}
@@ -153,7 +153,7 @@ bool UMythSkillManager::Play(UObject* WorldContext, int32 SkillID, EMythSkillEff
 bool UMythSkillManager::PlayGeneric(UObject* WorldContext, int32 SkillID, EMythSkillEffectStage Stage, AActor* Target, const FVector& Location, AActor* Source)
 {
 	UWorld* World = WorldContext ? WorldContext->GetWorld() : nullptr;
-	const FVfxClass* C = Tables().Skills.Find(SkillID);
+	const FVfxSkill* C = VfxTables().Skills.Find(SkillID);
 	if (!World || !C || C->Class == TEXT("none"))
 	{
 		return false;
@@ -169,14 +169,14 @@ bool UMythSkillManager::PlayGeneric(UObject* WorldContext, int32 SkillID, EMythS
 	Recent.Add(Key, Now);
 
 	const FString& Cls = C->Class;
-	FLinearColor Tint = ElementTint(C->Element);
+	FLinearColor Tint = VfxElementTint(C->Element);
 	const FVector Feet = Target ? AMythStrEffect::FeetOf(Target) : Location;
 
 	// Niagara pedido no JSON (da skill ou da classe): usa em vez do visual generico
 	FString NiagaraPath = C->Niagara;
 	if (NiagaraPath.IsEmpty())
 	{
-		if (const FString* ClassPath = Tables().ClassNiagara.Find(Cls)) { NiagaraPath = *ClassPath; }
+		if (const FString* ClassPath = VfxTables().ClassNiagara.Find(Cls)) { NiagaraPath = *ClassPath; }
 	}
 	const bool bBuffStage = Stage == EMythSkillEffectStage::Effect || Stage == EMythSkillEffectStage::Success;
 	const bool bGroundStage = Stage == EMythSkillEffectStage::Ground;
@@ -214,11 +214,11 @@ bool UMythSkillManager::PlayGeneric(UObject* WorldContext, int32 SkillID, EMythS
 		const bool bDebuff = Cls == TEXT("debuff");
 		if (bDebuff) { Tint = FLinearColor(0.7f, 0.35f, 0.95f); }
 		// anel subindo em volta do alvo
-		Spawn(Part(TEXT("CYLINDER"), bDebuff ? TEXT("ring_black") : TEXT("ring_white"), Tint,
+		Spawn(VfxPart(TEXT("CYLINDER"), bDebuff ? TEXT("ring_black") : TEXT("ring_white"), Tint,
 			{ { TEXT("alphaMax"), 0.7 }, { TEXT("animation"), 1 }, { TEXT("blendMode"), 8 }, { TEXT("bottomSize"), 1.2 }, { TEXT("topSize"), 1.2 },
 			  { TEXT("height"), 3.5 }, { TEXT("duration"), 1500 } }));
 		// brilhos subindo
-		TSharedPtr<FJsonObject> Sparks = Part(TEXT("3D"), TEXT("effect/ac_center2.tga"), Tint,
+		TSharedPtr<FJsonObject> Sparks = VfxPart(TEXT("3D"), TEXT("effect/ac_center2.tga"), Tint,
 			{ { TEXT("alphaMax"), 1 }, { TEXT("duplicate"), 6 }, { TEXT("duration"), 1000 }, { TEXT("delayLate"), 250 }, { TEXT("posxRand"), 1.5 },
 			  { TEXT("posyRand"), 1 }, { TEXT("poszEndRand"), 1 }, { TEXT("poszEndRandMiddle"), 5 }, { TEXT("poszStartRand"), 1 }, { TEXT("poszStartRandMiddle"), 1 },
 			  { TEXT("sizeRandY"), 15 }, { TEXT("sizeRandYMiddle"), 40 }, { TEXT("sizeX"), 2.0 } });
@@ -229,14 +229,14 @@ bool UMythSkillManager::PlayGeneric(UObject* WorldContext, int32 SkillID, EMythS
 	{
 		const float Side = static_cast<float>(FMath::Max(1, C->Area > 0 ? C->Area : (Cls == TEXT("trap") ? 1 : FMythSkillEffects::AreaSize(SkillID, 1))));
 		AMythCastRing::Spawn(WorldContext, false, Location, Side, 1.4f, nullptr);
-		Spawn(Part(TEXT("CYLINDER"), TEXT("ring_white"), Tint,
+		Spawn(VfxPart(TEXT("CYLINDER"), TEXT("ring_white"), Tint,
 			{ { TEXT("alphaMax"), 0.6 }, { TEXT("animation"), 1 }, { TEXT("blendMode"), 8 }, { TEXT("bottomSize"), Side * 0.5 }, { TEXT("topSize"), Side * 0.5 },
 			  { TEXT("height"), 3.0 }, { TEXT("duration"), 1400 } }, false));
 		bAny = true;
 	}
 	else // melee_hit, ranged_hit, magic_hit: clarao de impacto do elemento
 	{
-		TSharedPtr<FJsonObject> Burst = Part(TEXT("3D"), TEXT("effect/lens2.tga"), Tint,
+		TSharedPtr<FJsonObject> Burst = VfxPart(TEXT("3D"), TEXT("effect/lens2.tga"), Tint,
 			{ { TEXT("alphaMax"), 1 }, { TEXT("angle"), 90 }, { TEXT("duration"), 400 }, { TEXT("posz"), 1 }, { TEXT("sizeEndY"), 200 }, { TEXT("sizeStartY"), 10 }, { TEXT("sizeX"), 15 }, { TEXT("toAngle"), 0 } }, false);
 		Burst->SetBoolField(TEXT("fadeOut"), true);
 		Burst->SetBoolField(TEXT("rotate"), true);

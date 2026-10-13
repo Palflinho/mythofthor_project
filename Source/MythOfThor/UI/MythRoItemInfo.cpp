@@ -95,8 +95,7 @@ void UMythRoHUDWidget::ShowItemInfo(const FRagnarokInventoryItem& Item)
 	{
 		Illust = FMythRoClientTables::ItemIcon(Item.ItemID); // sem ilustracao: o icone do item
 	}
-	const TArray<FString> Empty;
-	ShowInfoLines(Name, Illust, Info ? (Item.bIdentified ? Info->Desc : Info->UnidentifiedDesc) : Empty);
+	ShowInfoLines(Name, Illust, FMythRoClientTables::ItemDescriptionLines(Item.ItemID, Item.bIdentified));
 }
 
 void UMythRoHUDWidget::ShowSkillInfo(int32 SkillID)

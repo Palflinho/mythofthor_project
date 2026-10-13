@@ -422,7 +422,18 @@ int32 UMythRoSpriteComponent::WeaponTypeOf(int32 Weapon)
 	{
 		return FMath::Max(Weapon, 0);
 	}
-	return ItemVisuals().Weapons.FindRef(Weapon);
+	const int32* Found = ItemVisuals().Weapons.Find(Weapon);
+	if (!Found)
+	{
+		static TSet<int32> Warned;
+		if (!Warned.Contains(Weapon))
+		{
+			Warned.Add(Weapon);
+			UE_LOG(LogTemp, Error, TEXT("MythWeapon: arma/item %d nao esta em Config/weapon_types.json (tools/gen_weapon_types.py); sem o tipo o sprite da arma nao e desenhado. Regenere a tabela com o item_db do rAthena."), Weapon);
+		}
+		return 0;
+	}
+	return *Found;
 }
 
 int32 UMythRoSpriteComponent::LeftWeaponTypeOf(int32 ShieldValue)

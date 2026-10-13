@@ -37,6 +37,12 @@ struct MYTHOFTHOR_API FMythRoClientTables
 	/** Nome do recurso do item (sprite no chao: data/sprite/아이템/<nome>.spr; icone: item/<nome>.bmp). */
 	static FString ItemResource(int32 ItemID);
 
+	/**
+	 * Descricao do item que NUNCA volta vazia: itemInfo do cliente (Config/item_info.json) -> items.json -> catalogo do rAthena
+	 * (Config/item_catalog.json: nome em ingles, tipo). Sem nenhuma fonte, uma linha com o ID e um erro no log (uma vez por item).
+	 */
+	static TArray<FString> ItemDescriptionLines(int32 ItemID, bool bIdentified);
+
 	/** Raridade visual do item (0 comum .. 4 lendario), de Config/item_rarity.json (tools/gen_item_rarity.py). */
 	static int32 ItemRarity(int32 ItemID);
 
