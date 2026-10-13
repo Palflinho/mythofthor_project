@@ -267,6 +267,11 @@ bool UMythRoHUDWidget::IsOverAnyWindow(const FVector2D& ScreenPos) const
 
 void UMythRoHUDWidget::UpdateCooldowns()
 {
+	if (GuildSkillRefreshAt > 0.0 && FPlatformTime::Seconds() >= GuildSkillRefreshAt)
+	{
+		GuildSkillRefreshAt = 0.0;
+		if (URagnarokNetworkSubsystem* GNet = GetNet()) { GNet->SendGuildMenuRequest(3); }
+	}
 	const URagnarokNetworkSubsystem* Net = GetNet();
 	for (int32 i = 0; i < HotbarCdBacks.Num() && i < HotbarCdTexts.Num(); ++i)
 	{

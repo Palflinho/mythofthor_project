@@ -40,7 +40,7 @@ namespace
 	}
 
 	/** As abas que ja tem tela: Cla, Membros e Avisos. */
-	bool GuildTabReady(int32 Tab) { return Tab == 0 || Tab == 1 || Tab == 5; }
+	bool GuildTabReady(int32 Tab) { return Tab >= 0 && Tab <= 5; }
 }
 
 void UMythRoHUDWidget::BuildGuildWindow()
@@ -68,6 +68,8 @@ void UMythRoHUDWidget::BuildGuildWindow()
 	// caixas de aliancas e inimigos (vazias por enquanto: o servidor manda no ZC_MYGUILD_BASIC_INFO)
 	GuildAllyBoxes.Add(AddColor(GuildWindow, GuildTabOff, 210.f, GuildTop + 100.f, 168.f, 48.f));
 	GuildAllyBoxes.Add(AddColor(GuildWindow, GuildTabOff, 210.f, GuildTop + 174.f, 168.f, 48.f));
+	GuildAllyTexts.Add(AddText(GuildWindow, 214.f, GuildTop + 102.f, 7, GuildText));
+	GuildAllyTexts.Add(AddText(GuildWindow, 214.f, GuildTop + 176.f, 7, GuildText));
 	GuildNoneText = AddText(GuildWindow, 10.f, GuildTop + 10.f, 9, GuildText);
 	GuildNoneText->SetText(FText::FromString(GuildMsg(2075)));
 	GuildCreateBtn = AddTextButton(GuildWindow, GuildMsg(2076), 10.f, GuildTop + 34.f, 90.f);
@@ -169,6 +171,10 @@ void UMythRoHUDWidget::SetGuildTab(int32 Tab)
 {
 	GuildTab = FMath::Clamp(Tab, 0, GuildTabCount - 1);
 	GuildConfirm = 0;
+	if (URagnarokNetworkSubsystem* Net = GetNet(); Net && Net->IsInGuild() && GuildTab <= 4)
+	{
+		Net->SendGuildMenuRequest(GuildTab); // 0 dados, 1 membros, 2 cargos, 3 habilidades, 4 expulsos
+	}
 	RefreshGuild();
 }
 
@@ -254,45 +260,150 @@ void UMythRoHUDWidget::RefreshGuild()
 	}
 	Show(GuildNoneText, bInfo && !bIn);
 	for (UImage* B : GuildAllyBoxes) { Show(B, bInfo && bIn); }
+	for (int32 k = 0; k < GuildAllyTexts.Num(); ++k)
+	{
+		FString Lines2;
+		int32 Count = 0;
+		for (const FRoGuildRelation& Rel : Net->GetGuildRelations())
+		{
+			if (Rel.Relation == k && Count++ < 3)
+			{
+				Lines2 += Rel.Name + LINE_TERMINATOR;
+			}
+		}
+		GuildAllyTexts[k]->SetText(FText::FromString(Lines2.TrimEnd()));
+		Show(GuildAllyTexts[k], bInfo && bIn);
+	}
 	SetTextButtonShown(GuildCreateBtn, bInfo && !bIn);
 
 	// Aba Membros: online primeiro (como a opcao "Membros online primeiro" do cliente), depois pelo nome
 	const bool bMembers = GuildTab == 1 && bIn;
 	TArray<FRoGuildMember> Members = Net->GetGuildMembers();
 	Members.StableSort([](const FRoGuildMember& A, const FRoGuildMember& B) { return A.bOnline != B.bOnline ? A.bOnline : A.Position < B.Position; });
-	GuildScroll = FMath::Clamp(GuildScroll, 0, FMath::Max(0, Members.Num() - GuildRows));
-	for (UTextBlock* H : GuildHeader) { Show(H, bMembers); }
+
+	// Abas em lista (Membros, Cargos, Habil., Expulsos): cada uma preenche as mesmas 11 linhas de 5 colunas
+	struct FGuildRowData
+	{
+		FString C[5];
+		bool bOn = true;
+		int32 ClassId = -1;
+		bool bUpgrade = false;
+	};
+	const bool bList = bIn && GuildTab >= 1 && GuildTab <= 4;
+	TArray<FGuildRowData> Data;
+	FString Heads[5];
+	if (bList && GuildTab == 1)
+	{
+		Heads[0] = GuildMsg(328); Heads[1] = GuildMsg(342); Heads[2] = TEXT("Classe"); Heads[3] = GuildMsg(329); Heads[4] = GuildMsg(335);
+		for (const FRoGuildMember& M : Members)
+		{
+			FGuildRowData R;
+			R.C[0] = M.Name;
+			R.C[1] = Net->GetGuildPositionName(M.Position);
+			R.C[2] = URagnarokNetworkSubsystem::GetJobNameFromClass(M.ClassId);
+			R.C[3] = FString::FromInt(M.Level);
+			R.C[4] = FText::AsNumber(M.Exp).ToString();
+			R.bOn = M.bOnline;
+			R.ClassId = M.ClassId;
+			Data.Add(R);
+		}
+	}
+	else if (bList && GuildTab == 2)
+	{
+		Heads[0] = GuildMsg(340 + 2); Heads[1] = TEXT("Direitos"); Heads[2] = TEXT("Imposto");
+		Heads[0] = TEXT("Cargo");
+		for (const FRoGuildPosition& P : Net->GetGuildPositionInfos())
+		{
+			FGuildRowData R;
+			R.C[0] = FString::Printf(TEXT("%d. %s"), P.Id + 1, *Net->GetGuildPositionName(P.Id));
+			FString Rights;
+			if (P.Rights & 0x01) { Rights += TEXT("Convidar "); }
+			if (P.Rights & 0x10) { Rights += TEXT("Expulsar"); }
+			R.C[1] = Rights.IsEmpty() ? FString(TEXT("-")) : Rights.TrimEnd();
+			R.C[2] = FString::Printf(TEXT("%d%%"), P.PayRate);
+			Data.Add(R);
+		}
+	}
+	else if (bList && GuildTab == 3)
+	{
+		Heads[0] = TEXT("Habilidade"); Heads[1] = TEXT("Nível"); Heads[2] = TEXT("SP"); Heads[3] = TEXT("Alcance"); Heads[4] = Net->IsGuildMaster() ? TEXT("Subir") : TEXT("");
+		for (const FRoGuildSkill& S : Net->GetGuildSkills())
+		{
+			FGuildRowData R;
+			const FString Pt = FMythRoClientTables::SkillName(S.Id);
+			R.C[0] = Pt.IsEmpty() ? S.Name : Pt;
+			R.C[1] = FString::FromInt(S.Level);
+			R.C[2] = S.Level > 0 ? FString::FromInt(S.Sp) : FString(TEXT("-"));
+			R.C[3] = S.Level > 0 ? FString::FromInt(S.Range) : FString(TEXT("-"));
+			R.bUpgrade = S.bUpgradable && Net->GetGuildSkillPoints() > 0;
+			R.C[4] = R.bUpgrade ? FString(TEXT("[+]")) : FString();
+			R.bOn = S.Level > 0;
+			Data.Add(R);
+		}
+	}
+	else if (bList && GuildTab == 4)
+	{
+		Heads[0] = GuildMsg(328); Heads[1] = TEXT("Motivo");
+		for (const FRoGuildBan& B : Net->GetGuildBans())
+		{
+			FGuildRowData R;
+			R.C[0] = B.Name;
+			R.C[1] = B.Reason;
+			Data.Add(R);
+		}
+	}
+	GuildScroll = FMath::Clamp(GuildScroll, 0, FMath::Max(0, Data.Num() - GuildRows));
+	// Posicao das colunas de cada aba (as mesmas 5 colunas de texto servem para as quatro listas)
+	static const float ColX[5][5] = { { 30.f, 136.f, 214.f, 300.f, 336.f }, { 30.f, 136.f, 214.f, 300.f, 336.f }, { 30.f, 170.f, 300.f, 0.f, 0.f }, { 30.f, 190.f, 250.f, 300.f, 352.f }, { 30.f, 150.f, 0.f, 0.f, 0.f } };
+	const float* Xs = ColX[FMath::Clamp(GuildTab, 0, 4)];
+	auto PlaceX = [this](UWidget* W, float X)
+	{
+		if (UCanvasPanelSlot* Slot = W ? Cast<UCanvasPanelSlot>(W->Slot) : nullptr)
+		{
+			Slot->SetPosition(FVector2D(X * UIScale, Slot->GetPosition().Y));
+		}
+	};
+	for (int32 c = 0; c < GuildHeader.Num() && c < 5; ++c) { PlaceX(GuildHeader[c], Xs[c]); }
+	for (int32 i = 0; i < GuildRows; ++i)
+	{
+		UWidget* RowCells[5] = { GuildRowName[i], GuildRowPos[i], GuildRowJob[i], GuildRowLevel[i], GuildRowExp[i] };
+		for (int32 c = 0; c < 5; ++c) { PlaceX(RowCells[c], Xs[c]); }
+	}
+	for (int32 c = 0; c < GuildHeader.Num() && c < 5; ++c)
+	{
+		GuildHeader[c]->SetText(FText::FromString(Heads[c]));
+		Show(GuildHeader[c], bList && !Heads[c].IsEmpty());
+	}
 	for (int32 i = 0; i < GuildRows; ++i)
 	{
 		const int32 Index = GuildScroll + i;
-		const FRoGuildMember* M = bMembers && Members.IsValidIndex(Index) ? &Members[Index] : nullptr;
+		const FGuildRowData* M = bList && Data.IsValidIndex(Index) ? &Data[Index] : nullptr;
 		GuildRowBg[i]->SetVisibility(M ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
-		Show(GuildRowName[i], M != nullptr);
-		Show(GuildRowPos[i], M != nullptr);
-		Show(GuildRowJob[i], M != nullptr);
-		Show(GuildRowLevel[i], M != nullptr);
-		Show(GuildRowExp[i], M != nullptr);
+		UTextBlock* Cells[5] = { GuildRowName[i], GuildRowPos[i], GuildRowJob[i], GuildRowLevel[i], GuildRowExp[i] };
+		for (int32 c = 0; c < 5; ++c)
+		{
+			Show(Cells[c], M != nullptr);
+		}
 		Show(GuildRowIcon[i], false);
 		if (!M)
 		{
 			continue;
 		}
-		GuildRowBg[i]->SetColorAndOpacity(Index == GuildSelected ? GuildPick : (M->bOnline ? GuildOnline : FLinearColor::White));
-		if (UTexture2D* Icon = FMythRoUITextures::Get(FString::Printf(TEXT("renewalparty/icon_jobs_%d.bmp"), M->ClassId)))
+		GuildRowBg[i]->SetColorAndOpacity(GuildTab == 1 && Index == GuildSelected ? GuildPick : (GuildTab == 1 ? (M->bOn ? GuildOnline : FLinearColor::White) : FLinearColor::White));
+		if (M->ClassId >= 0)
 		{
-			GuildRowIcon[i]->SetBrushFromTexture(Icon, false);
-			GuildRowIcon[i]->SetDesiredSizeOverride(FVector2D(18.f, 18.f) * UIScale);
-			Show(GuildRowIcon[i], true);
+			if (UTexture2D* Icon = FMythRoUITextures::Get(FString::Printf(TEXT("renewalparty/icon_jobs_%d.bmp"), M->ClassId)))
+			{
+				GuildRowIcon[i]->SetBrushFromTexture(Icon, false);
+				GuildRowIcon[i]->SetDesiredSizeOverride(FVector2D(18.f, 18.f) * UIScale);
+				Show(GuildRowIcon[i], true);
+			}
 		}
-		const FLinearColor C = M->bOnline ? GuildText : GuildGray;
-		GuildRowName[i]->SetText(FText::FromString(M->Name));
-		GuildRowPos[i]->SetText(FText::FromString(Net->GetGuildPositionName(M->Position)));
-		GuildRowJob[i]->SetText(FText::FromString(URagnarokNetworkSubsystem::GetJobNameFromClass(M->ClassId)));
-		GuildRowLevel[i]->SetText(FText::AsNumber(M->Level));
-		GuildRowExp[i]->SetText(FText::AsNumber(M->Exp));
-		for (UTextBlock* T : { GuildRowName[i].Get(), GuildRowPos[i].Get(), GuildRowJob[i].Get(), GuildRowLevel[i].Get(), GuildRowExp[i].Get() })
+		const FLinearColor Color = M->bOn ? GuildText : GuildGray;
+		for (int32 c = 0; c < 5; ++c)
 		{
-			T->SetColorAndOpacity(FSlateColor(C));
+			Cells[c]->SetText(FText::FromString(M->C[c]));
+			Cells[c]->SetColorAndOpacity(FSlateColor(c == 4 && M->bUpgrade ? FLinearColor(0.1f, 0.45f, 0.1f) : Color));
 		}
 	}
 
@@ -328,6 +439,10 @@ void UMythRoHUDWidget::RefreshGuild()
 		for (const FRoGuildMember& M : Members) { On += M.bOnline ? 1 : 0; }
 		Footer = FString::Printf(TEXT("%s: %d / %d"), *GuildMsg(331), On, Members.Num());
 	}
+	else if (bList && GuildTab == 3)
+	{
+		Footer = FString::Printf(TEXT("Pontos de habilidade do clã: %d"), Net->GetGuildSkillPoints());
+	}
 	GuildFooterText->SetText(FText::FromString(Footer));
 }
 
@@ -356,8 +471,7 @@ bool UMythRoHUDWidget::HandleGuildClick(const FVector2D& ScreenPos)
 		if (GuildTabReady(t) && (Net->IsInGuild() || t == 0))
 		{
 			SetGuildTab(t);
-			if (t == 1) { Net->SendGuildMenuRequest(1); }
-			if (t == 0) { Net->SendGuildMenuRequest(0); }
+			if (t <= 4) { Net->SendGuildMenuRequest(t); } // 0 dados, 1 membros, 2 cargos, 3 habilidades, 4 expulsos
 		}
 		else if (Net->IsInGuild())
 		{
@@ -423,7 +537,17 @@ bool UMythRoHUDWidget::HandleGuildClick(const FVector2D& ScreenPos)
 	}
 	for (int32 i = 0; i < GuildRows; ++i)
 	{
-		if (IsUnder(GuildRowBg[i], ScreenPos))
+		if (GuildTab == 3 && Net->IsGuildMaster() && Net->GetGuildSkillPoints() > 0 && IsUnder(GuildRowBg[i], ScreenPos) && GuildRowExp[i]->IsVisible() && IsUnder(GuildRowExp[i], ScreenPos))
+		{
+			const int32 SkIndex = GuildScroll + i;
+			if (Net->GetGuildSkills().IsValidIndex(SkIndex) && Net->GetGuildSkills()[SkIndex].bUpgradable)
+			{
+				Net->SendSkillUp(Net->GetGuildSkills()[SkIndex].Id); // o servidor decide
+				GuildSkillRefreshAt = FPlatformTime::Seconds() + 1.0; // e a lista nova e pedida logo depois
+			}
+			return true;
+		}
+		if (GuildTab == 1 && IsUnder(GuildRowBg[i], ScreenPos))
 		{
 			GuildSelected = GuildScroll + i;
 			GuildConfirm = 0;
@@ -436,7 +560,7 @@ bool UMythRoHUDWidget::HandleGuildClick(const FVector2D& ScreenPos)
 
 bool UMythRoHUDWidget::HandleGuildWheel(const FVector2D& ScreenPos, float Delta)
 {
-	if (!GuildWindow || !GuildWindow->IsVisible() || GuildTab != 1 || !IsUnder(GuildWindow, ScreenPos))
+	if (!GuildWindow || !GuildWindow->IsVisible() || GuildTab < 1 || GuildTab > 4 || !IsUnder(GuildWindow, ScreenPos))
 	{
 		return false;
 	}

@@ -553,6 +553,42 @@ struct FRoGuildMember
 	FString Name;
 };
 
+/** Cargo do cla (ZC_POSITION_INFO 0x0160): direitos (1 convidar, 16 expulsar), posicao no ranking e imposto sobre a EXP em %. */
+struct FRoGuildPosition
+{
+	int32 Id = 0;
+	int32 Rights = 0;
+	int32 Rank = 0;
+	int32 PayRate = 0;
+};
+
+/** Relacao do cla com outro (ZC_MYGUILD_BASIC_INFO 0x014c): 0 aliado, 1 inimigo (oposicao). */
+struct FRoGuildRelation
+{
+	int32 Relation = 0;
+	int32 GuildId = 0;
+	FString Name;
+};
+
+/** Habilidade do cla (ZC_GUILD_SKILLINFO 0x0162). */
+struct FRoGuildSkill
+{
+	int32 Id = 0;
+	int32 Level = 0;
+	int32 Sp = 0;
+	int32 Range = 0;
+	bool bUpgradable = false;
+	FString Name;
+};
+
+/** Expulso do cla (ZC_BAN_LIST 0x0b7c). */
+struct FRoGuildBan
+{
+	int32 CharId = 0;
+	FString Name;
+	FString Reason;
+};
+
 /** Cla: 0 dados mudaram, 1 convite recebido (GetGuildInviteId/Name), 2 voce saiu, foi expulso ou o cla acabou. */
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGuild, uint8, Event);
 
@@ -753,6 +789,11 @@ public:
 	const FString& GetGuildName() const { return GuildName; }
 	const FRoGuildInfo& GetGuildInfo() const { return GuildInfo; }
 	const TArray<FRoGuildMember>& GetGuildMembers() const { return GuildMembers; }
+	const TArray<FRoGuildPosition>& GetGuildPositionInfos() const { return GuildPositionInfos; }
+	const TArray<FRoGuildSkill>& GetGuildSkills() const { return GuildSkills; }
+	int32 GetGuildSkillPoints() const { return GuildSkillPoints; }
+	const TArray<FRoGuildBan>& GetGuildBans() const { return GuildBans; }
+	const TArray<FRoGuildRelation>& GetGuildRelations() const { return GuildRelations; }
 	FString GetGuildPositionName(int32 Position) const { const FString* P = GuildPositions.Find(Position); return P ? *P : FString(); }
 	const FString& GetGuildNoticeSubject() const { return GuildNoticeSubject; }
 	const FString& GetGuildNoticeText() const { return GuildNoticeText; }
@@ -1259,6 +1300,11 @@ private:
 	FRoGuildInfo GuildInfo;
 	TArray<FRoGuildMember> GuildMembers;
 	TMap<int32, FString> GuildPositions;
+	TArray<FRoGuildPosition> GuildPositionInfos;
+	TArray<FRoGuildSkill> GuildSkills;
+	int32 GuildSkillPoints = 0;
+	TArray<FRoGuildBan> GuildBans;
+	TArray<FRoGuildRelation> GuildRelations;
 	FString GuildNoticeSubject;
 	FString GuildNoticeText;
 	int32 GuildInviteId = 0;

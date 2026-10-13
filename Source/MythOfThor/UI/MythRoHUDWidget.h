@@ -1178,6 +1178,8 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> GuildRowJob;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> GuildRowLevel;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> GuildRowExp;
+	double GuildSkillRefreshAt = 0.0;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> GuildAllyTexts; // aliados e inimigos (caixas da aba Cla)
 	UPROPERTY() TObjectPtr<UTextBlock> GuildNoticeLabel1;
 	UPROPERTY() TObjectPtr<UTextBlock> GuildNoticeLabel2;
 	UPROPERTY() TObjectPtr<UEditableTextBox> GuildSubjectBox;

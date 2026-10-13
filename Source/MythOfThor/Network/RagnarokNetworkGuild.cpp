@@ -39,6 +39,11 @@ void URagnarokNetworkSubsystem::ClearGuild()
 	GuildInfo = FRoGuildInfo();
 	GuildMembers.Reset();
 	GuildPositions.Reset();
+	GuildPositionInfos.Reset();
+	GuildSkills.Reset();
+	GuildSkillPoints = 0;
+	GuildBans.Reset();
+	GuildRelations.Reset();
 	GuildNoticeSubject.Reset();
 	GuildNoticeText.Reset();
 }
@@ -106,6 +111,62 @@ void URagnarokNetworkSubsystem::HandleGuildPacket(const uint8* PacketData, int32
 		for (int32 Off = 4; Off + 28 <= PacketSize; Off += 28)
 		{
 			GuildPositions.Add(GuildRead<int32>(PacketData, Off), GuildText(PacketData + Off + 4, 24));
+		}
+		OnGuild.Broadcast(0);
+		break;
+	case 0x014c: // ZC_MYGUILD_BASIC_INFO <len>.W { relacao.L cla.L nome.24B }* (32 bytes cada)
+		GuildRelations.Reset();
+		for (int32 Off = 4; Off + 32 <= PacketSize; Off += 32)
+		{
+			FRoGuildRelation Rel;
+			Rel.Relation = GuildRead<int32>(PacketData, Off);
+			Rel.GuildId = GuildRead<int32>(PacketData, Off + 4);
+			Rel.Name = GuildText(PacketData + Off + 8, 24);
+			GuildRelations.Add(Rel);
+		}
+		OnGuild.Broadcast(0);
+		break;
+	case 0x0160: // ZC_POSITION_INFO <len>.W { cargo.L direitos.L ranking.L imposto.L }*
+		GuildPositionInfos.Reset();
+		for (int32 Off = 4; Off + 16 <= PacketSize; Off += 16)
+		{
+			FRoGuildPosition P;
+			P.Id = GuildRead<int32>(PacketData, Off);
+			P.Rights = GuildRead<int32>(PacketData, Off + 4);
+			P.Rank = GuildRead<int32>(PacketData, Off + 8);
+			P.PayRate = GuildRead<int32>(PacketData, Off + 12);
+			GuildPositionInfos.Add(P);
+		}
+		OnGuild.Broadcast(0);
+		break;
+	case 0x0162: // ZC_GUILD_SKILLINFO <len>.W <pontos>.W { id.W inf.L nivel.W sp.W alcance.W nome.24B sobe.B }* (37 bytes cada)
+		if (PacketSize >= 6)
+		{
+			GuildSkillPoints = GuildRead<int16>(PacketData, 4);
+			GuildSkills.Reset();
+			for (int32 Off = 6; Off + 37 <= PacketSize; Off += 37)
+			{
+				FRoGuildSkill S;
+				S.Id = GuildRead<uint16>(PacketData, Off);
+				S.Level = GuildRead<uint16>(PacketData, Off + 6);
+				S.Sp = GuildRead<uint16>(PacketData, Off + 8);
+				S.Range = GuildRead<uint16>(PacketData, Off + 10);
+				S.Name = GuildText(PacketData + Off + 12, 24);
+				S.bUpgradable = PacketData[Off + 36] != 0;
+				GuildSkills.Add(S);
+			}
+			OnGuild.Broadcast(0);
+		}
+		break;
+	case 0x0b7c: // ZC_BAN_LIST <len>.W { CID.L motivo.40B nome.24B }* (68 bytes cada)
+		GuildBans.Reset();
+		for (int32 Off = 4; Off + 68 <= PacketSize; Off += 68)
+		{
+			FRoGuildBan B;
+			B.CharId = GuildRead<int32>(PacketData, Off);
+			B.Reason = GuildText(PacketData + Off + 4, 40);
+			B.Name = GuildText(PacketData + Off + 44, 24);
+			GuildBans.Add(B);
 		}
 		OnGuild.Broadcast(0);
 		break;

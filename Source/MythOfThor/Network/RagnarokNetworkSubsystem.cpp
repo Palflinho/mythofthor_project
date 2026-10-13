@@ -1028,6 +1028,10 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x0b7b: // ZC_GUILD_INFO
 			case 0x0b7d: // ZC_MEMBERMGR_INFO
 			case 0x0166: // ZC_POSITION_ID_NAME_INFO
+			case 0x0160: // ZC_POSITION_INFO
+			case 0x014c: // ZC_MYGUILD_BASIC_INFO (aliancas e inimigos)
+			case 0x0162: // ZC_GUILD_SKILLINFO
+			case 0x0b7c: // ZC_BAN_LIST
 			case 0x0156: // ZC_ACK_REQ_CHANGE_MEMBERS
 			case 0x016f: // ZC_GUILD_NOTICE
 			case 0x016a: // ZC_REQ_JOIN_GUILD (convite)
