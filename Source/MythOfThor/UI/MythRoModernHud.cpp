@@ -26,7 +26,7 @@ namespace
 	constexpr float MhExpHalfW = 290.f;  // so a barra
 	constexpr float MhExpBox = 56.f;     // caixa azul com o nivel, depois da barra (do lado do centro)
 	constexpr float MhExpGap = 12.f;
-	constexpr float MhExpBarY = 26.f;
+	constexpr float MhExpBarY = 32.f; // barra mais baixa: o icone de level up (29 px) fica acima dela
 	constexpr float MhExpBarH = 12.f;
 
 	const FLinearColor MhBody(0.965f, 0.965f, 0.98f, 1.f);        // fundo claro das janelas
@@ -88,14 +88,13 @@ void UMythRoHUDWidget::BuildModernHud()
 	ModernWeightZeny = AddText(ModernPanel, MhBarX, MhTitleH + 42.f, 6, MhInk);
 
 	// --- Barras de EXP embaixo (Base a esquerda, Classe a direita), com o botao de level up acima do rotulo
-	ModernExpStrip = MakeWindow(FVector2D(0.5f, 1.f), FVector2D(0.5f, 1.f), FVector2D(106.f, 0.f), FVector2D(2.f * (MhExpHalfW + MhExpBox) + MhExpGap, 40.f));
+	ModernExpStrip = MakeWindow(FVector2D(0.5f, 1.f), FVector2D(0.5f, 1.f), FVector2D(106.f, 0.f), FVector2D(2.f * (MhExpHalfW + MhExpBox) + MhExpGap, 46.f));
 	for (int32 Side = 0; Side < 2; ++Side)
 	{
 		// Base: [barra][caixa azul]   Classe: [caixa azul][barra]  (espelhado: as duas caixas ficam no centro)
 		const float X0 = Side * (MhExpHalfW + MhExpBox + MhExpGap);
 		const float BarX = Side == 0 ? X0 : X0 + MhExpBox;
 		const float BoxX = Side == 0 ? X0 + MhExpHalfW : X0;
-		AddRounded(ModernExpStrip, MhBody, FLinearColor::Transparent, X0 - 3.f, MhExpBarY - 3.f, MhExpHalfW + MhExpBox + 6.f, MhExpBarH + 6.f, 4.f, 4.f);
 		AddColor(ModernExpStrip, MhBarBack, BarX, MhExpBarY, MhExpHalfW, MhExpBarH);
 		UImage* Fill = AddColor(ModernExpStrip, Side == 0 ? FLinearColor(0.95f, 0.75f, 0.2f) : FLinearColor(0.35f, 0.8f, 0.95f), BarX, MhExpBarY, 1.f, MhExpBarH);
 		for (int32 t = 1; t < 10; ++t) // divisoes a cada 10%
@@ -112,7 +111,7 @@ void UMythRoHUDWidget::BuildModernHud()
 		UImage* Hover = AddColor(ModernExpStrip, FLinearColor::Transparent, BarX, MhExpBarY, MhExpHalfW, MhExpBarH);
 		Hover->SetVisibility(ESlateVisibility::Visible); // precisa ser clicavel para mostrar a dica ao passar o mouse
 		// o botao de level up fica acima da caixa de nivel (a que aponta para o centro)
-		UImage* LvUp = AddImage(ModernExpStrip, FMythRoUITextures::Get(TEXT("basic_interface/lv_up_on.bmp")), BoxX + (MhExpBox - 22.f) * 0.5f, 2.f, 22.f, 22.f);
+		UImage* LvUp = AddImage(ModernExpStrip, FMythRoUITextures::Get(TEXT("basic_interface/lv_up_on.bmp")), BoxX + (MhExpBox - 29.f) * 0.5f, 2.f, 29.f, 29.f);
 		LvUp->SetVisibility(ESlateVisibility::Collapsed);
 		if (Side == 0) { ModernBaseFill = Fill; ModernBaseLabel = Label; ModernBaseHover = Hover; ModernBaseLvUp = LvUp; }
 		else { ModernJobFill = Fill; ModernJobLabel = Label; ModernJobHover = Hover; ModernJobLvUp = LvUp; }
