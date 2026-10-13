@@ -4,6 +4,7 @@
 #include "UI/MythOptions.h"
 #include "Sprites/MythRoSpriteComponent.h"
 #include "Sprites/MythStrEffect.h"
+#include "Components/CapsuleComponent.h"
 #include "Sprites/MythSprEffect.h"
 #include "Sprites/MythProcEffect.h"
 #include "Sprites/MythTrailEffect.h"
@@ -213,6 +214,37 @@ bool FMythSkillEffects::PlayEffectId(UObject* WorldContext, int32 EffectID, AAct
 	bool bAny = false;
 	for (const FEffectPart& P : *Parts)
 	{
+		// Particulas em sprite (3D com spriteName, ex.: o brilho da Bencao): varias copias do sprite subindo perto do alvo
+		if (P.Type == TEXT("3D") && P.File.IsEmpty() && P.Raw.IsValid())
+		{
+			FString SpriteName;
+			if (P.Raw->TryGetStringField(TEXT("spriteName"), SpriteName) && !SpriteName.IsEmpty() && !SpriteName.StartsWith(TEXT("..")))
+			{
+				double Copies = 1.0, Between = 0.0, FirstDelay = 0.0, SpreadX = 1.0;
+				P.Raw->TryGetNumberField(TEXT("duplicate"), Copies);
+				P.Raw->TryGetNumberField(TEXT("timeBetweenDupli"), Between);
+				P.Raw->TryGetNumberField(TEXT("delayOffset"), FirstDelay);
+				P.Raw->TryGetNumberField(TEXT("posxRand"), SpreadX);
+				float Height = 100.f;
+				if (const ACharacter* Char = Cast<ACharacter>(Target); Char && Char->GetCapsuleComponent()) { Height = Char->GetCapsuleComponent()->GetScaledCapsuleHalfHeight() * 2.f; }
+				UWorld* World = WorldContext ? WorldContext->GetWorld() : nullptr;
+				const int32 N = FMath::Clamp(static_cast<int32>(Copies), 1, 12);
+				for (int32 k = 0; k < N && World; ++k)
+				{
+					const float Delay = FMath::Max(0.001f, static_cast<float>(FirstDelay + Between * k) / 1000.f);
+					const FVector Jitter(FMath::FRandRange(-1.f, 1.f) * static_cast<float>(SpreadX) * 30.f, FMath::FRandRange(-1.f, 1.f) * static_cast<float>(SpreadX) * 30.f, FMath::FRandRange(0.1f, 1.f) * Height);
+					TWeakObjectPtr<AActor> WeakTarget(Target);
+					FTimerHandle Handle;
+					World->GetTimerManager().SetTimer(Handle, FTimerDelegate::CreateWeakLambda(WorldContext, [WorldContext, SpriteName, WeakTarget, Feet, Jitter]()
+					{
+						const FVector At = (WeakTarget.IsValid() ? FeetOf(WeakTarget.Get(), Feet) : Feet) + Jitter;
+						AMythSprEffect::Play(WorldContext, SpriteName, At, nullptr, false, 0.f);
+					}), Delay, false);
+				}
+				bAny = true;
+				continue;
+			}
+		}
 		// Desenhados pelo executavel (docs/ref/11): cilindros, particulas/projeteis e raios
 		if (P.Type == TEXT("CYLINDER") || P.Type == TEXT("3D") || P.Type == TEXT("2D"))
 		{
@@ -261,14 +293,30 @@ bool FMythSkillEffects::PlayEffectId(UObject* WorldContext, int32 EffectID, AAct
 				P.Raw->TryGetBoolField(TEXT("repeat"), bRepeat);
 				P.Raw->TryGetNumberField(TEXT("duration"), Ms);
 			}
-			const bool bSpr = AMythSprEffect::Play(WorldContext, P.File, Feet, P.bAttached ? Target : nullptr, bRepeat, static_cast<float>(Ms) / 1000.f) != nullptr;
+			AMythSprEffect* SprFx = AMythSprEffect::Play(WorldContext, P.File, Feet, P.bAttached ? Target : nullptr, bRepeat, static_cast<float>(Ms) / 1000.f);
+			bool bHeadSpr = false;
+			if (SprFx && Target && P.Raw.IsValid() && P.Raw->TryGetBoolField(TEXT("head"), bHeadSpr) && bHeadSpr)
+			{
+				double YOff = 0.0; // yOffset da tabela (pixels do sprite, negativo = para cima): sobe mais acima da cabeca
+				P.Raw->TryGetNumberField(TEXT("yOffset"), YOff);
+				SprFx->SetAboveHead(Target, FMath::Max(0.f, static_cast<float>(-YOff)) * 0.8f); // ex.: o anjo da Bencao fica acima da cabeca
+			}
+			const bool bSpr = SprFx != nullptr;
 			UE_LOG(LogTemp, Verbose, TEXT("MythSkillEffects: efeito %d spr '%s' %s"), EffectID, *P.File, bSpr ? TEXT("ok") : TEXT("falhou"));
 			bAny |= bSpr;
 		}
 		if (P.Type == TEXT("STR") && !P.File.IsEmpty())
 		{
 			const FString File = ResolveVariant(P.File);
-			const bool bStr = AMythStrEffect::Play(WorldContext, File, Feet, P.bAttached ? Target : nullptr) != nullptr;
+			AMythStrEffect* StrFx = AMythStrEffect::Play(WorldContext, File, Feet, P.bAttached ? Target : nullptr);
+			bool bHeadStr = false;
+			if (StrFx && Target && P.bAttached && P.Raw.IsValid() && P.Raw->TryGetBoolField(TEXT("head"), bHeadStr) && bHeadStr)
+			{
+				float Half = 90.f;
+				if (const ACharacter* HeadChar = Cast<ACharacter>(Target); HeadChar && HeadChar->GetCapsuleComponent()) { Half = HeadChar->GetCapsuleComponent()->GetScaledCapsuleHalfHeight(); }
+				StrFx->HeadOffset = Half * 1.7f; // efeito "head": acima da cabeca (Angelus, Signum Crucis...)
+			}
+			const bool bStr = StrFx != nullptr;
 			UE_LOG(LogTemp, Verbose, TEXT("MythSkillEffects: efeito %d str '%s' %s"), EffectID, *File, bStr ? TEXT("ok") : TEXT("falhou"));
 			bAny |= bStr;
 		}

@@ -266,3 +266,13 @@ void AMythSprEffect::Tick(float DeltaSeconds)
 		++Section;
 	}
 }
+
+void AMythSprEffect::SetAboveHead(const AActor* Unit, float ExtraUU)
+{
+	float Half = 90.f;
+	if (const ACharacter* Char = Cast<ACharacter>(Unit); Char && Char->GetCapsuleComponent())
+	{
+		Half = Char->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+	}
+	HeightOffset = Half * 1.7f + ExtraUU;
+}

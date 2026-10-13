@@ -25,6 +25,9 @@ public:
 	 */
 	static AMythSprEffect* Play(UObject* WorldContext, const FString& SprFile, const FVector& Location, AActor* Follow, bool bRepeat, float DurationSec);
 
+	/** Poe o efeito acima da cabeca do ator que ele acompanha (efeitos "head" da tabela do roBrowser). */
+	void SetAboveHead(const AActor* Owner, float ExtraUU = 0.f);
+
 	/** Adereco de estado que fica em loop preso a quem esta com o estado (sono, atordoado, maldicao); destrua o ator para tirar. */
 	static AMythSprEffect* Attach(AActor* Owner, const FString& SprFile, bool bAboveHead, float SideOffset = 0.f, float UpOffset = 0.f);
 

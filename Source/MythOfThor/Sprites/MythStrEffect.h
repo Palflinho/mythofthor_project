@@ -58,6 +58,9 @@ public:
 	/** Toca data/texture/effect/<StrFile>.str em Location (ou preso ao ator Follow). Nulo se o arquivo nao existir. */
 	static AMythStrEffect* Play(UObject* WorldContext, const FString& StrFile, const FVector& Location, AActor* Follow = nullptr);
 
+	/** Altura acima dos pes (uu) quando o efeito acompanha um ator: efeitos marcados "head" ficam acima da cabeca. */
+	float HeadOffset = 0.f;
+
 	virtual void Tick(float DeltaSeconds) override;
 
 	/** Pes da unidade (base da capsula), onde os efeitos e sprites se apoiam. */

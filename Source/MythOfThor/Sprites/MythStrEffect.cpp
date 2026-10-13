@@ -285,7 +285,7 @@ void AMythStrEffect::Tick(float DeltaSeconds)
 	}
 	if (Follow.IsValid())
 	{
-		Origin = FeetOf(Follow.Get());
+		Origin = FeetOf(Follow.Get()) + FVector(0.f, 0.f, HeadOffset);
 	}
 
 	// Camera: quads paralelos a tela, puxados pela linha de visao para ficar na frente do sprite
