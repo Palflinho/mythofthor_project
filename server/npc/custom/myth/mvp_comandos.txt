@@ -20,25 +20,25 @@ OnList:
 		if ((.@i + 1) % 6 == 0) { dispbottom .@l$; .@l$ = ""; }
 	}
 	if (.@l$ != "") dispbottom .@l$;
-	dispbottom "Uso: @mvp <nome>   (ex.: @mvp baphomet)";
+	dispbottom "Usage: @mvp <name>   (e.g. @mvp baphomet)";
 	end;
 
 OnInvocar:
 	.@n$ = .@atcmd_parameters$[0];
-	if (.@n$ == "") { dispbottom "Uso: @mvp <nome>  (veja @mvps)"; end; }
+	if (.@n$ == "") { dispbottom "Usage: @mvp <name>  (see @mvps)"; end; }
 	.@p = -1;
 	for (.@i = 0; .@i < getarraysize(.nm$); .@i++) {
 		if (.nm$[.@i] == strtolower(.@n$)) { .@p = .@i; break; }
 	}
-	if (.@p < 0) { dispbottom "MVP desconhecido: " + .@n$ + " (veja @mvps)"; end; }
+	if (.@p < 0) { dispbottom "Unknown MVP: " + .@n$ + " (see @mvps)"; end; }
 	getmapxy(.@m$, .@x, .@y, BL_PC);
 	monster .@m$, .@x, .@y, "--ja--", .id[.@p], 1;
-	dispbottom "Invocado: " + .nm$[.@p];
+	dispbottom "Summoned: " + .nm$[.@p];
 	end;
 
 OnKill:
 	getmapxy(.@m$, .@x, .@y, BL_PC);
 	killmonsterall .@m$;
-	dispbottom "Monstros do mapa removidos.";
+	dispbottom "Map monsters removed.";
 	end;
 }

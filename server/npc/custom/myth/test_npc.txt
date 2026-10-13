@@ -2,43 +2,43 @@
 //= Myth of Thor - NPC de Teste para Game Masters (Tarefa B4)
 //===== Por: ==================================================
 //= Antigravity
-//===== Descrição: ============================================
+//===== Description: ============================================
 //= NPC de testes para GM localizado em Prontera (156, 191).
 //= Permite mudança de classe (até a transclasse), nível máximo,
 //= todas as habilidades, kits de equipamentos e consumíveis.
 //============================================================
 
-prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
+prontera,156,191,4	script	Test Assistant#gm	4_F_EDEN_OFFICER,{
 	.@npc_name$ = "[Assistente de Testes]";
 
 	// Apenas contas de Game Master podem usar o assistente
 	if (getgmlevel() == 0) {
 		mes .@npc_name$;
-		mes "Acesso restrito a Game Masters.";
+		mes "Restricted to Game Masters.";
 		close;
 	}
 
 	mes .@npc_name$;
-	mes "Olá, Mestre! Em que posso ajudar nos testes hoje?";
+	mes "Hello, Master! How can I help with testing today?";
 	next;
 
 	while (1) {
-		switch(select("Mudar de Classe:Definir Nível / Job Máximo:Aprender Todas as Habilidades:Kit de Equipamentos:Poções e Asas:Resetar Atributos e Habilidades:Recuperar HP e SP:Encerrar:Testar Caixa de Texto:Aprender Skills de Quest:Completar Conquista com Título")) {
+		switch(select("Change Class:Set Level / Max Job:Learn All Skills:Equipment Kit:Potions and Wings:Reset Stats and Skills:Restore HP and SP:Close:Test Text Box:Learn Quest Skills:Complete Achievement with Title")) {
 		case 1: // Mudar de Classe
 			mes .@npc_name$;
-			mes "Escolha a categoria da classe desejada:";
+			mes "Choose the class category:";
 			next;
 
-			switch(select("Aprendiz (Novice):1ªs Classes:2ªs Classes Normais:Classes Transcendentais (Transclasse):Voltar")) {
+			switch(select("Novice:1st Classes:2nd Classes:Transcendent Classes:Back")) {
 			case 1: // Aprendiz
-				.@c = select("Aprendiz (Novice):Super Aprendiz:Aprendiz T. (Novice High)");
+				.@c = select("Novice:Super Novice:Novice High");
 				if (.@c == 1) .@target = JOB_NOVICE;
 				else if (.@c == 2) .@target = JOB_SUPER_NOVICE;
 				else if (.@c == 3) .@target = JOB_NOVICE_HIGH;
 				break;
 
 			case 2: // 1ªs Classes
-				.@c = select("Espadachim:Mago:Arqueiro:Noviço:Mercador:Gatuno:Taekwon:Justiceiro:Ninja");
+				.@c = select("Swordman:Mage:Archer:Acolyte:Merchant:Thief:Taekwon:Gunslinger:Ninja");
 				if (.@c == 1) .@target = JOB_SWORDMAN;
 				else if (.@c == 2) .@target = JOB_MAGE;
 				else if (.@c == 3) .@target = JOB_ARCHER;
@@ -51,7 +51,7 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 				break;
 
 			case 3: // 2ªs Classes Normais
-				.@c = select("Cavaleiro:Bruxo:Caçador:Sacerdote:Ferreiro:Mercenário:Templário:Sábio:Bardo / Odalisca:Monge:Alquimista:Arruaceiro:Mestre Taekwon:Espiritualista");
+				.@c = select("Knight:Wizard:Hunter:Priest:Blacksmith:Assassin:Crusader:Sage:Bard / Dancer:Monk:Alchemist:Rogue:Star Gladiator:Soul Linker");
 				if (.@c == 1) .@target = JOB_KNIGHT;
 				else if (.@c == 2) .@target = JOB_WIZARD;
 				else if (.@c == 3) .@target = JOB_HUNTER;
@@ -69,7 +69,7 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 				break;
 
 			case 4: // Transclasses
-				.@c = select("Lorde:Arquimago:Atirador de Elite:Sumo Sacerdote:Mestre-Ferreiro:Algoz:Paladino:Professor:Menestrel / Cigana:Mestre:Criador:Desordeiro");
+				.@c = select("Lord Knight:High Wizard:Sniper:High Priest:Whitesmith:Assassin Cross:Paladin:Professor:Clown / Gypsy:Champion:Creator:Stalker");
 				if (.@c == 1) .@target = JOB_LORD_KNIGHT;
 				else if (.@c == 2) .@target = JOB_HIGH_WIZARD;
 				else if (.@c == 3) .@target = JOB_SNIPER;
@@ -94,7 +94,7 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 				specialeffect2 EF_ANGEL2;
 				specialeffect2 EF_ELECTRIC;
 				mes .@npc_name$;
-				mes "Sua classe foi alterada com sucesso!";
+				mes "Your class was changed successfully!";
 				next;
 			}
 			break;
@@ -102,11 +102,11 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 		case 2: // Nível 99 / Job Máximo
 			// Renovacao ate a transclasse: 2a classe vai a 99, transclasse e expandidas a 125 (o servidor limita)
 			mes .@npc_name$;
-			mes "Qual nível de base você quer? (1 a 125)";
+			mes "Which base level do you want? (1 to 125)";
 			next;
 			if (input(.@lv, 1, 125) != 0) {
 				mes .@npc_name$;
-				mes "Digite um número de 1 a 125.";
+				mes "Enter a number from 1 to 125.";
 				next;
 				break;
 			}
@@ -115,7 +115,7 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 			specialeffect2 EF_LEVELUP;
 			specialeffect2 EF_ANGEL;
 			mes .@npc_name$;
-			mes "Nível de base agora: " + BaseLevel + ". Job no máximo da classe.";
+			mes "Base level is now: " + BaseLevel + ". Job at the class maximum.";
 			next;
 			break;
 
@@ -123,15 +123,15 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 			atcommand "@allskill";
 			specialeffect2 EF_INCAGILITY;
 			mes .@npc_name$;
-			mes "Todas as habilidades da sua classe foram liberadas no nível máximo!";
+			mes "All skills of your class were unlocked at max level!";
 			next;
 			break;
 
 		case 4: // Kit de Equipamentos
 			mes .@npc_name$;
-			mes "Selecione o kit de equipamentos:";
+			mes "Select the equipment kit:";
 			next;
-			switch(select("Kit Campo de Treinamento:Kit Armas Básicas:Kit Escudos:Receber Todos os Kits:Voltar")) {
+			switch(select("Training Grounds Kit:Basic Weapons Kit:Shields Kit:Receive All Kits:Back")) {
 			case 1:
 				getitem 2341, 1; // Traje do Aprendiz
 				getitem 1207, 1; // Faca do Aprendiz
@@ -140,7 +140,7 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 				getitem 2101, 1; // Vambrance / Guard
 				getitem 5013, 1; // Sombrero
 				mes .@npc_name$;
-				mes "Kit de Treinamento entregue!";
+				mes "Training Kit delivered!";
 				next;
 				break;
 			case 2:
@@ -155,7 +155,7 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 				getitem 1605, 1; // Varinha do Arcano
 				getitem 1510, 1; // Mangual d'Armas (Chain)
 				mes .@npc_name$;
-				mes "Kit de Armas entregue!";
+				mes "Weapons Kit delivered!";
 				next;
 				break;
 			case 3:
@@ -163,7 +163,7 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 				getitem 2102, 1; // Escudo (Shield)
 				getitem 2107, 1; // Escudo Espelhado (Mirror Shield)
 				mes .@npc_name$;
-				mes "Kit de Escudos entregue!";
+				mes "Shields Kit delivered!";
 				next;
 				break;
 			case 4:
@@ -177,7 +177,7 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 				// Escudos
 				getitem 2103, 1; getitem 2102, 1; getitem 2107, 1;
 				mes .@npc_name$;
-				mes "Todos os equipamentos foram entregues!";
+				mes "All equipment was delivered!";
 				next;
 				break;
 			default:
@@ -196,7 +196,7 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 			getitem 657, 10;  // Poção da Fúria Selvagem
 			specialeffect2 EF_POTION_SUCCEED;
 			mes .@npc_name$;
-			mes "Aqui estão suas poções e asas!";
+			mes "Here are your potions and wings!";
 			next;
 			break;
 
@@ -205,7 +205,7 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 			resetskill;
 			specialeffect2 EF_ANGEL;
 			mes .@npc_name$;
-			mes "Seus atributos e pontos de habilidade foram resetados com sucesso.";
+			mes "Your stats and skill points were reset successfully.";
 			next;
 			break;
 
@@ -213,22 +213,22 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 			percentheal 100, 100;
 			specialeffect2 EF_HEAL;
 			mes .@npc_name$;
-			mes "HP e SP recuperados.";
+			mes "HP and SP restored.";
 			next;
 			break;
 
 		case 8: // Encerrar
 			mes .@npc_name$;
-			mes "Bom trabalho nos testes! Até logo.";
+			mes "Good work testing! See you later.";
 			close;
 
 		case 9: // Testar a caixa de texto do cliente (input com texto)
 			mes .@npc_name$;
-			mes "Escreva qualquer coisa:";
+			mes "Write anything:";
 			next;
 			input .@texto$;
 			mes .@npc_name$;
-			mes "Você escreveu: ^0000FF" + .@texto$ + "^000000";
+			mes "You wrote: ^0000FF" + .@texto$ + "^000000";
 			next;
 			break;
 
@@ -260,14 +260,14 @@ prontera,156,191,4	script	Assistente de Testes#gm	4_F_EDEN_OFFICER,{
 			case Job_Rogue: case Job_Stalker: skill "RG_CLOSECONFINE", 1, SKILL_PERM; break;
 			}
 			mes .@npc_name$;
-			mes "Skills de quest da sua classe aprendidas.";
+			mes "Quest skills of your class learned.";
 			next;
 			break;
 
 		case 11: // Conquista 200000 ("Acquire the first aura!", titulo 1000 "Jovem"): pegue o premio em Conquistas (Alt+Y)
 			achievementcomplete 200000;
 			mes .@npc_name$;
-			mes "Conquista completada. Pegue o prêmio em Conquistas (Alt+Y) e escolha o título na janela de Equipamento.";
+			mes "Achievement completed. Claim the reward in Achievements (Alt+Y) and choose the title in the Equipment window.";
 			next;
 			break;
 		}

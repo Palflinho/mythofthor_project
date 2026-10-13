@@ -1,30 +1,30 @@
 //=============================================================================
 // Myth of Thor - Mestre dos Graus de Equipamento (Enchant Grade)
 //=============================================================================
-prontera,154,185,5	script	Mestre de Graus#myth	4_M_KNIGHT,{
-	mes "[Valquíria Sigrún]";
-	mes "As armas consagradas pelos deuses transcendem o refino mundano.";
-	mes "Posso elevar o Grau de suas armas e armaduras de refino +9 ou superior.";
+prontera,154,185,5	script	Grade Master#myth	4_M_KNIGHT,{
+	mes "[Valkyrie Sigrun]";
+	mes "Weapons consecrated by the gods transcend mundane refining.";
+	mes "I can raise the Grade of your weapons and armor refined to +9 or higher.";
 	next;
-	switch(select("Entender o Sistema de Graus:Consagrar Equipamento:Cancelar")) {
+	switch(select("Understand the Grade System:Consecrate Equipment:Cancel")) {
 	case 1:
-		mes "[Valquíria Sigrún]";
-		mes "Existem quatro graus de consagração:";
-		mes "^cd7f32Grau D (Bronze)^000000: +5 ATQ/ATQM, +3% HP";
-		mes "^c0c0c0Grau C (Prata)^000000: +10 ATQ/ATQM, +5% HP, +3 DEF";
-		mes "^ffd700Grau B (Ouro)^000000: +18 ATQ/ATQM, +7% HP, +5 DEF, +2% Dano";
-		mes "^00ffffGrau A (Valquíria)^000000: +28 ATQ/ATQM, +10% HP, +8 DEF, +4% Dano";
-		mes "O equipamento ^FF0000NUNCA é destruído^000000 em caso de falha!";
+		mes "[Valkyrie Sigrun]";
+		mes "There are four grades of consecration:";
+		mes "^cd7f32Grade D (Bronze)^000000: +5 ATK/MATK, +3% HP";
+		mes "^c0c0c0Grade C (Silver)^000000: +10 ATK/MATK, +5% HP, +3 DEF";
+		mes "^ffd700Grade B (Gold)^000000: +18 ATK/MATK, +7% HP, +5 DEF, +2% Damage";
+		mes "^00ffffGrade A (Valkyrie)^000000: +28 ATK/MATK, +10% HP, +8 DEF, +4% Damage";
+		mes "The equipment is ^FF0000NEVER destroyed^000000 on failure!";
 		close;
 
 	case 2:
-		mes "[Valquíria Sigrún]";
-		mes "Apresente uma arma ou armadura refinada a pelo menos +9.";
+		mes "[Valkyrie Sigrun]";
+		mes "Show me a weapon or armor refined to at least +9.";
 		close;
 
 	case 3:
-		mes "[Valquíria Sigrún]";
-		mes "Que a bênção de Asgard proteja sua jornada.";
+		mes "[Valkyrie Sigrun]";
+		mes "May Asgard's blessing protect your journey.";
 		close;
 	}
 }

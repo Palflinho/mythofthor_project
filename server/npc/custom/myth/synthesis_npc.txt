@@ -1,48 +1,48 @@
 //=============================================================================
 // Myth of Thor - NPC de Síntese e Reforja de Atributos Aleatórios
 //=============================================================================
-prontera,152,185,5	script	Ferreiro de Síntese#myth	4_M_BLACKSMITH,{
+prontera,152,185,5	script	Synthesis Smith#myth	4_M_BLACKSMITH,{
 	mes "[Hephaestus]";
-	mes "Saudações, guerreiro. Sou o guardião das forjas de éter.";
-	mes "Posso imbuir ou reforjar atributos místicos em seus equipamentos.";
+	mes "Greetings, warrior. I am the guardian of the aether forges.";
+	mes "I can imbue or reforge mystic attributes on your equipment.";
 	next;
-	switch(select("O que é a Síntese?:Imbuir Atributos Místicos:Reforjar Atributos (Reroll):Cancelar")) {
+	switch(select("What is Synthesis?:Imbue Mystic Attributes:Reforge Attributes (Reroll):Cancel")) {
 	case 1:
 		mes "[Hephaestus]";
-		mes "A Síntese permite que suas armas e armaduras recebam de ^0000FF1 a 3 atributos aleatórios^000000 adicionais.";
-		mes "Os atributos dependem do tipo de equipamento e nunca se perdem ao refinar.";
+		mes "Synthesis lets your weapons and armor gain ^0000FF1 to 3 additional random attributes^000000.";
+		mes "The attributes depend on the equipment type and are never lost when refining.";
 		close;
 
 	case 2:
 		mes "[Hephaestus]";
-		mes "Para imbuir uma arma ou armadura limpa, necessito de:";
-		mes "- 1x Oridecon ou Elunium";
-		mes "- 2x Fragmentos de Síntese";
-		mes "- 50.000 Zeny";
+		mes "To imbue a clean weapon or armor, I need:";
+		mes "- 1x Oridecon or Elunium";
+		mes "- 2x Synthesis Fragments";
+		mes "- 50,000 Zeny";
 		next;
 		if (Zeny < 50000) {
 			mes "[Hephaestus]";
-			mes "Você não possui Zeny suficiente.";
+			mes "You do not have enough Zeny.";
 			close;
 		}
 		if (countitem(984) < 1 && countitem(985) < 1) { // Oridecon ou Elunium
 			mes "[Hephaestus]";
-			mes "Você precisa de pelo menos 1 Oridecon ou 1 Elunium.";
+			mes "You need at least 1 Oridecon or 1 Elunium.";
 			close;
 		}
 		mes "[Hephaestus]";
-		mes "Selecione o equipamento que deseja imbuir no seu inventário:";
+		mes "Select the equipment you want to imbue from your inventory:";
 		close;
 
 	case 3:
 		mes "[Hephaestus]";
-		mes "A reforja permite sortear novos atributos preservando cartas e refinos.";
-		mes "Taxa: 1x Oridecon/Elunium, 3x Fragmentos e 75.000 Zeny.";
+		mes "Reforging rerolls new attributes while keeping cards and refines.";
+		mes "Cost: 1x Oridecon/Elunium, 3x Fragments and 75,000 Zeny.";
 		close;
 
 	case 4:
 		mes "[Hephaestus]";
-		mes "Que a chama de Thor guie seus passos.";
+		mes "May Thor's flame guide your steps.";
 		close;
 	}
 }

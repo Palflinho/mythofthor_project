@@ -1,47 +1,47 @@
 //=============================================================================
 // Myth of Thor - Guardião do Códice de Mímir (Bestiário e Relíquias)
 //=============================================================================
-prontera,156,185,5	script	Guardião de Mímir#myth	4_M_SAGE_A,{
-	mes "[Mímir]";
-	mes "Eu guardo as memórias das nove dimensões sob a copa de Yggdrasil.";
-	mes "Suas jornadas e batalhas estão registradas neste grande tomo.";
+prontera,156,185,5	script	Mimir Guardian#myth	4_M_SAGE_A,{
+	mes "[Mimir]";
+	mes "I keep the memories of the nine realms beneath the crown of Yggdrasil.";
+	mes "Your journeys and battles are recorded in this great tome.";
 	next;
-	switch(select("Consultar Conhecimento Acumulado:Resgatar Recompensas de Marcos:Como funciona o Códice?:Cancelar")) {
+	switch(select("View Accumulated Knowledge:Claim Milestone Rewards:How does the Codex work?:Cancel")) {
 	case 1:
-		mes "[Mímir]";
-		mes "Pontos de Conhecimento de Mímir: ^0000FF" + MIMIR_PTS + "^000000";
-		mes "Continue caçando criaturas e explorando masmorras para expandir seus registros.";
+		mes "[Mimir]";
+		mes "Mimir's Knowledge Points: ^0000FF" + MIMIR_PTS + "^000000";
+		mes "Keep hunting creatures and exploring dungeons to expand your records.";
 		close;
 
 	case 2:
-		mes "[Mímir]";
-		mes "Verificando seus marcos de conhecimento...";
+		mes "[Mimir]";
+		mes "Checking your knowledge milestones...";
 		if (MIMIR_PTS >= 10 && !(MIMIR_REWARD & 1)) {
 			MIMIR_REWARD = MIMIR_REWARD | 1;
-			mes "Parabéns! Você alcançou o Marco de 10 Pontos: [Observador de Midgard]!";
+			mes "Congratulations! You reached the 10 Point Milestone: [Midgard Observer]!";
 			specialeffect2 EF_LEVELUP;
 			close;
 		}
 		if (MIMIR_PTS >= 30 && !(MIMIR_REWARD & 2)) {
 			MIMIR_REWARD = MIMIR_REWARD | 2;
-			mes "Parabéns! Você alcançou o Marco de 30 Pontos: [Erudito de Prontera]!";
+			mes "Congratulations! You reached the 30 Point Milestone: [Prontera Scholar]!";
 			specialeffect2 EF_LEVELUP;
 			close;
 		}
-		mes "Nenhum novo marco atingido no momento.";
+		mes "No new milestone reached at the moment.";
 		close;
 
 	case 3:
-		mes "[Mímir]";
-		mes "Cada espécie de monstro possui 3 níveis de maestria:";
-		mes "- Nível 1 (1 abate): Identificação básica.";
-		mes "- Nível 2 (50 abates): Visão do HP na barra de alvo.";
-		mes "- Nível 3 (250 abates): Tabela de drops e +1% de dano permanente contra a espécie.";
+		mes "[Mimir]";
+		mes "Each monster species has 3 mastery levels:";
+		mes "- Level 1 (1 kill): Basic identification.";
+		mes "- Level 2 (50 kills): HP shown on the target bar.";
+		mes "- Level 3 (250 kills): Drop table and a permanent +1% damage against the species.";
 		close;
 
 	case 4:
-		mes "[Mímir]";
-		mes "A sabedoria é a maior de todas as armas.";
+		mes "[Mimir]";
+		mes "Wisdom is the greatest of all weapons.";
 		close;
 	}
 }
