@@ -1777,7 +1777,7 @@ void AMythPlayerController::MythPlaySkill(int32 SkillID, int32 Stage)
 {
 	if (APawn* P = GetPawn())
 	{
-		FMythSkillEffects::Play(this, SkillID, static_cast<EMythSkillEffectStage>(FMath::Clamp(Stage, 0, 3)), P, P->GetActorLocation());
+		FMythSkillEffects::Play(this, SkillID, static_cast<EMythSkillEffectStage>(FMath::Clamp(Stage, 0, 10)), P, P->GetActorLocation());
 	}
 }
 
