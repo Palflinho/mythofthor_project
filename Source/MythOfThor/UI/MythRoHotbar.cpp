@@ -267,6 +267,7 @@ bool UMythRoHUDWidget::IsOverAnyWindow(const FVector2D& ScreenPos) const
 
 void UMythRoHUDWidget::UpdateCooldowns()
 {
+	UpdateBooking();
 	if (GuildSkillRefreshAt > 0.0 && FPlatformTime::Seconds() >= GuildSkillRefreshAt)
 	{
 		GuildSkillRefreshAt = 0.0;

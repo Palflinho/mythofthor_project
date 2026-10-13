@@ -505,6 +505,7 @@ void UMythRoHUDWidget::ToggleWindow(EMythRoWindow Window)
 	case EMythRoWindow::Quests: Target = QuestWindow; break;
 	case EMythRoWindow::Shortcuts: Target = ShortcutWindow; break;
 	case EMythRoWindow::TestShop: Target = TestShopWindow; break;
+	case EMythRoWindow::Booking: Target = BookingWindow; break;
 	}
 	if (!Target)
 	{
@@ -983,6 +984,10 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 
 bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 {
+	if (HandleBookingClick(ScreenPos))
+	{
+		return true;
+	}
 	if (HandleTestShopClick(ScreenPos, FSlateApplication::Get().GetModifierKeys().IsShiftDown()))
 	{
 		return true;

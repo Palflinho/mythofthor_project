@@ -64,7 +64,8 @@ enum class EMythRoWindow : uint8
 	Guild,    // Alt+G: cla
 	Pet,      // Alt+J: mascote
 	Homun,    // Alt+R com homunculo chamado: homunculo
-	TestShop  // Loja de Testes (GM)
+	TestShop, // Loja de Testes (GM)
+	Booking   // Procura de grupo
 };
 
 /** Barra de medidor classica (gze*_left/mid/right sobre gze_bg): o meio estica conforme a fracao. */
@@ -269,6 +270,22 @@ protected:
 	// Menu Principal centralizado (MythRoMainMenu.cpp)
 	void BuildMainMenu();
 	// Loja de Testes de GM (MythRoTestShop.cpp)
+	void BuildBookingWindow();
+	void UpdateBooking();
+	bool HandleBookingClick(const FVector2D& ScreenPos);
+	int32 BookingLevel() const;
+	UPROPERTY() TObjectPtr<UCanvasPanel> BookingWindow;
+	UPROPERTY() TObjectPtr<UEditableTextBox> BookingLevelBox;
+	UPROPERTY() TObjectPtr<UTextBlock> BookingFooter;
+	UPROPERTY() TObjectPtr<UTextBlock> BookingSearchBtn;
+	UPROPERTY() TObjectPtr<UTextBlock> BookingRegisterBtn;
+	UPROPERTY() TObjectPtr<UTextBlock> BookingDeleteBtn;
+	UPROPERTY() TArray<TObjectPtr<UImage>> BookingRowBacks;
+	UPROPERTY() TArray<TObjectPtr<UTextBlock>> BookingRowTexts;
+	int32 BookingRevisionSeen = 0;
+public:
+	void ToggleBookingWindow();
+protected:
 	void BuildTestShopWindow();
 	void TestShopRefilter();
 	void RefreshTestShop();

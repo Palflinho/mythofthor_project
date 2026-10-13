@@ -562,6 +562,16 @@ struct FRoGuildPosition
 	int32 PayRate = 0;
 };
 
+/** Anuncio da procura de grupo (ZC_PARTY_BOOKING_ACK_SEARCH 0x0805). */
+struct FRoPartyBookingAd
+{
+	int32 Index = 0;
+	FString Name;
+	int32 Level = 0;
+	int32 MapId = 0;
+	TArray<int32> Jobs;
+};
+
 /** Relacao do cla com outro (ZC_MYGUILD_BASIC_INFO 0x014c): 0 aliado, 1 inimigo (oposicao). */
 struct FRoGuildRelation
 {
@@ -794,6 +804,17 @@ public:
 	int32 GetGuildSkillPoints() const { return GuildSkillPoints; }
 	const TArray<FRoGuildBan>& GetGuildBans() const { return GuildBans; }
 	const TArray<FRoGuildRelation>& GetGuildRelations() const { return GuildRelations; }
+
+	// Procura de grupo (party booking)
+	bool SendPartyBookingRegister(int32 Level, int32 MapId, const TArray<int32>& Jobs);
+	bool SendPartyBookingSearch(int32 Level, int32 MapId, int32 Job, int32 LastIndex, int32 Count);
+	bool SendPartyBookingDelete();
+	const TArray<FRoPartyBookingAd>& GetBookingAds() const { return BookingAds; }
+	/** Sobe a cada resposta do servidor; a janela redesenha quando muda. */
+	int32 GetBookingRevision() const { return BookingRevision; }
+	/** 0 anuncio criado, 1 falhou, 2 ja anunciado, 10 anuncio removido, 11 expirou, 12 falhou ao remover, 13 nao havia, 20 lista recebida. */
+	int32 GetBookingLastResult() const { return BookingLastResult; }
+	bool BookingHasMore() const { return bBookingMore; }
 	FString GetGuildPositionName(int32 Position) const { const FString* P = GuildPositions.Find(Position); return P ? *P : FString(); }
 	const FString& GetGuildNoticeSubject() const { return GuildNoticeSubject; }
 	const FString& GetGuildNoticeText() const { return GuildNoticeText; }
@@ -1291,6 +1312,11 @@ private:
 	bool bCapturing = false;
 	bool bPetAutoFeed = false;
 	void HandleGuildPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	void HandleBookingPacket(const uint8* PacketData, int32 PacketSize, uint16 PacketID);
+	TArray<FRoPartyBookingAd> BookingAds;
+	int32 BookingRevision = 0;
+	int32 BookingLastResult = -1;
+	bool bBookingMore = false;
 	int32 LastUsedSkillId = 0;
 	int32 LastUsedSkillLevel = 1;
 	void ClearGuild();

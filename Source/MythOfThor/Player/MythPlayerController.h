@@ -186,6 +186,10 @@ public:
 	UFUNCTION(Exec) void MythSkillHover(int32 SkillId) { if (HudWidget) { HudWidget->SkillTestHover(SkillId); } }
 	UFUNCTION(Exec) void MythTestShop(int32 Tab = 0, const FString& Query = TEXT("")) { if (HudWidget) { HudWidget->TestTestShop(Tab, Query.Replace(TEXT("+"), TEXT(" "))); } }
 	UFUNCTION(Exec) void MythCooldown(int32 SkillId = 0, float Seconds = 8.f) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->DebugSetSkillCooldown(SkillId, Seconds); } }
+	UFUNCTION(Exec) void MythBooking() { if (HudWidget) { HudWidget->ToggleBookingWindow(); } }
+	UFUNCTION(Exec) void MythBookingReg(int32 Level = 50) { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendPartyBookingRegister(Level, 0, TArray<int32>()); } }
+	UFUNCTION(Exec) void MythBookingDel() { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendPartyBookingDelete(); } }
+	UFUNCTION(Exec) void MythBookingSearch() { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendPartyBookingSearch(0, 0, -1, 0, 9); } }
 	UFUNCTION(Exec) void MythMainMenu(int32 Index = -1) { if (HudWidget) { HudWidget->TestMainMenu(Index); } }
 	UFUNCTION(Exec) void MythSkillInfo(int32 SkillId) { if (HudWidget) { HudWidget->TestShowSkillInfo(SkillId); } }
 	/** Teste: usa a skill (nivel Level) no monstro mais perto. */

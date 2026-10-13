@@ -236,7 +236,7 @@ bool UMythRoHUDWidget::HandlePartyClick(const FVector2D& ScreenPos)
 	}
 	if (IsUnder(PartyToolBooking, ScreenPos) || IsUnder(PartyToolSearch, ScreenPos))
 	{
-		AddChatLine(TEXT("A procura de grupo ainda não está disponível."), FLinearColor(1.f, 0.85f, 0.4f));
+		ToggleBookingWindow();
 		return true;
 	}
 	const TArray<FRoPartyMember>& Members = Net->GetPartyMembers();

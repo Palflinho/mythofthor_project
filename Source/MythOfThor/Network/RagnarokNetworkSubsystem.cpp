@@ -1024,6 +1024,11 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x0135: // ZC_PC_PURCHASE_RESULT_FROMMC
 				HandleVendingPacket(PacketData, ActualLen, PacketID);
 				break;
+			case 0x0803: // ZC_PARTY_BOOKING_ACK_REGISTER
+			case 0x0805: // ZC_PARTY_BOOKING_ACK_SEARCH
+			case 0x0807: // ZC_PARTY_BOOKING_ACK_DELETE
+				HandleBookingPacket(PacketData, ActualLen, PacketID);
+				break;
 			case 0x02f7: // ZC_UPDATE_GDID (voce e de um cla)
 			case 0x0b7b: // ZC_GUILD_INFO
 			case 0x0b7d: // ZC_MEMBERMGR_INFO
