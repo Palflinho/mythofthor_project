@@ -537,6 +537,15 @@ protected:
 	TMap<int32, int32> SkillSelLevel;
 	/** Setas < e > ao lado do nivel de cada celula (arw_left/arw_right do cliente): trocam o nivel que vai para o atalho. */
 	UPROPERTY() TArray<TObjectPtr<UImage>> SkillArrowL;
+	/** Atributos adicionados na janela de Status mas ainda nao enviados: so viram pacote no OK (como as habilidades). */
+	int32 PendingStats[6] = { 0, 0, 0, 0, 0, 0 };
+	UPROPERTY() TObjectPtr<UImage> StatOkImg;
+	UPROPERTY() TObjectPtr<UImage> StatCancelImg;
+public:
+	/** Teste: soma N pontos pendentes ao atributo Index (0 Str..5 Luk), 98 = Cancelar. */
+	void TestStatPending(int32 Index, int32 N);
+protected:
+	int32 PendingStatTotal() const { int32 T = 0; for (int32 V : PendingStats) { T += V; } return T; }
 	UPROPERTY() TArray<TObjectPtr<UImage>> SkillArrowR;
 	/** Botao "Lv Up" de cada linha (lv_up_on.bmp do cliente), visivel com pontos e skill que ainda sobe. */
 	UPROPERTY() TArray<TObjectPtr<UImage>> SkillUpButtons;

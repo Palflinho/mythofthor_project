@@ -193,6 +193,7 @@ public:
 	UFUNCTION(Exec) void MythBookingSearch() { if (URagnarokNetworkSubsystem* N = GetGameInstance()->GetSubsystem<URagnarokNetworkSubsystem>()) { N->SendPartyBookingSearch(0, 0, -1, 0, 9); } }
 	UFUNCTION(Exec) void MythOpt(const FString& Key, int32 On) { FMythOptions::Set(FName(*Key), On != 0); if (HudWidget) { HudWidget->ApplyOptionEffectsPublic(); } }
 	UFUNCTION(Exec) void MythHotbarRows(int32 Rows) { if (HudWidget) { HudWidget->SetHotbarRows(Rows); } }
+	UFUNCTION(Exec) void MythStatPending(int32 Index, int32 N = 1) { if (HudWidget) { HudWidget->TestStatPending(Index, N); } }
 	UFUNCTION(Exec) void MythMainMenu(int32 Index = -1) { if (HudWidget) { HudWidget->TestMainMenu(Index); } }
 	UFUNCTION(Exec) void MythSkillInfo(int32 SkillId) { if (HudWidget) { HudWidget->TestShowSkillInfo(SkillId); } }
 	/** Teste: usa a skill (nivel Level) no monstro mais perto. */

@@ -198,7 +198,7 @@ void UMythRoHUDWidget::BuildStatusWindow()
 {
 	// Janela de atributos (Alt+A, print 12): arte w_statwin_bg (280 x 124) do cliente moderno; seis linhas Str..Luk com o valor
 	// "base+bonus", a seta e o custo do ponto; ao lado Atk/Def, Matk/Mdef, Hit/Flee, Critical/Aspd, pontos e clã
-	StatusWindow = MakeRoPanel(TEXT("Status"), FVector2D(280.f, 17.f + 124.f), FVector2D(-340.f, -170.f));
+	StatusWindow = MakeRoPanel(TEXT("Status"), FVector2D(280.f, 17.f + 124.f + 26.f), FVector2D(-340.f, -170.f));
 	AddImage(StatusWindow, FMythRoUITextures::Get(TEXT("statuswnd/w_statwin_bg.bmp")), 0.f, 17.f);
 	UTexture2D* Arrow = FMythRoUITextures::Get(RoWinArt(TEXT("arw_right_on")));
 	auto Label = [this](float X, float Y, const TCHAR* Text)
@@ -241,6 +241,11 @@ void UMythRoHUDWidget::BuildStatusWindow()
 	DerivedTexts.Add(Box(110.f, 17.f + 5.f + 64.f, 164.f, ETextJustify::Right));
 	Label(110.f, 17.f + 5.f + 80.f, TEXT("Clã"));
 	DerivedTexts.Add(Box(110.f, 17.f + 5.f + 80.f, 164.f, ETextJustify::Right));
+	// OK e Cancelar: so aparecem com atributos adicionados e ainda nao confirmados
+	StatOkImg = AddButton(StatusWindow, TEXT("ok"), 280.f - 96.f, 17.f + 124.f + 3.f);
+	StatCancelImg = AddButton(StatusWindow, TEXT("cancel"), 280.f - 50.f, 17.f + 124.f + 3.f);
+	StatOkImg->SetVisibility(ESlateVisibility::Collapsed);
+	StatCancelImg->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void UMythRoHUDWidget::BuildItemsWindow()
@@ -622,10 +627,19 @@ void UMythRoHUDWidget::RefreshStatusWindow()
 	const int32 Need[6] = { Ps.StrNeed, Ps.AgiNeed, Ps.VitNeed, Ps.IntNeed, Ps.DexNeed, Ps.LukNeed };
 	for (int32 i = 0; i < 6 && i < StatTexts.Num(); ++i)
 	{
-		StatTexts[i]->SetText(Ps.StatBonus[i] != 0 ? FText::FromString(FString::Printf(TEXT("%d+%d"), Base[i], Ps.StatBonus[i])) : FText::AsNumber(Base[i]));
+		const int32 Pend = PendingStats[i];
+		const FString Shown = Pend > 0 ? FString::Printf(TEXT("%d(+%d)"), Base[i], Pend) : FString::FromInt(Base[i]);
+		StatTexts[i]->SetText(Ps.StatBonus[i] != 0 ? FText::FromString(FString::Printf(TEXT("%s+%d"), *Shown, Ps.StatBonus[i])) : FText::FromString(Shown));
+		StatTexts[i]->SetColorAndOpacity(FSlateColor(Pend > 0 ? FLinearColor(0.1f, 0.45f, 0.15f) : RoWinText));
 		StatCostTexts[i]->SetText(FText::AsNumber(Need[i])); // custo do proximo ponto como o servidor manda (Renovacao: sobe mais rapido acima de 100)
 		// A seta so aparece com pontos livres (o custo real e validado pelo servidor)
-		StatUpArrows[i]->SetVisibility(Ps.StatusPoints > 0 ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+		StatUpArrows[i]->SetVisibility(Ps.StatusPoints > PendingStatTotal() ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+	}
+	if (StatOkImg && StatCancelImg)
+	{
+		const ESlateVisibility Vis = PendingStatTotal() > 0 ? ESlateVisibility::Visible : ESlateVisibility::Collapsed;
+		StatOkImg->SetVisibility(Vis);
+		StatCancelImg->SetVisibility(Vis);
 	}
 	auto Plus = [](int32 A, int32 B) { return FText::FromString(FString::Printf(TEXT("%d + %d"), A, B)); };
 	if (DerivedTexts.Num() >= 10)
@@ -638,7 +652,7 @@ void UMythRoHUDWidget::RefreshStatusWindow()
 		DerivedTexts[5]->SetText(Plus(Ps.Flee, Ps.Flee2));
 		DerivedTexts[6]->SetText(FText::AsNumber(Ps.Critical));
 		DerivedTexts[7]->SetText(FText::AsNumber(Ps.Aspd > 0 ? (2000 - Ps.Aspd) / 10 : 0)); // o servidor manda o amotion (ms x 10); o cliente mostra 200 - amotion / 10
-		DerivedTexts[8]->SetText(FText::AsNumber(Ps.StatusPoints));
+		DerivedTexts[8]->SetText(FText::AsNumber(FMath::Max(0, Ps.StatusPoints - PendingStatTotal())));
 		DerivedTexts[9]->SetText(FText::FromString(TEXT("-")));
 	}
 }
@@ -1202,12 +1216,34 @@ bool UMythRoHUDWidget::HandleWindowClick(const FVector2D& ScreenPos)
 		{
 			if (IsUnder(StatUpArrows[i], ScreenPos))
 			{
-				if (Net)
+				// Soma ao pendente (sem custo de pontos ainda: o servidor cobra no OK, ponto a ponto, e valida)
+				const FRagnarokPlayerStats Cur = Net ? Net->GetPlayerStats() : FRagnarokPlayerStats();
+				if (Cur.StatusPoints > PendingStatTotal())
 				{
-					Net->SendStatusUp(RoSpStr + i, 1); // CZ_STATUS_CHANGE: o servidor valida e devolve o novo valor
+					PendingStats[i]++;
+					RefreshStatusWindow();
 				}
 				return true;
 			}
+		}
+		if (StatOkImg && StatOkImg->IsVisible() && IsUnder(StatOkImg, ScreenPos))
+		{
+			for (int32 i = 0; i < 6; ++i)
+			{
+				for (int32 n = 0; n < PendingStats[i]; ++n)
+				{
+					if (Net) { Net->SendStatusUp(RoSpStr + i, 1); } // CZ_STATUS_CHANGE: o servidor valida e devolve o novo valor
+				}
+				PendingStats[i] = 0;
+			}
+			RefreshStatusWindow();
+			return true;
+		}
+		if (StatCancelImg && StatCancelImg->IsVisible() && IsUnder(StatCancelImg, ScreenPos))
+		{
+			for (int32& V : PendingStats) { V = 0; }
+			RefreshStatusWindow();
+			return true;
 		}
 	}
 	if (SkillsWindow && SkillsWindow->IsVisible())
@@ -1509,4 +1545,11 @@ void UMythRoHUDWidget::UpdateEquipMount()
 	{
 		EquipMountBtn->SetVisibility(bGeneral && (bFalcon || bRiding) ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
 	}
+}
+
+void UMythRoHUDWidget::TestStatPending(int32 Index, int32 N)
+{
+	if (Index >= 0 && Index < 6) { PendingStats[Index] += N; }
+	else if (Index == 98) { for (int32& V : PendingStats) { V = 0; } }
+	RefreshStatusWindow();
 }
