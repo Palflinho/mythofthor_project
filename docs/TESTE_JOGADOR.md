@@ -149,3 +149,8 @@ NOVO (rodada 27):
 - **Habilidades**: o nível usado nas skills agora tem setas < > de verdade (botões do cliente) ao lado de "n/máx".
 - A janela de Informações Básicas desceu para dar espaço ao painel novo; chat e Auto-Battle subiram acima da faixa de EXP.
 - **Recarga (cooldown) das skills**: o servidor manda o tempo de recarga ao usar a skill (pacote ZC_SKILL_POSTDELAY); o atalho na barra escurece e mostra os segundos que faltam. Comando de teste: `MythCooldown [skill] [segundos]`.
+
+## Rodada 29 (2026-10-13, lacunas do cliente)
+- **Clã**: as abas Cargos (direitos e imposto), Habil. (nível, SP, alcance; líder sobe com [+]) e Expulsos (nome e motivo) funcionam; as caixas de Alianças e Inimigos mostram os clãs que o servidor manda.
+- **Procura de grupo**: botões anunciar/procurar da janela do grupo (Alt+Z). Janela com Nível, Procurar, Anunciar, Remover e a lista de anúncios; clicar num anúncio abre o sussurro. Comandos de teste: `MythBooking`, `MythBookingReg`, `MythBookingSearch`, `MythBookingDel`.
+- **Fica de fora (e por quê)**: emblema do clã (vem num formato gráfico próprio e não há emblema de exemplo para testar), falas do pet (a `pettalktable.xml` do Data2026 vem ofuscada), evolução de pet e homúnculo (é regra do servidor; o cliente só troca o sprite, falta um teste real).
