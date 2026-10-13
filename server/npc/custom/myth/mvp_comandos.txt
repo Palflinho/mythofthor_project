@@ -1,0 +1,44 @@
+//===== rAthena Script =======================================
+//= Myth of Thor - comandos de teste para invocar MVPs
+//= @mvps lista os nomes; @mvp <nome> invoca o MVP perto de voce; @mvpkill remove os monstros do mapa.
+//= Gerado por server/npc/custom/myth/gen_mvp.py (nomes = AegisName do mob_db, ate a transclasse).
+//============================================================
+
+-	script	MythMvpCmd	FAKE_NPC,{
+OnInit:
+	bindatcmd("mvp", strnpcinfo(0) + "::OnInvocar", 60, 60);
+	bindatcmd("mvps", strnpcinfo(0) + "::OnList", 60, 60);
+	bindatcmd("mvpkill", strnpcinfo(0) + "::OnKill", 60, 60);
+	setarray .id,1038,1039,1046,1059,1086,1087,1112,1115,1147,1150,1157,1159,1190,1251,1252,1272,1312,1373,1389,1399,1418,1492,1502,1511,1583,1623,1630,1646,1647,1648,1649,1650,1651,1658,1685,1688,1708,1719,1734,1751,1768,1779,1785,1832,1871,1874,1876,1885,1917,1980;
+	setarray .nm$,"osiris","baphomet","doppelganger","mistress","golden_bug","ork_hero","drake","eddga","maya","moonlight","pharaoh","phreeoni","orc_lord","knight_of_windstorm","garm","dark_lord","turtle_general","lord_of_death","dracula","event_bapho","dark_snake_lord","incantation_samurai","poring_v","amon_ra","tao_gunka","rsx_0806","bacsojin_","b_seyren","b_eremes","b_harword","b_magaleta","b_shecil","b_katrinn","b_ygnizem","apocalips_h","lady_tanee","thanatos","detale","kiel_","randgris","gloomundernight","ktullanux","atroce","ifrit","fallingbishop","beelzebub_","e_lord_of_death","gopinich","morocc_","kublin";
+	end;
+
+OnList:
+	.@l$ = "";
+	for (.@i = 0; .@i < getarraysize(.nm$); .@i++) {
+		.@l$ += .nm$[.@i] + " ";
+		if ((.@i + 1) % 6 == 0) { dispbottom .@l$; .@l$ = ""; }
+	}
+	if (.@l$ != "") dispbottom .@l$;
+	dispbottom "Uso: @mvp <nome>   (ex.: @mvp baphomet)";
+	end;
+
+OnInvocar:
+	.@n$ = .@atcmd_parameters$[0];
+	if (.@n$ == "") { dispbottom "Uso: @mvp <nome>  (veja @mvps)"; end; }
+	.@p = -1;
+	for (.@i = 0; .@i < getarraysize(.nm$); .@i++) {
+		if (.nm$[.@i] == strtolower(.@n$)) { .@p = .@i; break; }
+	}
+	if (.@p < 0) { dispbottom "MVP desconhecido: " + .@n$ + " (veja @mvps)"; end; }
+	getmapxy(.@m$, .@x, .@y, BL_PC);
+	monster .@m$, .@x, .@y, "--ja--", .id[.@p], 1;
+	dispbottom "Invocado: " + .nm$[.@p];
+	end;
+
+OnKill:
+	getmapxy(.@m$, .@x, .@y, BL_PC);
+	killmonsterall .@m$;
+	dispbottom "Monstros do mapa removidos.";
+	end;
+}

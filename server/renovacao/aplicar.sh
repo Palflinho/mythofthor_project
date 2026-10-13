@@ -36,6 +36,8 @@ MSG=conf/msg_conf/map_msg_por.conf
 file "$MSG" | grep -q "UTF-8" || { iconv -f ISO-8859-1 -t UTF-8 "$MSG" > /tmp/map_msg_por.conf && cp /tmp/map_msg_por.conf "$MSG"; }
 cp "$HERE/idioma.txt" npc/custom/myth/idioma.txt
 grep -q "myth/idioma.txt" npc/scripts_custom.conf || echo "npc: npc/custom/myth/idioma.txt" >> npc/scripts_custom.conf
+cp "$HERE/../npc/custom/myth/mvp_comandos.txt" npc/custom/myth/mvp_comandos.txt
+grep -q "myth/mvp_comandos.txt" npc/scripts_custom.conf || echo "npc: npc/custom/myth/mvp_comandos.txt" >> npc/scripts_custom.conf
 
 # 6. Compilacao em modo Renovacao (PRERE desligado) com o mesmo PACKETVER
 echo "Pronto. Recompile com:"

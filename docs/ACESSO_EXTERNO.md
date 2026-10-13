@@ -68,3 +68,8 @@ docker exec mythofthor-db mariadb -uragnarok -pragnarok ragnarok -e "INSERT INTO
 - No seu PC: `netsh interface portproxy show v4tov4` deve listar as três portas.
 - `docker ps` no WSL: os quatro containers (db, login, char, map) estão "Up"?
 - Logou mas travou em "conectando ao mapa": o `configurar.sh` foi rodado com o IP da Radmin (e não 127.0.0.1)?
+
+## 6. Comandos de GM para testar (conta com group_id 99)
+- `@mvps` lista os MVPs (nomes do mob_db), `@mvp <nome>` invoca um MVP perto de você (ex.: `@mvp baphomet`), `@mvpkill` remove os monstros do mapa.
+- Os demais comandos normais do rAthena também funcionam: `@item <id> <qtd>`, `@monster`, `@blvl`, `@jlvl`, `@warp`, `@alive`...
+- Para dar GM a uma conta: `UPDATE login SET group_id=99 WHERE userid='nome';` (vale no próximo login). GM pode usar comandos que afetam o servidor todo: só para quem você confia.
