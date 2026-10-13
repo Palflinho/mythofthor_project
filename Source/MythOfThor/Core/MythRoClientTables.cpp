@@ -116,6 +116,34 @@ namespace
 			I.Resource = O->GetStringField(TEXT("resource"));
 			I.Slots = static_cast<int32>(O->GetNumberField(TEXT("slots")));
 		}
+		// Itens que o cliente LATAM nao conhece (episodios novos do rAthena): tabela do cliente 2026, em ingles (tools/gen_item_info_2026.py)
+		{
+			FString Text2026;
+			TSharedPtr<FJsonObject> Root2026;
+			if (FFileHelper::LoadFileToString(Text2026, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("item_info_2026.json")))
+				&& FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text2026), Root2026) && Root2026.IsValid())
+			{
+				int32 Added = 0;
+				for (const auto& Pair : Root2026->Values)
+				{
+					const int32 Id = FCString::Atoi(*Pair.Key);
+					if (Table.Contains(Id))
+					{
+						continue;
+					}
+					const TSharedPtr<FJsonObject> O = Pair.Value->AsObject();
+					FMythRoItemInfo& I = Table.Add(Id);
+					I.Name = O->GetStringField(TEXT("name"));
+					I.Desc = Lines(O, TEXT("desc"));
+					I.UnidentifiedName = O->GetStringField(TEXT("unidentified_name"));
+					I.UnidentifiedDesc = Lines(O, TEXT("unidentified_desc"));
+					I.Resource = O->GetStringField(TEXT("resource"));
+					I.Slots = static_cast<int32>(O->GetNumberField(TEXT("slots")));
+					++Added;
+				}
+				UE_LOG(LogTemp, Log, TEXT("MythRoClientTables: %d itens vindos da tabela 2026 (sem entrada no LATAM)"), Added);
+			}
+		}
 		return Table;
 	}
 }
