@@ -32,7 +32,8 @@ struct MYTHOFTHOR_API FMythRoClientTables
 	static UTexture2D* ItemIllustration(int32 ItemID);
 
 	/** Icone 24x24 do item (texture/유저인터페이스/item/<resource_name>.bmp). */
-	static UTexture2D* ItemIcon(int32 ItemID);
+	/** Item icon: the identified item art (item_info.json resource); bIdentified = false gives the unidentified one (items.json resource). */
+	static UTexture2D* ItemIcon(int32 ItemID, bool bIdentified = true);
 
 	/** Nome do recurso do item (sprite no chao: data/sprite/아이템/<nome>.spr; icone: item/<nome>.bmp). */
 	static FString ItemResource(int32 ItemID);

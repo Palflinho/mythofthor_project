@@ -89,7 +89,7 @@ namespace
 		return Tab == 0 ? Effect : (Tab == 1 ? Control : Other);
 	}
 
-	const TCHAR* TabNames[3] = { TEXT("Efeito"), TEXT("Controle"), TEXT("Outros") };
+	const TCHAR* TabNames[3] = { TEXT("Effects"), TEXT("Controls"), TEXT("Other") };
 }
 
 void UMythRoHUDWidget::BuildOptionsWindow()

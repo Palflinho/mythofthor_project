@@ -85,7 +85,7 @@ namespace
 void UMythRoHUDWidget::BuildTestShopWindow()
 {
 	TestShopWindow = MakeRoPanel(TEXT("Test Shop (GM)"), FVector2D(TsW, TsH), FVector2D(-200.f, -20.f));
-	static const TCHAR* Tabs[] = { TEXT("Equipment"), TEXT("Cartas"), TEXT("Consumables"), TEXT("Outros") };
+	static const TCHAR* Tabs[] = { TEXT("Equipment"), TEXT("Cards"), TEXT("Consumables"), TEXT("Other") };
 	for (int32 t = 0; t < 4; ++t)
 	{
 		const float W = TsW / 4.f;

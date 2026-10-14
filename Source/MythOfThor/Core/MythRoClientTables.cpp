@@ -186,8 +186,19 @@ UTexture2D* FMythRoClientTables::ItemIllustration(int32 ItemID)
 	return FPaths::FileExists(Full) ? FMythRoUITextures::Get(Rel) : nullptr;
 }
 
-UTexture2D* FMythRoClientTables::ItemIcon(int32 ItemID)
+UTexture2D* FMythRoClientTables::ItemIcon(int32 ItemID, bool bIdentified)
 {
+	// items.json "resource_name" is the UNIDENTIFIED art (every sword is the same "sword"); the identified art is in item_info.json
+	if (bIdentified)
+	{
+		if (const FMythRoItemInfo* I = RoItemInfo().Find(ItemID); I && !I->Resource.IsEmpty())
+		{
+			if (UTexture2D* Tex = FMythRoUITextures::Get(FString::Printf(TEXT("item/%s.bmp"), *I->Resource)))
+			{
+				return Tex;
+			}
+		}
+	}
 	const FRoTableEntry* E = RoItems().Find(ItemID);
 	return E && !E->Resource.IsEmpty() ? FMythRoUITextures::Get(FString::Printf(TEXT("item/%s.bmp"), *E->Resource)) : nullptr;
 }

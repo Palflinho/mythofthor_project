@@ -13,7 +13,7 @@
 namespace
 {
 	constexpr int32 StTabs = 5;
-	const TCHAR* StNames[StTabs] = { TEXT("Default"), TEXT("Efeito"), TEXT("Controle"), TEXT("Graphics"), TEXT("Outros") };
+	const TCHAR* StNames[StTabs] = { TEXT("Default"), TEXT("Effects"), TEXT("Controls"), TEXT("Graphics"), TEXT("Other") };
 	const FLinearColor StBlue(0.12f, 0.3f, 0.65f);
 }
 

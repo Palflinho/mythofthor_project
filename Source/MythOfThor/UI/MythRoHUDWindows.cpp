@@ -681,7 +681,7 @@ void UMythRoHUDWidget::RefreshItemsWindow()
 			{
 				continue;
 			}
-			UTexture2D* Icon = FMythRoClientTables::ItemIcon(Item.ItemID);
+			UTexture2D* Icon = FMythRoClientTables::ItemIcon(Item.ItemID, Item.bIdentified);
 			ItemIcons[Cell]->SetBrush(RoWinBrush(Icon, FVector2D(24.f, 24.f) * UIScale));
 			ItemIcons[Cell]->SetVisibility(Icon ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
 			ItemAmounts[Cell]->SetText(Item.Amount > 1 ? FText::AsNumber(Item.Amount) : FText::GetEmpty());
