@@ -16,7 +16,7 @@ Legenda: [ ] a fazer, [x] feito, [?] precisa de mais informacao.
 - [x] Alguns NPCs do centro de treinamento mandam o jogador para Izlude ao clicar (img 3: "iz_int ... nao foi importado"). Causa provavel: celula de portal (warp do rAthena `new_1-3,96,176 -> iz_ac01`) ou NPC da Academia; iz_int nao existe no cliente.
 - [x] Depois de sair do centro de treinamento e morrer, o ponto de retorno continua la dentro. O save point deve ir para Prontera ao sair.
 - [x] Comprar Flechas com o NPC trava o personagem: "Por favor, primeiro termine esse processo e depois tente novamente (Dialogo, Refino, etc)" (o dialogo/loja nao foi fechado no servidor).
-- [ ] Caixas se multiplicando infinitamente (img 13: muitos itens iguais com 106, 303... unidades).
+- [x] "Caixas se multiplicando": nao era duplicacao; eram itens sem icone no cliente mostrando o icone generico "Caixa roxa velha" (LATAM). Agora itens desconhecidos usam um icone generico do mesmo tipo (`GenericIconItem` em `MythRoClientTables.cpp`).
 - [ ] Sobrepeso: conseguiu bater com peso acima de 100% (img 19: Weight 104%). O original impede/avisa. Verificar se foi so por @item de GM.
 - [ ] Muitos Hornets em prt_fild05 (so conferir contra o spawn original).
 - [ ] Alguns NPCs sem traducao (texto).

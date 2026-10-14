@@ -175,6 +175,60 @@ UTexture2D* FMythRoClientTables::ItemIllustration(int32 ItemID)
 	return FPaths::FileExists(Full) ? FMythRoUITextures::Get(Rel) : nullptr;
 }
 
+namespace
+{
+	/** Item kind from item_catalog.json (rAthena item_db): id -> { type, subtype }. Only used to pick a generic icon for items the client tables do not know. */
+	const TMap<int32, TPair<FString, FString>>& ItemKinds()
+	{
+		static TMap<int32, TPair<FString, FString>> Kinds;
+		static bool bLoaded = false;
+		if (!bLoaded)
+		{
+			bLoaded = true;
+			FString Text;
+			TArray<TSharedPtr<FJsonValue>> Rows;
+			if (FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("item_catalog.json")))
+				&& FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Rows))
+			{
+				for (const TSharedPtr<FJsonValue>& V : Rows)
+				{
+					const TSharedPtr<FJsonObject> O = V->AsObject();
+					if (O.IsValid())
+					{
+						Kinds.Add(static_cast<int32>(O->GetNumberField(TEXT("i"))), TPair<FString, FString>(O->GetStringField(TEXT("t")), O->GetStringField(TEXT("s"))));
+					}
+				}
+			}
+		}
+		return Kinds;
+	}
+
+	/** A well-known item of the same kind whose icon exists: shown instead of the "unknown item" box for items newer than the client data. */
+	int32 GenericIconItem(int32 ItemID)
+	{
+		const TPair<FString, FString>* K = ItemKinds().Find(ItemID);
+		if (!K) { return 0; }
+		const FString& T = K->Key;
+		const FString& S = K->Value;
+		if (T == TEXT("card")) { return 4001; }
+		if (T == TEXT("use")) { return 501; }
+		if (T == TEXT("etc")) { return 909; }
+		if (S.EndsWith(TEXT("Head_Top"))) { return 2226; }
+		if (S.EndsWith(TEXT("Head_Mid"))) { return 2201; }
+		if (S.EndsWith(TEXT("Head_Low"))) { return 2208; }
+		if (S.EndsWith(TEXT("Garment"))) { return 2503; }
+		if (S == TEXT("Armor")) { return 2301; }
+		if (S == TEXT("Shoes")) { return 2401; }
+		if (S.Contains(TEXT("Accessory"))) { return 2601; }
+		if (S == TEXT("Shield")) { return 2101; }
+		if (S.Contains(TEXT("Axe"))) { return 1301; }
+		if (S.Contains(TEXT("Staff"))) { return 1601; }
+		if (S.Contains(TEXT("Dagger"))) { return 1201; }
+		if (T == TEXT("equip")) { return 1101; }
+		return 0;
+	}
+}
+
 UTexture2D* FMythRoClientTables::ItemIcon(int32 ItemID, bool bIdentified)
 {
 	// items.json "resource_name" is the UNIDENTIFIED art (every sword is the same "sword"); the identified art is in item_info.json
@@ -188,8 +242,20 @@ UTexture2D* FMythRoClientTables::ItemIcon(int32 ItemID, bool bIdentified)
 			}
 		}
 	}
-	const FRoTableEntry* E = RoItems().Find(ItemID);
-	return E && !E->Resource.IsEmpty() ? FMythRoUITextures::Get(FString::Printf(TEXT("item/%s.bmp"), *E->Resource)) : nullptr;
+	UTexture2D* Tex = nullptr;
+	if (const FRoTableEntry* E = RoItems().Find(ItemID); E && !E->Resource.IsEmpty()
+			&& !(bIdentified && (E->Resource == TEXT("오래된보라상자") || E->Resource == TEXT("이름없는카드")))) // LATAM placeholders ("old purple box", "nameless card") for items it does not know
+	{
+		Tex = FMythRoUITextures::Get(FString::Printf(TEXT("item/%s.bmp"), *E->Resource));
+	}
+	if (!Tex && bIdentified)
+	{
+		if (const int32 Generic = GenericIconItem(ItemID); Generic > 0 && Generic != ItemID)
+		{
+			Tex = ItemIcon(Generic, true);
+		}
+	}
+	return Tex;
 }
 
 FString FMythRoClientTables::SkillName(int32 SkillID)

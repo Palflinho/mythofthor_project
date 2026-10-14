@@ -3,43 +3,43 @@
 Gerado por `tools/gen_map_list.py` a partir dos spawns do rAthena (Renovação, `npc/re/mobs`) e do que já está em `Content/Maps`.
 Nível = faixa dos monstros do mapa. ✅ = já importado no Unreal. Prioridade sugerida: o que está no caminho de 1 a 99 e da transclasse.
 
-**Resumo:** 134 mapas com monstros, 20 importados (14%).
+**Resumo:** 134 mapas com monstros, 58 importados (43%).
 
-## Campos (55 mapas, 17 importados)
+## Campos (55 mapas, 55 importados)
 
 | Mapa | Nível típico (faixa) | Monstros principais | MVP | Unreal |
 |---|---|---|---|---|
-| `cmd_fild01` | 1 (1-1) | Blue Plant, Shining Plant | - | ⬜ |
-| `cmd_fild03` | 1 (1-1) | Shining Plant | - | ⬜ |
-| `cmd_fild06` | 1 (1-1) | Yellow Plant | - | ⬜ |
-| `cmd_fild08` | 1 (1-1) | Yellow Plant | - | ⬜ |
+| `cmd_fild01` | 1 (1-1) | Blue Plant, Shining Plant | - | ✅ |
+| `cmd_fild03` | 1 (1-1) | Shining Plant | - | ✅ |
+| `cmd_fild06` | 1 (1-1) | Yellow Plant | - | ✅ |
+| `cmd_fild08` | 1 (1-1) | Yellow Plant | - | ✅ |
 | `gef_fild00` | 1 (1-1) | Green Plant | - | ✅ |
-| `gef_fild01` | 1 (1-1) | Green Plant | - | ⬜ |
-| `gef_fild02` | 1 (1-1) | Green Plant, Red Mushroom, Blue Plant, Shining Plant | - | ⬜ |
+| `gef_fild01` | 1 (1-1) | Green Plant | - | ✅ |
+| `gef_fild02` | 1 (1-1) | Green Plant, Red Mushroom, Blue Plant, Shining Plant | - | ✅ |
 | `gef_fild04` | 1 (1-1) | Green Plant | - | ✅ |
 | `gef_fild07` | 1 (1-1) | Green Plant | - | ✅ |
-| `gef_fild09` | 1 (1-1) | Blue Plant | - | ⬜ |
-| `hu_fild04` | 1 (1-1) | Blue Plant | - | ⬜ |
-| `hu_fild06` | 1 (1-1) | Green Plant, Yellow Plant | - | ⬜ |
-| `mjolnir_01` | 1 (1-1) | Green Plant, Blue Plant, Shining Plant | - | ⬜ |
-| `mjolnir_02` | 1 (1-1) | Blue Plant | - | ⬜ |
-| `mjolnir_03` | 1 (1-1) | Shining Plant | - | ⬜ |
-| `mjolnir_05` | 1 (1-1) | Blue Plant, Shining Plant | - | ⬜ |
-| `mjolnir_08` | 1 (1-1) | Blue Plant | - | ⬜ |
-| `mjolnir_10` | 1 (1-1) | Shining Plant | - | ⬜ |
+| `gef_fild09` | 1 (1-1) | Blue Plant | - | ✅ |
+| `hu_fild04` | 1 (1-1) | Blue Plant | - | ✅ |
+| `hu_fild06` | 1 (1-1) | Green Plant, Yellow Plant | - | ✅ |
+| `mjolnir_01` | 1 (1-1) | Green Plant, Blue Plant, Shining Plant | - | ✅ |
+| `mjolnir_02` | 1 (1-1) | Blue Plant | - | ✅ |
+| `mjolnir_03` | 1 (1-1) | Shining Plant | - | ✅ |
+| `mjolnir_05` | 1 (1-1) | Blue Plant, Shining Plant | - | ✅ |
+| `mjolnir_08` | 1 (1-1) | Blue Plant | - | ✅ |
+| `mjolnir_10` | 1 (1-1) | Shining Plant | - | ✅ |
 | `moc_fild01` | 1 (1-1) | Yellow Plant | - | ✅ |
-| `moc_fild03` | 1 (1-1) | Green Plant | - | ⬜ |
+| `moc_fild03` | 1 (1-1) | Green Plant | - | ✅ |
 | `moc_fild07` | 1 (1-1) | Yellow Plant | - | ✅ |
-| `moc_fild12` | 1 (1-1) | Yellow Plant | - | ⬜ |
-| `moc_fild13` | 1 (1-1) | Yellow Plant | - | ⬜ |
-| `pay_fild02` | 1 (1-1) | Green Plant, Red Mushroom | - | ⬜ |
-| `pay_fild03` | 1 (1-1) | Red Mushroom, Green Plant | - | ⬜ |
-| `pay_fild04` | 1 (1-1) | Green Plant, Shining Plant | - | ⬜ |
-| `pay_fild06` | 1 (1-1) | Green Plant, Red Mushroom, Shining Plant | - | ⬜ |
-| `pay_fild07` | 1 (1-1) | Green Plant | - | ⬜ |
+| `moc_fild12` | 1 (1-1) | Yellow Plant | - | ✅ |
+| `moc_fild13` | 1 (1-1) | Yellow Plant | - | ✅ |
+| `pay_fild02` | 1 (1-1) | Green Plant, Red Mushroom | - | ✅ |
+| `pay_fild03` | 1 (1-1) | Red Mushroom, Green Plant | - | ✅ |
+| `pay_fild04` | 1 (1-1) | Green Plant, Shining Plant | - | ✅ |
+| `pay_fild06` | 1 (1-1) | Green Plant, Red Mushroom, Shining Plant | - | ✅ |
+| `pay_fild07` | 1 (1-1) | Green Plant | - | ✅ |
 | `pay_fild08` | 1 (1-1) | Shining Plant | - | ✅ |
-| `pay_fild09` | 1 (1-1) | Green Plant, Shining Plant | - | ⬜ |
-| `prt_fild00` | 1 (1-1) | Green Plant | - | ⬜ |
+| `pay_fild09` | 1 (1-1) | Green Plant, Shining Plant | - | ✅ |
+| `prt_fild00` | 1 (1-1) | Green Plant | - | ✅ |
 | `prt_fild01` | 1 (1-1) | Green Plant, Blue Plant | - | ✅ |
 | `prt_fild02` | 1 (1-1) | Shining Plant | - | ✅ |
 | `prt_fild03` | 1 (1-1) | Green Plant, Blue Plant | - | ✅ |
@@ -49,21 +49,21 @@ Nível = faixa dos monstros do mapa. ✅ = já importado no Unreal. Prioridade s
 | `prt_fild07` | 1 (1-1) | Black Mushroom | - | ✅ |
 | `prt_fild09` | 1 (1-1) | Yellow Plant | - | ✅ |
 | `prt_fild10` | 1 (1-1) | Red Mushroom, Shining Plant | - | ✅ |
-| `ve_fild03` | 1 (1-1) | Red Plant | - | ⬜ |
-| `ve_fild04` | 1 (1-1) | Blue Plant | - | ⬜ |
-| `yuno_fild01` | 1 (1-1) | Yellow Plant, Shining Plant, Blue Plant | - | ⬜ |
-| `yuno_fild03` | 1 (1-1) | Blue Plant, Shining Plant | - | ⬜ |
+| `ve_fild03` | 1 (1-1) | Red Plant | - | ✅ |
+| `ve_fild04` | 1 (1-1) | Blue Plant | - | ✅ |
+| `yuno_fild01` | 1 (1-1) | Yellow Plant, Shining Plant, Blue Plant | - | ✅ |
+| `yuno_fild03` | 1 (1-1) | Blue Plant, Shining Plant | - | ✅ |
 | `prt_fild08` | 4 (1-6) | Poring, Fabre, Lunatic, Pupa | - | ✅ |
-| `gef_fild03` | 50 (1-50) | Green Plant, Orc Hero | Orc Hero | ⬜ |
-| `gef_fild10` | 55 (1-55) | Blue Plant, Green Plant, Orc Lord | Orc Lord | ⬜ |
+| `gef_fild03` | 50 (1-50) | Green Plant, Orc Hero | Orc Hero | ✅ |
+| `gef_fild10` | 55 (1-55) | Blue Plant, Green Plant, Orc Lord | Orc Lord | ✅ |
 | `pay_fild10` | 65 (1-65) | Green Plant, Blue Plant, Eddga | Eddga | ✅ |
-| `moc_fild17` | 71 (71-71) | Phreeoni | Phreeoni | ⬜ |
-| `mjolnir_04` | 78 (1-78) | Shining Plant, Mistress | Mistress | ⬜ |
-| `xmas_fild01` | 98 (98-98) | Hatii | Hatii | ⬜ |
-| `ra_fild03` | 113 (113-113) | Atroce | Atroce | ⬜ |
-| `ra_fild04` | 113 (113-113) | Atroce | Atroce | ⬜ |
-| `ve_fild01` | 113 (1-113) | Blue Plant, Atroce, Shining Plant | Atroce | ⬜ |
-| `ve_fild02` | 113 (113-113) | Atroce | Atroce | ⬜ |
+| `moc_fild17` | 71 (71-71) | Phreeoni | Phreeoni | ✅ |
+| `mjolnir_04` | 78 (1-78) | Shining Plant, Mistress | Mistress | ✅ |
+| `xmas_fild01` | 98 (98-98) | Hatii | Hatii | ✅ |
+| `ra_fild03` | 113 (113-113) | Atroce | Atroce | ✅ |
+| `ra_fild04` | 113 (113-113) | Atroce | Atroce | ✅ |
+| `ve_fild01` | 113 (1-113) | Blue Plant, Atroce, Shining Plant | Atroce | ✅ |
+| `ve_fild02` | 113 (113-113) | Atroce | Atroce | ✅ |
 
 ## Dungeons (51 mapas, 3 importados)
 
