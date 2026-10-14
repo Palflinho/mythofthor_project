@@ -54,17 +54,22 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
 	float FixedYaw = 45.f;
 
+	/** Pitch fixo isométrico clássico (GDD Técnico HD-2D: -30.0 a -35.0 graus). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
-	float CameraPitch = -50.f;
+	float CameraPitch = -35.f;
+
+	/** FOV de maquete / diorama (GDD Técnico HD-2D: 35.0 a 45.0 graus). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
+	float FieldOfView = 40.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
-	float DefaultArmLength = 1200.f;
+	float DefaultArmLength = 800.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
-	float MinArmLength = 500.f;
+	float MinArmLength = 400.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
-	float MaxArmLength = 2500.f;
+	float MaxArmLength = 1200.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
 	float ZoomStep = 100.f;

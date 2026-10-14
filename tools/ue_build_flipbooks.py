@@ -62,6 +62,10 @@ def make_sprite(tex, folder, name, index, cell_w, cell_h, cols):
     # A spritesheet alinha cada frame pela base e pelo centro horizontal da celula.
     sprite.set_editor_property('pivot_mode', unreal.SpritePivotMode.BOTTOM_CENTER)
     sprite.set_editor_property('pixels_per_unreal_unit', PIXELS_PER_UU)
+    # GDD Técnico HD-2D: aplicar DefaultLitSpriteMaterial (Lit) para receber luz dinâmica e sombras
+    lit_mat = eal.load_asset('/Paper2D/DefaultLitSpriteMaterial')
+    if lit_mat:
+        sprite.set_editor_property('default_material', lit_mat)
     return sprite
 
 

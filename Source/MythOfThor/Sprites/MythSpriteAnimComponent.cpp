@@ -11,6 +11,7 @@ UMythSpriteAnimComponent::UMythSpriteAnimComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 	SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	SetLooping(true);
+	SetCastShadow(true); // GDD Técnico HD-2D: sprites projetam sombras sob luz solar e tochas
 }
 
 void UMythSpriteAnimComponent::BeginPlay()

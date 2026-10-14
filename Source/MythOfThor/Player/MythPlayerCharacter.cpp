@@ -46,6 +46,7 @@ AMythPlayerCharacter::AMythPlayerCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
+	FollowCamera->SetFieldOfView(FieldOfView);
 }
 
 void AMythPlayerCharacter::BeginPlay()
@@ -95,4 +96,8 @@ void AMythPlayerCharacter::ZoomCamera(float Delta)
 void AMythPlayerCharacter::ApplyCamera()
 {
 	CameraBoom->SetWorldRotation(FRotator(CameraPitch, CameraYaw, 0.f));
+	if (FollowCamera)
+	{
+		FollowCamera->SetFieldOfView(FieldOfView);
+	}
 }

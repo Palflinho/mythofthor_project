@@ -449,6 +449,9 @@ def add_lighting():
         ('override_vignette_intensity', 'vignette_intensity', 0.35),
         ('override_auto_exposure_min_brightness', 'auto_exposure_min_brightness', 0.5),
         ('override_auto_exposure_max_brightness', 'auto_exposure_max_brightness', 2.0),
+        ('override_motion_blur_amount', 'motion_blur_amount', 0.0),
+        ('override_depth_of_field_focal_distance', 'depth_of_field_focal_distance', 800.0),
+        ('override_depth_of_field_depth_blur_radius', 'depth_of_field_depth_blur_radius', 3.5),
     ):
         try_set(s, flag, True)
         try_set(s, prop, val)
@@ -539,6 +542,27 @@ def run():
     try_set(info, 'cell_origin_uu', unreal.Vector2D(origin_x, origin_y))
     if bgm:
         try_set(info, 'bgm', bgm)
+
+    # Popula dados de ambiente e fuso horario a partir de Config/map_environment_table.json
+    env_cfg_path = os.path.join(unreal.Paths.project_config_dir(), 'map_environment_table.json')
+    if os.path.exists(env_cfg_path):
+        try:
+            with open(env_cfg_path, 'r', encoding='utf-8') as f:
+                env_table = json.load(f)
+            ed = env_table.get(args['map_name'].lower())
+            if ed:
+                env_struct = unreal.MapEnvironmentData()
+                env_struct.set_editor_property('map_id', args['map_name'])
+                env_struct.set_editor_property('display_name', ed.get('name', args['map_name']))
+                env_struct.set_editor_property('grid_x', ed.get('grid_x', 0))
+                env_struct.set_editor_property('grid_y', ed.get('grid_y', 0))
+                env_struct.set_editor_property('b_is_dungeon', ed.get('dungeon', False))
+                env_struct.set_editor_property('b_is_perpetual_night', ed.get('perpetual_night', False))
+                env_struct.set_editor_property('biome_tag', ed.get('biome', 'Temperate'))
+                try_set(info, 'environment_data', env_struct)
+                log('Ambiente configurado: %s (Grid %d, %d | %s)' % (ed.get('name'), ed.get('grid_x', 0), ed.get('grid_y', 0), ed.get('biome')))
+        except Exception as e:
+            warn('Nao foi possivel carregar dados de ambiente: ' + str(e))
 
     eal.save_directory(dest, only_if_is_dirty=False, recursive=True)
     lvl.save_current_level()

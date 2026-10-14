@@ -7,6 +7,40 @@
 class USoundBase;
 
 /**
+ * Dados de ambiente, fuso horário e bioma geográfico do mapa (GDD Técnico HD-2D).
+ */
+USTRUCT(BlueprintType)
+struct MYTHOFTHOR_API FMapEnvironmentData : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Environment")
+	FName MapID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Environment")
+	FText DisplayName;
+
+	/** Longitude geográfica relativa a Prontera (0). A cada 4 mapas, o fuso avança ou recua 1 hora. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Environment")
+	int32 GridX = 0;
+
+	/** Latitude geográfica relativa a Prontera (0). Y < 0 clima quente/árido, Y > 0 clima frio/ártico. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Environment")
+	int32 GridY = 0;
+
+	/** Se verdadeiro, desliga o sol direto e mantém apenas iluminação ambiente interna. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Environment")
+	bool bIsDungeon = false;
+
+	/** Se verdadeiro (ex.: Lutie, Nifflheim), a iluminação fica travada em noite polar/eterna. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Environment")
+	bool bIsPerpetualNight = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Environment")
+	FString BiomeTag = TEXT("Temperate");
+};
+
+/**
  * Metadados do mapa montado (colocado no nivel por tools/ue_import_map.py):
  * nome no rAthena, escala das celulas, origem do grid e BGM do mapa.
  *
@@ -37,6 +71,14 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map|Audio")
 	float BgmVolume = 1.f;
+
+	/** Dados de bioma, fuso e clima calculados para este mapa. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map|Environment")
+	FMapEnvironmentData EnvironmentData;
+
+	/** Calcula a hora local considerando o fuso horario do GridX e condicoes especiais (Noite Polar). */
+	UFUNCTION(BlueprintPure, Category = "Map|Environment")
+	float GetLocalHour(float ServerHour) const;
 
 	UFUNCTION(BlueprintPure, Category = "Map")
 	FIntPoint WorldToCell(const FVector& WorldLocation) const;
