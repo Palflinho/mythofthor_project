@@ -61,3 +61,6 @@ grep -q "myth/myth_respawn.txt" npc/scripts_custom.conf || echo "npc: npc/custom
 # The Renewal "academy" script (Izlude academy and its Training Instructor NPCs on new_1-*) duplicates the old Training Grounds
 # NPCs from treino_novice.txt and warps the player to Izlude (iz_int, not imported): do not load it.
 sed -i 's|^npc: npc/re/jobs/novice/academy.txt|// npc: npc/re/jobs/novice/academy.txt|' npc/re/scripts_jobs.conf
+
+# Commands for the normal player group (the client exposes them as buttons: Game options > Other, Mimir Codex)
+cp "$HERE/groups_import.yml" conf/import/groups.yml

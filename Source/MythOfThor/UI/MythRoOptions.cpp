@@ -49,7 +49,7 @@ namespace
 		};
 		static const TArray<FOptionDef> Control = {
 			{ TEXT("MonsterSnap"), TEXT("Monster target"), TEXT("Targets monsters when the cursor is close."), false },
-			{ TEXT("SkillSnap"), TEXT("Alvo em skill"), TEXT("The cursor snaps to a nearby target when using skills."), false },
+			{ TEXT("SkillSnap"), TEXT("Skill target"), TEXT("The cursor snaps to a nearby target when using skills."), false },
 			{ TEXT("ItemSnap"), TEXT("Item snap"), TEXT("The cursor snaps to nearby ground items."), false },
 			{ TEXT("NoCtrl"), TEXT("No Ctrl"), TEXT("Attacks monsters continuously without holding Ctrl."), false },
 			{ TEXT("NoShift"), TEXT("No Shift"), TEXT("No need to hold Shift to attack monsters."), false },
@@ -61,6 +61,12 @@ namespace
 			{ TEXT("EquipCompare"), TEXT("Compare equipment"), TEXT("Shows a comparison window with the equipped item."), false },
 		};
 		static const TArray<FOptionDef> Other = {
+			// Server commands as toggles (docs/sistemas/05_hud_sem_comandos.md): the client sends ,  and  for you
+			{ TEXT("AutoLoot"), TEXT("Auto-loot"), TEXT("Picks up drops automatically (server command @autoloot)."), false },
+			{ TEXT("ShowExp"), TEXT("Show EXP gains"), TEXT("Shows the EXP you gain in the chat (@showexp)."), false },
+			{ TEXT("NoAsk"), TEXT("No requests"), TEXT("Declines party, trade and guild requests automatically (@noask)."), false },
+			{ TEXT("@rates"), TEXT("Server rates"), TEXT("Click: shows the EXP and drop rates in the chat."), true },
+			{ TEXT("@uptime"), TEXT("Server uptime"), TEXT("Click: shows how long the server has been up."), true },
 			{ TEXT("NoTrade"), TEXT("/notrade"), TEXT("Automatically declines trades and friend requests."), false },
 			{ TEXT("NoTalkMsg"), TEXT("/notalkmsg"), TEXT("Does not show chat messages."), false },
 			{ TEXT("ShowName"), TEXT("/showname"), TEXT("Uses a thinner font and shows guild and party."), false },
@@ -114,6 +120,32 @@ void UMythRoHUDWidget::ApplyOptionEffects()
 	// Aura: Mostrar aura desligada = nada; ligada com "simplificada" = so os brilhos; ligada = normal
 	AMythWater::ApplyStyleToAll(GetWorld());
 	AMythAura99::SetMode(!FMythOptions::Get(TEXT("ShowAura")) ? 0 : (FMythOptions::Get(TEXT("AuraDisplay")) ? 1 : 2));
+}
+
+void UMythRoHUDWidget::SyncServerOptions(bool bForce)
+{
+	// AutoLoot, ShowExp and NoAsk live on the server and reset at every login: send the saved choice once per session and then on each click
+	URagnarokNetworkSubsystem* Net = GetNet();
+	if (!Net || Net->GetNetworkState() != ERagnarokNetworkState::ConnectedMap)
+	{
+		return;
+	}
+	if (bForce)
+	{
+		ServerOptState.Empty();
+	}
+	struct FSrv { const TCHAR* Key; const TCHAR* On; const TCHAR* Off; };
+	static const FSrv Defs[] = { { TEXT("AutoLoot"), TEXT("@autoloot 100"), TEXT("@autoloot 0") }, { TEXT("ShowExp"), TEXT("@showexp"), TEXT("@showexp") }, { TEXT("NoAsk"), TEXT("@noask"), TEXT("@noask") } };
+	for (const FSrv& D : Defs)
+	{
+		const bool bWant = FMythOptions::Get(D.Key);
+		const bool bHave = ServerOptState.FindRef(FName(D.Key));
+		if (bWant != bHave)
+		{
+			Net->SendGlobalMessage(bWant ? D.On : D.Off);
+			ServerOptState.Add(FName(D.Key), bWant);
+		}
+	}
 }
 
 void UMythRoHUDWidget::ShowOptionsWindow(int32 Tab)
@@ -203,6 +235,7 @@ bool UMythRoHUDWidget::HandleOptionsClick(const FVector2D& ScreenPos)
 		{
 			FMythOptions::Set(D.Key, !FMythOptions::Get(D.Key));
 			ApplyOptionEffects();
+			SyncServerOptions(false);
 		}
 		RefreshOptions();
 		return true;

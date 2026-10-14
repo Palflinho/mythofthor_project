@@ -1,0 +1,20 @@
+# Myth of Thor: commands every normal player can use. The client turns them into buttons and toggles (docs/sistemas/05_hud_sem_comandos.md),
+# so nobody has to type @commands. Only commands that affect the player's own session; nothing that can be abused.
+Header:
+  Type: PLAYER_GROUP_DB
+  Version: 1
+
+Body:
+  - Id: 0
+    Commands:
+      autoloot: true
+      alootid: true
+      autoloottype: true
+      showexp: true
+      showzeny: true
+      noask: true
+      rates: true
+      uptime: true
+      servertime: true
+      whereis: true
+      whodrops: true

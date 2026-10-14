@@ -583,6 +583,11 @@ bool UMythRoHUDWidget::CloseTopWindow()
 
 void UMythRoHUDWidget::RefreshWindows()
 {
+	if (!bServerOptsSynced && GetNet() && GetNet()->GetNetworkState() == ERagnarokNetworkState::ConnectedMap && GetNet()->GetSelfID() != 0)
+	{
+		bServerOptsSynced = true;
+		SyncServerOptions(true); // once per login
+	}
 	RefreshHotbar();
 	if (StatusWindow && StatusWindow->IsVisible()) { RefreshStatusWindow(); }
 	if (ItemsWindow && ItemsWindow->IsVisible()) { RefreshItemsWindow(); }

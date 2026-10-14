@@ -1044,6 +1044,11 @@ protected:
 	UPROPERTY() TObjectPtr<UTextBlock> OptClose;
 	int32 OptTab = 0;
 	int32 OptScroll = 0;
+	TMap<FName, bool> ServerOptState; // what the server was last told for AutoLoot / ShowExp / NoAsk (per session)
+	bool bServerOptsSynced = false;
+public:
+	void SyncServerOptions(bool bForce);
+protected:
 
 	// Grupo (MythRoParty.cpp)
 public:

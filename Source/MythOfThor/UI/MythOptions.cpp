@@ -21,7 +21,7 @@ bool FMythOptions::DefaultOf(const FName& Key)
 		TEXT("HideSummons"), TEXT("HidePlayers"), TEXT("MonsterSnap"), TEXT("SkillSnap"), TEXT("ItemSnap"), TEXT("NoCtrl"),
 		TEXT("NoShift"), TEXT("ZoomOut"), TEXT("MouseLock"), TEXT("MiniSlot"), TEXT("EquipCompare"), TEXT("NoTrade"),
 		TEXT("NoTalkMsg"), TEXT("NoTalkMsg2"), TEXT("Window"), TEXT("Camera"), TEXT("Font"), TEXT("Call"), TEXT("HoAi"), TEXT("MerAi"),
-		TEXT("ShowShop"), TEXT("ShowName"), TEXT("Stateinfo"), TEXT("Footprint")
+		TEXT("ShowShop"), TEXT("ShowName"), TEXT("Stateinfo"), TEXT("Footprint"), TEXT("AutoLoot"), TEXT("ShowExp"), TEXT("NoAsk")
 	};
 	return !Off.Contains(Key);
 }
