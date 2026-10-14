@@ -419,7 +419,7 @@ void UMythRoHUDWidget::BuildLayout()
 	BuildEntryScreens();
 	BuildNpcDialog();
 	StyleEditBoxes();
-	AddChatLine(TEXT("Bem-vindo a Rune-Midgard."), ColSystem);
+	AddChatLine(TEXT("Welcome to Rune-Midgard."), ColSystem);
 }
 
 void UMythRoHUDWidget::BuildBasicInfo()
@@ -936,7 +936,7 @@ void UMythRoHUDWidget::RefreshAutoState(bool bIsActive)
 	{
 		return;
 	}
-	AutoButtonText->SetText(FText::FromString(bIsActive ? TEXT("  Ligado") : TEXT("  Desligado")));
+	AutoButtonText->SetText(FText::FromString(bIsActive ? TEXT("  On") : TEXT("  Off")));
 	AutoButtonText->SetColorAndOpacity(FSlateColor(bIsActive ? FLinearColor(0.1f, 0.55f, 0.15f) : ColText));
 	// Sempre da para desligar; para ligar, nao pode estar caido, sem vigor ou com sobrepeso.
 	const bool bCanStart = !AutoBattle->IsPlayerDowned() && !AutoBattle->IsOverweight() && AutoBattle->GetRemainingStaminaSeconds() > 0.f;
@@ -965,7 +965,7 @@ void UMythRoHUDWidget::RefreshWeight(float InWeightPercent, bool bOverweight)
 	RefreshStats();
 	if (bOverweight)
 	{
-		AddChatLine(FString::Printf(TEXT("Sobrepeso (%.0f%%): Auto-Battle bloqueado."), InWeightPercent), ColError);
+		AddChatLine(FString::Printf(TEXT("Overweight (%.0f%%): Auto-Battle locked."), InWeightPercent), ColError);
 	}
 	if (AutoBattle)
 	{

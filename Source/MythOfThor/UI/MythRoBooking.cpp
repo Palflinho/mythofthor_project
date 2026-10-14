@@ -111,7 +111,7 @@ void UMythRoHUDWidget::UpdateBooking()
 				Jobs += (j ? TEXT(", ") : TEXT("")) + URagnarokNetworkSubsystem::GetJobNameFromClass(Ad->Jobs[j]);
 			}
 			if (Ad->Jobs.Num() > 2) { Jobs += FString::Printf(TEXT(" +%d"), Ad->Jobs.Num() - 2); }
-			if (Jobs.IsEmpty()) { Jobs = TEXT("Qualquer"); }
+			if (Jobs.IsEmpty()) { Jobs = TEXT("Any"); }
 		}
 		BookingRowTexts[i * 3 + 0]->SetText(Ad ? FText::FromString(Ad->Name) : FText::GetEmpty());
 		BookingRowTexts[i * 3 + 1]->SetText(Ad ? FText::AsNumber(Ad->Level) : FText::GetEmpty());

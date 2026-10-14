@@ -288,7 +288,7 @@ void UMythRoHUDWidget::BuildEquipWindow()
 	// Fonte de dano), arte equipwin_bg (280 x 130) com os 10 encaixes em linhas de 26, o personagem no centro e o rodape de 22 com
 	// "Mostrar equip." e os botoes de atributos, troca rapida e tirar tudo
 	EquipWindow = MakeRoPanel(TEXT("Equipment"), FVector2D(280.f, EqTop + 130.f + EqFootH), FVector2D(-340.f, 120.f));
-	const TCHAR* TabNames[4] = { TEXT("General"), TEXT("Especial"), TEXT("Title"), TEXT("Damage font") };
+	const TCHAR* TabNames[4] = { TEXT("General"), TEXT("Special"), TEXT("Title"), TEXT("Damage font") };
 	for (int32 t = 0; t < 4; ++t)
 	{
 		UImage* Box = AddRounded(EquipWindow, FLinearColor::White, FLinearColor(0.62f, 0.66f, 0.76f, 1.f), 1.f + t * 70.f, 18.f, 69.f, EqTop - 18.f, 4.f, 0.f);
@@ -720,7 +720,7 @@ void UMythRoHUDWidget::RefreshItemsWindow()
 					}
 					if (Item.Amount > 1)
 					{
-						Info += FString::Printf(TEXT(": %d un."), Item.Amount);
+						Info += FString::Printf(TEXT(": %d pcs."), Item.Amount);
 					}
 					break;
 				}
@@ -990,7 +990,7 @@ void UMythRoHUDWidget::RefreshSkillsWindow()
 		}
 		if (PendingSkillTotal() > 0)
 		{
-			Line += FString::Printf(TEXT("  (pendentes: %d)"), PendingSkillTotal());
+			Line += FString::Printf(TEXT("  (pending: %d)"), PendingSkillTotal());
 		}
 		SkillPointsText->SetText(FText::FromString(Line));
 	}

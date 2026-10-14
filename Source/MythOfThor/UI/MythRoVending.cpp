@@ -69,7 +69,7 @@ void UMythRoHUDWidget::BuildVendingWindows()
 	VendSetupWindow = MakeRoPanel(TEXT("Open shop"), FVector2D(VendW, SetupH), FVector2D(0.f, -40.f));
 	VendTitleBox = Box(VendSetupWindow, 8.f, 22.f, 250.f, TEXT("Shop name"));
 	VendPriceBox = Box(VendSetupWindow, 270.f, 22.f, 120.f, TEXT("Price (z)"));
-	VendAmountBox = Box(VendSetupWindow, 398.f, 22.f, 114.f, TEXT("Qtd. (vazio: tudo)"));
+	VendAmountBox = Box(VendSetupWindow, 398.f, 22.f, 114.f, TEXT("Qty (empty: all)"));
 	AddText(VendSetupWindow, 8.f, 44.f, 8, VendGray)->SetText(FText::FromString(TEXT("In the cart (click: put in the shop)")));
 	AddText(VendSetupWindow, 266.f, 44.f, 8, VendGray)->SetText(FText::FromString(TEXT("In the shop (click: remove)")));
 	for (int32 i = 0; i < VendRows; ++i)

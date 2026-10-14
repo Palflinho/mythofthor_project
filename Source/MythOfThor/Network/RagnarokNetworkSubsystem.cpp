@@ -1316,6 +1316,7 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 			case 0x01a3: // ZC_FEED_PET
 			case 0x01a4: // ZC_CHANGESTATE_PET
 			case 0x01aa: // ZC_PET_ACT
+			case 0x09fc: // ZC_PET_EVOLUTION_RESULT
 				HandlePetPacket(PacketData, ActualLen, PacketID);
 				break;
 			case RagnarokPackets::HEADER_ZC_NOTIFY_ACT:
@@ -1549,7 +1550,7 @@ void URagnarokNetworkSubsystem::HandleLoginRefuse(const uint8* PacketData, int32
 	switch (Code)
 	{
 	case 0: Reason = TEXT("Unregistered user."); break;
-	case 1: Reason = TEXT("Senha incorreta."); break;
+	case 1: Reason = TEXT("Incorrect password."); break;
 	case 2: Reason = TEXT("This account has expired."); break;
 	case 3: Reason = TEXT("Connection refused by the server."); break;
 	case 4: Reason = TEXT("This account is blocked."); break;
@@ -4348,7 +4349,7 @@ void URagnarokNetworkSubsystem::HandleChatRoomPacket(const uint8* PacketData, in
 		break;
 	case 0x00da: // <resultado>.B: 0 cheia, 1 senha errada, 2 expulso, 4 sem zeny, 5 nivel baixo, 6 nivel alto, 7 classe
 	{
-		static const TCHAR* Reasons[8] = { TEXT("The room is full."), TEXT("Senha errada."), TEXT("You were expelled from that room."), TEXT(""), TEXT("Not enough zeny."), TEXT("Level too low."), TEXT("Level too high."), TEXT("Class not allowed.") };
+		static const TCHAR* Reasons[8] = { TEXT("The room is full."), TEXT("Wrong password."), TEXT("You were expelled from that room."), TEXT(""), TEXT("Not enough zeny."), TEXT("Level too low."), TEXT("Level too high."), TEXT("Class not allowed.") };
 		if (PacketSize >= 3 && PacketData[2] < 8 && PacketData[2] != 3)
 		{
 			Say(Reasons[PacketData[2]]);

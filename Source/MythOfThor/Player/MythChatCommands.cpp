@@ -110,7 +110,7 @@ bool AMythPlayerController::RunSlashCommand(const FString& Command, const FStrin
 		float& Current = bSound ? Effects : Music;
 		if (Current > 0.f) { Saved = Current; Current = 0.f; } else { Current = Saved > 0.f ? Saved : 1.f; }
 		UMythRoSound::SetVolumes(Music, Effects);
-		Say(FString::Printf(TEXT("%s: %s."), bSound ? TEXT("Efeitos sonoros") : TEXT("Music"), Current > 0.f ? TEXT("ligados") : TEXT("desligados")));
+		Say(FString::Printf(TEXT("%s: %s."), bSound ? TEXT("Sound effects") : TEXT("Music"), Current > 0.f ? TEXT("on") : TEXT("off")));
 		return true;
 	}
 	return false;

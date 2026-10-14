@@ -156,7 +156,7 @@ void UMythRoHUDWidget::NpcInput(int64 NpcID, bool bNumber)
 	}
 	NpcTalking = NpcID;
 	bNpcInputNumber = bNumber;
-	NpcInputHint->SetText(FText::FromString(bNumber ? TEXT("Quantidade:") : TEXT("Texto:")));
+	NpcInputHint->SetText(FText::FromString(bNumber ? TEXT("Amount:") : TEXT("Text:")));
 	NpcInputBox->SetText(FText::GetEmpty());
 	NpcInputWindow->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 	if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(NpcInputWindow->Slot))

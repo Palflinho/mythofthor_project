@@ -29,14 +29,14 @@ void UMythRoHUDWidget::BuildChatRoomWindows()
 		S->SetPosition(FVector2D(70.f, 24.f) * UIScale);
 		S->SetSize(FVector2D(256.f, 20.f) * UIScale);
 	}
-	AddText(ChatRoomCreateWindow, 14.f, 56.f, 9, CrText)->SetText(FText::FromString(TEXT("Limite")));
+	AddText(ChatRoomCreateWindow, 14.f, 56.f, 9, CrText)->SetText(FText::FromString(TEXT("Limit")));
 	RoomLimitLeft = AddText(ChatRoomCreateWindow, 70.f, 56.f, 10, CrLink);
 	RoomLimitLeft->SetText(FText::FromString(TEXT("◀")));
 	RoomLimitText = AddText(ChatRoomCreateWindow, 92.f, 56.f, 9, CrText);
 	RoomLimitRight = AddText(ChatRoomCreateWindow, 140.f, 56.f, 10, CrLink);
 	RoomLimitRight->SetText(FText::FromString(TEXT("▶")));
 	RoomTypeLink = AddText(ChatRoomCreateWindow, 190.f, 56.f, 9, CrLink);
-	AddText(ChatRoomCreateWindow, 14.f, 86.f, 9, CrText)->SetText(FText::FromString(TEXT("Senha")));
+	AddText(ChatRoomCreateWindow, 14.f, 86.f, 9, CrText)->SetText(FText::FromString(TEXT("Password")));
 	RoomPassBox = WidgetTree->ConstructWidget<UEditableTextBox>();
 	if (UCanvasPanelSlot* S = ChatRoomCreateWindow->AddChildToCanvas(RoomPassBox))
 	{
@@ -123,8 +123,8 @@ void UMythRoHUDWidget::RefreshChatRoom()
 	}
 	if (ChatRoomCreateWindow->IsVisible())
 	{
-		RoomLimitText->SetText(FText::FromString(FString::Printf(TEXT("%d pessoas"), RoomNewLimit)));
-		RoomTypeLink->SetText(FText::FromString(RoomNewPublic ? TEXT("[ Public ]") : TEXT("[ Privada ]")));
+		RoomLimitText->SetText(FText::FromString(FString::Printf(TEXT("%d people"), RoomNewLimit)));
+		RoomTypeLink->SetText(FText::FromString(RoomNewPublic ? TEXT("[ Public ]") : TEXT("[ Private ]")));
 	}
 	if (ChatRoomWindow->IsVisible())
 	{
@@ -137,7 +137,7 @@ void UMythRoHUDWidget::RefreshChatRoom()
 			RoomKickLinks[i]->SetVisibility(bHas && bOwner && i > 0 ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
 			if (bHas)
 			{
-				RoomMemberRows[i]->SetText(FText::FromString(FString::Printf(TEXT("%s%s"), *Net->GetChatRoomMembers()[i], i == 0 ? TEXT("  (dono)") : TEXT(""))));
+				RoomMemberRows[i]->SetText(FText::FromString(FString::Printf(TEXT("%s%s"), *Net->GetChatRoomMembers()[i], i == 0 ? TEXT("  (owner)") : TEXT(""))));
 			}
 		}
 	}

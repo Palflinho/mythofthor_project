@@ -89,7 +89,7 @@ void UMythRoHUDWidget::BuildMailWindows()
 	MailWriteWindow = MakeRoPanel(TEXT("Write mail"), FVector2D(340.f, 17.f + 150.f), FVector2D(60.f, -60.f));
 	AddText(MailWriteWindow, 12.f, 26.f, 8, MlText)->SetText(FText::FromString(TEXT("To")));
 	AddText(MailWriteWindow, 12.f, 56.f, 8, MlText)->SetText(FText::FromString(TEXT("Title")));
-	AddText(MailWriteWindow, 12.f, 86.f, 8, MlText)->SetText(FText::FromString(TEXT("Texto")));
+	AddText(MailWriteWindow, 12.f, 86.f, 8, MlText)->SetText(FText::FromString(TEXT("Text")));
 	for (int32 i = 0; i < 3; ++i)
 	{
 		UEditableTextBox* Box = WidgetTree->ConstructWidget<UEditableTextBox>();
@@ -185,7 +185,7 @@ void UMythRoHUDWidget::RefreshMail()
 	}
 	if (Net->GetOpenMailZeny() > 0)
 	{
-		MailTakeZeny->SetText(FText::FromString(FString::Printf(TEXT("[Pegar %s z]"), *FText::AsNumber(Net->GetOpenMailZeny()).ToString())));
+		MailTakeZeny->SetText(FText::FromString(FString::Printf(TEXT("[Take %s z]"), *FText::AsNumber(Net->GetOpenMailZeny()).ToString())));
 	}
 	if (Net->GetOpenMailItems() > 0)
 	{

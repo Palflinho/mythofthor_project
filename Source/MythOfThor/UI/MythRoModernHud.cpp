@@ -134,7 +134,7 @@ void UMythRoHUDWidget::UpdateModernHud()
 		const FString ClassName = NetStats ? NetStats->JobName : FString(TEXT("Novice"));
 		ModernClassName->SetText(FText::FromString(ClassName.Len() > 11 ? ClassName.Left(10) + TEXT("…") : ClassName));
 	}
-	ModernJob->SetText(FText::FromString(FString::Printf(TEXT("Nv. %d"), Stats->GetBaseLevel()))); // a classe fica embaixo do simbolo
+	ModernJob->SetText(FText::FromString(FString::Printf(TEXT("Lv. %d"), Stats->GetBaseLevel()))); // a classe fica embaixo do simbolo
 
 	auto Bar = [this](UImage* Fill, UTextBlock* Text, UTextBlock* Pct, float Y, int32 Cur, int32 Max, const FLinearColor& Color)
 	{

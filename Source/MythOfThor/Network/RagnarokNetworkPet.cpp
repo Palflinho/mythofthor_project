@@ -37,7 +37,7 @@ void URagnarokNetworkSubsystem::HandlePetPacket(const uint8* PacketData, int32 P
 		if (PacketSize >= 3)
 		{
 			bCapturing = false;
-			Say(PacketData[2] ? TEXT("Capture successful! The pet egg is in your backpack.") : TEXT("A captura falhou."),
+			Say(PacketData[2] ? TEXT("Capture successful! The pet egg is in your backpack.") : TEXT("The capture failed."),
 				PacketData[2] ? TEXT("#80FF80") : TEXT("#FF8080"));
 		}
 		break;
@@ -79,6 +79,16 @@ void URagnarokNetworkSubsystem::HandlePetPacket(const uint8* PacketData, int32 P
 			// msg 591: "A comida [%s] nao esta disponivel."
 			const FString Food = FMythRoClientTables::ItemName(PetRead<int32>(PacketData, 3));
 			Say(FMythRoClientTables::Message(591).Replace(TEXT("%s"), *Food).TrimEnd(), TEXT("#FF8080"));
+		}
+		break;
+	case 0x09fc: // ZC_PET_EVOLUTION_RESULT <result>.L (e_pet_evolution_result)
+		if (PacketSize >= 6)
+		{
+			static const TCHAR* Msgs[] = { TEXT("The evolution failed."), TEXT("You must have your pet out to evolve it."), TEXT("That is not a pet egg."), TEXT("This pet cannot evolve into that."),
+				TEXT("You do not have the required items."), TEXT("The pet must be loyal (max intimacy) and have no accessory equipped."), TEXT("Your pet evolved!") };
+			const uint32 R = PetRead<uint32>(PacketData, 2);
+			Say(R < UE_ARRAY_COUNT(Msgs) ? Msgs[R] : TEXT("The evolution failed."), R == 6 ? TEXT("#80FF80") : TEXT("#FF8080"));
+			OnPet.Broadcast(1);
 		}
 		break;
 	case 0x01aa: // ZC_PET_ACT <id>.L <dado>.L: emocao (valores pequenos) ou fala da pettalktable (compostos, ainda nao)
@@ -143,6 +153,19 @@ bool URagnarokNetworkSubsystem::SendConfig(int32 Type, bool bOn)
 	const uint32 Flag = bOn ? 1 : 0;
 	FMemory::Memcpy(Packet + 2, &Type, 4);
 	FMemory::Memcpy(Packet + 6, &Flag, 4);
+	SendData(Packet, sizeof(Packet));
+	return true;
+}
+
+bool URagnarokNetworkSubsystem::SendPetEvolution(int32 TargetEggItemId)
+{
+	if (!CurrentSocket || CurrentState != ERagnarokNetworkState::ConnectedMap || TargetEggItemId <= 0)
+	{
+		return false;
+	}
+	// CZ_PET_EVOLUTION 0x09fb <length>.W <egg item id>.L { <inventory index>.W <amount>.W }*: the server uses its own requirements
+	uint8 Packet[8] = { 0xfb, 0x09, 0x08, 0x00 };
+	FMemory::Memcpy(Packet + 4, &TargetEggItemId, 4);
 	SendData(Packet, sizeof(Packet));
 	return true;
 }

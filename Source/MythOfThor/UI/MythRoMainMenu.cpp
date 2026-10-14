@@ -95,7 +95,7 @@ void UMythRoHUDWidget::BuildMainMenu()
 	MainMenuPinMark = AddColor(MainMenuPanel, FLinearColor(0.15f, 0.45f, 0.9f), HubPad + 4.f, HubH - HubFootH - 2.f + 8.f, 8.f, 8.f);
 	MainMenuPinMark->SetVisibility(ESlateVisibility::Collapsed);
 	UTextBlock* Pin = AddText(MainMenuPanel, HubPad + 20.f, HubH - HubFootH - 2.f + 6.f, 7, FLinearColor(0.1f, 0.12f, 0.2f));
-	Pin->SetText(FText::FromString(TEXT("Manter aberto")));
+	Pin->SetText(FText::FromString(TEXT("Keep open")));
 	MainMenuPanel->SetVisibility(ESlateVisibility::Collapsed);
 }
 

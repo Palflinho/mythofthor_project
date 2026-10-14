@@ -35,7 +35,7 @@ namespace
 
 void UMythRoHUDWidget::BuildSelectListWindow()
 {
-	SelectWindow = MakeRoPanel(TEXT("Escolha"), FVector2D(SelW, SelH), FVector2D(0.f, -60.f));
+	SelectWindow = MakeRoPanel(TEXT("Choose"), FVector2D(SelW, SelH), FVector2D(0.f, -60.f));
 	// O texto da barra de titulo e o primeiro UTextBlock do painel (AddTitleBar): trocado a cada lista
 	for (int32 c = 0; c < SelectWindow->GetChildrenCount() && !SelectTitle; ++c)
 	{
@@ -75,11 +75,11 @@ void UMythRoHUDWidget::OpenSelectList(uint8 ListType, const TArray<int32>& Value
 	{
 	case EMythSelectList::Warp: Title = TEXT("Portal"); break;
 	case EMythSelectList::Identify: Title = TEXT("Identify item"); break;
-	case EMythSelectList::Card: Title = FMythRoClientTables::Message(522); if (Title.IsEmpty()) { Title = TEXT("Encaixar carta"); } break;
-	case EMythSelectList::Arrow: Title = TEXT("Fabricar flechas"); break;
-	case EMythSelectList::Produce: Title = TEXT("Fabricar"); break;
-	case EMythSelectList::Autospell: Title = TEXT("Autoconjurar"); break;
-	case EMythSelectList::Refine: Title = TEXT("Refinar arma"); break;
+	case EMythSelectList::Card: Title = FMythRoClientTables::Message(522); if (Title.IsEmpty()) { Title = TEXT("Socket card"); } break;
+	case EMythSelectList::Arrow: Title = TEXT("Craft arrows"); break;
+	case EMythSelectList::Produce: Title = TEXT("Craft"); break;
+	case EMythSelectList::Autospell: Title = TEXT("Auto-cast"); break;
+	case EMythSelectList::Refine: Title = TEXT("Refine weapon"); break;
 	case EMythSelectList::PetEgg: Title = FMythRoClientTables::Message(599).TrimEnd(); break;
 	case EMythSelectList::Repair: Title = FMythRoClientTables::Message(812).TrimEnd(); break;
 	}

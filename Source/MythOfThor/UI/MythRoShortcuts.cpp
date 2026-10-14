@@ -30,7 +30,7 @@ namespace
 		{ TEXT("Bank"), TEXT("Ctrl+B") },
 		{ TEXT("Mail"), TEXT("Alt+R") },
 		{ TEXT("Navigation (also /navi)"), TEXT("Alt+N") },
-		{ TEXT("Minimapa"), TEXT("Ctrl+Tab") },
+		{ TEXT("Minimap"), TEXT("Ctrl+Tab") },
 		{ TEXT("Sentar / levantar"), TEXT("Insert") },
 		{ TEXT("Bar shortcuts"), TEXT("F1 a F9") },
 		{ TEXT("Game menu"), TEXT("Esc") },

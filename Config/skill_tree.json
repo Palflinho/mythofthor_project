@@ -1382,7 +1382,7 @@
  },
  "skills": {
   "1": {
-   "name": "Habilidades Básicas",
+   "name": "Basic Skill",
    "aegis": "NV_BASIC",
    "maxlv": 9,
    "sp": [
@@ -1400,7 +1400,7 @@
    "need_by_job": {}
   },
   "2": {
-   "name": "Perícia com Espada",
+   "name": "Sword Mastery",
    "aegis": "SM_SWORD",
    "maxlv": 10,
    "sp": [
@@ -1419,7 +1419,7 @@
    "need_by_job": {}
   },
   "3": {
-   "name": "Perícia com Espada de Duas Mãos",
+   "name": "Two-Handed Sword Mastery",
    "aegis": "SM_TWOHAND",
    "maxlv": 10,
    "sp": [
@@ -1443,7 +1443,7 @@
    "need_by_job": {}
   },
   "4": {
-   "name": "Aumentar Recupera豫o de HP",
+   "name": "Increase HP Recovery",
    "aegis": "SM_RECOVERY",
    "maxlv": 10,
    "sp": [
@@ -1462,7 +1462,7 @@
    "need_by_job": {}
   },
   "5": {
-   "name": "Golpe Fulminante",
+   "name": "Bash",
    "aegis": "SM_BASH",
    "maxlv": 10,
    "sp": [
@@ -1481,7 +1481,7 @@
    "need_by_job": {}
   },
   "6": {
-   "name": "Provocar",
+   "name": "Provoke",
    "aegis": "SM_PROVOKE",
    "maxlv": 10,
    "sp": [
@@ -1500,7 +1500,7 @@
    "need_by_job": {}
   },
   "7": {
-   "name": "Impacto Explosivo",
+   "name": "Magnum Break",
    "aegis": "SM_MAGNUM",
    "maxlv": 10,
    "sp": [
@@ -1524,7 +1524,7 @@
    "need_by_job": {}
   },
   "8": {
-   "name": "Vigor",
+   "name": "Endure",
    "aegis": "SM_ENDURE",
    "maxlv": 10,
    "sp": [
@@ -1548,7 +1548,7 @@
    "need_by_job": {}
   },
   "9": {
-   "name": "Aumentar Recupera豫o de SP",
+   "name": "Increase SP Recovery",
    "aegis": "MG_SRECOVERY",
    "maxlv": 10,
    "sp": [
@@ -1567,7 +1567,7 @@
    "need_by_job": {}
   },
   "10": {
-   "name": "Chama Reveladora",
+   "name": "Sight",
    "aegis": "MG_SIGHT",
    "maxlv": 1,
    "sp": [
@@ -1577,7 +1577,7 @@
    "need_by_job": {}
   },
   "11": {
-   "name": "Ataque Espiritual",
+   "name": "Napalm Beat",
    "aegis": "MG_NAPALMBEAT",
    "maxlv": 10,
    "sp": [
@@ -1596,7 +1596,7 @@
    "need_by_job": {}
   },
   "12": {
-   "name": "Escudo Mágico",
+   "name": "Safety Wall",
    "aegis": "MG_SAFETYWALL",
    "maxlv": 10,
    "sp": [
@@ -1635,7 +1635,7 @@
    }
   },
   "13": {
-   "name": "Espíritos Anciões",
+   "name": "Soul Strike",
    "aegis": "MG_SOULSTRIKE",
    "maxlv": 10,
    "sp": [
@@ -1659,7 +1659,7 @@
    "need_by_job": {}
   },
   "14": {
-   "name": "Lanças de Gelo",
+   "name": "Cold Bolt",
    "aegis": "MG_COLDBOLT",
    "maxlv": 10,
    "sp": [
@@ -1678,7 +1678,7 @@
    "need_by_job": {}
   },
   "15": {
-   "name": "Rajada Congelante",
+   "name": "Frost Diver",
    "aegis": "MG_FROSTDIVER",
    "maxlv": 10,
    "sp": [
@@ -1702,7 +1702,7 @@
    "need_by_job": {}
   },
   "16": {
-   "name": "Petrificar",
+   "name": "Stone Curse",
    "aegis": "MG_STONECURSE",
    "maxlv": 10,
    "sp": [
@@ -1721,7 +1721,7 @@
    "need_by_job": {}
   },
   "17": {
-   "name": "Bolas de Fogo",
+   "name": "Fire Ball",
    "aegis": "MG_FIREBALL",
    "maxlv": 10,
    "sp": [
@@ -1745,7 +1745,7 @@
    "need_by_job": {}
   },
   "18": {
-   "name": "Barreira de Fogo",
+   "name": "Fire Wall",
    "aegis": "MG_FIREWALL",
    "maxlv": 10,
    "sp": [
@@ -1773,7 +1773,7 @@
    "need_by_job": {}
   },
   "19": {
-   "name": "Lanças de Fogo",
+   "name": "Fire Bolt",
    "aegis": "MG_FIREBOLT",
    "maxlv": 10,
    "sp": [
@@ -1792,7 +1792,7 @@
    "need_by_job": {}
   },
   "20": {
-   "name": "Relâmpago",
+   "name": "Lightning Bolt",
    "aegis": "MG_LIGHTNINGBOLT",
    "maxlv": 10,
    "sp": [
@@ -1811,7 +1811,7 @@
    "need_by_job": {}
   },
   "21": {
-   "name": "Tempestade de Raios",
+   "name": "Thunder Storm",
    "aegis": "MG_THUNDERSTORM",
    "maxlv": 10,
    "sp": [
@@ -1835,7 +1835,7 @@
    "need_by_job": {}
   },
   "22": {
-   "name": "Prote豫o Divina",
+   "name": "Divine Protection",
    "aegis": "AL_DP",
    "maxlv": 10,
    "sp": [
@@ -1861,7 +1861,7 @@
    }
   },
   "23": {
-   "name": "Flagelo do Mal",
+   "name": "Demon Bane",
    "aegis": "AL_DEMONBANE",
    "maxlv": 10,
    "sp": [
@@ -1885,7 +1885,7 @@
    "need_by_job": {}
   },
   "24": {
-   "name": "Revela豫o",
+   "name": "Ruwach",
    "aegis": "AL_RUWACH",
    "maxlv": 1,
    "sp": [
@@ -1895,7 +1895,7 @@
    "need_by_job": {}
   },
   "25": {
-   "name": "Escudo Sagrado",
+   "name": "Pneuma",
    "aegis": "AL_PNEUMA",
    "maxlv": 1,
    "sp": [
@@ -1910,7 +1910,7 @@
    "need_by_job": {}
   },
   "26": {
-   "name": "Teleporte",
+   "name": "Teleport",
    "aegis": "AL_TELEPORT",
    "maxlv": 2,
    "sp": [
@@ -1926,7 +1926,7 @@
    "need_by_job": {}
   },
   "27": {
-   "name": "Portal",
+   "name": "Warp Portal",
    "aegis": "AL_WARP",
    "maxlv": 4,
    "sp": [
@@ -1944,7 +1944,7 @@
    "need_by_job": {}
   },
   "28": {
-   "name": "Curar",
+   "name": "Heal",
    "aegis": "AL_HEAL",
    "maxlv": 10,
    "sp": [
@@ -1974,7 +1974,7 @@
    }
   },
   "29": {
-   "name": "Aumentar Agilidade",
+   "name": "Increase Agility",
    "aegis": "AL_INCAGI",
    "maxlv": 10,
    "sp": [
@@ -1998,7 +1998,7 @@
    "need_by_job": {}
   },
   "30": {
-   "name": "Diminuir Agilidade",
+   "name": "Decrease Agility",
    "aegis": "AL_DECAGI",
    "maxlv": 10,
    "sp": [
@@ -2080,7 +2080,7 @@
    "need_by_job": {}
   },
   "34": {
-   "name": "Bênção",
+   "name": "Blessing",
    "aegis": "AL_BLESSING",
    "maxlv": 10,
    "sp": [
@@ -2104,7 +2104,7 @@
    "need_by_job": {}
   },
   "35": {
-   "name": "Medicar",
+   "name": "Cure",
    "aegis": "AL_CURE",
    "maxlv": 1,
    "sp": [
@@ -2126,7 +2126,7 @@
    }
   },
   "36": {
-   "name": "Aumentar Capacidade de Carga",
+   "name": "Enlarge Weight Limit",
    "aegis": "MC_INCCARRY",
    "maxlv": 10,
    "sp": [
@@ -2145,7 +2145,7 @@
    "need_by_job": {}
   },
   "37": {
-   "name": "Desconto",
+   "name": "Discount",
    "aegis": "MC_DISCOUNT",
    "maxlv": 10,
    "sp": [
@@ -2169,7 +2169,7 @@
    "need_by_job": {}
   },
   "38": {
-   "name": "Superfaturar",
+   "name": "Overcharge",
    "aegis": "MC_OVERCHARGE",
    "maxlv": 10,
    "sp": [
@@ -2193,7 +2193,7 @@
    "need_by_job": {}
   },
   "39": {
-   "name": "Usar Carrinho",
+   "name": "Pushcart",
    "aegis": "MC_PUSHCART",
    "maxlv": 10,
    "sp": [
@@ -2217,7 +2217,7 @@
    "need_by_job": {}
   },
   "40": {
-   "name": "Identificar Item",
+   "name": "Item Appraisal",
    "aegis": "MC_IDENTIFY",
    "maxlv": 1,
    "sp": [
@@ -2227,7 +2227,7 @@
    "need_by_job": {}
   },
   "41": {
-   "name": "Comércio",
+   "name": "Vending",
    "aegis": "MC_VENDING",
    "maxlv": 10,
    "sp": [
@@ -2251,7 +2251,7 @@
    "need_by_job": {}
   },
   "42": {
-   "name": "Mammonita",
+   "name": "Mammonite",
    "aegis": "MC_MAMMONITE",
    "maxlv": 10,
    "sp": [
@@ -2270,7 +2270,7 @@
    "need_by_job": {}
   },
   "43": {
-   "name": "Olhos de Coruja",
+   "name": "Owl's Eye",
    "aegis": "AC_OWL",
    "maxlv": 10,
    "sp": [
@@ -2289,7 +2289,7 @@
    "need_by_job": {}
   },
   "44": {
-   "name": "Olhos de 햓uia",
+   "name": "Vulture's Eye",
    "aegis": "AC_VULTURE",
    "maxlv": 10,
    "sp": [
@@ -2315,7 +2315,7 @@
    }
   },
   "45": {
-   "name": "Concentrar",
+   "name": "Improve Concentration",
    "aegis": "AC_CONCENTRATION",
    "maxlv": 10,
    "sp": [
@@ -2339,7 +2339,7 @@
    "need_by_job": {}
   },
   "46": {
-   "name": "Rajada de Flechas",
+   "name": "Double Strafe",
    "aegis": "AC_DOUBLE",
    "maxlv": 10,
    "sp": [
@@ -2365,7 +2365,7 @@
    }
   },
   "47": {
-   "name": "Chuva de Flechas",
+   "name": "Arrow Shower",
    "aegis": "AC_SHOWER",
    "maxlv": 10,
    "sp": [
@@ -2389,7 +2389,7 @@
    "need_by_job": {}
   },
   "48": {
-   "name": "Ataque Duplo",
+   "name": "Double Attack",
    "aegis": "TF_DOUBLE",
    "maxlv": 10,
    "sp": [
@@ -2408,7 +2408,7 @@
    "need_by_job": {}
   },
   "49": {
-   "name": "Perícia em Esquiva",
+   "name": "Improve Dodge",
    "aegis": "TF_MISS",
    "maxlv": 10,
    "sp": [
@@ -2427,7 +2427,7 @@
    "need_by_job": {}
   },
   "50": {
-   "name": "Furto",
+   "name": "Steal",
    "aegis": "TF_STEAL",
    "maxlv": 10,
    "sp": [
@@ -2446,7 +2446,7 @@
    "need_by_job": {}
   },
   "51": {
-   "name": "Esconderijo",
+   "name": "Hiding",
    "aegis": "TF_HIDING",
    "maxlv": 10,
    "sp": [
@@ -2470,7 +2470,7 @@
    "need_by_job": {}
   },
   "52": {
-   "name": "Envenenar",
+   "name": "Envenom",
    "aegis": "TF_POISON",
    "maxlv": 10,
    "sp": [
@@ -2489,7 +2489,7 @@
    "need_by_job": {}
   },
   "53": {
-   "name": "Desintoxicar",
+   "name": "Detoxify",
    "aegis": "TF_DETOXIFY",
    "maxlv": 1,
    "sp": [
@@ -2504,7 +2504,7 @@
    "need_by_job": {}
   },
   "54": {
-   "name": "Ressuscitar",
+   "name": "Resurrection",
    "aegis": "ALL_RESURRECTION",
    "maxlv": 4,
    "sp": [
@@ -2526,7 +2526,7 @@
    "need_by_job": {}
   },
   "55": {
-   "name": "Perícia com Lança",
+   "name": "Spear Mastery",
    "aegis": "KN_SPEARMASTERY",
    "maxlv": 10,
    "sp": [
@@ -2545,7 +2545,7 @@
    "need_by_job": {}
   },
   "56": {
-   "name": "Perfurar",
+   "name": "Pierce",
    "aegis": "KN_PIERCE",
    "maxlv": 10,
    "sp": [
@@ -2569,7 +2569,7 @@
    "need_by_job": {}
   },
   "57": {
-   "name": "Brandir Lança",
+   "name": "Brandish Spear",
    "aegis": "KN_BRANDISHSPEAR",
    "maxlv": 10,
    "sp": [
@@ -2597,7 +2597,7 @@
    "need_by_job": {}
   },
   "58": {
-   "name": "Estocada",
+   "name": "Spear Stab",
    "aegis": "KN_SPEARSTAB",
    "maxlv": 10,
    "sp": [
@@ -2621,7 +2621,7 @@
    "need_by_job": {}
   },
   "59": {
-   "name": "Lança Bumerangue",
+   "name": "Spear Boomerang",
    "aegis": "KN_SPEARBOOMERANG",
    "maxlv": 5,
    "sp": [
@@ -2640,7 +2640,7 @@
    "need_by_job": {}
   },
   "60": {
-   "name": "Rapidez com Duas Mãos",
+   "name": "Two-Hand Quicken",
    "aegis": "KN_TWOHANDQUICKEN",
    "maxlv": 10,
    "sp": [
@@ -2664,7 +2664,7 @@
    "need_by_job": {}
   },
   "61": {
-   "name": "Contra-Ataque",
+   "name": "Auto Counter",
    "aegis": "KN_AUTOCOUNTER",
    "maxlv": 5,
    "sp": [
@@ -2683,7 +2683,7 @@
    "need_by_job": {}
   },
   "62": {
-   "name": "Impacto de Tyr",
+   "name": "Bowling Bash",
    "aegis": "KN_BOWLINGBASH",
    "maxlv": 10,
    "sp": [
@@ -2730,7 +2730,7 @@
    }
   },
   "63": {
-   "name": "Montaria",
+   "name": "Riding",
    "aegis": "KN_RIDING",
    "maxlv": 1,
    "sp": [
@@ -2745,7 +2745,7 @@
    "need_by_job": {}
   },
   "64": {
-   "name": "Perícia em Montaria",
+   "name": "Cavalry Mastery",
    "aegis": "KN_CAVALIERMASTERY",
    "maxlv": 5,
    "sp": [
@@ -2764,7 +2764,7 @@
    "need_by_job": {}
   },
   "65": {
-   "name": "Perícia com Maça",
+   "name": "Mace Mastery",
    "aegis": "PR_MACEMASTERY",
    "maxlv": 10,
    "sp": [
@@ -2860,7 +2860,7 @@
    "need_by_job": {}
   },
   "70": {
-   "name": "Santuário",
+   "name": "Sanctuary",
    "aegis": "PR_SANCTUARY",
    "maxlv": 10,
    "sp": [
@@ -2884,7 +2884,7 @@
    "need_by_job": {}
   },
   "71": {
-   "name": "Retardar Veneno",
+   "name": "Slow Poison",
    "aegis": "PR_SLOWPOISON",
    "maxlv": 4,
    "sp": [
@@ -2897,7 +2897,7 @@
    "need_by_job": {}
   },
   "72": {
-   "name": "Graça Divina",
+   "name": "Status Recovery",
    "aegis": "PR_STRECOVERY",
    "maxlv": 1,
    "sp": [
@@ -2945,7 +2945,7 @@
    "need_by_job": {}
   },
   "75": {
-   "name": "Glória",
+   "name": "Gloria",
    "aegis": "PR_GLORIA",
    "maxlv": 5,
    "sp": [
@@ -2999,7 +2999,7 @@
    "need_by_job": {}
   },
   "77": {
-   "name": "Esconjurar",
+   "name": "Turn Undead",
    "aegis": "PR_TURNUNDEAD",
    "maxlv": 10,
    "sp": [
@@ -3074,7 +3074,7 @@
    "need_by_job": {}
   },
   "80": {
-   "name": "Coluna de Fogo",
+   "name": "Fire Pillar",
    "aegis": "WZ_FIREPILLAR",
    "maxlv": 10,
    "sp": [
@@ -3098,7 +3098,7 @@
    "need_by_job": {}
   },
   "81": {
-   "name": "Supernova",
+   "name": "Sightrasher",
    "aegis": "WZ_SIGHTRASHER",
    "maxlv": 10,
    "sp": [
@@ -3126,7 +3126,7 @@
    "need_by_job": {}
   },
   "83": {
-   "name": "Chuva de Meteoros",
+   "name": "Meteor Storm",
    "aegis": "WZ_METEOR",
    "maxlv": 10,
    "sp": [
@@ -3154,7 +3154,7 @@
    "need_by_job": {}
   },
   "84": {
-   "name": "Trovão de Júpiter",
+   "name": "Jupitel Thunder",
    "aegis": "WZ_JUPITEL",
    "maxlv": 10,
    "sp": [
@@ -3182,7 +3182,7 @@
    "need_by_job": {}
   },
   "85": {
-   "name": "Ira de Thor",
+   "name": "Lord of Vermilion",
    "aegis": "WZ_VERMILION",
    "maxlv": 10,
    "sp": [
@@ -3210,7 +3210,7 @@
    "need_by_job": {}
   },
   "86": {
-   "name": "Esfera d'햓ua",
+   "name": "Water Ball",
    "aegis": "WZ_WATERBALL",
    "maxlv": 5,
    "sp": [
@@ -3233,7 +3233,7 @@
    "need_by_job": {}
   },
   "87": {
-   "name": "Barreira de Gelo",
+   "name": "Ice Wall",
    "aegis": "WZ_ICEWALL",
    "maxlv": 10,
    "sp": [
@@ -3261,7 +3261,7 @@
    "need_by_job": {}
   },
   "88": {
-   "name": "Congelar",
+   "name": "Frost Nova",
    "aegis": "WZ_FROSTNOVA",
    "maxlv": 10,
    "sp": [
@@ -3285,7 +3285,7 @@
    "need_by_job": {}
   },
   "89": {
-   "name": "Nevasca",
+   "name": "Storm Gust",
    "aegis": "WZ_STORMGUST",
    "maxlv": 10,
    "sp": [
@@ -3313,7 +3313,7 @@
    "need_by_job": {}
   },
   "90": {
-   "name": "Coluna de Pedra",
+   "name": "Earth Spike",
    "aegis": "WZ_EARTHSPIKE",
    "maxlv": 5,
    "sp": [
@@ -3339,7 +3339,7 @@
    }
   },
   "91": {
-   "name": "Fúria da Terra",
+   "name": "Heaven's Drive",
    "aegis": "WZ_HEAVENDRIVE",
    "maxlv": 5,
    "sp": [
@@ -3365,7 +3365,7 @@
    }
   },
   "92": {
-   "name": "Pântano dos Mortos",
+   "name": "Quagmire",
    "aegis": "WZ_QUAGMIRE",
    "maxlv": 5,
    "sp": [
@@ -3384,7 +3384,7 @@
    "need_by_job": {}
   },
   "93": {
-   "name": "Sentido Sobrenatural",
+   "name": "Sense",
    "aegis": "WZ_ESTIMATION",
    "maxlv": 1,
    "sp": [
@@ -3394,7 +3394,7 @@
    "need_by_job": {}
   },
   "94": {
-   "name": "Trabalhar Ferro",
+   "name": "Iron Tempering",
    "aegis": "BS_IRON",
    "maxlv": 5,
    "sp": [
@@ -3408,7 +3408,7 @@
    "need_by_job": {}
   },
   "95": {
-   "name": "Trabalhar Aço",
+   "name": "Steel Tempering",
    "aegis": "BS_STEEL",
    "maxlv": 5,
    "sp": [
@@ -3427,7 +3427,7 @@
    "need_by_job": {}
   },
   "96": {
-   "name": "Produzir Pedra Fundamental",
+   "name": "Enchanted Stone Craft",
    "aegis": "BS_ENCHANTEDSTONE",
    "maxlv": 5,
    "sp": [
@@ -3446,7 +3446,7 @@
    "need_by_job": {}
   },
   "97": {
-   "name": "Perícia com Oridecon",
+   "name": "Research Oridecon",
    "aegis": "BS_ORIDEOCON",
    "maxlv": 5,
    "sp": [
@@ -3465,7 +3465,7 @@
    "need_by_job": {}
   },
   "98": {
-   "name": "Forjar Adaga",
+   "name": "Smith Dagger",
    "aegis": "BS_DAGGER",
    "maxlv": 3,
    "sp": [
@@ -3477,7 +3477,7 @@
    "need_by_job": {}
   },
   "99": {
-   "name": "Forjar Espada",
+   "name": "Smith Sword",
    "aegis": "BS_SWORD",
    "maxlv": 3,
    "sp": [
@@ -3494,7 +3494,7 @@
    "need_by_job": {}
   },
   "100": {
-   "name": "Forjar Espada de Duas Mãos",
+   "name": "Smith Two-handed Sword",
    "aegis": "BS_TWOHANDSWORD",
    "maxlv": 3,
    "sp": [
@@ -3511,7 +3511,7 @@
    "need_by_job": {}
   },
   "101": {
-   "name": "Forjar Machado",
+   "name": "Smith Axe",
    "aegis": "BS_AXE",
    "maxlv": 3,
    "sp": [
@@ -3528,7 +3528,7 @@
    "need_by_job": {}
   },
   "102": {
-   "name": "Forjar Maça",
+   "name": "Smith Mace",
    "aegis": "BS_MACE",
    "maxlv": 3,
    "sp": [
@@ -3545,7 +3545,7 @@
    "need_by_job": {}
   },
   "103": {
-   "name": "Forjar Soqueira",
+   "name": "Smith Brass Knuckle",
    "aegis": "BS_KNUCKLE",
    "maxlv": 3,
    "sp": [
@@ -3562,7 +3562,7 @@
    "need_by_job": {}
   },
   "104": {
-   "name": "Forjar Lança",
+   "name": "Smith Spear",
    "aegis": "BS_SPEAR",
    "maxlv": 3,
    "sp": [
@@ -3579,7 +3579,7 @@
    "need_by_job": {}
   },
   "105": {
-   "name": "Punho Firme",
+   "name": "Hilt Binding",
    "aegis": "BS_HILTBINDING",
    "maxlv": 1,
    "sp": [
@@ -3589,7 +3589,7 @@
    "need_by_job": {}
   },
   "106": {
-   "name": "Encontrar Minério",
+   "name": "Ore Discovery",
    "aegis": "BS_FINDINGORE",
    "maxlv": 1,
    "sp": [
@@ -3608,7 +3608,7 @@
    "need_by_job": {}
   },
   "107": {
-   "name": "Perícia em Armamento",
+   "name": "Weaponry Research",
    "aegis": "BS_WEAPONRESEARCH",
    "maxlv": 10,
    "sp": [
@@ -3632,7 +3632,7 @@
    "need_by_job": {}
   },
   "108": {
-   "name": "Consertar Armas",
+   "name": "Repair Weapon",
    "aegis": "BS_REPAIRWEAPON",
    "maxlv": 1,
    "sp": [
@@ -3647,7 +3647,7 @@
    "need_by_job": {}
   },
   "109": {
-   "name": "Resistência ao Fogo",
+   "name": "Skin Tempering",
    "aegis": "BS_SKINTEMPER",
    "maxlv": 5,
    "sp": [
@@ -3661,7 +3661,7 @@
    "need_by_job": {}
   },
   "110": {
-   "name": "Martelo de Thor",
+   "name": "Hammerfall",
    "aegis": "BS_HAMMERFALL",
    "maxlv": 5,
    "sp": [
@@ -3675,7 +3675,7 @@
    "need_by_job": {}
   },
   "111": {
-   "name": "Adrenalina Pura",
+   "name": "Adrenaline Rush",
    "aegis": "BS_ADRENALINE",
    "maxlv": 5,
    "sp": [
@@ -3694,7 +3694,7 @@
    "need_by_job": {}
   },
   "112": {
-   "name": "Manejo Perfeito",
+   "name": "Weapon Perfection",
    "aegis": "BS_WEAPONPERFECT",
    "maxlv": 5,
    "sp": [
@@ -3717,7 +3717,7 @@
    "need_by_job": {}
   },
   "113": {
-   "name": "Força Violenta",
+   "name": "Power Thrust",
    "aegis": "BS_OVERTHRUST",
    "maxlv": 5,
    "sp": [
@@ -3736,7 +3736,7 @@
    "need_by_job": {}
   },
   "114": {
-   "name": "Amplificar Poder",
+   "name": "Maximize Power",
    "aegis": "BS_MAXIMIZE",
    "maxlv": 5,
    "sp": [
@@ -3759,7 +3759,7 @@
    "need_by_job": {}
   },
   "115": {
-   "name": "Armadilha Escorregadia",
+   "name": "Skid Trap",
    "aegis": "HT_SKIDTRAP",
    "maxlv": 5,
    "sp": [
@@ -3773,7 +3773,7 @@
    "need_by_job": {}
   },
   "116": {
-   "name": "Armadilha Atordoante",
+   "name": "Land Mine",
    "aegis": "HT_LANDMINE",
    "maxlv": 5,
    "sp": [
@@ -3787,7 +3787,7 @@
    "need_by_job": {}
   },
   "117": {
-   "name": "Instalar Armadilha",
+   "name": "Anklesnare",
    "aegis": "HT_ANKLESNARE",
    "maxlv": 5,
    "sp": [
@@ -3806,7 +3806,7 @@
    "need_by_job": {}
   },
   "118": {
-   "name": "Armadilha Extenuante",
+   "name": "Shockwave Trap",
    "aegis": "HT_SHOCKWAVE",
    "maxlv": 5,
    "sp": [
@@ -3825,7 +3825,7 @@
    "need_by_job": {}
   },
   "119": {
-   "name": "Armadilha Sonífera",
+   "name": "Sandman",
    "aegis": "HT_SANDMAN",
    "maxlv": 5,
    "sp": [
@@ -3844,7 +3844,7 @@
    "need_by_job": {}
   },
   "120": {
-   "name": "Armadilha Luminosa",
+   "name": "Flasher",
    "aegis": "HT_FLASHER",
    "maxlv": 5,
    "sp": [
@@ -3863,7 +3863,7 @@
    "need_by_job": {}
   },
   "121": {
-   "name": "Armadilha Congelante",
+   "name": "Freezing Trap",
    "aegis": "HT_FREEZINGTRAP",
    "maxlv": 5,
    "sp": [
@@ -3882,7 +3882,7 @@
    "need_by_job": {}
   },
   "122": {
-   "name": "Instalar Mina",
+   "name": "Blast Mine",
    "aegis": "HT_BLASTMINE",
    "maxlv": 5,
    "sp": [
@@ -3909,7 +3909,7 @@
    "need_by_job": {}
   },
   "123": {
-   "name": "Armadilha Explosiva",
+   "name": "Claymore Trap",
    "aegis": "HT_CLAYMORETRAP",
    "maxlv": 5,
    "sp": [
@@ -3932,7 +3932,7 @@
    "need_by_job": {}
   },
   "124": {
-   "name": "Remover Armadilha",
+   "name": "Remove Trap",
    "aegis": "HT_REMOVETRAP",
    "maxlv": 1,
    "sp": [
@@ -3954,7 +3954,7 @@
    }
   },
   "125": {
-   "name": "Mensagem Secreta",
+   "name": "Talkie Box",
    "aegis": "HT_TALKIEBOX",
    "maxlv": 1,
    "sp": [
@@ -3973,7 +3973,7 @@
    "need_by_job": {}
   },
   "126": {
-   "name": "Flagelo das Feras",
+   "name": "Beast Bane",
    "aegis": "HT_BEASTBANE",
    "maxlv": 10,
    "sp": [
@@ -3992,7 +3992,7 @@
    "need_by_job": {}
   },
   "127": {
-   "name": "Adestrar Ave",
+   "name": "Falconry Mastery",
    "aegis": "HT_FALCON",
    "maxlv": 1,
    "sp": [
@@ -4007,7 +4007,7 @@
    "need_by_job": {}
   },
   "128": {
-   "name": "Garras de Aço",
+   "name": "Steel Crow",
    "aegis": "HT_STEELCROW",
    "maxlv": 10,
    "sp": [
@@ -4031,7 +4031,7 @@
    "need_by_job": {}
   },
   "129": {
-   "name": "Ataque Aéreo",
+   "name": "Blitz Beat",
    "aegis": "HT_BLITZBEAT",
    "maxlv": 5,
    "sp": [
@@ -4050,7 +4050,7 @@
    "need_by_job": {}
   },
   "130": {
-   "name": "Alerta",
+   "name": "Detect",
    "aegis": "HT_DETECTING",
    "maxlv": 4,
    "sp": [
@@ -4072,7 +4072,7 @@
    "need_by_job": {}
   },
   "131": {
-   "name": "Desativar Armadilha",
+   "name": "Spring Trap",
    "aegis": "HT_SPRINGTRAP",
    "maxlv": 5,
    "sp": [
@@ -4091,7 +4091,7 @@
    "need_by_job": {}
   },
   "132": {
-   "name": "Perícia com Mão Direita",
+   "name": "Righthand Mastery",
    "aegis": "AS_RIGHT",
    "maxlv": 5,
    "sp": [
@@ -4105,7 +4105,7 @@
    "need_by_job": {}
   },
   "133": {
-   "name": "Perícia com Mão Esquerda",
+   "name": "Lefthand Mastery",
    "aegis": "AS_LEFT",
    "maxlv": 5,
    "sp": [
@@ -4124,7 +4124,7 @@
    "need_by_job": {}
   },
   "134": {
-   "name": "Perícia com Katar",
+   "name": "Katar Mastery",
    "aegis": "AS_KATAR",
    "maxlv": 10,
    "sp": [
@@ -4143,7 +4143,7 @@
    "need_by_job": {}
   },
   "135": {
-   "name": "Furtividade",
+   "name": "Cloaking",
    "aegis": "AS_CLOAKING",
    "maxlv": 10,
    "sp": [
@@ -4167,7 +4167,7 @@
    "need_by_job": {}
   },
   "136": {
-   "name": "Lâminas Destruidoras",
+   "name": "Sonic Blow",
    "aegis": "AS_SONICBLOW",
    "maxlv": 10,
    "sp": [
@@ -4191,7 +4191,7 @@
    "need_by_job": {}
   },
   "137": {
-   "name": "Tocaia",
+   "name": "Grimtooth",
    "aegis": "AS_GRIMTOOTH",
    "maxlv": 5,
    "sp": [
@@ -4214,7 +4214,7 @@
    "need_by_job": {}
   },
   "138": {
-   "name": "Envenenar Arma",
+   "name": "Enchant Poison",
    "aegis": "AS_ENCHANTPOISON",
    "maxlv": 10,
    "sp": [
@@ -4238,7 +4238,7 @@
    "need_by_job": {}
   },
   "139": {
-   "name": "Refletir Veneno",
+   "name": "Poison React",
    "aegis": "AS_POISONREACT",
    "maxlv": 10,
    "sp": [
@@ -4262,7 +4262,7 @@
    "need_by_job": {}
   },
   "140": {
-   "name": "Névoa Tóxica",
+   "name": "Venom Dust",
    "aegis": "AS_VENOMDUST",
    "maxlv": 10,
    "sp": [
@@ -4286,7 +4286,7 @@
    "need_by_job": {}
   },
   "141": {
-   "name": "Explosão Tóxica",
+   "name": "Venom Splasher",
    "aegis": "AS_SPLASHER",
    "maxlv": 10,
    "sp": [
@@ -4314,7 +4314,7 @@
    "need_by_job": {}
   },
   "142": {
-   "name": "Primeiros Socorros",
+   "name": "First Aid",
    "aegis": "NV_FIRSTAID",
    "maxlv": 1,
    "sp": [
@@ -4324,7 +4324,7 @@
    "need_by_job": {}
   },
   "143": {
-   "name": "Fingir de Morto",
+   "name": "Play Dead",
    "aegis": "NV_TRICKDEAD",
    "maxlv": 1,
    "sp": [
@@ -4334,7 +4334,7 @@
    "need_by_job": {}
   },
   "144": {
-   "name": "Recuperar HP em Movimento",
+   "name": "Moving HP Recovery",
    "aegis": "SM_MOVINGRECOVERY",
    "maxlv": 1,
    "sp": [
@@ -4344,7 +4344,7 @@
    "need_by_job": {}
   },
   "145": {
-   "name": "Ataque Fatal",
+   "name": "Fatal Blow",
    "aegis": "SM_FATALBLOW",
    "maxlv": 1,
    "sp": [
@@ -4354,7 +4354,7 @@
    "need_by_job": {}
   },
   "146": {
-   "name": "Instinto de Sobrevivência",
+   "name": "Auto Berserk",
    "aegis": "SM_AUTOBERSERK",
    "maxlv": 1,
    "sp": [
@@ -4364,7 +4364,7 @@
    "need_by_job": {}
   },
   "147": {
-   "name": "Fabricar Flechas",
+   "name": "Arrow Crafting",
    "aegis": "AC_MAKINGARROW",
    "maxlv": 1,
    "sp": [
@@ -4374,7 +4374,7 @@
    "need_by_job": {}
   },
   "148": {
-   "name": "Disparo Violento",
+   "name": "Charge Arrow",
    "aegis": "AC_CHARGEARROW",
    "maxlv": 1,
    "sp": [
@@ -4384,7 +4384,7 @@
    "need_by_job": {}
   },
   "149": {
-   "name": "Chutar Areia",
+   "name": "Sprinkle Sand",
    "aegis": "TF_SPRINKLESAND",
    "maxlv": 1,
    "sp": [
@@ -4394,7 +4394,7 @@
    "need_by_job": {}
   },
   "150": {
-   "name": "Recuar",
+   "name": "Back Slide",
    "aegis": "TF_BACKSLIDING",
    "maxlv": 1,
    "sp": [
@@ -4404,7 +4404,7 @@
    "need_by_job": {}
   },
   "151": {
-   "name": "Procurar Pedras",
+   "name": "Pick Stone",
    "aegis": "TF_PICKSTONE",
    "maxlv": 1,
    "sp": [
@@ -4414,7 +4414,7 @@
    "need_by_job": {}
   },
   "152": {
-   "name": "Arremessar Pedra",
+   "name": "Throw Stone",
    "aegis": "TF_THROWSTONE",
    "maxlv": 1,
    "sp": [
@@ -4424,7 +4424,7 @@
    "need_by_job": {}
   },
   "153": {
-   "name": "Cavalo-de-Pau",
+   "name": "Cart Revolution",
    "aegis": "MC_CARTREVOLUTION",
    "maxlv": 1,
    "sp": [
@@ -4434,7 +4434,7 @@
    "need_by_job": {}
   },
   "154": {
-   "name": "Personalizar Carrinho",
+   "name": "Change Cart",
    "aegis": "MC_CHANGECART",
    "maxlv": 1,
    "sp": [
@@ -4444,7 +4444,7 @@
    "need_by_job": {}
   },
   "155": {
-   "name": "Grito de Guerra",
+   "name": "Crazy Uproar",
    "aegis": "MC_LOUD",
    "maxlv": 1,
    "sp": [
@@ -4454,7 +4454,7 @@
    "need_by_job": {}
   },
   "156": {
-   "name": "Luz Divina",
+   "name": "Holy Light",
    "aegis": "AL_HOLYLIGHT",
    "maxlv": 1,
    "sp": [
@@ -4464,7 +4464,7 @@
    "need_by_job": {}
   },
   "157": {
-   "name": "Prote豫o Arcana",
+   "name": "Energy Coat",
    "aegis": "MG_ENERGYCOAT",
    "maxlv": 1,
    "sp": [
@@ -4474,7 +4474,7 @@
    "need_by_job": {}
   },
   "210": {
-   "name": "Mãos Leves",
+   "name": "Snatcher",
    "aegis": "RG_SNATCHER",
    "maxlv": 10,
    "sp": [
@@ -4498,7 +4498,7 @@
    "need_by_job": {}
   },
   "211": {
-   "name": "Afanar",
+   "name": "Steal Coin",
    "aegis": "RG_STEALCOIN",
    "maxlv": 10,
    "sp": [
@@ -4522,7 +4522,7 @@
    "need_by_job": {}
   },
   "212": {
-   "name": "Apunhalar",
+   "name": "Back Stab",
    "aegis": "RG_BACKSTAP",
    "maxlv": 10,
    "sp": [
@@ -4546,7 +4546,7 @@
    "need_by_job": {}
   },
   "213": {
-   "name": "Túnel de Fuga",
+   "name": "Tunnel Drive",
    "aegis": "RG_TUNNELDRIVE",
    "maxlv": 5,
    "sp": [
@@ -4565,7 +4565,7 @@
    "need_by_job": {}
   },
   "214": {
-   "name": "Ataque Surpresa",
+   "name": "Raid",
    "aegis": "RG_RAID",
    "maxlv": 5,
    "sp": [
@@ -4588,7 +4588,7 @@
    "need_by_job": {}
   },
   "215": {
-   "name": "Remover Arma",
+   "name": "Strip Weapon",
    "aegis": "RG_STRIPWEAPON",
    "maxlv": 5,
    "sp": [
@@ -4607,7 +4607,7 @@
    "need_by_job": {}
   },
   "216": {
-   "name": "Remover Escudo",
+   "name": "Strip Shield",
    "aegis": "RG_STRIPSHIELD",
    "maxlv": 5,
    "sp": [
@@ -4626,7 +4626,7 @@
    "need_by_job": {}
   },
   "217": {
-   "name": "Remover Armadura",
+   "name": "Strip Armor",
    "aegis": "RG_STRIPARMOR",
    "maxlv": 5,
    "sp": [
@@ -4645,7 +4645,7 @@
    "need_by_job": {}
   },
   "218": {
-   "name": "Remover Capacete",
+   "name": "Strip Helm",
    "aegis": "RG_STRIPHELM",
    "maxlv": 5,
    "sp": [
@@ -4664,7 +4664,7 @@
    "need_by_job": {}
   },
   "219": {
-   "name": "Rapto",
+   "name": "Intimidate",
    "aegis": "RG_INTIMIDATE",
    "maxlv": 5,
    "sp": [
@@ -4702,7 +4702,7 @@
    "need_by_job": {}
   },
   "221": {
-   "name": "Pichar",
+   "name": "Flag Graffiti",
    "aegis": "RG_FLAGGRAFFITI",
    "maxlv": 5,
    "sp": [
@@ -4721,7 +4721,7 @@
    "need_by_job": {}
   },
   "222": {
-   "name": "Faxina",
+   "name": "Cleaner",
    "aegis": "RG_CLEANER",
    "maxlv": 1,
    "sp": [
@@ -4736,7 +4736,7 @@
    "need_by_job": {}
   },
   "223": {
-   "name": "Malandragem",
+   "name": "Gangster Paradise",
    "aegis": "RG_GANGSTER",
    "maxlv": 1,
    "sp": [
@@ -4751,7 +4751,7 @@
    "need_by_job": {}
   },
   "224": {
-   "name": "Extorquir",
+   "name": "Compulsion Discount",
    "aegis": "RG_COMPULSION",
    "maxlv": 5,
    "sp": [
@@ -4770,7 +4770,7 @@
    "need_by_job": {}
   },
   "225": {
-   "name": "Plágio",
+   "name": "Plagiarism",
    "aegis": "RG_PLAGIARISM",
    "maxlv": 10,
    "sp": [
@@ -4794,7 +4794,7 @@
    "need_by_job": {}
   },
   "226": {
-   "name": "Perícia com Machado e Espada",
+   "name": "Axe Mastery",
    "aegis": "AM_AXEMASTERY",
    "maxlv": 10,
    "sp": [
@@ -4813,7 +4813,7 @@
    "need_by_job": {}
   },
   "227": {
-   "name": "Pesquisa de Po寤es",
+   "name": "Learning Potion",
    "aegis": "AM_LEARNINGPOTION",
    "maxlv": 10,
    "sp": [
@@ -4832,7 +4832,7 @@
    "need_by_job": {}
   },
   "228": {
-   "name": "Preparar Po豫o",
+   "name": "Pharmacy",
    "aegis": "AM_PHARMACY",
    "maxlv": 10,
    "sp": [
@@ -4856,7 +4856,7 @@
    "need_by_job": {}
   },
   "229": {
-   "name": "Fogo Grego",
+   "name": "Demonstration",
    "aegis": "AM_DEMONSTRATION",
    "maxlv": 5,
    "sp": [
@@ -4875,7 +4875,7 @@
    "need_by_job": {}
   },
   "230": {
-   "name": "Terror 햎ido",
+   "name": "Acid Terror",
    "aegis": "AM_ACIDTERROR",
    "maxlv": 5,
    "sp": [
@@ -4894,7 +4894,7 @@
    "need_by_job": {}
   },
   "231": {
-   "name": "Arremessar Po豫o",
+   "name": "Potion Pitcher",
    "aegis": "AM_POTIONPITCHER",
    "maxlv": 5,
    "sp": [
@@ -4913,7 +4913,7 @@
    "need_by_job": {}
   },
   "232": {
-   "name": "Criar Monstro Planta",
+   "name": "Bio Cannibalize",
    "aegis": "AM_CANNIBALIZE",
    "maxlv": 5,
    "sp": [
@@ -4932,7 +4932,7 @@
    "need_by_job": {}
   },
   "233": {
-   "name": "Criar Esfera Marinha",
+   "name": "Summon Marine Sphere",
    "aegis": "AM_SPHEREMINE",
    "maxlv": 5,
    "sp": [
@@ -4951,7 +4951,7 @@
    "need_by_job": {}
   },
   "234": {
-   "name": "Revestir Arma",
+   "name": "Chemical Protection Weapon",
    "aegis": "AM_CP_WEAPON",
    "maxlv": 5,
    "sp": [
@@ -4970,7 +4970,7 @@
    "need_by_job": {}
   },
   "235": {
-   "name": "Revestir Escudo",
+   "name": "Chemical Protection Shield",
    "aegis": "AM_CP_SHIELD",
    "maxlv": 5,
    "sp": [
@@ -4989,7 +4989,7 @@
    "need_by_job": {}
   },
   "236": {
-   "name": "Revestir Armadura",
+   "name": "Chemical Protection Armor",
    "aegis": "AM_CP_ARMOR",
    "maxlv": 5,
    "sp": [
@@ -5008,7 +5008,7 @@
    "need_by_job": {}
   },
   "237": {
-   "name": "Revestir Capacete",
+   "name": "Chemical Protection Helm",
    "aegis": "AM_CP_HELM",
    "maxlv": 5,
    "sp": [
@@ -5027,7 +5027,7 @@
    "need_by_job": {}
   },
   "238": {
-   "name": "Bioética",
+   "name": "Bioethics",
    "aegis": "AM_BIOETHICS",
    "maxlv": 1,
    "sp": [
@@ -5037,7 +5037,7 @@
    "need_by_job": {}
   },
   "243": {
-   "name": "Despertar Homunculus",
+   "name": "Call Homunculus",
    "aegis": "AM_CALLHOMUN",
    "maxlv": 1,
    "sp": [
@@ -5052,7 +5052,7 @@
    "need_by_job": {}
   },
   "244": {
-   "name": "Vaporizar",
+   "name": "Rest",
    "aegis": "AM_REST",
    "maxlv": 1,
    "sp": [
@@ -5067,7 +5067,7 @@
    "need_by_job": {}
   },
   "247": {
-   "name": "Ressuscitar Homunculus",
+   "name": "Ressurect Homunculus",
    "aegis": "AM_RESURRECTHOMUN",
    "maxlv": 5,
    "sp": [
@@ -5086,7 +5086,7 @@
    "need_by_job": {}
   },
   "248": {
-   "name": "Fé",
+   "name": "Faith",
    "aegis": "CR_TRUST",
    "maxlv": 10,
    "sp": [
@@ -5105,7 +5105,7 @@
    "need_by_job": {}
   },
   "249": {
-   "name": "Bloqueio",
+   "name": "Auto Guard",
    "aegis": "CR_AUTOGUARD",
    "maxlv": 10,
    "sp": [
@@ -5124,7 +5124,7 @@
    "need_by_job": {}
   },
   "250": {
-   "name": "Puni豫o Divina",
+   "name": "Shield Charge",
    "aegis": "CR_SHIELDCHARGE",
    "maxlv": 5,
    "sp": [
@@ -5143,7 +5143,7 @@
    "need_by_job": {}
   },
   "251": {
-   "name": "Escudo Bumerangue",
+   "name": "Shield Boomerang",
    "aegis": "CR_SHIELDBOOMERANG",
    "maxlv": 5,
    "sp": [
@@ -5162,7 +5162,7 @@
    "need_by_job": {}
   },
   "252": {
-   "name": "Escudo Refletor",
+   "name": "Reflect Shield",
    "aegis": "CR_REFLECTSHIELD",
    "maxlv": 10,
    "sp": [
@@ -5186,7 +5186,7 @@
    "need_by_job": {}
   },
   "253": {
-   "name": "Crux Divinum",
+   "name": "Holy Cross",
    "aegis": "CR_HOLYCROSS",
    "maxlv": 10,
    "sp": [
@@ -5210,7 +5210,7 @@
    "need_by_job": {}
   },
   "254": {
-   "name": "Crux Magnum",
+   "name": "Grand Cross",
    "aegis": "CR_GRANDCROSS",
    "maxlv": 10,
    "sp": [
@@ -5238,7 +5238,7 @@
    "need_by_job": {}
   },
   "255": {
-   "name": "Reden豫o",
+   "name": "Devotion",
    "aegis": "CR_DEVOTION",
    "maxlv": 5,
    "sp": [
@@ -5261,7 +5261,7 @@
    "need_by_job": {}
   },
   "256": {
-   "name": "Divina Providência",
+   "name": "Providence",
    "aegis": "CR_PROVIDENCE",
    "maxlv": 5,
    "sp": [
@@ -5284,7 +5284,7 @@
    "need_by_job": {}
   },
   "257": {
-   "name": "Aura Sagrada",
+   "name": "Defender",
    "aegis": "CR_DEFENDER",
    "maxlv": 5,
    "sp": [
@@ -5303,7 +5303,7 @@
    "need_by_job": {}
   },
   "258": {
-   "name": "Rapidez com Lança",
+   "name": "Spear Quicken",
    "aegis": "CR_SPEARQUICKEN",
    "maxlv": 10,
    "sp": [
@@ -5327,7 +5327,7 @@
    "need_by_job": {}
   },
   "259": {
-   "name": "Punhos de Ferro",
+   "name": "Iron Hand",
    "aegis": "MO_IRONHAND",
    "maxlv": 10,
    "sp": [
@@ -5355,7 +5355,7 @@
    "need_by_job": {}
   },
   "260": {
-   "name": "Medita豫o",
+   "name": "Spirit Recovery",
    "aegis": "MO_SPIRITSRECOVERY",
    "maxlv": 5,
    "sp": [
@@ -5374,7 +5374,7 @@
    "need_by_job": {}
   },
   "261": {
-   "name": "Invocar Esfera Espiritual",
+   "name": "Call Spirits",
    "aegis": "MO_CALLSPIRITS",
    "maxlv": 5,
    "sp": [
@@ -5393,7 +5393,7 @@
    "need_by_job": {}
   },
   "262": {
-   "name": "Absorver Esferas Espirituais",
+   "name": "Absorp Spirits",
    "aegis": "MO_ABSORBSPIRITS",
    "maxlv": 1,
    "sp": [
@@ -5408,7 +5408,7 @@
    "need_by_job": {}
   },
   "263": {
-   "name": "Combo Triplo",
+   "name": "Triple Attack",
    "aegis": "MO_TRIPLEATTACK",
    "maxlv": 10,
    "sp": [
@@ -5432,7 +5432,7 @@
    "need_by_job": {}
   },
   "264": {
-   "name": "Passo Etéreo",
+   "name": "Body Relocation",
    "aegis": "MO_BODYRELOCATION",
    "maxlv": 1,
    "sp": [
@@ -5455,7 +5455,7 @@
    "need_by_job": {}
   },
   "265": {
-   "name": "Cair das Pétalas",
+   "name": "Dodge",
    "aegis": "MO_DODGE",
    "maxlv": 10,
    "sp": [
@@ -5483,7 +5483,7 @@
    "need_by_job": {}
   },
   "266": {
-   "name": "Impacto Psíquico",
+   "name": "Investigate",
    "aegis": "MO_INVESTIGATE",
    "maxlv": 5,
    "sp": [
@@ -5502,7 +5502,7 @@
    "need_by_job": {}
   },
   "267": {
-   "name": "Disparo de Esferas Espirituais",
+   "name": "Finger Offensive",
    "aegis": "MO_FINGEROFFENSIVE",
    "maxlv": 5,
    "sp": [
@@ -5521,7 +5521,7 @@
    "need_by_job": {}
   },
   "268": {
-   "name": "Corpo Fechado",
+   "name": "Steel Body",
    "aegis": "MO_STEELBODY",
    "maxlv": 5,
    "sp": [
@@ -5540,7 +5540,7 @@
    "need_by_job": {}
   },
   "269": {
-   "name": "Dilema",
+   "name": "Blade Stop",
    "aegis": "MO_BLADESTOP",
    "maxlv": 5,
    "sp": [
@@ -5559,7 +5559,7 @@
    "need_by_job": {}
   },
   "270": {
-   "name": "Fúria Interior",
+   "name": "Explosion Spirits",
    "aegis": "MO_EXPLOSIONSPIRITS",
    "maxlv": 5,
    "sp": [
@@ -5578,7 +5578,7 @@
    "need_by_job": {}
   },
   "271": {
-   "name": "Punho Supremo de Asura",
+   "name": "Asura Strike",
    "aegis": "MO_EXTREMITYFIST",
    "maxlv": 5,
    "sp": [
@@ -5601,7 +5601,7 @@
    "need_by_job": {}
   },
   "272": {
-   "name": "Combo Quádruplo",
+   "name": "Chain Combo",
    "aegis": "MO_CHAINCOMBO",
    "maxlv": 5,
    "sp": [
@@ -5620,7 +5620,7 @@
    "need_by_job": {}
   },
   "273": {
-   "name": "O Último Dragão",
+   "name": "Combo Finish",
    "aegis": "MO_COMBOFINISH",
    "maxlv": 5,
    "sp": [
@@ -5639,7 +5639,7 @@
    "need_by_job": {}
   },
   "274": {
-   "name": "Estudo de Livros",
+   "name": "Advanced Book",
    "aegis": "SA_ADVANCEDBOOK",
    "maxlv": 10,
    "sp": [
@@ -5658,7 +5658,7 @@
    "need_by_job": {}
   },
   "275": {
-   "name": "Cancelar magia",
+   "name": "Cast Cancel",
    "aegis": "SA_CASTCANCEL",
    "maxlv": 5,
    "sp": [
@@ -5677,7 +5677,7 @@
    "need_by_job": {}
   },
   "276": {
-   "name": "Espelho Mágico",
+   "name": "Magic Rod",
    "aegis": "SA_MAGICROD",
    "maxlv": 5,
    "sp": [
@@ -5696,7 +5696,7 @@
    "need_by_job": {}
   },
   "277": {
-   "name": "Desconcentrar",
+   "name": "Spell Breaker",
    "aegis": "SA_SPELLBREAKER",
    "maxlv": 5,
    "sp": [
@@ -5715,7 +5715,7 @@
    "need_by_job": {}
   },
   "278": {
-   "name": "Conjura豫o Livre",
+   "name": "Free Cast",
    "aegis": "SA_FREECAST",
    "maxlv": 10,
    "sp": [
@@ -5739,7 +5739,7 @@
    "need_by_job": {}
   },
   "279": {
-   "name": "Desejo Arcano",
+   "name": "Auto Spell",
    "aegis": "SA_AUTOSPELL",
    "maxlv": 10,
    "sp": [
@@ -5763,7 +5763,7 @@
    "need_by_job": {}
   },
   "280": {
-   "name": "Encantar com Chama",
+   "name": "Flame Launcher",
    "aegis": "SA_FLAMELAUNCHER",
    "maxlv": 5,
    "sp": [
@@ -5786,7 +5786,7 @@
    "need_by_job": {}
   },
   "281": {
-   "name": "Encantar com Geada",
+   "name": "Frost Weapon",
    "aegis": "SA_FROSTWEAPON",
    "maxlv": 5,
    "sp": [
@@ -5809,7 +5809,7 @@
    "need_by_job": {}
   },
   "282": {
-   "name": "Encantar com Ventania",
+   "name": "Lightning Loader",
    "aegis": "SA_LIGHTNINGLOADER",
    "maxlv": 5,
    "sp": [
@@ -5832,7 +5832,7 @@
    "need_by_job": {}
   },
   "283": {
-   "name": "Encantar com Terremoto",
+   "name": "Seismic Weapon",
    "aegis": "SA_SEISMICWEAPON",
    "maxlv": 5,
    "sp": [
@@ -5855,7 +5855,7 @@
    "need_by_job": {}
   },
   "284": {
-   "name": "Dragonologia",
+   "name": "Dragonology",
    "aegis": "SA_DRAGONOLOGY",
    "maxlv": 5,
    "sp": [
@@ -5874,7 +5874,7 @@
    "need_by_job": {}
   },
   "285": {
-   "name": "Vulcão",
+   "name": "Volcano",
    "aegis": "SA_VOLCANO",
    "maxlv": 5,
    "sp": [
@@ -5893,7 +5893,7 @@
    "need_by_job": {}
   },
   "286": {
-   "name": "Dilúvio",
+   "name": "Deluge",
    "aegis": "SA_DELUGE",
    "maxlv": 5,
    "sp": [
@@ -5912,7 +5912,7 @@
    "need_by_job": {}
   },
   "287": {
-   "name": "Furacão",
+   "name": "Violent Gale",
    "aegis": "SA_VIOLENTGALE",
    "maxlv": 5,
    "sp": [
@@ -5931,7 +5931,7 @@
    "need_by_job": {}
   },
   "288": {
-   "name": "Proteger Terreno",
+   "name": "Land Protector",
    "aegis": "SA_LANDPROTECTOR",
    "maxlv": 5,
    "sp": [
@@ -5958,7 +5958,7 @@
    "need_by_job": {}
   },
   "289": {
-   "name": "Desencantar",
+   "name": "Dispell",
    "aegis": "SA_DISPELL",
    "maxlv": 5,
    "sp": [
@@ -6009,7 +6009,7 @@
    "need_by_job": {}
   },
   "304": {
-   "name": "Aquecimento",
+   "name": "Adaptation to Circumstances",
    "aegis": "BD_ADAPTATION",
    "maxlv": 1,
    "sp": [
@@ -6019,7 +6019,7 @@
    "need_by_job": {}
   },
   "305": {
-   "name": "Bis",
+   "name": "Encore",
    "aegis": "BD_ENCORE",
    "maxlv": 1,
    "sp": [
@@ -6034,7 +6034,7 @@
    "need_by_job": {}
   },
   "306": {
-   "name": "Cantiga de Ninar",
+   "name": "Lullaby",
    "aegis": "BD_LULLABY",
    "maxlv": 1,
    "sp": [
@@ -6057,7 +6057,7 @@
    }
   },
   "307": {
-   "name": "Banquete de Njord",
+   "name": "Mr. Kim A Rich Man",
    "aegis": "BD_RICHMANKIM",
    "maxlv": 5,
    "sp": [
@@ -6076,7 +6076,7 @@
    "need_by_job": {}
   },
   "308": {
-   "name": "Ritmo Caótico",
+   "name": "Eternal Chaos",
    "aegis": "BD_ETERNALCHAOS",
    "maxlv": 1,
    "sp": [
@@ -6091,7 +6091,7 @@
    "need_by_job": {}
   },
   "309": {
-   "name": "Rufar dos Tambores",
+   "name": "Drum of Battlefield",
    "aegis": "BD_DRUMBATTLEFIELD",
    "maxlv": 5,
    "sp": [
@@ -6118,7 +6118,7 @@
    }
   },
   "310": {
-   "name": "Anel dos Nibelungos",
+   "name": "The Ring of Nibelungen",
    "aegis": "BD_RINGNIBELUNGEN",
    "maxlv": 5,
    "sp": [
@@ -6137,7 +6137,7 @@
    "need_by_job": {}
   },
   "311": {
-   "name": "Lamento de Loki",
+   "name": "Loki's Wail",
    "aegis": "BD_ROKISWEIL",
    "maxlv": 1,
    "sp": [
@@ -6160,7 +6160,7 @@
    }
   },
   "312": {
-   "name": "Can豫o Preciosa",
+   "name": "Into the Abyss",
    "aegis": "BD_INTOABYSS",
    "maxlv": 1,
    "sp": [
@@ -6175,7 +6175,7 @@
    "need_by_job": {}
   },
   "313": {
-   "name": "Ode a Siegfried",
+   "name": "Invulnerable Siegfried",
    "aegis": "BD_SIEGFRIED",
    "maxlv": 5,
    "sp": [
@@ -6202,7 +6202,7 @@
    }
   },
   "315": {
-   "name": "Lições de Música",
+   "name": "Musical Lesson",
    "aegis": "BA_MUSICALLESSON",
    "maxlv": 10,
    "sp": [
@@ -6221,7 +6221,7 @@
    "need_by_job": {}
   },
   "316": {
-   "name": "Flecha Melódica",
+   "name": "Musical Strike",
    "aegis": "BA_MUSICALSTRIKE",
    "maxlv": 5,
    "sp": [
@@ -6240,7 +6240,7 @@
    "need_by_job": {}
   },
   "317": {
-   "name": "Dissonância",
+   "name": "Dissonance",
    "aegis": "BA_DISSONANCE",
    "maxlv": 5,
    "sp": [
@@ -6263,7 +6263,7 @@
    "need_by_job": {}
   },
   "318": {
-   "name": "Piada Infame",
+   "name": "Frost Joker",
    "aegis": "BA_FROSTJOKER",
    "maxlv": 5,
    "sp": [
@@ -6282,7 +6282,7 @@
    "need_by_job": {}
   },
   "319": {
-   "name": "Assovio",
+   "name": "Whistle",
    "aegis": "BA_WHISTLE",
    "maxlv": 10,
    "sp": [
@@ -6306,7 +6306,7 @@
    "need_by_job": {}
   },
   "320": {
-   "name": "Crepúsculo Sangrento",
+   "name": "Assassin Cross of Sunset",
    "aegis": "BA_ASSASSINCROSS",
    "maxlv": 10,
    "sp": [
@@ -6330,7 +6330,7 @@
    "need_by_job": {}
   },
   "321": {
-   "name": "Poema de Bragi",
+   "name": "Poem of Bragi",
    "aegis": "BA_POEMBRAGI",
    "maxlv": 10,
    "sp": [
@@ -6354,7 +6354,7 @@
    "need_by_job": {}
   },
   "322": {
-   "name": "Ma豫s de Idun",
+   "name": "Apple of Idun",
    "aegis": "BA_APPLEIDUN",
    "maxlv": 10,
    "sp": [
@@ -6378,7 +6378,7 @@
    "need_by_job": {}
   },
   "323": {
-   "name": "Lições de Dança",
+   "name": "Dancing Lesson",
    "aegis": "DC_DANCINGLESSON",
    "maxlv": 10,
    "sp": [
@@ -6397,7 +6397,7 @@
    "need_by_job": {}
   },
   "324": {
-   "name": "Estilingue",
+   "name": "Throw Arrow",
    "aegis": "DC_THROWARROW",
    "maxlv": 5,
    "sp": [
@@ -6416,7 +6416,7 @@
    "need_by_job": {}
   },
   "325": {
-   "name": "Dança do Ventre",
+   "name": "Ugly Dance",
    "aegis": "DC_UGLYDANCE",
    "maxlv": 5,
    "sp": [
@@ -6439,7 +6439,7 @@
    "need_by_job": {}
   },
   "326": {
-   "name": "Escândalo",
+   "name": "Scream",
    "aegis": "DC_SCREAM",
    "maxlv": 5,
    "sp": [
@@ -6458,7 +6458,7 @@
    "need_by_job": {}
   },
   "327": {
-   "name": "Sibilo",
+   "name": "Humming",
    "aegis": "DC_HUMMING",
    "maxlv": 10,
    "sp": [
@@ -6482,7 +6482,7 @@
    "need_by_job": {}
   },
   "328": {
-   "name": "Não Me Abandones",
+   "name": "Please Don't Forget Me",
    "aegis": "DC_DONTFORGETME",
    "maxlv": 10,
    "sp": [
@@ -6506,7 +6506,7 @@
    "need_by_job": {}
   },
   "329": {
-   "name": "Beijo da Sorte",
+   "name": "Fortune's Kiss",
    "aegis": "DC_FORTUNEKISS",
    "maxlv": 10,
    "sp": [
@@ -6530,7 +6530,7 @@
    "need_by_job": {}
   },
   "330": {
-   "name": "Dança Cigana",
+   "name": "Service For You",
    "aegis": "DC_SERVICEFORYOU",
    "maxlv": 10,
    "sp": [
@@ -6554,7 +6554,7 @@
    "need_by_job": {}
   },
   "355": {
-   "name": "Lâmina de Aura",
+   "name": "Aura Blade",
    "aegis": "LK_AURABLADE",
    "maxlv": 5,
    "sp": [
@@ -6577,7 +6577,7 @@
    "need_by_job": {}
   },
   "356": {
-   "name": "Aparar Golpe",
+   "name": "Parry",
    "aegis": "LK_PARRYING",
    "maxlv": 10,
    "sp": [
@@ -6609,7 +6609,7 @@
    "need_by_job": {}
   },
   "357": {
-   "name": "Dedica豫o",
+   "name": "Concentration",
    "aegis": "LK_CONCENTRATION",
    "maxlv": 5,
    "sp": [
@@ -6636,7 +6636,7 @@
    "need_by_job": {}
   },
   "358": {
-   "name": "Relaxar",
+   "name": "Tension Relax",
    "aegis": "LK_TENSIONRELAX",
    "maxlv": 1,
    "sp": [
@@ -6659,7 +6659,7 @@
    "need_by_job": {}
   },
   "359": {
-   "name": "Frenesi",
+   "name": "Berserk",
    "aegis": "LK_BERSERK",
    "maxlv": 1,
    "sp": [
@@ -6696,7 +6696,7 @@
    "need_by_job": {}
   },
   "362": {
-   "name": "Basílica",
+   "name": "Basilica",
    "aegis": "HP_BASILICA",
    "maxlv": 5,
    "sp": [
@@ -6755,7 +6755,7 @@
    "need_by_job": {}
   },
   "364": {
-   "name": "Dreno de Alma",
+   "name": "Soul Drain",
    "aegis": "HW_SOULDRAIN",
    "maxlv": 10,
    "sp": [
@@ -6783,7 +6783,7 @@
    "need_by_job": {}
   },
   "365": {
-   "name": "Esmagamento Mágico",
+   "name": "Magic Crasher",
    "aegis": "HW_MAGICCRASHER",
    "maxlv": 1,
    "sp": [
@@ -6798,7 +6798,7 @@
    "need_by_job": {}
   },
   "366": {
-   "name": "Amplificação Mística",
+   "name": "Mystical Amplification",
    "aegis": "HW_MAGICPOWER",
    "maxlv": 10,
    "sp": [
@@ -6817,7 +6817,7 @@
    "need_by_job": {}
   },
   "367": {
-   "name": "Gloria Domini",
+   "name": "Pressure",
    "aegis": "PA_PRESSURE",
    "maxlv": 5,
    "sp": [
@@ -6844,7 +6844,7 @@
    "need_by_job": {}
   },
   "368": {
-   "name": "Sacrifício do Mártir",
+   "name": "Sacrifice",
    "aegis": "PA_SACRIFICE",
    "maxlv": 5,
    "sp": [
@@ -6867,7 +6867,7 @@
    "need_by_job": {}
   },
   "369": {
-   "name": "Canto de Batalha",
+   "name": "Gospel",
    "aegis": "PA_GOSPEL",
    "maxlv": 10,
    "sp": [
@@ -6899,7 +6899,7 @@
    "need_by_job": {}
   },
   "370": {
-   "name": "Golpe da Palma em Fúria",
+   "name": "Palm Strike",
    "aegis": "CH_PALMSTRIKE",
    "maxlv": 5,
    "sp": [
@@ -6922,7 +6922,7 @@
    "need_by_job": {}
   },
   "371": {
-   "name": "Punho do Tigre",
+   "name": "Tiger Fist",
    "aegis": "CH_TIGERFIST",
    "maxlv": 5,
    "sp": [
@@ -6949,7 +6949,7 @@
    "need_by_job": {}
   },
   "372": {
-   "name": "Combo Esmagador",
+   "name": "Chain Crush Combo",
    "aegis": "CH_CHAINCRUSH",
    "maxlv": 10,
    "sp": [
@@ -6981,7 +6981,7 @@
    "need_by_job": {}
   },
   "373": {
-   "name": "Indulgir",
+   "name": "Indulge",
    "aegis": "PF_HPCONVERSION",
    "maxlv": 5,
    "sp": [
@@ -7004,7 +7004,7 @@
    "need_by_job": {}
   },
   "374": {
-   "name": "Exalar Alma",
+   "name": "Soul Change",
    "aegis": "PF_SOULCHANGE",
    "maxlv": 1,
    "sp": [
@@ -7023,7 +7023,7 @@
    "need_by_job": {}
   },
   "375": {
-   "name": "Sifão de Alma",
+   "name": "Soul Burn",
    "aegis": "PF_SOULBURN",
    "maxlv": 5,
    "sp": [
@@ -7050,7 +7050,7 @@
    "need_by_job": {}
   },
   "376": {
-   "name": "Perícia com Katar Avançada",
+   "name": "Advanced Katar Mastery",
    "aegis": "ASC_KATAR",
    "maxlv": 5,
    "sp": [
@@ -7073,7 +7073,7 @@
    "need_by_job": {}
   },
   "378": {
-   "name": "Encantar com Veneno Mortal",
+   "name": "Enchant Deadly Poison",
    "aegis": "ASC_EDP",
    "maxlv": 5,
    "sp": [
@@ -7092,7 +7092,7 @@
    "need_by_job": {}
   },
   "379": {
-   "name": "Destruidor de Almas",
+   "name": "Soul Destroyer",
    "aegis": "ASC_BREAKER",
    "maxlv": 10,
    "sp": [
@@ -7128,7 +7128,7 @@
    "need_by_job": {}
   },
   "380": {
-   "name": "Visão Real",
+   "name": "True Sight",
    "aegis": "SN_SIGHT",
    "maxlv": 10,
    "sp": [
@@ -7164,7 +7164,7 @@
    "need_by_job": {}
   },
   "381": {
-   "name": "Assalto do Falcão",
+   "name": "Falcon Assault",
    "aegis": "SN_FALCONASSAULT",
    "maxlv": 5,
    "sp": [
@@ -7195,7 +7195,7 @@
    "need_by_job": {}
   },
   "382": {
-   "name": "Tiro Preciso",
+   "name": "Sharp Shooting",
    "aegis": "SN_SHARPSHOOTING",
    "maxlv": 5,
    "sp": [
@@ -7218,7 +7218,7 @@
    "need_by_job": {}
   },
   "383": {
-   "name": "Caminho do Vento",
+   "name": "Wind Walk",
    "aegis": "SN_WINDWALK",
    "maxlv": 10,
    "sp": [
@@ -7242,7 +7242,7 @@
    "need_by_job": {}
   },
   "384": {
-   "name": "Golpe Estilhaçante",
+   "name": "Meltdown",
    "aegis": "WS_MELTDOWN",
    "maxlv": 10,
    "sp": [
@@ -7278,7 +7278,7 @@
    "need_by_job": {}
   },
   "387": {
-   "name": "Impulso no Carrinho",
+   "name": "Cart Boost",
    "aegis": "WS_CARTBOOST",
    "maxlv": 1,
    "sp": [
@@ -7297,7 +7297,7 @@
    "need_by_job": {}
   },
   "389": {
-   "name": "Espreitar",
+   "name": "Chase Walk",
    "aegis": "ST_CHASEWALK",
    "maxlv": 5,
    "sp": [
@@ -7320,7 +7320,7 @@
    "need_by_job": {}
   },
   "390": {
-   "name": "Instinto de Defesa",
+   "name": "Reject Sword",
    "aegis": "ST_REJECTSWORD",
    "maxlv": 5,
    "sp": [
@@ -7334,7 +7334,7 @@
    "need_by_job": {}
   },
   "394": {
-   "name": "Vulcão de Flechas",
+   "name": "Arrow Vulcan",
    "aegis": "CG_ARROWVULCAN",
    "maxlv": 10,
    "sp": [
@@ -7382,7 +7382,7 @@
    }
   },
   "395": {
-   "name": "Bênção Protetora",
+   "name": "Moonlit Water Mill",
    "aegis": "CG_MOONLIT",
    "maxlv": 5,
    "sp": [
@@ -7417,7 +7417,7 @@
    }
   },
   "396": {
-   "name": "Controle de Marionete",
+   "name": "Marionette Control",
    "aegis": "CG_MARIONETTE",
    "maxlv": 1,
    "sp": [
@@ -7448,7 +7448,7 @@
    }
   },
   "397": {
-   "name": "Perfurar em Espiral",
+   "name": "Spiral Pierce",
    "aegis": "LK_SPIRALPIERCE",
    "maxlv": 5,
    "sp": [
@@ -7479,7 +7479,7 @@
    "need_by_job": {}
   },
   "398": {
-   "name": "Golpe Traumático",
+   "name": "Head Crush",
    "aegis": "LK_HEADCRUSH",
    "maxlv": 5,
    "sp": [
@@ -7502,7 +7502,7 @@
    "need_by_job": {}
   },
   "399": {
-   "name": "Ataque Vital",
+   "name": "Joint Beat",
    "aegis": "LK_JOINTBEAT",
    "maxlv": 10,
    "sp": [
@@ -7530,7 +7530,7 @@
    "need_by_job": {}
   },
   "400": {
-   "name": "Vulcão Napalm",
+   "name": "Napalm Vulcan",
    "aegis": "HW_NAPALMVULCAN",
    "maxlv": 5,
    "sp": [
@@ -7549,7 +7549,7 @@
    "need_by_job": {}
   },
   "401": {
-   "name": "Zen",
+   "name": "Dangerous Soul Collect",
    "aegis": "CH_SOULCOLLECT",
    "maxlv": 1,
    "sp": [
@@ -7564,7 +7564,7 @@
    "need_by_job": {}
   },
   "402": {
-   "name": "Enlouquecedor",
+   "name": "Mind Breaker",
    "aegis": "PF_MINDBREAKER",
    "maxlv": 5,
    "sp": [
@@ -7587,7 +7587,7 @@
    "need_by_job": {}
   },
   "403": {
-   "name": "Presciência",
+   "name": "Memorize",
    "aegis": "PF_MEMORIZE",
    "maxlv": 1,
    "sp": [
@@ -7610,7 +7610,7 @@
    "need_by_job": {}
   },
   "404": {
-   "name": "Bruma Ofuscante",
+   "name": "Wall of Fog",
    "aegis": "PF_FOGWALL",
    "maxlv": 1,
    "sp": [
@@ -7629,7 +7629,7 @@
    "need_by_job": {}
   },
   "405": {
-   "name": "Prisão de Teia",
+   "name": "Spider Web",
    "aegis": "PF_SPIDERWEB",
    "maxlv": 1,
    "sp": [
@@ -7644,7 +7644,7 @@
    "need_by_job": {}
   },
   "406": {
-   "name": "Impacto Meteoro",
+   "name": "Meteor Assault",
    "aegis": "ASC_METEORASSAULT",
    "maxlv": 10,
    "sp": [
@@ -7680,7 +7680,7 @@
    "need_by_job": {}
   },
   "407": {
-   "name": "Criar Veneno Mortal",
+   "name": "Create Deadly Poison",
    "aegis": "ASC_CDP",
    "maxlv": 1,
    "sp": [
@@ -7703,7 +7703,7 @@
    "need_by_job": {}
   },
   "411": {
-   "name": "Corrida",
+   "name": "Sprint",
    "aegis": "TK_RUN",
    "maxlv": 10,
    "sp": [
@@ -7722,7 +7722,7 @@
    "need_by_job": {}
   },
   "412": {
-   "name": "Postura do Tornado",
+   "name": "Tornado Stance",
    "aegis": "TK_READYSTORM",
    "maxlv": 1,
    "sp": [
@@ -7737,7 +7737,7 @@
    "need_by_job": {}
   },
   "413": {
-   "name": "Chute do Tornado",
+   "name": "Tornado Kick",
    "aegis": "TK_STORMKICK",
    "maxlv": 7,
    "sp": [
@@ -7753,7 +7753,7 @@
    "need_by_job": {}
   },
   "414": {
-   "name": "Postura da Patada Voadora",
+   "name": "Heel Drop Stance",
    "aegis": "TK_READYDOWN",
    "maxlv": 1,
    "sp": [
@@ -7768,7 +7768,7 @@
    "need_by_job": {}
   },
   "415": {
-   "name": "Patada Voadora",
+   "name": "Heel Drop",
    "aegis": "TK_DOWNKICK",
    "maxlv": 7,
    "sp": [
@@ -7784,7 +7784,7 @@
    "need_by_job": {}
   },
   "416": {
-   "name": "Postura da Rasteira",
+   "name": "Roundhouse Stance",
    "aegis": "TK_READYTURN",
    "maxlv": 1,
    "sp": [
@@ -7799,7 +7799,7 @@
    "need_by_job": {}
   },
   "417": {
-   "name": "Rasteira",
+   "name": "Roundhouse Kick",
    "aegis": "TK_TURNKICK",
    "maxlv": 7,
    "sp": [
@@ -7815,7 +7815,7 @@
    "need_by_job": {}
   },
   "418": {
-   "name": "Postura do Contrachute",
+   "name": "Counter Kick Stance",
    "aegis": "TK_READYCOUNTER",
    "maxlv": 1,
    "sp": [
@@ -7830,7 +7830,7 @@
    "need_by_job": {}
   },
   "419": {
-   "name": "Contrachute",
+   "name": "Counter Kick",
    "aegis": "TK_COUNTER",
    "maxlv": 7,
    "sp": [
@@ -7846,7 +7846,7 @@
    "need_by_job": {}
   },
   "420": {
-   "name": "Cambalhota",
+   "name": "Tumbling",
    "aegis": "TK_DODGE",
    "maxlv": 1,
    "sp": [
@@ -7861,7 +7861,7 @@
    "need_by_job": {}
   },
   "421": {
-   "name": "Chute Aéreo",
+   "name": "Flying Kick",
    "aegis": "TK_JUMPKICK",
    "maxlv": 7,
    "sp": [
@@ -7877,7 +7877,7 @@
    "need_by_job": {}
   },
   "422": {
-   "name": "Trégua Rápida",
+   "name": "Peaceful Break",
    "aegis": "TK_HPTIME",
    "maxlv": 10,
    "sp": [
@@ -7896,7 +7896,7 @@
    "need_by_job": {}
   },
   "423": {
-   "name": "Retiro Rápido",
+   "name": "Happy Break",
    "aegis": "TK_SPTIME",
    "maxlv": 10,
    "sp": [
@@ -7929,7 +7929,7 @@
    "need_by_job": {}
   },
   "425": {
-   "name": "Brisa Leve",
+   "name": "Mild Wind",
    "aegis": "TK_SEVENWIND",
    "maxlv": 7,
    "sp": [
@@ -7958,7 +7958,7 @@
    "need_by_job": {}
   },
   "426": {
-   "name": "Salto",
+   "name": "Leap",
    "aegis": "TK_HIGHJUMP",
    "maxlv": 5,
    "sp": [
@@ -7972,7 +7972,7 @@
    "need_by_job": {}
   },
   "427": {
-   "name": "Percep豫o Solar, Lunar e Estelar",
+   "name": "Feeling of Sun Moon Star",
    "aegis": "SG_FEEL",
    "maxlv": 3,
    "sp": [
@@ -7984,7 +7984,7 @@
    "need_by_job": {}
   },
   "428": {
-   "name": "Calor Solar",
+   "name": "Warmth of The Sun",
    "aegis": "SG_SUN_WARM",
    "maxlv": 3,
    "sp": [
@@ -8001,7 +8001,7 @@
    "need_by_job": {}
   },
   "429": {
-   "name": "Calor Lunar",
+   "name": "Warmth of The Moon",
    "aegis": "SG_MOON_WARM",
    "maxlv": 3,
    "sp": [
@@ -8018,7 +8018,7 @@
    "need_by_job": {}
   },
   "430": {
-   "name": "Calor Estelar",
+   "name": "Warmth of The Star",
    "aegis": "SG_STAR_WARM",
    "maxlv": 3,
    "sp": [
@@ -8035,7 +8035,7 @@
    "need_by_job": {}
   },
   "431": {
-   "name": "Prote豫o Solar",
+   "name": "Comfort of The Sun",
    "aegis": "SG_SUN_COMFORT",
    "maxlv": 4,
    "sp": [
@@ -8053,7 +8053,7 @@
    "need_by_job": {}
   },
   "432": {
-   "name": "Prote豫o Lunar",
+   "name": "Comfort of The Moon",
    "aegis": "SG_MOON_COMFORT",
    "maxlv": 4,
    "sp": [
@@ -8071,7 +8071,7 @@
    "need_by_job": {}
   },
   "433": {
-   "name": "Prote豫o Estelar",
+   "name": "Comfort of The Star",
    "aegis": "SG_STAR_COMFORT",
    "maxlv": 4,
    "sp": [
@@ -8089,7 +8089,7 @@
    "need_by_job": {}
   },
   "434": {
-   "name": "Oposi豫o Solar, Lunar e Estelar",
+   "name": "Hatred of Sun Moon Star",
    "aegis": "SG_HATE",
    "maxlv": 3,
    "sp": [
@@ -8101,7 +8101,7 @@
    "need_by_job": {}
   },
   "435": {
-   "name": "Fúria Solar",
+   "name": "Anger of The Sun",
    "aegis": "SG_SUN_ANGER",
    "maxlv": 3,
    "sp": [
@@ -8118,7 +8118,7 @@
    "need_by_job": {}
   },
   "436": {
-   "name": "Fúria Lunar",
+   "name": "Anger of The Moon",
    "aegis": "SG_MOON_ANGER",
    "maxlv": 3,
    "sp": [
@@ -8135,7 +8135,7 @@
    "need_by_job": {}
   },
   "437": {
-   "name": "Fúria Estelar",
+   "name": "Anger of The Star",
    "aegis": "SG_STAR_ANGER",
    "maxlv": 3,
    "sp": [
@@ -8152,7 +8152,7 @@
    "need_by_job": {}
   },
   "438": {
-   "name": "Bênção Solar",
+   "name": "Blessing of The Sun",
    "aegis": "SG_SUN_BLESS",
    "maxlv": 5,
    "sp": [
@@ -8175,7 +8175,7 @@
    "need_by_job": {}
   },
   "439": {
-   "name": "Bênção Lunar",
+   "name": "Blessing of The Moon",
    "aegis": "SG_MOON_BLESS",
    "maxlv": 5,
    "sp": [
@@ -8198,7 +8198,7 @@
    "need_by_job": {}
   },
   "440": {
-   "name": "Bênção Estelar",
+   "name": "Blessing of The Star",
    "aegis": "SG_STAR_BLESS",
    "maxlv": 5,
    "sp": [
@@ -8221,7 +8221,7 @@
    "need_by_job": {}
   },
   "441": {
-   "name": "Sombra Solar, Lunar e Estelar",
+   "name": "Demon of Sun Moon Star",
    "aegis": "SG_DEVIL",
    "maxlv": 10,
    "sp": [
@@ -8240,7 +8240,7 @@
    "need_by_job": {}
   },
   "442": {
-   "name": "Auxílio Solar, Lunar e Estelar",
+   "name": "Friend of Sun Moon Star",
    "aegis": "SG_FRIEND",
    "maxlv": 3,
    "sp": [
@@ -8252,7 +8252,7 @@
    "need_by_job": {}
   },
   "443": {
-   "name": "Transmissão Solar, Lunar e Estelar",
+   "name": "Knowledge of Sun Moon Star",
    "aegis": "SG_KNOWLEDGE",
    "maxlv": 10,
    "sp": [
@@ -8271,7 +8271,7 @@
    "need_by_job": {}
   },
   "444": {
-   "name": "União Solar, Lunar e Estelar",
+   "name": "Fusion of Sun Moon Star",
    "aegis": "SG_FUSION",
    "maxlv": 1,
    "sp": [
@@ -8286,7 +8286,7 @@
    "need_by_job": {}
   },
   "445": {
-   "name": "Espírito do Alquimista",
+   "name": "Alchemist Spirit",
    "aegis": "SL_ALCHEMIST",
    "maxlv": 5,
    "sp": [
@@ -8300,7 +8300,7 @@
    "need_by_job": {}
   },
   "446": {
-   "name": "Arremessar Poção da Fúria Selvagem",
+   "name": "Berserk Pitcher",
    "aegis": "AM_BERSERKPITCHER",
    "maxlv": 1,
    "sp": [
@@ -8310,7 +8310,7 @@
    "need_by_job": {}
   },
   "447": {
-   "name": "Espírito do Monge",
+   "name": "Monk Spirit",
    "aegis": "SL_MONK",
    "maxlv": 5,
    "sp": [
@@ -8324,7 +8324,7 @@
    "need_by_job": {}
   },
   "448": {
-   "name": "Espírito do Mestre Taekwon",
+   "name": "Star Gladiator Spirit",
    "aegis": "SL_STAR",
    "maxlv": 5,
    "sp": [
@@ -8338,7 +8338,7 @@
    "need_by_job": {}
   },
   "449": {
-   "name": "Espírito do Sábio",
+   "name": "Sage Spirit",
    "aegis": "SL_SAGE",
    "maxlv": 5,
    "sp": [
@@ -8352,7 +8352,7 @@
    "need_by_job": {}
   },
   "450": {
-   "name": "Espírito do Templário",
+   "name": "Crusader Spirit",
    "aegis": "SL_CRUSADER",
    "maxlv": 5,
    "sp": [
@@ -8366,7 +8366,7 @@
    "need_by_job": {}
   },
   "451": {
-   "name": "Espírito do Superaprendiz",
+   "name": "Super Novice Spirit",
    "aegis": "SL_SUPERNOVICE",
    "maxlv": 5,
    "sp": [
@@ -8385,7 +8385,7 @@
    "need_by_job": {}
   },
   "452": {
-   "name": "Espírito do Cavaleiro",
+   "name": "Knight Spirit",
    "aegis": "SL_KNIGHT",
    "maxlv": 5,
    "sp": [
@@ -8404,7 +8404,7 @@
    "need_by_job": {}
   },
   "453": {
-   "name": "Espírito do Bruxo",
+   "name": "Wizard Spirit",
    "aegis": "SL_WIZARD",
    "maxlv": 5,
    "sp": [
@@ -8423,7 +8423,7 @@
    "need_by_job": {}
   },
   "454": {
-   "name": "Espírito do Sacerdote",
+   "name": "Priest Spirit",
    "aegis": "SL_PRIEST",
    "maxlv": 5,
    "sp": [
@@ -8442,7 +8442,7 @@
    "need_by_job": {}
   },
   "455": {
-   "name": "Espírito dos Artistas",
+   "name": "Bard and Dancer Spirits",
    "aegis": "SL_BARDDANCER",
    "maxlv": 5,
    "sp": [
@@ -8456,7 +8456,7 @@
    "need_by_job": {}
   },
   "456": {
-   "name": "Espírito do Arruaceiro",
+   "name": "Rogue Spirit",
    "aegis": "SL_ROGUE",
    "maxlv": 5,
    "sp": [
@@ -8475,7 +8475,7 @@
    "need_by_job": {}
   },
   "457": {
-   "name": "Espírito do Mercenário",
+   "name": "Assassin Spirit",
    "aegis": "SL_ASSASIN",
    "maxlv": 5,
    "sp": [
@@ -8489,7 +8489,7 @@
    "need_by_job": {}
   },
   "458": {
-   "name": "Espírito do Ferreiro",
+   "name": "Blacksmith Spirit",
    "aegis": "SL_BLACKSMITH",
    "maxlv": 5,
    "sp": [
@@ -8508,7 +8508,7 @@
    "need_by_job": {}
   },
   "459": {
-   "name": "Adrenalina Concentrada",
+   "name": "Full Adrenaline Rush",
    "aegis": "BS_ADRENALINE2",
    "maxlv": 1,
    "sp": [
@@ -8523,7 +8523,7 @@
    "need_by_job": {}
   },
   "460": {
-   "name": "Espírito do Caçador",
+   "name": "Hunter Spirit",
    "aegis": "SL_HUNTER",
    "maxlv": 5,
    "sp": [
@@ -8542,7 +8542,7 @@
    "need_by_job": {}
   },
   "461": {
-   "name": "Espírito do Espiritualista",
+   "name": "Soul Linker Spirit",
    "aegis": "SL_SOULLINKER",
    "maxlv": 5,
    "sp": [
@@ -8803,7 +8803,7 @@
    "need_by_job": {}
   },
   "475": {
-   "name": "Preservar",
+   "name": "Preserve",
    "aegis": "ST_PRESERVE",
    "maxlv": 1,
    "sp": [
@@ -8818,7 +8818,7 @@
    "need_by_job": {}
   },
   "476": {
-   "name": "Remo豫o Total",
+   "name": "Full Strip",
    "aegis": "ST_FULLSTRIP",
    "maxlv": 5,
    "sp": [
@@ -8837,7 +8837,7 @@
    "need_by_job": {}
   },
   "477": {
-   "name": "Aprimorar Armamento",
+   "name": "Weapon Refine",
    "aegis": "WS_WEAPONREFINE",
    "maxlv": 10,
    "sp": [
@@ -8861,7 +8861,7 @@
    "need_by_job": {}
   },
   "478": {
-   "name": "Arremessar Po豫o Compacta",
+   "name": "Slim Potion Pitcher",
    "aegis": "CR_SLIMPITCHER",
    "maxlv": 10,
    "sp": [
@@ -8885,7 +8885,7 @@
    "need_by_job": {}
   },
   "479": {
-   "name": "Proteção Química Total",
+   "name": "Full Chemical Protection",
    "aegis": "CR_FULLPROTECTION",
    "maxlv": 5,
    "sp": [
@@ -8916,7 +8916,7 @@
    "need_by_job": {}
   },
   "480": {
-   "name": "Choque Rápido",
+   "name": "Shield Chain",
    "aegis": "PA_SHIELDCHAIN",
    "maxlv": 5,
    "sp": [
@@ -8935,7 +8935,7 @@
    "need_by_job": {}
   },
   "481": {
-   "name": "Riqueza Espírito",
+   "name": "Mana Recharge",
    "aegis": "HP_MANARECHARGE",
    "maxlv": 5,
    "sp": [
@@ -8958,7 +8958,7 @@
    "need_by_job": {}
   },
   "482": {
-   "name": "Lanças Duplas",
+   "name": "Double Cast",
    "aegis": "PF_DOUBLECASTING",
    "maxlv": 5,
    "sp": [
@@ -8996,7 +8996,7 @@
    "need_by_job": {}
   },
   "484": {
-   "name": "Campo Gravitacional",
+   "name": "Gravitational Field",
    "aegis": "HW_GRAVITATION",
    "maxlv": 5,
    "sp": [
@@ -9023,7 +9023,7 @@
    "need_by_job": {}
   },
   "485": {
-   "name": "Choque de Carrinho",
+   "name": "Cart Termination",
    "aegis": "WS_CARTTERMINATION",
    "maxlv": 10,
    "sp": [
@@ -9055,7 +9055,7 @@
    "need_by_job": {}
   },
   "486": {
-   "name": "Força Violentíssima",
+   "name": "Maximum Power Thrust",
    "aegis": "WS_OVERTHRUSTMAX",
    "maxlv": 5,
    "sp": [
@@ -9074,7 +9074,7 @@
    "need_by_job": {}
   },
   "488": {
-   "name": "Bastão de Hermod",
+   "name": "Hermode's Rod",
    "aegis": "CG_HERMODE",
    "maxlv": 5,
    "sp": [
@@ -9109,7 +9109,7 @@
    }
   },
   "489": {
-   "name": "Destino nas Cartas",
+   "name": "Tarot Card of Fate",
    "aegis": "CG_TAROTCARD",
    "maxlv": 5,
    "sp": [
@@ -9144,7 +9144,7 @@
    }
   },
   "490": {
-   "name": "Bomba 햎ida",
+   "name": "Acid Demonstration",
    "aegis": "CR_ACIDDEMONSTRATION",
    "maxlv": 10,
    "sp": [
@@ -9172,7 +9172,7 @@
    "need_by_job": {}
   },
   "493": {
-   "name": "Missão Taekwon",
+   "name": "Taekwon Mission",
    "aegis": "TK_MISSION",
    "maxlv": 1,
    "sp": [
@@ -9187,7 +9187,7 @@
    "need_by_job": {}
   },
   "494": {
-   "name": "Espírito dos Transcendentais",
+   "name": "Rebirth Spirit",
    "aegis": "SL_HIGH",
    "maxlv": 5,
    "sp": [
@@ -9206,7 +9206,7 @@
    "need_by_job": {}
   },
   "495": {
-   "name": "Rapidez com Uma Mão",
+   "name": "One-Hand Quicken",
    "aegis": "KN_ONEHAND",
    "maxlv": 1,
    "sp": [
@@ -9230,7 +9230,7 @@
    "need_by_job": {}
   },
   "496": {
-   "name": "Cria豫o Espiritual de Po寤es I",
+   "name": "Twilight Pharmacy",
    "aegis": "AM_TWILIGHT1",
    "maxlv": 1,
    "sp": [
@@ -9245,7 +9245,7 @@
    "need_by_job": {}
   },
   "497": {
-   "name": "Cria豫o Espiritual de Po寤es II",
+   "name": "Twilight Pharmacy",
    "aegis": "AM_TWILIGHT2",
    "maxlv": 1,
    "sp": [
@@ -9260,7 +9260,7 @@
    "need_by_job": {}
   },
   "498": {
-   "name": "Cria豫o Espiritual de Po寤es III",
+   "name": "Twilight Pharmacy",
    "aegis": "AM_TWILIGHT3",
    "maxlv": 1,
    "sp": [
@@ -9275,7 +9275,7 @@
    "need_by_job": {}
   },
   "499": {
-   "name": "Ataque da Fera",
+   "name": "Beast Strafing",
    "aegis": "HT_POWER",
    "maxlv": 1,
    "sp": [
@@ -9290,7 +9290,7 @@
    "need_by_job": {}
   },
   "500": {
-   "name": "Cara ou Coroa",
+   "name": "Coin Flip",
    "aegis": "GS_GLITTERING",
    "maxlv": 5,
    "sp": [
@@ -9304,7 +9304,7 @@
    "need_by_job": {}
   },
   "501": {
-   "name": "Atirar Moedas",
+   "name": "Fling",
    "aegis": "GS_FLING",
    "maxlv": 1,
    "sp": [
@@ -9319,7 +9319,7 @@
    "need_by_job": {}
   },
   "502": {
-   "name": "Ataque Triplo",
+   "name": "Triple Action",
    "aegis": "GS_TRIPLEACTION",
    "maxlv": 1,
    "sp": [
@@ -9334,7 +9334,7 @@
    "need_by_job": {}
   },
   "503": {
-   "name": "Ataque Certeiro",
+   "name": "Bull's Eye",
    "aegis": "GS_BULLSEYE",
    "maxlv": 1,
    "sp": [
@@ -9349,7 +9349,7 @@
    "need_by_job": {}
   },
   "504": {
-   "name": "Resistência Final",
+   "name": "Madness Canceller",
    "aegis": "GS_MADNESSCANCEL",
    "maxlv": 1,
    "sp": [
@@ -9364,7 +9364,7 @@
    "need_by_job": {}
   },
   "505": {
-   "name": "Pânico do Justiceiro",
+   "name": "Adjustment",
    "aegis": "GS_ADJUSTMENT",
    "maxlv": 1,
    "sp": [
@@ -9379,7 +9379,7 @@
    "need_by_job": {}
   },
   "506": {
-   "name": "Aumentar Precisão",
+   "name": "Increasing Accuracy",
    "aegis": "GS_INCREASING",
    "maxlv": 1,
    "sp": [
@@ -9394,7 +9394,7 @@
    "need_by_job": {}
   },
   "507": {
-   "name": "Bala Mágica",
+   "name": "Magical Bullet",
    "aegis": "GS_MAGICALBULLET",
    "maxlv": 1,
    "sp": [
@@ -9409,7 +9409,7 @@
    "need_by_job": {}
   },
   "508": {
-   "name": "Tiro Bombinha",
+   "name": "Cracker",
    "aegis": "GS_CRACKER",
    "maxlv": 1,
    "sp": [
@@ -9424,7 +9424,7 @@
    "need_by_job": {}
   },
   "509": {
-   "name": "Ataque Concentrado",
+   "name": "Single Action",
    "aegis": "GS_SINGLEACTION",
    "maxlv": 10,
    "sp": [
@@ -9443,7 +9443,7 @@
    "need_by_job": {}
   },
   "510": {
-   "name": "Olhos de Serpente",
+   "name": "Snake Eyes",
    "aegis": "GS_SNAKEEYE",
    "maxlv": 10,
    "sp": [
@@ -9462,7 +9462,7 @@
    "need_by_job": {}
   },
   "511": {
-   "name": "Rea豫o em Cadeia",
+   "name": "Chain Action",
    "aegis": "GS_CHAINACTION",
    "maxlv": 10,
    "sp": [
@@ -9486,7 +9486,7 @@
    "need_by_job": {}
   },
   "512": {
-   "name": "Rastrear o Alvo",
+   "name": "Tracking",
    "aegis": "GS_TRACKING",
    "maxlv": 10,
    "sp": [
@@ -9510,7 +9510,7 @@
    "need_by_job": {}
   },
   "513": {
-   "name": "Desarmar",
+   "name": "Disarm",
    "aegis": "GS_DISARM",
    "maxlv": 5,
    "sp": [
@@ -9529,7 +9529,7 @@
    "need_by_job": {}
   },
   "514": {
-   "name": "Ferir Alvo",
+   "name": "Piercing Shot",
    "aegis": "GS_PIERCINGSHOT",
    "maxlv": 5,
    "sp": [
@@ -9548,7 +9548,7 @@
    "need_by_job": {}
   },
   "515": {
-   "name": "Rajada Certeira",
+   "name": "Rapid Shower",
    "aegis": "GS_RAPIDSHOWER",
    "maxlv": 10,
    "sp": [
@@ -9596,7 +9596,7 @@
    "need_by_job": {}
   },
   "517": {
-   "name": "Ataque Gatling",
+   "name": "Gatling Fever",
    "aegis": "GS_GATLINGFEVER",
    "maxlv": 10,
    "sp": [
@@ -9624,7 +9624,7 @@
    "need_by_job": {}
   },
   "518": {
-   "name": "Controle de Multidão",
+   "name": "Dust",
    "aegis": "GS_DUST",
    "maxlv": 10,
    "sp": [
@@ -9648,7 +9648,7 @@
    "need_by_job": {}
   },
   "519": {
-   "name": "Ataque Total",
+   "name": "Full Buster",
    "aegis": "GS_FULLBUSTER",
    "maxlv": 10,
    "sp": [
@@ -9672,7 +9672,7 @@
    "need_by_job": {}
   },
   "520": {
-   "name": "Disparo Espalhado",
+   "name": "Spread Attack",
    "aegis": "GS_SPREADATTACK",
    "maxlv": 10,
    "sp": [
@@ -9696,7 +9696,7 @@
    "need_by_job": {}
   },
   "521": {
-   "name": "Mina do Justiceiro",
+   "name": "Ground Drift",
    "aegis": "GS_GROUNDDRIFT",
    "maxlv": 10,
    "sp": [
@@ -9720,7 +9720,7 @@
    "need_by_job": {}
   },
   "522": {
-   "name": "Perícia com Shuriken",
+   "name": "Throwing Mastery",
    "aegis": "NJ_TOBIDOUGU",
    "maxlv": 10,
    "sp": [
@@ -9739,7 +9739,7 @@
    "need_by_job": {}
   },
   "523": {
-   "name": "Arremessar Shuriken",
+   "name": "Throw Shuriken",
    "aegis": "NJ_SYURIKEN",
    "maxlv": 10,
    "sp": [
@@ -9763,7 +9763,7 @@
    "need_by_job": {}
   },
   "524": {
-   "name": "Arremessar Kunai",
+   "name": "Throw Kunai",
    "aegis": "NJ_KUNAI",
    "maxlv": 5,
    "sp": [
@@ -9782,7 +9782,7 @@
    "need_by_job": {}
   },
   "525": {
-   "name": "Arremessar Huuma",
+   "name": "Throw Huuma Shuriken",
    "aegis": "NJ_HUUMA",
    "maxlv": 5,
    "sp": [
@@ -9805,7 +9805,7 @@
    "need_by_job": {}
   },
   "526": {
-   "name": "Chuva de Moedas",
+   "name": "Throw Zeny",
    "aegis": "NJ_ZENYNAGE",
    "maxlv": 10,
    "sp": [
@@ -9833,7 +9833,7 @@
    "need_by_job": {}
   },
   "527": {
-   "name": "Virar Tatami",
+   "name": "Flip Tatami",
    "aegis": "NJ_TATAMIGAESHI",
    "maxlv": 5,
    "sp": [
@@ -9847,7 +9847,7 @@
    "need_by_job": {}
   },
   "528": {
-   "name": "Corte da Névoa",
+   "name": "Haze Slasher",
    "aegis": "NJ_KASUMIKIRI",
    "maxlv": 10,
    "sp": [
@@ -9871,7 +9871,7 @@
    "need_by_job": {}
   },
   "529": {
-   "name": "Salto das Sombras",
+   "name": "Shadow Leap",
    "aegis": "NJ_SHADOWJUMP",
    "maxlv": 5,
    "sp": [
@@ -9890,7 +9890,7 @@
    "need_by_job": {}
   },
   "530": {
-   "name": "Corte das Sombras",
+   "name": "Shadow Slash",
    "aegis": "NJ_KIRIKAGE",
    "maxlv": 5,
    "sp": [
@@ -9909,7 +9909,7 @@
    "need_by_job": {}
   },
   "531": {
-   "name": "Troca de Pele",
+   "name": "Cicada Skin Shed",
    "aegis": "NJ_UTSUSEMI",
    "maxlv": 5,
    "sp": [
@@ -9928,7 +9928,7 @@
    "need_by_job": {}
   },
   "532": {
-   "name": "Imagem Falsa",
+   "name": "Mirror Image",
    "aegis": "NJ_BUNSINJYUTSU",
    "maxlv": 10,
    "sp": [
@@ -9960,7 +9960,7 @@
    "need_by_job": {}
   },
   "533": {
-   "name": "Perícia Ninja",
+   "name": "Ninja Mastery",
    "aegis": "NJ_NINPOU",
    "maxlv": 10,
    "sp": [
@@ -9979,7 +9979,7 @@
    "need_by_job": {}
   },
   "534": {
-   "name": "Pétalas Flamejantes",
+   "name": "Flaming Petals",
    "aegis": "NJ_KOUENKA",
    "maxlv": 10,
    "sp": [
@@ -10003,7 +10003,7 @@
    "need_by_job": {}
   },
   "535": {
-   "name": "Escudo de Chamas",
+   "name": "Blaze Shield",
    "aegis": "NJ_KAENSIN",
    "maxlv": 10,
    "sp": [
@@ -10027,7 +10027,7 @@
    "need_by_job": {}
   },
   "536": {
-   "name": "Dragão Explosivo",
+   "name": "Exploding Dragon",
    "aegis": "NJ_BAKUENRYU",
    "maxlv": 5,
    "sp": [
@@ -10050,7 +10050,7 @@
    "need_by_job": {}
   },
   "537": {
-   "name": "Lança Congelante",
+   "name": "Freezing Spear",
    "aegis": "NJ_HYOUSENSOU",
    "maxlv": 10,
    "sp": [
@@ -10074,7 +10074,7 @@
    "need_by_job": {}
   },
   "538": {
-   "name": "Evasão Aquática",
+   "name": "Watery Evasion",
    "aegis": "NJ_SUITON",
    "maxlv": 10,
    "sp": [
@@ -10098,7 +10098,7 @@
    "need_by_job": {}
   },
   "539": {
-   "name": "Grande Floco de Neve",
+   "name": "Snow Flake Draft",
    "aegis": "NJ_HYOUSYOURAKU",
    "maxlv": 5,
    "sp": [
@@ -10121,7 +10121,7 @@
    "need_by_job": {}
   },
   "540": {
-   "name": "Lâmina de Vento",
+   "name": "Wind Blade",
    "aegis": "NJ_HUUJIN",
    "maxlv": 10,
    "sp": [
@@ -10145,7 +10145,7 @@
    "need_by_job": {}
   },
   "541": {
-   "name": "Descarga Elétrica",
+   "name": "Lightning Jolt",
    "aegis": "NJ_RAIGEKISAI",
    "maxlv": 5,
    "sp": [
@@ -10164,7 +10164,7 @@
    "need_by_job": {}
   },
   "542": {
-   "name": "Brisa Cortante",
+   "name": "First Wind",
    "aegis": "NJ_KAMAITACHI",
    "maxlv": 5,
    "sp": [
@@ -10187,7 +10187,7 @@
    "need_by_job": {}
   },
   "543": {
-   "name": "Aura Ninja",
+   "name": "Ninja Aura",
    "aegis": "NJ_NEN",
    "maxlv": 5,
    "sp": [
@@ -10206,7 +10206,7 @@
    "need_by_job": {}
   },
   "544": {
-   "name": "Ataque Mortal",
+   "name": "Killing Strike",
    "aegis": "NJ_ISSEN",
    "maxlv": 10,
    "sp": [
@@ -10238,7 +10238,7 @@
    "need_by_job": {}
   },
   "1001": {
-   "name": "Avanço Ofensivo",
+   "name": "Charge Attack",
    "aegis": "KN_CHARGEATK",
    "maxlv": 1,
    "sp": [
@@ -10248,7 +10248,7 @@
    "need_by_job": {}
   },
   "1002": {
-   "name": "Submissão",
+   "name": "Shrink",
    "aegis": "CR_SHRINK",
    "maxlv": 1,
    "sp": [
@@ -10258,7 +10258,7 @@
    "need_by_job": {}
   },
   "1003": {
-   "name": "Lâminas Aceleradas",
+   "name": "Sonic Acceleration",
    "aegis": "AS_SONICACCEL",
    "maxlv": 1,
    "sp": [
@@ -10268,7 +10268,7 @@
    "need_by_job": {}
   },
   "1004": {
-   "name": "Faca Envenenada",
+   "name": "Venom Knife",
    "aegis": "AS_VENOMKNIFE",
    "maxlv": 1,
    "sp": [
@@ -10278,7 +10278,7 @@
    "need_by_job": {}
   },
   "1005": {
-   "name": "Confinamento",
+   "name": "Close Confine",
    "aegis": "RG_CLOSECONFINE",
    "maxlv": 1,
    "sp": [
@@ -10288,7 +10288,7 @@
    "need_by_job": {}
   },
   "1006": {
-   "name": "Explosão Protetora",
+   "name": "Sight Blaster",
    "aegis": "WZ_SIGHTBLASTER",
    "maxlv": 1,
    "sp": [
@@ -10298,7 +10298,7 @@
    "need_by_job": {}
   },
   "1007": {
-   "name": "Criar Conversor Elemental",
+   "name": "Create Elemental Converter",
    "aegis": "SA_CREATECON",
    "maxlv": 1,
    "sp": [
@@ -10308,7 +10308,7 @@
    "need_by_job": {}
   },
   "1008": {
-   "name": "Mudança Elemental - Água",
+   "name": "Elemental Change (Water)",
    "aegis": "SA_ELEMENTWATER",
    "maxlv": 1,
    "sp": [
@@ -10318,7 +10318,7 @@
    "need_by_job": {}
   },
   "1009": {
-   "name": "Flecha Ilusória",
+   "name": "Phantasmic Arrow",
    "aegis": "HT_PHANTASMIC",
    "maxlv": 1,
    "sp": [
@@ -10328,7 +10328,7 @@
    "need_by_job": {}
   },
   "1010": {
-   "name": "Voz Dolorosa",
+   "name": "Pang Voice",
    "aegis": "BA_PANGVOICE",
    "maxlv": 1,
    "sp": [
@@ -10338,7 +10338,7 @@
    "need_by_job": {}
   },
   "1011": {
-   "name": "Piscadela",
+   "name": "Charming Wink",
    "aegis": "DC_WINKCHARM",
    "maxlv": 1,
    "sp": [
@@ -10348,7 +10348,7 @@
    "need_by_job": {}
   },
   "1012": {
-   "name": "Venda Duvidosa",
+   "name": "Dubious Salesmanship",
    "aegis": "BS_UNFAIRLYTRICK",
    "maxlv": 1,
    "sp": [
@@ -10358,7 +10358,7 @@
    "need_by_job": {}
   },
   "1013": {
-   "name": "Ganância",
+   "name": "Greed",
    "aegis": "BS_GREED",
    "maxlv": 1,
    "sp": [
@@ -10368,7 +10368,7 @@
    "need_by_job": {}
   },
   "1014": {
-   "name": "Martírio",
+   "name": "Redemptio",
    "aegis": "PR_REDEMPTIO",
    "maxlv": 1,
    "sp": [
@@ -10378,7 +10378,7 @@
    "need_by_job": {}
   },
   "1015": {
-   "name": "Concessão Espiritual",
+   "name": "Spiritual Bestowment",
    "aegis": "MO_KITRANSLATION",
    "maxlv": 1,
    "sp": [
@@ -10388,7 +10388,7 @@
    "need_by_job": {}
   },
   "1016": {
-   "name": "Punhos Intensos",
+   "name": "Excruciating Palm",
    "aegis": "MO_BALKYOUNG",
    "maxlv": 1,
    "sp": [
@@ -10398,7 +10398,7 @@
    "need_by_job": {}
   },
   "1017": {
-   "name": "Mudança Elemental - Terra",
+   "name": "Elemental Change (Earth)",
    "aegis": "SA_ELEMENTGROUND",
    "maxlv": 1,
    "sp": [
@@ -10408,7 +10408,7 @@
    "need_by_job": {}
   },
   "1018": {
-   "name": "Mudança Elemental - Fogo",
+   "name": "Elemental Change (Fire)",
    "aegis": "SA_ELEMENTFIRE",
    "maxlv": 1,
    "sp": [
@@ -10418,7 +10418,7 @@
    "need_by_job": {}
   },
   "1019": {
-   "name": "Mudança Elemental - Vento",
+   "name": "Elemental Change (Wind)",
    "aegis": "SA_ELEMENTWIND",
    "maxlv": 1,
    "sp": [
@@ -10428,7 +10428,7 @@
    "need_by_job": {}
   },
   "2001": {
-   "name": "Encantar Lâmina",
+   "name": "Enchant Blade",
    "aegis": "RK_ENCHANTBLADE",
    "maxlv": 10,
    "sp": [
@@ -10452,7 +10452,7 @@
    "need_by_job": {}
   },
   "2002": {
-   "name": "Onda de Choque",
+   "name": "Sonic Wave",
    "aegis": "RK_SONICWAVE",
    "maxlv": 10,
    "sp": [
@@ -10476,7 +10476,7 @@
    "need_by_job": {}
   },
   "2003": {
-   "name": "Revidar Dano",
+   "name": "Death Bound",
    "aegis": "RK_DEATHBOUND",
    "maxlv": 10,
    "sp": [
@@ -10504,7 +10504,7 @@
    "need_by_job": {}
   },
   "2004": {
-   "name": "Lança das Mil Pontas",
+   "name": "Hundred Spear",
    "aegis": "RK_HUNDREDSPEAR",
    "maxlv": 10,
    "sp": [
@@ -10528,7 +10528,7 @@
    "need_by_job": {}
   },
   "2005": {
-   "name": "Vento Cortante",
+   "name": "Wind Cutter",
    "aegis": "RK_WINDCUTTER",
    "maxlv": 5,
    "sp": [
@@ -10547,7 +10547,7 @@
    "need_by_job": {}
   },
   "2006": {
-   "name": "Impacto Flamejante",
+   "name": "Ignition Break",
    "aegis": "RK_IGNITIONBREAK",
    "maxlv": 5,
    "sp": [
@@ -10574,7 +10574,7 @@
    "need_by_job": {}
   },
   "2007": {
-   "name": "Adestrar Dragão",
+   "name": "Dragon Training",
    "aegis": "RK_DRAGONTRAINING",
    "maxlv": 5,
    "sp": [
@@ -10593,7 +10593,7 @@
    "need_by_job": {}
   },
   "2008": {
-   "name": "Sopro do Dragão",
+   "name": "Dragon Breath",
    "aegis": "RK_DRAGONBREATH",
    "maxlv": 10,
    "sp": [
@@ -10617,7 +10617,7 @@
    "need_by_job": {}
   },
   "2009": {
-   "name": "Rugido do Dragão",
+   "name": "Dragon Howling",
    "aegis": "RK_DRAGONHOWLING",
    "maxlv": 5,
    "sp": [
@@ -10636,7 +10636,7 @@
    "need_by_job": {}
   },
   "2010": {
-   "name": "Perícia em Runas",
+   "name": "Rune Mastery",
    "aegis": "RK_RUNEMASTERY",
    "maxlv": 10,
    "sp": [
@@ -10655,7 +10655,7 @@
    "need_by_job": {}
   },
   "2020": {
-   "name": "Arpão",
+   "name": "Phantom Thrust",
    "aegis": "RK_PHANTOMTHRUST",
    "maxlv": 5,
    "sp": [
@@ -10674,7 +10674,7 @@
    "need_by_job": {}
   },
   "2021": {
-   "name": "Potencializar Veneno",
+   "name": "Venom Impress",
    "aegis": "GC_VENOMIMPRESS",
    "maxlv": 5,
    "sp": [
@@ -10693,7 +10693,7 @@
    "need_by_job": {}
   },
   "2022": {
-   "name": "Lâminas Retalhadoras",
+   "name": "Cross Impact",
    "aegis": "GC_CROSSIMPACT",
    "maxlv": 5,
    "sp": [
@@ -10712,7 +10712,7 @@
    "need_by_job": {}
   },
   "2023": {
-   "name": "Passo Sombrio",
+   "name": "Dark Illusion",
    "aegis": "GC_DARKILLUSION",
    "maxlv": 5,
    "sp": [
@@ -10731,7 +10731,7 @@
    "need_by_job": {}
   },
   "2024": {
-   "name": "Pesquisa de Toxinas",
+   "name": "Research New Poison",
    "aegis": "GC_RESEARCHNEWPOISON",
    "maxlv": 10,
    "sp": [
@@ -10750,7 +10750,7 @@
    "need_by_job": {}
   },
   "2025": {
-   "name": "Criar Toxina",
+   "name": "Create New Poison",
    "aegis": "GC_CREATENEWPOISON",
    "maxlv": 1,
    "sp": [
@@ -10765,7 +10765,7 @@
    "need_by_job": {}
   },
   "2026": {
-   "name": "Antídoto",
+   "name": "Antidote",
    "aegis": "GC_ANTIDOTE",
    "maxlv": 1,
    "sp": [
@@ -10780,7 +10780,7 @@
    "need_by_job": {}
   },
   "2027": {
-   "name": "Aplicar Toxina",
+   "name": "Poisoning Weapon",
    "aegis": "GC_POISONINGWEAPON",
    "maxlv": 5,
    "sp": [
@@ -10799,7 +10799,7 @@
    "need_by_job": {}
   },
   "2028": {
-   "name": "Reflexo de Combate",
+   "name": "Weapon Blocking",
    "aegis": "GC_WEAPONBLOCKING",
    "maxlv": 5,
    "sp": [
@@ -10818,7 +10818,7 @@
    "need_by_job": {}
   },
   "2029": {
-   "name": "Retalia豫o",
+   "name": "Counter Slash",
    "aegis": "GC_COUNTERSLASH",
    "maxlv": 10,
    "sp": [
@@ -10842,7 +10842,7 @@
    "need_by_job": {}
   },
   "2030": {
-   "name": "Estilhaçar Arma",
+   "name": "Weapon Crush",
    "aegis": "GC_WEAPONCRUSH",
    "maxlv": 5,
    "sp": [
@@ -10861,7 +10861,7 @@
    "need_by_job": {}
   },
   "2031": {
-   "name": "Intoxicar",
+   "name": "Venom Pressure",
    "aegis": "GC_VENOMPRESSURE",
    "maxlv": 5,
    "sp": [
@@ -10884,7 +10884,7 @@
    "need_by_job": {}
   },
   "2032": {
-   "name": "Nevoeiro Tóxico",
+   "name": "Poison Smoke",
    "aegis": "GC_POISONSMOKE",
    "maxlv": 5,
    "sp": [
@@ -10907,7 +10907,7 @@
    "need_by_job": {}
   },
   "2033": {
-   "name": "Oculta豫o",
+   "name": "Cloaking Exceed",
    "aegis": "GC_CLOAKINGEXCEED",
    "maxlv": 5,
    "sp": [
@@ -10926,7 +10926,7 @@
    "need_by_job": {}
   },
   "2034": {
-   "name": "Ameaça Fantasma",
+   "name": "Phantom Menace",
    "aegis": "GC_PHANTOMMENACE",
    "maxlv": 1,
    "sp": [
@@ -10945,7 +10945,7 @@
    "need_by_job": {}
   },
   "2035": {
-   "name": "Passos da Ilusão",
+   "name": "Hallucination Walk",
    "aegis": "GC_HALLUCINATIONWALK",
    "maxlv": 5,
    "sp": [
@@ -10964,7 +10964,7 @@
    "need_by_job": {}
   },
   "2036": {
-   "name": "Lâminas de Loki",
+   "name": "Rolling Cutter",
    "aegis": "GC_ROLLINGCUTTER",
    "maxlv": 5,
    "sp": [
@@ -10983,7 +10983,7 @@
    "need_by_job": {}
   },
   "2037": {
-   "name": "Castigo de Loki",
+   "name": "Cross Ripper Slasher",
    "aegis": "GC_CROSSRIPPERSLASHER",
    "maxlv": 5,
    "sp": [
@@ -11026,7 +11026,7 @@
    "need_by_job": {}
   },
   "2039": {
-   "name": "Criar Ancilla",
+   "name": "Ancilla",
    "aegis": "AB_ANCILLA",
    "maxlv": 1,
    "sp": [
@@ -11090,7 +11090,7 @@
    "need_by_job": {}
   },
   "2042": {
-   "name": "Canto Candidus",
+   "name": "Cantocandidus",
    "aegis": "AB_CANTO",
    "maxlv": 3,
    "sp": [
@@ -11107,7 +11107,7 @@
    "need_by_job": {}
   },
   "2043": {
-   "name": "Sopro Divino",
+   "name": "Coluceo Heal",
    "aegis": "AB_CHEAL",
    "maxlv": 3,
    "sp": [
@@ -11249,7 +11249,7 @@
    "need_by_job": {}
   },
   "2051": {
-   "name": "Curatio",
+   "name": "Highness Heal",
    "aegis": "AB_HIGHNESSHEAL",
    "maxlv": 5,
    "sp": [
@@ -11268,7 +11268,7 @@
    "need_by_job": {}
   },
   "2052": {
-   "name": "Gênese",
+   "name": "Clearance",
    "aegis": "AB_CLEARANCE",
    "maxlv": 5,
    "sp": [
@@ -11310,7 +11310,7 @@
    "need_by_job": {}
   },
   "2054": {
-   "name": "Gemini Lumen",
+   "name": "Duple Light",
    "aegis": "AB_DUPLELIGHT",
    "maxlv": 10,
    "sp": [
@@ -11353,7 +11353,7 @@
    "need_by_job": {}
   },
   "2201": {
-   "name": "Exílio",
+   "name": "White Imprison",
    "aegis": "WL_WHITEIMPRISON",
    "maxlv": 5,
    "sp": [
@@ -11372,7 +11372,7 @@
    "need_by_job": {}
   },
   "2202": {
-   "name": "Impacto Espiritual",
+   "name": "Soul Expansion",
    "aegis": "WL_SOULEXPANSION",
    "maxlv": 5,
    "sp": [
@@ -11391,7 +11391,7 @@
    "need_by_job": {}
   },
   "2203": {
-   "name": "Zero Absoluto",
+   "name": "Frost Misty",
    "aegis": "WL_FROSTMISTY",
    "maxlv": 5,
    "sp": [
@@ -11410,7 +11410,7 @@
    "need_by_job": {}
   },
   "2204": {
-   "name": "Esquife de Gelo",
+   "name": "Jack Frost",
    "aegis": "WL_JACKFROST",
    "maxlv": 5,
    "sp": [
@@ -11429,7 +11429,7 @@
    "need_by_job": {}
   },
   "2205": {
-   "name": "Pântano de Nifflheim",
+   "name": "Marsh of Abyss",
    "aegis": "WL_MARSHOFABYSS",
    "maxlv": 5,
    "sp": [
@@ -11448,7 +11448,7 @@
    "need_by_job": {}
   },
   "2206": {
-   "name": "Maestria Arcana",
+   "name": "Recognized Spell",
    "aegis": "WL_RECOGNIZEDSPELL",
    "maxlv": 5,
    "sp": [
@@ -11475,7 +11475,7 @@
    "need_by_job": {}
   },
   "2207": {
-   "name": "Fúria da Medusa",
+   "name": "Sienna Execrate",
    "aegis": "WL_SIENNAEXECRATE",
    "maxlv": 5,
    "sp": [
@@ -11525,7 +11525,7 @@
    "need_by_job": {}
   },
   "2210": {
-   "name": "Drenar Vida",
+   "name": "Drain Life",
    "aegis": "WL_DRAINLIFE",
    "maxlv": 5,
    "sp": [
@@ -11544,7 +11544,7 @@
    "need_by_job": {}
   },
   "2211": {
-   "name": "Meteoro Escarlate",
+   "name": "Crimson Rock",
    "aegis": "WL_CRIMSONROCK",
    "maxlv": 5,
    "sp": [
@@ -11563,7 +11563,7 @@
    "need_by_job": {}
   },
   "2212": {
-   "name": "Chamas de Hela",
+   "name": "Hell Inferno",
    "aegis": "WL_HELLINFERNO",
    "maxlv": 5,
    "sp": [
@@ -11582,7 +11582,7 @@
    "need_by_job": {}
   },
   "2213": {
-   "name": "Cometa",
+   "name": "Comet",
    "aegis": "WL_COMET",
    "maxlv": 5,
    "sp": [
@@ -11601,7 +11601,7 @@
    "need_by_job": {}
   },
   "2214": {
-   "name": "Corrente Elétrica",
+   "name": "Chain Lightning",
    "aegis": "WL_CHAINLIGHTNING",
    "maxlv": 5,
    "sp": [
@@ -11620,7 +11620,7 @@
    "need_by_job": {}
   },
   "2216": {
-   "name": "Abalo Sísmico",
+   "name": "Earth Strain",
    "aegis": "WL_EARTHSTRAIN",
    "maxlv": 5,
    "sp": [
@@ -11675,7 +11675,7 @@
    "need_by_job": {}
   },
   "2222": {
-   "name": "Invocar Esfera de Fogo",
+   "name": "Summon Fire Ball",
    "aegis": "WL_SUMMONFB",
    "maxlv": 2,
    "sp": [
@@ -11691,7 +11691,7 @@
    "need_by_job": {}
   },
   "2223": {
-   "name": "Invocar Esfera de Vento",
+   "name": "Summon Lightning Ball",
    "aegis": "WL_SUMMONBL",
    "maxlv": 2,
    "sp": [
@@ -11707,7 +11707,7 @@
    "need_by_job": {}
   },
   "2224": {
-   "name": "Invocar Esfera de 햓ua",
+   "name": "Summon Water Ball",
    "aegis": "WL_SUMMONWB",
    "maxlv": 2,
    "sp": [
@@ -11723,7 +11723,7 @@
    "need_by_job": {}
   },
   "2229": {
-   "name": "Invocar Esfera de Terra",
+   "name": "Summon Stone",
    "aegis": "WL_SUMMONSTONE",
    "maxlv": 2,
    "sp": [
@@ -11739,7 +11739,7 @@
    "need_by_job": {}
   },
   "2230": {
-   "name": "Lançar Magia",
+   "name": "Release",
    "aegis": "WL_RELEASE",
    "maxlv": 2,
    "sp": [
@@ -11750,7 +11750,7 @@
    "need_by_job": {}
   },
   "2231": {
-   "name": "Memorizar",
+   "name": "Reading Spell Book",
    "aegis": "WL_READING_SB",
    "maxlv": 1,
    "sp": [
@@ -11760,7 +11760,7 @@
    "need_by_job": {}
   },
   "2232": {
-   "name": "Estudo Arcano Avançado",
+   "name": "Freezing Spell",
    "aegis": "WL_FREEZE_SP",
    "maxlv": 10,
    "sp": [
@@ -11779,7 +11779,7 @@
    "need_by_job": {}
   },
   "2233": {
-   "name": "Tempestade de Flechas",
+   "name": "Arrow Storm",
    "aegis": "RA_ARROWSTORM",
    "maxlv": 10,
    "sp": [
@@ -11803,7 +11803,7 @@
    "need_by_job": {}
   },
   "2234": {
-   "name": "Disparo Selvagem",
+   "name": "Fear Breeze",
    "aegis": "RA_FEARBREEZE",
    "maxlv": 5,
    "sp": [
@@ -11826,7 +11826,7 @@
    "need_by_job": {}
   },
   "2235": {
-   "name": "Táticas de Sobrevivência",
+   "name": "Ranger Main",
    "aegis": "RA_RANGERMAIN",
    "maxlv": 10,
    "sp": [
@@ -11845,7 +11845,7 @@
    "need_by_job": {}
   },
   "2236": {
-   "name": "Disparo Certeiro",
+   "name": "Aimed Bolt",
    "aegis": "RA_AIMEDBOLT",
    "maxlv": 10,
    "sp": [
@@ -11869,7 +11869,7 @@
    "need_by_job": {}
   },
   "2237": {
-   "name": "Detonador",
+   "name": "Detonator",
    "aegis": "RA_DETONATOR",
    "maxlv": 1,
    "sp": [
@@ -11884,7 +11884,7 @@
    "need_by_job": {}
   },
   "2238": {
-   "name": "Armadilha Energizada",
+   "name": "Electric Shock",
    "aegis": "RA_ELECTRICSHOCKER",
    "maxlv": 5,
    "sp": [
@@ -11903,7 +11903,7 @@
    "need_by_job": {}
   },
   "2239": {
-   "name": "Bomba Relógio",
+   "name": "Cluster Bomb",
    "aegis": "RA_CLUSTERBOMB",
    "maxlv": 5,
    "sp": [
@@ -11922,7 +11922,7 @@
    "need_by_job": {}
   },
   "2240": {
-   "name": "Adestrar Worg",
+   "name": "Warg Mastery",
    "aegis": "RA_WUGMASTERY",
    "maxlv": 1,
    "sp": [
@@ -11932,7 +11932,7 @@
    "need_by_job": {}
   },
   "2241": {
-   "name": "Montaria em Worg",
+   "name": "Warg Rider",
    "aegis": "RA_WUGRIDER",
    "maxlv": 3,
    "sp": [
@@ -11949,7 +11949,7 @@
    "need_by_job": {}
   },
   "2242": {
-   "name": "Assalto de Worg",
+   "name": "Warg Dash",
    "aegis": "RA_WUGDASH",
    "maxlv": 1,
    "sp": [
@@ -11964,7 +11964,7 @@
    "need_by_job": {}
   },
   "2243": {
-   "name": "Investida de Worg",
+   "name": "Warg Strike",
    "aegis": "RA_WUGSTRIKE",
    "maxlv": 5,
    "sp": [
@@ -11983,7 +11983,7 @@
    "need_by_job": {}
   },
   "2244": {
-   "name": "Mordida Feroz",
+   "name": "Warg Bite",
    "aegis": "RA_WUGBITE",
    "maxlv": 5,
    "sp": [
@@ -12002,7 +12002,7 @@
    "need_by_job": {}
   },
   "2245": {
-   "name": "Presas Afiadas",
+   "name": "Tooth of Warg",
    "aegis": "RA_TOOTHOFWUG",
    "maxlv": 10,
    "sp": [
@@ -12026,7 +12026,7 @@
    "need_by_job": {}
   },
   "2246": {
-   "name": "Faro Aguçado",
+   "name": "Sensitive Keen",
    "aegis": "RA_SENSITIVEKEEN",
    "maxlv": 5,
    "sp": [
@@ -12045,7 +12045,7 @@
    "need_by_job": {}
   },
   "2247": {
-   "name": "Camuflagem",
+   "name": "Camouflage",
    "aegis": "RA_CAMOUFLAGE",
    "maxlv": 5,
    "sp": [
@@ -12064,7 +12064,7 @@
    "need_by_job": {}
   },
   "2248": {
-   "name": "Perícia com Armadilha",
+   "name": "Trap Research",
    "aegis": "RA_RESEARCHTRAP",
    "maxlv": 10,
    "sp": [
@@ -12092,7 +12092,7 @@
    "need_by_job": {}
   },
   "2249": {
-   "name": "Armadilha Escarlate",
+   "name": "Magenta Trap",
    "aegis": "RA_MAGENTATRAP",
    "maxlv": 1,
    "sp": [
@@ -12107,7 +12107,7 @@
    "need_by_job": {}
   },
   "2250": {
-   "name": "Armadilha Cobalto",
+   "name": "Cobalt Trap",
    "aegis": "RA_COBALTTRAP",
    "maxlv": 1,
    "sp": [
@@ -12122,7 +12122,7 @@
    "need_by_job": {}
   },
   "2251": {
-   "name": "Armadilha Ocre",
+   "name": "Maze Trap",
    "aegis": "RA_MAIZETRAP",
    "maxlv": 1,
    "sp": [
@@ -12137,7 +12137,7 @@
    "need_by_job": {}
   },
   "2252": {
-   "name": "Armadilha Esmeralda",
+   "name": "Verdure Trap",
    "aegis": "RA_VERDURETRAP",
    "maxlv": 1,
    "sp": [
@@ -12152,7 +12152,7 @@
    "need_by_job": {}
   },
   "2253": {
-   "name": "Armadilha Incendiária",
+   "name": "Firing Trap",
    "aegis": "RA_FIRINGTRAP",
    "maxlv": 5,
    "sp": [
@@ -12171,7 +12171,7 @@
    "need_by_job": {}
   },
   "2254": {
-   "name": "Armadilha Glacial",
+   "name": "Ice Bound Trap",
    "aegis": "RA_ICEBOUNDTRAP",
    "maxlv": 5,
    "sp": [
@@ -12190,7 +12190,7 @@
    "need_by_job": {}
   },
   "2255": {
-   "name": "Licença de Pilotagem",
+   "name": "Mado Gear License",
    "aegis": "NC_MADOLICENCE",
    "maxlv": 5,
    "sp": [
@@ -12204,7 +12204,7 @@
    "need_by_job": {}
   },
   "2256": {
-   "name": "Punho Foguete",
+   "name": "Knuckle Boost",
    "aegis": "NC_BOOSTKNUCKLE",
    "maxlv": 5,
    "sp": [
@@ -12223,7 +12223,7 @@
    "need_by_job": {}
   },
   "2257": {
-   "name": "Bate Estaca",
+   "name": "Pile Bunker",
    "aegis": "NC_PILEBUNKER",
    "maxlv": 3,
    "sp": [
@@ -12240,7 +12240,7 @@
    "need_by_job": {}
   },
   "2258": {
-   "name": "Metralhadora",
+   "name": "Vulcan Arm",
    "aegis": "NC_VULCANARM",
    "maxlv": 3,
    "sp": [
@@ -12257,7 +12257,7 @@
    "need_by_job": {}
   },
   "2259": {
-   "name": "Lança Chamas",
+   "name": "Flame Launcher",
    "aegis": "NC_FLAMELAUNCHER",
    "maxlv": 3,
    "sp": [
@@ -12274,7 +12274,7 @@
    "need_by_job": {}
   },
   "2260": {
-   "name": "Gás Criogênico",
+   "name": "Cold Slower",
    "aegis": "NC_COLDSLOWER",
    "maxlv": 3,
    "sp": [
@@ -12291,7 +12291,7 @@
    "need_by_job": {}
   },
   "2261": {
-   "name": "Canhão",
+   "name": "Arm Cannon",
    "aegis": "NC_ARMSCANNON",
    "maxlv": 5,
    "sp": [
@@ -12314,7 +12314,7 @@
    "need_by_job": {}
   },
   "2262": {
-   "name": "Acelera豫o",
+   "name": "Acceleration",
    "aegis": "NC_ACCELERATION",
    "maxlv": 3,
    "sp": [
@@ -12331,7 +12331,7 @@
    "need_by_job": {}
   },
   "2263": {
-   "name": "Planar",
+   "name": "Hover",
    "aegis": "NC_HOVERING",
    "maxlv": 1,
    "sp": [
@@ -12346,7 +12346,7 @@
    "need_by_job": {}
   },
   "2264": {
-   "name": "Propulsão Traseira",
+   "name": "Front Slide",
    "aegis": "NC_F_SIDESLIDE",
    "maxlv": 1,
    "sp": [
@@ -12361,7 +12361,7 @@
    "need_by_job": {}
   },
   "2265": {
-   "name": "Propulsão Dianteira",
+   "name": "Back Slide",
    "aegis": "NC_B_SIDESLIDE",
    "maxlv": 1,
    "sp": [
@@ -12376,7 +12376,7 @@
    "need_by_job": {}
   },
   "2266": {
-   "name": "Reforçar Estrutura",
+   "name": "Remodel Mainframe",
    "aegis": "NC_MAINFRAME",
    "maxlv": 4,
    "sp": [
@@ -12394,7 +12394,7 @@
    "need_by_job": {}
   },
   "2267": {
-   "name": "Autodestrui豫o",
+   "name": "Self Destruction",
    "aegis": "NC_SELFDESTRUCTION",
    "maxlv": 3,
    "sp": [
@@ -12411,7 +12411,7 @@
    "need_by_job": {}
   },
   "2268": {
-   "name": "Reconfigurar Elemento",
+   "name": "Shape Shift",
    "aegis": "NC_SHAPESHIFT",
    "maxlv": 4,
    "sp": [
@@ -12429,7 +12429,7 @@
    "need_by_job": {}
   },
   "2269": {
-   "name": "Resfriamento",
+   "name": "Emergency Cool",
    "aegis": "NC_EMERGENCYCOOL",
    "maxlv": 1,
    "sp": [
@@ -12444,7 +12444,7 @@
    "need_by_job": {}
   },
   "2270": {
-   "name": "Sensor Infravermelho",
+   "name": "Infrared Scan",
    "aegis": "NC_INFRAREDSCAN",
    "maxlv": 1,
    "sp": [
@@ -12459,7 +12459,7 @@
    "need_by_job": {}
   },
   "2271": {
-   "name": "Analisar",
+   "name": "Analyze",
    "aegis": "NC_ANALYZE",
    "maxlv": 3,
    "sp": [
@@ -12476,7 +12476,7 @@
    "need_by_job": {}
   },
   "2272": {
-   "name": "Campo Magnético",
+   "name": "Magnetic Field",
    "aegis": "NC_MAGNETICFIELD",
    "maxlv": 3,
    "sp": [
@@ -12493,7 +12493,7 @@
    "need_by_job": {}
   },
   "2273": {
-   "name": "Campo Protetor",
+   "name": "Neutral Barrier",
    "aegis": "NC_NEUTRALBARRIER",
    "maxlv": 3,
    "sp": [
@@ -12510,7 +12510,7 @@
    "need_by_job": {}
   },
   "2274": {
-   "name": "Campo de Invisibilidade",
+   "name": "Stealth Field",
    "aegis": "NC_STEALTHFIELD",
    "maxlv": 3,
    "sp": [
@@ -12531,7 +12531,7 @@
    "need_by_job": {}
   },
   "2275": {
-   "name": "Reparar",
+   "name": "Repair",
    "aegis": "NC_REPAIR",
    "maxlv": 5,
    "sp": [
@@ -12550,7 +12550,7 @@
    "need_by_job": {}
   },
   "2276": {
-   "name": "Maestria com Machados",
+   "name": "Axe Training",
    "aegis": "NC_TRAININGAXE",
    "maxlv": 10,
    "sp": [
@@ -12569,7 +12569,7 @@
    "need_by_job": {}
   },
   "2277": {
-   "name": "Sabedoria de Hefesto",
+   "name": "Fire Earth Research",
    "aegis": "NC_RESEARCHFE",
    "maxlv": 5,
    "sp": [
@@ -12583,7 +12583,7 @@
    "need_by_job": {}
   },
   "2278": {
-   "name": "Arremesso de Machado",
+   "name": "Axe Boomerang",
    "aegis": "NC_AXEBOOMERANG",
    "maxlv": 5,
    "sp": [
@@ -12602,7 +12602,7 @@
    "need_by_job": {}
   },
   "2279": {
-   "name": "Brandir Machado",
+   "name": "Power Swing",
    "aegis": "NC_POWERSWING",
    "maxlv": 10,
    "sp": [
@@ -12626,7 +12626,7 @@
    "need_by_job": {}
   },
   "2280": {
-   "name": "Fúria do Furacão ",
+   "name": "Axe Tornado",
    "aegis": "NC_AXETORNADO",
    "maxlv": 5,
    "sp": [
@@ -12645,7 +12645,7 @@
    "need_by_job": {}
   },
   "2281": {
-   "name": "Artilharia Caçadora",
+   "name": "FAW Silver Sniper",
    "aegis": "NC_SILVERSNIPER",
    "maxlv": 5,
    "sp": [
@@ -12664,7 +12664,7 @@
    "need_by_job": {}
   },
   "2282": {
-   "name": "Artilharia Arcana",
+   "name": "FAW Magic Decoy",
    "aegis": "NC_MAGICDECOY",
    "maxlv": 5,
    "sp": [
@@ -12683,7 +12683,7 @@
    "need_by_job": {}
   },
   "2283": {
-   "name": "Remover Artilharia",
+   "name": "Divest FAW",
    "aegis": "NC_DISJOINT",
    "maxlv": 1,
    "sp": [
@@ -12698,7 +12698,7 @@
    "need_by_job": {}
   },
   "2284": {
-   "name": "Ofensiva Fatal",
+   "name": "Fatal Menace",
    "aegis": "SC_FATALMENACE",
    "maxlv": 10,
    "sp": [
@@ -12722,7 +12722,7 @@
    "need_by_job": {}
   },
   "2285": {
-   "name": "Mimetismo",
+   "name": "Reproduce",
    "aegis": "SC_REPRODUCE",
    "maxlv": 10,
    "sp": [
@@ -12746,7 +12746,7 @@
    "need_by_job": {}
   },
   "2286": {
-   "name": "Desejo das Sombras",
+   "name": "Auto Shadow Spell",
    "aegis": "SC_AUTOSHADOWSPELL",
    "maxlv": 10,
    "sp": [
@@ -12770,7 +12770,7 @@
    "need_by_job": {}
   },
   "2287": {
-   "name": "Vínculo Sombrio",
+   "name": "Shadow Form",
    "aegis": "SC_SHADOWFORM",
    "maxlv": 5,
    "sp": [
@@ -12789,7 +12789,7 @@
    "need_by_job": {}
   },
   "2288": {
-   "name": "Disparo Triplo",
+   "name": "Triangle Shot",
    "aegis": "SC_TRIANGLESHOT",
    "maxlv": 10,
    "sp": [
@@ -12813,7 +12813,7 @@
    "need_by_job": {}
   },
   "2289": {
-   "name": "Borrifar Tinta",
+   "name": "Body Painting",
    "aegis": "SC_BODYPAINT",
    "maxlv": 5,
    "sp": [
@@ -12827,7 +12827,7 @@
    "need_by_job": {}
   },
   "2290": {
-   "name": "Forma Etérea",
+   "name": "Invisibility",
    "aegis": "SC_INVISIBILITY",
    "maxlv": 5,
    "sp": [
@@ -12854,7 +12854,7 @@
    "need_by_job": {}
   },
   "2291": {
-   "name": "Pestilência",
+   "name": "Deadly Infection",
    "aegis": "SC_DEADLYINFECT",
    "maxlv": 5,
    "sp": [
@@ -12877,7 +12877,7 @@
    "need_by_job": {}
   },
   "2292": {
-   "name": "Máscara da Fraqueza",
+   "name": "Masquerade Enervation",
    "aegis": "SC_ENERVATION",
    "maxlv": 3,
    "sp": [
@@ -12894,7 +12894,7 @@
    "need_by_job": {}
   },
   "2293": {
-   "name": "Máscara da Melancolia",
+   "name": "Masquerade Gloomy",
    "aegis": "SC_GROOMY",
    "maxlv": 3,
    "sp": [
@@ -12911,7 +12911,7 @@
    "need_by_job": {}
   },
   "2294": {
-   "name": "Máscara da Tolice",
+   "name": "Masquerade Ignorance",
    "aegis": "SC_IGNORANCE",
    "maxlv": 3,
    "sp": [
@@ -12928,7 +12928,7 @@
    "need_by_job": {}
   },
   "2295": {
-   "name": "Máscara da Ociosidade",
+   "name": "Masquerade Laziness",
    "aegis": "SC_LAZINESS",
    "maxlv": 3,
    "sp": [
@@ -12953,7 +12953,7 @@
    "need_by_job": {}
   },
   "2296": {
-   "name": "Máscara do Infortúnio",
+   "name": "Masquerade Unlucky",
    "aegis": "SC_UNLUCKY",
    "maxlv": 3,
    "sp": [
@@ -12974,7 +12974,7 @@
    "need_by_job": {}
   },
   "2297": {
-   "name": "Máscara da Vulnerabilidade",
+   "name": "Masquerade Weakness",
    "aegis": "SC_WEAKNESS",
    "maxlv": 3,
    "sp": [
@@ -12999,7 +12999,7 @@
    "need_by_job": {}
   },
   "2298": {
-   "name": "Remover Acessório",
+   "name": "Strip Accessory",
    "aegis": "SC_STRIPACCESSARY",
    "maxlv": 5,
    "sp": [
@@ -13018,7 +13018,7 @@
    "need_by_job": {}
   },
   "2299": {
-   "name": "Pintar Armadilha",
+   "name": "Manhole",
    "aegis": "SC_MANHOLE",
    "maxlv": 3,
    "sp": [
@@ -13035,7 +13035,7 @@
    "need_by_job": {}
   },
   "2300": {
-   "name": "Porta Dimensional",
+   "name": "Dimension Door",
    "aegis": "SC_DIMENSIONDOOR",
    "maxlv": 3,
    "sp": [
@@ -13052,7 +13052,7 @@
    "need_by_job": {}
   },
   "2301": {
-   "name": "Símbolo do Caos",
+   "name": "Chaos Panic",
    "aegis": "SC_CHAOSPANIC",
    "maxlv": 3,
    "sp": [
@@ -13069,7 +13069,7 @@
    "need_by_job": {}
   },
   "2302": {
-   "name": "Redemoinho de Absor豫o",
+   "name": "Maelstrom",
    "aegis": "SC_MAELSTROM",
    "maxlv": 3,
    "sp": [
@@ -13090,7 +13090,7 @@
    "need_by_job": {}
   },
   "2303": {
-   "name": "Sede de Sangue",
+   "name": "Bloody Lust",
    "aegis": "SC_BLOODYLUST",
    "maxlv": 3,
    "sp": [
@@ -13107,7 +13107,7 @@
    "need_by_job": {}
   },
   "2304": {
-   "name": "Cópia Explosiva",
+   "name": "Feint Bomb",
    "aegis": "SC_FEINTBOMB",
    "maxlv": 10,
    "sp": [
@@ -13131,7 +13131,7 @@
    "need_by_job": {}
   },
   "2307": {
-   "name": "Disparo Perfurante",
+   "name": "Cannon Spear",
    "aegis": "LG_CANNONSPEAR",
    "maxlv": 5,
    "sp": [
@@ -13150,7 +13150,7 @@
    "need_by_job": {}
   },
   "2308": {
-   "name": "Toque do Oblívio",
+   "name": "Banishing Point",
    "aegis": "LG_BANISHINGPOINT",
    "maxlv": 10,
    "sp": [
@@ -13174,7 +13174,7 @@
    "need_by_job": {}
   },
   "2309": {
-   "name": "Pisotear Armadilha",
+   "name": "Trample",
    "aegis": "LG_TRAMPLE",
    "maxlv": 3,
    "sp": [
@@ -13186,7 +13186,7 @@
    "need_by_job": {}
   },
   "2310": {
-   "name": "Escudo Compressor",
+   "name": "Shield Press",
    "aegis": "LG_SHIELDPRESS",
    "maxlv": 10,
    "sp": [
@@ -13210,7 +13210,7 @@
    "need_by_job": {}
   },
   "2311": {
-   "name": "Escudo Supressor",
+   "name": "Reflect Damage Reduction",
    "aegis": "LG_REFLECTDAMAGE",
    "maxlv": 5,
    "sp": [
@@ -13229,7 +13229,7 @@
    "need_by_job": {}
   },
   "2312": {
-   "name": "Estocada Precisa",
+   "name": "Pinpoint Attack",
    "aegis": "LG_PINPOINTATTACK",
    "maxlv": 5,
    "sp": [
@@ -13248,7 +13248,7 @@
    "need_by_job": {}
   },
   "2313": {
-   "name": "Prote豫o da Vanguarda",
+   "name": "Vanguard Force",
    "aegis": "LG_FORCEOFVANGUARD",
    "maxlv": 5,
    "sp": [
@@ -13262,7 +13262,7 @@
    "need_by_job": {}
   },
   "2314": {
-   "name": "Retribui豫o da Vanguarda",
+   "name": "Burst Attack",
    "aegis": "LG_RAGEBURST",
    "maxlv": 1,
    "sp": [
@@ -13277,7 +13277,7 @@
    "need_by_job": {}
   },
   "2315": {
-   "name": "Aegis Domini",
+   "name": "Shield Spell",
    "aegis": "LG_SHIELDSPELL",
    "maxlv": 3,
    "sp": [
@@ -13298,7 +13298,7 @@
    "need_by_job": {}
   },
   "2316": {
-   "name": "Exceder Limite",
+   "name": "Exceed Break",
    "aegis": "LG_EXEEDBREAK",
    "maxlv": 5,
    "sp": [
@@ -13317,7 +13317,7 @@
    "need_by_job": {}
   },
   "2317": {
-   "name": "Lança do Destino",
+   "name": "Over Brand",
    "aegis": "LG_OVERBRAND",
    "maxlv": 5,
    "sp": [
@@ -13340,7 +13340,7 @@
    "need_by_job": {}
   },
   "2318": {
-   "name": "Prestígio Divino",
+   "name": "Prestige",
    "aegis": "LG_PRESTIGE",
    "maxlv": 5,
    "sp": [
@@ -13359,7 +13359,7 @@
    "need_by_job": {}
   },
   "2319": {
-   "name": "Forma豫o Real",
+   "name": "Banding",
    "aegis": "LG_BANDING",
    "maxlv": 5,
    "sp": [
@@ -13382,7 +13382,7 @@
    "need_by_job": {}
   },
   "2320": {
-   "name": "Espiral Lunar",
+   "name": "Moon Slasher",
    "aegis": "LG_MOONSLASHER",
    "maxlv": 5,
    "sp": [
@@ -13401,7 +13401,7 @@
    "need_by_job": {}
   },
   "2321": {
-   "name": "Luz da Cria豫o",
+   "name": "Genesis Ray",
    "aegis": "LG_RAYOFGENESIS",
    "maxlv": 10,
    "sp": [
@@ -13425,7 +13425,7 @@
    "need_by_job": {}
   },
   "2322": {
-   "name": "Devo豫o",
+   "name": "Piety",
    "aegis": "LG_PIETY",
    "maxlv": 5,
    "sp": [
@@ -13444,7 +13444,7 @@
    "need_by_job": {}
   },
   "2323": {
-   "name": "Aegis Inferi",
+   "name": "Earth Drive",
    "aegis": "LG_EARTHDRIVE",
    "maxlv": 5,
    "sp": [
@@ -13463,7 +13463,7 @@
    "need_by_job": {}
   },
   "2324": {
-   "name": "Trindade",
+   "name": "Hesperus Lit",
    "aegis": "LG_HESPERUSLIT",
    "maxlv": 5,
    "sp": [
@@ -13486,7 +13486,7 @@
    "need_by_job": {}
   },
   "2325": {
-   "name": "Consagra豫o",
+   "name": "Inspiration",
    "aegis": "LG_INSPIRATION",
    "maxlv": 5,
    "sp": [
@@ -13513,7 +13513,7 @@
    "need_by_job": {}
   },
   "2326": {
-   "name": "Punho do Dragão",
+   "name": "Dragon Combo",
    "aegis": "SR_DRAGONCOMBO",
    "maxlv": 10,
    "sp": [
@@ -13537,7 +13537,7 @@
    "need_by_job": {}
   },
   "2327": {
-   "name": "Soco Furacão",
+   "name": "Sky Net Blow",
    "aegis": "SR_SKYNETBLOW",
    "maxlv": 5,
    "sp": [
@@ -13556,7 +13556,7 @@
    "need_by_job": {}
   },
   "2328": {
-   "name": "Impacto Sísmico",
+   "name": "Earth Shaker",
    "aegis": "SR_EARTHSHAKER",
    "maxlv": 5,
    "sp": [
@@ -13575,7 +13575,7 @@
    "need_by_job": {}
   },
   "2329": {
-   "name": "Ruína",
+   "name": "Fallen Empire",
    "aegis": "SR_FALLENEMPIRE",
    "maxlv": 10,
    "sp": [
@@ -13599,7 +13599,7 @@
    "need_by_job": {}
   },
   "2330": {
-   "name": "Garra de Tigre",
+   "name": "Tiger Cannon",
    "aegis": "SR_TIGERCANNON",
    "maxlv": 10,
    "sp": [
@@ -13623,7 +13623,7 @@
    "need_by_job": {}
   },
   "2332": {
-   "name": "Explosão Espiritual",
+   "name": "Rampage Blaster",
    "aegis": "SR_RAMPAGEBLASTER",
    "maxlv": 5,
    "sp": [
@@ -13642,7 +13642,7 @@
    "need_by_job": {}
   },
   "2333": {
-   "name": "Cotovelada Ascendente",
+   "name": "Crescent Elbow",
    "aegis": "SR_CRESCENTELBOW",
    "maxlv": 5,
    "sp": [
@@ -13661,7 +13661,7 @@
    "need_by_job": {}
   },
   "2334": {
-   "name": "Campo Amaldiçoado",
+   "name": "Cursed Circle",
    "aegis": "SR_CURSEDCIRCLE",
    "maxlv": 5,
    "sp": [
@@ -13680,7 +13680,7 @@
    "need_by_job": {}
   },
   "2335": {
-   "name": "Salto Relâmpago",
+   "name": "Lightning Walk",
    "aegis": "SR_LIGHTNINGWALK",
    "maxlv": 5,
    "sp": [
@@ -13699,7 +13699,7 @@
    "need_by_job": {}
   },
   "2336": {
-   "name": "Pancada Corporal",
+   "name": "Knuckle Arrow",
    "aegis": "SR_KNUCKLEARROW",
    "maxlv": 10,
    "sp": [
@@ -13723,7 +13723,7 @@
    "need_by_job": {}
   },
   "2337": {
-   "name": "Chute Rasteiro",
+   "name": "Windmill",
    "aegis": "SR_WINDMILL",
    "maxlv": 1,
    "sp": [
@@ -13738,7 +13738,7 @@
    "need_by_job": {}
   },
   "2338": {
-   "name": "Dragão Ascendente",
+   "name": "Rising Dragon",
    "aegis": "SR_RAISINGDRAGON",
    "maxlv": 10,
    "sp": [
@@ -13766,7 +13766,7 @@
    "need_by_job": {}
   },
   "2340": {
-   "name": "Absor豫o Espiritual",
+   "name": "Power Absorb",
    "aegis": "SR_ASSIMILATEPOWER",
    "maxlv": 1,
    "sp": [
@@ -13785,7 +13785,7 @@
    "need_by_job": {}
   },
   "2341": {
-   "name": "Renúncia Espiritual",
+   "name": "Power Implantation",
    "aegis": "SR_POWERVELOCITY",
    "maxlv": 1,
    "sp": [
@@ -13800,7 +13800,7 @@
    "need_by_job": {}
   },
   "2343": {
-   "name": "Portões do Inferno",
+   "name": "Gate of Hell",
    "aegis": "SR_GATEOFHELL",
    "maxlv": 10,
    "sp": [
@@ -13828,7 +13828,7 @@
    "need_by_job": {}
   },
   "2344": {
-   "name": "Chakra do Silêncio",
+   "name": "Gentle Touch Silence",
    "aegis": "SR_GENTLETOUCH_QUIET",
    "maxlv": 5,
    "sp": [
@@ -13842,7 +13842,7 @@
    "need_by_job": {}
   },
   "2345": {
-   "name": "Chakra da Cura",
+   "name": "Gentle Touch-Cure",
    "aegis": "SR_GENTLETOUCH_CURE",
    "maxlv": 5,
    "sp": [
@@ -13861,7 +13861,7 @@
    "need_by_job": {}
   },
   "2346": {
-   "name": "Chakra da Energia",
+   "name": "Gentle Touch-Energy Gain",
    "aegis": "SR_GENTLETOUCH_ENERGYGAIN",
    "maxlv": 5,
    "sp": [
@@ -13880,7 +13880,7 @@
    "need_by_job": {}
   },
   "2347": {
-   "name": "Chakra da Fúria",
+   "name": "Gentle Touch - Change",
    "aegis": "SR_GENTLETOUCH_CHANGE",
    "maxlv": 5,
    "sp": [
@@ -13907,7 +13907,7 @@
    "need_by_job": {}
   },
   "2348": {
-   "name": "Chakra do Vigor",
+   "name": "Gentle Touch-Revitalize",
    "aegis": "SR_GENTLETOUCH_REVITALIZE",
    "maxlv": 5,
    "sp": [
@@ -13934,7 +13934,7 @@
    "need_by_job": {}
   },
   "2350": {
-   "name": "Ritmo Contagiante",
+   "name": "Swing Dance",
    "aegis": "WA_SWING_DANCE",
    "maxlv": 5,
    "sp": [
@@ -13953,7 +13953,7 @@
    "need_by_job": {}
   },
   "2351": {
-   "name": "Balada Sinfônica",
+   "name": "Symphony of Lover",
    "aegis": "WA_SYMPHONY_OF_LOVER",
    "maxlv": 5,
    "sp": [
@@ -13972,7 +13972,7 @@
    "need_by_job": {}
   },
   "2352": {
-   "name": "Serenata ao Luar",
+   "name": "Moonlight Serenade",
    "aegis": "WA_MOONLIT_SERENADE",
    "maxlv": 5,
    "sp": [
@@ -13991,7 +13991,7 @@
    "need_by_job": {}
   },
   "2381": {
-   "name": "Sinfonia dos Ventos",
+   "name": "Windmill Rush",
    "aegis": "MI_RUSH_WINDMILL",
    "maxlv": 5,
    "sp": [
@@ -14010,7 +14010,7 @@
    "need_by_job": {}
   },
   "2382": {
-   "name": "Can豫o de Balder",
+   "name": "Echo Song",
    "aegis": "MI_ECHOSONG",
    "maxlv": 5,
    "sp": [
@@ -14029,7 +14029,7 @@
    "need_by_job": {}
   },
   "2383": {
-   "name": "Harmonizar",
+   "name": "Harmonize",
    "aegis": "MI_HARMONIZE",
    "maxlv": 5,
    "sp": [
@@ -14048,7 +14048,7 @@
    "need_by_job": {}
   },
   "2412": {
-   "name": "Domínio Musicial",
+   "name": "Lesson",
    "aegis": "WM_LESSON",
    "maxlv": 10,
    "sp": [
@@ -14067,7 +14067,7 @@
    "need_by_job": {}
   },
   "2413": {
-   "name": "Ruído Estridente",
+   "name": "Metallic Sound",
    "aegis": "WM_METALICSOUND",
    "maxlv": 10,
    "sp": [
@@ -14091,7 +14091,7 @@
    "need_by_job": {}
   },
   "2414": {
-   "name": "Ressonância",
+   "name": "Reverberation",
    "aegis": "WM_REVERBERATION",
    "maxlv": 5,
    "sp": [
@@ -14118,7 +14118,7 @@
    }
   },
   "2418": {
-   "name": "Temporal de Flechas",
+   "name": "Severe Rainstorm",
    "aegis": "WM_SEVERE_RAINSTORM",
    "maxlv": 5,
    "sp": [
@@ -14145,7 +14145,7 @@
    }
   },
   "2419": {
-   "name": "Poema de Nifflheim",
+   "name": "Song of Despair",
    "aegis": "WM_POEMOFNETHERWORLD",
    "maxlv": 5,
    "sp": [
@@ -14164,7 +14164,7 @@
    "need_by_job": {}
   },
   "2420": {
-   "name": "Canto da Sereia",
+   "name": "Siren's Voice",
    "aegis": "WM_VOICEOFSIREN",
    "maxlv": 5,
    "sp": [
@@ -14183,7 +14183,7 @@
    "need_by_job": {}
   },
   "2421": {
-   "name": "Réquiem de Orfeu",
+   "name": "Death Valley",
    "aegis": "WM_DEADHILLHERE",
    "maxlv": 5,
    "sp": [
@@ -14202,7 +14202,7 @@
    "need_by_job": {}
   },
   "2422": {
-   "name": "Melodia de Morfeu",
+   "name": "Deep Sleep Lullaby",
    "aegis": "WM_LULLABY_DEEPSLEEP",
    "maxlv": 5,
    "sp": [
@@ -14221,7 +14221,7 @@
    "need_by_job": {}
   },
   "2423": {
-   "name": "Sibilo de Eir",
+   "name": "Circle of Nature",
    "aegis": "WM_SIRCLEOFNATURE",
    "maxlv": 5,
    "sp": [
@@ -14240,7 +14240,7 @@
    "need_by_job": {}
   },
   "2424": {
-   "name": "Improviso",
+   "name": "Improvised Song",
    "aegis": "WM_RANDOMIZESPELL",
    "maxlv": 5,
    "sp": [
@@ -14259,7 +14259,7 @@
    "need_by_job": {}
   },
   "2425": {
-   "name": "Ode a Hela",
+   "name": "Gloomy Shyness",
    "aegis": "WM_GLOOMYDAY",
    "maxlv": 5,
    "sp": [
@@ -14278,7 +14278,7 @@
    "need_by_job": {}
   },
   "2426": {
-   "name": "Brado de Odin",
+   "name": "Great Echo",
    "aegis": "WM_GREAT_ECHO",
    "maxlv": 5,
    "sp": [
@@ -14297,7 +14297,7 @@
    "need_by_job": {}
   },
   "2427": {
-   "name": "Can豫o de Alfheim",
+   "name": "Song of Mana",
    "aegis": "WM_SONG_OF_MANA",
    "maxlv": 5,
    "sp": [
@@ -14340,7 +14340,7 @@
    }
   },
   "2428": {
-   "name": "Dança com Lobos",
+   "name": "Dance with Warg",
    "aegis": "WM_DANCE_WITH_WUG",
    "maxlv": 5,
    "sp": [
@@ -14383,7 +14383,7 @@
    }
   },
   "2429": {
-   "name": "Prelúdio do Ragnarök",
+   "name": "Song of Destruction",
    "aegis": "WM_SOUND_OF_DESTRUCTION",
    "maxlv": 5,
    "sp": [
@@ -14406,7 +14406,7 @@
    "need_by_job": {}
   },
   "2430": {
-   "name": "Embalos de Sábado a Noite",
+   "name": "Saturday Night Fever",
    "aegis": "WM_SATURDAY_NIGHT_FEVER",
    "maxlv": 5,
    "sp": [
@@ -14425,7 +14425,7 @@
    "need_by_job": {}
   },
   "2431": {
-   "name": "Orvalho de Idun",
+   "name": "Lerad's Dew",
    "aegis": "WM_LERADS_DEW",
    "maxlv": 5,
    "sp": [
@@ -14468,7 +14468,7 @@
    }
   },
   "2432": {
-   "name": "Cântico da Iluminação",
+   "name": "Sinking Melody",
    "aegis": "WM_MELODYOFSINK",
    "maxlv": 5,
    "sp": [
@@ -14487,7 +14487,7 @@
    "need_by_job": {}
   },
   "2433": {
-   "name": "Clamor de Batalha",
+   "name": "Beyond of Warcry",
    "aegis": "WM_BEYOND_OF_WARCRY",
    "maxlv": 5,
    "sp": [
@@ -14506,7 +14506,7 @@
    "need_by_job": {}
   },
   "2434": {
-   "name": "Murmúrio Perene",
+   "name": "Unlimited Humming Voice",
    "aegis": "WM_UNLIMITED_HUMMING_VOICE",
    "maxlv": 5,
    "sp": [
@@ -14529,7 +14529,7 @@
    "need_by_job": {}
   },
   "2443": {
-   "name": "Passos de Salamandra",
+   "name": "Fire Walk",
    "aegis": "SO_FIREWALK",
    "maxlv": 5,
    "sp": [
@@ -14548,7 +14548,7 @@
    "need_by_job": {}
   },
   "2444": {
-   "name": "Passos de Sílfide",
+   "name": "Electric Walk",
    "aegis": "SO_ELECTRICWALK",
    "maxlv": 5,
    "sp": [
@@ -14567,7 +14567,7 @@
    "need_by_job": {}
   },
   "2445": {
-   "name": "Punho Arcano",
+   "name": "Spell Fist",
    "aegis": "SO_SPELLFIST",
    "maxlv": 10,
    "sp": [
@@ -14591,7 +14591,7 @@
    "need_by_job": {}
   },
   "2446": {
-   "name": "Castigo de Nerthus",
+   "name": "Earth Grave",
    "aegis": "SO_EARTHGRAVE",
    "maxlv": 5,
    "sp": [
@@ -14610,7 +14610,7 @@
    "need_by_job": {}
   },
   "2447": {
-   "name": "Pó de Diamante",
+   "name": "Diamond Dust",
    "aegis": "SO_DIAMONDDUST",
    "maxlv": 5,
    "sp": [
@@ -14629,7 +14629,7 @@
    "need_by_job": {}
   },
   "2448": {
-   "name": "Implosão Tóxica",
+   "name": "Poison Buster",
    "aegis": "SO_POISON_BUSTER",
    "maxlv": 5,
    "sp": [
@@ -14648,7 +14648,7 @@
    "need_by_job": {}
   },
   "2449": {
-   "name": "Onda Psíquica",
+   "name": "Psychic Wave",
    "aegis": "SO_PSYCHIC_WAVE",
    "maxlv": 5,
    "sp": [
@@ -14667,7 +14667,7 @@
    "need_by_job": {}
   },
   "2450": {
-   "name": "Maldi豫o de Jormungand",
+   "name": "Killing Cloud",
    "aegis": "SO_CLOUD_KILL",
    "maxlv": 5,
    "sp": [
@@ -14686,7 +14686,7 @@
    "need_by_job": {}
   },
   "2451": {
-   "name": "Encanto de Órion",
+   "name": "Striking",
    "aegis": "SO_STRIKING",
    "maxlv": 5,
    "sp": [
@@ -14717,7 +14717,7 @@
    "need_by_job": {}
   },
   "2452": {
-   "name": "Aquecer Terreno",
+   "name": "Warmer",
    "aegis": "SO_WARMER",
    "maxlv": 5,
    "sp": [
@@ -14740,7 +14740,7 @@
    "need_by_job": {}
   },
   "2453": {
-   "name": "Tornado",
+   "name": "Extreme Vacuum",
    "aegis": "SO_VACUUM_EXTREME",
    "maxlv": 5,
    "sp": [
@@ -14759,7 +14759,7 @@
    "need_by_job": {}
   },
   "2454": {
-   "name": "Lanças dos Aesir",
+   "name": "Varetyr Spear",
    "aegis": "SO_VARETYR_SPEAR",
    "maxlv": 10,
    "sp": [
@@ -14806,7 +14806,7 @@
    "need_by_job": {}
   },
   "2456": {
-   "name": "Domínio Elemental",
+   "name": "Elemental Control",
    "aegis": "SO_EL_CONTROL",
    "maxlv": 4,
    "sp": [
@@ -14824,7 +14824,7 @@
    "need_by_job": {}
   },
   "2457": {
-   "name": "Invocar Agni",
+   "name": "Summon Agni",
    "aegis": "SO_SUMMON_AGNI",
    "maxlv": 3,
    "sp": [
@@ -14845,7 +14845,7 @@
    "need_by_job": {}
   },
   "2458": {
-   "name": "Invocar Varuna",
+   "name": "Summon Aqua",
    "aegis": "SO_SUMMON_AQUA",
    "maxlv": 3,
    "sp": [
@@ -14866,7 +14866,7 @@
    "need_by_job": {}
   },
   "2459": {
-   "name": "Invocar Vayu",
+   "name": "Summon Ventus",
    "aegis": "SO_SUMMON_VENTUS",
    "maxlv": 3,
    "sp": [
@@ -14887,7 +14887,7 @@
    "need_by_job": {}
   },
   "2460": {
-   "name": "Invocar Chandra",
+   "name": "Summon Tera",
    "aegis": "SO_SUMMON_TERA",
    "maxlv": 3,
    "sp": [
@@ -14908,7 +14908,7 @@
    "need_by_job": {}
   },
   "2461": {
-   "name": "Incitar Elemental",
+   "name": "Elemental Action",
    "aegis": "SO_EL_ACTION",
    "maxlv": 1,
    "sp": [
@@ -14923,7 +14923,7 @@
    "need_by_job": {}
   },
   "2462": {
-   "name": "Análise Elemental",
+   "name": "4 Elemental Analysis",
    "aegis": "SO_EL_ANALYSIS",
    "maxlv": 2,
    "sp": [
@@ -14951,7 +14951,7 @@
    "need_by_job": {}
   },
   "2463": {
-   "name": "Empatia Elemental",
+   "name": "Elemental Sympathy",
    "aegis": "SO_EL_SYMPATHY",
    "maxlv": 5,
    "sp": [
@@ -14970,7 +14970,7 @@
    "need_by_job": {}
   },
   "2464": {
-   "name": "Troca Espiritual",
+   "name": "Elemental Cure",
    "aegis": "SO_EL_CURE",
    "maxlv": 1,
    "sp": [
@@ -14985,7 +14985,7 @@
    "need_by_job": {}
   },
   "2465": {
-   "name": "Insígnia do Fogo",
+   "name": "Fire Insignia",
    "aegis": "SO_FIRE_INSIGNIA",
    "maxlv": 3,
    "sp": [
@@ -15002,7 +15002,7 @@
    "need_by_job": {}
   },
   "2466": {
-   "name": "Insígnia da Água",
+   "name": "Water Insignia",
    "aegis": "SO_WATER_INSIGNIA",
    "maxlv": 3,
    "sp": [
@@ -15019,7 +15019,7 @@
    "need_by_job": {}
   },
   "2467": {
-   "name": "Insígnia do Vento",
+   "name": "Wind Insignia",
    "aegis": "SO_WIND_INSIGNIA",
    "maxlv": 3,
    "sp": [
@@ -15036,7 +15036,7 @@
    "need_by_job": {}
   },
   "2468": {
-   "name": "Insígnia da Terra",
+   "name": "Earth Insignia",
    "aegis": "SO_EARTH_INSIGNIA",
    "maxlv": 3,
    "sp": [
@@ -15053,7 +15053,7 @@
    "need_by_job": {}
   },
   "2474": {
-   "name": "Perícia em Esgrima",
+   "name": "Sword Training",
    "aegis": "GN_TRAINING_SWORD",
    "maxlv": 5,
    "sp": [
@@ -15067,7 +15067,7 @@
    "need_by_job": {}
   },
   "2475": {
-   "name": "Aprimorar Carrinho",
+   "name": "Cart Remodeling",
    "aegis": "GN_REMODELING_CART",
    "maxlv": 5,
    "sp": [
@@ -15081,7 +15081,7 @@
    "need_by_job": {}
   },
   "2476": {
-   "name": "Tornado de Carrinho",
+   "name": "Cart Tornado",
    "aegis": "GN_CART_TORNADO",
    "maxlv": 10,
    "sp": [
@@ -15105,7 +15105,7 @@
    "need_by_job": {}
   },
   "2477": {
-   "name": "Canhão de Prótons",
+   "name": "Cart Cannon",
    "aegis": "GN_CARTCANNON",
    "maxlv": 5,
    "sp": [
@@ -15124,7 +15124,7 @@
    "need_by_job": {}
   },
   "2478": {
-   "name": "Propulsão do Carrinho",
+   "name": "Cart Boost",
    "aegis": "GN_CARTBOOST",
    "maxlv": 5,
    "sp": [
@@ -15143,7 +15143,7 @@
    "need_by_job": {}
   },
   "2479": {
-   "name": "Armadilha de Espinhos",
+   "name": "Thorns Trap",
    "aegis": "GN_THORNS_TRAP",
    "maxlv": 5,
    "sp": [
@@ -15162,7 +15162,7 @@
    "need_by_job": {}
   },
   "2480": {
-   "name": "Planta Sanguessuga",
+   "name": "Blood Sucker",
    "aegis": "GN_BLOOD_SUCKER",
    "maxlv": 5,
    "sp": [
@@ -15181,7 +15181,7 @@
    "need_by_job": {}
   },
   "2481": {
-   "name": "Esporo Explosivo",
+   "name": "Spore Explosion",
    "aegis": "GN_SPORE_EXPLOSION",
    "maxlv": 10,
    "sp": [
@@ -15205,7 +15205,7 @@
    "need_by_job": {}
   },
   "2482": {
-   "name": "Muralha de Espinhos",
+   "name": "Wall of Thorn",
    "aegis": "GN_WALLOFTHORN",
    "maxlv": 5,
    "sp": [
@@ -15224,7 +15224,7 @@
    "need_by_job": {}
   },
   "2483": {
-   "name": "Erva Daninha",
+   "name": "Crazy Weed",
    "aegis": "GN_CRAZYWEED",
    "maxlv": 10,
    "sp": [
@@ -15248,7 +15248,7 @@
    "need_by_job": {}
   },
   "2485": {
-   "name": "Bomba Napalm",
+   "name": "Demonic Fire",
    "aegis": "GN_DEMONIC_FIRE",
    "maxlv": 5,
    "sp": [
@@ -15267,7 +15267,7 @@
    "need_by_job": {}
   },
   "2486": {
-   "name": "Catalisador Alquímico",
+   "name": "Fire Expansion",
    "aegis": "GN_FIRE_EXPANSION",
    "maxlv": 5,
    "sp": [
@@ -15286,7 +15286,7 @@
    "need_by_job": {}
   },
   "2490": {
-   "name": "Planta Infernal",
+   "name": "Hell's Plant",
    "aegis": "GN_HELLS_PLANT",
    "maxlv": 5,
    "sp": [
@@ -15305,7 +15305,7 @@
    "need_by_job": {}
   },
   "2492": {
-   "name": "Grito da Mandrágora",
+   "name": "Howling of Mandragora",
    "aegis": "GN_MANDRAGORA",
    "maxlv": 5,
    "sp": [
@@ -15324,7 +15324,7 @@
    "need_by_job": {}
   },
   "2494": {
-   "name": "Reação Alquímica",
+   "name": "Change Material",
    "aegis": "GN_CHANGEMATERIAL",
    "maxlv": 1,
    "sp": [
@@ -15334,7 +15334,7 @@
    "need_by_job": {}
   },
   "2495": {
-   "name": "Culinária Avançada",
+   "name": "Mix Cooking",
    "aegis": "GN_MIX_COOKING",
    "maxlv": 2,
    "sp": [
@@ -15350,7 +15350,7 @@
    "need_by_job": {}
   },
   "2497": {
-   "name": "Farmacologia Avançada",
+   "name": "Special Pharmacy",
    "aegis": "GN_S_PHARMACY",
    "maxlv": 10,
    "sp": [
@@ -15369,7 +15369,7 @@
    "need_by_job": {}
   },
   "2515": {
-   "name": "Sacramentum",
+   "name": "Sacrament",
    "aegis": "AB_SECRAMENT",
    "maxlv": 5,
    "sp": [
@@ -15392,7 +15392,7 @@
    "need_by_job": {}
   },
   "2517": {
-   "name": "Rugido do Leão",
+   "name": "Howling of Lion",
    "aegis": "SR_HOWLINGOFLION",
    "maxlv": 5,
    "sp": [
@@ -15415,7 +15415,7 @@
    "need_by_job": {}
   },
   "2518": {
-   "name": "Tempestade Espiritual",
+   "name": "Ride in Lightning",
    "aegis": "SR_RIDEINLIGHTNING",
    "maxlv": 5,
    "sp": [
@@ -15434,7 +15434,7 @@
    "need_by_job": {}
   },
   "2544": {
-   "name": "Decorar Carrinho",
+   "name": "Change Cart 2",
    "aegis": "MC_CARTDECORATE",
    "maxlv": 1,
    "sp": [
@@ -15444,7 +15444,7 @@
    "need_by_job": {}
   },
   "2574": {
-   "name": "Luz Lunar",
+   "name": "Light of Moon",
    "aegis": "SJ_LIGHTOFMOON",
    "maxlv": 5,
    "sp": [
@@ -15463,7 +15463,7 @@
    "need_by_job": {}
   },
   "2575": {
-   "name": "Postura Lunar",
+   "name": "Lunar Stance",
    "aegis": "SJ_LUNARSTANCE",
    "maxlv": 3,
    "sp": [
@@ -15480,7 +15480,7 @@
    "need_by_job": {}
   },
   "2576": {
-   "name": "Chute Lunar",
+   "name": "Full Moon Kick",
    "aegis": "SJ_FULLMOONKICK",
    "maxlv": 10,
    "sp": [
@@ -15504,7 +15504,7 @@
    "need_by_job": {}
   },
   "2577": {
-   "name": "Luz Estelar",
+   "name": "Light of Star",
    "aegis": "SJ_LIGHTOFSTAR",
    "maxlv": 5,
    "sp": [
@@ -15523,7 +15523,7 @@
    "need_by_job": {}
   },
   "2578": {
-   "name": "Postura Estelar",
+   "name": "Star Stance",
    "aegis": "SJ_STARSTANCE",
    "maxlv": 3,
    "sp": [
@@ -15540,7 +15540,7 @@
    "need_by_job": {}
   },
   "2579": {
-   "name": "Eclipse Lunar",
+   "name": "New Moon Kick",
    "aegis": "SJ_NEWMOONKICK",
    "maxlv": 7,
    "sp": [
@@ -15561,7 +15561,7 @@
    "need_by_job": {}
   },
   "2580": {
-   "name": "Chute Estelar",
+   "name": "Flash Kick",
    "aegis": "SJ_FLASHKICK",
    "maxlv": 7,
    "sp": [
@@ -15582,7 +15582,7 @@
    "need_by_job": {}
   },
   "2581": {
-   "name": "Advento Imperial",
+   "name": "Advent of the Star Emperor",
    "aegis": "SJ_STAREMPEROR",
    "maxlv": 5,
    "sp": [
@@ -15605,7 +15605,7 @@
    "need_by_job": {}
   },
   "2582": {
-   "name": "Hipernova",
+   "name": "Nova Explosion",
    "aegis": "SJ_NOVAEXPLOSING",
    "maxlv": 5,
    "sp": [
@@ -15624,7 +15624,7 @@
    "need_by_job": {}
   },
   "2583": {
-   "name": "Postura do Universo",
+   "name": "Universe Stance",
    "aegis": "SJ_UNIVERSESTANCE",
    "maxlv": 3,
    "sp": [
@@ -15649,7 +15649,7 @@
    "need_by_job": {}
   },
   "2584": {
-   "name": "Chuva Estelar",
+   "name": "Falling Star",
    "aegis": "SJ_FALLINGSTAR",
    "maxlv": 10,
    "sp": [
@@ -15673,7 +15673,7 @@
    "need_by_job": {}
   },
   "2585": {
-   "name": "Controle Gravitacional",
+   "name": "Gravity Control",
    "aegis": "SJ_GRAVITYCONTROL",
    "maxlv": 1,
    "sp": [
@@ -15688,7 +15688,7 @@
    "need_by_job": {}
   },
   "2586": {
-   "name": "Livro das Dimensões",
+   "name": "Book of Dimension",
    "aegis": "SJ_BOOKOFDIMENSION",
    "maxlv": 5,
    "sp": [
@@ -15711,7 +15711,7 @@
    "need_by_job": {}
   },
   "2587": {
-   "name": "Livro da Cria豫o",
+   "name": "Book of Creating Star",
    "aegis": "SJ_BOOKOFCREATINGSTAR",
    "maxlv": 5,
    "sp": [
@@ -15734,7 +15734,7 @@
    "need_by_job": {}
   },
   "2588": {
-   "name": "Registro Solar, Lunar e Estelar",
+   "name": "Document of the Sun, Moon and Stars",
    "aegis": "SJ_DOCUMENT",
    "maxlv": 3,
    "sp": [
@@ -15755,7 +15755,7 @@
    "need_by_job": {}
   },
   "2589": {
-   "name": "Purifica豫o Solar, Lunar e Estelar",
+   "name": "Purification of the Sun, Moon and Stars",
    "aegis": "SJ_PURIFY",
    "maxlv": 1,
    "sp": [
@@ -15770,7 +15770,7 @@
    "need_by_job": {}
   },
   "2590": {
-   "name": "Luz Solar",
+   "name": "Light of Sun",
    "aegis": "SJ_LIGHTOFSUN",
    "maxlv": 5,
    "sp": [
@@ -15789,7 +15789,7 @@
    "need_by_job": {}
   },
   "2591": {
-   "name": "Postura Solar",
+   "name": "Sun Stance",
    "aegis": "SJ_SUNSTANCE",
    "maxlv": 3,
    "sp": [
@@ -15806,7 +15806,7 @@
    "need_by_job": {}
   },
   "2592": {
-   "name": "Explosão Solar",
+   "name": "Solar Burst",
    "aegis": "SJ_SOLARBURST",
    "maxlv": 10,
    "sp": [
@@ -15830,7 +15830,7 @@
    "need_by_job": {}
   },
   "2593": {
-   "name": "Chute Solar",
+   "name": "Prominence Kick",
    "aegis": "SJ_PROMINENCEKICK",
    "maxlv": 7,
    "sp": [
@@ -15851,7 +15851,7 @@
    "need_by_job": {}
   },
   "2596": {
-   "name": "Espírito do Golem",
+   "name": "Golem Soul",
    "aegis": "SP_SOULGOLEM",
    "maxlv": 5,
    "sp": [
@@ -15870,7 +15870,7 @@
    "need_by_job": {}
   },
   "2597": {
-   "name": "Espírito das Sombras",
+   "name": "Shadow Soul",
    "aegis": "SP_SOULSHADOW",
    "maxlv": 5,
    "sp": [
@@ -15889,7 +15889,7 @@
    "need_by_job": {}
   },
   "2598": {
-   "name": "Espírito do Falcão",
+   "name": "Falcon Soul",
    "aegis": "SP_SOULFALCON",
    "maxlv": 5,
    "sp": [
@@ -15908,7 +15908,7 @@
    "need_by_job": {}
   },
   "2599": {
-   "name": "Espírito da Fada",
+   "name": "Fairy Soul",
    "aegis": "SP_SOULFAIRY",
    "maxlv": 5,
    "sp": [
@@ -15927,7 +15927,7 @@
    "need_by_job": {}
   },
   "2600": {
-   "name": "Necroexplosão",
+   "name": "Curse Explosion",
    "aegis": "SP_CURSEEXPLOSION",
    "maxlv": 10,
    "sp": [
@@ -15951,7 +15951,7 @@
    "need_by_job": {}
   },
   "2601": {
-   "name": "Necromancia",
+   "name": "Curse of Wicked Soul",
    "aegis": "SP_SOULCURSE",
    "maxlv": 5,
    "sp": [
@@ -16037,7 +16037,7 @@
    "need_by_job": {}
   },
   "2605": {
-   "name": "União Espiritual",
+   "name": "Soul Unity",
    "aegis": "SP_SOULUNITY",
    "maxlv": 7,
    "sp": [
@@ -16058,7 +16058,7 @@
    "need_by_job": {}
   },
   "2606": {
-   "name": "Divisão de Alma",
+   "name": "Soul Division",
    "aegis": "SP_SOULDIVISION",
    "maxlv": 5,
    "sp": [
@@ -16081,7 +16081,7 @@
    "need_by_job": {}
   },
   "2607": {
-   "name": "Ceifar Alma",
+   "name": "Soul Reaper",
    "aegis": "SP_SOULREAPER",
    "maxlv": 5,
    "sp": [
@@ -16100,7 +16100,7 @@
    "need_by_job": {}
   },
   "2608": {
-   "name": "Absorver Espírito",
+   "name": "Soul Revolution",
    "aegis": "SP_SOULREVOLVE",
    "maxlv": 3,
    "sp": [
@@ -16121,7 +16121,7 @@
    "need_by_job": {}
   },
   "2609": {
-   "name": "Coletar Alma",
+   "name": "Soul Collect",
    "aegis": "SP_SOULCOLLECT",
    "maxlv": 5,
    "sp": [
@@ -16135,7 +16135,7 @@
    "need_by_job": {}
   },
   "2610": {
-   "name": "Sifão Espiritual",
+   "name": "Soul Explosion",
    "aegis": "SP_SOULEXPLOSION",
    "maxlv": 5,
    "sp": [
@@ -16170,7 +16170,7 @@
    "need_by_job": {}
   },
   "2611": {
-   "name": "Perícia com Almas",
+   "name": "Soul Energy Research",
    "aegis": "SP_SOULENERGY",
    "maxlv": 5,
    "sp": [
@@ -16208,7 +16208,7 @@
    "need_by_job": {}
   },
   "3001": {
-   "name": "Refúgio das Sombras",
+   "name": "Shadow Hiding",
    "aegis": "KO_YAMIKUMO",
    "maxlv": 1,
    "sp": [
@@ -16223,7 +16223,7 @@
    "need_by_job": {}
   },
   "3002": {
-   "name": "Perícia com a Mão Direita",
+   "name": "Righthand Mastery",
    "aegis": "KO_RIGHT",
    "maxlv": 5,
    "sp": [
@@ -16237,7 +16237,7 @@
    "need_by_job": {}
   },
   "3003": {
-   "name": "Perícia com a Mão Esquerda",
+   "name": "Lefthand Mastery",
    "aegis": "KO_LEFT",
    "maxlv": 5,
    "sp": [
@@ -16251,7 +16251,7 @@
    "need_by_job": {}
   },
   "3004": {
-   "name": "Impacto Cruzado",
+   "name": "Cross Slash",
    "aegis": "KO_JYUMONJIKIRI",
    "maxlv": 10,
    "sp": [
@@ -16275,7 +16275,7 @@
    "need_by_job": {}
   },
   "3005": {
-   "name": "Corte Espiritual",
+   "name": "Soul Cutter",
    "aegis": "KO_SETSUDAN",
    "maxlv": 5,
    "sp": [
@@ -16294,7 +16294,7 @@
    "need_by_job": {}
   },
   "3006": {
-   "name": "Kunai Explosiva",
+   "name": "Kunai Explosion",
    "aegis": "KO_BAKURETSU",
    "maxlv": 5,
    "sp": [
@@ -16313,7 +16313,7 @@
    "need_by_job": {}
   },
   "3007": {
-   "name": "Turbilhão de Kunais",
+   "name": "Kunai Splash",
    "aegis": "KO_HAPPOKUNAI",
    "maxlv": 5,
    "sp": [
@@ -16332,7 +16332,7 @@
    "need_by_job": {}
   },
   "3008": {
-   "name": "Explosão de Moedas",
+   "name": "Rapid Throw",
    "aegis": "KO_MUCHANAGE",
    "maxlv": 10,
    "sp": [
@@ -16356,7 +16356,7 @@
    "need_by_job": {}
   },
   "3009": {
-   "name": "Turbilhão de Pétalas",
+   "name": "Swirling Petal",
    "aegis": "KO_HUUMARANKA",
    "maxlv": 10,
    "sp": [
@@ -16380,7 +16380,7 @@
    "need_by_job": {}
   },
   "3010": {
-   "name": "Estrepes",
+   "name": "Makibishi",
    "aegis": "KO_MAKIBISHI",
    "maxlv": 5,
    "sp": [
@@ -16399,7 +16399,7 @@
    "need_by_job": {}
   },
   "3011": {
-   "name": "Purifica豫o da Alma",
+   "name": "Pure Soul",
    "aegis": "KO_MEIKYOUSISUI",
    "maxlv": 5,
    "sp": [
@@ -16418,7 +16418,7 @@
    "need_by_job": {}
   },
   "3012": {
-   "name": "Genjutsu: Clone das Sombras",
+   "name": "Illusion - Shadow",
    "aegis": "KO_ZANZOU",
    "maxlv": 5,
    "sp": [
@@ -16437,7 +16437,7 @@
    "need_by_job": {}
   },
   "3013": {
-   "name": "Genjutsu: Assalto das Sombras",
+   "name": "Illusion - Shock",
    "aegis": "KO_KYOUGAKU",
    "maxlv": 5,
    "sp": [
@@ -16456,7 +16456,7 @@
    "need_by_job": {}
   },
   "3014": {
-   "name": "Genjutsu: Chamado da Morte",
+   "name": "Illusion - Death",
    "aegis": "KO_JYUSATSU",
    "maxlv": 5,
    "sp": [
@@ -16475,7 +16475,7 @@
    "need_by_job": {}
   },
   "3015": {
-   "name": "Amuleto de Fogo",
+   "name": "Fire Charm",
    "aegis": "KO_KAHU_ENTEN",
    "maxlv": 1,
    "sp": [
@@ -16485,7 +16485,7 @@
    "need_by_job": {}
   },
   "3016": {
-   "name": "Amuleto de 햓ua",
+   "name": "Ice Charm",
    "aegis": "KO_HYOUHU_HUBUKI",
    "maxlv": 1,
    "sp": [
@@ -16495,7 +16495,7 @@
    "need_by_job": {}
   },
   "3017": {
-   "name": "Amuleto de Vento",
+   "name": "Wind Charm",
    "aegis": "KO_KAZEHU_SEIRAN",
    "maxlv": 1,
    "sp": [
@@ -16505,7 +16505,7 @@
    "need_by_job": {}
   },
   "3018": {
-   "name": "Amuleto de Terra",
+   "name": "Earth Charm",
    "aegis": "KO_DOHU_KOUKAI",
    "maxlv": 1,
    "sp": [
@@ -16515,7 +16515,7 @@
    "need_by_job": {}
   },
   "3019": {
-   "name": "Arremessar Amuleto",
+   "name": "Release Ninja Spell",
    "aegis": "KO_KAIHOU",
    "maxlv": 1,
    "sp": [
@@ -16542,7 +16542,7 @@
    "need_by_job": {}
   },
   "3020": {
-   "name": "Voragem Espiritual",
+   "name": "Cast Ninja Spell",
    "aegis": "KO_ZENKAI",
    "maxlv": 1,
    "sp": [
@@ -16561,7 +16561,7 @@
    "need_by_job": {}
   },
   "3021": {
-   "name": "Genjutsu: Substitui豫o",
+   "name": "Illusion - Bewitch",
    "aegis": "KO_GENWAKU",
    "maxlv": 5,
    "sp": [
@@ -16580,7 +16580,7 @@
    "need_by_job": {}
   },
   "3022": {
-   "name": "Inspira豫o",
+   "name": "16th Night",
    "aegis": "KO_IZAYOI",
    "maxlv": 5,
    "sp": [
@@ -16599,7 +16599,7 @@
    "need_by_job": {}
   },
   "3023": {
-   "name": "Esmagamento Sombrio",
+   "name": "Shadow Trampling",
    "aegis": "KG_KAGEHUMI",
    "maxlv": 5,
    "sp": [
@@ -16618,7 +16618,7 @@
    "need_by_job": {}
   },
   "3024": {
-   "name": "Vazio das Sombras",
+   "name": "Empty Shadow",
    "aegis": "KG_KYOMU",
    "maxlv": 5,
    "sp": [
@@ -16637,7 +16637,7 @@
    "need_by_job": {}
   },
   "3025": {
-   "name": "Contrato das Sombras",
+   "name": "Shadow Warrior",
    "aegis": "KG_KAGEMUSYA",
    "maxlv": 5,
    "sp": [
@@ -16656,7 +16656,7 @@
    "need_by_job": {}
   },
   "3026": {
-   "name": "Distor豫o Crescente",
+   "name": "Distorted Crescent",
    "aegis": "OB_ZANGETSU",
    "maxlv": 5,
    "sp": [
@@ -16675,7 +16675,7 @@
    "need_by_job": {}
   },
   "3027": {
-   "name": "Ilusão do Luar",
+   "name": "Moonlight Fantasy",
    "aegis": "OB_OBOROGENSOU",
    "maxlv": 5,
    "sp": [
@@ -16694,7 +16694,7 @@
    "need_by_job": {}
   },
   "3029": {
-   "name": "Luar Sinistro",
+   "name": "Ominous Red Moonlight",
    "aegis": "OB_AKAITSUKI",
    "maxlv": 5,
    "sp": [
@@ -16713,7 +16713,7 @@
    "need_by_job": {}
   },
   "5001": {
-   "name": "Garra Sombria",
+   "name": "Dark Claw",
    "aegis": "GC_DARKCROW",
    "maxlv": 5,
    "sp": [
@@ -16732,7 +16732,7 @@
    "need_by_job": {}
   },
   "5002": {
-   "name": "Ilimitar",
+   "name": "Unlimit",
    "aegis": "RA_UNLIMIT",
    "maxlv": 5,
    "sp": [
@@ -16751,7 +16751,7 @@
    "need_by_job": {}
   },
   "5003": {
-   "name": "Alucinógeno",
+   "name": "Illusion Doping",
    "aegis": "GN_ILLUSIONDOPING",
    "maxlv": 5,
    "sp": [
@@ -16770,7 +16770,7 @@
    "need_by_job": {}
   },
   "5004": {
-   "name": "Bafo do Dragão",
+   "name": "Dragon Breath - Water",
    "aegis": "RK_DRAGONBREATH_WATER",
    "maxlv": 10,
    "sp": [
@@ -16794,7 +16794,7 @@
    "need_by_job": {}
   },
   "5006": {
-   "name": "Erup豫o de Magma",
+   "name": "Magma Eruption",
    "aegis": "NC_MAGMA_ERUPTION",
    "maxlv": 5,
    "sp": [
@@ -16813,7 +16813,7 @@
    "need_by_job": {}
   },
   "5007": {
-   "name": "Can豫o de Frigga",
+   "name": "Frigg's Song",
    "aegis": "WM_FRIGG_SONG",
    "maxlv": 5,
    "sp": [
@@ -16832,7 +16832,7 @@
    "need_by_job": {}
   },
   "5008": {
-   "name": "Escudo Elemental",
+   "name": "Elemental Shield",
    "aegis": "SO_ELEMENTAL_SHIELD",
    "maxlv": 5,
    "sp": [
@@ -16851,7 +16851,7 @@
    "need_by_job": {}
   },
   "5009": {
-   "name": "Combo Rápido",
+   "name": "Flash Combo",
    "aegis": "SR_FLASHCOMBO",
    "maxlv": 5,
    "sp": [
@@ -16882,7 +16882,7 @@
    "need_by_job": {}
   },
   "5010": {
-   "name": "Escapar",
+   "name": "Escape",
    "aegis": "SC_ESCAPE",
    "maxlv": 5,
    "sp": [
@@ -16920,7 +16920,7 @@
    "need_by_job": {}
   },
   "5012": {
-   "name": "Telecinesia",
+   "name": "Telekinesis Intense",
    "aegis": "WL_TELEKINESIS_INTENSE",
    "maxlv": 5,
    "sp": [
@@ -16939,7 +16939,7 @@
    "need_by_job": {}
   },
   "5013": {
-   "name": "Graça Real",
+   "name": "King's Grace",
    "aegis": "LG_KINGS_GRACE",
    "maxlv": 5,
    "sp": [
@@ -16958,7 +16958,7 @@
    "need_by_job": {}
   },
   "5014": {
-   "name": "Maximizar Poder",
+   "name": "Full Throttle",
    "aegis": "ALL_FULL_THROTTLE",
    "maxlv": 5,
    "sp": [
@@ -17053,7 +17053,7 @@
    "need_by_job": {}
   },
   "5075": {
-   "name": "Crescimento",
+   "name": "Breakthrough",
    "aegis": "NV_BREAKTHROUGH",
    "maxlv": 5,
    "sp": [
@@ -17067,7 +17067,7 @@
    "need_by_job": {}
   },
   "5076": {
-   "name": "Ajuda Angelical",
+   "name": "Angel, help Me!",
    "aegis": "NV_HELPANGEL",
    "maxlv": 1,
    "sp": [
@@ -17077,7 +17077,7 @@
    "need_by_job": {}
   },
   "5077": {
-   "name": "Transcendência",
+   "name": "Transcendence",
    "aegis": "NV_TRANSCENDENCE",
    "maxlv": 5,
    "sp": [
@@ -17091,7 +17091,7 @@
    "need_by_job": {}
   },
   "5201": {
-   "name": "Espada Alada",
+   "name": "Servant Weapon",
    "aegis": "DK_SERVANTWEAPON",
    "maxlv": 5,
    "sp": [
@@ -17105,7 +17105,7 @@
    "need_by_job": {}
   },
   "5203": {
-   "name": "Marca Alada",
+   "name": "Servant Weapon - Sign",
    "aegis": "DK_SERVANT_W_SIGN",
    "maxlv": 5,
    "sp": [
@@ -17124,7 +17124,7 @@
    "need_by_job": {}
   },
   "5204": {
-   "name": "Impulsão Alada",
+   "name": "Servant Weapon - Phantom",
    "aegis": "DK_SERVANT_W_PHANTOM",
    "maxlv": 5,
    "sp": [
@@ -17147,7 +17147,7 @@
    "need_by_job": {}
   },
   "5205": {
-   "name": "Demoli豫o Alada",
+   "name": "Servant Weapon - Demolition",
    "aegis": "DK_SERVANT_W_DEMOL",
    "maxlv": 5,
    "sp": [
@@ -17166,7 +17166,7 @@
    "need_by_job": {}
   },
   "5206": {
-   "name": "Acumular Poder",
+   "name": "Charging Pierce",
    "aegis": "DK_CHARGINGPIERCE",
    "maxlv": 10,
    "sp": [
@@ -17190,7 +17190,7 @@
    "need_by_job": {}
   },
   "5207": {
-   "name": "Defesa com as Mãos",
+   "name": "Two Handed Defense",
    "aegis": "DK_TWOHANDDEF",
    "maxlv": 10,
    "sp": [
@@ -17209,7 +17209,7 @@
    "need_by_job": {}
   },
   "5208": {
-   "name": "Corte e Massacre",
+   "name": "Hack and Slasher",
    "aegis": "DK_HACKANDSLASHER",
    "maxlv": 10,
    "sp": [
@@ -17233,7 +17233,7 @@
    "need_by_job": {}
   },
   "5210": {
-   "name": "Aura Draconiana",
+   "name": "Dragonic Aura",
    "aegis": "DK_DRAGONIC_AURA",
    "maxlv": 10,
    "sp": [
@@ -17265,7 +17265,7 @@
    "need_by_job": {}
   },
   "5211": {
-   "name": "Cólera Esmagadora",
+   "name": "Madness Crusher",
    "aegis": "DK_MADNESS_CRUSHER",
    "maxlv": 5,
    "sp": [
@@ -17288,7 +17288,7 @@
    "need_by_job": {}
   },
   "5212": {
-   "name": "Determina豫o",
+   "name": "Vigor",
    "aegis": "DK_VIGOR",
    "maxlv": 10,
    "sp": [
@@ -17316,7 +17316,7 @@
    "need_by_job": {}
   },
   "5213": {
-   "name": "Dilacerar",
+   "name": "Storm Slash",
    "aegis": "DK_STORMSLASH",
    "maxlv": 5,
    "sp": [
@@ -17339,7 +17339,7 @@
    "need_by_job": {}
   },
   "5238": {
-   "name": "Mantra da Força",
+   "name": "Powerful Faith",
    "aegis": "IQ_POWERFUL_FAITH",
    "maxlv": 5,
    "sp": [
@@ -17358,7 +17358,7 @@
    "need_by_job": {}
   },
   "5239": {
-   "name": "Mantra da Saúde",
+   "name": "Firm Faith",
    "aegis": "IQ_FIRM_FAITH",
    "maxlv": 5,
    "sp": [
@@ -17377,7 +17377,7 @@
    "need_by_job": {}
   },
   "5240": {
-   "name": "Caminhos da Fé ",
+   "name": "Will of Faith",
    "aegis": "IQ_WILL_OF_FAITH",
    "maxlv": 10,
    "sp": [
@@ -17419,7 +17419,7 @@
    "need_by_job": {}
   },
   "5242": {
-   "name": "Mantra da Energia",
+   "name": "Sincere Faith",
    "aegis": "IQ_SINCERE_FAITH",
    "maxlv": 5,
    "sp": [
@@ -17438,7 +17438,7 @@
    "need_by_job": {}
   },
   "5243": {
-   "name": "Punho Labareda",
+   "name": "Massive Flame Blaster",
    "aegis": "IQ_MASSIVE_F_BLASTER",
    "maxlv": 10,
    "sp": [
@@ -17470,7 +17470,7 @@
    "need_by_job": {}
   },
   "5244": {
-   "name": "Técnica da Mão Explosiva",
+   "name": "Explosion Blaster",
    "aegis": "IQ_EXPOSION_BLASTER",
    "maxlv": 5,
    "sp": [
@@ -17489,7 +17489,7 @@
    "need_by_job": {}
   },
   "5245": {
-   "name": "Estigma",
+   "name": "First Brand",
    "aegis": "IQ_FIRST_BRAND",
    "maxlv": 5,
    "sp": [
@@ -17508,7 +17508,7 @@
    "need_by_job": {}
   },
   "5246": {
-   "name": "Auréola do Poder",
+   "name": "First Faith Power",
    "aegis": "IQ_FIRST_FAITH_POWER",
    "maxlv": 5,
    "sp": [
@@ -17531,7 +17531,7 @@
    "need_by_job": {}
   },
   "5247": {
-   "name": "Auréola do Juiz",
+   "name": "Judge",
    "aegis": "IQ_JUDGE",
    "maxlv": 5,
    "sp": [
@@ -17550,7 +17550,7 @@
    "need_by_job": {}
   },
   "5248": {
-   "name": "Palma Fervorosa",
+   "name": "Second Flame",
    "aegis": "IQ_SECOND_FLAME",
    "maxlv": 5,
    "sp": [
@@ -17569,7 +17569,7 @@
    "need_by_job": {}
   },
   "5249": {
-   "name": "Golpe Pantocrator",
+   "name": "Second Faith",
    "aegis": "IQ_SECOND_FAITH",
    "maxlv": 5,
    "sp": [
@@ -17588,7 +17588,7 @@
    "need_by_job": {}
   },
   "5250": {
-   "name": "Toque Intercessor",
+   "name": "Second Judgement",
    "aegis": "IQ_SECOND_JUDGEMENT",
    "maxlv": 5,
    "sp": [
@@ -17607,7 +17607,7 @@
    "need_by_job": {}
   },
   "5251": {
-   "name": "Soco Guilhotina",
+   "name": "Third Punish",
    "aegis": "IQ_THIRD_PUNISH",
    "maxlv": 5,
    "sp": [
@@ -17626,7 +17626,7 @@
    "need_by_job": {}
   },
   "5252": {
-   "name": "Fogueira Divina",
+   "name": "Third Flame Bomb",
    "aegis": "IQ_THIRD_FLAME_BOMB",
    "maxlv": 5,
    "sp": [
@@ -17645,7 +17645,7 @@
    "need_by_job": {}
   },
   "5253": {
-   "name": "Veredicto",
+   "name": "Third Consecration",
    "aegis": "IQ_THIRD_CONSECRATION",
    "maxlv": 5,
    "sp": [
@@ -17664,7 +17664,7 @@
    "need_by_job": {}
   },
   "5254": {
-   "name": "Auréola das Chamas",
+   "name": "Third Exorcism Flame",
    "aegis": "IQ_THIRD_EXOR_FLAME",
    "maxlv": 5,
    "sp": [
@@ -17683,7 +17683,7 @@
    "need_by_job": {}
   },
   "5255": {
-   "name": "Posi豫o de Defesa",
+   "name": "Guard Stance",
    "aegis": "IG_GUARD_STANCE",
    "maxlv": 5,
    "sp": [
@@ -17702,7 +17702,7 @@
    "need_by_job": {}
   },
   "5256": {
-   "name": "Escudo Guardião",
+   "name": "Guardian Shield",
    "aegis": "IG_GUARDIAN_SHIELD",
    "maxlv": 5,
    "sp": [
@@ -17721,7 +17721,7 @@
    "need_by_job": {}
   },
   "5257": {
-   "name": "Remissão",
+   "name": "Rebound Shield",
    "aegis": "IG_REBOUND_SHIELD",
    "maxlv": 5,
    "sp": [
@@ -17740,7 +17740,7 @@
    "need_by_job": {}
   },
   "5258": {
-   "name": "Perícia com Escudo",
+   "name": "Shield Mastery",
    "aegis": "IG_SHIELD_MASTERY",
    "maxlv": 10,
    "sp": [
@@ -17759,7 +17759,7 @@
    "need_by_job": {}
   },
   "5259": {
-   "name": "Perícia Hoplita",
+   "name": "Spear & Sword Mastery",
    "aegis": "IG_SPEAR_SWORD_M",
    "maxlv": 10,
    "sp": [
@@ -17778,7 +17778,7 @@
    "need_by_job": {}
   },
   "5260": {
-   "name": "Posi豫o de Ataque",
+   "name": "Attack Stance",
    "aegis": "IG_ATTACK_STANCE",
    "maxlv": 5,
    "sp": [
@@ -17797,7 +17797,7 @@
    "need_by_job": {}
   },
   "5261": {
-   "name": "Ultimato",
+   "name": "Ultimate Sacrifice",
    "aegis": "IG_ULTIMATE_SACRIFICE",
    "maxlv": 5,
    "sp": [
@@ -17820,7 +17820,7 @@
    "need_by_job": {}
   },
   "5262": {
-   "name": "Escudo Divino",
+   "name": "Holy Shield",
    "aegis": "IG_HOLY_SHIELD",
    "maxlv": 5,
    "sp": [
@@ -17843,7 +17843,7 @@
    "need_by_job": {}
   },
   "5263": {
-   "name": "Lança do Suplício",
+   "name": "Grand Judgement",
    "aegis": "IG_GRAND_JUDGEMENT",
    "maxlv": 10,
    "sp": [
@@ -17871,7 +17871,7 @@
    "need_by_job": {}
   },
   "5264": {
-   "name": "Crux Judicium",
+   "name": "Judgement Cross",
    "aegis": "IG_JUDGEMENT_CROSS",
    "maxlv": 10,
    "sp": [
@@ -17899,7 +17899,7 @@
    "need_by_job": {}
   },
   "5265": {
-   "name": "Arremessar Escudo",
+   "name": "Shield Shooting",
    "aegis": "IG_SHIELD_SHOOTING",
    "maxlv": 5,
    "sp": [
@@ -17922,7 +17922,7 @@
    "need_by_job": {}
   },
   "5266": {
-   "name": "Talho do Destino",
+   "name": "Overslash",
    "aegis": "IG_OVERSLASH",
    "maxlv": 10,
    "sp": [
@@ -17946,7 +17946,7 @@
    "need_by_job": {}
   },
   "5267": {
-   "name": "Crux Tempestas",
+   "name": "Cross Rain",
    "aegis": "IG_CROSS_RAIN",
    "maxlv": 10,
    "sp": [
@@ -18008,7 +18008,7 @@
    "need_by_job": {}
   },
   "5270": {
-   "name": "Estudo Religioso",
+   "name": "Mace & Book Mastery",
    "aegis": "CD_MACE_BOOK_M",
    "maxlv": 10,
    "sp": [
@@ -18198,7 +18198,7 @@
    "need_by_job": {}
   },
   "5279": {
-   "name": "Chuva Milagrosa",
+   "name": "Pneumaticus Procella",
    "aegis": "CD_PNEUMATICUS_PROCELLA",
    "maxlv": 10,
    "sp": [
@@ -18226,7 +18226,7 @@
    "need_by_job": {}
   },
   "5280": {
-   "name": "Salva豫o",
+   "name": "Dilectio Heal",
    "aegis": "CD_DILECTIO_HEAL",
    "maxlv": 5,
    "sp": [
@@ -18323,7 +18323,7 @@
    "need_by_job": {}
   },
   "5284": {
-   "name": "Flamen",
+   "name": "Framen",
    "aegis": "CD_FRAMEN",
    "maxlv": 5,
    "sp": [
@@ -18346,7 +18346,7 @@
    "need_by_job": {}
   },
   "5285": {
-   "name": "Carrasco Sombrio",
+   "name": "Shadow Exceed",
    "aegis": "SHC_SHADOW_EXCEED",
    "maxlv": 10,
    "sp": [
@@ -18378,7 +18378,7 @@
    "need_by_job": {}
   },
   "5286": {
-   "name": "Adagas Voadoras",
+   "name": "Dancing Knives",
    "aegis": "SHC_DANCING_KNIFE",
    "maxlv": 5,
    "sp": [
@@ -18397,7 +18397,7 @@
    "need_by_job": {}
   },
   "5287": {
-   "name": "Impacto Brutal",
+   "name": "Savage Impact",
    "aegis": "SHC_SAVAGE_IMPACT",
    "maxlv": 10,
    "sp": [
@@ -18425,7 +18425,7 @@
    "need_by_job": {}
   },
   "5288": {
-   "name": "Senso das Sombras",
+   "name": "Shadow Sense",
    "aegis": "SHC_SHADOW_SENSE",
    "maxlv": 10,
    "sp": [
@@ -18444,7 +18444,7 @@
    "need_by_job": {}
   },
   "5289": {
-   "name": "Talho Eterno",
+   "name": "Eternal Slash",
    "aegis": "SHC_ETERNAL_SLASH",
    "maxlv": 5,
    "sp": [
@@ -18471,7 +18471,7 @@
    "need_by_job": {}
   },
   "5290": {
-   "name": "Adulterar Veneno",
+   "name": "Potent Venom",
    "aegis": "SHC_POTENT_VENOM",
    "maxlv": 10,
    "sp": [
@@ -18499,7 +18499,7 @@
    "need_by_job": {}
   },
   "5291": {
-   "name": "Facada",
+   "name": "Shadow Stab",
    "aegis": "SHC_SHADOW_STAB",
    "maxlv": 5,
    "sp": [
@@ -18530,7 +18530,7 @@
    "need_by_job": {}
   },
   "5292": {
-   "name": "Impacto Cratera",
+   "name": "Impact Crater",
    "aegis": "SHC_IMPACT_CRATER",
    "maxlv": 5,
    "sp": [
@@ -18561,7 +18561,7 @@
    "need_by_job": {}
   },
   "5293": {
-   "name": "Profanar Arma",
+   "name": "Enchanting Shadow",
    "aegis": "SHC_ENCHANTING_SHADOW",
    "maxlv": 5,
    "sp": [
@@ -18584,7 +18584,7 @@
    "need_by_job": {}
   },
   "5294": {
-   "name": "Revoada Sombria",
+   "name": "Fatal Shadow Crow",
    "aegis": "SHC_FATAL_SHADOW_CROW",
    "maxlv": 10,
    "sp": [
@@ -18612,7 +18612,7 @@
    "need_by_job": {}
   },
   "5295": {
-   "name": "Machado Esmagador",
+   "name": "Axe Stomp",
    "aegis": "MT_AXE_STOMP",
    "maxlv": 5,
    "sp": [
@@ -18631,7 +18631,7 @@
    "need_by_job": {}
   },
   "5296": {
-   "name": "Avanço Sísmico",
+   "name": "Rush Quake",
    "aegis": "MT_RUSH_QUAKE",
    "maxlv": 10,
    "sp": [
@@ -18655,7 +18655,7 @@
    "need_by_job": {}
   },
   "5297": {
-   "name": "Criar Máquina",
+   "name": "Manufacture Machine",
    "aegis": "MT_M_MACHINE",
    "maxlv": 5,
    "sp": [
@@ -18669,7 +18669,7 @@
    "need_by_job": {}
   },
   "5298": {
-   "name": "Ativar Robô Atacante",
+   "name": "Activation Attack Machine",
    "aegis": "MT_A_MACHINE",
    "maxlv": 5,
    "sp": [
@@ -18692,7 +18692,7 @@
    "need_by_job": {}
   },
   "5299": {
-   "name": "Ativar Robô Defensor",
+   "name": "Activation Defense Machine",
    "aegis": "MT_D_MACHINE",
    "maxlv": 5,
    "sp": [
@@ -18711,7 +18711,7 @@
    "need_by_job": {}
   },
   "5300": {
-   "name": "Defesa com Machado",
+   "name": "Two-Handed Axe Defending",
    "aegis": "MT_TWOAXEDEF",
    "maxlv": 10,
    "sp": [
@@ -18730,7 +18730,7 @@
    "need_by_job": {}
   },
   "5301": {
-   "name": "Mecatrônica",
+   "name": "ABR Mastery",
    "aegis": "MT_ABR_M",
    "maxlv": 10,
    "sp": [
@@ -18754,7 +18754,7 @@
    "need_by_job": {}
   },
   "5302": {
-   "name": "Fabricar Soldado",
+   "name": "ABR - Battle Warrior",
    "aegis": "MT_SUMMON_ABR_BATTLE_WARIOR",
    "maxlv": 4,
    "sp": [
@@ -18772,7 +18772,7 @@
    "need_by_job": {}
   },
   "5303": {
-   "name": "Fabricar Canhoneiro",
+   "name": "ABR - Dual Cannon",
    "aegis": "MT_SUMMON_ABR_DUAL_CANNON",
    "maxlv": 4,
    "sp": [
@@ -18794,7 +18794,7 @@
    "need_by_job": {}
   },
   "5304": {
-   "name": "Fabricar Curandeira",
+   "name": "ABR - Mother Net",
    "aegis": "MT_SUMMON_ABR_MOTHER_NET",
    "maxlv": 4,
    "sp": [
@@ -18820,7 +18820,7 @@
    "need_by_job": {}
   },
   "5305": {
-   "name": "Fabricar Escoteiro",
+   "name": "ABR - Infinity",
    "aegis": "MT_SUMMON_ABR_INFINITY",
    "maxlv": 4,
    "sp": [
@@ -18850,7 +18850,7 @@
    "need_by_job": {}
   },
   "5311": {
-   "name": "Versatilidade",
+   "name": "Dagger & Bow Mastery",
    "aegis": "ABC_DAGGER_AND_BOW_M",
    "maxlv": 10,
    "sp": [
@@ -18869,7 +18869,7 @@
    "need_by_job": {}
   },
   "5312": {
-   "name": "Lâmina Mágica",
+   "name": "Magic Sword Mastery",
    "aegis": "ABC_MAGIC_SWORD_M",
    "maxlv": 10,
    "sp": [
@@ -18897,7 +18897,7 @@
    "need_by_job": {}
   },
   "5313": {
-   "name": "Remo豫o Sombria Total",
+   "name": "Strip Shadow",
    "aegis": "ABC_STRIP_SHADOW",
    "maxlv": 5,
    "sp": [
@@ -18920,7 +18920,7 @@
    "need_by_job": {}
   },
   "5314": {
-   "name": "Ofensiva Abissal",
+   "name": "Abyss Dagger",
    "aegis": "ABC_ABYSS_DAGGER",
    "maxlv": 5,
    "sp": [
@@ -18943,7 +18943,7 @@
    "need_by_job": {}
   },
   "5315": {
-   "name": "Salto Revés",
+   "name": "Unlucky Rush",
    "aegis": "ABC_UNLUCKY_RUSH",
    "maxlv": 5,
    "sp": [
@@ -18966,7 +18966,7 @@
    "need_by_job": {}
   },
   "5316": {
-   "name": "Disparo Progressivo",
+   "name": "Chain Reaction Shot",
    "aegis": "ABC_CHAIN_REACTION_SHOT",
    "maxlv": 5,
    "sp": [
@@ -18989,7 +18989,7 @@
    "need_by_job": {}
   },
   "5317": {
-   "name": "Invoca豫o do Abismo",
+   "name": "From the Abyss",
    "aegis": "ABC_FROM_THE_ABYSS",
    "maxlv": 5,
    "sp": [
@@ -19008,7 +19008,7 @@
    "need_by_job": {}
   },
   "5318": {
-   "name": "Sangue-Frio",
+   "name": "Abyss Slayer",
    "aegis": "ABC_ABYSS_SLAYER",
    "maxlv": 10,
    "sp": [
@@ -19036,7 +19036,7 @@
    "need_by_job": {}
   },
   "5319": {
-   "name": "Meteoro Ômega",
+   "name": "Omega Abyss Strike",
    "aegis": "ABC_ABYSS_STRIKE",
    "maxlv": 10,
    "sp": [
@@ -19064,7 +19064,7 @@
    "need_by_job": {}
   },
   "5320": {
-   "name": "Esfaquear",
+   "name": "Deft Stab",
    "aegis": "ABC_DEFT_STAB",
    "maxlv": 10,
    "sp": [
@@ -19092,7 +19092,7 @@
    "need_by_job": {}
   },
   "5321": {
-   "name": "Fenda do Abismo",
+   "name": "Abyss Square",
    "aegis": "ABC_ABYSS_SQUARE",
    "maxlv": 5,
    "sp": [
@@ -19115,7 +19115,7 @@
    "need_by_job": {}
   },
   "5322": {
-   "name": "Rajada Frenética",
+   "name": "Frenzy Shot",
    "aegis": "ABC_FRENZY_SHOT",
    "maxlv": 10,
    "sp": [
@@ -19143,7 +19143,7 @@
    "need_by_job": {}
   },
   "5323": {
-   "name": "Armadilha Avançada",
+   "name": "Advanced Trap",
    "aegis": "WH_ADVANCED_TRAP",
    "maxlv": 5,
    "sp": [
@@ -19162,7 +19162,7 @@
    "need_by_job": {}
   },
   "5324": {
-   "name": "Sinal do Vento",
+   "name": "Wind Sign",
    "aegis": "WH_WIND_SIGN",
    "maxlv": 5,
    "sp": [
@@ -19181,7 +19181,7 @@
    "need_by_job": {}
   },
   "5325": {
-   "name": "Amigo da Natureza",
+   "name": "Nature Friendly",
    "aegis": "WH_NATUREFRIENDLY",
    "maxlv": 5,
    "sp": [
@@ -19195,7 +19195,7 @@
    "need_by_job": {}
   },
   "5326": {
-   "name": "Mergulho Aéreo",
+   "name": "Hawk Rush",
    "aegis": "WH_HAWKRUSH",
    "maxlv": 5,
    "sp": [
@@ -19214,7 +19214,7 @@
    "need_by_job": {}
   },
   "5327": {
-   "name": "Chamar Ave",
+   "name": "Hawk Mastery",
    "aegis": "WH_HAWK_M",
    "maxlv": 1,
    "sp": [
@@ -19229,7 +19229,7 @@
    "need_by_job": {}
   },
   "5328": {
-   "name": "Ventos Sinistros",
+   "name": "Calamity Gale",
    "aegis": "WH_CALAMITYGALE",
    "maxlv": 1,
    "sp": [
@@ -19248,7 +19248,7 @@
    "need_by_job": {}
   },
   "5329": {
-   "name": "Aterrissagem",
+   "name": "Hawk Boomerang",
    "aegis": "WH_HAWKBOOMERANG",
    "maxlv": 5,
    "sp": [
@@ -19267,7 +19267,7 @@
    "need_by_job": {}
   },
   "5330": {
-   "name": "Vendaval de Flechas",
+   "name": "Gale Storm",
    "aegis": "WH_GALESTORM",
    "maxlv": 10,
    "sp": [
@@ -19291,7 +19291,7 @@
    "need_by_job": {}
   },
   "5331": {
-   "name": "Armadilha Sombria",
+   "name": "Deep Blinding Trap",
    "aegis": "WH_DEEPBLINDTRAP",
    "maxlv": 5,
    "sp": [
@@ -19310,7 +19310,7 @@
    "need_by_job": {}
   },
   "5332": {
-   "name": "Armadilha Terrestre",
+   "name": "Solid Trap",
    "aegis": "WH_SOLIDTRAP",
    "maxlv": 5,
    "sp": [
@@ -19329,7 +19329,7 @@
    "need_by_job": {}
   },
   "5333": {
-   "name": "Armadilha Atormentante",
+   "name": "Swift Trap",
    "aegis": "WH_SWIFTTRAP",
    "maxlv": 5,
    "sp": [
@@ -19348,7 +19348,7 @@
    "need_by_job": {}
   },
   "5334": {
-   "name": "Tiro Crescente",
+   "name": "Cresive Bolt",
    "aegis": "WH_CRESCIVE_BOLT",
    "maxlv": 10,
    "sp": [
@@ -19372,7 +19372,7 @@
    "need_by_job": {}
   },
   "5335": {
-   "name": "Armadilha Ardente",
+   "name": "Flame Trap",
    "aegis": "WH_FLAMETRAP",
    "maxlv": 5,
    "sp": [
@@ -19391,7 +19391,7 @@
    "need_by_job": {}
   },
   "5336": {
-   "name": "Manipular Po豫o",
+   "name": "Bionic Pharmacy",
    "aegis": "BO_BIONIC_PHARMACY",
    "maxlv": 5,
    "sp": [
@@ -19410,7 +19410,7 @@
    "need_by_job": {}
   },
   "5337": {
-   "name": "Botânica",
+   "name": "Bionics",
    "aegis": "BO_BIONICS_M",
    "maxlv": 10,
    "sp": [
@@ -19429,7 +19429,7 @@
    "need_by_job": {}
   },
   "5338": {
-   "name": "Proteção Química Geral",
+   "name": "The Whole Protection",
    "aegis": "BO_THE_WHOLE_PROTECTION",
    "maxlv": 5,
    "sp": [
@@ -19448,7 +19448,7 @@
    "need_by_job": {}
   },
   "5339": {
-   "name": "Prote豫o Sombria Total",
+   "name": "Full Shadow Protection",
    "aegis": "BO_ADVANCE_PROTECTION",
    "maxlv": 4,
    "sp": [
@@ -19466,7 +19466,7 @@
    "need_by_job": {}
   },
   "5340": {
-   "name": "Atirar 햎ido Aquoso",
+   "name": "Acidified Zone (Water)",
    "aegis": "BO_ACIDIFIED_ZONE_WATER",
    "maxlv": 5,
    "sp": [
@@ -19485,7 +19485,7 @@
    "need_by_job": {}
   },
   "5341": {
-   "name": "Atirar 햎ido Terroso",
+   "name": "Acidified Zone (Earth)",
    "aegis": "BO_ACIDIFIED_ZONE_GROUND",
    "maxlv": 5,
    "sp": [
@@ -19508,7 +19508,7 @@
    "need_by_job": {}
   },
   "5342": {
-   "name": "Atirar 햎ido Gasoso",
+   "name": "Acidified Zone (Wind)",
    "aegis": "BO_ACIDIFIED_ZONE_WIND",
    "maxlv": 5,
    "sp": [
@@ -19531,7 +19531,7 @@
    "need_by_job": {}
   },
   "5343": {
-   "name": "Atirar 햎ido Fogoso",
+   "name": "Acidified Zone (Fire)",
    "aegis": "BO_ACIDIFIED_ZONE_FIRE",
    "maxlv": 5,
    "sp": [
@@ -19550,7 +19550,7 @@
    "need_by_job": {}
   },
   "5344": {
-   "name": "Cultivar Bárbaro",
+   "name": "Wooden Warrior",
    "aegis": "BO_WOODENWARRIOR",
    "maxlv": 5,
    "sp": [
@@ -19569,7 +19569,7 @@
    "need_by_job": {}
   },
   "5345": {
-   "name": "Cultivar Fada",
+   "name": "Wooden Fairy",
    "aegis": "BO_WOODEN_FAIRY",
    "maxlv": 5,
    "sp": [
@@ -19588,7 +19588,7 @@
    "need_by_job": {}
   },
   "5346": {
-   "name": "Cultivar Vinha",
+   "name": "Creeper",
    "aegis": "BO_CREEPER",
    "maxlv": 5,
    "sp": [
@@ -19607,7 +19607,7 @@
    "need_by_job": {}
   },
   "5347": {
-   "name": "Relatatório de Pesquisa",
+   "name": "Research Report",
    "aegis": "BO_RESEARCHREPORT",
    "maxlv": 1,
    "sp": [
@@ -19626,7 +19626,7 @@
    "need_by_job": {}
   },
   "5348": {
-   "name": "Cultivar 햞vore Infernal",
+   "name": "Helltree",
    "aegis": "BO_HELLTREE",
    "maxlv": 5,
    "sp": [
@@ -19649,7 +19649,7 @@
    "need_by_job": {}
   },
   "5349": {
-   "name": "Presença de Palco",
+   "name": "Stage Manner",
    "aegis": "TR_STAGE_MANNER",
    "maxlv": 5,
    "sp": [
@@ -19663,7 +19663,7 @@
    "need_by_job": {}
   },
   "5350": {
-   "name": "Retrospectiva",
+   "name": "Retrospection",
    "aegis": "TR_RETROSPECTION",
    "maxlv": 1,
    "sp": [
@@ -19678,7 +19678,7 @@
    "need_by_job": {}
   },
   "5351": {
-   "name": "Sinfonia Mística",
+   "name": "Mystic Symphony",
    "aegis": "TR_MYSTIC_SYMPHONY",
    "maxlv": 1,
    "sp": [
@@ -19697,7 +19697,7 @@
    "need_by_job": {}
   },
   "5352": {
-   "name": "Sonata de Kvasir",
+   "name": "Sonata of Kvasir",
    "aegis": "TR_KVASIR_SONATA",
    "maxlv": 1,
    "sp": [
@@ -19716,7 +19716,7 @@
    "need_by_job": {}
   },
   "5353": {
-   "name": "Atirar Rosas",
+   "name": "Rose Blossom",
    "aegis": "TR_ROSEBLOSSOM",
    "maxlv": 5,
    "sp": [
@@ -19735,7 +19735,7 @@
    "need_by_job": {}
   },
   "5355": {
-   "name": "Disparo Rítmico",
+   "name": "Rhythm Shooting",
    "aegis": "TR_RHYTHMSHOOTING",
    "maxlv": 5,
    "sp": [
@@ -19749,7 +19749,7 @@
    "need_by_job": {}
   },
   "5356": {
-   "name": "Fúria Estridente",
+   "name": "Metallic Fury",
    "aegis": "TR_METALIC_FURY",
    "maxlv": 5,
    "sp": [
@@ -19768,7 +19768,7 @@
    "need_by_job": {}
   },
   "5357": {
-   "name": "Arranjo Musical",
+   "name": "Sound Blend",
    "aegis": "TR_SOUNDBLEND",
    "maxlv": 5,
    "sp": [
@@ -19787,7 +19787,7 @@
    "need_by_job": {}
   },
   "5358": {
-   "name": "Recital de Geffenia",
+   "name": "Geffenia Nocturne",
    "aegis": "TR_GEF_NOCTURN",
    "maxlv": 5,
    "sp": [
@@ -19806,7 +19806,7 @@
    "need_by_job": {}
   },
   "5359": {
-   "name": "Caprichos de Loki",
+   "name": "Capriccio of Roki",
    "aegis": "TR_ROKI_CAPRICCIO",
    "maxlv": 5,
    "sp": [
@@ -19825,7 +19825,7 @@
    "need_by_job": {}
   },
   "5360": {
-   "name": "Rapsódia do Minerador",
+   "name": "Raphsody of Mineworker",
    "aegis": "TR_AIN_RHAPSODY",
    "maxlv": 5,
    "sp": [
@@ -19844,7 +19844,7 @@
    "need_by_job": {}
   },
   "5361": {
-   "name": "Interlúdio",
+   "name": "Musical Interlude",
    "aegis": "TR_MUSICAL_INTERLUDE",
    "maxlv": 5,
    "sp": [
@@ -19863,7 +19863,7 @@
    "need_by_job": {}
   },
   "5362": {
-   "name": "Serenata de Jawaii",
+   "name": "Serenade of Jawaii",
    "aegis": "TR_JAWAII_SERENADE",
    "maxlv": 5,
    "sp": [
@@ -19882,7 +19882,7 @@
    "need_by_job": {}
   },
   "5363": {
-   "name": "Réquiem de Nifflheim",
+   "name": "Requiem of Nifleheim",
    "aegis": "TR_NIPELHEIM_REQUIEM",
    "maxlv": 5,
    "sp": [
@@ -19905,7 +19905,7 @@
    "need_by_job": {}
   },
   "5364": {
-   "name": "Marcha de Prontera",
+   "name": "March of Prontera",
    "aegis": "TR_PRON_MARCH",
    "maxlv": 5,
    "sp": [
@@ -19924,7 +19924,7 @@
    "need_by_job": {}
   },
   "5401": {
-   "name": "A.D.P",
+   "name": "P.F.I",
    "aegis": "NW_P_F_I",
    "maxlv": 10,
    "sp": [
@@ -19943,7 +19943,7 @@
    "need_by_job": {}
   },
   "5402": {
-   "name": "Perícia em Granada",
+   "name": "Grenade Mastery",
    "aegis": "NW_GRENADE_MASTERY",
    "maxlv": 10,
    "sp": [
@@ -19962,7 +19962,7 @@
    "need_by_job": {}
   },
   "5403": {
-   "name": "Mira Focalizada",
+   "name": "Intensive Aim",
    "aegis": "NW_INTENSIVE_AIM",
    "maxlv": 1,
    "sp": [
@@ -19977,7 +19977,7 @@
    "need_by_job": {}
   },
   "5404": {
-   "name": "Fragmenta豫o",
+   "name": "Grenade Fragment",
    "aegis": "NW_GRENADE_FRAGMENT",
    "maxlv": 7,
    "sp": [
@@ -19998,7 +19998,7 @@
    "need_by_job": {}
   },
   "5405": {
-   "name": "Vigília Noturna",
+   "name": "The Vigilante at Night",
    "aegis": "NW_THE_VIGILANTE_AT_NIGHT",
    "maxlv": 5,
    "sp": [
@@ -20021,7 +20021,7 @@
    "need_by_job": {}
   },
   "5406": {
-   "name": "Disparo Único",
+   "name": "Only One Bullet",
    "aegis": "NW_ONLY_ONE_BULLET",
    "maxlv": 5,
    "sp": [
@@ -20044,7 +20044,7 @@
    "need_by_job": {}
   },
   "5407": {
-   "name": "Atirar em Espiral",
+   "name": "Spiral Shooting",
    "aegis": "NW_SPIRAL_SHOOTING",
    "maxlv": 5,
    "sp": [
@@ -20067,7 +20067,7 @@
    "need_by_job": {}
   },
   "5408": {
-   "name": "Artilharia Pesada",
+   "name": "Magazine for One",
    "aegis": "NW_MAGAZINE_FOR_ONE",
    "maxlv": 5,
    "sp": [
@@ -20090,7 +20090,7 @@
    "need_by_job": {}
   },
   "5409": {
-   "name": "Chuva de Tiros",
+   "name": "Wild Fire",
    "aegis": "NW_WILD_FIRE",
    "maxlv": 5,
    "sp": [
@@ -20113,7 +20113,7 @@
    "need_by_job": {}
   },
   "5410": {
-   "name": "Jogar Granada",
+   "name": "Basic Grenade",
    "aegis": "NW_BASIC_GRENADE",
    "maxlv": 5,
    "sp": [
@@ -20132,7 +20132,7 @@
    "need_by_job": {}
   },
   "5411": {
-   "name": "Gatilho Incandescente",
+   "name": "Hasty Fire in the Hole",
    "aegis": "NW_HASTY_FIRE_IN_THE_HOLE",
    "maxlv": 5,
    "sp": [
@@ -20151,7 +20151,7 @@
    "need_by_job": {}
   },
   "5412": {
-   "name": "Queda de Granadas",
+   "name": "Grenade Dropping",
    "aegis": "NW_GRENADES_DROPPING",
    "maxlv": 5,
    "sp": [
@@ -20170,7 +20170,7 @@
    "need_by_job": {}
   },
   "5413": {
-   "name": "Disparo Automático",
+   "name": "Auto Firing Launcher",
    "aegis": "NW_AUTO_FIRING_LAUNCHER",
    "maxlv": 5,
    "sp": [
@@ -20189,7 +20189,7 @@
    "need_by_job": {}
   },
   "5414": {
-   "name": "Carta na Manga",
+   "name": "Hidden Card",
    "aegis": "NW_HIDDEN_CARD",
    "maxlv": 10,
    "sp": [
@@ -20217,7 +20217,7 @@
    "need_by_job": {}
   },
   "5415": {
-   "name": "Bombardeio",
+   "name": "Mission Bombard",
    "aegis": "NW_MISSION_BOMBARD",
    "maxlv": 10,
    "sp": [
@@ -20245,7 +20245,7 @@
    "need_by_job": {}
   },
   "5416": {
-   "name": "Perícia com Talismãs",
+   "name": "Talisman Mastery",
    "aegis": "SOA_TALISMAN_MASTERY",
    "maxlv": 10,
    "sp": [
@@ -20264,7 +20264,7 @@
    "need_by_job": {}
   },
   "5417": {
-   "name": "Maestria com Almas",
+   "name": "Soul Mastery",
    "aegis": "SOA_SOUL_MASTERY",
    "maxlv": 10,
    "sp": [
@@ -20283,7 +20283,7 @@
    "need_by_job": {}
   },
   "5418": {
-   "name": "Talismã do Protetor",
+   "name": "Talisman of Protection",
    "aegis": "SOA_TALISMAN_OF_PROTECTION",
    "maxlv": 5,
    "sp": [
@@ -20302,7 +20302,7 @@
    "need_by_job": {}
   },
   "5419": {
-   "name": "Talismã do Guerreiro",
+   "name": "Talisman of Warrior",
    "aegis": "SOA_TALISMAN_OF_WARRIOR",
    "maxlv": 5,
    "sp": [
@@ -20321,7 +20321,7 @@
    "need_by_job": {}
   },
   "5420": {
-   "name": "Talismã do Mágico",
+   "name": "Talisman of Magician",
    "aegis": "SOA_TALISMAN_OF_MAGICIAN",
    "maxlv": 5,
    "sp": [
@@ -20340,7 +20340,7 @@
    "need_by_job": {}
   },
   "5421": {
-   "name": "Convocar Almas",
+   "name": "Soul Gathering",
    "aegis": "SOA_SOUL_GATHERING",
    "maxlv": 5,
    "sp": [
@@ -20363,7 +20363,7 @@
    "need_by_job": {}
   },
   "5422": {
-   "name": "Totem de Tutela",
+   "name": "Talisman of Tutelary",
    "aegis": "SOA_TOTEM_OF_TUTELARY",
    "maxlv": 5,
    "sp": [
@@ -20386,7 +20386,7 @@
    "need_by_job": {}
   },
   "5423": {
-   "name": "Talismã dos Elementos",
+   "name": "Talisman of Five Elements",
    "aegis": "SOA_TALISMAN_OF_FIVE_ELEMENTS",
    "maxlv": 5,
    "sp": [
@@ -20405,7 +20405,7 @@
    "need_by_job": {}
   },
   "5424": {
-   "name": "Talismã do Ceifeiro",
+   "name": "Talisman of Soul Stealing",
    "aegis": "SOA_TALISMAN_OF_SOUL_STEALING",
    "maxlv": 5,
    "sp": [
@@ -20428,7 +20428,7 @@
    "need_by_job": {}
   },
   "5425": {
-   "name": "Exorcizar Assombra豫o",
+   "name": "Exorcism of Malicious Soul",
    "aegis": "SOA_EXORCISM_OF_MALICIOUS_SOUL",
    "maxlv": 5,
    "sp": [
@@ -20451,7 +20451,7 @@
    "need_by_job": {}
   },
   "5426": {
-   "name": "Talismã do Dragão",
+   "name": "Talisman of Blue Dragon",
    "aegis": "SOA_TALISMAN_OF_BLUE_DRAGON",
    "maxlv": 5,
    "sp": [
@@ -20470,7 +20470,7 @@
    "need_by_job": {}
   },
   "5427": {
-   "name": "Talismã do Tigre",
+   "name": "Talisman of White Tiger",
    "aegis": "SOA_TALISMAN_OF_WHITE_TIGER",
    "maxlv": 5,
    "sp": [
@@ -20489,7 +20489,7 @@
    "need_by_job": {}
   },
   "5428": {
-   "name": "Talimã da Fênix",
+   "name": "Talisman of Red Phoenix",
    "aegis": "SOA_TALISMAN_OF_RED_PHOENIX",
    "maxlv": 5,
    "sp": [
@@ -20508,7 +20508,7 @@
    "need_by_job": {}
   },
   "5429": {
-   "name": "Talismã do Jabuti",
+   "name": "Talisman of Black Tortoise",
    "aegis": "SOA_TALISMAN_OF_BLACK_TORTOISE",
    "maxlv": 5,
    "sp": [
@@ -20527,7 +20527,7 @@
    "need_by_job": {}
   },
   "5430": {
-   "name": "Talismã das Divindades",
+   "name": "Talisman of Four Bearing God",
    "aegis": "SOA_TALISMAN_OF_FOUR_BEARING_GOD",
    "maxlv": 5,
    "sp": [
@@ -20558,7 +20558,7 @@
    "need_by_job": {}
   },
   "5431": {
-   "name": "Mandala das Feras",
+   "name": "Circle of Directions and Elementals",
    "aegis": "SOA_CIRCLE_OF_DIRECTIONS_AND_ELEMENTALS",
    "maxlv": 5,
    "sp": [
@@ -20585,7 +20585,7 @@
    "need_by_job": {}
   },
   "5432": {
-   "name": "Reencarna豫o das Almas",
+   "name": "Soul of Heaven and Earth",
    "aegis": "SOA_SOUL_OF_HEAVEN_AND_EARTH",
    "maxlv": 10,
    "sp": [
@@ -20621,7 +20621,7 @@
    "need_by_job": {}
   },
   "5433": {
-   "name": "Maestria Mística",
+   "name": "Mystical Creature Mastery",
    "aegis": "SH_MYSTICAL_CREATURE_MASTERY",
    "maxlv": 10,
    "sp": [
@@ -20640,7 +20640,7 @@
    "need_by_job": {}
   },
   "5434": {
-   "name": "União com Onça",
+   "name": "Commune With Chulho",
    "aegis": "SH_COMMUNE_WITH_CHUL_HO",
    "maxlv": 1,
    "sp": [],
@@ -20657,7 +20657,7 @@
    "need_by_job": {}
   },
   "5435": {
-   "name": "Garras de Onça",
+   "name": "Chulho Sonic Claw",
    "aegis": "SH_CHUL_HO_SONIC_CLAW",
    "maxlv": 7,
    "sp": [
@@ -20678,7 +20678,7 @@
    "need_by_job": {}
   },
   "5436": {
-   "name": "Rugido da Onça",
+   "name": "Howling of Chulho",
    "aegis": "SH_HOWLING_OF_CHUL_HO",
    "maxlv": 7,
    "sp": [
@@ -20703,7 +20703,7 @@
    "need_by_job": {}
   },
   "5437": {
-   "name": "Patada Felina",
+   "name": "Hogogong Strike",
    "aegis": "SH_HOGOGONG_STRIKE",
    "maxlv": 7,
    "sp": [
@@ -20728,7 +20728,7 @@
    "need_by_job": {}
   },
   "5438": {
-   "name": "União com Tartaruga",
+   "name": "Commune With Kisul",
    "aegis": "SH_COMMUNE_WITH_KI_SUL",
    "maxlv": 1,
    "sp": [],
@@ -20745,7 +20745,7 @@
    "need_by_job": {}
   },
   "5439": {
-   "name": "Esguichar 햓ua",
+   "name": "Kisul Water Spraying",
    "aegis": "SH_KI_SUL_WATER_SPRAYING",
    "maxlv": 7,
    "sp": [
@@ -20766,7 +20766,7 @@
    "need_by_job": {}
   },
   "5440": {
-   "name": "Festival Marinho",
+   "name": "Marine Festival of Kisul",
    "aegis": "SH_MARINE_FESTIVAL_OF_KI_SUL",
    "maxlv": 5,
    "sp": [
@@ -20789,7 +20789,7 @@
    "need_by_job": {}
   },
   "5441": {
-   "name": "Luau nas Areias",
+   "name": "Sandy Festival of Kisul",
    "aegis": "SH_SANDY_FESTIVAL_OF_KI_SUL",
    "maxlv": 5,
    "sp": [
@@ -20812,7 +20812,7 @@
    "need_by_job": {}
   },
   "5442": {
-   "name": "Ira da Tartaruga",
+   "name": "Kisul Rampage",
    "aegis": "SH_KI_SUL_RAMPAGE",
    "maxlv": 7,
    "sp": [
@@ -20841,7 +20841,7 @@
    "need_by_job": {}
   },
   "5443": {
-   "name": "União com Cervo",
+   "name": "Commune With Hyunrok",
    "aegis": "SH_COMMUNE_WITH_HYUN_ROK",
    "maxlv": 1,
    "sp": [],
@@ -20858,7 +20858,7 @@
    "need_by_job": {}
   },
   "5444": {
-   "name": "Cores do Arco-Íris",
+   "name": "Colors of Hyunrok",
    "aegis": "SH_COLORS_OF_HYUN_ROK",
    "maxlv": 7,
    "sp": [
@@ -20879,7 +20879,7 @@
    "need_by_job": {}
   },
   "5445": {
-   "name": "Brisa Silvestre",
+   "name": "Hyunrok Breeze",
    "aegis": "SH_HYUN_ROKS_BREEZE",
    "maxlv": 7,
    "sp": [
@@ -20904,7 +20904,7 @@
    "need_by_job": {}
   },
   "5446": {
-   "name": "Lança Galhada",
+   "name": "Hyunrok Cannon",
    "aegis": "SH_HYUN_ROK_CANNON",
    "maxlv": 7,
    "sp": [
@@ -20929,7 +20929,7 @@
    "need_by_job": {}
   },
   "5447": {
-   "name": "Aliança Animal",
+   "name": "Temporary Communion",
    "aegis": "SH_TEMPORARY_COMMUNION",
    "maxlv": 5,
    "sp": [
@@ -20948,7 +20948,7 @@
    "need_by_job": {}
   },
   "5448": {
-   "name": "Bênção da Natureza",
+   "name": "Blessing of Mystical Creatures",
    "aegis": "SH_BLESSING_OF_MYSTICAL_CREATURES",
    "maxlv": 5,
    "sp": [
@@ -20971,7 +20971,7 @@
    "need_by_job": {}
   },
   "5449": {
-   "name": "Físico Autodidata",
+   "name": "Self Study Tactics",
    "aegis": "HN_SELFSTUDY_TATICS",
    "maxlv": 10,
    "sp": [
@@ -20990,7 +20990,7 @@
    "need_by_job": {}
   },
   "5450": {
-   "name": "Mágico Autodidata",
+   "name": "Self Study Sorcery",
    "aegis": "HN_SELFSTUDY_SOCERY",
    "maxlv": 10,
    "sp": [
@@ -21009,7 +21009,7 @@
    "need_by_job": {}
   },
   "5451": {
-   "name": "Golpe de Tyr",
+   "name": "Double Bowling Bash",
    "aegis": "HN_DOUBLEBOWLINGBASH",
    "maxlv": 10,
    "sp": [
@@ -21033,7 +21033,7 @@
    "need_by_job": {}
   },
   "5452": {
-   "name": "Lâminas Devastadoras",
+   "name": "Mega Sonic Blow",
    "aegis": "HN_MEGA_SONIC_BLOW",
    "maxlv": 10,
    "sp": [
@@ -21057,7 +21057,7 @@
    "need_by_job": {}
   },
   "5453": {
-   "name": "Choque Violento",
+   "name": "Shield Chain Rush",
    "aegis": "HN_SHIELD_CHAIN_RUSH",
    "maxlv": 10,
    "sp": [
@@ -21081,7 +21081,7 @@
    "need_by_job": {}
   },
   "5454": {
-   "name": "Cortar em Espiral",
+   "name": "Spiral Pierce Max",
    "aegis": "HN_SPIRAL_PIERCE_MAX",
    "maxlv": 10,
    "sp": [
@@ -21105,7 +21105,7 @@
    "need_by_job": {}
   },
   "5455": {
-   "name": "Chuva de Meteoritos",
+   "name": "Meteor Storm Buster",
    "aegis": "HN_METEOR_STORM_BUSTER",
    "maxlv": 10,
    "sp": [
@@ -21129,7 +21129,7 @@
    "need_by_job": {}
   },
   "5456": {
-   "name": "Tempestade de Júpiter",
+   "name": "Jupitel Thunderstorm",
    "aegis": "HN_JUPITEL_THUNDER_STORM",
    "maxlv": 10,
    "sp": [
@@ -21153,7 +21153,7 @@
    "need_by_job": {}
   },
   "5457": {
-   "name": "Esquife Congelante",
+   "name": "Jack Frost Nova",
    "aegis": "HN_JACK_FROST_NOVA",
    "maxlv": 10,
    "sp": [
@@ -21177,7 +21177,7 @@
    "need_by_job": {}
   },
   "5458": {
-   "name": "Ira da Terra",
+   "name": "Hell's Drive",
    "aegis": "HN_HELLS_DRIVE",
    "maxlv": 10,
    "sp": [
@@ -21201,7 +21201,7 @@
    "need_by_job": {}
   },
   "5459": {
-   "name": "Zona Gravitacional",
+   "name": "Ground Gravitation",
    "aegis": "HN_GROUND_GRAVITATION",
    "maxlv": 10,
    "sp": [
@@ -21225,7 +21225,7 @@
    "need_by_job": {}
   },
   "5460": {
-   "name": "Espectro Napalm",
+   "name": "Napalm Vulcan Strike",
    "aegis": "HN_NAPALM_VULCAN_STRIKE",
    "maxlv": 10,
    "sp": [
@@ -21249,7 +21249,7 @@
    "need_by_job": {}
   },
   "5461": {
-   "name": "Anjo da Prosperidade",
+   "name": "Breaking Limit",
    "aegis": "HN_BREAKINGLIMIT",
    "maxlv": 1,
    "sp": [
@@ -21276,7 +21276,7 @@
    "need_by_job": {}
   },
   "5462": {
-   "name": "Anjo da Liberta豫o",
+   "name": "Rule Break",
    "aegis": "HN_RULEBREAK",
    "maxlv": 1,
    "sp": [
@@ -21311,7 +21311,7 @@
    "need_by_job": {}
   },
   "5463": {
-   "name": "Maestria Celestial",
+   "name": "Sky Mastery",
    "aegis": "SKE_SKY_MASTERY",
    "maxlv": 10,
    "sp": [
@@ -21330,7 +21330,7 @@
    "need_by_job": {}
   },
   "5464": {
-   "name": "Perícia com Livro",
+   "name": "War Book Mastery",
    "aegis": "SKE_WAR_BOOK_MASTERY",
    "maxlv": 10,
    "sp": [
@@ -21349,7 +21349,7 @@
    "need_by_job": {}
   },
   "5465": {
-   "name": "Amanhecer",
+   "name": "Rising Sun",
    "aegis": "SKE_RISING_SUN",
    "maxlv": 5,
    "sp": [
@@ -21368,7 +21368,7 @@
    "need_by_job": {}
   },
   "5466": {
-   "name": "Entardecer",
+   "name": "Noon Blast",
    "aegis": "SKE_NOON_BLAST",
    "maxlv": 5,
    "sp": [
@@ -21391,7 +21391,7 @@
    "need_by_job": {}
   },
   "5467": {
-   "name": "Crepúsculo do Poente",
+   "name": "Sunset Blast",
    "aegis": "SKE_SUNSET_BLAST",
    "maxlv": 5,
    "sp": [
@@ -21414,7 +21414,7 @@
    "need_by_job": {}
   },
   "5468": {
-   "name": "Anoitecer",
+   "name": "Rising Moon",
    "aegis": "SKE_RISING_MOON",
    "maxlv": 5,
    "sp": [
@@ -21433,7 +21433,7 @@
    "need_by_job": {}
   },
   "5469": {
-   "name": "Chute Meia-Lua",
+   "name": "Midnight Kick",
    "aegis": "SKE_MIDNIGHT_KICK",
    "maxlv": 5,
    "sp": [
@@ -21456,7 +21456,7 @@
    "need_by_job": {}
   },
   "5470": {
-   "name": "Alvorada",
+   "name": "Dawn Break",
    "aegis": "SKE_DAWN_BREAK",
    "maxlv": 5,
    "sp": [
@@ -21479,7 +21479,7 @@
    "need_by_job": {}
   },
   "5471": {
-   "name": "Explosão Galática",
+   "name": "Twinkling Galaxy",
    "aegis": "SKE_TWINKLING_GALAXY",
    "maxlv": 5,
    "sp": [
@@ -21498,7 +21498,7 @@
    "need_by_job": {}
   },
   "5472": {
-   "name": "Colapso Estelar",
+   "name": "Star Burst",
    "aegis": "SKE_STAR_BURST",
    "maxlv": 5,
    "sp": [
@@ -21521,7 +21521,7 @@
    "need_by_job": {}
   },
   "5473": {
-   "name": "Constela豫o",
+   "name": "Star Cannon",
    "aegis": "SKE_STAR_CANNON",
    "maxlv": 5,
    "sp": [
@@ -21544,7 +21544,7 @@
    "need_by_job": {}
   },
   "5474": {
-   "name": "Firmamento",
+   "name": "All in the Sky",
    "aegis": "SKE_ALL_IN_THE_SKY",
    "maxlv": 10,
    "sp": [
@@ -21576,7 +21576,7 @@
    "need_by_job": {}
   },
   "5475": {
-   "name": "Elo Celestial",
+   "name": "Enchanting Sky",
    "aegis": "SKE_ENCHANTING_SKY",
    "maxlv": 10,
    "sp": [
@@ -21600,7 +21600,7 @@
    "need_by_job": {}
   },
   "5476": {
-   "name": "Derreter",
+   "name": "Melt Away",
    "aegis": "SS_TOKEDASU",
    "maxlv": 5,
    "sp": [
@@ -21619,7 +21619,7 @@
    "need_by_job": {}
   },
   "5477": {
-   "name": "Infiltrar",
+   "name": "Infiltrate",
    "aegis": "SS_SHIMIRU",
    "maxlv": 5,
    "sp": [
@@ -21638,7 +21638,7 @@
    "need_by_job": {}
   },
   "5478": {
-   "name": "Devorador de Pesadelos",
+   "name": "Nightmare Erasion",
    "aegis": "SS_AKUMUKESU",
    "maxlv": 1,
    "sp": [
@@ -21648,7 +21648,7 @@
    "need_by_job": {}
   },
   "5479": {
-   "name": "Miragem",
+   "name": "Mirage",
    "aegis": "SS_SHINKIROU",
    "maxlv": 1,
    "sp": [
@@ -21658,7 +21658,7 @@
    "need_by_job": {}
   },
   "5480": {
-   "name": "Lâmina das Trevas",
+   "name": "Shadow Hunting",
    "aegis": "SS_KAGEGARI",
    "maxlv": 10,
    "sp": [
@@ -21682,7 +21682,7 @@
    "need_by_job": {}
   },
   "5481": {
-   "name": "Dança das Trevas",
+   "name": "Shadow Dance",
    "aegis": "SS_KAGENOMAI",
    "maxlv": 10,
    "sp": [
@@ -21706,7 +21706,7 @@
    "need_by_job": {}
   },
   "5482": {
-   "name": "Centelha das Trevas",
+   "name": "Shadow Flash",
    "aegis": "SS_KAGEGISSEN",
    "maxlv": 10,
    "sp": [
@@ -21730,7 +21730,7 @@
    "need_by_job": {}
   },
   "5483": {
-   "name": "Huuma Aderente",
+   "name": "Huuma Shuriken - Grasp",
    "aegis": "SS_FUUMASHOUAKU",
    "maxlv": 10,
    "sp": [
@@ -21754,7 +21754,7 @@
    "need_by_job": {}
   },
   "5484": {
-   "name": "Huuma Andarilho",
+   "name": "Huuma Shuriken - Construct",
    "aegis": "SS_FUUMAKOUCHIKU",
    "maxlv": 10,
    "sp": [
@@ -21778,7 +21778,7 @@
    "need_by_job": {}
   },
   "5485": {
-   "name": "Kunai Distorcida",
+   "name": "Kunai - Distortion",
    "aegis": "SS_KUNAIWAIKYOKU",
    "maxlv": 10,
    "sp": [
@@ -21802,7 +21802,7 @@
    "need_by_job": {}
   },
   "5486": {
-   "name": "Kunai Rotatória",
+   "name": "Kunai - Rotation",
    "aegis": "SS_KUNAIKAITEN",
    "maxlv": 5,
    "sp": [
@@ -21821,7 +21821,7 @@
    "need_by_job": {}
   },
   "5487": {
-   "name": "Kunai Refratada",
+   "name": "Kunai - Refraction",
    "aegis": "SS_KUNAIKUSSETSU",
    "maxlv": 10,
    "sp": [
@@ -21845,7 +21845,7 @@
    "need_by_job": {}
   },
   "5488": {
-   "name": "Mahou da Chama Vermelha",
+   "name": "Red Flame Cannon",
    "aegis": "SS_SEKIENHOU",
    "maxlv": 10,
    "sp": [
@@ -21864,7 +21864,7 @@
    "need_by_job": {}
   },
   "5489": {
-   "name": "Mahou da Névoa Fria",
+   "name": "Cold Blooded Cannon",
    "aegis": "SS_REIKETSUHOU",
    "maxlv": 10,
    "sp": [
@@ -21883,7 +21883,7 @@
    "need_by_job": {}
   },
   "5490": {
-   "name": "Mahou da Trovoada",
+   "name": "Thundering Cannon",
    "aegis": "SS_RAIDENPOU",
    "maxlv": 10,
    "sp": [
@@ -21902,7 +21902,7 @@
    "need_by_job": {}
   },
   "5491": {
-   "name": "Mahou do Dragão Áureo",
+   "name": "Golden Dragon Cannon",
    "aegis": "SS_KINRYUUHOU",
    "maxlv": 10,
    "sp": [
@@ -21921,7 +21921,7 @@
    "need_by_job": {}
   },
   "5492": {
-   "name": "Mahou da Escuridão",
+   "name": "Darkening Cannon",
    "aegis": "SS_ANTENPOU",
    "maxlv": 10,
    "sp": [
@@ -21940,7 +21940,7 @@
    "need_by_job": {}
   },
   "5493": {
-   "name": "Pesadelo das Trevas",
+   "name": "Shadow - Nightmare",
    "aegis": "SS_KAGEAKUMU",
    "maxlv": 1,
    "sp": [
@@ -21959,7 +21959,7 @@
    "need_by_job": {}
   },
   "5494": {
-   "name": "Kunai do Pesadelo",
+   "name": "Kunai - Nightmare",
    "aegis": "SS_HITOUAKUMU",
    "maxlv": 1,
    "sp": [
@@ -21986,7 +21986,7 @@
    "need_by_job": {}
   },
   "5495": {
-   "name": "Mahou do Pesadelo",
+   "name": "Dark Dragon - Nightmare",
    "aegis": "SS_ANKOKURYUUAKUMU",
    "maxlv": 1,
    "sp": [

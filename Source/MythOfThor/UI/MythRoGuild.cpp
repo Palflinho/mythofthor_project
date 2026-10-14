@@ -310,7 +310,7 @@ void UMythRoHUDWidget::RefreshGuild()
 	}
 	else if (bList && GuildTab == 2)
 	{
-		Heads[0] = GuildMsg(340 + 2); Heads[1] = TEXT("Direitos"); Heads[2] = TEXT("Imposto");
+		Heads[0] = GuildMsg(340 + 2); Heads[1] = TEXT("Rights"); Heads[2] = TEXT("Tax");
 		Heads[0] = TEXT("Position");
 		for (const FRoGuildPosition& P : Net->GetGuildPositionInfos())
 		{
@@ -326,7 +326,7 @@ void UMythRoHUDWidget::RefreshGuild()
 	}
 	else if (bList && GuildTab == 3)
 	{
-		Heads[0] = TEXT("Skill"); Heads[1] = TEXT("Level"); Heads[2] = TEXT("SP"); Heads[3] = TEXT("Alcance"); Heads[4] = Net->IsGuildMaster() ? TEXT("Subir") : TEXT("");
+		Heads[0] = TEXT("Skill"); Heads[1] = TEXT("Level"); Heads[2] = TEXT("SP"); Heads[3] = TEXT("Range"); Heads[4] = Net->IsGuildMaster() ? TEXT("Raise") : TEXT("");
 		for (const FRoGuildSkill& S : Net->GetGuildSkills())
 		{
 			FGuildRowData R;
@@ -343,7 +343,7 @@ void UMythRoHUDWidget::RefreshGuild()
 	}
 	else if (bList && GuildTab == 4)
 	{
-		Heads[0] = GuildMsg(328); Heads[1] = TEXT("Motivo");
+		Heads[0] = GuildMsg(328); Heads[1] = TEXT("Reason");
 		for (const FRoGuildBan& B : Net->GetGuildBans())
 		{
 			FGuildRowData R;

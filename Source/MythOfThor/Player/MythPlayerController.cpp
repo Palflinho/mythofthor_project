@@ -1374,9 +1374,9 @@ void AMythPlayerController::MythWeather(const FString& Type)
 		return;
 	}
 	EMythWeather W = EMythWeather::Clear;
-	if (Type.Equals(TEXT("Rain"), ESearchCase::IgnoreCase) || Type.Equals(TEXT("Chuva"), ESearchCase::IgnoreCase)) { W = EMythWeather::Rain; }
-	else if (Type.Equals(TEXT("Snow"), ESearchCase::IgnoreCase) || Type.Equals(TEXT("Neve"), ESearchCase::IgnoreCase)) { W = EMythWeather::Snow; }
-	else if (Type.Equals(TEXT("Fog"), ESearchCase::IgnoreCase) || Type.Equals(TEXT("Neblina"), ESearchCase::IgnoreCase)) { W = EMythWeather::Fog; }
+	if (Type.Equals(TEXT("Rain"), ESearchCase::IgnoreCase) || Type.Equals(TEXT("Rain"), ESearchCase::IgnoreCase)) { W = EMythWeather::Rain; }
+	else if (Type.Equals(TEXT("Snow"), ESearchCase::IgnoreCase) || Type.Equals(TEXT("Snow"), ESearchCase::IgnoreCase)) { W = EMythWeather::Snow; }
+	else if (Type.Equals(TEXT("Fog"), ESearchCase::IgnoreCase) || Type.Equals(TEXT("Fog"), ESearchCase::IgnoreCase)) { W = EMythWeather::Fog; }
 	Weather->SetWeather(W);
 }
 

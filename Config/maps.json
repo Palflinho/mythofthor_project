@@ -2,197 +2,197 @@
   "moc_prydn1": {
     "map_id": "moc_prydn1",
     "file": "moc_prydn1.rsw",
-    "name": "Base da Pirâmide 01 - Pesadelo"
+    "name": "Morroc Pyramid B1 - Nightmare"
   },
   "moc_prydn2": {
     "map_id": "moc_prydn2",
     "file": "moc_prydn2.rsw",
-    "name": "Base da Pirâmide 02 - Pesadelo"
+    "name": "Morroc Pyramid B2 - Nightmare"
   },
   "gld_dun04": {
     "map_id": "gld_dun04",
     "file": "gld_dun04.rsw",
-    "name": "Calabouço do Feudo de Britoniah"
+    "name": "Britoniah Guild Dungeon"
   },
   "gld_dun03": {
     "map_id": "gld_dun03",
     "file": "gld_dun03.rsw",
-    "name": "Calabouço do Feudo das Valquírias"
+    "name": "Valkyrie Guild Dungeon"
   },
   "gld_dun02": {
     "map_id": "gld_dun02",
     "file": "gld_dun02.rsw",
-    "name": "Calabouço do Feudo de Luina"
+    "name": "Luina Guild Dungeon"
   },
   "gld_dun01": {
     "map_id": "gld_dun01",
     "file": "gld_dun01.rsw",
-    "name": "Calabouço do Feudo do Bosque Celestial"
+    "name": "Baldur Guild Dungeon"
   },
   "payg_cas05": {
     "map_id": "payg_cas05",
     "file": "payg_cas05.rsw",
-    "name": "Gumiho"
+    "name": "Bamboo Grove Hill Castle"
   },
   "payg_cas04": {
     "map_id": "payg_cas04",
     "file": "payg_cas04.rsw",
-    "name": "Haetae"
+    "name": "Sacred Altar Castle"
   },
   "payg_cas03": {
     "map_id": "payg_cas03",
     "file": "payg_cas03.rsw",
-    "name": "Guirin"
+    "name": "Holy Shadow Castle"
   },
   "payg_cas02": {
     "map_id": "payg_cas02",
     "file": "payg_cas02.rsw",
-    "name": "Uturi"
+    "name": "Scarlet Palace Castle"
   },
   "payg_cas01": {
     "map_id": "payg_cas01",
     "file": "payg_cas01.rsw",
-    "name": "Dokaebi"
+    "name": "Bright Arbor Castle"
   },
   "pay_gld": {
     "map_id": "pay_gld",
     "file": "pay_gld.rsw",
-    "name": "Feudo do Bosque Celestial"
+    "name": "Greenwood Lake"
   },
   "aldeg_cas05": {
     "map_id": "aldeg_cas05",
     "file": "aldeg_cas05.rsw",
-    "name": "Acrux"
+    "name": "Rothenburg Castle"
   },
   "aldeg_cas04": {
     "map_id": "aldeg_cas04",
     "file": "aldeg_cas04.rsw",
-    "name": "Rigel"
+    "name": "Wuerzburg Castle"
   },
   "aldeg_cas03": {
     "map_id": "aldeg_cas03",
     "file": "aldeg_cas03.rsw",
-    "name": "Canopus"
+    "name": "Nuernberg Castle"
   },
   "aldeg_cas02": {
     "map_id": "aldeg_cas02",
     "file": "aldeg_cas02.rsw",
-    "name": "Astrum"
+    "name": "Hohenschwangau Castle"
   },
   "aldeg_cas01": {
     "map_id": "aldeg_cas01",
     "file": "aldeg_cas01.rsw",
-    "name": "Sirius"
+    "name": "Neuschwanstein Castle"
   },
   "alde_gld": {
     "map_id": "alde_gld",
     "file": "alde_gld.rsw",
-    "name": "Feudo de Luina"
+    "name": "Luina, the satellite of Aldebaran"
   },
   "gefg_cas05": {
     "map_id": "gefg_cas05",
     "file": "gefg_cas05.rsw",
-    "name": "Arima"
+    "name": "Mersetzdeitz Castle"
   },
   "gefg_cas04": {
     "map_id": "gefg_cas04",
     "file": "gefg_cas04.rsw",
-    "name": "Saffran"
+    "name": "Bergel Castle"
   },
   "gefg_cas03": {
     "map_id": "gefg_cas03",
     "file": "gefg_cas03.rsw",
-    "name": "Ruaden"
+    "name": "Yesnelph Castle"
   },
   "gefg_cas02": {
     "map_id": "gefg_cas02",
     "file": "gefg_cas02.rsw",
-    "name": "Trapesac"
+    "name": "Eeyorbriggar Castle"
   },
   "gefg_cas01": {
     "map_id": "gefg_cas01",
     "file": "gefg_cas01.rsw",
-    "name": "Arsulf"
+    "name": "Repherion Castle"
   },
   "prtg_cas05": {
     "map_id": "prtg_cas05",
     "file": "prtg_cas05.rsw",
-    "name": "Gondul"
+    "name": "Gondul Castle"
   },
   "prtg_cas04": {
     "map_id": "prtg_cas04",
     "file": "prtg_cas04.rsw",
-    "name": "Skoegul"
+    "name": "Skoegul Castle"
   },
   "prtg_cas03": {
     "map_id": "prtg_cas03",
     "file": "prtg_cas03.rsw",
-    "name": "Brynhildr"
+    "name": "Fadhgridh Castle"
   },
   "prtg_cas02": {
     "map_id": "prtg_cas02",
     "file": "prtg_cas02.rsw",
-    "name": "Hrist"
+    "name": "Swanhild Castle"
   },
   "prtg_cas01": {
     "map_id": "prtg_cas01",
     "file": "prtg_cas01.rsw",
-    "name": "Kriemhild"
+    "name": "Kriemhild Castle"
   },
   "prt_gld": {
     "map_id": "prt_gld",
     "file": "prt_gld.rsw",
-    "name": "Feudo das Valquírias"
+    "name": "Valkyrie Realm"
   },
   "tur_dun01": {
     "map_id": "tur_dun01",
     "file": "tur_dun01.rsw",
-    "name": "Ilha da Tartaruga"
+    "name": "Turtle Island"
   },
   "tur_dun02": {
     "map_id": "tur_dun02",
     "file": "tur_dun02.rsw",
-    "name": "Calabouço da Ilha da Tartaruga"
+    "name": "Turtle Island Dungeon"
   },
   "tur_dun03": {
     "map_id": "tur_dun03",
     "file": "tur_dun03.rsw",
-    "name": "Vila das Boas Tartarugas"
+    "name": "Turtle Village"
   },
   "tur_dun04": {
     "map_id": "tur_dun04",
     "file": "tur_dun04.rsw",
-    "name": "Palácio da Ilha da Tartaruga"
+    "name": "Turtle Palace"
   },
   "tur_dun05": {
     "map_id": "tur_dun05",
     "file": "tur_dun05.rsw",
-    "name": "Pântano Subterrâneo (1)"
+    "name": "Underground swamp zone"
   },
   "tur_dun06": {
     "map_id": "tur_dun06",
     "file": "tur_dun06.rsw",
-    "name": "Pântano Subterrâneo (2)"
+    "name": "Underground swamp zone"
   },
   "guild_vs3": {
     "map_id": "guild_vs3",
     "file": "guild_vs3.rsw",
-    "name": "championship2"
+    "name": "Guild Arena"
   },
   "guild_vs2": {
     "map_id": "guild_vs2",
     "file": "guild_vs2.rsw",
-    "name": "Arena do Forte"
+    "name": "Guild Arena"
   },
   "guild_vs1": {
     "map_id": "guild_vs1",
     "file": "guild_vs1.rsw",
-    "name": "championship1"
+    "name": "Guild Arena"
   },
   "guild_room": {
     "map_id": "guild_room",
     "file": "guild_room.rsw",
-    "name": "Área de Espera, Arena da Guilda"
+    "name": "Guild Arena Waiting Room"
   },
   "quiz_00": {
     "map_id": "quiz_00",
@@ -207,972 +207,972 @@
   "gef_fild12": {
     "map_id": "gef_fild12",
     "file": "gef_fild12.rsw",
-    "name": "Floresta Kordt"
+    "name": "Kordt Forest"
   },
   "gef_fild13": {
     "map_id": "gef_fild13",
     "file": "gef_fild13.rsw",
-    "name": "Feudo de Britoniah"
+    "name": "Britoniah"
   },
   "gef_fild14": {
     "map_id": "gef_fild14",
     "file": "gef_fild14.rsw",
-    "name": "Vila dos Orcs do Oeste"
+    "name": "West Orc Village"
   },
   "cmd_in02": {
     "map_id": "cmd_in02",
     "file": "cmd_in02.rsw",
-    "name": "Casa em Comodo (2)"
+    "name": "Inside Comodo"
   },
   "cmd_in01": {
     "map_id": "cmd_in01",
     "file": "cmd_in01.rsw",
-    "name": "Casa em Comodo (1)"
+    "name": "Inside Comodo"
   },
   "comodo": {
     "map_id": "comodo",
     "file": "comodo.rsw",
-    "name": "Cidade Litorânea de Comodo"
+    "name": "Comodo, the Beach Town"
   },
   "beach_dun": {
     "map_id": "beach_dun",
     "file": "beach_dun.rsw",
-    "name": "Karu, a Caverna do Oeste"
+    "name": "Karu, the West Cave"
   },
   "beach_dun2": {
     "map_id": "beach_dun2",
     "file": "beach_dun2.rsw",
-    "name": "Ruande, a Caverna do Norte"
+    "name": "Luanda, the North Cave"
   },
   "beach_dun3": {
     "map_id": "beach_dun3",
     "file": "beach_dun3.rsw",
-    "name": "Mao, a Caverna do Leste"
+    "name": "Mao, the East Cave"
   },
   "cmd_fild01": {
     "map_id": "cmd_fild01",
     "file": "cmd_fild01.rsw",
-    "name": "Floresta Papuchica"
+    "name": "Papuchicha Forest"
   },
   "cmd_fild02": {
     "map_id": "cmd_fild02",
     "file": "cmd_fild02.rsw",
-    "name": "Praia Kokomo"
+    "name": "Kokomo Beach"
   },
   "cmd_fild03": {
     "map_id": "cmd_fild03",
     "file": "cmd_fild03.rsw",
-    "name": "Mangue Zenhai"
+    "name": "Zenhai Marsh"
   },
   "cmd_fild04": {
     "map_id": "cmd_fild04",
     "file": "cmd_fild04.rsw",
-    "name": "Praia Kokomo"
+    "name": "Kokomo Beach"
   },
   "cmd_fild05": {
     "map_id": "cmd_fild05",
     "file": "cmd_fild05.rsw",
-    "name": "Limite da Floresta Papuchica"
+    "name": "Border of Papuchica Forest"
   },
   "cmd_fild06": {
     "map_id": "cmd_fild06",
     "file": "cmd_fild06.rsw",
-    "name": "Fortaleza de São Darmain (Oeste)"
+    "name": "Fortress Saint Darmain (West)"
   },
   "cmd_fild07": {
     "map_id": "cmd_fild07",
     "file": "cmd_fild07.rsw",
-    "name": "Ilha do Farol, Pharos"
+    "name": "Beacon Island, Pharos"
   },
   "cmd_fild08": {
     "map_id": "cmd_fild08",
     "file": "cmd_fild08.rsw",
-    "name": "Fortaleza de São Darmain (Leste)"
+    "name": "Fortress Saint Darmain (East)"
   },
   "cmd_fild09": {
     "map_id": "cmd_fild09",
     "file": "cmd_fild09.rsw",
-    "name": "Fortaleza de São Darmain (Sul)"
+    "name": "Fortress Saint Darmain (South)"
   },
   "xmas_in": {
     "map_id": "xmas_in",
     "file": "xmas_in.rsw",
-    "name": "Casa em Lutie"
+    "name": "Inside Lutie"
   },
   "xmas_dun02": {
     "map_id": "xmas_dun02",
     "file": "xmas_dun02.rsw",
-    "name": "Sala de Construção de Brinquedos"
+    "name": "Toy Monitoring Room"
   },
   "xmas_dun01": {
     "map_id": "xmas_dun01",
     "file": "xmas_dun01.rsw",
-    "name": "Depósito da Fábrica de Brinquedos"
+    "name": "Toy Factory Warehouse"
   },
   "xmas_fild01": {
     "map_id": "xmas_fild01",
     "file": "xmas_fild01.rsw",
-    "name": "Arredores de Lutie"
+    "name": "Lutie Field"
   },
   "xmas": {
     "map_id": "xmas",
     "file": "xmas.rsw",
-    "name": "Lutie, A Cidade do Natal"
+    "name": "Lutie, the Snow Village"
   },
   "mjolnir_01": {
     "map_id": "mjolnir_01",
     "file": "mjolnir_01.rsw",
-    "name": "Monte Mjolnir (01)"
+    "name": "Mt.Mjolnir North Area"
   },
   "mjolnir_02": {
     "map_id": "mjolnir_02",
     "file": "mjolnir_02.rsw",
-    "name": "Monte Mjolnir (02)"
+    "name": "Mt.Mjolnir North Area"
   },
   "mjolnir_03": {
     "map_id": "mjolnir_03",
     "file": "mjolnir_03.rsw",
-    "name": "Monte Mjolnir (03)"
+    "name": "Mt.Mjolnir North Area"
   },
   "mjolnir_04": {
     "map_id": "mjolnir_04",
     "file": "mjolnir_04.rsw",
-    "name": "Monte Mjolnir (04)"
+    "name": "Mt.Mjolnir North Area"
   },
   "mjolnir_05": {
     "map_id": "mjolnir_05",
     "file": "mjolnir_05.rsw",
-    "name": "Monte Mjolnir (05)"
+    "name": "Mt.Mjolnir North Area"
   },
   "mjolnir_06": {
     "map_id": "mjolnir_06",
     "file": "mjolnir_06.rsw",
-    "name": "Monte Mjolnir (06)"
+    "name": "Mt.Mjolnir South Area"
   },
   "mjolnir_07": {
     "map_id": "mjolnir_07",
     "file": "mjolnir_07.rsw",
-    "name": "Monte Mjolnir (07)"
+    "name": "Mt.Mjolnir South Area"
   },
   "mjolnir_08": {
     "map_id": "mjolnir_08",
     "file": "mjolnir_08.rsw",
-    "name": "Monte Mjolnir (08)"
+    "name": "Mt.Mjolnir South Area"
   },
   "mjolnir_09": {
     "map_id": "mjolnir_09",
     "file": "mjolnir_09.rsw",
-    "name": "Monte Mjolnir (09)"
+    "name": "Mt.Mjolnir South Foothills"
   },
   "mjolnir_10": {
     "map_id": "mjolnir_10",
     "file": "mjolnir_10.rsw",
-    "name": "Monte Mjolnir (10)"
+    "name": "Mt.Mjolnir South Area"
   },
   "mjolnir_11": {
     "map_id": "mjolnir_11",
     "file": "mjolnir_11.rsw",
-    "name": "Monte Mjolnir (11)"
+    "name": "Mt.Mjolnir South Area"
   },
   "mjolnir_12": {
     "map_id": "mjolnir_12",
     "file": "mjolnir_12.rsw",
-    "name": "Monte Mjolnir (12)"
+    "name": "Mt.Mjolnir North Foothills"
   },
   "prt_fild00": {
     "map_id": "prt_fild00",
     "file": "prt_fild00.rsw",
-    "name": "Arredores de Prontera (00)"
+    "name": "Prontera Field"
   },
   "prt_fild01": {
     "map_id": "prt_fild01",
     "file": "prt_fild01.rsw",
-    "name": "Arredores de Prontera (01)"
+    "name": "Prontera Field"
   },
   "prt_fild02": {
     "map_id": "prt_fild02",
     "file": "prt_fild02.rsw",
-    "name": "Arredores de Prontera (02)"
+    "name": "Prontera Field 2"
   },
   "prt_fild03": {
     "map_id": "prt_fild03",
     "file": "prt_fild03.rsw",
-    "name": "Arredores de Prontera (03)"
+    "name": "Prontera Field"
   },
   "prt_fild04": {
     "map_id": "prt_fild04",
     "file": "prt_fild04.rsw",
-    "name": "Arredores de Prontera (04)"
+    "name": "Prontera Field"
   },
   "prt_fild05": {
     "map_id": "prt_fild05",
     "file": "prt_fild05.rsw",
-    "name": "Arredores de Prontera (05)"
+    "name": "Prontera Field"
   },
   "prt_fild06": {
     "map_id": "prt_fild06",
     "file": "prt_fild06.rsw",
-    "name": "Arredores de Prontera (06)"
+    "name": "Prontera Field 6"
   },
   "prt_fild07": {
     "map_id": "prt_fild07",
     "file": "prt_fild07.rsw",
-    "name": "Arredores de Prontera (07)"
+    "name": "Prontera Field 7"
   },
   "prt_fild08": {
     "map_id": "prt_fild08",
     "file": "prt_fild08.rsw",
-    "name": "Arredores de Prontera (08)"
+    "name": "Prontera Field 8"
   },
   "prt_fild09": {
     "map_id": "prt_fild09",
     "file": "prt_fild09.rsw",
-    "name": "Arredores de Prontera (09)"
+    "name": "Prontera Field 9"
   },
   "prt_fild10": {
     "map_id": "prt_fild10",
     "file": "prt_fild10.rsw",
-    "name": "Arredores de Prontera (10)"
+    "name": "Prontera Field 10"
   },
   "prt_fild11": {
     "map_id": "prt_fild11",
     "file": "prt_fild11.rsw",
-    "name": "Arredores de Prontera (11)"
+    "name": "Prontera Field 11"
   },
   "prt_monk": {
     "map_id": "prt_monk",
     "file": "prt_monk.rsw",
-    "name": "Abadia de Santa Capitolina"
+    "name": "St. Capitolina Abbey"
   },
   "gef_fild00": {
     "map_id": "gef_fild00",
     "file": "gef_fild00.rsw",
-    "name": "Arredores de Geffen (00)"
+    "name": "Geffen Field 0"
   },
   "gef_fild01": {
     "map_id": "gef_fild01",
     "file": "gef_fild01.rsw",
-    "name": "Arredores de Geffen (01)"
+    "name": "Geffen Field 1"
   },
   "gef_fild02": {
     "map_id": "gef_fild02",
     "file": "gef_fild02.rsw",
-    "name": "Arredores de Geffen (02)"
+    "name": "Geffen Field 2"
   },
   "gef_fild03": {
     "map_id": "gef_fild03",
     "file": "gef_fild03.rsw",
-    "name": "Arredores de Geffen (03)"
+    "name": "Geffen Field 3"
   },
   "gef_fild04": {
     "map_id": "gef_fild04",
     "file": "gef_fild04.rsw",
-    "name": "Arredores de Geffen (04)"
+    "name": "Geffen Field 4"
   },
   "gef_fild05": {
     "map_id": "gef_fild05",
     "file": "gef_fild05.rsw",
-    "name": "Arredores de Geffen (05)"
+    "name": "Geffen Field 5"
   },
   "gef_fild06": {
     "map_id": "gef_fild06",
     "file": "gef_fild06.rsw",
-    "name": "Arredores de Geffen (06)"
+    "name": "Geffen Field 6"
   },
   "gef_fild07": {
     "map_id": "gef_fild07",
     "file": "gef_fild07.rsw",
-    "name": "Arredores de Geffen (07)"
+    "name": "Geffen Field 7"
   },
   "gef_fild08": {
     "map_id": "gef_fild08",
     "file": "gef_fild08.rsw",
-    "name": "Arredores de Geffen (08)"
+    "name": "Geffen Field 8"
   },
   "gef_fild09": {
     "map_id": "gef_fild09",
     "file": "gef_fild09.rsw",
-    "name": "Arredores de Geffen (09)"
+    "name": "Geffen Field 9"
   },
   "gef_fild10": {
     "map_id": "gef_fild10",
     "file": "gef_fild10.rsw",
-    "name": "Arredores de Geffen (10)"
+    "name": "Geffen Field 10"
   },
   "in_orcs01": {
     "map_id": "in_orcs01",
     "file": "in_orcs01.rsw",
-    "name": "Vila dos Orcs"
+    "name": "Inside Orc Village"
   },
   "gef_fild11": {
     "map_id": "gef_fild11",
     "file": "gef_fild11.rsw",
-    "name": "Arredores de Geffen (11)"
+    "name": "Geffen Field 11"
   },
   "moc_fild01": {
     "map_id": "moc_fild01",
     "file": "moc_fild01.rsw",
-    "name": "Deserto Sograt (01)"
+    "name": "Morroc Field"
   },
   "moc_fild02": {
     "map_id": "moc_fild02",
     "file": "moc_fild02.rsw",
-    "name": "Deserto Sograt (02)"
+    "name": "Morroc Field"
   },
   "moc_fild03": {
     "map_id": "moc_fild03",
     "file": "moc_fild03.rsw",
-    "name": "Deserto Sograt (03)"
+    "name": "Morroc Field"
   },
   "moc_fild04": {
     "map_id": "moc_fild04",
     "file": "moc_fild04.rsw",
-    "name": "Deserto Sograt (04)"
+    "name": "Morroc Field"
   },
   "moc_fild05": {
     "map_id": "moc_fild05",
     "file": "moc_fild05.rsw",
-    "name": "Deserto Sograt (05)"
+    "name": "Sograt Desert F5"
   },
   "moc_fild06": {
     "map_id": "moc_fild06",
     "file": "moc_fild06.rsw",
-    "name": "Deserto Sograt (06)"
+    "name": "Sograt Desert F6"
   },
   "moc_fild07": {
     "map_id": "moc_fild07",
     "file": "moc_fild07.rsw",
-    "name": "Deserto Sograt (07)"
+    "name": "Sograt Desert F7"
   },
   "moc_fild08": {
     "map_id": "moc_fild08",
     "file": "moc_fild08.rsw",
-    "name": "Deserto Sograt (08)"
+    "name": "Sograt Desert F8"
   },
   "moc_fild09": {
     "map_id": "moc_fild09",
     "file": "moc_fild09.rsw",
-    "name": "Deserto Sograt (09)"
+    "name": "Sograt Desert F9"
   },
   "moc_fild10": {
     "map_id": "moc_fild10",
     "file": "moc_fild10.rsw",
-    "name": "Deserto Sograt (10)"
+    "name": "Sograt Desert F10"
   },
   "moc_fild11": {
     "map_id": "moc_fild11",
     "file": "moc_fild11.rsw",
-    "name": "Deserto Sograt (11)"
+    "name": "Sograt Desert F11"
   },
   "moc_fild12": {
     "map_id": "moc_fild12",
     "file": "moc_fild12.rsw",
-    "name": "Deserto Sograt (12)"
+    "name": "Sograt Desert F12"
   },
   "moc_fild13": {
     "map_id": "moc_fild13",
     "file": "moc_fild13.rsw",
-    "name": "Deserto Sograt (13)"
+    "name": "Sograt Desert F13"
   },
   "moc_fild14": {
     "map_id": "moc_fild14",
     "file": "moc_fild14.rsw",
-    "name": "Deserto Sograt (14)"
+    "name": "Sograt Desert F14"
   },
   "moc_fild15": {
     "map_id": "moc_fild15",
     "file": "moc_fild15.rsw",
-    "name": "Deserto Sograt (15)"
+    "name": "Sograt Desert F15"
   },
   "moc_fild16": {
     "map_id": "moc_fild16",
     "file": "moc_fild16.rsw",
-    "name": "Deserto Sograt (16)"
+    "name": "Sograt Desert F16"
   },
   "in_moc_16": {
     "map_id": "in_moc_16",
     "file": "in_moc_16.rsw",
-    "name": "Guilda dos Mercenários"
+    "name": "Assassin Clan"
   },
   "moc_fild17": {
     "map_id": "moc_fild17",
     "file": "moc_fild17.rsw",
-    "name": "Deserto Sograt (17)"
+    "name": "Sograt Desert F17"
   },
   "moc_fild18": {
     "map_id": "moc_fild18",
     "file": "moc_fild18.rsw",
-    "name": "Deserto Sograt (18)"
+    "name": "Sograt Desert F18"
   },
   "moc_fild19": {
     "map_id": "moc_fild19",
     "file": "moc_fild19.rsw",
-    "name": "Deserto Sograt (19)"
+    "name": "Sograt Desert F19"
   },
   "pay_fild01": {
     "map_id": "pay_fild01",
     "file": "pay_fild01.rsw",
-    "name": "Floresta de Payon (01)"
+    "name": "Payon Forest F1"
   },
   "pay_fild02": {
     "map_id": "pay_fild02",
     "file": "pay_fild02.rsw",
-    "name": "Floresta de Payon (02)"
+    "name": "Payon Forest F2"
   },
   "pay_fild03": {
     "map_id": "pay_fild03",
     "file": "pay_fild03.rsw",
-    "name": "Floresta de Payon (03)"
+    "name": "Payon Forest F3"
   },
   "pay_fild04": {
     "map_id": "pay_fild04",
     "file": "pay_fild04.rsw",
-    "name": "Floresta de Payon (04)"
+    "name": "Payon Forest F4"
   },
   "pay_fild05": {
     "map_id": "pay_fild05",
     "file": "pay_fild05.rsw",
-    "name": "Floresta de Payon (05)"
+    "name": "Payon Forest F5"
   },
   "pay_fild06": {
     "map_id": "pay_fild06",
     "file": "pay_fild06.rsw",
-    "name": "Floresta de Payon (06)"
+    "name": "Payon Forest F6"
   },
   "pay_fild07": {
     "map_id": "pay_fild07",
     "file": "pay_fild07.rsw",
-    "name": "Floresta de Payon (07)"
+    "name": "Payon Forest F7"
   },
   "pay_fild08": {
     "map_id": "pay_fild08",
     "file": "pay_fild08.rsw",
-    "name": "Floresta de Payon (08)"
+    "name": "Payon Forest F8"
   },
   "pay_fild09": {
     "map_id": "pay_fild09",
     "file": "pay_fild09.rsw",
-    "name": "Floresta de Payon (09)"
+    "name": "Payon Forest F9"
   },
   "pay_fild10": {
     "map_id": "pay_fild10",
     "file": "pay_fild10.rsw",
-    "name": "Floresta de Payon (10)"
+    "name": "Payon Forest F10"
   },
   "pay_fild11": {
     "map_id": "pay_fild11",
     "file": "pay_fild11.rsw",
-    "name": "Floresta de Payon (11)"
+    "name": "Payon Forest F11"
   },
   "new_1-1": {
     "map_id": "new_1-1",
     "file": "new_1-1.rsw",
-    "name": "Campo de Treinamento"
+    "name": "Training Ground"
   },
   "new_2-1": {
     "map_id": "new_2-1",
     "file": "new_2-1.rsw",
-    "name": "Campo de Treinamento"
+    "name": "Training Ground"
   },
   "new_3-1": {
     "map_id": "new_3-1",
     "file": "new_3-1.rsw",
-    "name": "Campo de Treinamento"
+    "name": "Training Ground"
   },
   "new_4-1": {
     "map_id": "new_4-1",
     "file": "new_4-1.rsw",
-    "name": "Campo de Treinamento"
+    "name": "Training Ground"
   },
   "new_5-1": {
     "map_id": "new_5-1",
     "file": "new_5-1.rsw",
-    "name": "Campo de Treinamento"
+    "name": "Training Ground"
   },
   "new_1-2": {
     "map_id": "new_1-2",
     "file": "new_1-2.rsw",
-    "name": "Campo de Treinamento"
+    "name": "Training Ground"
   },
   "new_2-2": {
     "map_id": "new_2-2",
     "file": "new_2-2.rsw",
-    "name": "Campo de Treinamento"
+    "name": "Training Ground"
   },
   "new_3-2": {
     "map_id": "new_3-2",
     "file": "new_3-2.rsw",
-    "name": "Campo de Treinamento"
+    "name": "Training Ground"
   },
   "new_4-2": {
     "map_id": "new_4-2",
     "file": "new_4-2.rsw",
-    "name": "Campo de Treinamento"
+    "name": "Training Ground"
   },
   "new_5-2": {
     "map_id": "new_5-2",
     "file": "new_5-2.rsw",
-    "name": "Campo de Treinamento"
+    "name": "Training Ground"
   },
   "new_1-3": {
     "map_id": "new_1-3",
     "file": "new_1-3.rsw",
-    "name": "Campo de Treinamento"
+    "name": "Training Ground"
   },
   "new_2-3": {
     "map_id": "new_2-3",
     "file": "new_2-3.rsw",
-    "name": "Campo de Treinamento"
+    "name": "Training Ground"
   },
   "new_3-3": {
     "map_id": "new_3-3",
     "file": "new_3-3.rsw",
-    "name": "Campo de Treinamento"
+    "name": "Training Ground"
   },
   "new_4-3": {
     "map_id": "new_4-3",
     "file": "new_4-3.rsw",
-    "name": "Campo de Treinamento"
+    "name": "Training Ground"
   },
   "new_5-3": {
     "map_id": "new_5-3",
     "file": "new_5-3.rsw",
-    "name": "Campo de Treinamento"
+    "name": "Training Ground"
   },
   "new_1-4": {
     "map_id": "new_1-4",
     "file": "new_1-4.rsw",
-    "name": "Campo de Treinamento"
+    "name": "Training Ground"
   },
   "new_2-4": {
     "map_id": "new_2-4",
     "file": "new_2-4.rsw",
-    "name": "Campo de Treinamento"
+    "name": "Training Ground"
   },
   "new_3-4": {
     "map_id": "new_3-4",
     "file": "new_3-4.rsw",
-    "name": "Campo de Treinamento"
+    "name": "Training Ground"
   },
   "new_4-4": {
     "map_id": "new_4-4",
     "file": "new_4-4.rsw",
-    "name": "Campo de Treinamento"
+    "name": "Training Ground"
   },
   "new_5-4": {
     "map_id": "new_5-4",
     "file": "new_5-4.rsw",
-    "name": "Campo de Treinamento"
+    "name": "Training Ground"
   },
   "anthell01": {
     "map_id": "anthell01",
     "file": "anthell01.rsw",
-    "name": "Formigueiro Infernal (1)"
+    "name": "Ant Hell F1"
   },
   "anthell02": {
     "map_id": "anthell02",
     "file": "anthell02.rsw",
-    "name": "Formigueiro Infernal (2)"
+    "name": "Ant Hell F2"
   },
   "gef_dun00": {
     "map_id": "gef_dun00",
     "file": "gef_dun00.rsw",
-    "name": "Calabouço de Geffen (1)"
+    "name": "Geffen Dungeon B1"
   },
   "gef_dun01": {
     "map_id": "gef_dun01",
     "file": "gef_dun01.rsw",
-    "name": "Calabouço de Geffen (2)"
+    "name": "Geffen Dungeon B2"
   },
   "gef_dun02": {
     "map_id": "gef_dun02",
     "file": "gef_dun02.rsw",
-    "name": "Geffenia (1)"
+    "name": "Geffen Dungeon B3"
   },
   "gef_dun03": {
     "map_id": "gef_dun03",
     "file": "gef_dun03.rsw",
-    "name": "Geffenia (2)"
+    "name": "Geffenia Dungeon"
   },
   "iz_dun00": {
     "map_id": "iz_dun00",
     "file": "iz_dun00.rsw",
-    "name": "Túnel Submarino (0)"
+    "name": "Undersea Tunnel B1"
   },
   "iz_dun01": {
     "map_id": "iz_dun01",
     "file": "iz_dun01.rsw",
-    "name": "Túnel Submarino (1)"
+    "name": "Undersea Tunnel B2"
   },
   "iz_dun02": {
     "map_id": "iz_dun02",
     "file": "iz_dun02.rsw",
-    "name": "Túnel Submarino (3)"
+    "name": "Undersea Tunnel B3"
   },
   "iz_dun03": {
     "map_id": "iz_dun03",
     "file": "iz_dun03.rsw",
-    "name": "Túnel Submarino (4)"
+    "name": "Undersea Tunnel B4"
   },
   "iz_dun04": {
     "map_id": "iz_dun04",
     "file": "iz_dun04.rsw",
-    "name": "Túnel Submarino (5)"
+    "name": "Undersea Tunnel B5"
   },
   "iz_dun05": {
     "map_id": "iz_dun05",
     "file": "iz_dun05.rsw",
-    "name": "Túnel Submarino (6)"
+    "name": "Undersea Tunnel B6"
   },
   "in_sphinx1": {
     "map_id": "in_sphinx1",
     "file": "in_sphinx1.rsw",
-    "name": "Esfinge (1)"
+    "name": "Morroc Sphinx B1"
   },
   "in_sphinx2": {
     "map_id": "in_sphinx2",
     "file": "in_sphinx2.rsw",
-    "name": "Esfinge (2)"
+    "name": "Morroc Sphinx B2"
   },
   "in_sphinx3": {
     "map_id": "in_sphinx3",
     "file": "in_sphinx3.rsw",
-    "name": "Esfinge (3)"
+    "name": "Morroc Sphinx B3"
   },
   "in_sphinx4": {
     "map_id": "in_sphinx4",
     "file": "in_sphinx4.rsw",
-    "name": "Esfinge (4)"
+    "name": "Morroc Sphinx B4"
   },
   "in_sphinx5": {
     "map_id": "in_sphinx5",
     "file": "in_sphinx5.rsw",
-    "name": "Esfinge (5)"
+    "name": "Morroc Sphinx B5"
   },
   "moc_pryd01": {
     "map_id": "moc_pryd01",
     "file": "moc_pryd01.rsw",
-    "name": "Dentro da Pirâmide (1)"
+    "name": "Inside Pyramid F1"
   },
   "moc_pryd02": {
     "map_id": "moc_pryd02",
     "file": "moc_pryd02.rsw",
-    "name": "Dentro da Pirâmide (2)"
+    "name": "Inside Pyramid F2"
   },
   "moc_pryd03": {
     "map_id": "moc_pryd03",
     "file": "moc_pryd03.rsw",
-    "name": "Dentro da Pirâmide (3)"
+    "name": "Inside Pyramid F3"
   },
   "moc_pryd04": {
     "map_id": "moc_pryd04",
     "file": "moc_pryd04.rsw",
-    "name": "Dentro da Pirâmide (4)"
+    "name": "Inside Pyramid F4"
   },
   "moc_pryd05": {
     "map_id": "moc_pryd05",
     "file": "moc_pryd05.rsw",
-    "name": "Dentro da Pirâmide (5)"
+    "name": "Inside Pyramid B1"
   },
   "moc_pryd06": {
     "map_id": "moc_pryd06",
     "file": "moc_pryd06.rsw",
-    "name": "Dentro da Pirâmide (6)"
+    "name": "Inside Pyramid B2"
   },
   "moc_prydb1": {
     "map_id": "moc_prydb1",
     "file": "moc_prydb1.rsw",
-    "name": "Guilda dos Gatunos"
+    "name": "Thief Guild"
   },
   "mjo_dun01": {
     "map_id": "mjo_dun01",
     "file": "mjo_dun01.rsw",
-    "name": "Mina Abandonada de Mjolnir (1)"
+    "name": "Mjolnir Dead Pit F1"
   },
   "mjo_dun02": {
     "map_id": "mjo_dun02",
     "file": "mjo_dun02.rsw",
-    "name": "Mina Abandonada de Mjolnir (2)"
+    "name": "Mjolnir Dead Pit F2"
   },
   "mjo_dun03": {
     "map_id": "mjo_dun03",
     "file": "mjo_dun03.rsw",
-    "name": "Mina Abandonada de Mjolnir (3)"
+    "name": "Mjolnir Dead Pit F3"
   },
   "orcsdun01": {
     "map_id": "orcsdun01",
     "file": "orcsdun01.rsw",
-    "name": "Calabouço dos Orcs (1)"
+    "name": "Orc Dungeon F1"
   },
   "orcsdun02": {
     "map_id": "orcsdun02",
     "file": "orcsdun02.rsw",
-    "name": "Calabouço dos Orcs (2)"
+    "name": "Orc Dungeon F2"
   },
   "pay_dun00": {
     "map_id": "pay_dun00",
     "file": "pay_dun00.rsw",
-    "name": "Caverna de Payon (0)"
+    "name": "Payon Cave F1"
   },
   "pay_dun01": {
     "map_id": "pay_dun01",
     "file": "pay_dun01.rsw",
-    "name": "Caverna de Payon (1)"
+    "name": "Payon Cave F2"
   },
   "pay_dun02": {
     "map_id": "pay_dun02",
     "file": "pay_dun02.rsw",
-    "name": "Caverna de Payon (2)"
+    "name": "Payon Cave F3"
   },
   "pay_dun03": {
     "map_id": "pay_dun03",
     "file": "pay_dun03.rsw",
-    "name": "Caverna de Payon (3)"
+    "name": "Payon Cave F4"
   },
   "pay_dun04": {
     "map_id": "pay_dun04",
     "file": "pay_dun04.rsw",
-    "name": "Caverna de Payon (4)"
+    "name": "Payon Cave F5"
   },
   "prt_maze01": {
     "map_id": "prt_maze01",
     "file": "prt_maze01.rsw",
-    "name": "Labirinto da Floresta (1)"
+    "name": "Labyrinth Forest F1"
   },
   "prt_maze02": {
     "map_id": "prt_maze02",
     "file": "prt_maze02.rsw",
-    "name": "Labirinto da Floresta (2)"
+    "name": "Labyrinth Forest F2"
   },
   "prt_maze03": {
     "map_id": "prt_maze03",
     "file": "prt_maze03.rsw",
-    "name": "Labirinto da Floresta (3)"
+    "name": "Labyrinth Forest F3"
   },
   "prt_sewb1": {
     "map_id": "prt_sewb1",
     "file": "prt_sewb1.rsw",
-    "name": "Esgoto de Prontera (1)"
+    "name": "Prontera Culvert F1"
   },
   "prt_sewb2": {
     "map_id": "prt_sewb2",
     "file": "prt_sewb2.rsw",
-    "name": "Esgoto de Prontera (2)"
+    "name": "Prontera Culvert F2"
   },
   "prt_sewb3": {
     "map_id": "prt_sewb3",
     "file": "prt_sewb3.rsw",
-    "name": "Esgoto de Prontera (3)"
+    "name": "Prontera Culvert F3"
   },
   "prt_sewb4": {
     "map_id": "prt_sewb4",
     "file": "prt_sewb4.rsw",
-    "name": "Esgoto de Prontera (4)"
+    "name": "Prontera Culvert F4"
   },
   "treasure01": {
     "map_id": "treasure01",
     "file": "treasure01.rsw",
-    "name": "Navio Fantasma (1)"
+    "name": "Sunken Ship B1"
   },
   "treasure02": {
     "map_id": "treasure02",
     "file": "treasure02.rsw",
-    "name": "Navio Fantasma (2)"
+    "name": "Sunken Ship B2"
   },
   "hunter_1-1": {
     "map_id": "hunter_1-1",
     "file": "hunter_1-1.rsw",
-    "name": "Guilda dos Caçadores"
+    "name": "Hunter Guild"
   },
   "hunter_2-1": {
     "map_id": "hunter_2-1",
     "file": "hunter_2-1.rsw",
-    "name": "Guilda dos Caçadores"
+    "name": "Hunter Guild"
   },
   "hunter_3-1": {
     "map_id": "hunter_3-1",
     "file": "hunter_3-1.rsw",
-    "name": "Guilda dos Caçadores"
+    "name": "Hunter Guild"
   },
   "in_hunter": {
     "map_id": "in_hunter",
     "file": "in_hunter.rsw",
-    "name": "Guilda dos Caçadores"
+    "name": "Hunter Guild"
   },
   "knight_1-1": {
     "map_id": "knight_1-1",
     "file": "knight_1-1.rsw",
-    "name": "Cavalaria"
+    "name": "The Chivalry"
   },
   "knight_2-1": {
     "map_id": "knight_2-1",
     "file": "knight_2-1.rsw",
-    "name": "Cavalaria"
+    "name": "The Chivalry"
   },
   "knight_3-1": {
     "map_id": "knight_3-1",
     "file": "knight_3-1.rsw",
-    "name": "Cavalaria"
+    "name": "The Chivalry"
   },
   "priest_1-1": {
     "map_id": "priest_1-1",
     "file": "priest_1-1.rsw",
-    "name": "Sanctum"
+    "name": "The Sanctum"
   },
   "priest_2-1": {
     "map_id": "priest_2-1",
     "file": "priest_2-1.rsw",
-    "name": "Sanctum"
+    "name": "The Sanctum"
   },
   "priest_3-1": {
     "map_id": "priest_3-1",
     "file": "priest_3-1.rsw",
-    "name": "Sanctum"
+    "name": "The Sanctum"
   },
   "sword_1-1": {
     "map_id": "sword_1-1",
     "file": "sword_1-1.rsw",
-    "name": "Hall da Prova dos Espadachins"
+    "name": "Swordman Test Hall"
   },
   "sword_2-1": {
     "map_id": "sword_2-1",
     "file": "sword_2-1.rsw",
-    "name": "Hall da Prova dos Espadachins"
+    "name": "Swordman Test Hall"
   },
   "sword_3-1": {
     "map_id": "sword_3-1",
     "file": "sword_3-1.rsw",
-    "name": "Hall da Prova dos Espadachins"
+    "name": "Swordman Test Hall"
   },
   "job_thief1": {
     "map_id": "job_thief1",
     "file": "job_thief1.rsw",
-    "name": "Fazenda dos Cogumelos"
+    "name": "Mushroom Farm"
   },
   "wizard_1-1": {
     "map_id": "wizard_1-1",
     "file": "wizard_1-1.rsw",
-    "name": "Escola dos Bruxos"
+    "name": "Wizard Academy"
   },
   "wizard_2-1": {
     "map_id": "wizard_2-1",
     "file": "wizard_2-1.rsw",
-    "name": "Escola dos Bruxos"
+    "name": "Wizard Academy"
   },
   "wizard_3-1": {
     "map_id": "wizard_3-1",
     "file": "wizard_3-1.rsw",
-    "name": "Escola dos Bruxos"
+    "name": "Wizard Academy"
   },
   "force_1-1": {
     "map_id": "force_1-1",
     "file": "force_1-1.rsw",
-    "name": "Luta Contra o Tempo"
+    "name": "Time Limit Fight"
   },
   "force_2-1": {
     "map_id": "force_2-1",
     "file": "force_2-1.rsw",
-    "name": "Luta Contra o Tempo"
+    "name": "Time Limit Fight"
   },
   "force_3-1": {
     "map_id": "force_3-1",
     "file": "force_3-1.rsw",
-    "name": "Luta Contra o Tempo"
+    "name": "Time Limit Fight"
   },
   "force_1-2": {
     "map_id": "force_1-2",
     "file": "force_1-2.rsw",
-    "name": "Luta Contra o Tempo"
+    "name": "Time Limit Fight"
   },
   "force_2-2": {
     "map_id": "force_2-2",
     "file": "force_2-2.rsw",
-    "name": "Luta Contra o Tempo"
+    "name": "Time Limit Fight"
   },
   "force_3-2": {
     "map_id": "force_3-2",
     "file": "force_3-2.rsw",
-    "name": "Luta Contra o Tempo"
+    "name": "Time Limit Fight"
   },
   "force_1-3": {
     "map_id": "force_1-3",
     "file": "force_1-3.rsw",
-    "name": "Luta Contra o Tempo"
+    "name": "Time Limit Fight"
   },
   "force_2-3": {
     "map_id": "force_2-3",
     "file": "force_2-3.rsw",
-    "name": "Luta Contra o Tempo"
+    "name": "Time Limit Fight"
   },
   "force_3-3": {
     "map_id": "force_3-3",
     "file": "force_3-3.rsw",
-    "name": "Luta Contra o Tempo"
+    "name": "Time Limit Fight"
   },
   "ordeal_1-1": {
     "map_id": "ordeal_1-1",
     "file": "ordeal_1-1.rsw",
-    "name": "Batalha de Provação"
+    "name": "Battle Ordeal Mode"
   },
   "ordeal_2-1": {
     "map_id": "ordeal_2-1",
     "file": "ordeal_2-1.rsw",
-    "name": "Batalha de Provação"
+    "name": "Battle Ordeal Mode"
   },
   "ordeal_3-1": {
     "map_id": "ordeal_3-1",
     "file": "ordeal_3-1.rsw",
-    "name": "Batalha de Provação"
+    "name": "Battle Ordeal Mode"
   },
   "ordeal_1-2": {
     "map_id": "ordeal_1-2",
     "file": "ordeal_1-2.rsw",
-    "name": "Batalha de Provação"
+    "name": "Battle Ordeal Mode"
   },
   "ordeal_2-2": {
     "map_id": "ordeal_2-2",
     "file": "ordeal_2-2.rsw",
-    "name": "Batalha de Provação"
+    "name": "Battle Ordeal Mode"
   },
   "ordeal_3-2": {
     "map_id": "ordeal_3-2",
     "file": "ordeal_3-2.rsw",
-    "name": "Batalha de Provação"
+    "name": "Battle Ordeal Mode"
   },
   "ordeal_1-3": {
     "map_id": "ordeal_1-3",
     "file": "ordeal_1-3.rsw",
-    "name": "Batalha de Provação"
+    "name": "Battle Ordeal Mode"
   },
   "ordeal_2-3": {
     "map_id": "ordeal_2-3",
     "file": "ordeal_2-3.rsw",
-    "name": "Batalha de Provação"
+    "name": "Battle Ordeal Mode"
   },
   "ordeal_3-3": {
     "map_id": "ordeal_3-3",
     "file": "ordeal_3-3.rsw",
-    "name": "Batalha de Provação"
+    "name": "Battle Ordeal Mode"
   },
   "ordeal_1-4": {
     "map_id": "ordeal_1-4",
     "file": "ordeal_1-4.rsw",
-    "name": "Batalha de Provação"
+    "name": "Battle Ordeal Mode"
   },
   "ordeal_2-4": {
     "map_id": "ordeal_2-4",
     "file": "ordeal_2-4.rsw",
-    "name": "Batalha de Provação"
+    "name": "Battle Ordeal Mode"
   },
   "ordeal_3-4": {
     "map_id": "ordeal_3-4",
     "file": "ordeal_3-4.rsw",
-    "name": "Batalha de Provação"
+    "name": "Battle Ordeal Mode"
   },
   "alb_ship": {
     "map_id": "alb_ship",
     "file": "alb_ship.rsw",
-    "name": "Navio de Alberta"
+    "name": "Alberta Ship"
   },
   "alberta": {
     "map_id": "alberta",
@@ -1182,942 +1182,942 @@
   "alberta_in": {
     "map_id": "alberta_in",
     "file": "alberta_in.rsw",
-    "name": "Casa em Alberta"
+    "name": "Inside Alberta"
   },
   "alb2trea": {
     "map_id": "alb2trea",
     "file": "alb2trea.rsw",
-    "name": "Ilha de Alberta"
+    "name": "Alberta Island"
   },
   "aldebaran": {
     "map_id": "aldebaran",
     "file": "aldebaran.rsw",
-    "name": "Al De Baran"
+    "name": "Border City Aldebaran"
   },
   "aldeba_in": {
     "map_id": "aldeba_in",
     "file": "aldeba_in.rsw",
-    "name": "Dentro de Al De Baran"
+    "name": "Inside Aldebaran"
   },
   "gef_tower": {
     "map_id": "gef_tower",
     "file": "gef_tower.rsw",
-    "name": "Torre de Geffen"
+    "name": "Geffen Tower"
   },
   "geffen": {
     "map_id": "geffen",
     "file": "geffen.rsw",
-    "name": "Geffen"
+    "name": "Geffen, the Magic City"
   },
   "geffen_in": {
     "map_id": "geffen_in",
     "file": "geffen_in.rsw",
-    "name": "Casa em Geffen"
+    "name": "Inside Geffen"
   },
   "moc_castle": {
     "map_id": "moc_castle",
     "file": "moc_castle.rsw",
-    "name": "Castelo de Morroc"
+    "name": "Morroc Castle"
   },
   "moc_ruins": {
     "map_id": "moc_ruins",
     "file": "moc_ruins.rsw",
-    "name": "Ruínas de Morroc"
+    "name": "Morroc Ruins"
   },
   "morocc": {
     "map_id": "morocc",
     "file": "morocc.rsw",
-    "name": "Morroc"
+    "name": "Morroc Town"
   },
   "morocc_in": {
     "map_id": "morocc_in",
     "file": "morocc_in.rsw",
-    "name": "Casa em Morroc"
+    "name": "Inside Morroc"
   },
   "pay_arche": {
     "map_id": "pay_arche",
     "file": "pay_arche.rsw",
-    "name": "Vila dos Arqueiros"
+    "name": "Archer Village"
   },
   "payon": {
     "map_id": "payon",
     "file": "payon.rsw",
-    "name": "Payon"
+    "name": "Payon Town"
   },
   "payon_in01": {
     "map_id": "payon_in01",
     "file": "payon_in01.rsw",
-    "name": "Casa em Payon (1)"
+    "name": "Inside Payon"
   },
   "payon_in02": {
     "map_id": "payon_in02",
     "file": "payon_in02.rsw",
-    "name": "Casa em Payon (2)"
+    "name": "Inside Payon"
   },
   "prontera": {
     "map_id": "prontera",
     "file": "prontera.rsw",
-    "name": "Prontera"
+    "name": "Prontera, Capital of Rune Midgard"
   },
   "prt_in": {
     "map_id": "prt_in",
     "file": "prt_in.rsw",
-    "name": "Casa em Prontera"
+    "name": "Inside Prontera"
   },
   "prt_castle": {
     "map_id": "prt_castle",
     "file": "prt_castle.rsw",
-    "name": "Castelo de Prontera"
+    "name": "Prontera Castle"
   },
   "prt_church": {
     "map_id": "prt_church",
     "file": "prt_church.rsw",
-    "name": "Catedral"
+    "name": "The Sanctuary"
   },
   "izlude": {
     "map_id": "izlude",
     "file": "izlude.rsw",
-    "name": "Izlude"
+    "name": "Izlude, the Satellite City"
   },
   "izlude_in": {
     "map_id": "izlude_in",
     "file": "izlude_in.rsw",
-    "name": "Casa em Izlude"
+    "name": "Inside Izlude"
   },
   "izlu2dun": {
     "map_id": "izlu2dun",
     "file": "izlu2dun.rsw",
-    "name": "Ilha Byalan"
+    "name": "Byalan Island"
   },
   "monk_in": {
     "map_id": "monk_in",
     "file": "monk_in.rsw",
-    "name": "Dentro da Abadia"
+    "name": "Inside St. Abbey"
   },
   "glast_01": {
     "map_id": "glast_01",
     "file": "glast_01.rsw",
-    "name": "Glast Heim"
+    "name": "Glastheim"
   },
   "alde_dun01": {
     "map_id": "alde_dun01",
     "file": "alde_dun01.rsw",
-    "name": "Torre do Relógio (s1)"
+    "name": "Clock Tower B1"
   },
   "alde_dun02": {
     "map_id": "alde_dun02",
     "file": "alde_dun02.rsw",
-    "name": "Torre do Relógio (s2)"
+    "name": "Clock Tower B2"
   },
   "alde_dun03": {
     "map_id": "alde_dun03",
     "file": "alde_dun03.rsw",
-    "name": "Torre do Relógio (s3)"
+    "name": "Clock Tower B3"
   },
   "alde_dun04": {
     "map_id": "alde_dun04",
     "file": "alde_dun04.rsw",
-    "name": "Torre do Relógio (s4)"
+    "name": "Clock Tower B4"
   },
   "c_tower1": {
     "map_id": "c_tower1",
     "file": "c_tower1.rsw",
-    "name": "Torre do Relógio (1)"
+    "name": "Clock Tower F1"
   },
   "c_tower2": {
     "map_id": "c_tower2",
     "file": "c_tower2.rsw",
-    "name": "Torre do Relógio (2)"
+    "name": "Clock Tower F2"
   },
   "c_tower3": {
     "map_id": "c_tower3",
     "file": "c_tower3.rsw",
-    "name": "Torre do Relógio (3)"
+    "name": "Clock Tower F3"
   },
   "c_tower4": {
     "map_id": "c_tower4",
     "file": "c_tower4.rsw",
-    "name": "Torre do Relógio (4)"
+    "name": "Clock Tower F4"
   },
   "gl_cas01": {
     "map_id": "gl_cas01",
     "file": "gl_cas01.rsw",
-    "name": "Glast Heim (1)"
+    "name": "Glastheim F1"
   },
   "gl_cas02": {
     "map_id": "gl_cas02",
     "file": "gl_cas02.rsw",
-    "name": "Glast Heim (2)"
+    "name": "Glastheim F2"
   },
   "gl_church": {
     "map_id": "gl_church",
     "file": "gl_church.rsw",
-    "name": "Abadia de Glast Heim"
+    "name": "Glastheim Monastery"
   },
   "gl_chyard": {
     "map_id": "gl_chyard",
     "file": "gl_chyard.rsw",
-    "name": "Cemitério de Glast Heim"
+    "name": "Glastheim Underground Churchyard"
   },
   "gl_dun01": {
     "map_id": "gl_dun01",
     "file": "gl_dun01.rsw",
-    "name": "A Mais Profunda Caverna de Glast Heim (1)"
+    "name": "The Lowest Cave in Glastheim B1"
   },
   "gl_dun02": {
     "map_id": "gl_dun02",
     "file": "gl_dun02.rsw",
-    "name": "A Mais Profunda Caverna de Glast Heim (2)"
+    "name": "The Lowest Cave in Glastheim B2"
   },
   "gl_in01": {
     "map_id": "gl_in01",
     "file": "gl_in01.rsw",
-    "name": "Casa em Glast Heim"
+    "name": "Inside Glastheim"
   },
   "gl_knt01": {
     "map_id": "gl_knt01",
     "file": "gl_knt01.rsw",
-    "name": "Cavalaria de Glast Heim (1)"
+    "name": "Inside Glastheim Chivalry F1"
   },
   "gl_knt02": {
     "map_id": "gl_knt02",
     "file": "gl_knt02.rsw",
-    "name": "Cavalaria de Glast Heim (1)"
+    "name": "Inside Glastheim Chivalry F2"
   },
   "gl_prison": {
     "map_id": "gl_prison",
     "file": "gl_prison.rsw",
-    "name": "Prisão Subterrânea de Glast Heim (0)"
+    "name": "Glastheim Underground Prison B1"
   },
   "gl_prison1": {
     "map_id": "gl_prison1",
     "file": "gl_prison1.rsw",
-    "name": "Prisão Subterrânea de Glast Heim (1)"
+    "name": "Glastheim Underground Prison B2"
   },
   "gl_sew01": {
     "map_id": "gl_sew01",
     "file": "gl_sew01.rsw",
-    "name": "Esgoto de Glast Heim (1)"
+    "name": "Glastheim Underground Waterway B1"
   },
   "gl_sew02": {
     "map_id": "gl_sew02",
     "file": "gl_sew02.rsw",
-    "name": "Esgoto de Glast Heim (2)"
+    "name": "Glastheim Underground Waterway B2"
   },
   "gl_sew03": {
     "map_id": "gl_sew03",
     "file": "gl_sew03.rsw",
-    "name": "Esgoto de Glast Heim (3)"
+    "name": "Glastheim Underground Waterway B3"
   },
   "gl_sew04": {
     "map_id": "gl_sew04",
     "file": "gl_sew04.rsw",
-    "name": "Esgoto de Glast Heim (4)"
+    "name": "Glastheim Underground Waterway B4"
   },
   "gl_step": {
     "map_id": "gl_step",
     "file": "gl_step.rsw",
-    "name": "Escadarias de Glast Heim"
+    "name": "Glastheim Staircase Dungeon"
   },
   "pvp_y_room": {
     "map_id": "pvp_y_room",
     "file": "pvp_y_room.rsw",
-    "name": "PvP : Sala de Espera"
+    "name": "PvP : Waiting Room"
   },
   "pvp_n_room": {
     "map_id": "pvp_n_room",
     "file": "pvp_n_room.rsw",
-    "name": "PvP : Sala de Espera"
+    "name": "PvP : Waiting Room"
   },
   "pvp_c_room": {
     "map_id": "pvp_c_room",
     "file": "pvp_c_room.rsw",
-    "name": "PvP : Sala de Espera"
+    "name": "PvP : Waiting Room"
   },
   "pvp_n_1-1": {
     "map_id": "pvp_n_1-1",
     "file": "pvp_n_1-1.rsw",
-    "name": "PvP : Sala Sanduíche"
+    "name": "PvP : Room Sandwich"
   },
   "pvp_n_2-1": {
     "map_id": "pvp_n_2-1",
     "file": "pvp_n_2-1.rsw",
-    "name": "PvP : Sala Sanduíche"
+    "name": "PvP : Room Sandwich"
   },
   "pvp_n_3-1": {
     "map_id": "pvp_n_3-1",
     "file": "pvp_n_3-1.rsw",
-    "name": "PvP : Sala Sanduíche"
+    "name": "PvP : Room Sandwich"
   },
   "pvp_n_4-1": {
     "map_id": "pvp_n_4-1",
     "file": "pvp_n_4-1.rsw",
-    "name": "PvP : Sala Sanduíche"
+    "name": "PvP : Room Sandwich"
   },
   "pvp_n_5-1": {
     "map_id": "pvp_n_5-1",
     "file": "pvp_n_5-1.rsw",
-    "name": "PvP : Sala Sanduíche"
+    "name": "PvP : Room Sandwich"
   },
   "pvp_n_6-1": {
     "map_id": "pvp_n_6-1",
     "file": "pvp_n_6-1.rsw",
-    "name": "PvP : Sala Sanduíche"
+    "name": "PvP : Room Sandwich"
   },
   "pvp_n_7-1": {
     "map_id": "pvp_n_7-1",
     "file": "pvp_n_7-1.rsw",
-    "name": "PvP : Sala Sanduíche"
+    "name": "PvP : Room Sandwich"
   },
   "pvp_n_8-1": {
     "map_id": "pvp_n_8-1",
     "file": "pvp_n_8-1.rsw",
-    "name": "PvP : Sala Sanduíche"
+    "name": "PvP : Room Sandwich"
   },
   "pvp_n_1-2": {
     "map_id": "pvp_n_1-2",
     "file": "pvp_n_1-2.rsw",
-    "name": "PvP : Sala Desafio Adiante"
+    "name": "PvP : Room Rock On"
   },
   "pvp_n_2-2": {
     "map_id": "pvp_n_2-2",
     "file": "pvp_n_2-2.rsw",
-    "name": "PvP : Sala Desafio Adiante"
+    "name": "PvP : Room Rock On"
   },
   "pvp_n_3-2": {
     "map_id": "pvp_n_3-2",
     "file": "pvp_n_3-2.rsw",
-    "name": "PvP : Sala Desafio Adiante"
+    "name": "PvP : Room Rock On"
   },
   "pvp_n_4-2": {
     "map_id": "pvp_n_4-2",
     "file": "pvp_n_4-2.rsw",
-    "name": "PvP : Sala Desafio Adiante"
+    "name": "PvP : Room Rock On"
   },
   "pvp_n_5-2": {
     "map_id": "pvp_n_5-2",
     "file": "pvp_n_5-2.rsw",
-    "name": "PvP : Sala Desafio Adiante"
+    "name": "PvP : Room Rock On"
   },
   "pvp_n_6-2": {
     "map_id": "pvp_n_6-2",
     "file": "pvp_n_6-2.rsw",
-    "name": "PvP : Sala Desafio Adiante"
+    "name": "PvP : Room Rock On"
   },
   "pvp_n_7-2": {
     "map_id": "pvp_n_7-2",
     "file": "pvp_n_7-2.rsw",
-    "name": "PvP : Sala Desafio Adiante"
+    "name": "PvP : Room Rock On"
   },
   "pvp_n_8-2": {
     "map_id": "pvp_n_8-2",
     "file": "pvp_n_8-2.rsw",
-    "name": "PvP : Sala Desafio Adiante"
+    "name": "PvP : Room Rock On"
   },
   "pvp_n_1-3": {
     "map_id": "pvp_n_1-3",
     "file": "pvp_n_1-3.rsw",
-    "name": "PvP : Sala Tetra"
+    "name": "PvP : Four Room"
   },
   "pvp_n_2-3": {
     "map_id": "pvp_n_2-3",
     "file": "pvp_n_2-3.rsw",
-    "name": "PvP : Sala Tetra"
+    "name": "PvP : Four Room"
   },
   "pvp_n_3-3": {
     "map_id": "pvp_n_3-3",
     "file": "pvp_n_3-3.rsw",
-    "name": "PvP : Sala Tetra"
+    "name": "PvP : Four Room"
   },
   "pvp_n_4-3": {
     "map_id": "pvp_n_4-3",
     "file": "pvp_n_4-3.rsw",
-    "name": "PvP : Sala Tetra"
+    "name": "PvP : Four Room"
   },
   "pvp_n_5-3": {
     "map_id": "pvp_n_5-3",
     "file": "pvp_n_5-3.rsw",
-    "name": "PvP : Sala Tetra"
+    "name": "PvP : Four Room"
   },
   "pvp_n_6-3": {
     "map_id": "pvp_n_6-3",
     "file": "pvp_n_6-3.rsw",
-    "name": "PvP : Sala Tetra"
+    "name": "PvP : Four Room"
   },
   "pvp_n_7-3": {
     "map_id": "pvp_n_7-3",
     "file": "pvp_n_7-3.rsw",
-    "name": "PvP : Sala Tetra"
+    "name": "PvP : Four Room"
   },
   "pvp_n_8-3": {
     "map_id": "pvp_n_8-3",
     "file": "pvp_n_8-3.rsw",
-    "name": "PvP : Sala Tetra"
+    "name": "PvP : Four Room"
   },
   "pvp_n_1-4": {
     "map_id": "pvp_n_1-4",
     "file": "pvp_n_1-4.rsw",
-    "name": "PvP : Sala Encruzilhada"
+    "name": "PvP : Room Undercross"
   },
   "pvp_n_2-4": {
     "map_id": "pvp_n_2-4",
     "file": "pvp_n_2-4.rsw",
-    "name": "PvP : Sala Encruzilhada"
+    "name": "PvP : Room Undercross"
   },
   "pvp_n_3-4": {
     "map_id": "pvp_n_3-4",
     "file": "pvp_n_3-4.rsw",
-    "name": "PvP : Sala Encruzilhada"
+    "name": "PvP : Room Undercross"
   },
   "pvp_n_4-4": {
     "map_id": "pvp_n_4-4",
     "file": "pvp_n_4-4.rsw",
-    "name": "PvP : Sala Encruzilhada"
+    "name": "PvP : Room Undercross"
   },
   "pvp_n_5-4": {
     "map_id": "pvp_n_5-4",
     "file": "pvp_n_5-4.rsw",
-    "name": "PvP : Sala Encruzilhada"
+    "name": "PvP : Room Undercross"
   },
   "pvp_n_6-4": {
     "map_id": "pvp_n_6-4",
     "file": "pvp_n_6-4.rsw",
-    "name": "PvP : Sala Encruzilhada"
+    "name": "PvP : Room Undercross"
   },
   "pvp_n_7-4": {
     "map_id": "pvp_n_7-4",
     "file": "pvp_n_7-4.rsw",
-    "name": "PvP : Sala Encruzilhada"
+    "name": "PvP : Room Undercross"
   },
   "pvp_n_8-4": {
     "map_id": "pvp_n_8-4",
     "file": "pvp_n_8-4.rsw",
-    "name": "PvP : Sala Encruzilhada"
+    "name": "PvP : Room Undercross"
   },
   "pvp_n_1-5": {
     "map_id": "pvp_n_1-5",
     "file": "pvp_n_1-5.rsw",
-    "name": "PvP : Sala Bússola"
+    "name": "PvP : Room Copass"
   },
   "pvp_n_2-5": {
     "map_id": "pvp_n_2-5",
     "file": "pvp_n_2-5.rsw",
-    "name": "PvP : Sala Bússola"
+    "name": "PvP : Room Copass"
   },
   "pvp_n_3-5": {
     "map_id": "pvp_n_3-5",
     "file": "pvp_n_3-5.rsw",
-    "name": "PvP : Sala Bússola"
+    "name": "PvP : Room Copass"
   },
   "pvp_n_4-5": {
     "map_id": "pvp_n_4-5",
     "file": "pvp_n_4-5.rsw",
-    "name": "PvP : Sala Bússola"
+    "name": "PvP : Room Copass"
   },
   "pvp_n_5-5": {
     "map_id": "pvp_n_5-5",
     "file": "pvp_n_5-5.rsw",
-    "name": "PvP : Sala Bússola"
+    "name": "PvP : Room Copass"
   },
   "pvp_n_6-5": {
     "map_id": "pvp_n_6-5",
     "file": "pvp_n_6-5.rsw",
-    "name": "PvP : Sala Bússola"
+    "name": "PvP : Room Copass"
   },
   "pvp_n_7-5": {
     "map_id": "pvp_n_7-5",
     "file": "pvp_n_7-5.rsw",
-    "name": "PvP : Sala Bússola"
+    "name": "PvP : Room Copass"
   },
   "pvp_n_8-5": {
     "map_id": "pvp_n_8-5",
     "file": "pvp_n_8-5.rsw",
-    "name": "PvP : Sala Bússola"
+    "name": "PvP : Room Copass"
   },
   "pvp_y_1-1": {
     "map_id": "pvp_y_1-1",
     "file": "pvp_y_1-1.rsw",
-    "name": "PvP : Sala de Prontera"
+    "name": "PvP : Room Prontera"
   },
   "pvp_y_2-1": {
     "map_id": "pvp_y_2-1",
     "file": "pvp_y_2-1.rsw",
-    "name": "PvP : Sala de Prontera"
+    "name": "PvP : Room Prontera"
   },
   "pvp_y_3-1": {
     "map_id": "pvp_y_3-1",
     "file": "pvp_y_3-1.rsw",
-    "name": "PvP : Sala de Prontera"
+    "name": "PvP : Room Prontera"
   },
   "pvp_y_4-1": {
     "map_id": "pvp_y_4-1",
     "file": "pvp_y_4-1.rsw",
-    "name": "PvP : Sala de Prontera"
+    "name": "PvP : Room Prontera"
   },
   "pvp_y_5-1": {
     "map_id": "pvp_y_5-1",
     "file": "pvp_y_5-1.rsw",
-    "name": "PvP : Sala de Prontera"
+    "name": "PvP : Room Prontera"
   },
   "pvp_y_6-1": {
     "map_id": "pvp_y_6-1",
     "file": "pvp_y_6-1.rsw",
-    "name": "PvP : Sala de Prontera"
+    "name": "PvP : Room Prontera"
   },
   "pvp_y_7-1": {
     "map_id": "pvp_y_7-1",
     "file": "pvp_y_7-1.rsw",
-    "name": "PvP : Sala de Prontera"
+    "name": "PvP : Room Prontera"
   },
   "pvp_y_8-1": {
     "map_id": "pvp_y_8-1",
     "file": "pvp_y_8-1.rsw",
-    "name": "PvP : Sala de Prontera"
+    "name": "PvP : Room Prontera"
   },
   "pvp_y_1-2": {
     "map_id": "pvp_y_1-2",
     "file": "pvp_y_1-2.rsw",
-    "name": "PvP : Sala de Izlude"
+    "name": "PvP : Room Izlude"
   },
   "pvp_y_2-2": {
     "map_id": "pvp_y_2-2",
     "file": "pvp_y_2-2.rsw",
-    "name": "PvP : Sala de Izlude"
+    "name": "PvP : Room Izlude"
   },
   "pvp_y_3-2": {
     "map_id": "pvp_y_3-2",
     "file": "pvp_y_3-2.rsw",
-    "name": "PvP : Sala de Izlude"
+    "name": "PvP : Room Izlude"
   },
   "pvp_y_4-2": {
     "map_id": "pvp_y_4-2",
     "file": "pvp_y_4-2.rsw",
-    "name": "PvP : Sala de Izlude"
+    "name": "PvP : Room Izlude"
   },
   "pvp_y_5-2": {
     "map_id": "pvp_y_5-2",
     "file": "pvp_y_5-2.rsw",
-    "name": "PvP : Sala de Izlude"
+    "name": "PvP : Room Izlude"
   },
   "pvp_y_6-2": {
     "map_id": "pvp_y_6-2",
     "file": "pvp_y_6-2.rsw",
-    "name": "PvP : Sala de Izlude"
+    "name": "PvP : Room Izlude"
   },
   "pvp_y_7-2": {
     "map_id": "pvp_y_7-2",
     "file": "pvp_y_7-2.rsw",
-    "name": "PvP : Sala de Izlude"
+    "name": "PvP : Room Izlude"
   },
   "pvp_y_8-2": {
     "map_id": "pvp_y_8-2",
     "file": "pvp_y_8-2.rsw",
-    "name": "PvP : Sala de Izlude"
+    "name": "PvP : Room Izlude"
   },
   "pvp_y_1-3": {
     "map_id": "pvp_y_1-3",
     "file": "pvp_y_1-3.rsw",
-    "name": "PvP : Sala de Payon"
+    "name": "PvP : Room Payon"
   },
   "pvp_y_2-3": {
     "map_id": "pvp_y_2-3",
     "file": "pvp_y_2-3.rsw",
-    "name": "PvP : Sala de Payon"
+    "name": "PvP : Room Payon"
   },
   "pvp_y_3-3": {
     "map_id": "pvp_y_3-3",
     "file": "pvp_y_3-3.rsw",
-    "name": "PvP : Sala de Payon"
+    "name": "PvP : Room Payon"
   },
   "pvp_y_4-3": {
     "map_id": "pvp_y_4-3",
     "file": "pvp_y_4-3.rsw",
-    "name": "PvP : Sala de Payon"
+    "name": "PvP : Room Payon"
   },
   "pvp_y_5-3": {
     "map_id": "pvp_y_5-3",
     "file": "pvp_y_5-3.rsw",
-    "name": "PvP : Sala de Payon"
+    "name": "PvP : Room Payon"
   },
   "pvp_y_6-3": {
     "map_id": "pvp_y_6-3",
     "file": "pvp_y_6-3.rsw",
-    "name": "PvP : Sala de Payon"
+    "name": "PvP : Room Payon"
   },
   "pvp_y_7-3": {
     "map_id": "pvp_y_7-3",
     "file": "pvp_y_7-3.rsw",
-    "name": "PvP : Sala de Payon"
+    "name": "PvP : Room Payon"
   },
   "pvp_y_8-3": {
     "map_id": "pvp_y_8-3",
     "file": "pvp_y_8-3.rsw",
-    "name": "PvP : Sala de Payon"
+    "name": "PvP : Room Payon"
   },
   "pvp_y_1-4": {
     "map_id": "pvp_y_1-4",
     "file": "pvp_y_1-4.rsw",
-    "name": "PvP : Sala de Alberta"
+    "name": "PvP : Room Alberta"
   },
   "pvp_y_2-4": {
     "map_id": "pvp_y_2-4",
     "file": "pvp_y_2-4.rsw",
-    "name": "PvP : Sala de Alberta"
+    "name": "PvP : Room Alberta"
   },
   "pvp_y_3-4": {
     "map_id": "pvp_y_3-4",
     "file": "pvp_y_3-4.rsw",
-    "name": "PvP : Sala de Alberta"
+    "name": "PvP : Room Alberta"
   },
   "pvp_y_4-4": {
     "map_id": "pvp_y_4-4",
     "file": "pvp_y_4-4.rsw",
-    "name": "PvP : Sala de Alberta"
+    "name": "PvP : Room Alberta"
   },
   "pvp_y_5-4": {
     "map_id": "pvp_y_5-4",
     "file": "pvp_y_5-4.rsw",
-    "name": "PvP : Sala de Alberta"
+    "name": "PvP : Room Alberta"
   },
   "pvp_y_6-4": {
     "map_id": "pvp_y_6-4",
     "file": "pvp_y_6-4.rsw",
-    "name": "PvP : Sala de Alberta"
+    "name": "PvP : Room Alberta"
   },
   "pvp_y_7-4": {
     "map_id": "pvp_y_7-4",
     "file": "pvp_y_7-4.rsw",
-    "name": "PvP : Sala de Alberta"
+    "name": "PvP : Room Alberta"
   },
   "pvp_y_8-4": {
     "map_id": "pvp_y_8-4",
     "file": "pvp_y_8-4.rsw",
-    "name": "PvP : Sala de Alberta"
+    "name": "PvP : Room Alberta"
   },
   "pvp_y_1-5": {
     "map_id": "pvp_y_1-5",
     "file": "pvp_y_1-5.rsw",
-    "name": "PvP : Sala de Morroc"
+    "name": "PvP : Room Morroc"
   },
   "pvp_y_2-5": {
     "map_id": "pvp_y_2-5",
     "file": "pvp_y_2-5.rsw",
-    "name": "PvP : Sala de Morroc"
+    "name": "PvP : Room Morroc"
   },
   "pvp_y_3-5": {
     "map_id": "pvp_y_3-5",
     "file": "pvp_y_3-5.rsw",
-    "name": "PvP : Sala de Morroc"
+    "name": "PvP : Room Morroc"
   },
   "pvp_y_4-5": {
     "map_id": "pvp_y_4-5",
     "file": "pvp_y_4-5.rsw",
-    "name": "PvP : Sala de Morroc"
+    "name": "PvP : Room Morroc"
   },
   "pvp_y_5-5": {
     "map_id": "pvp_y_5-5",
     "file": "pvp_y_5-5.rsw",
-    "name": "PvP : Sala de Morroc"
+    "name": "PvP : Room Morroc"
   },
   "pvp_y_6-5": {
     "map_id": "pvp_y_6-5",
     "file": "pvp_y_6-5.rsw",
-    "name": "PvP : Sala de Morroc"
+    "name": "PvP : Room Morroc"
   },
   "pvp_y_7-5": {
     "map_id": "pvp_y_7-5",
     "file": "pvp_y_7-5.rsw",
-    "name": "PvP : Sala de Morroc"
+    "name": "PvP : Room Morroc"
   },
   "pvp_y_8-5": {
     "map_id": "pvp_y_8-5",
     "file": "pvp_y_8-5.rsw",
-    "name": "PvP : Sala de Morroc"
+    "name": "PvP : Room Morroc"
   },
   "pvp_2vs2": {
     "map_id": "pvp_2vs2",
     "file": "pvp_2vs2.rsw",
-    "name": "PvP : Colisseu"
+    "name": "PvP : Event Coliseum"
   },
   "alde_alche": {
     "map_id": "alde_alche",
     "file": "alde_alche.rsw",
-    "name": "Guilda dos Alquimistas"
+    "name": "Alchemist Realm"
   },
   "yuno_in05": {
     "map_id": "yuno_in05",
     "file": "yuno_in05.rsw",
-    "name": "Coração de Imir"
+    "name": "Power Plant of Ymir's Heart"
   },
   "yuno_in04": {
     "map_id": "yuno_in04",
     "file": "yuno_in04.rsw",
-    "name": "Biblioteca de Juno"
+    "name": "Republic Library"
   },
   "job_duncer": {
     "map_id": "job_duncer",
     "file": "job_duncer.rsw",
-    "name": "Teatro de Comodo"
+    "name": "Comodo Theatre"
   },
   "job_sage": {
     "map_id": "job_sage",
     "file": "job_sage.rsw",
-    "name": "Campo de Testes (Sábios)"
+    "name": "Sage Realm"
   },
   "job_cru": {
     "map_id": "job_cru",
     "file": "job_cru.rsw",
-    "name": "Campo de Testes (Templários)"
+    "name": "Crusader Realm"
   },
   "job_monk": {
     "map_id": "job_monk",
     "file": "job_monk.rsw",
-    "name": "Abadia de Santa Capitolina"
+    "name": "Saint Capitolina Abbey"
   },
   "monk_test": {
     "map_id": "monk_test",
     "file": "monk_test.rsw",
-    "name": "Abadia de Santa Capitolina"
+    "name": "Saint Capitolina Abbey"
   },
   "in_rogue": {
     "map_id": "in_rogue",
     "file": "in_rogue.rsw",
-    "name": "Guila dos Arruaceiros"
+    "name": "Inside the Rogue Guild"
   },
   "mag_dun02": {
     "map_id": "mag_dun02",
     "file": "mag_dun02.rsw",
-    "name": "Calabouço de Magma"
+    "name": "Nogg Road Dungeon F2"
   },
   "mag_dun01": {
     "map_id": "mag_dun01",
     "file": "mag_dun01.rsw",
-    "name": "Calabouço de Magma"
+    "name": "Nogg Road Dungeon F1"
   },
   "yuno_fild04": {
     "map_id": "yuno_fild04",
     "file": "yuno_fild04.rsw",
-    "name": "Planalto de Juno"
+    "name": "El Mes Plateau"
   },
   "yuno_fild03": {
     "map_id": "yuno_fild03",
     "file": "yuno_fild03.rsw",
-    "name": "Planalto de Juno"
+    "name": "El Mes Plateau"
   },
   "yuno_fild02": {
     "map_id": "yuno_fild02",
     "file": "yuno_fild02.rsw",
-    "name": "Arredores de Juno"
+    "name": "Kiel Hyre's Cottage"
   },
   "yuno_fild01": {
     "map_id": "yuno_fild01",
     "file": "yuno_fild01.rsw",
-    "name": "Fronteira de Aldebaran"
+    "name": "Border Posts"
   },
   "yuno_in03": {
     "map_id": "yuno_in03",
     "file": "yuno_in03.rsw",
-    "name": "Casa em Juno"
+    "name": "Inside Yuno"
   },
   "yuno_in02": {
     "map_id": "yuno_in02",
     "file": "yuno_in02.rsw",
-    "name": "Castelo dos Sábios"
+    "name": "Inside the Sage Castle"
   },
   "yuno_in01": {
     "map_id": "yuno_in01",
     "file": "yuno_in01.rsw",
-    "name": "Casa em Juno"
+    "name": "Inside Yuno"
   },
   "yuno": {
     "map_id": "yuno",
     "file": "yuno.rsw",
-    "name": "Juno"
+    "name": "Yuno, Capital of Schwartzvald Republic"
   },
   "job_wiz": {
     "map_id": "job_wiz",
     "file": "job_wiz.rsw",
-    "name": "Campo de Testes (Bruxos)"
+    "name": "Wizard Realm"
   },
   "job_prist": {
     "map_id": "job_prist",
     "file": "job_prist.rsw",
-    "name": "Campo de Testes (Sacerdotes)"
+    "name": "Priest Realm"
   },
   "job_knt": {
     "map_id": "job_knt",
     "file": "job_knt.rsw",
-    "name": "Campo de Testes (Cavaleiros)"
+    "name": "Knight Realm"
   },
   "job_hunte": {
     "map_id": "job_hunte",
     "file": "job_hunte.rsw",
-    "name": "Campo de Testes (Caçadores)"
+    "name": "Hunter Job Change Place"
   },
   "gon_test": {
     "map_id": "gon_test",
     "file": "gon_test.rsw",
-    "name": "Salão de Batalhas"
+    "name": "Gonryun Fighting Ground"
   },
   "gon_dun01": {
     "map_id": "gon_dun01",
     "file": "gon_dun01.rsw",
-    "name": "Santuário de Xi Wang Mu"
+    "name": "Temple of the Western Queen"
   },
   "gon_dun02": {
     "map_id": "gon_dun02",
     "file": "gon_dun02.rsw",
-    "name": "Tabuleiro de Go"
+    "name": "Hermit's Checkerboard"
   },
   "gon_dun03": {
     "map_id": "gon_dun03",
     "file": "gon_dun03.rsw",
-    "name": "Terra das Fadas"
+    "name": "The Peach Blossom Land"
   },
   "gon_fild01": {
     "map_id": "gon_fild01",
     "file": "gon_fild01.rsw",
-    "name": "Campo de Kunlun"
+    "name": "Gonryun Field"
   },
   "gon_in": {
     "map_id": "gon_in",
     "file": "gon_in.rsw",
-    "name": "Interior de Kunlun"
+    "name": "Inside Gonryun"
   },
   "gonryun": {
     "map_id": "gonryun",
     "file": "gonryun.rsw",
-    "name": "Kunlun, a Ilha dos Heremitas"
+    "name": "Gonryun, the Hermit Land"
   },
   "ama_test": {
     "map_id": "ama_test",
     "file": "ama_test.rsw",
-    "name": "Campo de Momotaro"
+    "name": "Momotaro Experience Place"
   },
   "ama_dun03": {
     "map_id": "ama_dun03",
     "file": "ama_dun03.rsw",
-    "name": "Templo Subterrâneo de Amatsu"
+    "name": "Amatsu Underground Shrine"
   },
   "ama_dun02": {
     "map_id": "ama_dun02",
     "file": "ama_dun02.rsw",
-    "name": "Campo de Batalha da Floresta Subterrânea"
+    "name": "Battle Field in the Underground Forest"
   },
   "ama_dun01": {
     "map_id": "ama_dun01",
     "file": "ama_dun01.rsw",
-    "name": "Labirinto de Tatames"
+    "name": "Tatami Maze"
   },
   "ama_fild01": {
     "map_id": "ama_fild01",
     "file": "ama_fild01.rsw",
-    "name": "Campo de Amatsu"
+    "name": "Amatsu Field"
   },
   "ama_in02": {
     "map_id": "ama_in02",
     "file": "ama_in02.rsw",
-    "name": "Interior de TenguGak"
+    "name": "Inside Himezi Castle"
   },
   "ama_in01": {
     "map_id": "ama_in01",
     "file": "ama_in01.rsw",
-    "name": "Interior de Amatsu"
+    "name": "Inside Amatsu"
   },
   "amatsu": {
     "map_id": "amatsu",
     "file": "amatsu.rsw",
-    "name": "Amatsu, a terra dos Tengu"
+    "name": "Amatsu, the Land of Destiny"
   },
   "um_dun01": {
     "map_id": "um_dun01",
     "file": "um_dun01.rsw",
-    "name": "Loja de Carpintaria"
+    "name": "Carpenter's Shop in the Tree"
   },
   "um_dun02": {
     "map_id": "um_dun02",
     "file": "um_dun02.rsw",
-    "name": "Estrada para o Outro Mundo"
+    "name": "Passage to a Foreign World"
   },
   "um_in": {
     "map_id": "um_in",
     "file": "um_in.rsw",
-    "name": "Interior de Umbala"
+    "name": "Inside Umbala"
   },
   "um_fild01": {
     "map_id": "um_fild01",
     "file": "um_fild01.rsw",
-    "name": "Floresta de Luluka"
+    "name": "Luluka Forest"
   },
   "um_fild02": {
     "map_id": "um_fild02",
     "file": "um_fild02.rsw",
-    "name": "Floresta de Hoomga"
+    "name": "Hoomga Forest"
   },
   "um_fild03": {
     "map_id": "um_fild03",
     "file": "um_fild03.rsw",
-    "name": "Pântano de Kalala"
+    "name": "Kalala Swamp"
   },
   "um_fild04": {
     "map_id": "um_fild04",
     "file": "um_fild04.rsw",
-    "name": "Selva de Hoomga"
+    "name": "Hoomga Jungle"
   },
   "umbala": {
     "map_id": "umbala",
     "file": "umbala.rsw",
-    "name": "Aldeia da tribo Wootan, Umbala"
+    "name": "Wootan Tribe's Village, Umbala"
   },
   "payon_in03": {
     "map_id": "payon_in03",
     "file": "payon_in03.rsw",
-    "name": "Casa em Payon"
+    "name": "Inside Payon"
   },
   "nif_in": {
     "map_id": "nif_in",
     "file": "nif_in.rsw",
-    "name": "Interior de Nifflheim"
+    "name": "Inside Niflheim"
   },
   "yggdrasil01": {
     "map_id": "yggdrasil01",
     "file": "yggdrasil01.rsw",
-    "name": "Fonte de Hvergelmir (Tronco de Yggdrasil)"
+    "name": "Hvergelmir's Fountain (Trunk of Yggdrasil)"
   },
   "nif_fild02": {
     "map_id": "nif_fild02",
     "file": "nif_fild02.rsw",
-    "name": "Vale de Gyoll"
+    "name": "Valley of Niflheim"
   },
   "nif_fild01": {
     "map_id": "nif_fild01",
     "file": "nif_fild01.rsw",
-    "name": "Skellington, um vilarejo solitário em Nifflheim"
+    "name": "Skellington, a Solitary Village in Niflheim"
   },
   "niflheim": {
     "map_id": "niflheim",
     "file": "niflheim.rsw",
-    "name": "Nifflheim, O reino dos mortos"
+    "name": "Niflheim, Realm of the Dead"
   },
   "jawaii_in": {
     "map_id": "jawaii_in",
     "file": "jawaii_in.rsw",
-    "name": "Interior de Jawaii"
+    "name": "Inside Jawaii"
   },
   "jawaii": {
     "map_id": "jawaii",
     "file": "jawaii.rsw",
-    "name": "Jawaii, a Ilha da Lua-de-Mel"
+    "name": "Jawaii, the Honeymoon Island"
   },
   "lou_in02": {
     "map_id": "lou_in02",
     "file": "lou_in02.rsw",
-    "name": "Interior de Louyang"
+    "name": "Inside Louyang"
   },
   "lou_in01": {
     "map_id": "lou_in01",
     "file": "lou_in01.rsw",
-    "name": "Interior de Louyang"
+    "name": "Inside Louyang"
   },
   "lou_dun03": {
     "map_id": "lou_dun03",
@@ -2127,67 +2127,67 @@
   "lou_dun02": {
     "map_id": "lou_dun02",
     "file": "lou_dun02.rsw",
-    "name": "Interior da Tumba Real"
+    "name": "Inside the Royal Tomb"
   },
   "lou_dun01": {
     "map_id": "lou_dun01",
     "file": "lou_dun01.rsw",
-    "name": "A Tumba Real"
+    "name": "The Royal Tomb"
   },
   "lou_fild01": {
     "map_id": "lou_fild01",
     "file": "lou_fild01.rsw",
-    "name": "Campos de Louyang"
+    "name": "Louyang Field"
   },
   "louyang": {
     "map_id": "louyang",
     "file": "louyang.rsw",
-    "name": "Louyang, as terras altas"
+    "name": "Louyang, the Highland"
   },
   "ayo_in02": {
     "map_id": "ayo_in02",
     "file": "ayo_in02.rsw",
-    "name": "Interior de Ayotaya"
+    "name": "Inside Ayothaya"
   },
   "ayo_in01": {
     "map_id": "ayo_in01",
     "file": "ayo_in01.rsw",
-    "name": "Interior de Ayotaya"
+    "name": "Inside Ayothaya"
   },
   "ayo_dun02": {
     "map_id": "ayo_dun02",
     "file": "ayo_dun02.rsw",
-    "name": "Interior do Santuário Ancestral"
+    "name": "Inside Ancient Shrine"
   },
   "ayo_dun01": {
     "map_id": "ayo_dun01",
     "file": "ayo_dun01.rsw",
-    "name": "Labirinto do Santuário Ancestral"
+    "name": "Ancient Shrine Maze"
   },
   "ayo_fild02": {
     "map_id": "ayo_fild02",
     "file": "ayo_fild02.rsw",
-    "name": "Campos de Ayotaya"
+    "name": "Ayothaya Field 2"
   },
   "ayo_fild01": {
     "map_id": "ayo_fild01",
     "file": "ayo_fild01.rsw",
-    "name": "Campos de Ayotaya"
+    "name": "Ayothaya Field 1"
   },
   "ayothaya": {
     "map_id": "ayothaya",
     "file": "ayothaya.rsw",
-    "name": "Ayotaya"
+    "name": "Ayothaya"
   },
   "prt_are_in": {
     "map_id": "prt_are_in",
     "file": "prt_are_in.rsw",
-    "name": "Sala de Espera"
+    "name": "Waiting room"
   },
   "arena_room": {
     "map_id": "arena_room",
     "file": "arena_room.rsw",
-    "name": "Sala de Espera"
+    "name": "Waiting room"
   },
   "prt_arena01": {
     "map_id": "prt_arena01",
@@ -2212,292 +2212,292 @@
   "sec_in01": {
     "map_id": "sec_in01",
     "file": "sec_in01.rsw",
-    "name": "Interior do Valhalla"
+    "name": "Inside Valhalla"
   },
   "sec_in02": {
     "map_id": "sec_in02",
     "file": "sec_in02.rsw",
-    "name": "Interior do Valhalla"
+    "name": "Inside Valhalla"
   },
   "sec_pri": {
     "map_id": "sec_pri",
     "file": "sec_pri.rsw",
-    "name": "Sala da Meditação (Prisão do Valhalla)"
+    "name": "Room of Meditation (Valhalla Prison)"
   },
   "valkyrie": {
     "map_id": "valkyrie",
     "file": "valkyrie.rsw",
-    "name": "Hall das Valquírias"
+    "name": "Valkyrie Hall, the Hall of Honor"
   },
   "gefenia01": {
     "map_id": "gefenia01",
     "file": "gefenia01.rsw",
-    "name": "Gefenia"
+    "name": "Geffenia F1"
   },
   "gefenia02": {
     "map_id": "gefenia02",
     "file": "gefenia02.rsw",
-    "name": "Gefenia"
+    "name": "Geffenia F2"
   },
   "gefenia03": {
     "map_id": "gefenia03",
     "file": "gefenia03.rsw",
-    "name": "Gefenia"
+    "name": "Geffenia F3"
   },
   "gefenia04": {
     "map_id": "gefenia04",
     "file": "gefenia04.rsw",
-    "name": "Gefenia"
+    "name": "Geffenia F4"
   },
   "ein_dun02": {
     "map_id": "ein_dun02",
     "file": "ein_dun02.rsw",
-    "name": "Calabouço da Mina"
+    "name": "Einbech Mine F2"
   },
   "ein_dun01": {
     "map_id": "ein_dun01",
     "file": "ein_dun01.rsw",
-    "name": "Calabouço da Mina"
+    "name": "Einbech Mine F1"
   },
   "ein_fild10": {
     "map_id": "ein_fild10",
     "file": "ein_fild10.rsw",
-    "name": "Campos de Einbroch"
+    "name": "Einbroch Field 10"
   },
   "ein_fild09": {
     "map_id": "ein_fild09",
     "file": "ein_fild09.rsw",
-    "name": "Campos de Einbroch"
+    "name": "Einbroch Field 9"
   },
   "ein_fild08": {
     "map_id": "ein_fild08",
     "file": "ein_fild08.rsw",
-    "name": "Campos de Einbroch"
+    "name": "Einbroch Field 8"
   },
   "ein_fild07": {
     "map_id": "ein_fild07",
     "file": "ein_fild07.rsw",
-    "name": "Campos de Einbroch"
+    "name": "Einbroch Field 7"
   },
   "ein_fild06": {
     "map_id": "ein_fild06",
     "file": "ein_fild06.rsw",
-    "name": "Campos de Einbroch"
+    "name": "Einbroch Field 6"
   },
   "airplane": {
     "map_id": "airplane",
     "file": "airplane.rsw",
-    "name": "Aeroplano"
+    "name": "Airship"
   },
   "airport": {
     "map_id": "airport",
     "file": "airport.rsw",
-    "name": "Aeroporto"
+    "name": "Airport"
   },
   "ein_in01": {
     "map_id": "ein_in01",
     "file": "ein_in01.rsw",
-    "name": "Interior de Einbroch"
+    "name": "Inside Einbroch"
   },
   "einbech": {
     "map_id": "einbech",
     "file": "einbech.rsw",
-    "name": "Einbech, a vila mineradora"
+    "name": "Einbech, the Mining Village"
   },
   "einbroch": {
     "map_id": "einbroch",
     "file": "einbroch.rsw",
-    "name": "Einbroch, a cidade de aço"
+    "name": "Einbroch, the City of Steel"
   },
   "turbo_e_16": {
     "map_id": "turbo_e_16",
     "file": "turbo_e_16.rsw",
-    "name": "Estádio Turbo Track"
+    "name": "Turbo Track Stadium"
   },
   "turbo_e_8": {
     "map_id": "turbo_e_8",
     "file": "turbo_e_8.rsw",
-    "name": "Estádio Turbo Track"
+    "name": "Turbo Track Stadium"
   },
   "turbo_e_4": {
     "map_id": "turbo_e_4",
     "file": "turbo_e_4.rsw",
-    "name": "Estádio Turbo Track"
+    "name": "Turbo Track Stadium"
   },
   "turbo_n_16": {
     "map_id": "turbo_n_16",
     "file": "turbo_n_16.rsw",
-    "name": "Estádio Turbo Track"
+    "name": "Turbo Track Stadium"
   },
   "turbo_n_8": {
     "map_id": "turbo_n_8",
     "file": "turbo_n_8.rsw",
-    "name": "Estádio Turbo Track"
+    "name": "Turbo Track Stadium"
   },
   "turbo_n_4": {
     "map_id": "turbo_n_4",
     "file": "turbo_n_4.rsw",
-    "name": "Estádio Turbo Track"
+    "name": "Turbo Track Stadium"
   },
   "turbo_n_1": {
     "map_id": "turbo_n_1",
     "file": "turbo_n_1.rsw",
-    "name": "Estádio Turbo Track"
+    "name": "Turbo Track Stadium"
   },
   "turbo_room": {
     "map_id": "turbo_room",
     "file": "turbo_room.rsw",
-    "name": "Sala de Espera"
+    "name": "Waiting Room"
   },
   "yuno_fild12": {
     "map_id": "yuno_fild12",
     "file": "yuno_fild12.rsw",
-    "name": "Controle da Fronteira"
+    "name": "Border Checkpoint"
   },
   "yuno_fild11": {
     "map_id": "yuno_fild11",
     "file": "yuno_fild11.rsw",
-    "name": "Campos de Juno"
+    "name": "Yuno Field"
   },
   "yuno_fild09": {
     "map_id": "yuno_fild09",
     "file": "yuno_fild09.rsw",
-    "name": "Acampamento dos Guardas de Schwaltzwald"
+    "name": "Schwartzvald Guards Camp"
   },
   "yuno_fild08": {
     "map_id": "yuno_fild08",
     "file": "yuno_fild08.rsw",
-    "name": "Academia de Kiel Hyre"
+    "name": "Kiel Hyre's Academy"
   },
   "yuno_fild07": {
     "map_id": "yuno_fild07",
     "file": "yuno_fild07.rsw",
-    "name": "Desfiladeiro de El Mes (Vale do Abismo)"
+    "name": "El Mes Gorge (Valley of Abyss)"
   },
   "yuno_fild05": {
     "map_id": "yuno_fild05",
     "file": "yuno_fild05.rsw",
-    "name": "Planalto de El Mes"
+    "name": "El Mes Plateau"
   },
   "que_god02": {
     "map_id": "que_god02",
     "file": "que_god02.rsw",
-    "name": "Mapa da Missão"
+    "name": "Quest Map"
   },
   "que_god01": {
     "map_id": "que_god01",
     "file": "que_god01.rsw",
-    "name": "Mapa da Missão"
+    "name": "Quest Map"
   },
   "quiz_test": {
     "map_id": "quiz_test",
     "file": "quiz_test.rsw",
-    "name": "Salão do Desafio"
+    "name": "Quiz Hall"
   },
   "guild_vs4": {
     "map_id": "guild_vs4",
     "file": "guild_vs4.rsw",
-    "name": "championship3"
+    "name": "Guild Arena"
   },
   "rwc01": {
     "map_id": "rwc01",
     "file": "rwc01.rsw",
-    "name": "championship4"
+    "name": "Ragnarok World Championship Arena 1"
   },
   "rwc03": {
     "map_id": "rwc03",
     "file": "rwc03.rsw",
-    "name": "championship5"
+    "name": "Ragnarok World Championship Arena 3"
   },
   "que_job01": {
     "map_id": "que_job01",
     "file": "que_job01.rsw",
-    "name": "Taverna Particular"
+    "name": "Private Pub"
   },
   "abyss_01": {
     "map_id": "abyss_01",
     "file": "abyss_01.rsw",
-    "name": "Caverna Subterrânea do Lago do Abismo"
+    "name": "Abyss Lakes Underground Cave F1"
   },
   "abyss_02": {
     "map_id": "abyss_02",
     "file": "abyss_02.rsw",
-    "name": "Caverna Subterrânea do Lago do Abismo"
+    "name": "Abyss Lakes Underground Cave F2"
   },
   "abyss_03": {
     "map_id": "abyss_03",
     "file": "abyss_03.rsw",
-    "name": "Caverna Subterrânea do Lago do Abismo"
+    "name": "Abyss Lakes Underground Cave F3"
   },
   "tha_t01": {
     "map_id": "tha_t01",
     "file": "tha_t01.rsw",
-    "name": "Torre de Thanatos - Andar Inferior"
+    "name": "Thanatos Tower Lower Level - Museum entrance"
   },
   "tha_t02": {
     "map_id": "tha_t02",
     "file": "tha_t02.rsw",
-    "name": "Torre de Thanatos - Andar Inferior"
+    "name": "Thanatos Tower Lower Level - Museum"
   },
   "tha_t03": {
     "map_id": "tha_t03",
     "file": "tha_t03.rsw",
-    "name": "Torre de Thanatos - Andar Inferior"
+    "name": "Thanatos Tower Lower Level - Abandoned Place"
   },
   "tha_t04": {
     "map_id": "tha_t04",
     "file": "tha_t04.rsw",
-    "name": "Torre de Thanatos - Andar Inferior"
+    "name": "Thanatos Tower Lower Level - Abandoned Place"
   },
   "tha_t05": {
     "map_id": "tha_t05",
     "file": "tha_t05.rsw",
-    "name": "Torre de Thanatos - Andar Superior"
+    "name": "Thanatos Tower Upper Level"
   },
   "tha_t06": {
     "map_id": "tha_t06",
     "file": "tha_t06.rsw",
-    "name": "Torre de Thanatos - Andar Superior"
+    "name": "Thanatos Tower Upper Level"
   },
   "tha_t07": {
     "map_id": "tha_t07",
     "file": "tha_t07.rsw",
-    "name": "Torre de Thanatos - Andar Superior"
+    "name": "Thanatos Tower Upper Level - Room of Angel"
   },
   "tha_t08": {
     "map_id": "tha_t08",
     "file": "tha_t08.rsw",
-    "name": "Torre de Thanatos - Andar Superior"
+    "name": "Thanatos Tower Upper Level - Room of Angel"
   },
   "tha_t09": {
     "map_id": "tha_t09",
     "file": "tha_t09.rsw",
-    "name": "Torre de Thanatos - Andar Superior"
+    "name": "Thanatos Tower Upper Level - Room of Agony"
   },
   "tha_t10": {
     "map_id": "tha_t10",
     "file": "tha_t10.rsw",
-    "name": "Torre de Thanatos - Andar Superior"
+    "name": "Thanatos Tower Upper Level - Room of Sorrow"
   },
   "tha_t11": {
     "map_id": "tha_t11",
     "file": "tha_t11.rsw",
-    "name": "Torre de Thanatos - Andar Superior"
+    "name": "Thanatos Tower Upper Level - Room of Despair"
   },
   "tha_t12": {
     "map_id": "tha_t12",
     "file": "tha_t12.rsw",
-    "name": "Torre de Thanatos - Andar Superior"
+    "name": "Thanatos Tower Upper Level - Room of Hatred"
   },
   "thana_step": {
     "map_id": "thana_step",
     "file": "thana_step.rsw",
-    "name": "Torre de Thanatos - Andar Superior"
+    "name": "Thanatos Tower Upper Level - Stairs"
   },
   "thana_boss": {
     "map_id": "thana_boss",
     "file": "thana_boss.rsw",
-    "name": "Torre de Thanatos - Área Desconhecida"
+    "name": "Thanatos Tower - Unknown Place"
   },
   "thana_scene01": {
     "map_id": "thana_scene01",
@@ -2507,872 +2507,872 @@
   "job_soul": {
     "map_id": "job_soul",
     "file": "job_soul.rsw",
-    "name": "Seu Coração"
+    "name": "Your Heart"
   },
   "job_star": {
     "map_id": "job_star",
     "file": "job_star.rsw",
-    "name": "O Sol, a Lua e as Estrelas"
+    "name": "The Sun, the Moon and the Stars"
   },
   "hu_fild07": {
     "map_id": "hu_fild07",
     "file": "hu_fild07.rsw",
-    "name": "Campos de Hugel"
+    "name": "Hugel Field 7"
   },
   "hu_fild05": {
     "map_id": "hu_fild05",
     "file": "hu_fild05.rsw",
-    "name": "O Lago do Abismo"
+    "name": "Hugel Abyss Lake"
   },
   "hu_fild04": {
     "map_id": "hu_fild04",
     "file": "hu_fild04.rsw",
-    "name": "Campos de Hugel"
+    "name": "Hugel Field 4"
   },
   "hu_fild01": {
     "map_id": "hu_fild01",
     "file": "hu_fild01.rsw",
-    "name": "Torre de Thanatos"
+    "name": "Hugel Field 1"
   },
   "yuno_fild06": {
     "map_id": "yuno_fild06",
     "file": "yuno_fild06.rsw",
-    "name": "Planalto de El Mes"
+    "name": "El Mes Plateau"
   },
   "quiz_02": {
     "map_id": "quiz_02",
     "file": "quiz_02.rsw",
-    "name": "Arena de Perguntas"
+    "name": "Quiz Arena"
   },
   "jupe_cave": {
     "map_id": "jupe_cave",
     "file": "jupe_cave.rsw",
-    "name": "Entrada das Ruínas de Juperos"
+    "name": "Juperos Dungeon Entrance"
   },
   "juperos_01": {
     "map_id": "juperos_01",
     "file": "juperos_01.rsw",
-    "name": "Ruínas de Juperos"
+    "name": "The Ruins of Juperos F1"
   },
   "juperos_02": {
     "map_id": "juperos_02",
     "file": "juperos_02.rsw",
-    "name": "Ruínas de Juperos"
+    "name": "The Ruins of Juperos F2"
   },
   "jupe_gate": {
     "map_id": "jupe_gate",
     "file": "jupe_gate.rsw",
-    "name": "Juperos, Zona Restrita"
+    "name": "Juperos, Restricted Zone"
   },
   "jupe_area1": {
     "map_id": "jupe_area1",
     "file": "jupe_area1.rsw",
-    "name": "Juperos, Zona Restrita"
+    "name": "Juperos, Restricted Zone 1"
   },
   "jupe_area2": {
     "map_id": "jupe_area2",
     "file": "jupe_area2.rsw",
-    "name": "Juperos, Zona Restrita"
+    "name": "Juperos, Restricted Zone 2"
   },
   "jupe_ele": {
     "map_id": "jupe_ele",
     "file": "jupe_ele.rsw",
-    "name": "Elevador de Juperos"
+    "name": "Juperos Elevator"
   },
   "jupe_ele_r": {
     "map_id": "jupe_ele_r",
     "file": "jupe_ele_r.rsw",
-    "name": "Elevador de Juperos"
+    "name": "Juperos Elevator"
   },
   "jupe_core": {
     "map_id": "jupe_core",
     "file": "jupe_core.rsw",
-    "name": "Centro de Juperos"
+    "name": "Center of Juperos"
   },
   "lighthalzen": {
     "map_id": "lighthalzen",
     "file": "lighthalzen.rsw",
-    "name": "Lighthalzen, a Cidade-Estado da Prosperidade"
+    "name": "Lighthalzen, the City-State of Prosperity"
   },
   "lhz_in01": {
     "map_id": "lhz_in01",
     "file": "lhz_in01.rsw",
-    "name": "Sede da Corporação Rekenber"
+    "name": "Rekenber Corporation Headquarters"
   },
   "lhz_in02": {
     "map_id": "lhz_in02",
     "file": "lhz_in02.rsw",
-    "name": "Interior de Lighthalzen"
+    "name": "Inside Lighthalzen"
   },
   "lhz_in03": {
     "map_id": "lhz_in03",
     "file": "lhz_in03.rsw",
-    "name": "Interior de Lighthalzen"
+    "name": "Inside Lighthalzen"
   },
   "lhz_cube": {
     "map_id": "lhz_cube",
     "file": "lhz_cube.rsw",
-    "name": "Sala Cênica"
+    "name": "Cube Room"
   },
   "lhz_que01": {
     "map_id": "lhz_que01",
     "file": "lhz_que01.rsw",
-    "name": "Interior de Lighthalzen"
+    "name": "Inside Lighthalzen"
   },
   "lhz_airport": {
     "map_id": "lhz_airport",
     "file": "lhz_airport.rsw",
-    "name": "Aeroporto de Lighthalzen"
+    "name": "Lighthalzen Airport"
   },
   "airplane_01": {
     "map_id": "airplane_01",
     "file": "airplane_01.rsw",
-    "name": "Aeroplano"
+    "name": "Airship"
   },
   "lhz_dun01": {
     "map_id": "lhz_dun01",
     "file": "lhz_dun01.rsw",
-    "name": "Laboratório de Somatologia"
+    "name": "Somatology Laboratory F1"
   },
   "lhz_dun02": {
     "map_id": "lhz_dun02",
     "file": "lhz_dun02.rsw",
-    "name": "Laboratório de Somatologia"
+    "name": "Somatology Laboratory F2"
   },
   "lhz_dun03": {
     "map_id": "lhz_dun03",
     "file": "lhz_dun03.rsw",
-    "name": "Laboratório de Somatologia"
+    "name": "Somatology Laboratory F3"
   },
   "lhz_fild01": {
     "map_id": "lhz_fild01",
     "file": "lhz_fild01.rsw",
-    "name": "Campos de Lighthalzen"
+    "name": "Lighthalzen Field 1"
   },
   "yuno_pre": {
     "map_id": "yuno_pre",
     "file": "yuno_pre.rsw",
-    "name": "Sede do Governo de Schwaltzwald"
+    "name": "Schwartzvald Government Buildings"
   },
   "y_airport": {
     "map_id": "y_airport",
     "file": "y_airport.rsw",
-    "name": "Aeroporto de Juno"
+    "name": "Yuno Airport"
   },
   "lhz_fild03": {
     "map_id": "lhz_fild03",
     "file": "lhz_fild03.rsw",
-    "name": "Campos de Lighthalzen"
+    "name": "Lighthalzen Field 3"
   },
   "lhz_fild02": {
     "map_id": "lhz_fild02",
     "file": "lhz_fild02.rsw",
-    "name": "Campos de Lighthalzen (Vale da Morte)"
+    "name": "Lighthalzen Field 2 (Grim Reaper's Valley)"
   },
   "ein_fild04": {
     "map_id": "ein_fild04",
     "file": "ein_fild04.rsw",
-    "name": "Campos de Einbroch"
+    "name": "Einbroch Field 4"
   },
   "ein_fild03": {
     "map_id": "ein_fild03",
     "file": "ein_fild03.rsw",
-    "name": "Campos de Einbroch"
+    "name": "Einbroch Field 3"
   },
   "hugel": {
     "map_id": "hugel",
     "file": "hugel.rsw",
-    "name": "Hugel, a Vila do Jardim Fantástico"
+    "name": "Hugel, the Quaint Garden Village"
   },
   "hu_in01": {
     "map_id": "hu_in01",
     "file": "hu_in01.rsw",
-    "name": "Interior de Hugel"
+    "name": "Inside Hugel"
   },
   "que_bingo": {
     "map_id": "que_bingo",
     "file": "que_bingo.rsw",
-    "name": "Sala do Bingo"
+    "name": "Bingo Game Room"
   },
   "que_hugel": {
     "map_id": "que_hugel",
     "file": "que_hugel.rsw",
-    "name": "Subterrâneos do Santuário de Odin"
+    "name": "Odin Shrine's Underground"
   },
   "p_track01": {
     "map_id": "p_track01",
     "file": "p_track01.rsw",
-    "name": "Arena da Corrida de Monstros"
+    "name": "Monster Race Arena"
   },
   "p_track02": {
     "map_id": "p_track02",
     "file": "p_track02.rsw",
-    "name": "Arena da Corrida de Monstros"
+    "name": "Monster Race Arena"
   },
   "odin_tem01": {
     "map_id": "odin_tem01",
     "file": "odin_tem01.rsw",
-    "name": "Santuário de Odin"
+    "name": "Odin Shrine F1"
   },
   "odin_tem02": {
     "map_id": "odin_tem02",
     "file": "odin_tem02.rsw",
-    "name": "Santuário de Odin"
+    "name": "Odin Shrine F2"
   },
   "odin_tem03": {
     "map_id": "odin_tem03",
     "file": "odin_tem03.rsw",
-    "name": "Santuário de Odin"
+    "name": "Odin Shrine F3"
   },
   "hu_fild02": {
     "map_id": "hu_fild02",
     "file": "hu_fild02.rsw",
-    "name": "Campos de Hugel"
+    "name": "Hugel Field"
   },
   "hu_fild03": {
     "map_id": "hu_fild03",
     "file": "hu_fild03.rsw",
-    "name": "Campo de Caça"
+    "name": "Hunting Ground"
   },
   "hu_fild06": {
     "map_id": "hu_fild06",
     "file": "hu_fild06.rsw",
-    "name": "Campos de Hugel"
+    "name": "Hugel Field"
   },
   "ein_fild01": {
     "map_id": "ein_fild01",
     "file": "ein_fild01.rsw",
-    "name": "Campos de Einbroch"
+    "name": "Einbroch Field 1"
   },
   "ein_fild02": {
     "map_id": "ein_fild02",
     "file": "ein_fild02.rsw",
-    "name": "Campos de Einbroch"
+    "name": "Einbroch Field 2"
   },
   "ein_fild05": {
     "map_id": "ein_fild05",
     "file": "ein_fild05.rsw",
-    "name": "Campos de Einbroch"
+    "name": "Einbroch Field 5"
   },
   "yuno_fild10": {
     "map_id": "yuno_fild10",
     "file": "yuno_fild10.rsw",
-    "name": "Campos de Juno"
+    "name": "Yuno Field"
   },
   "kh_kiehl02": {
     "map_id": "kh_kiehl02",
     "file": "kh_kiehl02.rsw",
-    "name": "Aposentos de Kiehl"
+    "name": "Kiel's Room"
   },
   "kh_kiehl01": {
     "map_id": "kh_kiehl01",
     "file": "kh_kiehl01.rsw",
-    "name": "Aposentos de Kiehl"
+    "name": "Kiel's Room"
   },
   "kh_dun02": {
     "map_id": "kh_dun02",
     "file": "kh_dun02.rsw",
-    "name": "Fábrica de Robô - Nível 2"
+    "name": "Robot Factory F2"
   },
   "kh_dun01": {
     "map_id": "kh_dun01",
     "file": "kh_dun01.rsw",
-    "name": "Fábrica de Robô - Nível 1"
+    "name": "Robot Factory F1"
   },
   "kh_mansion": {
     "map_id": "kh_mansion",
     "file": "kh_mansion.rsw",
-    "name": "Mansão de Kiel Hyre"
+    "name": "Kiel Hyre's Mansion"
   },
   "kh_rossi": {
     "map_id": "kh_rossi",
     "file": "kh_rossi.rsw",
-    "name": "A Mansão Rosimier"
+    "name": "The Rosimier's Mansion"
   },
   "kh_school": {
     "map_id": "kh_school",
     "file": "kh_school.rsw",
-    "name": "Academia Kiel Hyre"
+    "name": "Kiel Hyre's Academy"
   },
   "kh_vila": {
     "map_id": "kh_vila",
     "file": "kh_vila.rsw",
-    "name": "Cabana de Kiel Hyre"
+    "name": "Kiel Hyre's Cottage"
   },
   "auction_01": {
     "map_id": "auction_01",
     "file": "auction_01.rsw",
-    "name": "Sala de Leilão"
+    "name": "Auction Hall"
   },
   "auction_02": {
     "map_id": "auction_02",
     "file": "auction_02.rsw",
-    "name": "Ordem dos Exploradores"
+    "name": "Auction Hall"
   },
   "06guild_r": {
     "map_id": "06guild_r",
     "file": "06guild_r.rsw",
-    "name": "Arena de Batalha de Clã - Sala de Espera"
+    "name": "Guild Arena Waiting Room"
   },
   "06guild_01": {
     "map_id": "06guild_01",
     "file": "06guild_01.rsw",
-    "name": "Arena de Batalha de Clã"
+    "name": "Guild Arena"
   },
   "06guild_02": {
     "map_id": "06guild_02",
     "file": "06guild_02.rsw",
-    "name": "Arena de Batalha de Clã"
+    "name": "Guild Arena"
   },
   "06guild_03": {
     "map_id": "06guild_03",
     "file": "06guild_03.rsw",
-    "name": "Arena de Batalha de Clã"
+    "name": "Guild Arena"
   },
   "06guild_04": {
     "map_id": "06guild_04",
     "file": "06guild_04.rsw",
-    "name": "Arena de Batalha de Clã"
+    "name": "Guild Arena"
   },
   "06guild_05": {
     "map_id": "06guild_05",
     "file": "06guild_05.rsw",
-    "name": "Arena de Batalha de Clã"
+    "name": "Guild Arena"
   },
   "06guild_06": {
     "map_id": "06guild_06",
     "file": "06guild_06.rsw",
-    "name": "Arena de Batalha de Clã"
+    "name": "Guild Arena"
   },
   "06guild_07": {
     "map_id": "06guild_07",
     "file": "06guild_07.rsw",
-    "name": "Arena de Batalha de Clã"
+    "name": "Guild Arena"
   },
   "06guild_08": {
     "map_id": "06guild_08",
     "file": "06guild_08.rsw",
-    "name": "Arena de Batalha de Clã"
+    "name": "Guild Arena"
   },
   "rachel": {
     "map_id": "rachel",
     "file": "rachel.rsw",
-    "name": "Capital de Arunafeltz, Rachel"
+    "name": "Rachel, Capital of Arunafelz, the Study Nation"
   },
   "ra_in01": {
     "map_id": "ra_in01",
     "file": "ra_in01.rsw",
-    "name": "Interior de Rachel"
+    "name": "Inside Rachel"
   },
   "ra_temple": {
     "map_id": "ra_temple",
     "file": "ra_temple.rsw",
-    "name": "Templo de Freya - Cheshrumnir"
+    "name": "Freya's Grand Temple (Sesilmir)"
   },
   "ra_temin": {
     "map_id": "ra_temin",
     "file": "ra_temin.rsw",
-    "name": "Interior do Templo"
+    "name": "Inside Rachel Sanctuary"
   },
   "que_rachel": {
     "map_id": "que_rachel",
     "file": "que_rachel.rsw",
-    "name": "Interior do Templo"
+    "name": "Inside Freya's Temple"
   },
   "ra_temsky": {
     "map_id": "ra_temsky",
     "file": "ra_temsky.rsw",
-    "name": "Escritório da Papisa - Os Jardins Sagrados"
+    "name": "Pope's Room (Sky Garden)"
   },
   "ra_fild01": {
     "map_id": "ra_fild01",
     "file": "ra_fild01.rsw",
-    "name": "Pradaria Audhumbla"
+    "name": "Audumra Grass Land"
   },
   "ra_fild02": {
     "map_id": "ra_fild02",
     "file": "ra_fild02.rsw",
-    "name": "Cânion"
+    "name": "Oz Gorge"
   },
   "ra_fild03": {
     "map_id": "ra_fild03",
     "file": "ra_fild03.rsw",
-    "name": "Planície de Ida"
+    "name": "Ida Plane"
   },
   "ra_fild04": {
     "map_id": "ra_fild04",
     "file": "ra_fild04.rsw",
-    "name": "Pradaria Audhumbla"
+    "name": "Audumra Grass Land"
   },
   "ra_fild05": {
     "map_id": "ra_fild05",
     "file": "ra_fild05.rsw",
-    "name": "Pradaria Audhumbla"
+    "name": "Audumra Grass Land"
   },
   "ra_fild06": {
     "map_id": "ra_fild06",
     "file": "ra_fild06.rsw",
-    "name": "Portus Luna"
+    "name": "Fortu Luna"
   },
   "ra_fild07": {
     "map_id": "ra_fild07",
     "file": "ra_fild07.rsw",
-    "name": "Cânion"
+    "name": "Oz Gorge"
   },
   "ra_fild08": {
     "map_id": "ra_fild08",
     "file": "ra_fild08.rsw",
-    "name": "Planície de Ida"
+    "name": "Ida Plane"
   },
   "ra_fild09": {
     "map_id": "ra_fild09",
     "file": "ra_fild09.rsw",
-    "name": "Pradaria Audhumbla"
+    "name": "Audumra Grass Land"
   },
   "ra_fild10": {
     "map_id": "ra_fild10",
     "file": "ra_fild10.rsw",
-    "name": "Cânion"
+    "name": "Oz Gorge"
   },
   "ra_fild11": {
     "map_id": "ra_fild11",
     "file": "ra_fild11.rsw",
-    "name": "Planície de Ida"
+    "name": "Ida Plane"
   },
   "ra_fild12": {
     "map_id": "ra_fild12",
     "file": "ra_fild12.rsw",
-    "name": "Planície de Ida"
+    "name": "Ida Plane"
   },
   "ra_fild13": {
     "map_id": "ra_fild13",
     "file": "ra_fild13.rsw",
-    "name": "Costa das Lágrimas"
+    "name": "Beach of Tears"
   },
   "ra_san01": {
     "map_id": "ra_san01",
     "file": "ra_san01.rsw",
-    "name": "Santuário"
+    "name": "Freya's Sacred Precinct F1"
   },
   "ra_san02": {
     "map_id": "ra_san02",
     "file": "ra_san02.rsw",
-    "name": "Santuário"
+    "name": "Freya's Sacred Precinct F2"
   },
   "ra_san03": {
     "map_id": "ra_san03",
     "file": "ra_san03.rsw",
-    "name": "Santuário"
+    "name": "Freya's Sacred Precinct F3"
   },
   "ra_san04": {
     "map_id": "ra_san04",
     "file": "ra_san04.rsw",
-    "name": "Santuário"
+    "name": "Freya's Sacred Precinct F4"
   },
   "ra_san05": {
     "map_id": "ra_san05",
     "file": "ra_san05.rsw",
-    "name": "Santuário"
+    "name": "Freya's Sacred Precinct F5"
   },
   "ice_dun01": {
     "map_id": "ice_dun01",
     "file": "ice_dun01.rsw",
-    "name": "Caverna de Gelo"
+    "name": "Rachel Ice Cave F1"
   },
   "ice_dun02": {
     "map_id": "ice_dun02",
     "file": "ice_dun02.rsw",
-    "name": "Caverna de Gelo"
+    "name": "Rachel Ice Cave F2"
   },
   "ice_dun03": {
     "map_id": "ice_dun03",
     "file": "ice_dun03.rsw",
-    "name": "Caverna de Gelo"
+    "name": "Rachel Ice Cave F3"
   },
   "ice_dun04": {
     "map_id": "ice_dun04",
     "file": "ice_dun04.rsw",
-    "name": "Caverna de Gelo"
+    "name": "Rachel Ice Cave - Sealed Space"
   },
   "veins": {
     "map_id": "veins",
     "file": "veins.rsw",
-    "name": "Veins"
+    "name": "Veins, the Canyon Village"
   },
   "ve_in": {
     "map_id": "ve_in",
     "file": "ve_in.rsw",
-    "name": "Interior de Veins"
+    "name": "Inside Veins"
   },
   "ve_in02": {
     "map_id": "ve_in02",
     "file": "ve_in02.rsw",
-    "name": "Interior de Veins"
+    "name": "Inside Veins"
   },
   "ve_fild01": {
     "map_id": "ve_fild01",
     "file": "ve_fild01.rsw",
-    "name": "Campo de Veins"
+    "name": "Veins Field 1"
   },
   "ve_fild02": {
     "map_id": "ve_fild02",
     "file": "ve_fild02.rsw",
-    "name": "Campo de Veins"
+    "name": "Veins Field 2"
   },
   "ve_fild03": {
     "map_id": "ve_fild03",
     "file": "ve_fild03.rsw",
-    "name": "Campo de Veins"
+    "name": "Veins Field 3"
   },
   "ve_fild04": {
     "map_id": "ve_fild04",
     "file": "ve_fild04.rsw",
-    "name": "Campo de Veins"
+    "name": "Veins Field 4"
   },
   "ve_fild05": {
     "map_id": "ve_fild05",
     "file": "ve_fild05.rsw",
-    "name": "Campo de Veins"
+    "name": "Veins Field 5"
   },
   "ve_fild06": {
     "map_id": "ve_fild06",
     "file": "ve_fild06.rsw",
-    "name": "Campo de Veins"
+    "name": "Veins Field 6"
   },
   "ve_fild07": {
     "map_id": "ve_fild07",
     "file": "ve_fild07.rsw",
-    "name": "Campo de Veins"
+    "name": "Veins Field 7"
   },
   "thor_camp": {
     "map_id": "thor_camp",
     "file": "thor_camp.rsw",
-    "name": "Acampamento do Vulcão de Thor"
+    "name": "Thor Volcano Camp"
   },
   "que_thor": {
     "map_id": "que_thor",
     "file": "que_thor.rsw",
-    "name": "Vulcão de Thor"
+    "name": "Thor Volcano Dungeon"
   },
   "thor_v01": {
     "map_id": "thor_v01",
     "file": "thor_v01.rsw",
-    "name": "Vulcão de Thor"
+    "name": "Thor Volcano Dungeon"
   },
   "thor_v02": {
     "map_id": "thor_v02",
     "file": "thor_v02.rsw",
-    "name": "Vulcão de Thor"
+    "name": "Thor Volcano Dungeon"
   },
   "thor_v03": {
     "map_id": "thor_v03",
     "file": "thor_v03.rsw",
-    "name": "Vulcão de Thor"
+    "name": "Thor Volcano Dungeon"
   },
   "que_qsch01": {
     "map_id": "que_qsch01",
     "file": "que_qsch01.rsw",
-    "name": "Visão de Okolnir"
+    "name": "Fallacious Okolnir"
   },
   "que_qsch02": {
     "map_id": "que_qsch02",
     "file": "que_qsch02.rsw",
-    "name": "Visão de Okolnir"
+    "name": "Fallacious Okolnir"
   },
   "que_qsch03": {
     "map_id": "que_qsch03",
     "file": "que_qsch03.rsw",
-    "name": "Visão de Okolnir"
+    "name": "Fallacious Okolnir"
   },
   "que_qsch04": {
     "map_id": "que_qsch04",
     "file": "que_qsch04.rsw",
-    "name": "Visão de Okolnir"
+    "name": "Fallacious Okolnir"
   },
   "que_qsch05": {
     "map_id": "que_qsch05",
     "file": "que_qsch05.rsw",
-    "name": "Visão de Okolnir"
+    "name": "Fallacious Okolnir"
   },
   "que_qaru01": {
     "map_id": "que_qaru01",
     "file": "que_qaru01.rsw",
-    "name": "Visão de Okolnir"
+    "name": "Fallacious Okolnir"
   },
   "que_qaru02": {
     "map_id": "que_qaru02",
     "file": "que_qaru02.rsw",
-    "name": "Visão de Okolnir"
+    "name": "Fallacious Okolnir"
   },
   "que_qaru03": {
     "map_id": "que_qaru03",
     "file": "que_qaru03.rsw",
-    "name": "Visão de Okolnir"
+    "name": "Fallacious Okolnir"
   },
   "que_qaru04": {
     "map_id": "que_qaru04",
     "file": "que_qaru04.rsw",
-    "name": "Visão de Okolnir"
+    "name": "Fallacious Okolnir"
   },
   "que_qaru05": {
     "map_id": "que_qaru05",
     "file": "que_qaru05.rsw",
-    "name": "Visão de Okolnir"
+    "name": "Fallacious Okolnir"
   },
   "arug_cas01": {
     "map_id": "arug_cas01",
     "file": "arug_cas01.rsw",
-    "name": "Mardol"
+    "name": "Mardol Castle"
   },
   "arug_cas02": {
     "map_id": "arug_cas02",
     "file": "arug_cas02.rsw",
-    "name": "Syr"
+    "name": "Cyr Castle"
   },
   "arug_cas03": {
     "map_id": "arug_cas03",
     "file": "arug_cas03.rsw",
-    "name": "Horn"
+    "name": "Horn Castle"
   },
   "arug_cas04": {
     "map_id": "arug_cas04",
     "file": "arug_cas04.rsw",
-    "name": "Gefn"
+    "name": "Gefn Castle"
   },
   "arug_cas05": {
     "map_id": "arug_cas05",
     "file": "arug_cas05.rsw",
-    "name": "Vanadis"
+    "name": "Banadis Castle"
   },
   "aru_gld": {
     "map_id": "aru_gld",
     "file": "aru_gld.rsw",
-    "name": "Feudo de Valfreyja"
+    "name": "Valfreyja"
   },
   "schg_cas01": {
     "map_id": "schg_cas01",
     "file": "schg_cas01.rsw",
-    "name": "Himinn"
+    "name": "Himinn Castle"
   },
   "schg_cas02": {
     "map_id": "schg_cas02",
     "file": "schg_cas02.rsw",
-    "name": "Andlangr"
+    "name": "Andlangr Castle"
   },
   "schg_cas03": {
     "map_id": "schg_cas03",
     "file": "schg_cas03.rsw",
-    "name": "Vidblainn"
+    "name": "Vidblainn Castle"
   },
   "schg_cas04": {
     "map_id": "schg_cas04",
     "file": "schg_cas04.rsw",
-    "name": "Hljod"
+    "name": "Hljod Castle"
   },
   "schg_cas05": {
     "map_id": "schg_cas05",
     "file": "schg_cas05.rsw",
-    "name": "Skatyrnir"
+    "name": "Skidbladnir Castle"
   },
   "sch_gld": {
     "map_id": "sch_gld",
     "file": "sch_gld.rsw",
-    "name": "Feudo de Nithafjoll"
+    "name": "Nidhoggur"
   },
   "bossnia_01": {
     "map_id": "bossnia_01",
     "file": "bossnia_01.rsw",
-    "name": "Cheffênia"
+    "name": "Bossnia"
   },
   "bossnia_02": {
     "map_id": "bossnia_02",
     "file": "bossnia_02.rsw",
-    "name": "Cheffênia"
+    "name": "Bossnia"
   },
   "bossnia_03": {
     "map_id": "bossnia_03",
     "file": "bossnia_03.rsw",
-    "name": "Cheffênia"
+    "name": "Bossnia"
   },
   "bossnia_04": {
     "map_id": "bossnia_04",
     "file": "bossnia_04.rsw",
-    "name": "Cheffênia"
+    "name": "Bossnia"
   },
   "itemmall": {
     "map_id": "itemmall",
     "file": "itemmall.rsw",
-    "name": "Mercado"
+    "name": "Kafra Shop"
   },
   "poring_w01": {
     "map_id": "poring_w01",
     "file": "poring_w01.rsw",
-    "name": "Guerra Poring - Sala de Espera"
+    "name": "Poring War Waiting Room"
   },
   "poring_w02": {
     "map_id": "poring_w02",
     "file": "poring_w02.rsw",
-    "name": "Guerra Poring"
+    "name": "Poring War Market"
   },
   "nameless_i": {
     "map_id": "nameless_i",
     "file": "nameless_i.rsw",
-    "name": "Ilha Esquecida"
+    "name": "Nameless Island Entrance"
   },
   "nameless_n": {
     "map_id": "nameless_n",
     "file": "nameless_n.rsw",
-    "name": "Ilha Esquecida"
+    "name": "Nameless Island Entrance"
   },
   "nameless_in": {
     "map_id": "nameless_in",
     "file": "nameless_in.rsw",
-    "name": "Interior da Ilha Esquecida"
+    "name": "Inside Nameless Island"
   },
   "abbey01": {
     "map_id": "abbey01",
     "file": "abbey01.rsw",
-    "name": "Monastério"
+    "name": "Cursed Abbey Dungeon F1"
   },
   "abbey02": {
     "map_id": "abbey02",
     "file": "abbey02.rsw",
-    "name": "Monastério"
+    "name": "Cursed Abbey Dungeon F2"
   },
   "abbey03": {
     "map_id": "abbey03",
     "file": "abbey03.rsw",
-    "name": "Monastério"
+    "name": "Cursed Abbey Dungeon F3"
   },
   "que_temsky": {
     "map_id": "que_temsky",
     "file": "que_temsky.rsw",
-    "name": "Sala da Papisa - Jardim do Paraíso"
+    "name": "Pope's Room (Sky Garden)"
   },
   "z_agit": {
     "map_id": "z_agit",
     "file": "z_agit.rsw",
-    "name": "Esconderijo da Gangue Z"
+    "name": "Z Gang's Hideout"
   },
   "moscovia": {
     "map_id": "moscovia",
     "file": "moscovia.rsw",
-    "name": "Moscóvia"
+    "name": "Moscovia"
   },
   "mosk_in": {
     "map_id": "mosk_in",
     "file": "mosk_in.rsw",
-    "name": "Interior de Moscóvia"
+    "name": "Inside Moscovia"
   },
   "mosk_ship": {
     "map_id": "mosk_ship",
     "file": "mosk_ship.rsw",
-    "name": "Navio"
+    "name": "Charabel"
   },
   "mosk_fild01": {
     "map_id": "mosk_fild01",
     "file": "mosk_fild01.rsw",
-    "name": "Ilha Baleia"
+    "name": "Okrestnosti Of Moscovia"
   },
   "mosk_fild02": {
     "map_id": "mosk_fild02",
     "file": "mosk_fild02.rsw",
-    "name": "Campo de Moscóvia"
+    "name": "Okrestnosti Of Moscovia"
   },
   "mosk_dun01": {
     "map_id": "mosk_dun01",
     "file": "mosk_dun01.rsw",
-    "name": "Floresta Encantada 1"
+    "name": "Les Forest"
   },
   "mosk_dun02": {
     "map_id": "mosk_dun02",
     "file": "mosk_dun02.rsw",
-    "name": "Floresta Encantada 2"
+    "name": "Temny Forest"
   },
   "mosk_dun03": {
     "map_id": "mosk_dun03",
     "file": "mosk_dun03.rsw",
-    "name": "Floresta Encantada 3"
+    "name": "Dremuci Forest"
   },
   "cave": {
     "map_id": "cave",
     "file": "cave.rsw",
-    "name": "Caverna"
+    "name": "Cave Village"
   },
   "moc_fild20": {
     "map_id": "moc_fild20",
     "file": "moc_fild20.rsw",
-    "name": "Ruptura Dimensional"
+    "name": "Sograt Desert - Dimensional Rift"
   },
   "moc_fild21": {
     "map_id": "moc_fild21",
     "file": "moc_fild21.rsw",
-    "name": "Ruptura Dimensional"
+    "name": "Sograt Desert - Dimensional Rift"
   },
   "moc_fild22": {
     "map_id": "moc_fild22",
     "file": "moc_fild22.rsw",
-    "name": "Ruptura Dimensional"
+    "name": "Sograt Desert - Dimensional Rift"
   },
   "1@cata": {
     "map_id": "1@cata",
     "file": "1@cata.rsw",
-    "name": "Catacumba"
+    "name": "Catacombs"
   },
   "2@cata": {
     "map_id": "2@cata",
     "file": "2@cata.rsw",
-    "name": "Altar do Selo"
+    "name": "Sealed Shrine"
   },
   "e_tower": {
     "map_id": "e_tower",
     "file": "e_tower.rsw",
-    "name": "Ilha Misty"
+    "name": "Misty Island"
   },
   "1@tower": {
     "map_id": "1@tower",
     "file": "1@tower.rsw",
-    "name": "Torre Sem Fim"
+    "name": "Endless Tower"
   },
   "2@tower": {
     "map_id": "2@tower",
     "file": "2@tower.rsw",
-    "name": "Torre Sem Fim"
+    "name": "Endless Tower"
   },
   "3@tower": {
     "map_id": "3@tower",
     "file": "3@tower.rsw",
-    "name": "Torre Sem Fim"
+    "name": "Endless Tower"
   },
   "4@tower": {
     "map_id": "4@tower",
     "file": "4@tower.rsw",
-    "name": "Torre Sem Fim"
+    "name": "Endless Tower"
   },
   "5@tower": {
     "map_id": "5@tower",
     "file": "5@tower.rsw",
-    "name": "Torre Sem Fim"
+    "name": "Endless Tower"
   },
   "6@tower": {
     "map_id": "6@tower",
     "file": "6@tower.rsw",
-    "name": "Torre Sem Fim (Área Desconhecida)"
+    "name": "Endless Tower (Unknown Area)"
   },
   "bat_room": {
     "map_id": "bat_room",
     "file": "bat_room.rsw",
-    "name": "Sala de Espera do Campo de Batalha"
+    "name": "Battlegrounds Waiting Room"
   },
   "bat_a01": {
     "map_id": "bat_a01",
     "file": "bat_a01.rsw",
-    "name": "Desfiladeiro Tierra"
+    "name": "Tierra Valley"
   },
   "bat_a02": {
     "map_id": "bat_a02",
     "file": "bat_a02.rsw",
-    "name": "Desfiladeiro Tierra"
+    "name": "Tierra Valley"
   },
   "bat_b01": {
     "map_id": "bat_b01",
@@ -3387,177 +3387,177 @@
   "bat_c01": {
     "map_id": "bat_c01",
     "file": "bat_c01.rsw",
-    "name": "Krieger von Midgard"
+    "name": "Kreiger Von Midgard"
   },
   "bat_c02": {
     "map_id": "bat_c02",
     "file": "bat_c02.rsw",
-    "name": "Krieger von Midgard"
+    "name": "Kreiger Von Midgard"
   },
   "bat_c03": {
     "map_id": "bat_c03",
     "file": "bat_c03.rsw",
-    "name": "Krieger von Midgard"
+    "name": "Kreiger Von Midgard"
   },
   "mid_camp": {
     "map_id": "mid_camp",
     "file": "mid_camp.rsw",
-    "name": "Acampamento da Expedição da Aliança"
+    "name": "Midgard Expedition Camp"
   },
   "mid_campin": {
     "map_id": "mid_campin",
     "file": "mid_campin.rsw",
-    "name": "Acampamento da Expedição da Aliança"
+    "name": "Inside Midgard Expedition Camp"
   },
   "man_fild01": {
     "map_id": "man_fild01",
     "file": "man_fild01.rsw",
-    "name": "Montanhas dos Manuk"
+    "name": "Manuk Field 1"
   },
   "man_fild03": {
     "map_id": "man_fild03",
     "file": "man_fild03.rsw",
-    "name": "Montanhas dos Manuk"
+    "name": "Manuk Field 3"
   },
   "spl_fild02": {
     "map_id": "spl_fild02",
     "file": "spl_fild02.rsw",
-    "name": "Campos dos Esplendores"
+    "name": "Splendide Field 2"
   },
   "spl_fild03": {
     "map_id": "spl_fild03",
     "file": "spl_fild03.rsw",
-    "name": "Campos dos Esplendores"
+    "name": "Splendide Field 3"
   },
   "moc_fild22b": {
     "map_id": "moc_fild22b",
     "file": "moc_fild22b.rsw",
-    "name": "Fenda Dimensional"
+    "name": "Dimensional Gorge"
   },
   "que_dan01": {
     "map_id": "que_dan01",
     "file": "que_dan01.rsw",
-    "name": "Campos de Hugel"
+    "name": "Hugel Field"
   },
   "que_dan02": {
     "map_id": "que_dan02",
     "file": "que_dan02.rsw",
-    "name": "Interior da Casa Abandonada de Juno"
+    "name": "Inside of the Abandoned House in Yuno"
   },
   "schg_que01": {
     "map_id": "schg_que01",
     "file": "schg_que01.rsw",
-    "name": "Pradaria de Morestone"
+    "name": "Morestone Prairie"
   },
   "schg_dun01": {
     "map_id": "schg_dun01",
     "file": "schg_dun01.rsw",
-    "name": "Calabouço Subterrâneo de Castelo"
+    "name": "Schwartzvald Guild Dungeon"
   },
   "arug_que01": {
     "map_id": "arug_que01",
     "file": "arug_que01.rsw",
-    "name": "Pradaria de Morestone"
+    "name": "Morestone Prairie"
   },
   "arug_dun01": {
     "map_id": "arug_dun01",
     "file": "arug_dun01.rsw",
-    "name": "Calabouço Subterrâneo de Castelo"
+    "name": "Arunafeltz Guild Dungeon"
   },
   "1@orcs": {
     "map_id": "1@orcs",
     "file": "1@orcs.rsw",
-    "name": "Caverna Subterrânea de Orcs"
+    "name": "Subterranean Orc Cave F1"
   },
   "2@orcs": {
     "map_id": "2@orcs",
     "file": "2@orcs.rsw",
-    "name": "Caverna Subterrânea de Orcs"
+    "name": "Subterranean Orc Cave F2"
   },
   "evt_hello": {
     "map_id": "evt_hello",
     "file": "evt_hello.rsw",
-    "name": "Campo Morto"
+    "name": "Dead Angel's landing"
   },
   "1@nyd": {
     "map_id": "1@nyd",
     "file": "1@nyd.rsw",
-    "name": "Ninho de Nidhogg"
+    "name": "Nidhoggr's Nest F1"
   },
   "2@nyd": {
     "map_id": "2@nyd",
     "file": "2@nyd.rsw",
-    "name": "Ninho de Nidhogg"
+    "name": "Nidhoggr's Nest F2"
   },
   "nyd_dun01": {
     "map_id": "nyd_dun01",
     "file": "nyd_dun01.rsw",
-    "name": "A Grande Ferida"
+    "name": "Yggdrasil Root F1"
   },
   "nyd_dun02": {
     "map_id": "nyd_dun02",
     "file": "nyd_dun02.rsw",
-    "name": "A Grande Ferida"
+    "name": "Yggdrasil Root F2"
   },
   "manuk": {
     "map_id": "manuk",
     "file": "manuk.rsw",
-    "name": "Vila Mineradora Manuka"
+    "name": "Manuk Mining Camp"
   },
   "man_fild02": {
     "map_id": "man_fild02",
     "file": "man_fild02.rsw",
-    "name": "Montanhas dos Manuk"
+    "name": "Manuk Field 2"
   },
   "man_in01": {
     "map_id": "man_in01",
     "file": "man_in01.rsw",
-    "name": "Dentro da Vila Mineradora"
+    "name": "Inside Manuk"
   },
   "splendide": {
     "map_id": "splendide",
     "file": "splendide.rsw",
-    "name": "Base dos Esplêndidos, Esplendor"
+    "name": "Splendide"
   },
   "spl_fild01": {
     "map_id": "spl_fild01",
     "file": "spl_fild01.rsw",
-    "name": "Campos dos Esplendores"
+    "name": "Splendide Field 1"
   },
   "spl_in01": {
     "map_id": "spl_in01",
     "file": "spl_in01.rsw",
-    "name": "Dentro de Esplendor"
+    "name": "Inside Splendide"
   },
   "spl_in02": {
     "map_id": "spl_in02",
     "file": "spl_in02.rsw",
-    "name": "Dentro de Esplendor"
+    "name": "Inside Splendide"
   },
   "brasilis": {
     "map_id": "brasilis",
     "file": "brasilis.rsw",
-    "name": "Cidade de Brasilis"
+    "name": "Brasilis"
   },
   "bra_in01": {
     "map_id": "bra_in01",
     "file": "bra_in01.rsw",
-    "name": "Interior de Brasilis"
+    "name": "Inside Brasilis"
   },
   "bra_fild01": {
     "map_id": "bra_fild01",
     "file": "bra_fild01.rsw",
-    "name": "Floresta de Brasilis"
+    "name": "Brasilis Field"
   },
   "bra_dun01": {
     "map_id": "bra_dun01",
     "file": "bra_dun01.rsw",
-    "name": "Caverna das Cataratas"
+    "name": "Beyond the Waterfall"
   },
   "bra_dun02": {
     "map_id": "bra_dun02",
     "file": "bra_dun02.rsw",
-    "name": "Profundezas das Cataratas"
+    "name": "Beyond the Waterfall"
   },
   "dewata": {
     "map_id": "dewata",
@@ -3567,177 +3567,177 @@
   "dew_in01": {
     "map_id": "dew_in01",
     "file": "dew_in01.rsw",
-    "name": "Dentro da Vila da Tribo Jaty"
+    "name": "Inside Dewata"
   },
   "dew_fild01": {
     "map_id": "dew_fild01",
     "file": "dew_fild01.rsw",
-    "name": "Campos de Dewata - Vila da tribo Jaty"
+    "name": "Dewata Field (Tribal Village)"
   },
   "dew_dun01": {
     "map_id": "dew_dun01",
     "file": "dew_dun01.rsw",
-    "name": "Vulcão Krakatau"
+    "name": "Volcanic Island of Krakatoa"
   },
   "dew_dun02": {
     "map_id": "dew_dun02",
     "file": "dew_dun02.rsw",
-    "name": "Caverna Istana"
+    "name": "Istana Cave"
   },
   "bif_fild01": {
     "map_id": "bif_fild01",
     "file": "bif_fild01.rsw",
-    "name": "Floresta da Neblina - Sul de Bifröst"
+    "name": "Bifrost Bridge"
   },
   "bif_fild02": {
     "map_id": "bif_fild02",
     "file": "bif_fild02.rsw",
-    "name": "Floresta da Neblina - Norte de Bifröst"
+    "name": "Bifrost Bridge"
   },
   "mora": {
     "map_id": "mora",
     "file": "mora.rsw",
-    "name": "Mora - A Vila dos Rafflen"
+    "name": "Mora Village"
   },
   "dic_in01": {
     "map_id": "dic_in01",
     "file": "dic_in01.rsw",
-    "name": "Casa em Dicastes"
+    "name": "Inside of El Dicastes"
   },
   "1@mist": {
     "map_id": "1@mist",
     "file": "1@mist.rsw",
-    "name": "Labirinto da Neblina"
+    "name": "The Hazy Maze Forest"
   },
   "dicastes01": {
     "map_id": "dicastes01",
     "file": "dicastes01.rsw",
-    "name": "El Dicastes, Cidade Capital dos Manuks"
+    "name": "El Dicastes, the Sapha Capital"
   },
   "dicastes02": {
     "map_id": "dicastes02",
     "file": "dicastes02.rsw",
-    "name": "Floresta Brumbeld Jorhi"
+    "name": "Dicastes Diel"
   },
   "dic_fild01": {
     "map_id": "dic_fild01",
     "file": "dic_fild01.rsw",
-    "name": "Campos de El Dicastes 01"
+    "name": "Outskirts of Kamidal Mountain F1"
   },
   "dic_fild02": {
     "map_id": "dic_fild02",
     "file": "dic_fild02.rsw",
-    "name": "Campos de El Dicastes 02"
+    "name": "Outskirts of Kamidal Mountain F2"
   },
   "dic_dun01": {
     "map_id": "dic_dun01",
     "file": "dic_dun01.rsw",
-    "name": "Túnel Kamidal 01"
+    "name": "Kamidal Tunnel"
   },
   "dic_dun02": {
     "map_id": "dic_dun02",
     "file": "dic_dun02.rsw",
-    "name": "Túnel Kamidal 02"
+    "name": "Scaraba Hall"
   },
   "dic_dun03": {
     "map_id": "dic_dun03",
     "file": "dic_dun03.rsw",
-    "name": "Túnel Kamidal - Pesadelo"
+    "name": "Scaraba Hole - Nightmare Mode"
   },
   "malangdo": {
     "map_id": "malangdo",
     "file": "malangdo.rsw",
-    "name": "Malangdo - A Ilha da Pata de Gato"
+    "name": "Malangdo"
   },
   "mal_in01": {
     "map_id": "mal_in01",
     "file": "mal_in01.rsw",
-    "name": "Interior de Malangdo"
+    "name": "Inside Malangdo"
   },
   "mal_in02": {
     "map_id": "mal_in02",
     "file": "mal_in02.rsw",
-    "name": "Interior do navio"
+    "name": "Inside the Ship"
   },
   "mal_dun01": {
     "map_id": "mal_dun01",
     "file": "mal_dun01.rsw",
-    "name": "Área de Coral Estrelado"
+    "name": "Starry Coral Area"
   },
   "1@cash": {
     "map_id": "1@cash",
     "file": "1@cash.rsw",
-    "name": "Caverna do Polvo"
+    "name": "Octopus Cave"
   },
   "1@pump": {
     "map_id": "1@pump",
     "file": "1@pump.rsw",
-    "name": "Esgotos de Malangdo"
+    "name": "Culvert"
   },
   "2@pump": {
     "map_id": "2@pump",
     "file": "2@pump.rsw",
-    "name": "Esgotos de Malangdo"
+    "name": "Culvert"
   },
   "lhz_dun04": {
     "map_id": "lhz_dun04",
     "file": "lhz_dun04.rsw",
-    "name": "Laboratório de Somatologia"
+    "name": "Somatology Laboratory 4th Basement"
   },
   "que_lhz": {
     "map_id": "que_lhz",
     "file": "que_lhz.rsw",
-    "name": "Laboratório de Somatologia"
+    "name": "Lighthalzen Indoor"
   },
   "1@lhz": {
     "map_id": "1@lhz",
     "file": "1@lhz.rsw",
-    "name": "Laboratório de Wolfchev"
+    "name": "Wolfchev's Lab"
   },
   "gld_dun01_2": {
     "map_id": "gld_dun01_2",
     "file": "gld_dun01_2.rsw",
-    "name": "2º calabouço da Guilda"
+    "name": "Guild Dungeon Underground F2"
   },
   "gld_dun02_2": {
     "map_id": "gld_dun02_2",
     "file": "gld_dun02_2.rsw",
-    "name": "2º calabouço da Guilda"
+    "name": "Guild Dungeon Underground F2"
   },
   "gld_dun03_2": {
     "map_id": "gld_dun03_2",
     "file": "gld_dun03_2.rsw",
-    "name": "2º calabouço da Guilda"
+    "name": "Guild Dungeon Underground F2"
   },
   "gld_dun04_2": {
     "map_id": "gld_dun04_2",
     "file": "gld_dun04_2.rsw",
-    "name": "2º calabouço da Guilda"
+    "name": "Guild Dungeon Underground F2"
   },
   "gld2_ald": {
     "map_id": "gld2_ald",
     "file": "gld2_ald.rsw",
-    "name": "Portal do Abismo: Lágrimas do Herói"
+    "name": "Corridor of the Abyss - Tears of Hero"
   },
   "gld2_gef": {
     "map_id": "gld2_gef",
     "file": "gld2_gef.rsw",
-    "name": "Portal do Abismo: Colina dos Mortos"
+    "name": "Corridor of the Abyss - Dead Man Hill"
   },
   "gld2_pay": {
     "map_id": "gld2_pay",
     "file": "gld2_pay.rsw",
-    "name": "Portal do Abismo: Ventos Ancestrais"
+    "name": "Corridor of the Abyss - Ancient Wind"
   },
   "gld2_prt": {
     "map_id": "gld2_prt",
     "file": "gld2_prt.rsw",
-    "name": "Portal do Abismo: Caminho do Guerreiro"
+    "name": "Corridor of the Abyss - Warrior's Way"
   },
   "malaya": {
     "map_id": "malaya",
     "file": "malaya.rsw",
-    "name": "Porto Malaya"
+    "name": "Port Malaya"
   },
   "ma_fild01": {
     "map_id": "ma_fild01",
@@ -3747,142 +3747,142 @@
   "ma_fild02": {
     "map_id": "ma_fild02",
     "file": "ma_fild02.rsw",
-    "name": "Floresta"
+    "name": "Forest"
   },
   "ma_scene01": {
     "map_id": "ma_scene01",
     "file": "ma_scene01.rsw",
-    "name": "Lago Bakonawa"
+    "name": "Bakonawa Lake"
   },
   "ma_in01": {
     "map_id": "ma_in01",
     "file": "ma_in01.rsw",
-    "name": "Interior de Malaya"
+    "name": "Inside of Malaya"
   },
   "ma_dun01": {
     "map_id": "ma_dun01",
     "file": "ma_dun01.rsw",
-    "name": "Hospital de Bangungot, 1º andar"
+    "name": "Bangungot Hospital F1"
   },
   "1@ma_h": {
     "map_id": "1@ma_h",
     "file": "1@ma_h.rsw",
-    "name": "Hospital de Bangungot, 2º andar"
+    "name": "Bangungot Hospital F2"
   },
   "1@ma_c": {
     "map_id": "1@ma_c",
     "file": "1@ma_c.rsw",
-    "name": "Caverna Buwaya"
+    "name": "Buwaya Cave"
   },
   "1@ma_b": {
     "map_id": "1@ma_b",
     "file": "1@ma_b.rsw",
-    "name": "Esconderijo Bakonawa"
+    "name": "Bakonawa Hideout"
   },
   "ma_zif01": {
     "map_id": "ma_zif01",
     "file": "ma_zif01.rsw",
-    "name": "Interior de Jeepney"
+    "name": "Inside of Jeepney"
   },
   "ma_zif02": {
     "map_id": "ma_zif02",
     "file": "ma_zif02.rsw",
-    "name": "Interior de Jeepney"
+    "name": "Inside of Jeepney"
   },
   "ma_zif03": {
     "map_id": "ma_zif03",
     "file": "ma_zif03.rsw",
-    "name": "Interior de Jeepney"
+    "name": "Inside of Jeepney"
   },
   "ma_zif04": {
     "map_id": "ma_zif04",
     "file": "ma_zif04.rsw",
-    "name": "Interior de Jeepney"
+    "name": "Inside of Jeepney"
   },
   "ma_zif05": {
     "map_id": "ma_zif05",
     "file": "ma_zif05.rsw",
-    "name": "Interior de Jeepney"
+    "name": "Inside of Jeepney"
   },
   "ma_zif06": {
     "map_id": "ma_zif06",
     "file": "ma_zif06.rsw",
-    "name": "Interior de Jeepney"
+    "name": "Inside of Jeepney"
   },
   "ma_zif07": {
     "map_id": "ma_zif07",
     "file": "ma_zif07.rsw",
-    "name": "Interior de Jeepney"
+    "name": "Inside of Jeepney"
   },
   "ma_zif08": {
     "map_id": "ma_zif08",
     "file": "ma_zif08.rsw",
-    "name": "Interior de Jeepney"
+    "name": "Inside of Jeepney"
   },
   "ma_zif09": {
     "map_id": "ma_zif09",
     "file": "ma_zif09.rsw",
-    "name": "Interior de Jeepney"
+    "name": "Inside of Jeepney"
   },
   "job_ko": {
     "map_id": "job_ko",
     "file": "job_ko.rsw",
-    "name": "Lugar Escondido"
+    "name": "Hidden Place"
   },
   "ecl_in01": {
     "map_id": "ecl_in01",
     "file": "ecl_in01.rsw",
-    "name": "Praça de Eclage"
+    "name": "Eclage Indoor 1"
   },
   "ecl_hub01": {
     "map_id": "ecl_hub01",
     "file": "ecl_hub01.rsw",
-    "name": "Perímetros de Eclage"
+    "name": "Eclage Perimeter"
   },
   "ecl_in02": {
     "map_id": "ecl_in02",
     "file": "ecl_in02.rsw",
-    "name": "Interior de Eclage 2"
+    "name": "Eclage Indoor 2"
   },
   "ecl_in03": {
     "map_id": "ecl_in03",
     "file": "ecl_in03.rsw",
-    "name": "Interior de Eclage 3"
+    "name": "Eclage Indoor 3"
   },
   "ecl_in04": {
     "map_id": "ecl_in04",
     "file": "ecl_in04.rsw",
-    "name": "Interior de Eclage 4"
+    "name": "Eclage Indoor 4"
   },
   "eclage": {
     "map_id": "eclage",
     "file": "eclage.rsw",
-    "name": "Eclage"
+    "name": "Eclage, Forestic Village"
   },
   "ecl_fild01": {
     "map_id": "ecl_fild01",
     "file": "ecl_fild01.rsw",
-    "name": "Campo Florescente"
+    "name": "Blooming Flower Land"
   },
   "ecl_tdun01": {
     "map_id": "ecl_tdun01",
     "file": "ecl_tdun01.rsw",
-    "name": "Torre de Bifröst (1)"
+    "name": "Bifrost Tower 1F"
   },
   "ecl_tdun02": {
     "map_id": "ecl_tdun02",
     "file": "ecl_tdun02.rsw",
-    "name": "Torre de Bifröst (2)"
+    "name": "Bifrost Tower 2F"
   },
   "ecl_tdun03": {
     "map_id": "ecl_tdun03",
     "file": "ecl_tdun03.rsw",
-    "name": "Torre de Bifröst (3)"
+    "name": "Bifrost Tower 3F"
   },
   "ecl_tdun04": {
     "map_id": "ecl_tdun04",
     "file": "ecl_tdun04.rsw",
-    "name": "Topo da Torre de Bifröst"
+    "name": "Bifrost Tower 4F"
   },
   "te_prt_gld": {
     "map_id": "te_prt_gld",
@@ -3892,37 +3892,37 @@
   "te_prtcas01": {
     "map_id": "te_prtcas01",
     "file": "te_prtcas01.rsw",
-    "name": "Gaebolg"
+    "name": "Geoborg Castle"
   },
   "te_prtcas02": {
     "map_id": "te_prtcas02",
     "file": "te_prtcas02.rsw",
-    "name": "Richard"
+    "name": "Richard Castle"
   },
   "te_prtcas03": {
     "map_id": "te_prtcas03",
     "file": "te_prtcas03.rsw",
-    "name": "Wigner"
+    "name": "Wigner Castle"
   },
   "te_prtcas04": {
     "map_id": "te_prtcas04",
     "file": "te_prtcas04.rsw",
-    "name": "Heine"
+    "name": "Heine Castle"
   },
   "te_prtcas05": {
     "map_id": "te_prtcas05",
     "file": "te_prtcas05.rsw",
-    "name": "Nerius"
+    "name": "Nerius Castle"
   },
   "teg_dun01": {
     "map_id": "teg_dun01",
     "file": "teg_dun01.rsw",
-    "name": "Calabouço da Guilda 1"
+    "name": "Guild Underground Dungeon"
   },
   "te_alde_gld": {
     "map_id": "te_alde_gld",
     "file": "te_alde_gld.rsw",
-    "name": "Kafra Garten"
+    "name": "Kafra's Den"
   },
   "te_aldecas1": {
     "map_id": "te_aldecas1",
@@ -3952,7 +3952,7 @@
   "teg_dun02": {
     "map_id": "teg_dun02",
     "file": "teg_dun02.rsw",
-    "name": "Calabouço da Guilda 2"
+    "name": "Guild Underground Dungeon"
   },
   "niflxmas": {
     "map_id": "niflxmas",
@@ -3962,117 +3962,117 @@
   "moc_para01": {
     "map_id": "moc_para01",
     "file": "moc_para01.rsw",
-    "name": "Grupo do Éden"
+    "name": "Inside of Morroc Eden Group"
   },
   "1@xm_d": {
     "map_id": "1@xm_d",
     "file": "1@xm_d.rsw",
-    "name": "Fábrica do Terror"
+    "name": "Horror Toy Factory"
   },
   "moro_vol": {
     "map_id": "moro_vol",
     "file": "moro_vol.rsw",
-    "name": "Círculo de Fogo"
+    "name": "Flame Basin"
   },
   "moro_cav": {
     "map_id": "moro_cav",
     "file": "moro_cav.rsw",
-    "name": "Cavena de Fogo"
+    "name": "Flame Cave"
   },
   "1@dth1": {
     "map_id": "1@dth1",
     "file": "1@dth1.rsw",
-    "name": "Ilha Bios (Manhã"
+    "name": "Bios Island"
   },
   "1@dth2": {
     "map_id": "1@dth2",
     "file": "1@dth2.rsw",
-    "name": "Ilha Bios (Tarde)"
+    "name": "Bios Island"
   },
   "1@dth3": {
     "map_id": "1@dth3",
     "file": "1@dth3.rsw",
-    "name": "Ilha Bios (Noite)"
+    "name": "Bios Island"
   },
   "1@rev": {
     "map_id": "1@rev",
     "file": "1@rev.rsw",
-    "name": "Caverna"
+    "name": "Morse Cave"
   },
   "1@eom": {
     "map_id": "1@eom",
     "file": "1@eom.rsw",
-    "name": "Templo do Demônio Rei"
+    "name": "Shrine of Demon God"
   },
   "ver_eju": {
     "map_id": "ver_eju",
     "file": "ver_eju.rsw",
-    "name": "Ruínas de Juperos (Oeste)"
+    "name": "Eastern Ruins of Juperos"
   },
   "ver_tunn": {
     "map_id": "ver_tunn",
     "file": "ver_tunn.rsw",
-    "name": "Túnel de Verus"
+    "name": "Verus - Tunnel Outskirts"
   },
   "verus04": {
     "map_id": "verus04",
     "file": "verus04.rsw",
-    "name": "Centro de Verus"
+    "name": "Verus - Excavation Site"
   },
   "verus03": {
     "map_id": "verus03",
     "file": "verus03.rsw",
-    "name": "Praça Central de Verus"
+    "name": "Verus - Central Plaza"
   },
   "1@mcd": {
     "map_id": "1@mcd",
     "file": "1@mcd.rsw",
-    "name": "Fábrica de Charlestons"
+    "name": "Charleston Factory"
   },
   "verus01": {
     "map_id": "verus01",
     "file": "verus01.rsw",
-    "name": "Laboratório OPTATIO de Experimentos"
+    "name": "Laboratory-OPTATIO"
   },
   "verus02": {
     "map_id": "verus02",
     "file": "verus02.rsw",
-    "name": "Instituto WISH de Pesquisa"
+    "name": "Research Building-WISH"
   },
   "un_bk_q": {
     "map_id": "un_bk_q",
     "file": "un_bk_q.rsw",
-    "name": "Abrigo Subterrâneo"
+    "name": "Underground Bunker"
   },
   "un_bunker": {
     "map_id": "un_bunker",
     "file": "un_bunker.rsw",
-    "name": "Abrigo Subterrâneo"
+    "name": "Underground Bunker"
   },
   "un_myst": {
     "map_id": "un_myst",
     "file": "un_myst.rsw",
-    "name": "Túnel do Abrigo"
+    "name": "Underground Tunnel"
   },
   "1@uns": {
     "map_id": "1@uns",
     "file": "1@uns.rsw",
-    "name": "Sala Final"
+    "name": "The Last room"
   },
   "1@lab": {
     "map_id": "1@lab",
     "file": "1@lab.rsw",
-    "name": "Laboratório Central"
+    "name": "Central Laboratory"
   },
   "c_tower2_": {
     "map_id": "c_tower2_",
     "file": "c_tower2_.rsw",
-    "name": "Torre Distorcida (2)"
+    "name": "Twisted Clock Tower F2"
   },
   "c_tower3_": {
     "map_id": "c_tower3_",
     "file": "c_tower3_.rsw",
-    "name": "Torre Distorcida (3)"
+    "name": "Twisted Clock Tower F3"
   },
   "brz_n": {
     "map_id": "brz_n",
@@ -4082,317 +4082,317 @@
   "1@mir": {
     "map_id": "1@mir",
     "file": "1@mir.rsw",
-    "name": "Salão de Ymir"
+    "name": "Ritual Room"
   },
   "2@mir": {
     "map_id": "2@mir",
     "file": "2@mir.rsw",
-    "name": "Salão de Ymir"
+    "name": "Ritual Room"
   },
   "1@sthb": {
     "map_id": "1@sthb",
     "file": "1@sthb.rsw",
-    "name": "Sussurro Sombrio"
+    "name": "Air Fortress - Inside"
   },
   "1@sthc": {
     "map_id": "1@sthc",
     "file": "1@sthc.rsw",
-    "name": "Sala Secreta"
+    "name": "Air Fortress - Secret Chamber"
   },
   "1@sthd": {
     "map_id": "1@sthd",
     "file": "1@sthd.rsw",
-    "name": "Topo da Fortaleza"
+    "name": "Air Fortress - Top Floor"
   },
   "prt_cas": {
     "map_id": "prt_cas",
     "file": "prt_cas.rsw",
-    "name": "Palácio de Prontera"
+    "name": "Prontera Central Palace"
   },
   "prt_cas_q": {
     "map_id": "prt_cas_q",
     "file": "prt_cas_q.rsw",
-    "name": "Aposentos dos Nobres"
+    "name": "Prontera Imperial Villa"
   },
   "prt_prison": {
     "map_id": "prt_prison",
     "file": "prt_prison.rsw",
-    "name": "Prisão de Prontera"
+    "name": "Prontera Dungeon"
   },
   "prt_lib": {
     "map_id": "prt_lib",
     "file": "prt_lib.rsw",
-    "name": "Memorial das Famílias Reais [Presente]"
+    "name": "Memorial of Royal Family"
   },
   "prt_lib_q": {
     "map_id": "prt_lib_q",
     "file": "prt_lib_q.rsw",
-    "name": "Memorial das Famílias Reais [Passado]"
+    "name": "Memorial of Past Royal Family"
   },
   "prt_q": {
     "map_id": "prt_q",
     "file": "prt_q.rsw",
-    "name": "Prontera Destruída"
+    "name": "Invaded Prontera"
   },
   "prt_pri00": {
     "map_id": "prt_pri00",
     "file": "prt_pri00.rsw",
-    "name": "Carceragem de Prontera"
+    "name": "Prontera Prison"
   },
   "lasagna": {
     "map_id": "lasagna",
     "file": "lasagna.rsw",
-    "name": "Cidade Portuária de Lasagna"
+    "name": "Port Town Lasagna"
   },
   "lasa_fild01": {
     "map_id": "lasa_fild01",
     "file": "lasa_fild01.rsw",
-    "name": "Planícies Ravioli"
+    "name": "Ravioli Plain, Border Post"
   },
   "lasa_fild02": {
     "map_id": "lasa_fild02",
     "file": "lasa_fild02.rsw",
-    "name": "Floresta Ravioli"
+    "name": "Ravioli Forest"
   },
   "lasa_dun01": {
     "map_id": "lasa_dun01",
     "file": "lasa_dun01.rsw",
-    "name": "Ninho do Dragão"
+    "name": "Dragon Nest"
   },
   "lasa_dun02": {
     "map_id": "lasa_dun02",
     "file": "lasa_dun02.rsw",
-    "name": "Ninho do Dragão"
+    "name": "Dragon Nest"
   },
   "lasa_dun03": {
     "map_id": "lasa_dun03",
     "file": "lasa_dun03.rsw",
-    "name": "Ninho do Dragão"
+    "name": "Dragon Nest"
   },
   "conch_in": {
     "map_id": "conch_in",
     "file": "conch_in.rsw",
-    "name": "Dentro do Conchiolina"
+    "name": "Inside Conch"
   },
   "lasa_in01": {
     "map_id": "lasa_in01",
     "file": "lasa_in01.rsw",
-    "name": "Casa em Lasagna"
+    "name": "Inside Lasagna"
   },
   "lasa_dun_q": {
     "map_id": "lasa_dun_q",
     "file": "lasa_dun_q.rsw",
-    "name": "Ninho do Dragão"
+    "name": "Dragon Nest"
   },
   "iz_int": {
     "map_id": "iz_int",
     "file": "iz_int.rsw",
-    "name": "Navio naufragado"
+    "name": "Intro"
   },
   "iz_int01": {
     "map_id": "iz_int01",
     "file": "iz_int01.rsw",
-    "name": "Navio naufragado"
+    "name": "Intro"
   },
   "iz_int02": {
     "map_id": "iz_int02",
     "file": "iz_int02.rsw",
-    "name": "Navio naufragado"
+    "name": "Intro"
   },
   "iz_int03": {
     "map_id": "iz_int03",
     "file": "iz_int03.rsw",
-    "name": "Navio naufragado"
+    "name": "Intro"
   },
   "iz_int04": {
     "map_id": "iz_int04",
     "file": "iz_int04.rsw",
-    "name": "Navio naufragado"
+    "name": "Intro"
   },
   "int_land": {
     "map_id": "int_land",
     "file": "int_land.rsw",
-    "name": "Ilhota"
+    "name": "Remote Island"
   },
   "int_land01": {
     "map_id": "int_land01",
     "file": "int_land01.rsw",
-    "name": "Ilhota"
+    "name": "Remote Island"
   },
   "int_land02": {
     "map_id": "int_land02",
     "file": "int_land02.rsw",
-    "name": "Ilhota"
+    "name": "Remote Island"
   },
   "int_land03": {
     "map_id": "int_land03",
     "file": "int_land03.rsw",
-    "name": "Ilhota"
+    "name": "Remote Island"
   },
   "int_land04": {
     "map_id": "int_land04",
     "file": "int_land04.rsw",
-    "name": "Ilhota"
+    "name": "Remote Island"
   },
   "prt_fild08d": {
     "map_id": "prt_fild08d",
     "file": "prt_fild08d.rsw",
-    "name": "Arredores de Prontera (08)"
+    "name": "Prontera Field 8"
   },
   "prt_fild08c": {
     "map_id": "prt_fild08c",
     "file": "prt_fild08c.rsw",
-    "name": "Arredores de Prontera (08)"
+    "name": "Prontera Field 8"
   },
   "prt_fild08b": {
     "map_id": "prt_fild08b",
     "file": "prt_fild08b.rsw",
-    "name": "Arredores de Prontera (08)"
+    "name": "Prontera Field 8"
   },
   "prt_fild08a": {
     "map_id": "prt_fild08a",
     "file": "prt_fild08a.rsw",
-    "name": "Arredores de Prontera (08)"
+    "name": "Prontera Field 8"
   },
   "iz_ac01_d": {
     "map_id": "iz_ac01_d",
     "file": "iz_ac01_d.rsw",
-    "name": "Instituto do Aprendiz"
+    "name": "Criatura Academy F1"
   },
   "iz_ac02_d": {
     "map_id": "iz_ac02_d",
     "file": "iz_ac02_d.rsw",
-    "name": "Instituto do Aprendiz"
+    "name": "Criatura Academy F2"
   },
   "iz_ac01_c": {
     "map_id": "iz_ac01_c",
     "file": "iz_ac01_c.rsw",
-    "name": "Instituto do Aprendiz"
+    "name": "Criatura Academy F1"
   },
   "iz_ac02_c": {
     "map_id": "iz_ac02_c",
     "file": "iz_ac02_c.rsw",
-    "name": "Instituto do Aprendiz"
+    "name": "Criatura Academy F2"
   },
   "iz_ac01_b": {
     "map_id": "iz_ac01_b",
     "file": "iz_ac01_b.rsw",
-    "name": "Instituto do Aprendiz"
+    "name": "Criatura Academy F1"
   },
   "iz_ac02_b": {
     "map_id": "iz_ac02_b",
     "file": "iz_ac02_b.rsw",
-    "name": "Instituto do Aprendiz"
+    "name": "Criatura Academy F2"
   },
   "iz_ac01_a": {
     "map_id": "iz_ac01_a",
     "file": "iz_ac01_a.rsw",
-    "name": "Instituto do Aprendiz"
+    "name": "Criatura Academy F1"
   },
   "iz_ac02_a": {
     "map_id": "iz_ac02_a",
     "file": "iz_ac02_a.rsw",
-    "name": "Instituto do Aprendiz"
+    "name": "Criatura Academy F2"
   },
   "izlude_d": {
     "map_id": "izlude_d",
     "file": "izlude_d.rsw",
-    "name": "Izlude"
+    "name": "Izlude, the Satellite City"
   },
   "izlude_c": {
     "map_id": "izlude_c",
     "file": "izlude_c.rsw",
-    "name": "Izlude"
+    "name": "Izlude, the Satellite City"
   },
   "izlude_b": {
     "map_id": "izlude_b",
     "file": "izlude_b.rsw",
-    "name": "Izlude"
+    "name": "Izlude, the Satellite City"
   },
   "izlude_a": {
     "map_id": "izlude_a",
     "file": "izlude_a.rsw",
-    "name": "Izlude"
+    "name": "Izlude, the Satellite City"
   },
   "iz_ac01": {
     "map_id": "iz_ac01",
     "file": "iz_ac01.rsw",
-    "name": "Instituto do Aprendiz"
+    "name": "Criatura Academy F1"
   },
   "iz_ac02": {
     "map_id": "iz_ac02",
     "file": "iz_ac02.rsw",
-    "name": "Instituto do Aprendiz"
+    "name": "Criatura Academy F2"
   },
   "iz_ng01": {
     "map_id": "iz_ng01",
     "file": "iz_ng01.rsw",
-    "name": "Escola Ninja"
+    "name": "Ninja tutorial map"
   },
   "treasure_n1": {
     "map_id": "treasure_n1",
     "file": "treasure_n1.rsw",
-    "name": "Navio Fantasma 01 - Pesadelo"
+    "name": "Izlude Shipwreck B1"
   },
   "treasure_n2": {
     "map_id": "treasure_n2",
     "file": "treasure_n2.rsw",
-    "name": "Navio Fantasma 02 - Pesadelo"
+    "name": "Izlude Shipwreck B2"
   },
   "1@begi": {
     "map_id": "1@begi",
     "file": "1@begi.rsw",
-    "name": "Vila dos Poring"
+    "name": "Poring Town"
   },
   "lhz_dun_n": {
     "map_id": "lhz_dun_n",
     "file": "lhz_dun_n.rsw",
-    "name": "Laboratório de Somatologia - Pesadelo"
+    "name": "Tomb of the Fallen"
   },
   "lhz_d_n2": {
     "map_id": "lhz_d_n2",
     "file": "lhz_d_n2.rsw",
-    "name": "Laboratório de Somatologia - Pesadelo"
+    "name": "Void of Vicious Mind"
   },
   "prt_evt_in": {
     "map_id": "prt_evt_in",
     "file": "prt_evt_in.rsw",
-    "name": "Cabana"
+    "name": "Hunting Lodge"
   },
   "1@md_gef": {
     "map_id": "1@md_gef",
     "file": "1@md_gef.rsw",
-    "name": "Túmulo do Monarca"
+    "name": "Friday Memorial"
   },
   "1@md_pay": {
     "map_id": "1@md_pay",
     "file": "1@md_pay.rsw",
-    "name": "Weekend Dungeon"
+    "name": "Weekend Memorial"
   },
   "lasa_sea": {
     "map_id": "lasa_sea",
     "file": "lasa_sea.rsw",
-    "name": "Mar de Lasagna"
+    "name": "Cat Tunnel"
   },
   "1@infi": {
     "map_id": "1@infi",
     "file": "1@infi.rsw",
-    "name": "Espaço Infinit"
+    "name": "Infinite Space"
   },
   "paramk": {
     "map_id": "paramk",
     "file": "paramk.rsw",
-    "name": "Mercado Paralelo do Éden"
+    "name": "Para Market"
   },
   "1@gol1": {
     "map_id": "1@gol1",
     "file": "1@gol1.rsw",
-    "name": "Edda do Biolaboratório"
+    "name": "Biological Experiment Center"
   },
   "1@gol2": {
     "map_id": "1@gol2",
     "file": "1@gol2.rsw",
-    "name": "Edda do Biolaboratório"
+    "name": "Morgue"
   },
   "ein_dun03": {
     "map_id": "ein_dun03",
@@ -4402,12 +4402,12 @@
   "abyss_04": {
     "map_id": "abyss_04",
     "file": "abyss_04.rsw",
-    "name": "Caverna Subterrânea (4)"
+    "name": "Abyss Lakes Underground Cave F4"
   },
   "odin_past": {
     "map_id": "odin_past",
     "file": "odin_past.rsw",
-    "name": "Templo de Odin"
+    "name": "Odin Shrine Past"
   },
   "ba_maison": {
     "map_id": "ba_maison",
@@ -4507,7 +4507,7 @@
   "que_house_s": {
     "map_id": "que_house_s",
     "file": "que_house_s.rsw",
-    "name": "Weird house"
+    "name": "Strange House"
   },
   "job3_gen01": {
     "map_id": "job3_gen01",
@@ -4522,7 +4522,7 @@
   "job3_arch01": {
     "map_id": "job3_arch01",
     "file": "job3_arch01.rsw",
-    "name": "Waiting room for Arch Bishop Job Change"
+    "name": "Waiting room for Archbishop Job Change"
   },
   "job3_arch02": {
     "map_id": "job3_arch02",
@@ -4532,7 +4532,7 @@
   "job3_arch03": {
     "map_id": "job3_arch03",
     "file": "job3_arch03.rsw",
-    "name": "Waiting room for Arch Bishop Job Change"
+    "name": "Waiting room for Archbishop Job Change"
   },
   "job3_guil01": {
     "map_id": "job3_guil01",
@@ -4547,7 +4547,7 @@
   "job3_guil03": {
     "map_id": "job3_guil03",
     "file": "job3_guil03.rsw",
-    "name": "An isolated mansion"
+    "name": "Isolated mansion"
   },
   "job3_rang01": {
     "map_id": "job3_rang01",
@@ -4587,7 +4587,7 @@
   "jupe_core2": {
     "map_id": "jupe_core2",
     "file": "jupe_core2.rsw",
-    "name": "The center of Juperos"
+    "name": "Center of Juperos"
   },
   "mosk_que": {
     "map_id": "mosk_que",
@@ -4607,42 +4607,42 @@
   "2007rwc_01": {
     "map_id": "2007rwc_01",
     "file": "2007rwc_01.rsw",
-    "name": "2007 USRC Arena"
+    "name": "2007 Ragnarok World Championship Arena 1"
   },
   "2007rwc_02": {
     "map_id": "2007rwc_02",
     "file": "2007rwc_02.rsw",
-    "name": "2007 USRC Arena"
+    "name": "2007 Ragnarok World Championship Arena 2"
   },
   "2007rwc_03": {
     "map_id": "2007rwc_03",
     "file": "2007rwc_03.rsw",
-    "name": "2007 USRC Arena"
+    "name": "2007 Ragnarok World Championship Arena 3"
   },
   "2007rwc_04": {
     "map_id": "2007rwc_04",
     "file": "2007rwc_04.rsw",
-    "name": "2007 USRC Arena"
+    "name": "2007 Ragnarok World Championship Arena 4"
   },
   "2007rwc_05": {
     "map_id": "2007rwc_05",
     "file": "2007rwc_05.rsw",
-    "name": "2007 USRC Arena"
+    "name": "2007 Ragnarok World Championship Arena 5"
   },
   "2007rwc_06": {
     "map_id": "2007rwc_06",
     "file": "2007rwc_06.rsw",
-    "name": "2007 USRC Arena"
+    "name": "2007 Ragnarok World Championship Arena 6"
   },
   "2007rwc_07": {
     "map_id": "2007rwc_07",
     "file": "2007rwc_07.rsw",
-    "name": "2007 USRC Arena"
+    "name": "2007 Ragnarok World Championship Arena 7"
   },
   "2007rwc_08": {
     "map_id": "2007rwc_08",
     "file": "2007rwc_08.rsw",
-    "name": "2007 USRC Arena"
+    "name": "2007 Ragnarok World Championship Arena 8"
   },
   "evt_xmas": {
     "map_id": "evt_xmas",
@@ -4652,7 +4652,7 @@
   "evt_zombie": {
     "map_id": "evt_zombie",
     "file": "evt_zombie.rsw",
-    "name": "Run_From_Zombies"
+    "name": "Run from Zombies"
   },
   "iz_dun00t": {
     "map_id": "iz_dun00t",
@@ -4712,17 +4712,17 @@
   "1@def01": {
     "map_id": "1@def01",
     "file": "1@def01.rsw",
-    "name": "Wave Dungeon - forest"
+    "name": "Wave Dungeon - Forest"
   },
   "rockrdg2": {
     "map_id": "rockrdg2",
     "file": "rockrdg2.rsw",
-    "name": "Deserto Kiwawa (2)"
+    "name": "Kiwawa Desert"
   },
   "1@halo": {
     "map_id": "1@halo",
     "file": "1@halo.rsw",
-    "name": "Halloween Festival"
+    "name": "Halloween Festival Hall"
   },
   "sp_rudus4": {
     "map_id": "sp_rudus4",
@@ -4817,72 +4817,72 @@
   "1@gl_he": {
     "map_id": "1@gl_he",
     "file": "1@gl_he.rsw",
-    "name": "Dimensão Contaminada"
+    "name": "Contaminated Dimension"
   },
   "1@gl_prq": {
     "map_id": "1@gl_prq",
     "file": "1@gl_prq.rsw",
-    "name": "A queda de Glastheim"
+    "name": "The Fall of Glastheim"
   },
   "vis_h01": {
     "map_id": "vis_h01",
     "file": "vis_h01.rsw",
-    "name": "Corridor of Phantoms Floor 1"
+    "name": "Illusion Corridor F1"
   },
   "vis_h02": {
     "map_id": "vis_h02",
     "file": "vis_h02.rsw",
-    "name": "Corridor of Phantoms Floor 2"
+    "name": "Illusion Corridor F2"
   },
   "vis_h03": {
     "map_id": "vis_h03",
     "file": "vis_h03.rsw",
-    "name": "Corridor of Phantoms Floor 3"
+    "name": "Illusion Corridor F3"
   },
   "vis_h04": {
     "map_id": "vis_h04",
     "file": "vis_h04.rsw",
-    "name": "Corridor of Phantoms Floor 4"
+    "name": "Illusion Corridor F4"
   },
   "2@gl_kh": {
     "map_id": "2@gl_kh",
     "file": "2@gl_kh.rsw",
-    "name": "Old Chivalry Floor 2"
+    "name": "Old Glastheim Chivalry F2"
   },
   "1@gl_kh": {
     "map_id": "1@gl_kh",
     "file": "1@gl_kh.rsw",
-    "name": "Old Chivalry Floor 1"
+    "name": "Old Glastheim Chivalry F1"
   },
   "x_prt": {
     "map_id": "x_prt",
     "file": "x_prt.rsw",
-    "name": "Prontera of Parallell World"
+    "name": "Prontera - Beyond dimension"
   },
   "x_lhz": {
     "map_id": "x_lhz",
     "file": "x_lhz.rsw",
-    "name": "Lighthalzen of Parallell World"
+    "name": "Lighthalzen - Beyond dimension"
   },
   "x_ra": {
     "map_id": "x_ra",
     "file": "x_ra.rsw",
-    "name": "Rachel of Parallell World"
+    "name": "Rachel - Beyond dimension"
   },
   "1@drdo": {
     "map_id": "1@drdo",
     "file": "1@drdo.rsw",
-    "name": "Legendary Dorado"
+    "name": "Legend of Dorado"
   },
   "que_ng": {
     "map_id": "que_ng",
     "file": "que_ng.rsw",
-    "name": "Unknown Area"
+    "name": "Ninja - Gunslinger map"
   },
   "1@crd": {
     "map_id": "1@crd",
     "file": "1@crd.rsw",
-    "name": "Volcanic Island Korodo"
+    "name": "Volcanic island Korodo"
   },
   "1@tre": {
     "map_id": "1@tre",
@@ -4897,22 +4897,22 @@
   "1@gl_k2": {
     "map_id": "1@gl_k2",
     "file": "1@gl_k2.rsw",
-    "name": "Old Chivalry Floor 1"
+    "name": "Old Glastheim Chivalry F1"
   },
   "2@gl_k2": {
     "map_id": "2@gl_k2",
     "file": "2@gl_k2.rsw",
-    "name": "Old Chivalry Floor 2"
+    "name": "Old Glastheim Chivalry F2"
   },
   "1@ffp": {
     "map_id": "1@ffp",
     "file": "1@ffp.rsw",
-    "name": "Esconderijo dos Remanescentes"
+    "name": "Remnant Hideout"
   },
   "job_gun": {
     "map_id": "job_gun",
     "file": "job_gun.rsw",
-    "name": "Shelter of Liberation"
+    "name": "Shelter of Rebellion"
   },
   "e_hugel": {
     "map_id": "e_hugel",
@@ -4937,37 +4937,37 @@
   "evt_bomb": {
     "map_id": "evt_bomb",
     "file": "evt_bomb.rsw",
-    "name": "Event Labyrinth"
+    "name": "Labyrinth Event"
   },
   "te_aldecas01": {
     "map_id": "te_aldecas01",
     "file": "te_aldecas01.rsw",
-    "name": "Leliah"
+    "name": "Glaris Castle"
   },
   "te_aldecas02": {
     "map_id": "te_aldecas02",
     "file": "te_aldecas02.rsw",
-    "name": "Pavianne"
+    "name": "Defolty Castle"
   },
   "te_aldecas03": {
     "map_id": "te_aldecas03",
     "file": "te_aldecas03.rsw",
-    "name": "Jasmine"
+    "name": "Sorin Castle"
   },
   "te_aldecas04": {
     "map_id": "te_aldecas04",
     "file": "te_aldecas04.rsw",
-    "name": "Roxie"
+    "name": "Bennit Castle"
   },
   "te_aldecas05": {
     "map_id": "te_aldecas05",
     "file": "te_aldecas05.rsw",
-    "name": "Curly Sue"
+    "name": "W Castle"
   },
   "guild_vs5": {
     "map_id": "guild_vs5",
     "file": "guild_vs5.rsw",
-    "name": "Guild War Arena"
+    "name": "Guild Arena"
   },
   "tra_fild": {
     "map_id": "tra_fild",
@@ -5197,52 +5197,52 @@
   "gl_cas01_": {
     "map_id": "gl_cas01_",
     "file": "gl_cas01_.rsw",
-    "name": "Castillo de Glastheim Abyss piso 1"
+    "name": "Abyss Glastheim Castle F1"
   },
   "com_d02_i": {
     "map_id": "com_d02_i",
     "file": "com_d02_i.rsw",
-    "name": "Ilusão de Luanda"
+    "name": "Luanda, the North Cave"
   },
   "1@jtb": {
     "map_id": "1@jtb",
     "file": "1@jtb.rsw",
-    "name": "Sonho Sombrio"
+    "name": "Dream and Shadow"
   },
   "1@glast": {
     "map_id": "1@glast",
     "file": "1@glast.rsw",
-    "name": "Ruínas Antigas"
+    "name": "Past Glastheim"
   },
   "1@air1": {
     "map_id": "1@air1",
     "file": "1@air1.rsw",
-    "name": "Aeroplano"
+    "name": "Airship"
   },
   "1@air2": {
     "map_id": "1@air2",
     "file": "1@air2.rsw",
-    "name": "Aeroplano"
+    "name": "Airship"
   },
   "1@slw": {
     "map_id": "1@slw",
     "file": "1@slw.rsw",
-    "name": "Laboratório Werner"
+    "name": "Central room of Werner Laboratory"
   },
   "1@swat": {
     "map_id": "1@swat",
     "file": "1@swat.rsw",
-    "name": "Base Militar"
+    "name": "Heart Hunter Military Base"
   },
   "que_swat": {
     "map_id": "que_swat",
     "file": "que_swat.rsw",
-    "name": "Base Militar"
+    "name": "Heart Hunter Military Base"
   },
   "slabw01": {
     "map_id": "slabw01",
     "file": "slabw01.rsw",
-    "name": "Laboratório Clandestino"
+    "name": "Werner Laboratory"
   },
   "rebel_in": {
     "map_id": "rebel_in",
@@ -5252,12 +5252,12 @@
   "prt_mz03_i": {
     "map_id": "prt_mz03_i",
     "file": "prt_mz03_i.rsw",
-    "name": "Ilusão do Labirinto"
+    "name": "Twisted Labyrinth Forest"
   },
   "har_in01": {
     "map_id": "har_in01",
     "file": "har_in01.rsw",
-    "name": "Interior de Rockridge"
+    "name": "Rockridge"
   },
   "harboro1": {
     "map_id": "harboro1",
@@ -5267,42 +5267,42 @@
   "harboro2": {
     "map_id": "harboro2",
     "file": "harboro2.rsw",
-    "name": "Subterrâneo de Rockridge"
+    "name": "Underground Waterway"
   },
   "rockmi1": {
     "map_id": "rockmi1",
     "file": "rockmi1.rsw",
-    "name": "Mina de Rockridge (1)"
+    "name": "Rockridge Mine"
   },
   "rockmi2": {
     "map_id": "rockmi2",
     "file": "rockmi2.rsw",
-    "name": "Mina de Rockridge (2)"
+    "name": "Rockridge Mine"
   },
   "rockrdg1": {
     "map_id": "rockrdg1",
     "file": "rockrdg1.rsw",
-    "name": "Deserto Kiwawa (1)"
+    "name": "Kiwawa Desert"
   },
   "mag_dun03": {
     "map_id": "mag_dun03",
     "file": "mag_dun03.rsw",
-    "name": "Caverna de Magma (3)"
+    "name": "Nogg Road Dungeon F3"
   },
   "star_frst": {
     "map_id": "star_frst",
     "file": "star_frst.rsw",
-    "name": "Bosque Meteoro"
+    "name": "Yu Seong Lim"
   },
   "star_in": {
     "map_id": "star_in",
     "file": "star_in.rsw",
-    "name": "Interior do Bosque Meteoro"
+    "name": "Inside Yu Seong Lim"
   },
   "1@soul": {
     "map_id": "1@soul",
     "file": "1@soul.rsw",
-    "name": "Caminho da alma"
+    "name": "Soul Passage"
   },
   "1@gat": {
     "map_id": "1@gat",

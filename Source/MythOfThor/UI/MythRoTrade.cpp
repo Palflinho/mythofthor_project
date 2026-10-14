@@ -43,7 +43,7 @@ namespace
 void UMythRoHUDWidget::BuildTradeWindows()
 {
 	const float H = TradeListY + TradeRowCount * TradeRowH + 62.f;
-	TradeWindow = MakeRoPanel(TEXT("Troca"), FVector2D(TradeW, H), FVector2D(0.f, -40.f));
+	TradeWindow = MakeRoPanel(TEXT("Trade"), FVector2D(TradeW, H), FVector2D(0.f, -40.f));
 	TradeMineTitle = AddText(TradeWindow, 10.f, 22.f, 9, TrText);
 	TradeTheirTitle = AddText(TradeWindow, 10.f + TradeColW + 10.f, 22.f, 9, TrText);
 	AddColor(TradeWindow, FLinearColor(0.9f, 0.92f, 0.96f, 1.f), 8.f, TradeListY - 2.f, TradeColW, TradeRowCount * TradeRowH + 4.f);
@@ -55,7 +55,7 @@ void UMythRoHUDWidget::BuildTradeWindows()
 	}
 	const float BY = H - 40.f;
 	TradeHint = AddText(TradeWindow, 10.f, BY - 4.f, 7, TrGray);
-	TradeLockLink = AddTextButton(TradeWindow, TEXT("Travar"), 40.f, BY + 10.f, 80.f);
+	TradeLockLink = AddTextButton(TradeWindow, TEXT("Lock"), 40.f, BY + 10.f, 80.f);
 	TradeCommitLink = AddButtonHit(TradeWindow, TEXT("exchange"), 170.f, BY + 10.f);
 	TradeCancelLink = AddButtonHit(TradeWindow, TEXT("cancel"), 290.f, BY + 10.f);
 
@@ -67,7 +67,7 @@ void UMythRoHUDWidget::BuildTradeWindows()
 
 	// Menu do botao direito sobre um jogador
 	PlayerMenuWindow = MakeRoPanel(TEXT("Player"), FVector2D(170.f, 17.f + 6 * 20.f + 10.f), FVector2D::ZeroVector);
-	const TCHAR* Labels[6] = { TEXT("Trade"), TEXT("Invite to party"), TEXT("Cochichar"), TEXT("Adicionar amigo"), TEXT("Invite to guild"), TEXT("Cancel") };
+	const TCHAR* Labels[6] = { TEXT("Trade"), TEXT("Invite to party"), TEXT("Whisper"), TEXT("Add friend"), TEXT("Invite to guild"), TEXT("Cancel") };
 	for (int32 i = 0; i < 6; ++i)
 	{
 		UTextBlock* T = AddText(PlayerMenuWindow, 14.f, 24.f + i * 20.f, 9, TrLink);
@@ -109,7 +109,7 @@ void UMythRoHUDWidget::RefreshTrade()
 		if (TradeAskWindow) { TradeAskWindow->SetVisibility(ESlateVisibility::Collapsed); }
 	}
 	TradeMineTitle->SetText(FText::FromString(Net->IsTradeLockedMine() ? TEXT("You (locked)") : TEXT("You")));
-	TradeTheirTitle->SetText(FText::FromString(FString::Printf(TEXT("%s%s"), Net->GetTradePartner().IsEmpty() ? TEXT("Player") : *Net->GetTradePartner(), Net->IsTradeLockedTheirs() ? TEXT(" (travado)") : TEXT(""))));
+	TradeTheirTitle->SetText(FText::FromString(FString::Printf(TEXT("%s%s"), Net->GetTradePartner().IsEmpty() ? TEXT("Player") : *Net->GetTradePartner(), Net->IsTradeLockedTheirs() ? TEXT(" (locked)") : TEXT(""))));
 	TradeMineTitle->SetColorAndOpacity(FSlateColor(Net->IsTradeLockedMine() ? TrGreen : TrText));
 	TradeTheirTitle->SetColorAndOpacity(FSlateColor(Net->IsTradeLockedTheirs() ? TrGreen : TrText));
 	for (int32 i = 0; i < TradeRowCount; ++i)

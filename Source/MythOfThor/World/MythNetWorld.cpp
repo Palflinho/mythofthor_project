@@ -427,7 +427,7 @@ void AMythNetWorld::HandleLoginResult(bool bSuccess, const FString& Message)
 		}
 		return;
 	}
-	Chat(bSuccess ? TEXT("Login aceito.") : FString::Printf(TEXT("Login recusado: %s"), *Message), bSuccess ? NetSystemColor : NetErrorColor);
+	Chat(bSuccess ? TEXT("Login accepted.") : FString::Printf(TEXT("Login refused: %s"), *Message), bSuccess ? NetSystemColor : NetErrorColor);
 }
 
 void AMythNetWorld::HandleCharCreateResult(bool bSuccess, const FString& Message)
@@ -589,7 +589,7 @@ void AMythNetWorld::FinishMapEnter(const FString& Map, int32 CellX, int32 CellY)
 		ApplySelfAppearance();
 		HandleStats(Net->GetPlayerStats());
 	}
-	Chat(FString::Printf(TEXT("Entrou em %s (%d, %d)."), *Map, CellX, CellY), NetSystemColor);
+	Chat(FString::Printf(TEXT("Entered %s (%d, %d)."), *Map, CellX, CellY), NetSystemColor);
 }
 
 // ------------------------------------------------------------------------------------------------ unidades
@@ -1400,7 +1400,7 @@ void AMythNetWorld::HandleDisconnected(const FString& Reason)
 	{
 		if (EntryHud->IsEntryActive())
 		{
-			EntryHud->ShowEntryLogin(FString::Printf(TEXT("Desconectado: %s"), *Reason));
+			EntryHud->ShowEntryLogin(FString::Printf(TEXT("Disconnected: %s"), *Reason));
 		}
 	}
 	Chat(FString::Printf(TEXT("Disconnected from the server: %s"), *Reason), NetErrorColor);

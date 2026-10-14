@@ -1217,6 +1217,10 @@ protected:
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> PetLines;   // nivel, fome, lealdade, acessorio
 	UPROPERTY() TObjectPtr<UTextBlock> PetAutoFeed;
 	UPROPERTY() TArray<TObjectPtr<UTextBlock>> PetCmdBtns;  // alimentar, brincar, voltar para o ovo, desequipar
+	UPROPERTY() TObjectPtr<UTextBlock> PetEvoLine1;
+	UPROPERTY() TObjectPtr<UTextBlock> PetEvoLine2;
+	UPROPERTY() TObjectPtr<UTextBlock> PetEvoBtn;
+	int32 PetEvoIndex = 0;
 	FString PetPortraitKey;
 	FString PetShownName; // nome que a caixa mostra (o servidor confirma a troca mandando o ZC_PROPERTY_PET de novo)
 

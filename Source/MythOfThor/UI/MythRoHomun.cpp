@@ -48,7 +48,7 @@ void UMythRoHUDWidget::BuildHomunWindow()
 		S->SetPosition(FVector2D(156.f, 24.f) * UIScale);
 		S->SetSize(FVector2D(120.f, 20.f) * UIScale);
 	}
-	HomunRenameBtn = AddTextButton(HomunWindow, TEXT("Renomear"), 282.f, 24.f, 70.f);
+	HomunRenameBtn = AddTextButton(HomunWindow, TEXT("Rename"), 282.f, 24.f, 70.f);
 	for (int32 i = 0; i < HomLineCount; ++i)
 	{
 		const bool bStat = i >= 3;
@@ -174,13 +174,13 @@ void UMythRoHUDWidget::RefreshHomun()
 		FString::Printf(TEXT("%s: %d"), *HomMsg(329), H.Level),
 		FString::Printf(TEXT("%s: %d/100"), *HomMsg(585), H.Hunger),
 		FString::Printf(TEXT("%s: %s"), *HomMsg(586), *Loyalty),
-		FString::Printf(TEXT("Atq: %d"), H.Atk),
-		FString::Printf(TEXT("Matq: %d"), H.Matk),
+		FString::Printf(TEXT("ATK: %d"), H.Atk),
+		FString::Printf(TEXT("MATK: %d"), H.Matk),
 		FString::Printf(TEXT("Accuracy: %d"), H.Hit),
 		FString::Printf(TEXT("Critical: %d"), H.Crit),
 		FString::Printf(TEXT("Def: %d"), H.Def),
 		FString::Printf(TEXT("Mdef: %d"), H.Mdef),
-		FString::Printf(TEXT("Esquiva: %d"), H.Flee),
+		FString::Printf(TEXT("Flee: %d"), H.Flee),
 		FString::Printf(TEXT("ASPD: %d"), Aspd),
 	};
 	for (int32 i = 0; i < HomLineCount; ++i)
@@ -225,7 +225,7 @@ void UMythRoHUDWidget::RefreshHomun()
 		}
 		const bool bPassive = S->Inf == 0;
 		HomunSkillNames[i]->SetText(FText::FromString(S->Level > 0
-			? FString::Printf(TEXT("%s  Nv %d%s"), *Name, S->Level, bPassive ? TEXT("  (passiva)") : *FString::Printf(TEXT("  (%d SP)"), S->Sp))
+			? FString::Printf(TEXT("%s  Nv %d%s"), *Name, S->Level, bPassive ? TEXT("  (passive)") : *FString::Printf(TEXT("  (%d SP)"), S->Sp))
 			: FString::Printf(TEXT("%s  (not learned)"), *Name)));
 		HomunSkillNames[i]->SetColorAndOpacity(FSlateColor(S->Level > 0 && !bPassive ? HomLink : HomGray));
 	}

@@ -127,20 +127,9 @@ namespace
 				for (const auto& Pair : Root2026->Values)
 				{
 					const int32 Id = FCString::Atoi(*Pair.Key);
-					if (FMythRoItemInfo* Existing = Table.Find(Id))
-					{
-						// LATAM sometimes keeps the raw Korean (CP949) name, which shows as mojibake: take the 2026 name then
-						int32 Odd = 0;
-						for (const TCHAR C : Existing->Name) { Odd += (C >= 0xA1 && C <= 0xBF && C != 0xAA && C != 0xBA) ? 1 : 0; }
-						if (Odd >= 2)
-						{
-							FString Fixed;
-							if (Pair.Value->AsObject()->TryGetStringField(TEXT("name"), Fixed) && !Fixed.IsEmpty()) { Existing->Name = Fixed; }
-						}
-						continue;
-					}
+					// The 2026 table (iRO English, ROenglishRE) covers every item: it wins over the LATAM Portuguese entry
 					const TSharedPtr<FJsonObject> O = Pair.Value->AsObject();
-					FMythRoItemInfo& I = Table.Add(Id);
+					FMythRoItemInfo& I = Table.FindOrAdd(Id);
 					I.Name = O->GetStringField(TEXT("name"));
 					I.Desc = Lines(O, TEXT("desc"));
 					I.UnidentifiedName = O->GetStringField(TEXT("unidentified_name"));
@@ -149,7 +138,7 @@ namespace
 					I.Slots = static_cast<int32>(O->GetNumberField(TEXT("slots")));
 					++Added;
 				}
-				UE_LOG(LogTemp, Log, TEXT("MythRoClientTables: %d items from the 2026 table (no entry in LATAM)"), Added);
+				UE_LOG(LogTemp, Log, TEXT("MythRoClientTables: %d items from the 2026 English table (overrides LATAM)"), Added);
 			}
 		}
 		return Table;
@@ -278,7 +267,9 @@ FString FMythRoClientTables::Message(int32 Index)
 				const TSharedPtr<FJsonObject>* Obj = nullptr;
 				if (P.Key.IsNumeric() && P.Value->TryGetObject(Obj))
 				{
-					Messages.Add(FCString::Atoi(*P.Key), (*Obj)->GetStringField(TEXT("text")));
+					FString En;
+					// English (ROenglishRE msgstringtable of the 2026 client) first; the LATAM Portuguese text only when there is none
+					Messages.Add(FCString::Atoi(*P.Key), ((*Obj)->TryGetStringField(TEXT("text_en"), En) && !En.IsEmpty()) ? En : (*Obj)->GetStringField(TEXT("text")));
 				}
 			}
 		}
@@ -341,8 +332,8 @@ TArray<FString> FMythRoClientTables::ItemDescriptionLines(int32 ItemID, bool bId
 	if (const FCatalogLite* C = CatalogLite().Find(ItemID))
 	{
 		Out.Add(FString::Printf(TEXT("%s"), *C->NameEn));
-		const TCHAR* Kind = C->Kind == TEXT("equip") ? TEXT("Equipment") : (C->Kind == TEXT("card") ? TEXT("Carta") : (C->Kind == TEXT("use") ? TEXT("Consumable") : TEXT("Diversos")));
-		Out.Add(FString::Printf(TEXT("Tipo: %s%s"), Kind, C->Sub.IsEmpty() ? TEXT("") : *FString::Printf(TEXT(" (%s)"), *C->Sub)));
+		const TCHAR* Kind = C->Kind == TEXT("equip") ? TEXT("Equipment") : (C->Kind == TEXT("card") ? TEXT("Card") : (C->Kind == TEXT("use") ? TEXT("Consumable") : TEXT("Misc")));
+		Out.Add(FString::Printf(TEXT("Type: %s%s"), Kind, C->Sub.IsEmpty() ? TEXT("") : *FString::Printf(TEXT(" (%s)"), *C->Sub)));
 		Out.Add(TEXT("Description not available in the client."));
 	}
 	else

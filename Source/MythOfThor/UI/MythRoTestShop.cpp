@@ -71,9 +71,7 @@ namespace
 			FCatalogItem It;
 			It.Id = (*O)->GetIntegerField(TEXT("i"));
 			It.NameEn = (*O)->GetStringField(TEXT("n"));
-			// Nome em ingles (do item_db) e, quando o cliente tem um nome proprio, o nome em portugues entre parenteses
-			const FString Pt = (*O)->GetStringField(TEXT("p"));
-			It.Name = (Pt.IsEmpty() || Pt == It.NameEn || Pt == TEXT("Carta")) ? It.NameEn : FString::Printf(TEXT("%s (%s)"), *It.NameEn, *Pt);
+			It.Name = It.NameEn; // English name from the rAthena item_db
 			const FString Kind = (*O)->GetStringField(TEXT("t"));
 			It.Kind = Kind == TEXT("equip") ? 0 : Kind == TEXT("card") ? 1 : Kind == TEXT("use") ? 2 : 3;
 			Items.Add(MoveTemp(It));

@@ -50,7 +50,7 @@ namespace
 		return B;
 	}
 	FString NvArtS(const TCHAR* Name) { return FString::Printf(TEXT("navigation_interface3/%s.bmp"), Name); }
-	const TCHAR* NvFilterNames[3] = { TEXT("All"), TEXT("Maps"), TEXT("Monstros") };
+	const TCHAR* NvFilterNames[3] = { TEXT("All"), TEXT("Maps"), TEXT("Monsters") };
 	const TCHAR* NvSizeNames[3] = { TEXT("pequeno"), TEXT("medium"), TEXT("grande") };
 
 	struct FNaviLink { FString To; int32 X = 0, Y = 0; };
@@ -305,7 +305,7 @@ void UMythRoHUDWidget::SearchNavi(const FString& Query)
 			}
 		}
 	}
-	NaviCount->SetText(FText::FromString(Needle.IsEmpty() ? FString() : FString::Printf(TEXT("Resultado[%d]"), NaviResults.Num())));
+	NaviCount->SetText(FText::FromString(Needle.IsEmpty() ? FString() : FString::Printf(TEXT("Result[%d]"), NaviResults.Num())));
 	if (NaviResults.Num() == 1 || (NaviResults.Num() > 0 && NaviResults[0].Type == 0 && Data.Names[NaviResults[0].MapId].ToLower() == Needle))
 	{
 		ShowNaviRoute(NaviResults[0].MapId); // um resultado so, ou o nome exato do mapa: ja mostra
@@ -488,7 +488,7 @@ void UMythRoHUDWidget::TickNaviAuto(float DeltaTime)
 {
 	if (NaviAutoBtn)
 	{
-		const FString Want = bNaviAuto ? TEXT("Parar") : TEXT("Mover");
+		const FString Want = bNaviAuto ? TEXT("Stop") : TEXT("Mover");
 		if (NaviAutoBtn->GetText().ToString() != Want)
 		{
 			NaviAutoBtn->SetText(FText::FromString(Want));

@@ -89,7 +89,7 @@ void UMythRoHUDWidget::BuildEntryScreens()
 		AddRounded(EntryLoginPanel, FLinearColor(0.965f, 0.965f, 0.98f, 1.f), FLinearColor::Transparent, 0.f, 9.f, Size.X, Size.Y - 9.f, 0.f, 7.f)->SetVisibility(ESlateVisibility::Visible);
 		AddTitleBar(EntryLoginPanel, Size.X, TEXT("Login"));
 		AddText(EntryLoginPanel, 18.f, 30.f, 9, EnText)->SetText(FText::FromString(TEXT("Username")));
-		AddText(EntryLoginPanel, 18.f, 66.f, 9, EnText)->SetText(FText::FromString(TEXT("Senha")));
+		AddText(EntryLoginPanel, 18.f, 66.f, 9, EnText)->SetText(FText::FromString(TEXT("Password")));
 		EntryUserBox = WidgetTree->ConstructWidget<UEditableTextBox>();
 		EntryUserBox->OnTextCommitted.AddDynamic(this, &UMythRoHUDWidget::OnEntryCommitted);
 		if (UCanvasPanelSlot* S = EntryLoginPanel->AddChildToCanvas(EntryUserBox))
@@ -178,7 +178,7 @@ void UMythRoHUDWidget::BuildEntryScreens()
 			S->SetPosition(FVector2D(18.f, 44.f) * UIScale);
 			S->SetSize(FVector2D(Size.X - 36.f, 20.f) * UIScale);
 		}
-		AddText(EntryCreatePanel, 18.f, 78.f, 9, EnText)->SetText(FText::FromString(TEXT("Cabelo")));
+		AddText(EntryCreatePanel, 18.f, 78.f, 9, EnText)->SetText(FText::FromString(TEXT("Hair")));
 		EntryHairLeft = AddText(EntryCreatePanel, 120.f, 78.f, 10, EnLink);
 		EntryHairLeft->SetText(FText::FromString(TEXT("◀")));
 		EntryHairText = AddText(EntryCreatePanel, 148.f, 78.f, 9, EnText);
@@ -284,7 +284,7 @@ void UMythRoHUDWidget::SubmitEntryLogin()
 	}
 	const FString Host = URagnarokNetworkSubsystem::ResolveHost();
 	SetEntryPanel(2);
-	EntryStatus->SetText(FText::FromString(TEXT("Conectando...")));
+	EntryStatus->SetText(FText::FromString(TEXT("Connecting...")));
 	EntryStatus->SetColorAndOpacity(FSlateColor(EnGray));
 	if (!Net->ConnectAndLogin(Host, User, Pass))
 	{
@@ -341,7 +341,7 @@ void UMythRoHUDWidget::RefreshEntryCharacters()
 		EntryCardInfo2[i]->SetText(C ? FText::FromString(FString::Printf(TEXT("Nv %d / %d"), C->BaseLevel, C->JobLevel)) : FText::GetEmpty());
 	}
 	const FRagnarokCharacterSlotInfo* Sel = EntrySlotChar(EntrySelected);
-	EntryInfoTitle->SetText(FText::FromString(Sel ? Sel->Name : FString(TEXT("Escolha"))));
+	EntryInfoTitle->SetText(FText::FromString(Sel ? Sel->Name : FString(TEXT("Choose"))));
 	const FString Values[6] = {
 		Sel ? EnJobName(Sel->JobClass) : FString(),
 		Sel ? FString::Printf(TEXT("%d"), Sel->BaseLevel) : FString(),

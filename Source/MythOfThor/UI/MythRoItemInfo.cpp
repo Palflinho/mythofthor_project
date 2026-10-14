@@ -348,7 +348,7 @@ void UMythRoHUDWidget::UpdateSkillHover()
 	// So os pre-requisitos; a descricao fica no botao direito (ShowSkillInfo)
 	if (Needs.Num() > 0)
 	{
-		AddLine(TEXT("Requer:"), true);
+		AddLine(TEXT("Requires:"), true);
 		for (const TPair<int32, int32>& N : Needs)
 		{
 			const FMythTreeSkill* NeedTree = FMythRoSkillTree::Skill(N.Key);

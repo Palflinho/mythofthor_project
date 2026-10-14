@@ -127,11 +127,11 @@ void UMythRoHUDWidget::RefreshParty()
 		Info.RemoveFromEnd(TEXT(".gat"));
 		if (M->ClassId > 0 || M->Level > 0)
 		{
-			Info = FString::Printf(TEXT("Nv %d %s  -  %s"), M->Level, *URagnarokNetworkSubsystem::GetJobNameFromClass(M->ClassId), *Info);
+			Info = FString::Printf(TEXT("Lv %d %s  -  %s"), M->Level, *URagnarokNetworkSubsystem::GetJobNameFromClass(M->ClassId), *Info);
 		}
 		if (M->bLeader) { Info += TEXT("  (leader)"); }
-		if (M->bOffline) { Info += TEXT("  (desconectado)"); }
-		else if (bDead) { Info += TEXT("  (morto)"); }
+		if (M->bOffline) { Info += TEXT("  (offline)"); }
+		else if (bDead) { Info += TEXT("  (dead)"); }
 		PartyRowInfo[i]->SetText(FText::FromString(Info));
 		const float Fraction = (MaxHp > 0 && !M->bOffline) ? FMath::Clamp(static_cast<float>(Hp) / static_cast<float>(MaxHp), 0.f, 1.f) : 0.f;
 		if (UCanvasPanelSlot* S = Cast<UCanvasPanelSlot>(PartyBarFill[i]->Slot))

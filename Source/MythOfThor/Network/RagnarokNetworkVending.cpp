@@ -118,7 +118,7 @@ void URagnarokNetworkSubsystem::HandleVendingPacket(const uint8* PacketData, int
 			{
 				if (MyVendItems[i].Index == Index)
 				{
-					OnChatMessage.Broadcast(TEXT(""), FString::Printf(TEXT("Vendido: %s x %d."), *FMythRoClientTables::ItemName(MyVendItems[i].ItemID), Amount), TEXT("#00FFFF"));
+					OnChatMessage.Broadcast(TEXT(""), FString::Printf(TEXT("Sold: %s x %d."), *FMythRoClientTables::ItemName(MyVendItems[i].ItemID), Amount), TEXT("#00FFFF"));
 					MyVendItems[i].Amount -= Amount;
 					if (MyVendItems[i].Amount <= 0)
 					{

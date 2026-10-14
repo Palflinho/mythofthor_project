@@ -773,6 +773,8 @@ public:
 	/** Mascote (RagnarokNetworkPet.cpp). Menu: 0 informacoes, 1 alimentar, 2 brincar, 3 voltar para o ovo, 4 desequipar acessorio. */
 	bool SendPetMenu(int32 Command);
 	bool SendPetRename(const FString& Name);
+	/** Pet evolution: CZ_PET_EVOLUTION 0x09fb with the egg item id of the target pet; the server checks loyalty and items, result 0x09fc. */
+	bool SendPetEvolution(int32 TargetEggItemId);
 	/** Captura: o monstro escolhido depois do ZC_START_CAPTURE (0 desiste). */
 	bool SendCatchPet(int32 TargetId);
 	/** CZ_CONFIG 0x02d8: 2 = autoalimentar o mascote. */

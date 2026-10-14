@@ -36,7 +36,7 @@ namespace
 
 	const TArray<FString>& QualityNames()
 	{
-		static const TArray<FString> N = { TEXT("Baixa"), TEXT("Medium"), TEXT("Alta"), TEXT("Epic"), TEXT("Cinematic") };
+		static const TArray<FString> N = { TEXT("Low"), TEXT("Medium"), TEXT("High"), TEXT("Epic"), TEXT("Cinematic") };
 		return N;
 	}
 }
@@ -144,7 +144,7 @@ void UMythRoHUDWidget::BuildGameMenu()
 	GameMenuWindow->SetVisibility(ESlateVisibility::Collapsed);
 
 	// Configuracoes graficas: "rotulo   <  valor  >" por linha
-	const TCHAR* Labels[GfxRowCount] = { TEXT("Screen mode"), TEXT("Resolution"), TEXT("Overall quality"), TEXT("Sombras"),
+	const TCHAR* Labels[GfxRowCount] = { TEXT("Screen mode"), TEXT("Resolution"), TEXT("Overall quality"), TEXT("Shadows"),
 		TEXT("Lighting (Lumen)"), TEXT("Anti-aliasing"), TEXT("Resolution scale"), TEXT("FPS limit"), TEXT("V-Sync") };
 	const FVector2D Size(470.f, 17.f + 22.f + GfxRowCount * 24.f + 44.f);
 	GraphicsWindow = MakeRoPanel(TEXT("Settings"), Size, FVector2D::ZeroVector);
@@ -172,7 +172,7 @@ void UMythRoHUDWidget::BuildGameMenu()
 	LoadGraphicsOptions();
 
 	// Som e interface
-	const TCHAR* SndLabels[SndRowCount] = { TEXT("Master volume"), TEXT("Music"), TEXT("Efeitos"), TEXT("Interface scale") };
+	const TCHAR* SndLabels[SndRowCount] = { TEXT("Master volume"), TEXT("Music"), TEXT("Effects"), TEXT("Interface scale") };
 	const FVector2D SSize = Size; // mesmo tamanho: troca de aba sem a janela "pular"
 	SoundWindow = MakeRoPanel(TEXT("Settings"), SSize, FVector2D::ZeroVector);
 	AddSettingsTabs(SoundWindow);
@@ -199,7 +199,7 @@ void UMythRoHUDWidget::BuildGameMenu()
 	DeathSaveLink = AddText(DeathWindow, 14.f, 44.f, 9, MenuLink);
 	DeathSaveLink->SetText(FText::FromString(TEXT("Return to save point")));
 	DeathWaitLink = AddText(DeathWindow, 14.f, 64.f, 9, MenuLink);
-	DeathWaitLink->SetText(FText::FromString(TEXT("Aguardar socorro")));
+	DeathWaitLink->SetText(FText::FromString(TEXT("Wait for rescue")));
 	DeathWindow->SetVisibility(ESlateVisibility::Collapsed);
 	SoundWindow->SetVisibility(ESlateVisibility::Collapsed);
 	SndMusic = FMath::RoundToInt(UMythRoSound::GetMusicVolume() * 10.f);
@@ -249,8 +249,8 @@ void UMythRoHUDWidget::RefreshGraphicsWindow()
 	{
 		return;
 	}
-	static const TCHAR* Modes[3] = { TEXT("Window"), TEXT("Fullscreen (borderless)"), TEXT("Tela cheia") };
-	static const TCHAR* AA[4] = { TEXT("None"), TEXT("FXAA (recomendado)"), TEXT("TAA"), TEXT("TSR") };
+	static const TCHAR* Modes[3] = { TEXT("Window"), TEXT("Fullscreen (borderless)"), TEXT("Fullscreen") };
+	static const TCHAR* AA[4] = { TEXT("None"), TEXT("FXAA (recommended)"), TEXT("TAA"), TEXT("TSR") };
 	static const TCHAR* Fps[5] = { TEXT("30"), TEXT("60"), TEXT("120"), TEXT("144"), TEXT("Unlimited") };
 	const FIntPoint Res = Gfx.Resolutions.IsValidIndex(Gfx.ResolutionIndex) ? Gfx.Resolutions[Gfx.ResolutionIndex] : FIntPoint(1600, 900);
 	const FString Values[GfxRowCount] = {
@@ -258,11 +258,11 @@ void UMythRoHUDWidget::RefreshGraphicsWindow()
 		FString::Printf(TEXT("%d x %d"), Res.X, Res.Y),
 		QualityNames()[FMath::Clamp(Gfx.Quality, 0, 4)],
 		QualityNames()[FMath::Clamp(Gfx.Shadows, 0, 4)],
-		Gfx.Lumen ? TEXT("Ligada") : TEXT("Desligada"),
+		Gfx.Lumen ? TEXT("On") : TEXT("Off"),
 		AA[FMath::Clamp(Gfx.AntiAliasing, 0, 3)],
 		FString::Printf(TEXT("%d%%"), Gfx.ResolutionScale * 10),
 		Fps[FMath::Clamp(Gfx.FpsIndex, 0, 4)],
-		Gfx.bVSync ? TEXT("Ligado") : TEXT("Desligado") };
+		Gfx.bVSync ? TEXT("On") : TEXT("Off") };
 	for (int32 i = 0; i < GfxRowCount; ++i)
 	{
 		GfxValues[i]->SetText(FText::FromString(Values[i]));
