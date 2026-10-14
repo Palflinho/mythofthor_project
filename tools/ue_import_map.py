@@ -69,11 +69,11 @@ def warn(msg):
 # ----------------------------------------------------------------------------- argumentos
 def parse_args(argv):
     args = {'obj': None, 'name': None, 'map_name': None, 'dest': None, 'scale': 10.0, 'texture_dir': None,
-            'bgm': None, 'start_cell': None, 'lighting': True}
+            'bgm': None, 'start_cell': None, 'lighting': True, 'water_level': None}
     i = 0
     while i < len(argv):
         a = argv[i]
-        if a in ('--name', '--map-name', '--dest', '--scale', '--texture-dir', '--bgm', '--start-cell'):
+        if a in ('--name', '--map-name', '--dest', '--scale', '--texture-dir', '--bgm', '--start-cell', '--water-level'):
             args[a[2:].replace('-', '_')] = argv[i + 1]
             i += 2
         elif a == '--no-lighting':
@@ -542,6 +542,10 @@ def run():
     try_set(info, 'cell_origin_uu', unreal.Vector2D(origin_x, origin_y))
     if bgm:
         try_set(info, 'bgm', bgm)
+    if args.get('water_level') is not None:
+        try_set(info, 'b_has_water', True)
+        try_set(info, 'water_level_uu', float(args['water_level']) * scale)
+        log('Plano de agua configurado: %.1f UU' % (float(args['water_level']) * scale))
 
     # Popula dados de ambiente e fuso horario a partir de Config/map_environment_table.json
     env_cfg_path = os.path.join(unreal.Paths.project_config_dir(), 'map_environment_table.json')

@@ -5,6 +5,9 @@
 #include "GameFramework/Actor.h"
 #include "GameFramework/PlayerController.h"
 #include "PaperFlipbook.h"
+#include "TimerManager.h"
+#include "Materials/MaterialInstanceDynamic.h"
+#include "World/MythMapInfo.h"
 
 UMythSpriteAnimComponent::UMythSpriteAnimComponent()
 {
@@ -18,6 +21,38 @@ void UMythSpriteAnimComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	OnFinishedPlaying.AddDynamic(this, &UMythSpriteAnimComponent::HandleFinishedPlaying);
+
+	// Detecta automaticamente se o mapa atual possui plano de agua configurado
+	if (const UWorld* World = GetWorld())
+	{
+		if (const AMythMapInfo* MapInfo = AMythMapInfo::Find(World))
+		{
+			if (MapInfo->bHasWater)
+			{
+				bEnableWaterReflection = true;
+				WaterSurfaceZ = MapInfo->WaterLevelUU;
+			}
+		}
+	}
+
+	if (bEnableWaterReflection && !WaterReflectionComponent)
+	{
+		if (AActor* Owner = GetOwner())
+		{
+			WaterReflectionComponent = NewObject<UPaperFlipbookComponent>(Owner, TEXT("WaterReflectionSpriteComponent"));
+			if (WaterReflectionComponent)
+			{
+				WaterReflectionComponent->SetupAttachment(Owner->GetRootComponent());
+				WaterReflectionComponent->RegisterComponent();
+				WaterReflectionComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+				WaterReflectionComponent->SetCastShadow(false);
+				WaterReflectionComponent->SetTranslucentSortPriority(-5);
+				WaterReflectionComponent->SetLooping(true);
+				WaterReflectionComponent->SetRelativeScale3D(FVector(1.f, 1.f, -1.f)); // Espelhamento no eixo Z
+			}
+		}
+	}
+
 	ApplyFlipbook(false);
 }
 
@@ -78,6 +113,18 @@ void UMythSpriteAnimComponent::ApplyFlipbook(bool bKeepPlaybackPosition)
 	// Trocar so a direcao nao deve reiniciar o ciclo de caminhada.
 	SetPlaybackPosition(bKeepPlaybackPosition ? FMath::Min(Position, Flipbook->GetTotalDuration()) : 0.f, false);
 	Play();
+
+	// Sincroniza o Ghost Sprite Espelhado
+	if (WaterReflectionComponent)
+	{
+		if (WaterReflectionComponent->GetFlipbook() != Flipbook)
+		{
+			WaterReflectionComponent->SetFlipbook(Flipbook);
+		}
+		WaterReflectionComponent->SetLooping(bLoop);
+		WaterReflectionComponent->SetPlaybackPosition(GetPlaybackPosition(), false);
+		WaterReflectionComponent->Play();
+	}
 }
 
 void UMythSpriteAnimComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -94,6 +141,23 @@ void UMythSpriteAnimComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 
 	// Billboard em yaw: o plano do sprite (normal -Y) fica de frente para a camera.
 	SetWorldRotation(FRotator(0.f, CamRot.Yaw - 90.f, 0.f));
+
+	// Atualiza o Ghost Sprite Espelhado de agua (GDD Tecnico HD-2D)
+	if (WaterReflectionComponent && bEnableWaterReflection)
+	{
+		const bool bReflectVisible = IsVisible() && (State != EMythSpriteState::Dead);
+		WaterReflectionComponent->SetVisibility(bReflectVisible);
+		if (bReflectVisible)
+		{
+			const FVector SpriteLoc = GetComponentLocation();
+			// Espelha no eixo Z atraves do plano d'agua (Z_refletido = 2 * WaterZ - SpriteZ)
+			const float ReflectedZ = 2.f * WaterSurfaceZ - SpriteLoc.Z;
+			WaterReflectionComponent->SetWorldLocation(FVector(SpriteLoc.X, SpriteLoc.Y, ReflectedZ));
+			WaterReflectionComponent->SetWorldRotation(FRotator(0.f, CamRot.Yaw - 90.f, 0.f));
+			WaterReflectionComponent->SetWorldScale3D(FVector(GetComponentScale().X, GetComponentScale().Y, -GetComponentScale().Z));
+			WaterReflectionComponent->SetPlaybackPosition(GetPlaybackPosition(), false);
+		}
+	}
 
 	if (State == EMythSpriteState::Dead)
 	{
@@ -160,7 +224,73 @@ void UMythSpriteAnimComponent::PlayAttack(float AttackDuration)
 		}
 	}
 }
-void UMythSpriteAnimComponent::PlayHit()    { EnterOneShot(EMythSpriteState::Hit); }
+void UMythSpriteAnimComponent::PlayHit()
+{
+	EnterOneShot(EMythSpriteState::Hit);
+	TriggerHitstop(0.04f); // 2 a 3 frames (0.03s a 0.05s) conforme GDD Tecnico HD-2D
+	TriggerHitFlash(0.05f);
+}
+
+void UMythSpriteAnimComponent::TriggerHitstop(float Duration)
+{
+	if (Duration <= 0.f)
+	{
+		return;
+	}
+
+	AActor* Owner = GetOwner();
+	UWorld* World = GetWorld();
+	if (!Owner || !World)
+	{
+		return;
+	}
+
+	if (!bIsHitstopped)
+	{
+		SavedCustomTimeDilation = Owner->CustomTimeDilation;
+		bIsHitstopped = true;
+	}
+
+	// Pausa fisica quase completa no tempo do ator para imprimir peso ao impacto
+	Owner->CustomTimeDilation = 0.001f;
+
+	World->GetTimerManager().ClearTimer(HitstopTimerHandle);
+	World->GetTimerManager().SetTimer(HitstopTimerHandle, this, &UMythSpriteAnimComponent::EndHitstop, Duration, false);
+}
+
+void UMythSpriteAnimComponent::EndHitstop()
+{
+	if (bIsHitstopped)
+	{
+		if (AActor* Owner = GetOwner())
+		{
+			Owner->CustomTimeDilation = SavedCustomTimeDilation;
+		}
+		bIsHitstopped = false;
+	}
+}
+
+void UMythSpriteAnimComponent::TriggerHitFlash(float Duration)
+{
+	if (UMaterialInstanceDynamic* DynMat = GetMaterial(0) ? Cast<UMaterialInstanceDynamic>(GetMaterial(0)) : CreateDynamicMaterialInstance(0))
+	{
+		DynMat->SetScalarParameterValue(TEXT("HitFlash"), 1.0f);
+		if (UWorld* World = GetWorld())
+		{
+			World->GetTimerManager().ClearTimer(HitFlashTimerHandle);
+			World->GetTimerManager().SetTimer(HitFlashTimerHandle, this, &UMythSpriteAnimComponent::EndHitFlash, Duration, false);
+		}
+	}
+}
+
+void UMythSpriteAnimComponent::EndHitFlash()
+{
+	if (UMaterialInstanceDynamic* DynMat = Cast<UMaterialInstanceDynamic>(GetMaterial(0)))
+	{
+		DynMat->SetScalarParameterValue(TEXT("HitFlash"), 0.0f);
+	}
+}
+
 void UMythSpriteAnimComponent::Die()        { EnterOneShot(EMythSpriteState::Dead); }
 
 void UMythSpriteAnimComponent::Revive()
@@ -178,3 +308,24 @@ void UMythSpriteAnimComponent::FaceLocation(const FVector& WorldLocation)
 		ApplyFlipbook(true);
 	}
 }
+
+void UMythSpriteAnimComponent::SetupWaterReflection(bool bEnable, float InWaterSurfaceZ, float InOpacity)
+{
+	bEnableWaterReflection = bEnable;
+	WaterSurfaceZ = InWaterSurfaceZ;
+	ReflectionOpacity = InOpacity;
+	if (WaterReflectionComponent)
+	{
+		WaterReflectionComponent->SetVisibility(bEnable);
+	}
+}
+
+void UMythSpriteAnimComponent::SetWaterReflectionActive(bool bActive)
+{
+	bEnableWaterReflection = bActive;
+	if (WaterReflectionComponent)
+	{
+		WaterReflectionComponent->SetVisibility(bActive);
+	}
+}
+

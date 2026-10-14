@@ -45,6 +45,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Sprite")
 	void PlayHit();
 
+	/** Hitstop (Micro-congelamento): pausa o CustomTimeDilation por Duration segundos (GDD Tecnico HD-2D) */
+	UFUNCTION(BlueprintCallable, Category = "Sprite")
+	void TriggerHitstop(float Duration = 0.03f);
+
+	/** Hit-flash: pulso de emissao de 1 frame no sprite atingido */
+	UFUNCTION(BlueprintCallable, Category = "Sprite")
+	void TriggerHitFlash(float Duration = 0.05f);
+
 	UFUNCTION(BlueprintCallable, Category = "Sprite")
 	void Die();
 
@@ -55,6 +63,19 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Sprite")
 	void FaceLocation(const FVector& WorldLocation);
 
+	/** Configura o Ghost Sprite Espelhado na agua (GDD Tecnico: Sistema de Agua e Reflexos HD-2D) */
+	UFUNCTION(BlueprintCallable, Category = "Sprite|WaterReflection")
+	void SetupWaterReflection(bool bEnable, float InWaterSurfaceZ = 0.0f, float InOpacity = 0.40f);
+
+	UFUNCTION(BlueprintCallable, Category = "Sprite|WaterReflection")
+	void SetWaterReflectionActive(bool bActive);
+
+	UFUNCTION(BlueprintCallable, Category = "Sprite|WaterReflection")
+	void SetWaterSurfaceZ(float InZ) { WaterSurfaceZ = InZ; }
+
+	UFUNCTION(BlueprintPure, Category = "Sprite|WaterReflection")
+	UPaperFlipbookComponent* GetWaterReflectionComponent() const { return WaterReflectionComponent; }
+
 	UFUNCTION(BlueprintPure, Category = "Sprite")
 	EMythSpriteState GetState() const { return State; }
 
@@ -64,6 +85,18 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprite|WaterReflection")
+	TObjectPtr<UPaperFlipbookComponent> WaterReflectionComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprite|WaterReflection")
+	bool bEnableWaterReflection = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprite|WaterReflection")
+	float WaterSurfaceZ = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprite|WaterReflection")
+	float ReflectionOpacity = 0.40f;
 
 private:
 	EMythSpriteState State = EMythSpriteState::Idle;
@@ -77,4 +110,12 @@ private:
 	void ApplyFlipbook(bool bKeepPlaybackPosition);
 	UPaperFlipbook* FindFlipbook(EMythSpriteState InState, ERagnarokDirection InDir) const;
 	FRotator GetCameraRotation() const;
+
+	FTimerHandle HitstopTimerHandle;
+	FTimerHandle HitFlashTimerHandle;
+	float SavedCustomTimeDilation = 1.0f;
+	bool bIsHitstopped = false;
+
+	void EndHitstop();
+	void EndHitFlash();
 };

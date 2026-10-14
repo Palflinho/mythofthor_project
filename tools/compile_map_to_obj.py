@@ -117,13 +117,16 @@ def read_rsw(rsw_path: str):
         gat_file = f.read(40).split(b'\x00')[0].decode('cp949', errors='ignore') if version >= 1.4 else ""
         src_file = f.read(40).split(b'\x00')[0].decode('cp949', errors='ignore')
         
-        # Pula água
+        # Água (GDD Técnico: Sistema de Água e Reflexos HD-2D)
+        water_level = 0.0
+        has_water = False
         if version >= 1.3:
-            f.seek(4, os.SEEK_CUR)
+            water_level = struct.unpack('f', f.read(4))[0]
+            has_water = True
         if version >= 1.8:
-            f.seek(16, os.SEEK_CUR)
+            water_type, water_wave_height, water_wave_speed, water_wave_pitch = struct.unpack('4i', f.read(16))
         if version >= 1.9:
-            f.seek(4, os.SEEK_CUR)
+            water_anim_speed = struct.unpack('i', f.read(4))[0]
             
         # Pula luz
         if version >= 1.5:
@@ -169,7 +172,9 @@ def read_rsw(rsw_path: str):
         return {
             'gnd_file': gnd_file,
             'gat_file': gat_file,
-            'models': models
+            'models': models,
+            'water_level': water_level,
+            'has_water': has_water
         }
 
 

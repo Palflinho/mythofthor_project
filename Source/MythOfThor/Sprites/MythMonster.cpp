@@ -25,6 +25,8 @@ AMythMonster::AMythMonster()
 
 	// Pivo do sprite fica nos pes (bottom-center): desce ate o chao da capsula.
 	Sprite->SetRelativeLocation(FVector(0.f, 0.f, -40.f));
+	Sprite->SetRenderCustomDepth(true);
+	Sprite->SetCustomDepthStencilValue(2); // 2 = Monstro / Inimigo (GDD Tecnico HD-2D: Oclusao X-Ray)
 }
 
 void AMythMonster::PlaySfx(USoundBase* Sound) const

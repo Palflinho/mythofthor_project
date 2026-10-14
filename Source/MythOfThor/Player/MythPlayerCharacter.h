@@ -2,11 +2,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Core/RagnarokDirectionHelper.h"
 #include "MythPlayerCharacter.generated.h"
 
 class USpringArmComponent;
 class UCameraComponent;
 class UMythSpriteAnimComponent;
+class UPaperFlipbookComponent;
 class UMythStatsComponent;
 class UAutoBattleComponent;
 
@@ -74,15 +76,40 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
 	float ZoomStep = 100.f;
 
-	/** Sprite 2D do personagem; aponte Sprite->SpriteSet para o DA do Aprendiz. */
+	/** Sprite 2D do personagem (Corpo / Master Sprite Component). */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprite")
 	TObjectPtr<UMythSpriteAnimComponent> Sprite;
+
+	/** Camadas de customizacao visual sincronizadas (GDD Tecnico HD-2D: Secao 3) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprite|Layers")
+	TObjectPtr<UPaperFlipbookComponent> RobeLayer;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprite|Layers")
+	TObjectPtr<UPaperFlipbookComponent> HairLayer;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprite|Layers")
+	TObjectPtr<UPaperFlipbookComponent> HeadgearLowerLayer;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprite|Layers")
+	TObjectPtr<UPaperFlipbookComponent> HeadgearMiddleLayer;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprite|Layers")
+	TObjectPtr<UPaperFlipbookComponent> HeadgearTopLayer;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprite|Layers")
+	TObjectPtr<UPaperFlipbookComponent> WeaponLayer;
+
+	/** Ajusta dinamicamente a prioridade de transluscencia das camadas e inverte ao olhar para o Norte */
+	UFUNCTION(BlueprintCallable, Category = "Sprite|Layers")
+	void UpdateLayerSorting(ERagnarokDirection FacingDirection);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Myth|Stats")
 	TObjectPtr<UMythStatsComponent> Stats;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Myth|AutoBattle")
 	TObjectPtr<UAutoBattleComponent> AutoBattle;
+
+	virtual void Tick(float DeltaSeconds) override;
 
 protected:
 	virtual void BeginPlay() override;

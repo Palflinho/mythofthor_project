@@ -76,6 +76,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map|Environment")
 	FMapEnvironmentData EnvironmentData;
 
+	/** Altura da superficie da agua no mapa (GDD Tecnico: Sistema de Agua e Reflexos HD-2D). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map|Water")
+	bool bHasWater = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map|Water")
+	float WaterLevelUU = 0.f;
+
 	/** Calcula a hora local considerando o fuso horario do GridX e condicoes especiais (Noite Polar). */
 	UFUNCTION(BlueprintPure, Category = "Map|Environment")
 	float GetLocalHour(float ServerHour) const;

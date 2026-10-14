@@ -23,7 +23,8 @@ public class MythOfThor : ModuleRules
 			"SlateCore",
 			"NavigationSystem",
 			"Sockets",
-			"Networking"
+			"Networking",
+			"Niagara"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { });
