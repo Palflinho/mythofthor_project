@@ -49,7 +49,7 @@ services:
     command: sh -c "/bin/wait-for db:3306 -- /rathena/login-server"
     restart: unless-stopped
     ports:
-      - "6900:6900"
+      - "127.0.0.1:16900:6900"
     depends_on:
       - db
 
@@ -59,7 +59,7 @@ services:
     command: sh -c "/bin/wait-for db:3306 -- /rathena/char-server"
     restart: unless-stopped
     ports:
-      - "6121:6121"
+      - "127.0.0.1:16121:6121"
     depends_on:
       - login
 
@@ -69,7 +69,7 @@ services:
     command: sh -c "/bin/wait-for db:3306 -- /rathena/map-server"
     restart: unless-stopped
     ports:
-      - "5121:5121"
+      - "127.0.0.1:15121:5121"
     depends_on:
       - char
 
