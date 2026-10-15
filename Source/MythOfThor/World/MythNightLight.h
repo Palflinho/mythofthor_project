@@ -38,13 +38,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NightLight")
 	bool bAlwaysOn = false;
 
-	/** Desenha chama animada em loop sobre a tocha (torch_01.spr). */
+	/** Desenha chama animada em loop sobre a tocha (torch_01.spr) apenas para tochas reais. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NightLight")
-	bool bShowFlame = true;
+	bool bShowFlame = false;
 
-	/** Deslocamento vertical da chama animada em relacao a tocha (cm). */
+	/** Deslocamento vertical da chama animada em relacao a tocha (cm) - posicionado no cesto da tocha. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NightLight")
-	float FlameZOffset = -85.f;
+	float FlameZOffset = -115.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "NightLight")
 	TObjectPtr<UPointLightComponent> Light;

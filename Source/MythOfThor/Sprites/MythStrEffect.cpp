@@ -396,9 +396,9 @@ AMythLightFlash::AMythLightFlash()
 	Light->SetMobility(EComponentMobility::Movable);
 	Light->SetIntensityUnits(ELightUnits::Candelas);
 	Light->SetIntensity(0.f);
-	Light->SetAttenuationRadius(800.f);
+	Light->SetAttenuationRadius(450.f);
 	Light->SetSourceRadius(35.f);
-	Light->SetCastShadows(true);
+	Light->SetCastShadows(false); // flash rapido nao precisa de sombras pesadas por frame
 }
 
 AMythLightFlash* AMythLightFlash::Flash(UObject* WorldContext, const FVector& Location, const FLinearColor& Color, float Intensity, float InDuration, AActor* InFollow)

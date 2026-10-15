@@ -486,22 +486,42 @@ bool FMythSkillEffects::Play(UObject* WorldContext, int32 SkillID, EMythSkillEff
 	if (Stage == EMythSkillEffectStage::Hit || Stage == EMythSkillEffectStage::Effect || Stage == EMythSkillEffectStage::Release)
 	{
 		const FVector At = FeetOf(Target, Location) + FVector(0.f, 0.f, 75.f);
-		AMythLightFlash::Flash(WorldContext, At, LightColor, 2500.f, 0.45f, Target);
+		AMythLightFlash::Flash(WorldContext, At, LightColor, 450.f, 0.35f, Target);
+		if (SkillID == 271) // Asura Strike
+		{
+			if (const APlayerController* PC = WorldContext ? WorldContext->GetWorld()->GetFirstPlayerController() : nullptr)
+			{
+				if (AMythPlayerCharacter* QuakeChar = Cast<AMythPlayerCharacter>(PC->GetPawn()))
+				{
+					QuakeChar->StartQuake(0.45f, 65.f);
+				}
+			}
+		}
 	}
 	else if (Stage == EMythSkillEffectStage::Ground)
 	{
 		const FVector At = Location + FVector(0.f, 0.f, 40.f);
-		AMythLightFlash::Flash(WorldContext, At, LightColor, 3000.f, 0.65f, nullptr);
+		AMythLightFlash::Flash(WorldContext, At, LightColor, 600.f, 0.50f, nullptr);
+		if (SkillID == 89 || SkillID == 723) // Storm Gust
+		{
+			if (const APlayerController* PC = WorldContext ? WorldContext->GetWorld()->GetFirstPlayerController() : nullptr)
+			{
+				if (AMythPlayerCharacter* QuakeChar = Cast<AMythPlayerCharacter>(PC->GetPawn()))
+				{
+					QuakeChar->StartQuake(0.25f, 18.f);
+				}
+			}
+		}
 	}
 	else if (Stage == EMythSkillEffectStage::Cast || Stage == EMythSkillEffectStage::BeginCast)
 	{
 		AActor* Caster = Source ? Source : Target;
 		const FVector At = FeetOf(Caster, Location) + FVector(0.f, 0.f, 60.f);
-		AMythLightFlash::Flash(WorldContext, At, LightColor, 1200.f, 0.35f, Caster);
+		AMythLightFlash::Flash(WorldContext, At, LightColor, 280.f, 0.30f, Caster);
 	}
 	else if (!bPlayed && bFlashIfMissing)
 	{
-		AMythLightFlash::Flash(WorldContext, FeetOf(Target, Location) + FVector(0.f, 0.f, 70.f), LightColor, 1800.f, 0.55f, Target);
+		AMythLightFlash::Flash(WorldContext, FeetOf(Target, Location) + FVector(0.f, 0.f, 70.f), LightColor, 380.f, 0.40f, Target);
 	}
 	return bPlayed;
 }

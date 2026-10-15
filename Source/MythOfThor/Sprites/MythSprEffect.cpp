@@ -250,12 +250,23 @@ void AMythSprEffect::Tick(float DeltaSeconds)
 			Mat = bAdd ? AdditiveMaterials[Section] : Materials[Section];
 			Mat->SetTextureParameterValue(TEXT("Tex"), Tex);
 		}
-		const float HW = Size.X * 0.5f * UnitsPerPixel * L.Scale.X;
-		const float HH = Size.Y * 0.5f * UnitsPerPixel * L.Scale.Y;
+		float ScaleFactorX = L.Scale.X;
+		float ScaleFactorY = L.Scale.Y;
+		float GlowFactor = 1.0f;
+		if (Key.Contains(TEXT("torch")) && L.SprIndex == 0)
+		{
+			// Camada de claridade/halo ao redor da tocha: reduz o raio gigante em 75%
+			// e suaviza o brilho para nao cegar a tela nem cobrir paredes com bola radioativa
+			ScaleFactorX *= 0.22f;
+			ScaleFactorY *= 0.22f;
+			GlowFactor = 0.25f;
+		}
+		const float HW = Size.X * 0.5f * UnitsPerPixel * ScaleFactorX;
+		const float HH = Size.Y * 0.5f * UnitsPerPixel * ScaleFactorY;
 		// Origem do .act = pes; o centro da imagem fica em Offset (Y para baixo); puxado para a camera para ficar na frente
 		const FVector Center = Right * (L.Offset.X * UnitsPerPixel) - Up * (L.Offset.Y * UnitsPerPixel) + Up * 10.f;
 		const float Flip = L.bMirror ? -1.f : 1.f;
-		const FLinearColor Tint(L.Color.R / 255.f, L.Color.G / 255.f, L.Color.B / 255.f, L.Color.A / 255.f);
+		const FLinearColor Tint(L.Color.R / 255.f * GlowFactor, L.Color.G / 255.f * GlowFactor, L.Color.B / 255.f * GlowFactor, L.Color.A / 255.f * GlowFactor);
 		const FColor VC = Tint.ToFColor(false);
 		TArray<FVector> Verts = { Center - Right * HW * Flip + Up * HH, Center + Right * HW * Flip + Up * HH, Center - Right * HW * Flip - Up * HH, Center + Right * HW * Flip - Up * HH };
 		TArray<FVector2D> UVs = { FVector2D(0.f, 0.f), FVector2D(1.f, 0.f), FVector2D(0.f, 1.f), FVector2D(1.f, 1.f) };

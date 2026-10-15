@@ -58,6 +58,8 @@ AMythDayNightActor::AMythDayNightActor()
 
 	Atmosphere = CreateDefaultSubobject<USkyAtmosphereComponent>(TEXT("Atmosphere"));
 	Atmosphere->SetupAttachment(Root);
+	Atmosphere->SetMultiScatteringFactor(1.5f);
+	Atmosphere->SetGroundAlbedo(FColor(175, 210, 245)); // Horizonte e borda do mapa com tom suave de ceu claro, sem vacuo escuro
 
 	Audio = CreateDefaultSubobject<UMythNightAudioComponent>(TEXT("Audio"));
 
@@ -243,14 +245,15 @@ void AMythDayNightActor::UpdateLighting()
 				Atmosphere->SetVisibility(false);
 			}
 		}
-		SkyLight->SetIntensity(0.08f);
-		SkyLight->SetLightColor(FLinearColor(0.25f, 0.30f, 0.42f));
+		// Luz natural/ambiente de masmorra calibrada 20% mais clara para otima legibilidade e atmosfera
+		SkyLight->SetIntensity(0.12f);
+		SkyLight->SetLightColor(FLinearColor(0.32f, 0.38f, 0.50f));
 		if (Grading)
 		{
 			FPostProcessSettings& PP = Grading->Settings;
-			PP.AutoExposureBias = -0.4f;
-			PP.ColorGain = FVector4(0.85f, 0.90f, 1.0f, 1.f);
-			PP.ColorSaturation = FVector4(1.f, 1.f, 1.f, 0.90f);
+			PP.AutoExposureBias = -0.15f;
+			PP.ColorGain = FVector4(0.92f, 0.95f, 1.05f, 1.f);
+			PP.ColorSaturation = FVector4(1.f, 1.f, 1.f, 0.92f);
 		}
 		if (!FMath::IsNearlyEqual(1.0f, AppliedNightGlow, 0.01f))
 		{

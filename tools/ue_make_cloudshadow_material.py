@@ -28,14 +28,14 @@ mat.set_editor_property('material_domain', unreal.MaterialDomain.MD_LIGHT_FUNCTI
 wp = expr(mat, unreal.MaterialExpressionWorldPosition, -1200, 0)
 xy = expr(mat, unreal.MaterialExpressionComponentMask, -1000, 0, r=True, g=True, b=False, a=False)
 lib.connect_material_expressions(wp, '', xy, '')
-scale = expr(mat, unreal.MaterialExpressionScalarParameter, -1000, 150, parameter_name='Scale', default_value=3000.0)
+scale = expr(mat, unreal.MaterialExpressionScalarParameter, -1000, 150, parameter_name='Scale', default_value=22000.0)
 div = expr(mat, unreal.MaterialExpressionDivide, -800, 0)
 lib.connect_material_expressions(xy, '', div, 'A')
 lib.connect_material_expressions(scale, '', div, 'B')
 
 time = expr(mat, unreal.MaterialExpressionTime, -1000, 300)
-sx = expr(mat, unreal.MaterialExpressionScalarParameter, -1000, 400, parameter_name='SpeedX', default_value=0.035)
-sy = expr(mat, unreal.MaterialExpressionScalarParameter, -1000, 480, parameter_name='SpeedY', default_value=0.018)
+sx = expr(mat, unreal.MaterialExpressionScalarParameter, -1000, 400, parameter_name='SpeedX', default_value=0.008)
+sy = expr(mat, unreal.MaterialExpressionScalarParameter, -1000, 480, parameter_name='SpeedY', default_value=0.004)
 
 mx = expr(mat, unreal.MaterialExpressionMultiply, -800, 300)
 lib.connect_material_expressions(time, '', mx, 'A')

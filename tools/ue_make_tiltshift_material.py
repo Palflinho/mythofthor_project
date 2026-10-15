@@ -30,41 +30,49 @@ mat.set_editor_property('material_domain', unreal.MaterialDomain.MD_POST_PROCESS
 uv = expr(mat, unreal.MaterialExpressionTextureCoordinate, -1400, 0)
 
 focus = expr(mat, unreal.MaterialExpressionScalarParameter, -1400, 200, parameter_name='FocusY', default_value=0.52)
-band = expr(mat, unreal.MaterialExpressionScalarParameter, -1400, 300, parameter_name='ClearBand', default_value=0.14)
-maxpx = expr(mat, unreal.MaterialExpressionScalarParameter, -1400, 400, parameter_name='MaxBlurPx', default_value=6.5)
-power = expr(mat, unreal.MaterialExpressionScalarParameter, -1400, 500, parameter_name='BlurPower', default_value=1.6)
+top_band = expr(mat, unreal.MaterialExpressionScalarParameter, -1400, 300, parameter_name='TopBand', default_value=0.16)
+bot_band = expr(mat, unreal.MaterialExpressionScalarParameter, -1400, 380, parameter_name='BotBand', default_value=0.28)
+maxpx = expr(mat, unreal.MaterialExpressionScalarParameter, -1400, 460, parameter_name='MaxBlurPx', default_value=6.0)
+power = expr(mat, unreal.MaterialExpressionScalarParameter, -1400, 540, parameter_name='BlurPower', default_value=1.6)
 
-# v = uv.y
-vy = expr(mat, unreal.MaterialExpressionComponentMask, -1200, 0, r=False, g=True, b=False, a=False)
-lib.connect_material_expressions(uv, '', vy, '')
-# d = saturate(max(|v - focus| - band, 0) / (0.5 - band))
-sub = expr(mat, unreal.MaterialExpressionSubtract, -1000, 0)
-lib.connect_material_expressions(vy, '', sub, 'A')
-lib.connect_material_expressions(focus, '', sub, 'B')
-ab = expr(mat, unreal.MaterialExpressionAbs, -850, 0)
-lib.connect_material_expressions(sub, '', ab, '')
-sub2 = expr(mat, unreal.MaterialExpressionSubtract, -700, 0)
-lib.connect_material_expressions(ab, '', sub2, 'A')
-lib.connect_material_expressions(band, '', sub2, 'B')
-mx = expr(mat, unreal.MaterialExpressionMax, -550, 0)
-lib.connect_material_expressions(sub2, '', mx, 'A')
-zero = expr(mat, unreal.MaterialExpressionConstant, -700, 100, r=0.0)
-lib.connect_material_expressions(zero, '', mx, 'B')
-half = expr(mat, unreal.MaterialExpressionConstant, -700, 160, r=0.5)
-den = expr(mat, unreal.MaterialExpressionSubtract, -550, 140)
-lib.connect_material_expressions(half, '', den, 'A')
-lib.connect_material_expressions(band, '', den, 'B')
-dv = expr(mat, unreal.MaterialExpressionDivide, -400, 0)
-lib.connect_material_expressions(mx, '', dv, 'A')
-lib.connect_material_expressions(den, '', dv, 'B')
-sat = expr(mat, unreal.MaterialExpressionSaturate, -250, 0)
-lib.connect_material_expressions(dv, '', sat, '')
-pw = expr(mat, unreal.MaterialExpressionPower, -100, 0)
-lib.connect_material_expressions(sat, '', pw, 'Base')
-lib.connect_material_expressions(power, '', pw, 'Exponent')
-radius = expr(mat, unreal.MaterialExpressionMultiply, 50, 0)  # blur radius in pixels
-lib.connect_material_expressions(pw, '', radius, 'A')
-lib.connect_material_expressions(maxpx, '', radius, 'B')
+# Custom HLSL node para raio de blur com reducao assimetrica (Topo -15%, Fundo -60%)
+custom_radius = expr(mat, unreal.MaterialExpressionCustom, -400, 0)
+custom_radius.set_editor_property('output_type', unreal.CustomMaterialOutputType.CMOT_FLOAT1)
+custom_radius.set_editor_property('description', 'AsymmetricTiltShiftRadius')
+custom_radius.set_editor_property('code', """
+float v = UV.y;
+float f = Focus;
+float d = 0.0;
+float blurMul = 1.0;
+if (v < f)
+{
+    float dist = f - v;
+    d = saturate(max(dist - TopBand, 0.0) / max(f - TopBand, 0.01));
+    blurMul = 0.85; // Topo: reduzido em 15%
+}
+else
+{
+    float dist = v - f;
+    d = saturate(max(dist - BotBand, 0.0) / max((1.0 - f) - BotBand, 0.01));
+    blurMul = 0.40; // Fundo: reduzido em 60% (chao e pes nitidos)
+}
+return pow(d, Power) * blurMul * MaxPx;
+""")
+
+inps = []
+for name in ['UV', 'Focus', 'TopBand', 'BotBand', 'Power', 'MaxPx']:
+    inp = unreal.CustomInput()
+    inp.set_editor_property('input_name', name)
+    inps.append(inp)
+custom_radius.set_editor_property('inputs', inps)
+
+lib.connect_material_expressions(uv, '', custom_radius, 'UV')
+lib.connect_material_expressions(focus, '', custom_radius, 'Focus')
+lib.connect_material_expressions(top_band, '', custom_radius, 'TopBand')
+lib.connect_material_expressions(bot_band, '', custom_radius, 'BotBand')
+lib.connect_material_expressions(power, '', custom_radius, 'Power')
+lib.connect_material_expressions(maxpx, '', custom_radius, 'MaxPx')
+radius = custom_radius
 
 # one SceneTexture just to read InvSize (1 / viewport size)
 inv_src = expr(mat, unreal.MaterialExpressionSceneTexture, -1400, 700,

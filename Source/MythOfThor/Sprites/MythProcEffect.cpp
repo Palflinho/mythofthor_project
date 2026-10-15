@@ -210,7 +210,9 @@ bool AMythProcEffect::Setup(const TSharedPtr<FJsonObject>& Part)
 	}
 
 	// 3D / 2D: quads voltados para a camera. 3D: tamanho em centesimos de celula; 2D: pixels (~1,5 uu na camera do RO)
-	const float Unit = Type == TEXT("2D") ? 1.5f : ProcCell / 100.f;
+	const FString FileStr = Part->GetStringField(TEXT("file")).ToLower();
+	const bool bMagicSpear = FileStr.Contains(TEXT("icearrow")) || FileStr.Contains(TEXT("firearrow")) || FileStr.Contains(TEXT("arrow")) || FileStr.Contains(TEXT("spear"));
+	const float Unit = (Type == TEXT("2D") ? 1.5f : ProcCell / 100.f) * (bMagicSpear ? 3.2f : 1.0f);
 	const float Size = Num(Part, TEXT("size"), 100.f);
 	SizeStart = FVector2D(Num(Part, TEXT("sizeStartX"), Num(Part, TEXT("sizeRandStartX"), Num(Part, TEXT("sizeX"), Num(Part, TEXT("sizeStart"), Size)))),
 		Num(Part, TEXT("sizeStartY"), Num(Part, TEXT("sizeRandStartY"), Num(Part, TEXT("sizeY"), Num(Part, TEXT("sizeStart"), Size))))) * Unit;

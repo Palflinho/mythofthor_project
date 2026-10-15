@@ -60,7 +60,17 @@ try:
 except Exception as e:
     unreal.log_error(f"Error compiling M_WaterModern: {e}")
 
-# 5. Add live torches to Lvl_PrtSewb1
+# 5. Recompile M_TiltShift (asymmetric tilt-shift: Top -15%, Bottom -60%)
+unreal.log("--- Recompiling M_TiltShift ---")
+try:
+    spec = importlib.util.spec_from_file_location("ue_make_tiltshift_material", "E:/Documentos/Repositórios/mythofthor_project/tools/ue_make_tiltshift_material.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    unreal.log("M_TiltShift recompiled successfully.")
+except Exception as e:
+    unreal.log_error(f"Error compiling M_TiltShift: {e}")
+
+# 6. Add live torches to Lvl_PrtSewb1
 unreal.log("--- Adding Live Torches to Lvl_PrtSewb1 ---")
 level_path = "/Game/Maps/PrtSewb1/Lvl_PrtSewb1"
 if eal.does_asset_exist(level_path):
@@ -95,6 +105,7 @@ if eal.does_asset_exist(level_path):
             unreal.log(f"Removed {removed} existing NightLights.")
 
             spawned = 0
+            flame_count = 0
             for i, l in enumerate(lights):
                 lx = (l['x'] - cx) * scale
                 ly = -(l['y'] - cy) * scale
@@ -102,26 +113,29 @@ if eal.does_asset_exist(level_path):
                 loc = unreal.Vector(lx, ly, lz)
                 actor = eas.spawn_actor_from_class(unreal.MythNightLight, loc)
                 if actor:
-                    actor.set_actor_label(f"Torch_Sewb1_{i:03d}")
+                    r, g, b = l.get('color', [1.0, 0.6, 0.2])
+                    is_torch = (r > 0.35 and b < 0.15)
+                    actor.set_actor_label(f"{'Torch' if is_torch else 'Ambient'}_Sewb1_{i:03d}")
                     try:
                         actor.set_editor_property('always_on', True)
                     except Exception:
                         pass
                     try:
-                        actor.set_editor_property('show_flame', True)
+                        actor.set_editor_property('show_flame', is_torch)
                     except Exception:
                         pass
-                    actor.set_editor_property('night_intensity', 75.0)
-                    actor.set_editor_property('flicker_amount', 0.22)
-                    r, g, b = l.get('color', [1.0, 0.6, 0.2])
+                    actor.set_editor_property('night_intensity', 65.0 if is_torch else 40.0)
+                    actor.set_editor_property('flicker_amount', 0.18 if is_torch else 0.04)
                     peak = max(r, g, b, 0.01)
                     comp = actor.get_editor_property('light')
                     if comp:
                         comp.set_editor_property('light_color', unreal.Color(r=int(255 * r / peak), g=int(255 * g / peak), b=int(255 * b / peak), a=255))
-                        comp.set_editor_property('attenuation_radius', 480.0)
+                        comp.set_editor_property('attenuation_radius', 450.0 if is_torch else 550.0)
                     spawned += 1
+                    if is_torch:
+                        flame_count += 1
 
-            unreal.log(f"Spawned {spawned} live torches with animated flames in Lvl_PrtSewb1.")
+            unreal.log(f"Spawned {spawned} lights ({flame_count} live torches with animated flames) in Lvl_PrtSewb1.")
             les.save_current_level()
 
 unreal.log("=== Visual updates completed successfully ===")
