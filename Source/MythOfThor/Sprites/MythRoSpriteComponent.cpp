@@ -1281,7 +1281,8 @@ void UMythRoSpriteComponent::UpdateBillboard(const FRotator& CamRot)
 		{
 			SmoothedFeetZ = FMath::FInterpTo(SmoothedFeetZ, Feet.Z, Dt, FeetHeightSmoothing);
 		}
-		Feet.Z = SmoothedFeetZ;
+		Feet.Z = SmoothedFeetZ + 5.0f; // eleva 5 cm para os pes nunca afundarem no desnivel do piso
+
 		CurrentCamPitch = CamRot.Pitch;
 		// Gradient Depth (HD-2D / Shipping Bugs):
 		// Os pes permanecem na posicao 3D real no chao (com offset minimo de 2 cm ao longo da visao

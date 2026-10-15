@@ -10,6 +10,8 @@
 #include "Sprites/MythRoSpriteComponent.h"
 #include "UI/MythRoHUDWidget.h"
 #include "World/MythMapInfo.h"
+#include "World/MythWeatherActor.h"
+#include "World/MythDayNightActor.h"
 
 bool AMythPlayerController::RunSlashCommand(const FString& Command, const FString& Args)
 {
@@ -111,6 +113,68 @@ bool AMythPlayerController::RunSlashCommand(const FString& Command, const FStrin
 		if (Current > 0.f) { Saved = Current; Current = 0.f; } else { Current = Saved > 0.f ? Saved : 1.f; }
 		UMythRoSound::SetVolumes(Music, Effects);
 		Say(FString::Printf(TEXT("%s: %s."), bSound ? TEXT("Sound effects") : TEXT("Music"), Current > 0.f ? TEXT("on") : TEXT("off")));
+		return true;
+	}
+	if (Cmd == TEXT("rain") || Cmd == TEXT("chuva"))
+	{
+		if (AMythWeatherActor* W = AMythWeatherActor::FindOrSpawn(GetWorld()))
+		{
+			W->SetWeather(EMythWeather::Rain);
+			Say(TEXT("Clima: Chuva ativada (gotas, chão molhado e reflexos)."));
+		}
+		return true;
+	}
+	if (Cmd == TEXT("snow") || Cmd == TEXT("neve"))
+	{
+		if (AMythWeatherActor* W = AMythWeatherActor::FindOrSpawn(GetWorld()))
+		{
+			W->SetWeather(EMythWeather::Snow);
+			Say(TEXT("Clima: Neve ativada."));
+		}
+		return true;
+	}
+	if (Cmd == TEXT("clear") || Cmd == TEXT("limpo") || Cmd == TEXT("sun") || Cmd == TEXT("sol"))
+	{
+		if (AMythWeatherActor* W = AMythWeatherActor::FindOrSpawn(GetWorld()))
+		{
+			W->SetWeather(EMythWeather::Clear);
+			Say(TEXT("Clima: Tempo limpo e ensolarado ativado."));
+		}
+		return true;
+	}
+	if (Cmd == TEXT("day") || Cmd == TEXT("dia"))
+	{
+		if (AMythDayNightActor* DN = AMythDayNightActor::Find(GetWorld()))
+		{
+			DN->SetTimeOfDay(12.f);
+			Say(TEXT("Horário: 12:00 (Pleno dia / sol a pino)."));
+		}
+		return true;
+	}
+	if (Cmd == TEXT("night") || Cmd == TEXT("noite"))
+	{
+		if (AMythDayNightActor* DN = AMythDayNightActor::Find(GetWorld()))
+		{
+			DN->SetTimeOfDay(0.f);
+			Say(TEXT("Horário: 00:00 (Meia-noite / tochas, lamparinas e iluminação ativadas)."));
+		}
+		return true;
+	}
+	if (Cmd == TEXT("time") || Cmd == TEXT("hora"))
+	{
+		if (AMythDayNightActor* DN = AMythDayNightActor::Find(GetWorld()))
+		{
+			if (!Args.IsEmpty())
+			{
+				const float H = FCString::Atof(*Args);
+				DN->SetTimeOfDay(FMath::Clamp(H, 0.f, 24.f));
+				Say(FString::Printf(TEXT("Horário ajustado para: %.1fh."), H));
+			}
+			else
+			{
+				Say(FString::Printf(TEXT("Horário atual: %.1fh (Fator noite: %.2f). Use /hora <0-24>."), DN->GetTimeOfDay(), DN->GetNightFactor()));
+			}
+		}
 		return true;
 	}
 	return false;

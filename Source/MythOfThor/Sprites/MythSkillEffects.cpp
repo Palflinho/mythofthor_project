@@ -486,22 +486,22 @@ bool FMythSkillEffects::Play(UObject* WorldContext, int32 SkillID, EMythSkillEff
 	if (Stage == EMythSkillEffectStage::Hit || Stage == EMythSkillEffectStage::Effect || Stage == EMythSkillEffectStage::Release)
 	{
 		const FVector At = FeetOf(Target, Location) + FVector(0.f, 0.f, 75.f);
-		AMythLightFlash::Flash(WorldContext, At, LightColor, 80.f, 0.45f, Target);
+		AMythLightFlash::Flash(WorldContext, At, LightColor, 2500.f, 0.45f, Target);
 	}
 	else if (Stage == EMythSkillEffectStage::Ground)
 	{
 		const FVector At = Location + FVector(0.f, 0.f, 40.f);
-		AMythLightFlash::Flash(WorldContext, At, LightColor, 90.f, 0.65f, nullptr);
+		AMythLightFlash::Flash(WorldContext, At, LightColor, 3000.f, 0.65f, nullptr);
 	}
 	else if (Stage == EMythSkillEffectStage::Cast || Stage == EMythSkillEffectStage::BeginCast)
 	{
 		AActor* Caster = Source ? Source : Target;
 		const FVector At = FeetOf(Caster, Location) + FVector(0.f, 0.f, 60.f);
-		AMythLightFlash::Flash(WorldContext, At, LightColor, 45.f, 0.35f, Caster);
+		AMythLightFlash::Flash(WorldContext, At, LightColor, 1200.f, 0.35f, Caster);
 	}
 	else if (!bPlayed && bFlashIfMissing)
 	{
-		AMythLightFlash::Flash(WorldContext, FeetOf(Target, Location) + FVector(0.f, 0.f, 70.f), LightColor, 55.f, 0.55f, Target);
+		AMythLightFlash::Flash(WorldContext, FeetOf(Target, Location) + FVector(0.f, 0.f, 70.f), LightColor, 1800.f, 0.55f, Target);
 	}
 	return bPlayed;
 }

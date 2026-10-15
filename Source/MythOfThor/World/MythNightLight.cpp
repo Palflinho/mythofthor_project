@@ -1,21 +1,25 @@
 #include "World/MythNightLight.h"
 
 #include "World/MythDayNightActor.h"
+#include "World/MythMapInfo.h"
+#include "Sprites/MythSprEffect.h"
 #include "Components/PointLightComponent.h"
 
 AMythNightLight::AMythNightLight()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	PrimaryActorTick.TickInterval = 0.05f; // a oscilacao nao precisa de 60 Hz
+	PrimaryActorTick.TickInterval = 0.04f; // 25 Hz e suave para a oscilacao de chama
 
 	Light = CreateDefaultSubobject<UPointLightComponent>(TEXT("Light"));
 	RootComponent = Light;
 	Light->SetMobility(EComponentMobility::Movable);
-	Light->SetLightColor(FLinearColor(1.f, 0.72f, 0.42f)); // luz de lampiao, quente
-	Light->SetAttenuationRadius(1000.f);
-	Light->SetSourceRadius(8.f);
-	Light->SetCastShadows(false); // dezenas de luzes: sombras so do sol/lua
+	Light->SetLightColor(FLinearColor(1.0f, 0.58f, 0.16f)); // cor de fogo/tocha viva e quente
+	Light->SetAttenuationRadius(850.f);
+	Light->SetSourceRadius(16.f);
+	Light->SetCastShadows(false); // sem sombras pesadas por tocha para manter alta performance
 	Light->SetIntensityUnits(ELightUnits::Candelas);
+	NightIntensity = 650.f; // intensidade viva (ilumina o ambiente com Lumen)
+	FlickerAmount = 0.22f;  // oscilacao organica de fogo
 	Light->SetIntensity(0.f);
 }
 
@@ -23,24 +27,52 @@ void AMythNightLight::BeginPlay()
 {
 	Super::BeginPlay();
 	DayNight = AMythDayNightActor::Find(this);
-	FlickerPhase = FMath::FRandRange(0.f, 100.f); // cada luz oscila fora de fase
+	FlickerPhase = FMath::FRandRange(0.f, 100.f); // cada tocha oscila fora de fase
+
+	const AMythMapInfo* MapInfo = AMythMapInfo::Find(GetWorld());
+	if (MapInfo)
+	{
+		const FString Low = MapInfo->MapName.ToLower();
+		if (MapInfo->IsIndoor() || Low.Contains(TEXT("dun")) || Low.Contains(TEXT("sewb")) || Low.Contains(TEXT("cave")) || Low.Contains(TEXT("anthell")) || Low.Contains(TEXT("maze")))
+		{
+			bAlwaysOn = true;
+		}
+	}
+
+	// Adiciona a chama animada viva em loop no topo da tocha (torch_01.spr, 7 quadros do RO original)
+	if (bShowFlame)
+	{
+		FlameEffect = AMythSprEffect::Attach(this, TEXT("torch_01"), false, 0.f, 25.f);
+	}
 }
 
 void AMythNightLight::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	if (!DayNight.IsValid())
+	float Night = 1.0f;
+	if (DayNight.IsValid())
+	{
+		Night = DayNight->GetNightFactor();
+	}
+	else
 	{
 		DayNight = AMythDayNightActor::Find(this);
-		if (!DayNight.IsValid())
+		if (DayNight.IsValid())
 		{
-			return;
+			Night = DayNight->GetNightFactor();
 		}
 	}
-	const float Night = DayNight->GetNightFactor();
-	const float On = FMath::SmoothStep(TurnOnAt, FMath::Min(TurnOnAt + 0.35f, 1.f), Night);
+
+	const float On = bAlwaysOn ? 1.0f : FMath::SmoothStep(TurnOnAt, FMath::Min(TurnOnAt + 0.35f, 1.f), Night);
 	FlickerPhase += DeltaSeconds;
-	const float Flicker = 1.f + FlickerAmount * (0.6f * FMath::Sin(FlickerPhase * 9.f) + 0.4f * FMath::Sin(FlickerPhase * 23.f));
+	// Oscilacao multifrequencial organica de labareda de fogo:
+	const float Flicker = 1.f + FlickerAmount * (0.55f * FMath::Sin(FlickerPhase * 8.5f) + 0.30f * FMath::Sin(FlickerPhase * 19.3f) + 0.15f * FMath::Sin(FlickerPhase * 37.1f));
 	Light->SetIntensity(NightIntensity * On * Flicker);
 	Light->SetVisibility(On > 0.001f);
+
+	if (FlameEffect.IsValid())
+	{
+		FlameEffect->SetActorHiddenInGame(On <= 0.001f);
+	}
 }
+

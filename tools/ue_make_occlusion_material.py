@@ -51,21 +51,24 @@ int StencilVal = (int)(CustomStencil.r + 0.5);
 float CD = CustomDepth.r;
 float SD = SceneDepth.r;
 
-if (StencilVal > 0 && CD < 50000.0 && CD > SD + 5.0)
+// Exige pelo menos 65 cm de profundidade para ocluir (paredes/predios reais)
+// impedindo que desniveis do chao, calcadas ou folhas finas criem manchas sob os pes
+if (StencilVal > 0 && CD < 50000.0 && CD > SD + 65.0)
 {
     float3 OutlineColor = float3(0.2, 0.6, 1.0); // Player: Blue (Stencil 1)
     if (StencilVal == 2)
     {
-        OutlineColor = float3(1.0, 0.2, 0.2); // Monster: Red
+        OutlineColor = float3(1.0, 0.25, 0.25); // Monster: Red
     }
     else if (StencilVal == 3)
     {
         OutlineColor = float3(1.0, 0.8, 0.1); // NPC: Gold
     }
-    return lerp(SceneColor.rgb, OutlineColor, 0.65);
+    return lerp(SceneColor.rgb, OutlineColor, 0.35); // translucido e suave, nao um bloco solido
 }
 return SceneColor.rgb;
 """
+
 custom.set_editor_property('code', hlsl_code)
 
 inputs = []

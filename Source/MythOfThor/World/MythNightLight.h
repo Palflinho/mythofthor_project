@@ -32,7 +32,15 @@ public:
 
 	/** Variacao da chama (0 = luz fixa). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NightLight")
-	float FlickerAmount = 0.08f;
+	float FlickerAmount = 0.22f;
+
+	/** Sempre acesa (masmorras subterraneas, interiores escuros). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NightLight")
+	bool bAlwaysOn = false;
+
+	/** Desenha chama animada em loop sobre a tocha (torch_01.spr). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NightLight")
+	bool bShowFlame = true;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "NightLight")
 	TObjectPtr<UPointLightComponent> Light;
@@ -42,5 +50,7 @@ protected:
 
 private:
 	TWeakObjectPtr<AMythDayNightActor> DayNight;
+	TWeakObjectPtr<class AMythSprEffect> FlameEffect;
 	float FlickerPhase = 0.f;
+
 };

@@ -396,8 +396,8 @@ AMythLightFlash::AMythLightFlash()
 	Light->SetMobility(EComponentMobility::Movable);
 	Light->SetIntensityUnits(ELightUnits::Candelas);
 	Light->SetIntensity(0.f);
-	Light->SetAttenuationRadius(550.f);
-	Light->SetSourceRadius(25.f);
+	Light->SetAttenuationRadius(800.f);
+	Light->SetSourceRadius(35.f);
 	Light->SetCastShadows(true);
 }
 
