@@ -30,6 +30,11 @@ public:
 	static void ApplyStyleToAll(UWorld* World);
 	void ApplyStyle();
 
+	/** Retorna se o mapa atual possui plano de agua ativo e sua altura Z em UU. */
+	static bool GetWaterPlane(const UObject* WorldContext, float& OutWaterZ);
+	float GetWaterZ() const { return WaterZ; }
+	bool HasWater() const { return bHasWater; }
+
 private:
 	UPROPERTY() TObjectPtr<UProceduralMeshComponent> Mesh;
 	UPROPERTY() TObjectPtr<UMaterialInstanceDynamic> Material;
@@ -38,6 +43,8 @@ private:
 	float BaseOpacity = 0.78f;
 	float AnimSpeed = 3.f;
 	float Time = 0.f;
+	float WaterZ = 0.f;
+	bool bHasWater = false;
 
 	bool Build(const FString& MapName, const FVector2D& Origin);
 };

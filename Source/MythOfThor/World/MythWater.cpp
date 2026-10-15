@@ -59,6 +59,8 @@ bool AMythWater::Build(const FString& MapName, const FVector2D& Origin)
 	AnimSpeed = FMath::Max(1.f, static_cast<float>(Root->GetNumberField(TEXT("anim"))));
 	const float TileUU = static_cast<float>(Root->GetNumberField(TEXT("scale"))) * 10.f; // tile do GND (10) * escala do importador
 	const float Z = -Level * 10.f;
+	WaterZ = Z;
+	bHasWater = true;
 
 	for (int32 i = 0; i < 32; ++i)
 	{
@@ -164,4 +166,26 @@ void AMythWater::ApplyStyleToAll(UWorld* World)
 	{
 		It->ApplyStyle();
 	}
+}
+
+bool AMythWater::GetWaterPlane(const UObject* WorldContext, float& OutWaterZ)
+{
+	if (!WorldContext)
+	{
+		return false;
+	}
+	UWorld* World = GEngine ? GEngine->GetWorldFromContextObject(WorldContext, EGetWorldErrorMode::ReturnNull) : nullptr;
+	if (!World)
+	{
+		return false;
+	}
+	for (TActorIterator<AMythWater> It(World); It; ++It)
+	{
+		if (It->bHasWater)
+		{
+			OutWaterZ = It->WaterZ;
+			return true;
+		}
+	}
+	return false;
 }

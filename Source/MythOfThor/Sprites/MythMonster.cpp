@@ -164,6 +164,24 @@ void AMythMonster::Kill()
 		}
 	}
 
+	// Dissolve procedural na morte (GDD HD-2D Secao 6.1):
+	float DissolveDuration = 1.0f;
+	FLinearColor GlowColor = FLinearColor(1.0f, 0.45f, 0.1f, 1.0f); // Ambar padrao
+	if (IsRare())
+	{
+		DissolveDuration = 1.5f;
+		GlowColor = FLinearColor(1.0f, 0.85f, 0.2f, 1.0f); // Dourado radiante para raros / MVPs
+	}
+	else
+	{
+		const FString LowerName = MonsterName.ToLower();
+		if (LowerName.Contains(TEXT("ghost")) || LowerName.Contains(TEXT("skeleton")) || LowerName.Contains(TEXT("zombie")) || LowerName.Contains(TEXT("whisper")))
+		{
+			GlowColor = FLinearColor(0.2f, 1.0f, 0.4f, 1.0f); // Verde espectral para mortos-vivos / fantasmas
+		}
+	}
+	Sprite->StartDeathDissolve(DissolveDuration, GlowColor);
+
 	PlaySfx(SfxDie);
 	Sprite->Die();
 	SetLifeSpan(DeathDestroyDelay); // auto-Destroy apos a animacao de morte

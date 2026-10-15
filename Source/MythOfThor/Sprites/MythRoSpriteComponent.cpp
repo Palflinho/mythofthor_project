@@ -3,6 +3,7 @@
 
 #include "World/MythDayNightActor.h"
 #include "World/MythNightLight.h"
+#include "World/MythWater.h"
 #include "Sprites/MythSprEffect.h"
 #include "Sprites/MythFalcon.h"
 #include "Sprites/MythRoSound.h"
@@ -239,6 +240,17 @@ void UMythRoSpriteComponent::BeginPlay()
 		ShadowMesh->bCastDynamicShadow = true;
 		ShadowMesh->RegisterComponent();
 	}
+	if (GetOwner())
+	{
+		// Ghost Sprite na Agua (Reflexo dos Sprites 2D HD-2D):
+		ReflectionMesh = NewObject<UProceduralMeshComponent>(GetOwner(), TEXT("RoSpriteReflection"));
+		ReflectionMesh->SetupAttachment(GetAttachParent());
+		ReflectionMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		ReflectionMesh->SetCastShadow(false);
+		ReflectionMesh->bCastDynamicShadow = false;
+		ReflectionMesh->SetVisibility(false);
+		ReflectionMesh->RegisterComponent();
+	}
 	if (bBlobShadow)
 	{
 		CreateBlobShadow();
@@ -472,6 +484,11 @@ void UMythRoSpriteComponent::OnComponentDestroyed(bool bDestroyingHierarchy)
 		ShadowMesh->DestroyComponent();
 		ShadowMesh = nullptr;
 	}
+	if (ReflectionMesh)
+	{
+		ReflectionMesh->DestroyComponent();
+		ReflectionMesh = nullptr;
+	}
 	if (BlobMesh)
 	{
 		BlobMesh->DestroyComponent();
@@ -650,8 +667,9 @@ bool UMythRoSpriteComponent::LoadSource(FMythRoSpriteSource& Source, const FStri
 	}
 	BuildAtlas(Source);
 
+	const bool bUseLitMat = bLitByScene || IsMonster();
 	const TCHAR* DesiredLit = LitMaterialPath;
-	if (bLitByScene)
+	if (bUseLitMat)
 	{
 		static bool bCheckedCustom = false;
 		static bool bHasCustom = false;
@@ -663,10 +681,21 @@ bool UMythRoSpriteComponent::LoadSource(FMythRoSpriteSource& Source, const FStri
 		DesiredLit = bHasCustom ? CustomLitMaterialPath : LitMaterialPath;
 	}
 
-	if (UMaterialInterface* Base = LoadObject<UMaterialInterface>(nullptr, bLitByScene ? DesiredLit : UnlitMaterialPath))
+	if (UMaterialInterface* Base = LoadObject<UMaterialInterface>(nullptr, bUseLitMat ? DesiredLit : UnlitMaterialPath))
 	{
 		Source.Material = UMaterialInstanceDynamic::Create(Base, this);
 		Source.Material->SetTextureParameterValue(TEXT("SpriteTexture"), Source.Atlas);
+		Source.Material->SetScalarParameterValue(TEXT("DissolveProgress"), 0.0f);
+		Source.Material->SetVectorParameterValue(TEXT("DissolveGlowColor"), DissolveColor);
+	}
+
+	static const TCHAR* ReflectionMaterialPath = TEXT("/Game/Myth/M_RoSprite_Reflection.M_RoSprite_Reflection");
+	if (UMaterialInterface* ReflBase = LoadObject<UMaterialInterface>(nullptr, ReflectionMaterialPath))
+	{
+		Source.ReflectionMaterial = UMaterialInstanceDynamic::Create(ReflBase, this);
+		Source.ReflectionMaterial->SetTextureParameterValue(TEXT("SpriteTexture"), Source.Atlas);
+		Source.ReflectionMaterial->SetScalarParameterValue(TEXT("ReflectionOpacity"), 0.35f);
+		Source.ReflectionMaterial->SetVectorParameterValue(TEXT("WaterTint"), FLinearColor(0.65f, 0.85f, 1.0f, 1.0f));
 	}
 	return Source.IsValid() && Source.Material != nullptr;
 }
@@ -948,10 +977,62 @@ void UMythRoSpriteComponent::SetSitting(bool bSit)
 		SetState(bSit ? EMythSpriteState::Sit : EMythSpriteState::Idle, false);
 	}
 }
-void UMythRoSpriteComponent::Die()     { SetState(EMythSpriteState::Dead, false); }
+void UMythRoSpriteComponent::Die()
+{
+	SetState(EMythSpriteState::Dead, false);
+	if (IsMonster() && !bDissolving)
+	{
+		StartDeathDissolve(1.0f, FLinearColor(1.0f, 0.45f, 0.1f, 1.0f));
+	}
+}
+
+void UMythRoSpriteComponent::StartDeathDissolve(float Duration, FLinearColor GlowColor)
+{
+	bDissolving = true;
+	DissolveDuration = FMath::Max(0.1f, Duration);
+	DissolveElapsed = 0.0f;
+	DissolveColor = GlowColor;
+
+	auto InitDissolve = [this](FMythRoSpriteSource& S)
+	{
+		if (S.Material)
+		{
+			S.Material->SetScalarParameterValue(TEXT("DissolveProgress"), 0.0f);
+			S.Material->SetVectorParameterValue(TEXT("DissolveGlowColor"), DissolveColor);
+		}
+	};
+	InitDissolve(Body);
+	InitDissolve(Head);
+	InitDissolve(HatBottom);
+	InitDissolve(HatMid);
+	InitDissolve(HatTop);
+	InitDissolve(WeaponSource);
+	InitDissolve(ShieldSource);
+	InitDissolve(RobeSource);
+	InitDissolve(CartSource);
+}
 
 void UMythRoSpriteComponent::Revive()
 {
+	bDissolving = false;
+	DissolveElapsed = 0.0f;
+	auto ResetDissolve = [](FMythRoSpriteSource& S)
+	{
+		if (S.Material)
+		{
+			S.Material->SetScalarParameterValue(TEXT("DissolveProgress"), 0.0f);
+		}
+	};
+	ResetDissolve(Body);
+	ResetDissolve(Head);
+	ResetDissolve(HatBottom);
+	ResetDissolve(HatMid);
+	ResetDissolve(HatTop);
+	ResetDissolve(WeaponSource);
+	ResetDissolve(ShieldSource);
+	ResetDissolve(RobeSource);
+	ResetDissolve(CartSource);
+
 	State = EMythSpriteState::Idle;
 	bOneShotPlaying = false;
 	StateTime = 0.f;
@@ -1054,6 +1135,27 @@ void UMythRoSpriteComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 		return;
 	}
 	StateTime += DeltaTime;
+	if (bDissolving)
+	{
+		DissolveElapsed += DeltaTime;
+		const float Prog = FMath::Clamp(DissolveElapsed / DissolveDuration, 0.0f, 1.0f);
+		auto UpdateDissolve = [Prog](FMythRoSpriteSource& S)
+		{
+			if (S.Material)
+			{
+				S.Material->SetScalarParameterValue(TEXT("DissolveProgress"), Prog);
+			}
+		};
+		UpdateDissolve(Body);
+		UpdateDissolve(Head);
+		UpdateDissolve(HatBottom);
+		UpdateDissolve(HatMid);
+		UpdateDissolve(HatTop);
+		UpdateDissolve(WeaponSource);
+		UpdateDissolve(ShieldSource);
+		UpdateDissolve(RobeSource);
+		UpdateDissolve(CartSource);
+	}
 	const FRotator CamRot = GetCameraRotation();
 	const FVector Velocity = Owner->GetVelocity();
 	if (!bOneShotPlaying && State != EMythSpriteState::Dead && Velocity.Size2D() > WalkSpeedThreshold)
@@ -1177,6 +1279,44 @@ void UMythRoSpriteComponent::UpdateBillboard(const FRotator& CamRot)
 		SetWorldScale3D(FVector(1.f));
 		UpdateShadowTransform(Feet);
 		UpdateTint(Feet, Dt);
+		WaterWaveTime += Dt;
+
+		// Ghost Sprite na Agua (Reflexo dos Sprites 2D HD-2D):
+		float WaterZ = 0.f;
+		if (AMythWater::GetWaterPlane(this, WaterZ))
+		{
+			const float DistToWater = Feet.Z - WaterZ;
+			// Se o sprite estiver proximo da superficie da agua (de 50 cm abaixo ate 400 cm acima)
+			if (DistToWater >= -50.f && DistToWater <= 400.f)
+			{
+				bNearWater = true;
+				CachedWaterZ = WaterZ;
+				if (ReflectionMesh)
+				{
+					FVector ReflFeet = Feet;
+					ReflFeet.Z = 2.f * WaterZ - Feet.Z;
+					ReflectionMesh->SetWorldLocation(ReflFeet - CamForward * BaseFeetOffset);
+					ReflectionMesh->SetWorldRotation(GetComponentRotation());
+					ReflectionMesh->SetVisibility(true);
+				}
+			}
+			else
+			{
+				bNearWater = false;
+				if (ReflectionMesh)
+				{
+					ReflectionMesh->SetVisibility(false);
+				}
+			}
+		}
+		else
+		{
+			bNearWater = false;
+			if (ReflectionMesh)
+			{
+				ReflectionMesh->SetVisibility(false);
+			}
+		}
 		if (BlobMesh)
 		{
 			// No cliente original o shadow.spr e desenhado direto na tela. Deitado no chao ele achatava de novo pela
@@ -1250,6 +1390,13 @@ void UMythRoSpriteComponent::RebuildMesh(const FRotator& CamRot)
 		if (ShadowMesh)
 		{
 			ShadowMesh->SetMeshSectionVisible(i, false);
+		}
+	}
+	for (int32 i = Section; i < ReflectionSectionsCreated; ++i)
+	{
+		if (ReflectionMesh)
+		{
+			ReflectionMesh->SetMeshSectionVisible(i, false);
 		}
 	}
 }
@@ -1375,6 +1522,36 @@ void UMythRoSpriteComponent::AddLayerQuads(const FMythRoSpriteSource& Source, co
 			if (ShadowMesh)
 			{
 				ShadowMesh->SetMaterial(Section, Mat); // mascarado: a sombra tem o recorte do sprite
+			}
+		}
+
+		// Ghost Sprite na Agua (Reflexo dos Sprites 2D HD-2D):
+		if (ReflectionMesh && bNearWater && Source.ReflectionMaterial)
+		{
+			TArray<FVector> ReflVerts;
+			ReflVerts.Reserve(4);
+			for (int32 k = 0; k < 4; ++k)
+			{
+				const float VertLocalZ = Verts[k].Z;
+				// Distorcao senoidal suave da agua (HD-2D)
+				const float WaveX = FMath::Sin(WaterWaveTime * 4.0f + VertLocalZ * 0.08f) * 3.0f;
+				// Espelha no eixo Z vertical para baixo do plano dos pes
+				ReflVerts.Add(FVector(Verts[k].X + WaveX, Verts[k].Y, -VertLocalZ));
+			}
+
+			if (Section < ReflectionSectionsCreated)
+			{
+				ReflectionMesh->UpdateMeshSection(Section, ReflVerts, Normals, Tex, Colors, TArray<FProcMeshTangent>());
+				ReflectionMesh->SetMeshSectionVisible(Section, true);
+			}
+			else
+			{
+				ReflectionMesh->CreateMeshSection(Section, ReflVerts, Tris, Normals, Tex, Colors, TArray<FProcMeshTangent>(), false);
+				++ReflectionSectionsCreated;
+			}
+			if (ReflectionMesh->GetMaterial(Section) != Source.ReflectionMaterial)
+			{
+				ReflectionMesh->SetMaterial(Section, Source.ReflectionMaterial);
 			}
 		}
 		++Section;

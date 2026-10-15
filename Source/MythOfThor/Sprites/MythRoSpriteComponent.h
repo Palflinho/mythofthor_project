@@ -29,6 +29,7 @@ struct FMythRoSpriteSource
 
 	UPROPERTY() TObjectPtr<UTexture2D> Atlas;
 	UPROPERTY() TObjectPtr<UMaterialInstanceDynamic> Material;
+	UPROPERTY() TObjectPtr<UMaterialInstanceDynamic> ReflectionMaterial;
 
 	/** Retangulo de cada imagem no atlas (UV 0..1); indexadas primeiro, depois RGBA. */
 	TArray<FBox2f> IndexedUV;
@@ -234,6 +235,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "RO Sprite")
 	void Die();
 
+	/** Dissolve procedural na morte de monstros (0.8s a 1.2s) com borda emissiva queimando (HD-2D). */
+	UFUNCTION(BlueprintCallable, Category = "RO Sprite")
+	void StartDeathDissolve(float Duration = 1.0f, FLinearColor GlowColor = FLinearColor(1.0f, 0.45f, 0.1f, 1.0f));
+
+	bool IsDissolving() const { return bDissolving; }
+
 	UFUNCTION(BlueprintCallable, Category = "RO Sprite")
 	void Revive();
 
@@ -308,6 +315,19 @@ private:
 
 	/** Copia do sprite que so projeta sombra (nao aparece na imagem). */
 	UPROPERTY() TObjectPtr<UProceduralMeshComponent> ShadowMesh;
+	/** Copia do sprite refletido na agua ("Ghost Sprite" HD-2D). */
+	UPROPERTY() TObjectPtr<UProceduralMeshComponent> ReflectionMesh;
+	int32 ReflectionSectionsCreated = 0;
+	float WaterWaveTime = 0.f;
+	bool bNearWater = false;
+	float CachedWaterZ = 0.f;
+
+	/** Dissolve procedural na morte. */
+	bool bDissolving = false;
+	float DissolveDuration = 1.0f;
+	float DissolveElapsed = 0.0f;
+	FLinearColor DissolveColor = FLinearColor(1.0f, 0.45f, 0.1f, 1.0f);
+
 	/** Sombra redonda (shadow.spr) deitada no chao. */
 	UPROPERTY() TObjectPtr<UProceduralMeshComponent> BlobMesh;
 	UPROPERTY() FMythRoSpriteSource BlobSource;
