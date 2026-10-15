@@ -330,6 +330,8 @@ private:
 
 	/** Sombra redonda (shadow.spr) deitada no chao. */
 	UPROPERTY() TObjectPtr<UProceduralMeshComponent> BlobMesh;
+	/** Sombra do carrinho do mercador. */
+	UPROPERTY() TObjectPtr<UProceduralMeshComponent> CartBlobMesh;
 	UPROPERTY() FMythRoSpriteSource BlobSource;
 	void CreateBlobShadow();
 	/** Ultimo (acao, quadro) cujo evento de som ja tocou. */

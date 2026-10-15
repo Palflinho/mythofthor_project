@@ -230,7 +230,7 @@
     "default_weather": "Underground"
   },
   "prt_prison": {
-    "name": "Prisão Subterrânea de Prontera",
+    "name": "Pris\u00e3o Subterr\u00e2nea de Prontera",
     "grid_x": 0,
     "grid_y": 0,
     "dungeon": true,
@@ -256,7 +256,7 @@
     "default_weather": "ClearSunny"
   },
   "iz_dun00": {
-    "name": "Túnel de Byalan 1",
+    "name": "T\u00fanel de Byalan 1",
     "grid_x": 3,
     "grid_y": -1,
     "dungeon": true,
@@ -268,7 +268,7 @@
     "default_weather": "Underground"
   },
   "iz_dun01": {
-    "name": "Túnel de Byalan 2",
+    "name": "T\u00fanel de Byalan 2",
     "grid_x": 3,
     "grid_y": -1,
     "dungeon": true,
@@ -280,7 +280,7 @@
     "default_weather": "Underground"
   },
   "iz_dun02": {
-    "name": "Túnel de Byalan 3",
+    "name": "T\u00fanel de Byalan 3",
     "grid_x": 3,
     "grid_y": -1,
     "dungeon": true,
@@ -292,7 +292,7 @@
     "default_weather": "Underground"
   },
   "iz_dun03": {
-    "name": "Túnel de Byalan 4",
+    "name": "T\u00fanel de Byalan 4",
     "grid_x": 3,
     "grid_y": -1,
     "dungeon": true,
@@ -304,7 +304,7 @@
     "default_weather": "Underground"
   },
   "iz_dun04": {
-    "name": "Túnel de Byalan 5",
+    "name": "T\u00fanel de Byalan 5",
     "grid_x": 3,
     "grid_y": -1,
     "dungeon": true,
@@ -316,7 +316,7 @@
     "default_weather": "Underground"
   },
   "geffen": {
-    "name": "Geffen (Cidade Mágica)",
+    "name": "Geffen (Cidade M\u00e1gica)",
     "grid_x": -4,
     "grid_y": 1,
     "dungeon": false,
@@ -517,7 +517,7 @@
     "default_weather": "Underground"
   },
   "morocc": {
-    "name": "Morroc (Oásis do Deserto)",
+    "name": "Morroc (O\u00e1sis do Deserto)",
     "grid_x": 0,
     "grid_y": -6,
     "dungeon": false,
@@ -531,7 +531,7 @@
     "default_weather": "ClearSunny"
   },
   "moc_ruins": {
-    "name": "Ruínas da Fenda de Morroc",
+    "name": "Ru\u00ednas da Fenda de Morroc",
     "grid_x": 0,
     "grid_y": -6,
     "dungeon": false,
@@ -545,7 +545,7 @@
     "default_weather": "DimensionalAurora"
   },
   "moc_pryd01": {
-    "name": "Pirâmides 1",
+    "name": "Pir\u00e2mides 1",
     "grid_x": 0,
     "grid_y": -6,
     "dungeon": true,
@@ -557,7 +557,7 @@
     "default_weather": "Underground"
   },
   "moc_pryd02": {
-    "name": "Pirâmides 2",
+    "name": "Pir\u00e2mides 2",
     "grid_x": 0,
     "grid_y": -6,
     "dungeon": true,
@@ -569,7 +569,7 @@
     "default_weather": "Underground"
   },
   "moc_pryd03": {
-    "name": "Pirâmides 3",
+    "name": "Pir\u00e2mides 3",
     "grid_x": 0,
     "grid_y": -6,
     "dungeon": true,
@@ -581,7 +581,7 @@
     "default_weather": "Underground"
   },
   "moc_pryd04": {
-    "name": "Pirâmides 4",
+    "name": "Pir\u00e2mides 4",
     "grid_x": 0,
     "grid_y": -6,
     "dungeon": true,
@@ -593,7 +593,7 @@
     "default_weather": "Underground"
   },
   "moc_pryd05": {
-    "name": "Pirâmides B1",
+    "name": "Pir\u00e2mides B1",
     "grid_x": 0,
     "grid_y": -6,
     "dungeon": true,
@@ -605,7 +605,7 @@
     "default_weather": "Underground"
   },
   "moc_pryd06": {
-    "name": "Pirâmides B2",
+    "name": "Pir\u00e2mides B2",
     "grid_x": 0,
     "grid_y": -6,
     "dungeon": true,
@@ -742,7 +742,7 @@
     "name": "Ilha das Tartarugas 1",
     "grid_x": 6,
     "grid_y": -4,
-    "dungeon": false,
+    "dungeon": true,
     "perpetual_night": false,
     "biome": "TropicalIsland",
     "allowed_weathers": [
@@ -804,7 +804,7 @@
     "default_weather": "Fog"
   },
   "c_tower1": {
-    "name": "Torre do Relógio 1F",
+    "name": "Torre do Rel\u00f3gio 1F",
     "grid_x": 0,
     "grid_y": 4,
     "dungeon": true,
@@ -816,7 +816,7 @@
     "default_weather": "Underground"
   },
   "c_tower2": {
-    "name": "Torre do Relógio 2F",
+    "name": "Torre do Rel\u00f3gio 2F",
     "grid_x": 0,
     "grid_y": 4,
     "dungeon": true,
@@ -828,7 +828,7 @@
     "default_weather": "Underground"
   },
   "c_tower3": {
-    "name": "Torre do Relógio 3F",
+    "name": "Torre do Rel\u00f3gio 3F",
     "grid_x": 0,
     "grid_y": 4,
     "dungeon": true,
@@ -840,7 +840,7 @@
     "default_weather": "Underground"
   },
   "c_tower4": {
-    "name": "Torre do Relógio 4F",
+    "name": "Torre do Rel\u00f3gio 4F",
     "grid_x": 0,
     "grid_y": 4,
     "dungeon": true,
@@ -852,7 +852,7 @@
     "default_weather": "Underground"
   },
   "alde_dun01": {
-    "name": "Porão do Relógio B1",
+    "name": "Por\u00e3o do Rel\u00f3gio B1",
     "grid_x": 0,
     "grid_y": 4,
     "dungeon": true,
@@ -864,7 +864,7 @@
     "default_weather": "Underground"
   },
   "alde_dun02": {
-    "name": "Porão do Relógio B2",
+    "name": "Por\u00e3o do Rel\u00f3gio B2",
     "grid_x": 0,
     "grid_y": 4,
     "dungeon": true,
@@ -876,7 +876,7 @@
     "default_weather": "Underground"
   },
   "alde_dun03": {
-    "name": "Porão do Relógio B3",
+    "name": "Por\u00e3o do Rel\u00f3gio B3",
     "grid_x": 0,
     "grid_y": 4,
     "dungeon": true,
@@ -888,7 +888,7 @@
     "default_weather": "Underground"
   },
   "alde_dun04": {
-    "name": "Porão do Relógio B4",
+    "name": "Por\u00e3o do Rel\u00f3gio B4",
     "grid_x": 0,
     "grid_y": 4,
     "dungeon": true,
@@ -951,7 +951,7 @@
     "default_weather": "Underground"
   },
   "gl_chyard": {
-    "name": "Cemitério de GH",
+    "name": "Cemit\u00e9rio de GH",
     "grid_x": -7,
     "grid_y": 2,
     "dungeon": true,
@@ -987,7 +987,7 @@
     "default_weather": "Underground"
   },
   "gl_prison": {
-    "name": "Prisão de GH 1",
+    "name": "Pris\u00e3o de GH 1",
     "grid_x": -7,
     "grid_y": 2,
     "dungeon": true,
@@ -999,7 +999,7 @@
     "default_weather": "Underground"
   },
   "gl_prison1": {
-    "name": "Prisão de GH 2",
+    "name": "Pris\u00e3o de GH 2",
     "grid_x": -7,
     "grid_y": 2,
     "dungeon": true,
@@ -1123,7 +1123,7 @@
     "default_weather": "Snow"
   },
   "xmas_dun01": {
-    "name": "Fábrica de Brinquedos 1",
+    "name": "F\u00e1brica de Brinquedos 1",
     "grid_x": 0,
     "grid_y": 12,
     "dungeon": true,
@@ -1135,7 +1135,7 @@
     "default_weather": "Underground"
   },
   "xmas_dun02": {
-    "name": "Fábrica de Brinquedos 2",
+    "name": "F\u00e1brica de Brinquedos 2",
     "grid_x": 0,
     "grid_y": 12,
     "dungeon": true,
@@ -1279,7 +1279,7 @@
     "default_weather": "Underground"
   },
   "juperos_01": {
-    "name": "Ruínas de Juperos 1",
+    "name": "Ru\u00ednas de Juperos 1",
     "grid_x": 6,
     "grid_y": 7,
     "dungeon": true,
@@ -1291,7 +1291,7 @@
     "default_weather": "Underground"
   },
   "juperos_02": {
-    "name": "Ruínas de Juperos 2",
+    "name": "Ru\u00ednas de Juperos 2",
     "grid_x": 6,
     "grid_y": 7,
     "dungeon": true,
@@ -1303,7 +1303,7 @@
     "default_weather": "Underground"
   },
   "einbroch": {
-    "name": "Einbroch (Cidade do Aço)",
+    "name": "Einbroch (Cidade do A\u00e7o)",
     "grid_x": 7,
     "grid_y": 6,
     "dungeon": false,
@@ -1317,7 +1317,7 @@
     "default_weather": "IndustrialSmog"
   },
   "einbech": {
-    "name": "Einbech (Vila de Mineração)",
+    "name": "Einbech (Vila de Minera\u00e7\u00e3o)",
     "grid_x": 7,
     "grid_y": 6,
     "dungeon": false,
@@ -1331,7 +1331,7 @@
     "default_weather": "IndustrialSmog"
   },
   "slabw01": {
-    "name": "Laboratório Werner (Ep 16)",
+    "name": "Laborat\u00f3rio Werner (Ep 16)",
     "grid_x": 7,
     "grid_y": 6,
     "dungeon": true,
@@ -1343,7 +1343,7 @@
     "default_weather": "Underground"
   },
   "lighthalzen": {
-    "name": "Lighthalzen (Metrópole)",
+    "name": "Lighthalzen (Metr\u00f3pole)",
     "grid_x": 8,
     "grid_y": 6,
     "dungeon": false,
@@ -1357,7 +1357,7 @@
     "default_weather": "ClearSunny"
   },
   "lhz_dun01": {
-    "name": "Laboratório Somatologia 1",
+    "name": "Laborat\u00f3rio Somatologia 1",
     "grid_x": 8,
     "grid_y": 6,
     "dungeon": true,
@@ -1369,7 +1369,7 @@
     "default_weather": "Underground"
   },
   "lhz_dun02": {
-    "name": "Laboratório Somatologia 2",
+    "name": "Laborat\u00f3rio Somatologia 2",
     "grid_x": 8,
     "grid_y": 6,
     "dungeon": true,
@@ -1381,7 +1381,7 @@
     "default_weather": "Underground"
   },
   "lhz_dun03": {
-    "name": "Laboratório Somatologia 3",
+    "name": "Laborat\u00f3rio Somatologia 3",
     "grid_x": 8,
     "grid_y": 6,
     "dungeon": true,
@@ -1393,7 +1393,7 @@
     "default_weather": "Underground"
   },
   "lhz_dun04": {
-    "name": "Laboratório Somatologia 4",
+    "name": "Laborat\u00f3rio Somatologia 4",
     "grid_x": 8,
     "grid_y": 6,
     "dungeon": true,
@@ -1433,7 +1433,7 @@
     "default_weather": "ClearSunny"
   },
   "rachel": {
-    "name": "Rachel (Capital Teocrática)",
+    "name": "Rachel (Capital Teocr\u00e1tica)",
     "grid_x": -16,
     "grid_y": -4,
     "dungeon": false,
@@ -1460,7 +1460,7 @@
     "default_weather": "Underground"
   },
   "veins": {
-    "name": "Veins (Cânions Vermelhos)",
+    "name": "Veins (C\u00e2nions Vermelhos)",
     "grid_x": -18,
     "grid_y": -5,
     "dungeon": false,
@@ -1474,7 +1474,7 @@
     "default_weather": "ClearSunny"
   },
   "thor_v01": {
-    "name": "Vulcão de Thor 1",
+    "name": "Vulc\u00e3o de Thor 1",
     "grid_x": -18,
     "grid_y": -5,
     "dungeon": true,
@@ -1527,7 +1527,7 @@
     "default_weather": "ClearSunny"
   },
   "lasagna": {
-    "name": "Lasagna (Pátria Doram)",
+    "name": "Lasagna (P\u00e1tria Doram)",
     "grid_x": 12,
     "grid_y": -7,
     "dungeon": false,
@@ -1541,7 +1541,7 @@
     "default_weather": "ClearSunny"
   },
   "lasa_dun01": {
-    "name": "Caverna dos Dragões de Lasagna",
+    "name": "Caverna dos Drag\u00f5es de Lasagna",
     "grid_x": 12,
     "grid_y": -7,
     "dungeon": true,
@@ -1553,7 +1553,7 @@
     "default_weather": "Underground"
   },
   "amatsu": {
-    "name": "Amatsu (Japão Feudal)",
+    "name": "Amatsu (Jap\u00e3o Feudal)",
     "grid_x": 32,
     "grid_y": 1,
     "dungeon": false,
@@ -1595,7 +1595,7 @@
     "default_weather": "ClearSunny"
   },
   "ayothaya": {
-    "name": "Ayothaya (Tailândia)",
+    "name": "Ayothaya (Tail\u00e2ndia)",
     "grid_x": 44,
     "grid_y": -1,
     "dungeon": false,
@@ -1637,7 +1637,7 @@
     "default_weather": "ClearSunny"
   },
   "moscovia": {
-    "name": "Moscovia (Rússia)",
+    "name": "Moscovia (R\u00fassia)",
     "grid_x": 16,
     "grid_y": 5,
     "dungeon": false,
@@ -1651,7 +1651,7 @@
     "default_weather": "Snow"
   },
   "dewata": {
-    "name": "Dewata (Indonésia)",
+    "name": "Dewata (Indon\u00e9sia)",
     "grid_x": 20,
     "grid_y": -8,
     "dungeon": false,
@@ -1733,7 +1733,7 @@
     "default_weather": "DimensionalAurora"
   },
   "eclage": {
-    "name": "Eclage (Palácio das Fadas)",
+    "name": "Eclage (Pal\u00e1cio das Fadas)",
     "grid_x": 23,
     "grid_y": 5,
     "dungeon": false,
@@ -1795,7 +1795,7 @@
     "default_weather": "Underground"
   },
   "sp_cor": {
-    "name": "Special Cor (Instalação Industrial)",
+    "name": "Special Cor (Instala\u00e7\u00e3o Industrial)",
     "grid_x": 28,
     "grid_y": 4,
     "dungeon": false,
@@ -1809,7 +1809,7 @@
     "default_weather": "IndustrialSmog"
   },
   "sp_rudus": {
-    "name": "Rudus (Lixão de Ciborgues)",
+    "name": "Rudus (Lix\u00e3o de Ciborgues)",
     "grid_x": 28,
     "grid_y": 4,
     "dungeon": true,
@@ -1821,7 +1821,7 @@
     "default_weather": "Underground"
   },
   "ba_maison": {
-    "name": "Mansão Varmundt",
+    "name": "Mans\u00e3o Varmundt",
     "grid_x": 30,
     "grid_y": 4,
     "dungeon": false,
@@ -1849,7 +1849,7 @@
     "default_weather": "Snow"
   },
   "jor_tail": {
-    "name": "Issgard (Raízes de Yggdrasil)",
+    "name": "Issgard (Ra\u00edzes de Yggdrasil)",
     "grid_x": 34,
     "grid_y": 8,
     "dungeon": false,

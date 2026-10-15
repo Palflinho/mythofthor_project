@@ -350,6 +350,16 @@ void UMythRoSpriteComponent::CreateBlobShadow()
 	const TArray<int32> Tris = { 0, 1, 2, 0, 2, 3, 0, 2, 1, 0, 3, 2 };
 	BlobMesh->CreateMeshSection(0, Verts, Tris, Normals, Tex, Colors, TArray<FProcMeshTangent>(), false);
 	BlobMesh->SetMaterial(0, BlobSource.Material);
+
+	// Sombra para o carrinho do mercador (HD-2D):
+	CartBlobMesh = NewObject<UProceduralMeshComponent>(GetOwner(), TEXT("RoSpriteCartBlobShadow"));
+	CartBlobMesh->SetupAttachment(GetAttachParent());
+	CartBlobMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	CartBlobMesh->SetCastShadow(false);
+	CartBlobMesh->SetVisibility(false);
+	CartBlobMesh->RegisterComponent();
+	CartBlobMesh->CreateMeshSection(0, Verts, Tris, Normals, Tex, Colors, TArray<FProcMeshTangent>(), false);
+	CartBlobMesh->SetMaterial(0, BlobSource.Material);
 }
 
 void UMythRoSpriteComponent::PlayFrameEvent(const FRoActFrame& Frame, int32 ActionIndex, int32 FrameIndex)
@@ -493,6 +503,11 @@ void UMythRoSpriteComponent::OnComponentDestroyed(bool bDestroyingHierarchy)
 	{
 		BlobMesh->DestroyComponent();
 		BlobMesh = nullptr;
+	}
+	if (CartBlobMesh)
+	{
+		CartBlobMesh->DestroyComponent();
+		CartBlobMesh = nullptr;
 	}
 	Super::OnComponentDestroyed(bDestroyingHierarchy);
 }
@@ -1332,8 +1347,32 @@ void UMythRoSpriteComponent::UpdateBillboard(const FRotator& CamRot)
 			{
 				BlobAt.Z = GroundHit.ImpactPoint.Z + 3.f;
 			}
+			const bool bIsPeco = (JobClass == 13 || JobClass == 21 || JobClass == 4014 || JobClass == 4022 || JobClass == 4036 || JobClass == 4044 || JobSpriteName.Contains(TEXT("peco")) || JobSpriteName.Contains(TEXT("페코")));
+			const float MountScale = bIsPeco ? 1.75f : 1.0f;
 			BlobMesh->SetWorldLocationAndRotation(BlobAt, FRotator(0.f, CamRot.Yaw, 0.f));
-			BlobMesh->SetWorldScale3D(FVector(1.f / SinPitch, 1.f, 1.f));
+			BlobMesh->SetWorldScale3D(FVector(MountScale / SinPitch, MountScale, 1.f));
+		}
+		if (CartBlobMesh)
+		{
+			if (CartType > 0 && CartSource.IsValid())
+			{
+				const float SinPitch = FMath::Max(FMath::Abs(FMath::Sin(FMath::DegreesToRadians(CamRot.Pitch))), 0.25f);
+				// Sombra projetada do carrinho atras do personagem:
+				FVector CartAt = Feet - FVector(FacingWorld.X, FacingWorld.Y, 0.f) * 60.f + FVector(0.f, 0.f, 5.f);
+				FHitResult CartGroundHit;
+				FCollisionQueryParams CartParams(TEXT("RoCartBlobGround"), false, GetOwner());
+				if (GetWorld()->LineTraceSingleByChannel(CartGroundHit, CartAt + FVector(0.f, 0.f, 60.f), CartAt - FVector(0.f, 0.f, 60.f), ECC_Camera, CartParams))
+				{
+					CartAt.Z = CartGroundHit.ImpactPoint.Z + 3.f;
+				}
+				CartBlobMesh->SetWorldLocationAndRotation(CartAt, FRotator(0.f, CamRot.Yaw, 0.f));
+				CartBlobMesh->SetWorldScale3D(FVector(1.15f / SinPitch, 1.15f, 1.f));
+				CartBlobMesh->SetVisibility(true);
+			}
+			else
+			{
+				CartBlobMesh->SetVisibility(false);
+			}
 		}
 	}
 }

@@ -201,12 +201,61 @@ void AMythDayNightActor::UpdateLighting()
 		MapInfoCache = AMythMapInfo::Find(GetWorld());
 		NextMapInfoSearch = GetWorld()->GetTimeSeconds() + 2.0; // do not scan the actors every frame on maps without a MapInfo
 	}
-	if (const AMythMapInfo* MapInfo = MapInfoCache.Get(); MapInfo && !MapInfo->IsIndoor() && FMythOptions::Get(TEXT("RegionalTime")))
+	bool bIsDungeon = false;
+	if (const AMythMapInfo* MapInfo = MapInfoCache.Get())
 	{
 		if (const FMythMapEnv* Env = MapInfo->GetEnvironment())
 		{
-			EffectiveHour = Env->bPerpetualNight ? 0.f : MapInfo->GetLocalHour(TimeOfDay);
-			LatitudeY = Env->GridY;
+			bIsDungeon = Env->bDungeon;
+			if (!MapInfo->IsIndoor() && FMythOptions::Get(TEXT("RegionalTime")))
+			{
+				EffectiveHour = Env->bPerpetualNight ? 0.f : MapInfo->GetLocalHour(TimeOfDay);
+				LatitudeY = Env->GridY;
+			}
+		}
+	}
+
+	if (bIsDungeon)
+	{
+		// Sinalizador de Masmorra (HD-2D):
+		// Apaga o sol e a lua; mantem a iluminacao ambiente suave de masmorra sem escuridao absoluta,
+		// e as tochas/cristais (NightGlow) acendem com forca maxima (Lumen).
+		Sun->SetVisibility(false);
+		Sun->SetIntensity(0.f);
+		Moon->SetVisibility(false);
+		Moon->SetIntensity(0.f);
+		if (Atmosphere)
+		{
+			Atmosphere->SetVisibility(false);
+		}
+		SkyLight->SetIntensity(0.08f);
+		SkyLight->SetLightColor(FLinearColor(0.25f, 0.30f, 0.42f));
+		if (Grading)
+		{
+			FPostProcessSettings& PP = Grading->Settings;
+			PP.AutoExposureBias = -0.4f;
+			PP.ColorGain = FVector4(0.85f, 0.90f, 1.0f, 1.f);
+			PP.ColorSaturation = FVector4(1.f, 1.f, 1.f, 0.90f);
+		}
+		if (!FMath::IsNearlyEqual(1.0f, AppliedNightGlow, 0.01f))
+		{
+			AppliedNightGlow = 1.0f;
+			for (TObjectIterator<UStaticMeshComponent> It; It; ++It)
+			{
+				if (It->GetWorld() == GetWorld() && It->GetOwner() && !It->GetOwner()->IsA<APawn>())
+				{
+					It->SetScalarParameterForCustomPrimitiveData(TEXT("NightGlow"), 1.0f);
+				}
+			}
+		}
+		NightFactor = 1.0f;
+		return;
+	}
+	else
+	{
+		if (Atmosphere)
+		{
+			Atmosphere->SetVisibility(true);
 		}
 	}
 

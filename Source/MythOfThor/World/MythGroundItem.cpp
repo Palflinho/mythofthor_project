@@ -93,19 +93,25 @@ void AMythGroundItem::BeginPlay()
 {
 	Super::BeginPlay();
 	const FLinearColor Color = FMythRoClientTables::RarityColor(Rarity);
-	if (Rarity >= 2)
+	if (Rarity >= 1)
 	{
 		Glow->SetLightColor(Color);
-		Glow->SetIntensity(Rarity >= 4 ? 30.f : (Rarity == 3 ? 20.f : 12.f));
+		float Intensity = 8.f;
+		if (Rarity == 2) { Intensity = 15.f; }
+		else if (Rarity == 3) { Intensity = 24.f; }
+		else if (Rarity >= 4) { Intensity = 36.f; }
+		Glow->SetIntensity(Intensity);
 		Glow->SetVisibility(true);
-	}
-	if (Rarity >= 3)
-	{
+
 		if (UMaterialInterface* Base = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Myth/M_ItemBeam.M_ItemBeam")))
 		{
 			UMaterialInstanceDynamic* M = UMaterialInstanceDynamic::Create(Base, this);
 			M->SetVectorParameterValue(TEXT("Color"), Color);
-			M->SetScalarParameterValue(TEXT("Strength"), Rarity >= 4 ? 9.f : 6.f);
+			float Strength = 4.f;
+			if (Rarity == 2) { Strength = 6.f; }
+			else if (Rarity == 3) { Strength = 8.f; }
+			else if (Rarity >= 4) { Strength = 11.f; }
+			M->SetScalarParameterValue(TEXT("Strength"), Strength);
 			Beam->SetMaterial(0, M);
 			Beam->SetVisibility(true);
 		}
@@ -117,14 +123,21 @@ void AMythGroundItem::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	if (Beam->IsVisible())
 	{
-		// Feixe em pe e virado para a camera (so gira no eixo vertical): 35 cm de largura, 3,5 m de altura
+		// Feixe em pe e virado para a camera (so gira no eixo vertical):
+		// altura e largura escalonadas pela raridade do drop (HD-2D)
+		float BeamHeightM = 2.5f;
+		float BeamWidth = 0.22f;
+		if (Rarity == 2) { BeamHeightM = 3.2f; BeamWidth = 0.28f; }
+		else if (Rarity == 3) { BeamHeightM = 4.2f; BeamWidth = 0.36f; }
+		else if (Rarity >= 4) { BeamHeightM = 5.5f; BeamWidth = 0.45f; }
+
 		if (const APlayerController* PC = GetWorld()->GetFirstPlayerController(); PC && PC->PlayerCameraManager)
 		{
 			const float Yaw = PC->PlayerCameraManager->GetCameraRotation().Yaw;
 			Beam->SetWorldRotation(FRotator(0.f, Yaw + 90.f, 90.f));
 		}
-		Beam->SetWorldLocation(GetActorLocation() + FVector(0.f, 0.f, 175.f));
-		Beam->SetWorldScale3D(FVector(0.35f, 3.5f, 1.f));
+		Beam->SetWorldLocation(GetActorLocation() + FVector(0.f, 0.f, BeamHeightM * 50.f));
+		Beam->SetWorldScale3D(FVector(BeamWidth, BeamHeightM, 1.f));
 	}
 	if (DropTime < 0.f)
 	{

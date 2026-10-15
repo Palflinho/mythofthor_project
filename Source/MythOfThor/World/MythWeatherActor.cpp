@@ -1,6 +1,8 @@
 #include "World/MythWeatherActor.h"
 
 #include "World/MythDayNightActor.h"
+#include "World/MythMapEnvironment.h"
+#include "World/MythMapInfo.h"
 #include "Camera/PlayerCameraManager.h"
 #include "Components/ExponentialHeightFogComponent.h"
 #include "Components/InstancedStaticMeshComponent.h"
@@ -8,7 +10,9 @@
 #include "Engine/StaticMesh.h"
 #include "EngineUtils.h"
 #include "GameFramework/PlayerController.h"
+#include "Kismet/KismetMaterialLibrary.h"
 #include "Materials/MaterialInterface.h"
+#include "Materials/MaterialParameterCollection.h"
 
 AMythWeatherActor::AMythWeatherActor()
 {
@@ -49,6 +53,7 @@ void AMythWeatherActor::BeginPlay()
 	Super::BeginPlay();
 	RainMaterial = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Weather/M_RainStreak.M_RainStreak"));
 	SnowMaterial = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Weather/M_SnowFlake.M_SnowFlake"));
+	EnvironmentMPC = LoadObject<UMaterialParameterCollection>(nullptr, TEXT("/Game/Myth/MPC_Environment.MPC_Environment"));
 	if (!RainMaterial || !SnowMaterial)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("MythWeather: weather materials missing; run tools/ue_setup_weather.py"));
@@ -60,6 +65,7 @@ void AMythWeatherActor::BeginPlay()
 		break;
 	}
 	DayNight = AMythDayNightActor::Find(this);
+	InitBiomeWeather();
 }
 
 void AMythWeatherActor::SetWeather(EMythWeather NewWeather)
@@ -164,9 +170,100 @@ void AMythWeatherActor::ApplyAtmosphere()
 	}
 }
 
+void AMythWeatherActor::InitBiomeWeather()
+{
+	const AMythMapInfo* MapInfo = AMythMapInfo::Find(GetWorld());
+	if (!MapInfo)
+	{
+		return;
+	}
+	bBiomeWeatherInitialized = true;
+	const FMythMapEnv* Env = MapInfo->GetEnvironment();
+	if (!Env)
+	{
+		return;
+	}
+
+	AllowedWeatherList.Empty();
+	if (Env->bDungeon)
+	{
+		// Dungeons nao possuem clima externo de chuva/neve
+		AllowedWeatherList.Add(EMythWeather::Clear);
+		SetWeather(EMythWeather::Clear);
+		return;
+	}
+
+	auto ParseWeather = [](const FString& S) -> EMythWeather
+	{
+		if (S.Equals(TEXT("Rain"), ESearchCase::IgnoreCase)) { return EMythWeather::Rain; }
+		if (S.Equals(TEXT("Snow"), ESearchCase::IgnoreCase)) { return EMythWeather::Snow; }
+		if (S.Equals(TEXT("Fog"), ESearchCase::IgnoreCase) || S.Equals(TEXT("Overcast"), ESearchCase::IgnoreCase)) { return EMythWeather::Fog; }
+		return EMythWeather::Clear;
+	};
+
+	for (const FString& WName : Env->AllowedWeathers)
+	{
+		EMythWeather W = ParseWeather(WName);
+		AllowedWeatherList.AddUnique(W);
+	}
+	if (AllowedWeatherList.Num() == 0)
+	{
+		AllowedWeatherList.Add(EMythWeather::Clear);
+	}
+
+	if (!Env->DefaultWeather.IsEmpty())
+	{
+		SetWeather(ParseWeather(Env->DefaultWeather));
+	}
+	else
+	{
+		SetWeather(AllowedWeatherList[0]);
+	}
+	NextWeatherChangeTime = FMath::RandRange(180.f, 420.f);
+}
+
+void AMythWeatherActor::UpdateWetness(float DeltaSeconds)
+{
+	const bool bRaining = (Visible == EMythWeather::Rain || Weather == EMythWeather::Rain);
+	if (bRaining)
+	{
+		// Durante a chuva o piso molha progressivamente
+		Wetness = FMath::FInterpTo(Wetness, Intensity, DeltaSeconds, 0.25f);
+	}
+	else
+	{
+		// Apos a chuva o piso seca suavemente em ~30 segundos
+		Wetness = FMath::FInterpTo(Wetness, 0.0f, DeltaSeconds, 0.035f);
+	}
+
+	if (EnvironmentMPC && GetWorld())
+	{
+		UKismetMaterialLibrary::SetScalarParameterValue(GetWorld(), EnvironmentMPC, FName(TEXT("Wetness")), Wetness);
+		UKismetMaterialLibrary::SetScalarParameterValue(GetWorld(), EnvironmentMPC, FName(TEXT("RainIntensity")), Visible == EMythWeather::Rain ? Intensity : 0.f);
+	}
+}
+
 void AMythWeatherActor::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+
+	UpdateWetness(DeltaSeconds);
+
+	if (!bBiomeWeatherInitialized)
+	{
+		InitBiomeWeather();
+	}
+	else if (AllowedWeatherList.Num() > 1)
+	{
+		WeatherTimer += DeltaSeconds;
+		if (WeatherTimer >= NextWeatherChangeTime)
+		{
+			WeatherTimer = 0.f;
+			NextWeatherChangeTime = FMath::RandRange(180.f, 420.f);
+			const int32 Idx = FMath::RandRange(0, AllowedWeatherList.Num() - 1);
+			SetWeather(AllowedWeatherList[Idx]);
+		}
+	}
 
 	// Troca de clima: o visivel some ate 0 e so entao o novo entra
 	const float Step = DeltaSeconds / FMath::Max(TransitionSeconds, 0.1f);

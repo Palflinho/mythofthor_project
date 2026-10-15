@@ -152,23 +152,79 @@ namespace
 	{
 		return Target ? AMythStrEffect::FeetOf(Target) : Fallback;
 	}
+
+	struct FSkillElementInfo
+	{
+		FString Name;
+		FString Element;
+		FLinearColor Color;
+	};
+
+	const TMap<int32, FSkillElementInfo>& SkillElementTable()
+	{
+		static TMap<int32, FSkillElementInfo> Table;
+		static bool bLoaded = false;
+		if (!bLoaded)
+		{
+			bLoaded = true;
+			FString Text;
+			if (FFileHelper::LoadFileToString(Text, *FPaths::Combine(FPaths::ProjectConfigDir(), TEXT("skill_elements.json"))))
+			{
+				TSharedPtr<FJsonObject> Root;
+				if (FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Text), Root) && Root.IsValid())
+				{
+					for (const auto& Pair : Root->Values)
+					{
+						const TSharedPtr<FJsonObject>* Obj = nullptr;
+						if (Pair.Value->TryGetObject(Obj) && Obj && (*Obj).IsValid())
+						{
+							const int32 Id = (*Obj)->GetIntegerField(TEXT("id"));
+							FSkillElementInfo& Info = Table.Add(Id);
+							Info.Name = (*Obj)->GetStringField(TEXT("name"));
+							Info.Element = (*Obj)->GetStringField(TEXT("element"));
+							const TArray<TSharedPtr<FJsonValue>>* ColorArr = nullptr;
+							if ((*Obj)->TryGetArrayField(TEXT("color"), ColorArr) && ColorArr && ColorArr->Num() >= 3)
+							{
+								Info.Color = FLinearColor(
+									static_cast<float>((*ColorArr)[0]->AsNumber()),
+									static_cast<float>((*ColorArr)[1]->AsNumber()),
+									static_cast<float>((*ColorArr)[2]->AsNumber()),
+									1.0f
+								);
+							}
+							else
+							{
+								Info.Color = FLinearColor(0.88f, 0.88f, 0.95f, 1.0f);
+							}
+						}
+					}
+					UE_LOG(LogTemp, Log, TEXT("MythSkillEffects: %d skill elements carregados de Config/skill_elements.json"), Table.Num());
+				}
+			}
+		}
+		return Table;
+	}
 }
 
 FLinearColor FMythSkillEffects::ElementColor(int32 SkillID)
 {
+	if (const FSkillElementInfo* Info = SkillElementTable().Find(SkillID))
+	{
+		return Info->Color;
+	}
 	const FSkillEntry* S = Tables().Skills.Find(SkillID);
 	const FString Element = S ? S->Element : FString();
 	// GDD Tecnico Magias HD-2D s.3 (Matriz Elemental):
-	if (Element == TEXT("Fire"))   { return FColor::FromHex(TEXT("#FF4500")).ReinterpretAsLinear(); } // Laranja Incandescente
-	if (Element == TEXT("Water"))  { return FColor::FromHex(TEXT("#00CED1")).ReinterpretAsLinear(); } // Azul Turquesa
-	if (Element == TEXT("Wind"))   { return FColor::FromHex(TEXT("#00BFFF")).ReinterpretAsLinear(); } // Azul Eletrico
-	if (Element == TEXT("Earth"))  { return FColor::FromHex(TEXT("#8B4513")).ReinterpretAsLinear(); } // Marrom Terra / Ocre
-	if (Element == TEXT("Holy"))   { return FColor::FromHex(TEXT("#FFF8DC")).ReinterpretAsLinear(); } // Dourado Puro
-	if (Element == TEXT("Dark"))   { return FColor::FromHex(TEXT("#4B0082")).ReinterpretAsLinear(); } // Roxo Escuro
-	if (Element == TEXT("Ghost"))  { return FColor::FromHex(TEXT("#8A2BE2")).ReinterpretAsLinear(); } // Violeta Translucido
-	if (Element == TEXT("Poison")) { return FColor::FromHex(TEXT("#32CD32")).ReinterpretAsLinear(); } // Verde Toxico
-	if (Element == TEXT("Undead")) { return FColor::FromHex(TEXT("#8B0000")).ReinterpretAsLinear(); } // Carmesim
-	return FColor::FromHex(TEXT("#E6E6FA")).ReinterpretAsLinear(); // Branco Prateado (Neutro)
+	if (Element == TEXT("Fire"))   { return FLinearColor(1.0f, 0.35f, 0.02f); } // Laranja Incandescente
+	if (Element == TEXT("Water"))  { return FLinearColor(0.05f, 0.55f, 1.0f); } // Azul Turquesa
+	if (Element == TEXT("Wind"))   { return FLinearColor(0.1f, 0.9f, 0.95f); } // Azul Eletrico / Ciano
+	if (Element == TEXT("Earth"))  { return FLinearColor(0.85f, 0.52f, 0.22f); } // Marrom Terra / Ocre
+	if (Element == TEXT("Holy"))   { return FLinearColor(1.0f, 0.92f, 0.38f); } // Dourado Puro
+	if (Element == TEXT("Dark") || Element == TEXT("Shadow")) { return FLinearColor(0.58f, 0.15f, 0.92f); } // Roxo Escuro / Violeta
+	if (Element == TEXT("Ghost"))  { return FLinearColor(0.45f, 0.65f, 0.95f); } // Violeta Translucido / Etereo
+	if (Element == TEXT("Poison")) { return FLinearColor(0.2f, 0.85f, 0.1f); } // Verde Toxico
+	if (Element == TEXT("Undead")) { return FLinearColor(0.65f, 0.05f, 0.35f); } // Carmesim
+	return FLinearColor(0.88f, 0.88f, 0.95f); // Branco Prateado (Neutro)
 }
 
 bool FMythSkillEffects::PlayEffectId(UObject* WorldContext, int32 EffectID, AActor* Target, const FVector& Location, AActor* Source)
@@ -423,10 +479,29 @@ bool FMythSkillEffects::Play(UObject* WorldContext, int32 SkillID, EMythSkillEff
 		}
 	}
 	UE_LOG(LogTemp, Verbose, TEXT("MythSkillEffects: skill %d estagio %d -> efeito %d (%s)"), SkillID, static_cast<int32>(Stage), EffectID, bPlayed ? TEXT("tocou") : TEXT("no effect"));
-	// O .str ja traz a propria luz; sem ele, o clarao do elemento no impacto
-	if (!bPlayed && bFlashIfMissing && Stage != EMythSkillEffectStage::Ground)
+	// Luz Dinamica nas Habilidades por Elemento (GDD HD-2D Secao 4):
+	// Instancia uma luz pontual colorida rapida (UPointLightComponent via AMythLightFlash)
+	// durante os efeitos originais STR/SPR na cor exata do elemento da skill.
+	const FLinearColor LightColor = ElementColor(SkillID);
+	if (Stage == EMythSkillEffectStage::Hit || Stage == EMythSkillEffectStage::Effect || Stage == EMythSkillEffectStage::Release)
 	{
-		AMythLightFlash::Flash(WorldContext, FeetOf(Target, Location) + FVector(0.f, 0.f, 70.f), ElementColor(SkillID), 55.f, 0.55f, Target);
+		const FVector At = FeetOf(Target, Location) + FVector(0.f, 0.f, 75.f);
+		AMythLightFlash::Flash(WorldContext, At, LightColor, 80.f, 0.45f, Target);
+	}
+	else if (Stage == EMythSkillEffectStage::Ground)
+	{
+		const FVector At = Location + FVector(0.f, 0.f, 40.f);
+		AMythLightFlash::Flash(WorldContext, At, LightColor, 90.f, 0.65f, nullptr);
+	}
+	else if (Stage == EMythSkillEffectStage::Cast || Stage == EMythSkillEffectStage::BeginCast)
+	{
+		AActor* Caster = Source ? Source : Target;
+		const FVector At = FeetOf(Caster, Location) + FVector(0.f, 0.f, 60.f);
+		AMythLightFlash::Flash(WorldContext, At, LightColor, 45.f, 0.35f, Caster);
+	}
+	else if (!bPlayed && bFlashIfMissing)
+	{
+		AMythLightFlash::Flash(WorldContext, FeetOf(Target, Location) + FVector(0.f, 0.f, 70.f), LightColor, 55.f, 0.55f, Target);
 	}
 	return bPlayed;
 }

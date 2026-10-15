@@ -76,6 +76,7 @@ private:
 	UPROPERTY(VisibleAnywhere) TObjectPtr<UInstancedStaticMeshComponent> Particles;
 	UPROPERTY() TObjectPtr<UMaterialInterface> RainMaterial;
 	UPROPERTY() TObjectPtr<UMaterialInterface> SnowMaterial;
+	UPROPERTY() TObjectPtr<class UMaterialParameterCollection> EnvironmentMPC;
 	TWeakObjectPtr<AExponentialHeightFog> Fog;
 	TWeakObjectPtr<AMythDayNightActor> DayNight;
 	float BaseFogDensity = 0.02f;
@@ -85,6 +86,15 @@ private:
 	float Intensity = 0.f;
 	/** Clima que ainda esta saindo (durante a troca, o anterior some antes do novo entrar). */
 	EMythWeather Visible = EMythWeather::Clear;
+
+	float Wetness = 0.f;
+	float WeatherTimer = 0.f;
+	float NextWeatherChangeTime = 120.f;
+	TArray<EMythWeather> AllowedWeatherList;
+	bool bBiomeWeatherInitialized = false;
+
+	void InitBiomeWeather();
+	void UpdateWetness(float DeltaSeconds);
 
 	struct FParticle
 	{
