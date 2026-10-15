@@ -103,6 +103,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Sprite|Layers")
 	void UpdateLayerSorting(ERagnarokDirection FacingDirection);
 
+	/** Propaga o Hit-Flash emissivo de 1 frame simultaneamente em todas as 7 camadas (GDD Tecnico: Modulo 4.1) */
+	UFUNCTION(BlueprintCallable, Category = "Sprite")
+	void TriggerMultiLayerHitFlash(float Duration = 0.05f);
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Myth|Stats")
 	TObjectPtr<UMythStatsComponent> Stats;
 

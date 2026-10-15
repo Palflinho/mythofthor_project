@@ -563,8 +563,22 @@ def run():
                 env_struct.set_editor_property('b_is_dungeon', ed.get('dungeon', False))
                 env_struct.set_editor_property('b_is_perpetual_night', ed.get('perpetual_night', False))
                 env_struct.set_editor_property('biome_tag', ed.get('biome', 'Temperate'))
+                weathers = ed.get('allowed_weathers', [])
+                if weathers and hasattr(unreal, 'MythWeatherType'):
+                    w_list = []
+                    for w_name in weathers:
+                        enum_val = getattr(unreal.MythWeatherType, w_name.upper(), getattr(unreal.MythWeatherType, w_name, None))
+                        if enum_val is not None:
+                            w_list.append(enum_val)
+                    if w_list:
+                        env_struct.set_editor_property('allowed_weathers', w_list)
+                def_w = ed.get('default_weather', '')
+                if def_w and hasattr(unreal, 'MythWeatherType'):
+                    def_val = getattr(unreal.MythWeatherType, def_w.upper(), getattr(unreal.MythWeatherType, def_w, None))
+                    if def_val is not None:
+                        env_struct.set_editor_property('default_weather', def_val)
                 try_set(info, 'environment_data', env_struct)
-                log('Ambiente configurado: %s (Grid %d, %d | %s)' % (ed.get('name'), ed.get('grid_x', 0), ed.get('grid_y', 0), ed.get('biome')))
+                log('Ambiente configurado: %s (Grid %d, %d | %s | Clima: %s)' % (ed.get('name'), ed.get('grid_x', 0), ed.get('grid_y', 0), ed.get('biome'), ed.get('default_weather', 'ClearSunny')))
         except Exception as e:
             warn('Nao foi possivel carregar dados de ambiente: ' + str(e))
 

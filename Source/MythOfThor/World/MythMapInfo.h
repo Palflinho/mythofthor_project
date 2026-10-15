@@ -6,6 +6,23 @@
 
 class USoundBase;
 
+/** Tipos climáticos canônicos e regionais (GDD Técnico HD-2D: Módulo 2 e Seção 7) */
+UENUM(BlueprintType)
+enum class EMythWeatherType : uint8
+{
+	ClearSunny        UMETA(DisplayName = "Clear / Sunny"),
+	Overcast          UMETA(DisplayName = "Overcast / Cloudy"),
+	Rain              UMETA(DisplayName = "Rain / Storm"),
+	Snow              UMETA(DisplayName = "Snow / Blizzard"),
+	Sandstorm         UMETA(DisplayName = "Sandstorm"),
+	Fog               UMETA(DisplayName = "Fog / Magic Mist"),
+	IndustrialSmog    UMETA(DisplayName = "Industrial Smog / Acid"),
+	VolcanicAsh       UMETA(DisplayName = "Volcanic Ash / Cinders"),
+	CherryBlossom     UMETA(DisplayName = "Cherry Blossom Petals"),
+	DimensionalAurora UMETA(DisplayName = "Dimensional Aurora / Ash Vacuum"),
+	Underground       UMETA(DisplayName = "Underground / Cave")
+};
+
 /**
  * Dados de ambiente, fuso horário e bioma geográfico do mapa (GDD Técnico HD-2D).
  */
@@ -38,6 +55,13 @@ struct MYTHOFTHOR_API FMapEnvironmentData : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Environment")
 	FString BiomeTag = TEXT("Temperate");
+
+	/** Climas permitidos e sorteáveis pelo subsistema climático (Módulo 2 do GDD) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Environment")
+	TArray<EMythWeatherType> AllowedWeathers;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Environment")
+	EMythWeatherType DefaultWeather = EMythWeatherType::ClearSunny;
 };
 
 /**

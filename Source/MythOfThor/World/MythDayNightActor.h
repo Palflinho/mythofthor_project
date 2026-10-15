@@ -77,6 +77,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "DayNight")
 	TObjectPtr<UMythNightAudioComponent> Audio;
 
+	/** Componente de Clima Local Niagara e Piso Molhado (GDD Técnico: Módulo 2) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "DayNight")
+	TObjectPtr<class UMythWeatherComponent> Weather;
+
 protected:
 	virtual void BeginPlay() override;
 

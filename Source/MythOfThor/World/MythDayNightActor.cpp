@@ -1,6 +1,7 @@
 #include "World/MythDayNightActor.h"
 
 #include "World/MythNightAudioComponent.h"
+#include "World/MythWeatherComponent.h"
 #include "World/MythMapInfo.h"
 
 #include "Components/DirectionalLightComponent.h"
@@ -48,6 +49,7 @@ AMythDayNightActor::AMythDayNightActor()
 	Atmosphere->SetupAttachment(Root);
 
 	Audio = CreateDefaultSubobject<UMythNightAudioComponent>(TEXT("Audio"));
+	Weather = CreateDefaultSubobject<UMythWeatherComponent>(TEXT("Weather"));
 }
 
 void AMythDayNightActor::BeginPlay()

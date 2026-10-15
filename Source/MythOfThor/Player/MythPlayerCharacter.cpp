@@ -8,6 +8,8 @@
 #include "Sprites/MythSpriteAnimComponent.h"
 #include "Gameplay/MythStatsComponent.h"
 #include "Gameplay/AutoBattleComponent.h"
+#include "Materials/MaterialInstanceDynamic.h"
+#include "TimerManager.h"
 
 AMythPlayerCharacter::AMythPlayerCharacter()
 {
@@ -186,4 +188,47 @@ void AMythPlayerCharacter::UpdateLayerSorting(ERagnarokDirection FacingDirection
 		if (WeaponLayer)         WeaponLayer->SetTranslucentSortPriority(70);
 	}
 }
+
+void AMythPlayerCharacter::TriggerMultiLayerHitFlash(float Duration)
+{
+	if (Sprite)
+	{
+		Sprite->TriggerHitFlash(Duration);
+	}
+
+	auto FlashLayer = [this, Duration](UPaperFlipbookComponent* LayerComp)
+	{
+		if (LayerComp && LayerComp->GetFlipbook())
+		{
+			UMaterialInterface* ExistingMat = LayerComp->GetMaterial(0);
+			UMaterialInstanceDynamic* DynMat = ExistingMat ? Cast<UMaterialInstanceDynamic>(ExistingMat) : LayerComp->CreateDynamicMaterialInstance(0);
+			if (DynMat)
+			{
+				DynMat->SetScalarParameterValue(TEXT("HitFlash"), 1.0f);
+				if (UWorld* World = GetWorld())
+				{
+					FTimerHandle Handle;
+					World->GetTimerManager().SetTimer(Handle, [LayerComp]()
+					{
+						if (LayerComp)
+						{
+							if (UMaterialInstanceDynamic* Mat = Cast<UMaterialInstanceDynamic>(LayerComp->GetMaterial(0)))
+							{
+								Mat->SetScalarParameterValue(TEXT("HitFlash"), 0.0f);
+							}
+						}
+					}, Duration, false);
+				}
+			}
+		}
+	};
+
+	FlashLayer(RobeLayer);
+	FlashLayer(HairLayer);
+	FlashLayer(HeadgearLowerLayer);
+	FlashLayer(HeadgearMiddleLayer);
+	FlashLayer(HeadgearTopLayer);
+	FlashLayer(WeaponLayer);
+}
+
 
