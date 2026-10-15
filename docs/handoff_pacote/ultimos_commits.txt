@@ -1,0 +1,40 @@
+6b6751d docs: HD-2D branch test results
+04d5f00 HD-2D branch review: regional time/latitude/perpetual night from map_environment_table, hit flash + hitstop; comparison doc
+40ea3d9 maps: 35 more field maps imported (docs regenerated); generic item icons by kind; groups
+192110e feat: HUD without commands (auto-loot, show EXP, no-requests toggles, server rates/uptime, player group commands); fixes
+aec20cf i18n: English data layer (skills, descriptions, items, maps, navi, messages from Data2026), English interface art, pet evolution UI, more literals; tools for all of it
+8f390bd fix: item icons use the identified art (each sword its own icon); more UI labels in English
+eea7813 server: Docker ports 16900/16121/15121 (Windows portproxy owns 6900/6121/5121); tools/fix_radmin_ports.ps1
+7fb7bf4 fix: friend feedback batch (academy NPCs off, respawn save point, shop close, drop prompt, item snap, night, skill tree classes, auto prerequisites, class names, mojibake)
+f597c6c docs: friend feedback checklist (2026-10-13) with images
+476be3b codex: spawn maps and monsters per map at knowledge level 2
+9253b27 rare monsters: HP x6, EXP x8, item drops x4, card drops x2
+d61525f feat: rare monsters (1 in 20 kills, star copy, 6x EXP, 3x drops, @rare) and Mimir Codex (kill tracking, bestiary window Alt+K, HP on target at level 2, milestone bonuses)
+3bcf20d i18n: server NPC scripts and language switch to English; docs: Novice body PNGs
+bc8bd1d i18n: client UI/network/log strings converted to English (483 literals)
+769aa62 tools: Data2026 merge/diff/apply scripts; report of updated files; extractor resume
+02d3d59 feat(training): Training Grounds new_1-1..4 (import, indoor rules, minimap alias, tutorial NPCs, start point); water only on tiles with ground
+de68d25 assets: water materials (M_Water, M_WaterModern, T_WaterNormal)
+eb2e6cd tools: sync_item_assets case-insensitive; docs: item icon coverage
+bffbf67 docs: overnight work log; tools: sync_item_assets
+f99fdb4 feat(items): item_info_2026 fallback (10.5k items missing in LATAM) from the 2026 client itemInfo.lua
+1e1c59d feat(achievements): standard title bar, rewards from achievement_db shown in details
+8435fed feat(status): pending attribute points with OK/Cancel like skills
+4121f75 feat(hotbar): 1-4 visible rows with - / + buttons and F12 cycling (saved)
+220b282 feat(items): item descriptions never blank (info -> items.json -> catalog fallback + error log); weapon id without table entry logs an error
+5f66f2a feat(vfx): UMythSkillManager (data-driven; generic effect by element+effect_class from skill_vfx_classes.json, optional Niagara), Niagara module
+877b5b3 feat(effects): head-attached SPR/STR effects above the head, sprite particles (spriteName) for buffs
+a401d13 fix(ui): EXP strip without white margin, level-up icon 30% larger
+3e0c4c4 fix(ui): EXP level boxes flush with the bar ends (end caps)
+4c8c29e feat(ui): black panel/menu titles, blue level boxes after the EXP bars; docs
+9976c8c feat(ui): character panel, EXP bars and main menu in the standard window style (light body, blue title bar)
+463ea6a feat(ui): area selection circle, chat/EXP/hotbar/panel adjustments, menu hover, hover name+HP plates
+8562b93 feat(water): modern Single Layer Water material with classic/modern option
+b49c171 feat(world): water in canals/lakes/sewers (RSW+GND criterion, animated frames, M_Water); map checklist
+31c72c2 docs: map/dungeon/instance checklist generator and list; sewers 2-4 imported
+ae4b777 feat: class trainer NPC (test), real monster level in the name label, booking constants fix
+afa3c56 docs: round 29 (guild tabs, party booking, known gaps)
+90d84b8 feat(party): party booking (search, register, remove) with the real rAthena packets; docs
+f20e3aa feat(guild): Positions, Skills (with upgrade), Expulsions tabs and alliance/enemy boxes
+febd244 docs(skills): checkup results verified in game
+9612467 feat(skills): skill cooldown from ZC_SKILL_POSTDELAY (0x043d) shown on the hotbar

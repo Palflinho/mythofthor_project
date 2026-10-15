@@ -1,0 +1,20 @@
+- [Server authority rule](server-authority-rule.md) — never reimplement what rAthena does; rebuild client to match original RO
+- [Dev environment](mythofthor-dev-environment.md) — E:\Dev junctions (accent breaks MSVC), WSL/Docker rAthena, client at C:\Gravity\Ragnarok
+- [Antigravity collaboration](antigravity-collaboration.md) — user's other AI agent; split tasks via repo docs
+- [Client 1:1 principle](client-1to1-principle.md) — RO client identical in Unreal; only add HD-2D shadows, weather, day/night
+- [Weather backlog](weather-backlog.md) — puddles, rain on units, per-map weather: deferred until NPC dialog + house warps are done
+- [Reply in Portuguese](reply-in-portuguese.md) — always answer the user in pt-BR
+- [Closed test plan](closed-test-plan.md) — host on own PC for ~20 friends first; checklist for opening it
+- [Class scope](class-scope.md) — Renewal rules, only up to trans (125/70, stats 110), expanded classes in; no 3rd/Doram
+- [Códice de Mímir](codice-de-mimir.md) — in-game monster/item book (our Omnibook) + commandless HUD, planned
+- [Handoff before context limit](handoff-before-context-limit.md) — at ~95% tokens, write docs/ handoff for Antigravity
+- [Reference clients](reference-clients.md) — port behavior from open-midgard / roBrowserLegacy / korangar, don't guess
+- [Aura needs Lumen light](aura-needs-lumen-light.md) — level 99 aura must emit light when HD-2D/Lumen is revisited
+- [Test accounts + user test build](test-accounts-and-test-build.md) — use mythclaude not mythtest; make_test_build.ps1 gives the user a frozen build
+- [WSL server keepalive](wsl-server-keepalive.md) — Docker dies with idle WSL; restart order and keepalive trick
+- [HUD igual ao RO LATAM](hud-igual-ro-latam.md) — rebuild whole HUD with real client art/buttons, follow docs/HUD_MODERNA_PLANO.md
+- [Autonomia noturna](autonomia-noturna.md) — develop without confirming; morning report; resume after token limit
+- [Handoff aos 97% semanal](handoff-weekly-98.md) — ao chegar a 97%: parar, juntar tudo numa pasta unica (docs/handoff_pacote) e avisar
+- [English conversion](english-conversion-done.md) — data/UI moved to English, interface-art replacement rule, pets: evolutions only
+- [Docker ports + portproxy](docker-ports-portproxy.md) — ports 16900/16121/15121, JogarLocal.bat, remote control blocked by org
+- [Friend test feedback](friend-test-feedback.md) — feedback checklist doc, package flow

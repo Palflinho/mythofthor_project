@@ -1,0 +1,2 @@
+﻿Versao de teste gerada em 2026-10-13 19:34 a partir do commit 7fb7bf4
+Justiceiro/Ninja/Taekwon na arvore de habilidades, pre-requisitos automaticos, soltar pilha, noite mais clara, NPCs do treino, Codice de Mimir, monstros raros

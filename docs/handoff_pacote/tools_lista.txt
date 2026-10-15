@@ -1,0 +1,81 @@
+apply_data2026_ui.py: """ Replaces the LATAM Portuguese interface art (texture/유저인터페이스) with the English versions of the Data2026 client, only for the files that exist 
+apply_data2026_updates.py: """ Aplica as ATUALIZACOES do cliente 2026 (arquivos que o LATAM tem com tamanho diferente) sobre o conjunto de assets do jogo, so nas categorias de arte do mun
+audit_skill_effects.py: import json P='/mnt/e/Documentos/Repositórios/mythofthor_project/Config/' fx=json.load(open(P+'skill_effects_full.json')) 
+build_maps.sh: #!/bin/bash # Extrai e compila mapas do data.grf para a Unreal (WSL). A importacao roda depois no Windows (UnrealEditor-Cmd). # Uso: tools/build_maps.sh <pasta_
+build_watch.ps1: # Build do MythOfThorEditor com vigia: se 5 min sem progresso (CPU do cl/dotnet parada e log sem crescer), # mata o build e sai com "TRAVOU". Uso: powershell -F
+compile_map_to_obj.py: #!/usr/bin/env python3 """ Myth of Thor - Full Ragnarok Map Assembler (GND + RSW + RSM -> Wavefront OBJ) 
+convert_alberta_mobs.py: import os import sys sys.path.append(r"D:\Repositórios\mythofthor_project\tools") 
+convert_aldebaran_mobs.py: import os import sys sys.path.append(r"D:\Repositórios\mythofthor_project\tools") 
+convert_geffen_mobs.py: import os import sys sys.path.append(r"D:\Repositórios\mythofthor_project\tools") 
+convert_glastheim_mobs.py: import os import sys sys.path.append(r"D:\Repositórios\mythofthor_project\tools") 
+convert_gnd_to_obj.py: #!/usr/bin/env python3 """ Myth of Thor - Standalone Ragnarok Map to Wavefront OBJ Converter 
+convert_lutie_mobs.py: import os import sys sys.path.append(r"D:\Repositórios\mythofthor_project\tools") 
+convert_morroc_mobs.py: import os import sys sys.path.append(r"D:\Repositórios\mythofthor_project\tools") 
+convert_payon_mobs.py: import os import sys sys.path.append(r"D:\Repositórios\mythofthor_project\tools") 
+diff_data2026.py: """ Compara o indice do LATAM (C:\\Gravity\\Ragnarok\\data.grf) com o do cliente 2026 (data.grf + 2026.grf, esta por cima) e gera docs/ref/DATA2026_ATUALIZADOS.
+dump_live_packets.py: import struct import json import sys 
+dump_packets.cpp: #include <iostream> #include <map> #include <fstream> 
+dump_packets_full.cpp: #include "clif.hpp" #include <iostream> #include <fstream> 
+dump_preload.c: #define _GNU_SOURCE #include <stdio.h> #include <stdint.h> 
+dump_with_gdb.py: import gdb import json  
+extract_act_manifest.py: #!/usr/bin/env python3 """ Myth of Thor - ACT -> JSON manifest 
+extract_all_regions.py: """ Myth of Thor - Extrator e Compilador de Regiões do Mundo --------------------------------------------------------- 
+extract_and_convert_sprites.py: #!/usr/bin/env python3 """ Myth of Thor - Sprite Extraction & Spritesheet Converter 
+extract_assets.py: #!/usr/bin/env python3 """ Myth of Thor - Asset Extraction & Pre-processing Utility 
+extract_client_tables.py: #!/usr/bin/env python3 """ Myth of Thor - Client Data Tables Extractor 
+extract_map.py: """ Extrai um mapa do data.grf com tudo o que ele usa, numa pasta autocontida para o compile_map_to_obj.py:   <saida>/<mapa>.rsw/.gnd/.gat 
+extract_shared_models.py: import os import subprocess import time 
+extract_shared_textures.py: import os import subprocess import time 
+find_handlers.py: import gdb  gdb.execute("start") 
+fix_radmin_ports.ps1: # Run as ADMINISTRATOR (PowerShell). Re-points the Windows port forwarding after the Docker ports moved to 16900/16121/15121 # (the forwarding on 6900/6121/5121
+gen_achievements.py: #!/usr/bin/env python3 """Gera Config/achievements.json a partir do achievement_db.yml do rAthena (pre-re). Uso: python3 gen_achievements.py <achievement_db.yml
+gen_cast_size.py: """ Gera Config/cast_size.json: tamanho (lado, em celulas) do circulo magico de cada skill de chao por nivel, do roBrowserLegacy (src/Renderer/Effects/MagicTarg
+gen_cursors.py: #!/usr/bin/env python3 """ Gera os cursores do cliente (data/sprite/cursors.spr/.act) como PNG para o cursor de hardware da Unreal. 
+gen_english_tables.py: """ Moves the client tables from the LATAM Portuguese text to the English text of the Data2026 client (ROenglishRE translation):   - Config/skills.json      nam
+gen_equip_sprites.py: """ Gera Config/equip_sprites.json: como achar os sprites de equipamento no personagem.  
+gen_item_catalog.py: """ Gera Config/item_catalog.json: catalogo de itens para a Loja de Testes (janela de GM). Cada item: {"i": id, "n": nome em ingles (item_db), "p": nome em port
+gen_item_info.py: """ Gera Config/item_info.json a partir do System/itemInfo.lua do cliente original (bRO, em portugues): nome, descricao (linhas com as cores ^RRGGBB do cliente)
+gen_item_info_2026.py: """ Gera Config/item_info_2026.json a partir do System/LuaFiles514/itemInfo.lua do cliente 2026 (iRO, em ingles): o LATAM que usamos nao conhece ~14 mil itens q
+gen_item_rarity.py: """ Gera Config/item_rarity.json: raridade visual de cada item (nome colorido e aura no chao, estilo Diablo 4), calculada pelas taxas de drop do proprio rAthena
+gen_job_sprites.py: """ Gera Config/job_sprites.json: id da classe -> nome do sprite do corpo (data/sprite/인간족/몸통/<sexo>/<nome>_<sexo>.spr).  
+gen_map_list.py: """ Gera docs/MAPAS_PENDENTES.md: lista dos mapas com monstros do rAthena (Renovacao) agrupados por tipo (campos, dungeons, cidades/outros), com o nivel dos mon
+gen_mob_codex.py: """ Generates Config/mob_codex.json for the Mimir Codex window (Source/MythOfThor/UI/MythRoMimir.cpp) from the rAthena Renewal databases: monster name, level, H
+gen_navi.py: #!/usr/bin/env python3 """Gera Config/navi.json (rotas do /navi) a partir dos .lub de navegacao do cliente LATAM, ja convertidos com tools/lub_eval.py. Uso: pyt
+gen_navi_mobs.py: #!/usr/bin/env python3 """Gera Config/navi_mobs.json (monstros por mapa para a janela de Navegacao) a partir do navi_mob do cliente LATAM e do banco de monstros
+gen_packet_lengths.py: """ Gera Config/packet_lengths_<PACKETVER>.json a partir do codigo do proprio rAthena (regra do projeto: nunca digitar IDs/tamanhos de pacote de memoria). Fonte
+gen_pet_evolution.py: """ Generates Config/pet_evolution.json for the Pet window (Source/MythOfThor/UI/MythRoPet.cpp) from the rAthena pet_db.yml: for every pet (mob id) the evolutio
+gen_quest_titles.py: #!/usr/bin/env python3 """Gera Config/quests.json (id -> titulo) a partir do quest_db.yml do rAthena (pre-re). Uso: python tools/gen_quest_titles.py <quest_db.y
+gen_robe_sprites.py: #!/usr/bin/env python3 """ Gera Config/robe_sprites.json: id visual da capa/asas (LOOK_ROBE, campo robe dos pacotes) -> pasta em data/sprite/로브. 
+gen_skill_area.py: #!/usr/bin/env python3 """ Gera Config/skill_area.json: raio (em celulas) da area de cada skill de chao, para o anel do cursor de mira. 
+gen_skill_effects.py: """ Gera Config/skill_effects.json: que efeito visual cada skill toca e o elemento dela (cor da luz do Lumen).  
+gen_skill_effects_ro.py: """ Gera Config/skill_effects_full.json a partir do roBrowserLegacy, sem tabela feita a mao:   - effects: src/DB/Effects/EffectTable.js inteiro (cada parte com 
+gen_skill_map_from_rb.py: #!/usr/bin/env python3 """ Completa o mapa skill -> efeito de Config/skill_effects_full.json a partir do SkillEffect.js do roBrowserLegacy 
+gen_skill_tree.py: #!/usr/bin/env python3 """ Gera Config/skill_tree.json a partir dos .lub do cliente LATAM (via tools/lub_eval.py): 
+gen_skill_vfx_classes.py: """ Gera Config/skill_vfx_classes.json: para cada skill do rAthena (db/re/skill_db.yml), o elemento e a "classe de efeito" que o UMythSkillManager usa quando o 
+gen_status_icons.py: """ Gera Config/status_icons.json: id do estado (EFST_*, o "type" dos pacotes de status) -> icone e nome do buff.  
+gen_titles.py: #!/usr/bin/env python3 """Gera Config/titles.json (aba Titulo do Equipamento): titulos ganhos por conquista.  
+gen_unit_sprite_tables.py: """ Gera Config/unit_sprites.json: ID visual do servidor -> nome do sprite do cliente (data/sprite/...).  
+gen_water.py: """ Gera Config/water/<mapa>.json com a agua de cada mapa (RSW + GND), no mesmo criterio do roBrowser (Loaders/Ground.js): o plano de agua fica na altura do RSW
+gen_water_normal.py: """ Gera tools/data/water_normal.png: normal map de agua (256x256, repete sem emenda) feito de ondas senoidais cruzadas; usado pela agua moderna (M_WaterModern,
+gen_weapon_action.py: """ Gera Config/weapon_action.json: qual das tres animacoes de ataque o jogador usa, por classe e tipo de arma.  
+gen_weapon_types.py: """ Gera Config/weapon_types.json: ID do item -> visual que o cliente desenha.   weapons: ID da arma -> tipo de arma do cliente (WeaponType: 1 adaga ... 11 arco
+generate_packet_database_header.py: import json  with open('Config/packet_lengths_20211103.json') as f: 
+generate_skill_effects_full.py: #!/usr/bin/env python3 """ Gera Config/skill_effects_full.json completo com todas as habilidades e efeitos (STR + procedurais: CYLINDER, 3D, 2D, SPR, FUNC, WAV)
+grf_des.py: import struct import zlib  
+grf_extract.py: #!/usr/bin/env python3 """ Myth of Thor - GRF Archive Extractor (GRF 0x200 & 0x300) 
+import_batch_maps.ps1: param(     [string[]]$MapNames = @() ) 
+lub_eval.py: #!/usr/bin/env python3 """ Executa .lub do cliente (bytecode Lua 5.1) que so montam tabelas de constantes e exporta as globais como JSON. 
+make_friend_build.ps1: # Pacote do jogo para jogar em OUTRO PC (sem Unreal instalada), apontando para o seu servidor. #   - Compila e empacota o MythOfThor (Development, Win64) com to
+make_test_build.ps1: # Cria (ou atualiza) a "versao de teste" do jogo, uma copia congelada do projeto compilado, para o usuario testar sem # atrapalhar quem continua mexendo no proj
+merge_data2026.py: """ Junta o Data2026 (cliente kRO 2026 extraido em D:\\Ragnarok_Assets\\grf2026) ao conjunto de assets que o jogo usa (E:\\Dev\\Ragnarok_Assets\\grf), SEM sobre
+play_standalone.bat: @echo off rem Myth of Thor - roda o jogo fora do editor (Standalone): F1-F9, Alt+atalhos e Enter funcionam rem como no cliente original (no Play do editor ess
+preview_maps.py: #!/usr/bin/env python3 """ Myth of Thor - Map OBJ & GAT Preview Inspector 
+reimport_maps.ps1: param(     [string[]]$MapNames = @('prt_fild06', 'prt_fild08', 'prt_in', 'prt_church', 'prt_castle') ) 
+sync_item_assets.py: """ Copia para a pasta de assets que o jogo usa (E:\\Dev\\Ragnarok_Assets\\grf) os arquivos do cliente 2026 que o LATAM nao tem e que os itens do rAthena precis
+test_extract_map.py: import os import subprocess  
+ue_build_flipbooks.py: """ Myth of Thor - Construtor de Flipbooks Paper2D (roda DENTRO do Unreal Editor) ----------------------------------------------------------------------------
+ue_import_batch.py: """ Myth of Thor - Importador em Lote de Mapas para Unreal Editor Executa a importacao de multiplos mapas em uma unica sessao do UnrealEditor-Cmd. 
+ue_import_map.py: """ Myth of Thor - Importador de mapas compilados (.obj) para o Unreal Editor ------------------------------------------------------------------------- 
+ue_make_water_material.py: """ Cria os materiais da agua dos mapas (usados por AMythWater, Source/MythOfThor/World/MythWater.cpp):   /Game/Myth/M_Water        agua classica do RO: translu
+ue_setup_poring.py: """ Myth of Thor - Prepara o Poring como monstro de teste completo (roda DENTRO do editor / headless) ----------------------------------------------------------
+ue_setup_weather.py: """ Myth of Thor - materiais do clima HD-2D (roda DENTRO do editor / headless) --------------------------------------------------------------------------- 

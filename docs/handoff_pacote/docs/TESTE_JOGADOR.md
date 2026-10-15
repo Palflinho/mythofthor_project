@@ -1,0 +1,162 @@
+COMO TESTAR A VERSAO DE TESTE DO MYTH OF THOR
+=============================================
+
+Esta pasta e uma COPIA CONGELADA do jogo: ela nao muda enquanto o desenvolvimento continua. Quando houver novidades,
+o Claude gera uma versao nova (veja VERSAO.txt para saber qual e a atual).
+
+Para abrir
+----------
+1. Ligue o servidor (Docker/WSL do rAthena), como sempre.
+2. De dois cliques em Jogar_Myth_Teste.bat. A janela demora alguns minutos para abrir na primeira vez depois de uma
+   versao nova; depois entra direto no jogo com a conta mythtest.
+3. Feche o jogo antes de pedir uma versao nova (o Claude nao consegue atualizar com o jogo aberto).
+
+Teclas e comandos uteis
+-----------------------
+- Botao esquerdo: andar, atacar, falar, pegar item. Botao direito + arrastar: girar a camera (Shift: inclinar; roda: zoom;
+  duplo clique direito: voltar a camera ao padrao).
+- Insert: sentar. Setas esquerda e direita (parado ou sentado): virar a cabeca (doridori). Esc: fecha janela / menu.
+- Alt+A atributos, Alt+E inventario, Alt+Q equipamento, Alt+S habilidades.
+- No chat (Enter): @job 3 (arqueiro), @changelook 4 11 (arco, so o visual), @changelook 7 1 (asas de anjo),
+  @option 0 0 8 (carrinho de Mercador; @option 0 0 0 tira), @monster poring 3, @die (morrer), @alive, @heal, @go 0,
+  @warp prt_in 101 70 (interior), @blvl 98 / @blvl 1 (nivel de base: a aura do 99 liga em 99 ou mais).
+- Console (F10): MythAura 0, 1 ou 2 (desliga / so brilhos / completa).
+
+O que ja da para testar (e o que deve acontecer)
+------------------------------------------------
+
+NOVO nesta versao
+- Chat: Enter e digite. Fala publica agora mostra balao sobre a cabeca (4,5 s). Cima/Baixo repete mensagens antigas.
+  Comandos: /w Nome mensagem (cochicho), /r (responder), %mensagem (grupo), /sit, /where, /doridori (liga e desliga),
+  /bangbang e /bingbing (girar 45 graus), /noctrl (ataque continuo), /aura e /aura2, /sound, /bgm, /e1 a /e64 (emocoes;
+  Alt+1 a Alt+0 tambem fazem emocoes (precisa da skill Habilidades Basicas nivel 2 no servidor). Teste com @allskill).
+- Armazem: @storage abre o armazem (ou fale com uma Kafra e escolha o armazem). Esquerda: o que esta guardado;
+  direita: sua mochila. Clique num item para mover 1 (Shift: 10). Fechar ou Esc fecha. O peso muda ao mover.
+- Jogar item no chao: arraste um item da mochila (Alt+E) e solte fora das janelas. Joga 1; com Shift, a pilha toda.
+- Loja de NPC: va ate o Chef Assistant de Prontera (156,212), clique nele. Abre "Comprar / Vender / Cancelar". Comprar:
+  clique num item da vitrine (soma 1; Shift soma 10), clique na cesta para tirar, "Comprar" confirma. O zeny e o peso
+  mudam. Dica: @zeny 5000. Vender: o mesmo, com os itens do seu inventario. Esc ou Cancelar fecha.
+- Grupo: Alt+Z abre a janela. /organize NomeDoGrupo cria; /invite NomePersonagem convida (o outro ve um aviso com Aceitar/Recusar);
+  /leave sai; o lider ve "Expulsar" ao lado dos membros. % mensagem fala no grupo. Precisa de 2 jogadores (a conta
+  mythclaude2 / personagem ClaudeTester2 existe para isso). Obs.: criar grupo no servidor exige a skill Habilidades Basicas.
+- Corrigido: personagens, NPCs e monstros flutuando (o chao agora ignora as caixas de clique).
+- Tremor de tela agora tambem no Punho Supremo de Asura (150 ms, mais forte).
+
+1. Camera: ao arrastar com o botao direito o giro deve ser rapido (0,4 grau por pixel). Gire parado: o personagem
+   e os NPCs devem mostrar outros lados. Mude o zoom, entre num interior e volte: o zoom e a inclinacao ficam guardados
+   (separados para dentro e fora).
+2. Doridori: parado ou sentado, aperte as setas esquerda e direita: so a cabeca vira. Andar ou atacar endireita.
+3. Capa/asas: @changelook 7 1. De frente as asas ficam atras do corpo; de costas ficam por cima.
+4. Carrinho (Mercador): @option 0 0 8. Atras do personagem de frente; na frente dele de costas; a roda gira ao andar.
+5. Arco: @job 3, @changelook 4 11, @monster poring 1 e ataque: uma flecha sai do arqueiro ate o monstro; o numero
+   de dano aparece quando ela chega.
+6. Tremor de tela: efeitos como Martelo (Hammerfall) tremem a camera por um instante.
+7. Barras de vida e SP: finas, sob os pes do personagem (verde/amarela/vermelha e azul). O monstro atingido mostra a
+   barra dele sob os pes.
+8. Morte: @die. O personagem deita e abre a janela "Voce morreu". "Voltar ao ponto de salvamento" leva ao ponto de
+   salvamento e levanta. "Aguardar socorro" so fecha a janela (@alive levanta).
+9. Aura do nivel 99: o personagem de teste ja e nivel 99: anel branco no chao, faixas azuis subindo e brilhos.
+   MythAura 1 deixa so os brilhos. A aura ainda nao ilumina o cenario (isso vem na fase HD-2D).
+
+Como me passar o resultado
+--------------------------
+Diga em palavras o que viu de diferente do esperado (ex.: "as asas aparecem na frente do corpo"). Se puder, tire um
+print (tecla Impr Tela) e diga o numero do item acima.
+
+NOVO (rodada 2): barra de vida do monstro agora desce com o dano (servidor manda 0x0977); clique em janela/atalho nao anda
+mais o personagem; usar skill interrompe a perseguicao do ataque comum; /resetchar (GM) volta o personagem a Aprendiz 1/1
+sem pontos nem skills, para testar progressao e troca de classe.
+
+NOVO (rodada 2b): unidades de skill no chao agora aparecem (Muralha de Fogo, Muralha de Seguranca, Pneuma, Santuario, Magnus, Muralha de Gelo, Pantano, Vulcao/Dil�vio/Ventania, Protetor de Terra, Portal, Pilar de Fogo...). Armadilhas e cancoes do bardo ainda sem desenho (os arquivos nao estao no GRF). Lista do que falta: docs/EFEITOS_PENDENTES.md.
+
+NOVO (rodada 3): efeitos de skill - o mapa de skills para efeitos foi completado com o do roBrowser (mais de 500 skills ganharam efeito ou som). Estados do corpo tingem o sprite: veneno (rosado), maldicao (vermelho escuro), gelo (azul), pedra (escuro), Aceleracao (amarelo), Berserk (avermelhado), Energy Coat/Kaite/Soul Link (azulado), esconder/camuflar (some para os outros; voce se ve escurecido). Teste: @option 0 1 0 (veneno), @option 2 2 0 (gelo e maldicao), @option 0 0 0 (limpa).
+
+NOVO (rodada 4): Esc > Opcoes do jogo (abas Efeito, Controle, Outros com ON/OFF que valem: aura, efeitos, tremor de tela, miss). Cursor: quadrado verde no tile sob o mouse; ao mirar skill de area aparece o anel branco com o nivel. Janelas com cantos arredondados. Efeitos de sprite (Aqua Benedicta) e adereco de sono/atordoado/maldicao.
+
+NOVO (rodada 5): Troca entre jogadores: clique direito rapido (sem arrastar a camera) sobre outro jogador abre o menu Trocar / Convidar para o grupo / Cochichar; ou /exchange NomeDoJogador. O outro ve o pedido (Aceitar/Recusar). Na janela: duplo clique num item do inventario oferece (Shift: todos), Travar, Trocar (so quando os dois travaram), Cancelar. Precisa de 2 jogadores (mythclaude e mythclaude2 funcionam, com @warp para ficarem perto). Alt+L abre a lista de emocoes (clique manda /eN) e Alt+M a lista de atalhos. Ao entrar num mapa aparece o nome dele em letras grandes (desliga em Esc > Opcoes do jogo > Nome do mapa). Depois de bater ou apanhar o personagem fica em postura de combate por 4 s.
+
+NOVO (rodada 6): TELA DE ENTRADA. Abra Jogar_Myth_Teste_Com_Login.bat (o Jogar_Myth_Teste.bat antigo continua entrando sozinho com a mythtest). Login (usuario e senha; lembra o ultimo usuario), lista de ate 9 personagens (cartoes com classe e nivel), criar personagem (nome, cabelo e cor; sempre Aprendiz) e Jogar. Excluir personagem ainda nao existe. Sem previa do personagem ainda.
+
+NOVO (rodada 7): Amigos (Alt+H): /friend Nome ou botao direito no jogador > Adicionar amigo; o outro ve um pedido (Aceitar/Recusar); a lista mostra quem esta online e avisa no chat quando um amigo entra ou sai. Atributos mostram "base + bonus" quando ha bonus.
+
+NOVO (rodada 8): arqueiros inimigos (Orc Archer, Skeleton Archer etc.) atiram flechas visiveis. Na arvore de skills (Alt+S) as skills com mais de um nivel mostram '< n/max >': clique no lado esquerdo ou direito escolhe o nivel usado ao arrastar para o atalho ou dar duplo clique.
+
+NOVO (rodada 9): Sala de chat (Alt+C): defina titulo, limite, publica/privada e senha e clique em Criar; o titulo aparece sobre a cabeca de quem abriu. Outro jogador clica no titulo para entrar (pede senha se privada). A janela mostra quem esta dentro; o dono pode Expulsar; "Sair da sala" sai. Precisa de 2 jogadores. A venda em lojas de NPC (cesta, Vender) foi testada e funciona.
+
+NOVO (rodada 10): Missoes (Alt+U): lista as quests do servidor com [Ocultar]/[Rastrear]; clique no titulo para ver os objetivos. As quests ativas aparecem como rastreador no canto direito da tela com a contagem (ex.: Poring 37/1000). Os titulos estao em ingles (vem do banco do servidor). O Zeny agora aparece certo ja ao entrar no jogo (antes mostrava 0).
+
+NOVO (rodada 11): o peso fica vermelho na Informacao Basica quando passa de 50% (o servidor aplica os efeitos). Som ao pegar item do chao e ao vestir equipamento.
+
+NOVO (rodada 12): menu Esc agora tem "Selecao de personagem" (primeiro item): sai do mapa e volta para a lista de personagens sem pedir a senha de novo, para trocar de personagem. Ordem do menu: Selecao de personagem, Configuracoes, Opcoes do jogo, Sair do jogo, Voltar ao jogo.
+
+NOVO (rodada 13): Banco (Ctrl+B): mostra o saldo guardado no servidor; digite a quantia e clique Depositar ou Sacar. Janela de atalhos de teclado (F12). Menu Esc: Selecao de personagem, Configuracoes do jogo, Atalhos, Sair, Voltar.
+
+NOVO (rodada 14): Conquistas (Alt+Y): lista do servidor com pontos, rank, progresso e botao [Receber] para o premio; paginas com Anterior/Proxima. Nomes em ingles (vem do banco do servidor).
+
+NOVO (rodada 15): corrigido o sprite cortado por paredes atras dele (o puxao de profundidade agora acompanha a altura do sprite e a inclinacao da camera). Camera nao entra mais no chao. Esferas espirituais do Monge, vinhetas de veneno e cegueira, postura de congelado/atordoado, terremoto com 3 pulsos.
+
+NOVO (rodada 16): Navegacao (Alt+N ou /navi Nome): digite o nome de um mapa e veja o caminho pelos portais a partir de onde voce esta (dados do cliente LATAM; so vale para mapas que o nosso servidor tem). Troca rapida de equipamento (Alt+W): Ctrl + duplo clique num equipamento da janela de itens o inclui; "Trocar tudo" veste o conjunto.
+
+NOVO (rodada 17): Correio (Alt+R): caixa de entrada do servidor, clique na carta para ler, [Excluir], [Pegar zeny]/[Pegar itens] quando a carta tiver anexo e [Escrever] (destinatario, titulo e texto; anexos ao escrever ainda nao). Aviso no chat quando chega carta nova.
+
+NOVO (rodada 18, HUD moderna): barra de atalhos de 2 linhas (setas e linha ativa), chat com abas e rolagem, minimapa com zoom, itens com 4 abas (Ctrl + botao direito marca favorito), atributos no formato novo, botoes do cliente nas janelas, selecao de personagem com cartoes, Missoes e Conquistas e Navegacao e Correio e Banco no formato do cliente, configuracoes em uma janela com 5 abas, Amigos e Grupo trocam entre si (bolinhas no pe), pontos de habilidade ficam pendentes ate clicar OK, equipamento com abas Geral e Especial, caixas de texto na mesma fonte da interface.
+
+NOVO (rodada 19, correcoes do seu teste): botao de minimizar (_) na barra de titulo das janelas e da Informacao Basica; a Informacao Basica agora mostra a % de EXP de Base e de Classe e os numeros de HP/SP com contorno para ler. Municao: duplo clique na flecha do inventario equipa (aparece na aba Especial do equipamento). Camera travada na vista padrao (inclinacao e distancia maximas; fora da cidade e dentro). Rastreador de missao desce abaixo do minimapa e os icones de buff ficam abaixo dele. Navegacao: botao "Ir ate o mapa" anda sozinho ate o portal de cada etapa (Parar cancela) e as linhas de rota cabem na janela. Botao direito numa habilidade abre a descricao. Buffs e debuffs sem duracao (o servidor manda 9999) nao mostram mais tempo nem somem. Icones de item: 240 itens (flechas, gemas, armadilha...) tinham o nome do arquivo corrompido e agora aparecem. Itens soltos na mesma celula ficam em posicoes diferentes e sem piscar. Emotes com todas as camadas. Falcao do Cacador agora e solido, fica sobre o personagem (pousado) e vira conforme a direcao dele. Removido o som de assobio ao pegar item. Login com senha errada diz "Senha incorreta". Peco Peco: nao testado (precisa de Cavaleiro; NPC em Prontera 55,350).
+
+NOVO (rodada 20): Equipamento, aba Geral: a municao equipada aparece no meio, acima do personagem (duplo clique desequipa, botao direito mostra a descricao); para equipar continue dando duplo clique na flecha em Itens > Diversos. Abaixo do personagem aparece o botao "Soltar falcao" ou "Descer do Peco" quando voce esta com um deles. O estado do falcao/Peco/carrinho agora e guardado e reaplicado ao trocar de mapa (corrige o falcao que nao aparecia).
+
+NOVO (rodada 21): a municao equipada agora continua na lista de Itens > Diversos (antes sumia da lista ao equipar e nao havia como desequipar). Duplo clique na municao equipa ou desequipa; o slot no meio da janela de Equipamento tambem desequipa com duplo clique.
+
+NOVO (rodada 22): itens no chao agora tem sombra embaixo (como no cliente original), caem com a curva original (sobem um pouco e pousam em ~0,4 s, sem quique) e ficam na posicao exata dentro da celula que o servidor manda.
+
+NOVO (rodada 23, HUD): o menu Esc agora tem 5 botoes largos (300 de largura) como no LATAM. A janela de Grupo tem cartoes de membro (fundo escuro, icone da classe, coroa no lider, nome, nivel, mapa e barra de HP); ainda faltam a barra de ferramentas e a alca de redimensionar. A fonte da interface passou a ser a do Windows (Tahoma, ou Arial) como no cliente original; se nao existir, usa a Roboto de antes. Itens no chao tem sombra e caem com a curva original.
+
+NOVO (rodada 24, noite de 12 para 13/10 - detalhes em docs/RELATORIO_NOITE_2026-10-12.md):
+- SERVIDOR EM RENOVACAO (ate a transclasse): transclasse vai ao nivel 125 (classe 70), atributos ate 110, classes expandidas liberadas, sem 3a classe. As formulas de dano, conjuracao e ASPD sao as da Renovacao. Personagens antigos podem ter pontos de atributo a mais ou a menos: use @streset (ou o NPC de teste) para redistribuir.
+- Atributos (Alt+A): MATK aparece como "atributo + equipamento", ASPD no numero do cliente (ex.: 147) e o custo do ponto vem do servidor (acima de 100 fica mais caro).
+- Equipamento (Alt+Q): 4 abas (Geral, Especial, Titulo, Fonte de dano), o PERSONAGEM aparece no meio e muda na hora ao trocar chapeu/arma, nomes em 2 linhas, botao redondo "off" para o falcao/Peco, rodape com "Mostrar equip." e os botoes Atributos, Troca rapida e TIRAR TUDO. Com carrinho aparece o botao "itens" no meio, que abre o CARRINHO.
+- Carrinho (Mercador com carrinho): janela com o carrinho a esquerda e a mochila a direita; clique move 1 (Shift: 10); mostra itens e peso.
+- Navegacao (Alt+N): filtro Todos/Mapas/Monstros (procure "poring" com Monstros), lista dos MONSTROS de cada mapa com o tamanho, "Procurar" mostra a rota, "Enviar" poe /navi no chat, "Mover" anda sozinho.
+- NPCs que pedem numero ou texto nao travam mais (caixa abaixo da fala). As falas saem uma por linha. Teste no Assistente de Testes de Prontera (156,191): "Definir Nivel" pede o nivel; "Testar Caixa de Texto".
+- Flechas: o jogo nao mostra mais flecha "fantasma" equipada; sem flecha aparece "Voce deve equipar flechas antes." em vermelho.
+- Listas depois de skill/item: Lupa/Avaliacao de item, ENCAIXAR CARTA (duplo clique na carta), Fabricar Flechas, Forjar, Autoconjurar, Refinar arma e o destino do Portal. Mensagens de falha de skill com o texto do cliente LATAM.
+- Monstros novos da Renovacao e varios antigos (Chonchon, Salgueiro...) agora tem sprite.
+
+NOVO (rodada 25, mesma noite):
+- MENSAGENS DO SERVIDOR EM PORTUGUES (ex.: "HP e SP foram recuperados."). Na primeira entrada aparece "O seu idioma agora esta definido para Portugues Brasileiro". Mensagens de sistema do cliente (ZC_MSG) com o texto do LATAM.
+- Peco Peco: Cavaleiro/Templario montado agora aparece montado (no mundo e na previa do Equipamento). Teste: @job 7 e @mount (de novo @mount desce; ou o botao "off" do Equipamento).
+- Habilidades (Alt+S): abas 1a (Aprendiz + 1a classe juntas), 2a, 3a e Etc como no LATAM; o personagem aparece no canto de baixo. Corrigido: a barra de baixo (OK/Cancelar) andava para a direita.
+- Grupo (Alt+Z): barra de ferramentas embaixo (cadeado trava a janela; criar/convidar poem o comando no chat; sair).
+- Skills de quest (Primeiros Socorros, Fabricar Flechas...) aprendidas por NPC agora funcionam no atalho. O Assistente de Testes tem a opcao "Aprender Skills de Quest".
+- Troca de classe pelo NPC original (Aprendiz -> Espadachim em Izlude) testada.
+- LOJA DE JOGADOR (Mercador com carrinho e a skill Venda): use a skill longe de NPCs (o servidor nao deixa perto deles). Abre "Abrir loja": digite o nome e o preco, clique nos itens do carrinho para por na loja (quantidade vazia = a pilha toda), "Abrir". A placa com o nome aparece sobre a cabeca; outro jogador clica nela, escolhe (clique +1, Shift +10) e "Comprar". Quem vende ve "Vendido: ..." e o que resta em "Minha loja".
+- TITULOS: Equipamento > Titulo lista os titulos das conquistas com premio recebido (clique usa; "(sem titulo)" tira). Teste: Assistente de Testes > "Completar Conquista com Titulo", pegue o premio em Conquistas (Alt+Y) e escolha "Jovem".
+- MAPA-MUNDI: Ctrl+` (tecla abaixo do Esc). O seu mapa fica em vermelho; passe o mouse para ver o nome; clique num mapa abre a Navegacao com a rota.
+- Menus de NPC com muitas opcoes agora mostram todas (antes cortava em 10).
+- CLA (GUILDA): Alt+G (ou o icone Cla do menu). Sem cla: "Criar Cla" poe /guild no chat (o servidor pede 1 Emperium; GM pode usar @guild nome). Convidar: botao direito no jogador > "Convidar para o cla"; quem recebe ve a janela Concordo/Nao concordo. Abas Cla (dados), Membros (online primeiro, em verde; o lider escolhe a linha e clica Expulsar duas vezes) e Avisos (o lider escreve e clica OK). "Sair do Cla" pede o segundo clique. /breakguild nome desfaz (sem membros).
+- MASCOTE: Alt+J abre a Janela de Mascote (precisa de um mascote chocado). Capturar: use o item de domar (ex.: Maca Verde para o Poring) e clique no monstro (botao direito desiste). Chocar: use a Incubadora e escolha o ovo. Na janela: Alimentar (com a comida certa na mochila; alimentar cheio baixa a lealdade, regra do servidor), Brincar, Voltar para o ovo, Desequipar (com acessorio), Renomear (uma vez) e Autoalimentacao. GM: @makeegg 1002 cria um ovo de Poring.
+- REPARAR ARMA (Ferreiro): use a skill num jogador (ou em si); aparece a lista "Este item pode ser consertado" com os itens quebrados; escolha e OK (precisa do material, ex.: Minerio de Ferro para arma nivel 1). Item quebrado de teste: @item2 1201 1 1 0 1 0 0 0 0.
+- HOMUNCULO (Alquimista): aprenda Bioetica (Assistente de Testes > Aprender Skills de Quest, ou a quest), @allskill, tenha 1 Germination Breed (7140) e 1 Semente da Vida (7142) e use Chamar Homunculo. Alt+R abre a janela (sem homunculo, Alt+R continua sendo o correio). O homunculo segue voce e ataca o seu alvo; Alt+botao direito manda andar ou atacar; Alt+T alterna "aguardar". Descansar (Vaporizar) guarda o homunculo.
+NOVO (rodada 27):
+- HABILIDADES: passe o mouse numa skill para ver a descricao (antes nao aparecia). Sem as linhas de caminho: numa skill que voce ainda nao aprendeu, as que ela exige ficam com borda laranja (falta) ou verde (ja tem) e aparecem em "Requer:".
+- CACADOR: com arco ele puxa a corda (antes parecia jogar a flecha) e a flecha voa ate o alvo. Cada classe usa a animacao de ataque certa para a arma dela. O falcao voa uma altura de personagem acima e segue voce.
+- ANDAR: clique longe ou atras de parede/fonte: o personagem contorna e vai ate la sem parar. A Navegacao (Mover) anda direto, sem o "anda e para", e a rota aparece no minimapa em laranja.
+
+## Rodada 28 (2026-10-12, toque pessoal na HUD)
+- **Painel do personagem** (canto superior esquerdo): avatar, nome, classe/nível, barras de HP e SP com "atual / máx" e % (HP muda de cor com a vida). Sem barra de AP (só existe na 4ª classe).
+- **Barras de EXP** embaixo (Base e Classe) com marcas a cada 10%; passe o mouse para ver a % exata. Com pontos pendentes aparece o botão de level up acima de "Base" (abre Status) e de "Job" (abre Habilidades).
+- **Menu Principal**: botão de 3 barras ao lado do minimapa abre um painel central com Inventário, Equipamentos, Status, Habilidades, Grupo, Missões, Correio, Mapa e Configurações. Fecha ao escolher, a menos que "Manter aberto" esteja marcado. Comando de teste: `MythMainMenu [N]`.
+- **Habilidades**: o nível usado nas skills agora tem setas < > de verdade (botões do cliente) ao lado de "n/máx".
+- A janela de Informações Básicas desceu para dar espaço ao painel novo; chat e Auto-Battle subiram acima da faixa de EXP.
+- **Recarga (cooldown) das skills**: o servidor manda o tempo de recarga ao usar a skill (pacote ZC_SKILL_POSTDELAY); o atalho na barra escurece e mostra os segundos que faltam. Comando de teste: `MythCooldown [skill] [segundos]`.
+
+## Rodada 29 (2026-10-13, lacunas do cliente)
+- **Clã**: as abas Cargos (direitos e imposto), Habil. (nível, SP, alcance; líder sobe com [+]) e Expulsos (nome e motivo) funcionam; as caixas de Alianças e Inimigos mostram os clãs que o servidor manda.
+- **Procura de grupo**: botões anunciar/procurar da janela do grupo (Alt+Z). Janela com Nível, Procurar, Anunciar, Remover e a lista de anúncios; clicar num anúncio abre o sussurro. Comandos de teste: `MythBooking`, `MythBookingReg`, `MythBookingSearch`, `MythBookingDel`.
+- **Fica de fora (e por quê)**: emblema do clã (vem num formato gráfico próprio e não há emblema de exemplo para testar), falas do pet (a `pettalktable.xml` do Data2026 vem ofuscada), evolução de pet e homúnculo (é regra do servidor; o cliente só troca o sprite, falta um teste real).
+- **Treinadora de Classes** (Prontera 152,190; só para testes): troca de classe só conversando, exigindo os níveis mínimos: Aprendiz (classe 10) → 1ªs classes/Taekwon/Pistoleiro/Ninja (Super Aprendiz: base 45); 1ª classe (classe 40) → 2ªs; 2ª classe (base 99 + classe 50) → renascer; Aprendiz Avançado (classe 10) → avançadas; avançada (classe 40) → transclasses; Taekwon (40) → Mestre/Espiritualista; Ninja e Pistoleiro (base 99 + classe 70) → Kagerou/Oboro/Rebelde.
+- **Nível dos monstros**: o nome mostra o nível real do monstro (antes todos saíam "Lv 1"): lia o campo errado nos pacotes de monstro que se movem ou nascem.
+- **Água nos canais, lagos e esgoto**: agora aparece (azul animada, 32 quadros), no mesmo critério do cliente original (só onde o chão fica abaixo do nível da água do RSW). Dados em `Config/water/<mapa>.json` (`tools/gen_water.py`), material `/Game/Myth/M_Water` (`tools/ue_make_water_material.py`), código `World/MythWater.cpp`. Testado no fosso sul de Prontera.
+- **Esgoto de Prontera andares 2 a 4** (`prt_sewb2` a `prt_sewb4`) importados; entra pelas escadas como no original.
+- **Lista de mapas a fazer**: `docs/MAPAS_PENDENTES.md` (gerada por `tools/gen_map_list.py`): campos, dungeons, cidades e instâncias, com nível típico, MVPs e o que já está importado.
+- **Água moderna / clássica**: Esc > Opções do jogo > Efeito > "Água moderna" (ON por padrão). Moderna = Single Layer Water da Unreal (reflexo do céu, brilho do sol, ondas de normal map, cor que escurece com a profundidade); clássica = a água azul animada do RO. Materiais criados por `tools/ue_make_water_material.py` (`M_Water`, `M_WaterModern`, `T_WaterNormal`; normal map de `tools/data/water_normal.png`).
