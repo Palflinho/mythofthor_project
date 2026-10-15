@@ -15,6 +15,9 @@
 #include "Components/TextBlock.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Misc/ConfigCacheIni.h"
+#include "World/MythDayNightActor.h"
+#include "World/MythNightAudioComponent.h"
+#include "World/MythMapInfo.h"
 
 namespace
 {
@@ -43,20 +46,40 @@ void UMythRoHUDWidget::BuildEntryScreens()
 		S->SetOffsets(FMargin(0.f));
 		S->SetZOrder(9000);
 	}
-	UImage* Fill = WidgetTree->ConstructWidget<UImage>();
-	Fill->SetColorAndOpacity(FLinearColor(0.03f, 0.05f, 0.11f, 1.f));
-	Fill->SetVisibility(ESlateVisibility::Visible);
-	if (UCanvasPanelSlot* S = EntryBackdrop->AddChildToCanvas(Fill))
+	// 1. Imagem de fundo da tela de Login (Palácio e Yggdrasil com pôr do sol)
+	EntryLoginBg = WidgetTree->ConstructWidget<UImage>();
+	if (UTexture2D* LoginTex = LoadObject<UTexture2D>(nullptr, TEXT("/Game/UI/T_LoginBackground.T_LoginBackground")))
+	{
+		EntryLoginBg->SetBrushFromTexture(LoginTex);
+	}
+	EntryLoginBg->SetVisibility(ESlateVisibility::Visible);
+	if (UCanvasPanelSlot* S = EntryBackdrop->AddChildToCanvas(EntryLoginBg))
 	{
 		S->SetAnchors(FAnchors(0.f, 0.f, 1.f, 1.f));
 		S->SetOffsets(FMargin(0.f));
 	}
+
+	// 2. Imagem de fundo da tela de Seleção de Personagem (Acampamento rúnico circular com fogueira)
+	EntryCharSelectBg = WidgetTree->ConstructWidget<UImage>();
+	if (UTexture2D* CharTex = LoadObject<UTexture2D>(nullptr, TEXT("/Game/UI/T_CharSelectBackground.T_CharSelectBackground")))
+	{
+		EntryCharSelectBg->SetBrushFromTexture(CharTex);
+	}
+	EntryCharSelectBg->SetVisibility(ESlateVisibility::Collapsed);
+	if (UCanvasPanelSlot* S = EntryBackdrop->AddChildToCanvas(EntryCharSelectBg))
+	{
+		S->SetAnchors(FAnchors(0.f, 0.f, 1.f, 1.f));
+		S->SetOffsets(FMargin(0.f));
+	}
+
+	EntryBgm = LoadObject<USoundBase>(nullptr, TEXT("/Game/Audio/BGM_Title.BGM_Title"));
+
 	UTextBlock* Title = WidgetTree->ConstructWidget<UTextBlock>();
 	Title->SetFont(FMythRoUITextures::RoFont(FMath::RoundToInt(34 * UIScale), true));
 	Title->SetColorAndOpacity(FSlateColor(EnGold));
 	Title->SetShadowOffset(FVector2D(2.f, 2.f));
 	Title->SetShadowColorAndOpacity(FLinearColor(0.f, 0.f, 0.f, 0.8f));
-	Title->SetText(FText::FromString(TEXT("MYTH OF THOR")));
+	Title->SetText(FText::FromString(TEXT("THOR PROJECT")));
 	Title->SetJustification(ETextJustify::Center);
 	if (UCanvasPanelSlot* S = EntryBackdrop->AddChildToCanvas(Title))
 	{
@@ -207,9 +230,64 @@ void UMythRoHUDWidget::SetEntryPanel(int32 State)
 		return;
 	}
 	EntryBackdrop->SetVisibility(State == 0 ? ESlateVisibility::Collapsed : ESlateVisibility::SelfHitTestInvisible);
-	EntryLoginPanel->SetVisibility(State == 1 || State == 2 ? ESlateVisibility::SelfHitTestInvisible : ESlateVisibility::Collapsed);
+
+	const bool bIsLogin = (State == 1 || State == 2);
+	const bool bIsCharSelect = (State == 3 || State == 4);
+
+	if (EntryLoginBg)
+	{
+		EntryLoginBg->SetVisibility(bIsLogin ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+	}
+	if (EntryCharSelectBg)
+	{
+		EntryCharSelectBg->SetVisibility(bIsCharSelect ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+	}
+
+	EntryLoginPanel->SetVisibility(bIsLogin ? ESlateVisibility::SelfHitTestInvisible : ESlateVisibility::Collapsed);
 	EntryCharPanel->SetVisibility(State == 3 ? ESlateVisibility::SelfHitTestInvisible : ESlateVisibility::Collapsed);
 	EntryCreatePanel->SetVisibility(State == 4 ? ESlateVisibility::SelfHitTestInvisible : ESlateVisibility::Collapsed);
+
+	if (State != 0)
+	{
+		PlayEntryMusic();
+	}
+	else
+	{
+		RestoreMapMusic();
+	}
+}
+
+void UMythRoHUDWidget::PlayEntryMusic()
+{
+	if (!EntryBgm)
+	{
+		EntryBgm = LoadObject<USoundBase>(nullptr, TEXT("/Game/Audio/BGM_Title.BGM_Title"));
+	}
+	if (EntryBgm)
+	{
+		if (AMythDayNightActor* DN = AMythDayNightActor::Find(GetWorld()))
+		{
+			if (DN->Audio)
+			{
+				DN->Audio->PlayBGM(EntryBgm, 1.0f);
+			}
+		}
+	}
+}
+
+void UMythRoHUDWidget::RestoreMapMusic()
+{
+	const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld());
+	if (Info && Info->Bgm)
+	{
+		if (AMythDayNightActor* DN = AMythDayNightActor::Find(GetWorld()))
+		{
+			if (DN->Audio)
+			{
+				DN->Audio->PlayBGM(Info->Bgm, Info->BgmVolume);
+			}
+		}
+	}
 }
 
 void UMythRoHUDWidget::ShowEntryLogin(const FString& Message)

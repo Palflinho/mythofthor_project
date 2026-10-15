@@ -19,18 +19,20 @@ $data = Get-Date -Format 'yyyy-MM-dd HH:mm'
 "Versao de teste gerada em $data a partir do commit $commit`r`n$Nota" | Set-Content (Join-Path $dst 'VERSAO.txt') -Encoding UTF8
 @'
 @echo off
-rem Myth of Thor - VERSAO DE TESTE (copia congelada; nao muda enquanto o desenvolvimento continua)
+rem Thor Project - VERSAO DE TESTE (copia congelada; nao muda enquanto o desenvolvimento continua)
 rem Abra o servidor (Docker/WSL) antes. Conta de teste: mythtest. Detalhes em COMO_TESTAR.txt
 set UE="C:\Program Files\Epic Games\UE_5.8\Engine\Binaries\Win64\UnrealEditor.exe"
 set PROJ="E:\Dev\MythTeste\mythofthor.uproject"
 start "" %UE% %PROJ% /Game/Maps/Prontera/Lvl_Prontera -game -windowed -ResX=1600 -ResY=900 -log -NoLiveCoding -MythOnline
-'@ | Set-Content (Join-Path $dst 'Jogar_Myth_Teste.bat') -Encoding ASCII
+'@ | Set-Content (Join-Path $dst 'Jogar_Thor_Teste.bat') -Encoding ASCII
+Copy-Item (Join-Path $dst 'Jogar_Thor_Teste.bat') (Join-Path $dst 'Jogar_Myth_Teste.bat') -Force
 @'
 @echo off
-rem Myth of Thor - VERSAO DE TESTE com a tela de login (nao entra sozinho). Use uma conta criada no servidor.
+rem Thor Project - VERSAO DE TESTE com a tela de login (nao entra sozinho). Use uma conta criada no servidor.
 set UE="C:\Program Files\Epic Games\UE_5.8\Engine\Binaries\Win64\UnrealEditor.exe"
 set PROJ="E:\Dev\MythTeste\mythofthor.uproject"
 start "" %UE% %PROJ% /Game/Maps/Prontera/Lvl_Prontera -game -windowed -ResX=1600 -ResY=900 -log -NoLiveCoding
-'@ | Set-Content (Join-Path $dst 'Jogar_Myth_Teste_Com_Login.bat') -Encoding ASCII
+'@ | Set-Content (Join-Path $dst 'Jogar_Thor_Teste_Com_Login.bat') -Encoding ASCII
+Copy-Item (Join-Path $dst 'Jogar_Thor_Teste_Com_Login.bat') (Join-Path $dst 'Jogar_Myth_Teste_Com_Login.bat') -Force
 Copy-Item (Join-Path $src 'docs\TESTE_JOGADOR.md') (Join-Path $dst 'COMO_TESTAR.txt') -Force -ErrorAction SilentlyContinue
-"Pronto: $dst (commit $commit). Abra Jogar_Myth_Teste.bat."
+"Pronto: $dst (commit $commit). Abra Jogar_Thor_Teste.bat ou Jogar_Thor_Teste_Com_Login.bat."

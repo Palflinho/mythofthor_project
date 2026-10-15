@@ -637,6 +637,8 @@ public:
 protected:
 	void BuildEntryScreens();
 	void SetEntryPanel(int32 State);
+	void PlayEntryMusic();
+	void RestoreMapMusic();
 	void SubmitEntryLogin();
 	void RefreshEntryCharacters();
 	void ShowEntryCreate(int32 Slot);
@@ -651,6 +653,9 @@ protected:
 	int32 EntryHair = 1;
 	int32 EntryColor = 0;
 	UPROPERTY() TObjectPtr<UCanvasPanel> EntryBackdrop;
+	UPROPERTY() TObjectPtr<UImage> EntryLoginBg;
+	UPROPERTY() TObjectPtr<UImage> EntryCharSelectBg;
+	UPROPERTY() TObjectPtr<USoundBase> EntryBgm;
 	UPROPERTY() TObjectPtr<UCanvasPanel> EntryLoginPanel;
 	UPROPERTY() TObjectPtr<UCanvasPanel> EntryCharPanel;
 	UPROPERTY() TObjectPtr<UCanvasPanel> EntryCreatePanel;

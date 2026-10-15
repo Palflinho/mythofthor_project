@@ -105,9 +105,20 @@ void AMythGameMode::BeginPlay()
 
 	if (const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld()))
 	{
-		if (Info->Bgm && DayNight && DayNight->Audio)
+		const bool bAutoOnline = FParse::Param(FCommandLine::Get(), TEXT("MythOnline")) || FParse::Param(FCommandLine::Get(), TEXT("ThorOnline"));
+		USoundBase* BgmToPlay = Info->Bgm;
+		float BgmVol = Info->BgmVolume;
+		if (!bAutoOnline)
 		{
-			DayNight->Audio->PlayBGM(Info->Bgm, Info->BgmVolume);
+			if (USoundBase* TitleBgm = LoadObject<USoundBase>(nullptr, TEXT("/Game/Audio/BGM_Title.BGM_Title")))
+			{
+				BgmToPlay = TitleBgm;
+				BgmVol = 1.0f;
+			}
+		}
+		if (BgmToPlay && DayNight && DayNight->Audio)
+		{
+			DayNight->Audio->PlayBGM(BgmToPlay, BgmVol);
 		}
 	}
 }
