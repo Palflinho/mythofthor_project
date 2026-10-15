@@ -117,6 +117,9 @@ public:
 
 	/** Estados visuais do EntityState do cliente: opt1 (pedra, gelo, atordoar, sono), opt2 (veneno, maldicao...) e as skills
 	 * de opt3 (Aceleracao, Escudo, Berserk...) tingem o sprite; esconder/camuflar some com ele (ou o escurece em quem e voce). */
+	/** HD-2D hit feedback (docs/BRANCH_HD2D_COMPARACAO.md): short brightness pulse and a micro-freeze (30 ms) of the unit that was hit. */
+	void TriggerHitFlash(float Duration = 0.06f);
+	void TriggerHitstop(float Duration = 0.03f);
 	void SetBodyState(int32 Value);
 	void SetHealthState(int32 Value);
 	void SetEfstVirtue(int32 EfstId, bool bOn);
@@ -320,6 +323,9 @@ private:
 
 	/** Cor dos estados (corpo x saude x opt3 x camuflagem), multiplicada na cor dos vertices. */
 	FLinearColor StatusTint = FLinearColor::White;
+	double HitFlashUntil = 0.0;
+	FTimerHandle HitFlashTimer;
+	FTimerHandle HitstopTimer;
 	int32 BodyState = 0;
 	int32 HealthState = 0;
 public:

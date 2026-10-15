@@ -1,6 +1,7 @@
 #include "World/MythMapInfo.h"
 
 #include "EngineUtils.h"
+#include "World/MythMapEnvironment.h"
 
 FIntPoint AMythMapInfo::WorldToCell(const FVector& WorldLocation) const
 {
@@ -15,6 +16,21 @@ FVector AMythMapInfo::CellToWorld(FIntPoint Cell, float Z) const
 {
 	const float Size = FMath::Max(CellSizeUU, 1.f);
 	return FVector(CellOriginUU.X + (Cell.X + 0.5f) * Size, CellOriginUU.Y - (Cell.Y + 0.5f) * Size, Z);
+}
+
+const FMythMapEnv* AMythMapInfo::GetEnvironment() const
+{
+	return FMythMapEnvironment::Find(MapName);
+}
+
+float AMythMapInfo::GetLocalHour(float WorldHour) const
+{
+	const FMythMapEnv* Env = GetEnvironment();
+	if (!Env)
+	{
+		return WorldHour;
+	}
+	return FMath::Fmod(FMath::Fmod(WorldHour + Env->GridX * 0.25f, 24.f) + 24.f, 24.f);
 }
 
 AMythMapInfo* AMythMapInfo::Find(const UWorld* World)

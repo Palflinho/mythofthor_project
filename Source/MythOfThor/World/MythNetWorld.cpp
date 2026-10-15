@@ -1284,6 +1284,16 @@ void AMythNetWorld::HandleDamage(int64 SourceID, int64 TargetID, int32 Damage, u
 		return;
 	}
 
+	// HD-2D hit feedback on whoever was hit (micro-freeze + flash); only for real damage
+	if (Damage > 0 && DamageType != 4)
+	{
+		if (UMythRoSpriteComponent* TS = Target->FindComponentByClass<UMythRoSpriteComponent>())
+		{
+			TS->TriggerHitFlash(0.06f);
+			TS->TriggerHitstop(0.03f);
+		}
+	}
+
 	// Arco (view 11 da arma): a flecha sai ao fim do golpe e leva ~190 ms; o numero de dano e a reacao do alvo so
 	// aparecem quando ela chega (docs/ref/03; roBrowser soma 8 quadros de 24 ms ao attackMT para o arco)
 	const UMythRoSpriteComponent* SrcSprite = Source ? Source->FindComponentByClass<UMythRoSpriteComponent>() : nullptr;

@@ -1,6 +1,9 @@
 #include "World/MythDayNightActor.h"
 
 #include "World/MythNightAudioComponent.h"
+#include "World/MythMapInfo.h"
+#include "World/MythMapEnvironment.h"
+#include "UI/MythOptions.h"
 
 #include "Components/DirectionalLightComponent.h"
 #include "Components/SkyAtmosphereComponent.h"
@@ -111,8 +114,25 @@ void AMythDayNightActor::Tick(float DeltaSeconds)
 
 void AMythDayNightActor::UpdateLighting()
 {
+	// Regional environment (HD-2D GDD branch): local hour by timezone, perpetual night and latitude tint. Not for interiors (fixed lamp lighting).
+	float EffectiveHour = TimeOfDay;
+	int32 LatitudeY = 0;
+	if (!MapInfoCache.IsValid() && GetWorld() && GetWorld()->GetTimeSeconds() >= NextMapInfoSearch)
+	{
+		MapInfoCache = AMythMapInfo::Find(GetWorld());
+		NextMapInfoSearch = GetWorld()->GetTimeSeconds() + 2.0; // do not scan the actors every frame on maps without a MapInfo
+	}
+	if (const AMythMapInfo* MapInfo = MapInfoCache.Get(); MapInfo && !MapInfo->IsIndoor() && FMythOptions::Get(TEXT("RegionalTime")))
+	{
+		if (const FMythMapEnv* Env = MapInfo->GetEnvironment())
+		{
+			EffectiveHour = Env->bPerpetualNight ? 0.f : MapInfo->GetLocalHour(TimeOfDay);
+			LatitudeY = Env->GridY;
+		}
+	}
+
 	// Angulo solar: 0 deg as 6h (horizonte), 90 deg ao meio-dia, 180 deg as 18h.
-	const float ThetaDeg = (TimeOfDay - 6.f) * 15.f;
+	const float ThetaDeg = (EffectiveHour - 6.f) * 15.f;
 	const float S = FMath::Sin(FMath::DegreesToRadians(ThetaDeg)); // elevacao do sol (-1..1)
 
 	const float Daylight = Smooth(-0.10f, 0.25f, S);
@@ -123,8 +143,18 @@ void AMythDayNightActor::UpdateLighting()
 	Moon->SetWorldRotation(FRotator(-(ThetaDeg + 180.f), SunYaw, 0.f));
 
 	// Sol dourado perto do horizonte, branco alto no ceu.
-	const FLinearColor Warm(1.f, 0.55f, 0.25f);
-	const FLinearColor White(1.f, 0.97f, 0.90f);
+	FLinearColor Warm(1.f, 0.55f, 0.25f);
+	FLinearColor White(1.f, 0.97f, 0.90f);
+	if (LatitudeY < 0) // south (Morroc, Comodo): warmer, golden light
+	{
+		Warm = FLinearColor(1.f, 0.48f, 0.15f);
+		White = FLinearColor(1.f, 0.92f, 0.80f);
+	}
+	else if (LatitudeY > 0) // north (Aldebaran, Lutie): colder, bluer light
+	{
+		Warm = FLinearColor(0.95f, 0.65f, 0.45f);
+		White = FLinearColor(0.90f, 0.95f, 1.0f);
+	}
 	Sun->SetLightColor(FMath::Lerp(Warm, White, Smooth(0.05f, 0.45f, S)));
 	// Chuva/neve/neblina (AMythWeatherActor) escurecem o sol e o ceu
 	Sun->SetIntensity(SunIntensityLux * Daylight * (1.f - 0.75f * WeatherDim));

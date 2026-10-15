@@ -1,0 +1,2635 @@
+{
+  "prontera": {
+    "name": "Prontera (Capital)",
+    "grid_x": 0,
+    "grid_y": 0,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Temperate",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Overcast",
+      "Rain"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "prt_fild00": {
+    "name": "Campos de Prontera 00",
+    "grid_x": 0,
+    "grid_y": 1,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Temperate",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Overcast",
+      "Rain"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "prt_fild01": {
+    "name": "Campos de Prontera 01",
+    "grid_x": 0,
+    "grid_y": 2,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Temperate",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Overcast",
+      "Rain"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "prt_fild02": {
+    "name": "Campos de Prontera 02",
+    "grid_x": 1,
+    "grid_y": 0,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Temperate",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Overcast",
+      "Rain"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "prt_fild03": {
+    "name": "Campos de Prontera 03",
+    "grid_x": 2,
+    "grid_y": 0,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Temperate",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Overcast",
+      "Rain"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "prt_fild04": {
+    "name": "Campos de Prontera 04",
+    "grid_x": 2,
+    "grid_y": 1,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Temperate",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Overcast",
+      "Rain"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "prt_fild05": {
+    "name": "Campos de Prontera 05",
+    "grid_x": -1,
+    "grid_y": 0,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Temperate",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Overcast",
+      "Rain"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "prt_fild06": {
+    "name": "Campos de Prontera 06",
+    "grid_x": -2,
+    "grid_y": 0,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Temperate",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Overcast",
+      "Rain"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "prt_fild07": {
+    "name": "Campos de Prontera 07",
+    "grid_x": -2,
+    "grid_y": 1,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Temperate",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Overcast",
+      "Rain"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "prt_fild08": {
+    "name": "Campos de Prontera 08",
+    "grid_x": 0,
+    "grid_y": -1,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Temperate",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Overcast",
+      "Rain"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "prt_fild09": {
+    "name": "Campos de Prontera 09",
+    "grid_x": 0,
+    "grid_y": -2,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Temperate",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Overcast",
+      "Rain"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "prt_fild10": {
+    "name": "Campos de Prontera 10",
+    "grid_x": 1,
+    "grid_y": -1,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Temperate",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Overcast",
+      "Rain"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "prt_fild11": {
+    "name": "Campos de Prontera 11",
+    "grid_x": 1,
+    "grid_y": -2,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Temperate",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Overcast",
+      "Rain"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "prt_sewb1": {
+    "name": "Esgotos de Prontera 1",
+    "grid_x": 0,
+    "grid_y": 0,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Subterranean",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "prt_sewb2": {
+    "name": "Esgotos de Prontera 2",
+    "grid_x": 0,
+    "grid_y": 0,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Subterranean",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "prt_sewb3": {
+    "name": "Esgotos de Prontera 3",
+    "grid_x": 0,
+    "grid_y": 0,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Subterranean",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "prt_sewb4": {
+    "name": "Esgotos de Prontera 4",
+    "grid_x": 0,
+    "grid_y": 0,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Subterranean",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "prt_prison": {
+    "name": "Prisão Subterrânea de Prontera",
+    "grid_x": 0,
+    "grid_y": 0,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Subterranean",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "izlude": {
+    "name": "Izlude (Porto)",
+    "grid_x": 2,
+    "grid_y": -1,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Coastal",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Rain",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "iz_dun00": {
+    "name": "Túnel de Byalan 1",
+    "grid_x": 3,
+    "grid_y": -1,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Underwater",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "iz_dun01": {
+    "name": "Túnel de Byalan 2",
+    "grid_x": 3,
+    "grid_y": -1,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Underwater",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "iz_dun02": {
+    "name": "Túnel de Byalan 3",
+    "grid_x": 3,
+    "grid_y": -1,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Underwater",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "iz_dun03": {
+    "name": "Túnel de Byalan 4",
+    "grid_x": 3,
+    "grid_y": -1,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Underwater",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "iz_dun04": {
+    "name": "Túnel de Byalan 5",
+    "grid_x": 3,
+    "grid_y": -1,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Underwater",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "geffen": {
+    "name": "Geffen (Cidade Mágica)",
+    "grid_x": -4,
+    "grid_y": 1,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Magical",
+    "allowed_weathers": [
+      "Fog",
+      "Rain",
+      "Overcast",
+      "ClearSunny"
+    ],
+    "default_weather": "Fog"
+  },
+  "gef_fild10": {
+    "name": "Vila dos Orcs",
+    "grid_x": -3,
+    "grid_y": -2,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Savannah",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "orcsdun01": {
+    "name": "Caverna dos Orcs 1",
+    "grid_x": -3,
+    "grid_y": -2,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Subterranean",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "orcsdun02": {
+    "name": "Caverna dos Orcs 2",
+    "grid_x": -3,
+    "grid_y": -2,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Subterranean",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "gef_dun00": {
+    "name": "Torre de Geffen B1",
+    "grid_x": -4,
+    "grid_y": 1,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "GothicCatacomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "gef_dun01": {
+    "name": "Torre de Geffen B2",
+    "grid_x": -4,
+    "grid_y": 1,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "GothicCatacomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "gef_dun02": {
+    "name": "Torre de Geffen B3",
+    "grid_x": -4,
+    "grid_y": 1,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "GothicCatacomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "gef_dun03": {
+    "name": "Torre de Geffen B4",
+    "grid_x": -4,
+    "grid_y": 1,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "GothicCatacomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "gefenia01": {
+    "name": "Geffenia 1",
+    "grid_x": -4,
+    "grid_y": 1,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "ElvenRuins",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "payon": {
+    "name": "Payon (Vila Florestal)",
+    "grid_x": 3,
+    "grid_y": -3,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "OrientalForest",
+    "allowed_weathers": [
+      "CherryBlossom",
+      "ClearSunny",
+      "Rain"
+    ],
+    "default_weather": "CherryBlossom"
+  },
+  "pay_arche": {
+    "name": "Vila dos Arqueiros",
+    "grid_x": 3,
+    "grid_y": -2,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "OrientalForest",
+    "allowed_weathers": [
+      "CherryBlossom",
+      "ClearSunny",
+      "Rain"
+    ],
+    "default_weather": "CherryBlossom"
+  },
+  "pay_dun00": {
+    "name": "Caverna de Payon 1",
+    "grid_x": 3,
+    "grid_y": -3,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "BuddhistCatacomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "pay_dun01": {
+    "name": "Caverna de Payon 2",
+    "grid_x": 3,
+    "grid_y": -3,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "BuddhistCatacomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "pay_dun02": {
+    "name": "Caverna de Payon 3",
+    "grid_x": 3,
+    "grid_y": -3,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "BuddhistCatacomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "pay_dun03": {
+    "name": "Caverna de Payon 4",
+    "grid_x": 3,
+    "grid_y": -3,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "BuddhistCatacomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "pay_dun04": {
+    "name": "Caverna de Payon 5",
+    "grid_x": 3,
+    "grid_y": -3,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "BuddhistCatacomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "morocc": {
+    "name": "Morroc (Oásis do Deserto)",
+    "grid_x": 0,
+    "grid_y": -6,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AridDesert",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "moc_ruins": {
+    "name": "Ruínas da Fenda de Morroc",
+    "grid_x": 0,
+    "grid_y": -6,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "CosmicRift",
+    "allowed_weathers": [
+      "DimensionalAurora",
+      "Fog",
+      "VolcanicAsh"
+    ],
+    "default_weather": "DimensionalAurora"
+  },
+  "moc_pryd01": {
+    "name": "Pirâmides 1",
+    "grid_x": 0,
+    "grid_y": -6,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "PharaonicTomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "moc_pryd02": {
+    "name": "Pirâmides 2",
+    "grid_x": 0,
+    "grid_y": -6,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "PharaonicTomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "moc_pryd03": {
+    "name": "Pirâmides 3",
+    "grid_x": 0,
+    "grid_y": -6,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "PharaonicTomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "moc_pryd04": {
+    "name": "Pirâmides 4",
+    "grid_x": 0,
+    "grid_y": -6,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "PharaonicTomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "moc_pryd05": {
+    "name": "Pirâmides B1",
+    "grid_x": 0,
+    "grid_y": -6,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "PharaonicTomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "moc_pryd06": {
+    "name": "Pirâmides B2",
+    "grid_x": 0,
+    "grid_y": -6,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "PharaonicTomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "in_sphinx1": {
+    "name": "Esfinge 1",
+    "grid_x": -1,
+    "grid_y": -6,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "PharaonicTomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "in_sphinx2": {
+    "name": "Esfinge 2",
+    "grid_x": -1,
+    "grid_y": -6,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "PharaonicTomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "in_sphinx3": {
+    "name": "Esfinge 3",
+    "grid_x": -1,
+    "grid_y": -6,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "PharaonicTomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "in_sphinx4": {
+    "name": "Esfinge 4",
+    "grid_x": -1,
+    "grid_y": -6,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "PharaonicTomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "in_sphinx5": {
+    "name": "Esfinge 5",
+    "grid_x": -1,
+    "grid_y": -6,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "PharaonicTomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "anthell01": {
+    "name": "Formigueiro Infernal 1",
+    "grid_x": 1,
+    "grid_y": -5,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Subterranean",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "anthell02": {
+    "name": "Formigueiro Infernal 2",
+    "grid_x": 1,
+    "grid_y": -5,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Subterranean",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "alberta": {
+    "name": "Alberta (Porto Mercantil)",
+    "grid_x": 4,
+    "grid_y": -2,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Coastal",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Rain",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "treasure01": {
+    "name": "Navio Fantasma 1",
+    "grid_x": 5,
+    "grid_y": -3,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "HauntedGalleon",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "treasure02": {
+    "name": "Navio Fantasma 2",
+    "grid_x": 5,
+    "grid_y": -3,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "HauntedGalleon",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "tur_dun01": {
+    "name": "Ilha das Tartarugas 1",
+    "grid_x": 6,
+    "grid_y": -4,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "TropicalIsland",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Rain",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "tur_dun02": {
+    "name": "Ilha das Tartarugas 2",
+    "grid_x": 6,
+    "grid_y": -4,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Subterranean",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "tur_dun03": {
+    "name": "Ilha das Tartarugas 3",
+    "grid_x": 6,
+    "grid_y": -4,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "AncientTemple",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "tur_dun04": {
+    "name": "Ilha das Tartarugas 4",
+    "grid_x": 6,
+    "grid_y": -4,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "AncientTemple",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "aldebaran": {
+    "name": "Aldebaran (Canais)",
+    "grid_x": 0,
+    "grid_y": 4,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AlpineCanals",
+    "allowed_weathers": [
+      "Fog",
+      "Rain",
+      "Overcast",
+      "ClearSunny"
+    ],
+    "default_weather": "Fog"
+  },
+  "c_tower1": {
+    "name": "Torre do Relógio 1F",
+    "grid_x": 0,
+    "grid_y": 4,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Clockwork",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "c_tower2": {
+    "name": "Torre do Relógio 2F",
+    "grid_x": 0,
+    "grid_y": 4,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Clockwork",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "c_tower3": {
+    "name": "Torre do Relógio 3F",
+    "grid_x": 0,
+    "grid_y": 4,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Clockwork",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "c_tower4": {
+    "name": "Torre do Relógio 4F",
+    "grid_x": 0,
+    "grid_y": 4,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Clockwork",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "alde_dun01": {
+    "name": "Porão do Relógio B1",
+    "grid_x": 0,
+    "grid_y": 4,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Clockwork",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "alde_dun02": {
+    "name": "Porão do Relógio B2",
+    "grid_x": 0,
+    "grid_y": 4,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "WitchcraftCatacomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "alde_dun03": {
+    "name": "Porão do Relógio B3",
+    "grid_x": 0,
+    "grid_y": 4,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "WitchcraftCatacomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "alde_dun04": {
+    "name": "Porão do Relógio B4",
+    "grid_x": 0,
+    "grid_y": 4,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "WitchcraftCatacomb",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "glast_01": {
+    "name": "Entrada de Glast Heim",
+    "grid_x": -7,
+    "grid_y": 2,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "GothicRuins",
+    "allowed_weathers": [
+      "Fog",
+      "Rain",
+      "Overcast",
+      "ClearSunny"
+    ],
+    "default_weather": "Fog"
+  },
+  "gl_cas01": {
+    "name": "Castelo de GH 1",
+    "grid_x": -7,
+    "grid_y": 2,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "GothicCastle",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "gl_cas02": {
+    "name": "Castelo de GH 2",
+    "grid_x": -7,
+    "grid_y": 2,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "GothicCastle",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "gl_church": {
+    "name": "Abadia de GH",
+    "grid_x": -7,
+    "grid_y": 2,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "DefiledAbbey",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "gl_chyard": {
+    "name": "Cemitério de GH",
+    "grid_x": -7,
+    "grid_y": 2,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "ProfaneGraveyard",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "gl_knt01": {
+    "name": "Cavalaria de GH 1",
+    "grid_x": -7,
+    "grid_y": 2,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Chivalry",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "gl_knt02": {
+    "name": "Cavalaria de GH 2",
+    "grid_x": -7,
+    "grid_y": 2,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Chivalry",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "gl_prison": {
+    "name": "Prisão de GH 1",
+    "grid_x": -7,
+    "grid_y": 2,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "DungeonPrison",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "gl_prison1": {
+    "name": "Prisão de GH 2",
+    "grid_x": -7,
+    "grid_y": 2,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "DungeonPrison",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "gl_sew01": {
+    "name": "Esgotos de GH 1",
+    "grid_x": -7,
+    "grid_y": 2,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Subterranean",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "gl_sew02": {
+    "name": "Esgotos de GH 2",
+    "grid_x": -7,
+    "grid_y": 2,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Subterranean",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "gl_sew03": {
+    "name": "Esgotos de GH 3",
+    "grid_x": -7,
+    "grid_y": 2,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Subterranean",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "gl_sew04": {
+    "name": "Esgotos de GH 4",
+    "grid_x": -7,
+    "grid_y": 2,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Subterranean",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "gl_step": {
+    "name": "Escadarias de GH",
+    "grid_x": -7,
+    "grid_y": 2,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "GothicCastle",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "gl_dun01": {
+    "name": "Caverna de GH 1",
+    "grid_x": -7,
+    "grid_y": 2,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Subterranean",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "gl_dun02": {
+    "name": "Caverna de GH 2",
+    "grid_x": -7,
+    "grid_y": 2,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Subterranean",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "xmas": {
+    "name": "Lutie (Vila do Natal)",
+    "grid_x": 0,
+    "grid_y": 12,
+    "dungeon": false,
+    "perpetual_night": true,
+    "biome": "PolarNight",
+    "allowed_weathers": [
+      "Snow",
+      "Overcast",
+      "DimensionalAurora"
+    ],
+    "default_weather": "Snow"
+  },
+  "xmas_fild01": {
+    "name": "Campos Nevados de Lutie",
+    "grid_x": 0,
+    "grid_y": 12,
+    "dungeon": false,
+    "perpetual_night": true,
+    "biome": "PolarSnow",
+    "allowed_weathers": [
+      "Snow",
+      "Overcast",
+      "DimensionalAurora"
+    ],
+    "default_weather": "Snow"
+  },
+  "xmas_dun01": {
+    "name": "Fábrica de Brinquedos 1",
+    "grid_x": 0,
+    "grid_y": 12,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "ToyFactory",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "xmas_dun02": {
+    "name": "Fábrica de Brinquedos 2",
+    "grid_x": 0,
+    "grid_y": 12,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "ToyFactory",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "comodo": {
+    "name": "Comodo (Praia dos Jogos)",
+    "grid_x": -4,
+    "grid_y": -8,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "TropicalFestive",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Rain",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "beach_dun": {
+    "name": "Caverna de Comodo 1",
+    "grid_x": -4,
+    "grid_y": -8,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "MarineCave",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "beach_dun2": {
+    "name": "Caverna de Comodo 2",
+    "grid_x": -4,
+    "grid_y": -8,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "MarineCave",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "beach_dun3": {
+    "name": "Caverna de Comodo 3",
+    "grid_x": -4,
+    "grid_y": -8,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "MarineCave",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "umbala": {
+    "name": "Umbala (Vila Utan)",
+    "grid_x": -5,
+    "grid_y": -10,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Rainforest",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Overcast",
+      "Rain"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "niflheim": {
+    "name": "Nifflheim (Reino dos Mortos)",
+    "grid_x": -5,
+    "grid_y": -14,
+    "dungeon": false,
+    "perpetual_night": true,
+    "biome": "RealmOfDead",
+    "allowed_weathers": [
+      "Fog",
+      "Rain",
+      "Overcast",
+      "ClearSunny"
+    ],
+    "default_weather": "Fog"
+  },
+  "jawaii": {
+    "name": "Jawaii (Lua de Mel)",
+    "grid_x": -6,
+    "grid_y": -7,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "EternalSunset",
+    "allowed_weathers": [
+      "Fog",
+      "Rain",
+      "Overcast",
+      "ClearSunny"
+    ],
+    "default_weather": "Fog"
+  },
+  "yuno": {
+    "name": "Yuno (Cidade Flutuante)",
+    "grid_x": 6,
+    "grid_y": 6,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "SkyCity",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Overcast",
+      "Rain"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "mag_dun01": {
+    "name": "Masmorra de Magma 1",
+    "grid_x": 6,
+    "grid_y": 6,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "VolcanicLava",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "mag_dun02": {
+    "name": "Masmorra de Magma 2",
+    "grid_x": 6,
+    "grid_y": 6,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "VolcanicLava",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "juperos_01": {
+    "name": "Ruínas de Juperos 1",
+    "grid_x": 6,
+    "grid_y": 7,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "AncientTech",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "juperos_02": {
+    "name": "Ruínas de Juperos 2",
+    "grid_x": 6,
+    "grid_y": 7,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "AncientTech",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "einbroch": {
+    "name": "Einbroch (Cidade do Aço)",
+    "grid_x": 7,
+    "grid_y": 6,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "SteampunkIndustrial",
+    "allowed_weathers": [
+      "IndustrialSmog",
+      "Rain",
+      "Overcast"
+    ],
+    "default_weather": "IndustrialSmog"
+  },
+  "einbech": {
+    "name": "Einbech (Vila de Mineração)",
+    "grid_x": 7,
+    "grid_y": 6,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "SteampunkIndustrial",
+    "allowed_weathers": [
+      "IndustrialSmog",
+      "Rain",
+      "Overcast"
+    ],
+    "default_weather": "IndustrialSmog"
+  },
+  "slabw01": {
+    "name": "Laboratório Werner (Ep 16)",
+    "grid_x": 7,
+    "grid_y": 6,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "CyberLab",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "lighthalzen": {
+    "name": "Lighthalzen (Metrópole)",
+    "grid_x": 8,
+    "grid_y": 6,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "UrbanDrizzle",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Overcast",
+      "Rain"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "lhz_dun01": {
+    "name": "Laboratório Somatologia 1",
+    "grid_x": 8,
+    "grid_y": 6,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "BioLab",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "lhz_dun02": {
+    "name": "Laboratório Somatologia 2",
+    "grid_x": 8,
+    "grid_y": 6,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "BioLab",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "lhz_dun03": {
+    "name": "Laboratório Somatologia 3",
+    "grid_x": 8,
+    "grid_y": 6,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "BioLab",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "lhz_dun04": {
+    "name": "Laboratório Somatologia 4",
+    "grid_x": 8,
+    "grid_y": 6,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "BioLab",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "hugel": {
+    "name": "Hugel (Vila do Norte)",
+    "grid_x": 9,
+    "grid_y": 7,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "SubpolarCoast",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Overcast",
+      "Rain"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "odin_tem01": {
+    "name": "Templo de Odin 1",
+    "grid_x": 9,
+    "grid_y": 7,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "NorseTemple",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Overcast",
+      "Rain"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "rachel": {
+    "name": "Rachel (Capital Teocrática)",
+    "grid_x": -16,
+    "grid_y": -4,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "LateSunsetPlato",
+    "allowed_weathers": [
+      "Fog",
+      "Rain",
+      "Overcast",
+      "ClearSunny"
+    ],
+    "default_weather": "Fog"
+  },
+  "ice_dun01": {
+    "name": "Caverna de Gelo 1",
+    "grid_x": -16,
+    "grid_y": -3,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "PureIceCave",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "veins": {
+    "name": "Veins (Cânions Vermelhos)",
+    "grid_x": -18,
+    "grid_y": -5,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "RedCanyon",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "thor_v01": {
+    "name": "Vulcão de Thor 1",
+    "grid_x": -18,
+    "grid_y": -5,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "VolcanicInferno",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "nameless_n": {
+    "name": "Ilha Esquecida",
+    "grid_x": -18,
+    "grid_y": -8,
+    "dungeon": false,
+    "perpetual_night": true,
+    "biome": "ThunderstormCursed",
+    "allowed_weathers": [
+      "Fog",
+      "Rain",
+      "Overcast",
+      "ClearSunny"
+    ],
+    "default_weather": "Fog"
+  },
+  "abbey01": {
+    "name": "Abadia Maldita 1",
+    "grid_x": -18,
+    "grid_y": -8,
+    "dungeon": true,
+    "perpetual_night": true,
+    "biome": "CursedAbbey",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "malangdo": {
+    "name": "Malangdo (Ilha dos Gatos)",
+    "grid_x": 10,
+    "grid_y": -6,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "FelineIsland",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Rain",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "lasagna": {
+    "name": "Lasagna (Pátria Doram)",
+    "grid_x": 12,
+    "grid_y": -7,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "VerdantHills",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Overcast",
+      "Rain"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "lasa_dun01": {
+    "name": "Caverna dos Dragões de Lasagna",
+    "grid_x": 12,
+    "grid_y": -7,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "DragonNest",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "amatsu": {
+    "name": "Amatsu (Japão Feudal)",
+    "grid_x": 32,
+    "grid_y": 1,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "CherryBlossomFarEast",
+    "allowed_weathers": [
+      "CherryBlossom",
+      "ClearSunny",
+      "Rain"
+    ],
+    "default_weather": "CherryBlossom"
+  },
+  "gonryun": {
+    "name": "Kunlun (Taiwan Flutuante)",
+    "grid_x": 36,
+    "grid_y": 2,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "TaoistCloudIsland",
+    "allowed_weathers": [
+      "CherryBlossom",
+      "ClearSunny",
+      "Rain"
+    ],
+    "default_weather": "CherryBlossom"
+  },
+  "louyang": {
+    "name": "Louyang (China Imperial)",
+    "grid_x": 40,
+    "grid_y": 2,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "HighlandImperial",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Overcast",
+      "Rain"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "ayothaya": {
+    "name": "Ayothaya (Tailândia)",
+    "grid_x": 44,
+    "grid_y": -1,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "SacredMarsh",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Rain",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "malaya": {
+    "name": "Porto Malaya (Filipinas)",
+    "grid_x": 48,
+    "grid_y": -2,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "OppositeTimeMangrove",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Rain",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "brasilis": {
+    "name": "Brasilis (Brasil)",
+    "grid_x": 14,
+    "grid_y": -10,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AmazonRainforest",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Rain",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "moscovia": {
+    "name": "Moscovia (Rússia)",
+    "grid_x": 16,
+    "grid_y": 5,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "RussianTaiga",
+    "allowed_weathers": [
+      "Snow",
+      "Overcast",
+      "DimensionalAurora"
+    ],
+    "default_weather": "Snow"
+  },
+  "dewata": {
+    "name": "Dewata (Indonésia)",
+    "grid_x": 20,
+    "grid_y": -8,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "VolcanicKomodoJungle",
+    "allowed_weathers": [
+      "ClearSunny",
+      "VolcanicAsh",
+      "Overcast"
+    ],
+    "default_weather": "VolcanicAsh"
+  },
+  "mid_camp": {
+    "name": "Acampamento da Fenda (Mid-Camp)",
+    "grid_x": 20,
+    "grid_y": 3,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "CosmicRiftDim",
+    "allowed_weathers": [
+      "DimensionalAurora",
+      "Fog",
+      "VolcanicAsh"
+    ],
+    "default_weather": "DimensionalAurora"
+  },
+  "splendide": {
+    "name": "Splendide (Fadas Laphine)",
+    "grid_x": 22,
+    "grid_y": 3,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "FairyForest",
+    "allowed_weathers": [
+      "DimensionalAurora",
+      "Fog",
+      "VolcanicAsh"
+    ],
+    "default_weather": "DimensionalAurora"
+  },
+  "manuk": {
+    "name": "Manuk (Gigantes Sapha)",
+    "grid_x": 24,
+    "grid_y": 3,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "BradiumFrost",
+    "allowed_weathers": [
+      "Snow",
+      "Overcast",
+      "DimensionalAurora"
+    ],
+    "default_weather": "Snow"
+  },
+  "dicastes01": {
+    "name": "El Dicastes (Scaraba)",
+    "grid_x": 26,
+    "grid_y": 4,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "Subterranean",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "mora": {
+    "name": "Mora (Vila de Bifrost)",
+    "grid_x": 21,
+    "grid_y": 4,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "RainbowBifrost",
+    "allowed_weathers": [
+      "DimensionalAurora",
+      "Fog",
+      "VolcanicAsh"
+    ],
+    "default_weather": "DimensionalAurora"
+  },
+  "eclage": {
+    "name": "Eclage (Palácio das Fadas)",
+    "grid_x": 23,
+    "grid_y": 5,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "CelestialTreePalace",
+    "allowed_weathers": [
+      "DimensionalAurora",
+      "Fog",
+      "VolcanicAsh"
+    ],
+    "default_weather": "DimensionalAurora"
+  },
+  "verus01": {
+    "name": "Verus (Fantasmagoria 1)",
+    "grid_x": 18,
+    "grid_y": 7,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "AncientBuriedTech",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "verus02": {
+    "name": "Verus (Fantasmagoria 2)",
+    "grid_x": 18,
+    "grid_y": 7,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "AncientBuriedTech",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "verus03": {
+    "name": "Verus (Fantasmagoria 3)",
+    "grid_x": 18,
+    "grid_y": 7,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "AncientBuriedTech",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "verus04": {
+    "name": "Verus (Fantasmagoria 4)",
+    "grid_x": 18,
+    "grid_y": 7,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "AncientBuriedTech",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "sp_cor": {
+    "name": "Special Cor (Instalação Industrial)",
+    "grid_x": 28,
+    "grid_y": 4,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "DystopianFactory",
+    "allowed_weathers": [
+      "IndustrialSmog",
+      "Rain",
+      "Overcast"
+    ],
+    "default_weather": "IndustrialSmog"
+  },
+  "sp_rudus": {
+    "name": "Rudus (Lixão de Ciborgues)",
+    "grid_x": 28,
+    "grid_y": 4,
+    "dungeon": true,
+    "perpetual_night": false,
+    "biome": "DystopianFactory",
+    "allowed_weathers": [
+      "Underground"
+    ],
+    "default_weather": "Underground"
+  },
+  "ba_maison": {
+    "name": "Mansão Varmundt",
+    "grid_x": 30,
+    "grid_y": 4,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "GrandNobleMansion",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Overcast",
+      "Rain"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "wolfvill": {
+    "name": "Vila dos Lobos Cinzentos (Wolfvill)",
+    "grid_x": -14,
+    "grid_y": 5,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "WolfTerritory",
+    "allowed_weathers": [
+      "Snow",
+      "Overcast",
+      "DimensionalAurora"
+    ],
+    "default_weather": "Snow"
+  },
+  "jor_tail": {
+    "name": "Issgard (Raízes de Yggdrasil)",
+    "grid_x": 34,
+    "grid_y": 8,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "YggdrasilRootsGlacier",
+    "allowed_weathers": [
+      "Snow",
+      "Overcast",
+      "DimensionalAurora"
+    ],
+    "default_weather": "Snow"
+  },
+  "gef_fild00": {
+    "name": "Campos de Geffen 00",
+    "grid_x": -5,
+    "grid_y": -1,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Magical",
+    "allowed_weathers": [
+      "Fog",
+      "Rain",
+      "Overcast",
+      "ClearSunny"
+    ],
+    "default_weather": "Fog"
+  },
+  "gef_fild01": {
+    "name": "Campos de Geffen 01",
+    "grid_x": -4,
+    "grid_y": -1,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Magical",
+    "allowed_weathers": [
+      "Fog",
+      "Rain",
+      "Overcast",
+      "ClearSunny"
+    ],
+    "default_weather": "Fog"
+  },
+  "gef_fild02": {
+    "name": "Campos de Geffen 02",
+    "grid_x": -3,
+    "grid_y": -1,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Magical",
+    "allowed_weathers": [
+      "Fog",
+      "Rain",
+      "Overcast",
+      "ClearSunny"
+    ],
+    "default_weather": "Fog"
+  },
+  "gef_fild03": {
+    "name": "Campos de Geffen 03",
+    "grid_x": -5,
+    "grid_y": 0,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Magical",
+    "allowed_weathers": [
+      "Fog",
+      "Rain",
+      "Overcast",
+      "ClearSunny"
+    ],
+    "default_weather": "Fog"
+  },
+  "gef_fild04": {
+    "name": "Campos de Geffen 04",
+    "grid_x": -4,
+    "grid_y": 0,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Magical",
+    "allowed_weathers": [
+      "Fog",
+      "Rain",
+      "Overcast",
+      "ClearSunny"
+    ],
+    "default_weather": "Fog"
+  },
+  "gef_fild05": {
+    "name": "Campos de Geffen 05",
+    "grid_x": -3,
+    "grid_y": 0,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Magical",
+    "allowed_weathers": [
+      "Fog",
+      "Rain",
+      "Overcast",
+      "ClearSunny"
+    ],
+    "default_weather": "Fog"
+  },
+  "gef_fild06": {
+    "name": "Campos de Geffen 06",
+    "grid_x": -5,
+    "grid_y": 1,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Magical",
+    "allowed_weathers": [
+      "Fog",
+      "Rain",
+      "Overcast",
+      "ClearSunny"
+    ],
+    "default_weather": "Fog"
+  },
+  "gef_fild07": {
+    "name": "Campos de Geffen 07",
+    "grid_x": -4,
+    "grid_y": 1,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Magical",
+    "allowed_weathers": [
+      "Fog",
+      "Rain",
+      "Overcast",
+      "ClearSunny"
+    ],
+    "default_weather": "Fog"
+  },
+  "gef_fild08": {
+    "name": "Campos de Geffen 08",
+    "grid_x": -3,
+    "grid_y": 1,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Magical",
+    "allowed_weathers": [
+      "Fog",
+      "Rain",
+      "Overcast",
+      "ClearSunny"
+    ],
+    "default_weather": "Fog"
+  },
+  "gef_fild09": {
+    "name": "Campos de Geffen 09",
+    "grid_x": -5,
+    "grid_y": 2,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Magical",
+    "allowed_weathers": [
+      "Fog",
+      "Rain",
+      "Overcast",
+      "ClearSunny"
+    ],
+    "default_weather": "Fog"
+  },
+  "gef_fild11": {
+    "name": "Campos de Geffen 11",
+    "grid_x": -3,
+    "grid_y": 2,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Magical",
+    "allowed_weathers": [
+      "Fog",
+      "Rain",
+      "Overcast",
+      "ClearSunny"
+    ],
+    "default_weather": "Fog"
+  },
+  "gef_fild12": {
+    "name": "Campos de Geffen 12",
+    "grid_x": -5,
+    "grid_y": 3,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Magical",
+    "allowed_weathers": [
+      "Fog",
+      "Rain",
+      "Overcast",
+      "ClearSunny"
+    ],
+    "default_weather": "Fog"
+  },
+  "gef_fild13": {
+    "name": "Campos de Geffen 13",
+    "grid_x": -4,
+    "grid_y": 3,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Magical",
+    "allowed_weathers": [
+      "Fog",
+      "Rain",
+      "Overcast",
+      "ClearSunny"
+    ],
+    "default_weather": "Fog"
+  },
+  "gef_fild14": {
+    "name": "Campos de Geffen 14",
+    "grid_x": -3,
+    "grid_y": 3,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "Magical",
+    "allowed_weathers": [
+      "Fog",
+      "Rain",
+      "Overcast",
+      "ClearSunny"
+    ],
+    "default_weather": "Fog"
+  },
+  "pay_fild01": {
+    "name": "Campos de Payon 01",
+    "grid_x": 3,
+    "grid_y": -4,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "OrientalForest",
+    "allowed_weathers": [
+      "CherryBlossom",
+      "ClearSunny",
+      "Rain"
+    ],
+    "default_weather": "CherryBlossom"
+  },
+  "pay_fild02": {
+    "name": "Campos de Payon 02",
+    "grid_x": 4,
+    "grid_y": -4,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "OrientalForest",
+    "allowed_weathers": [
+      "CherryBlossom",
+      "ClearSunny",
+      "Rain"
+    ],
+    "default_weather": "CherryBlossom"
+  },
+  "pay_fild03": {
+    "name": "Campos de Payon 03",
+    "grid_x": 2,
+    "grid_y": -3,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "OrientalForest",
+    "allowed_weathers": [
+      "CherryBlossom",
+      "ClearSunny",
+      "Rain"
+    ],
+    "default_weather": "CherryBlossom"
+  },
+  "pay_fild04": {
+    "name": "Campos de Payon 04",
+    "grid_x": 3,
+    "grid_y": -3,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "OrientalForest",
+    "allowed_weathers": [
+      "CherryBlossom",
+      "ClearSunny",
+      "Rain"
+    ],
+    "default_weather": "CherryBlossom"
+  },
+  "pay_fild05": {
+    "name": "Campos de Payon 05",
+    "grid_x": 4,
+    "grid_y": -3,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "OrientalForest",
+    "allowed_weathers": [
+      "CherryBlossom",
+      "ClearSunny",
+      "Rain"
+    ],
+    "default_weather": "CherryBlossom"
+  },
+  "pay_fild06": {
+    "name": "Campos de Payon 06",
+    "grid_x": 2,
+    "grid_y": -2,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "OrientalForest",
+    "allowed_weathers": [
+      "CherryBlossom",
+      "ClearSunny",
+      "Rain"
+    ],
+    "default_weather": "CherryBlossom"
+  },
+  "pay_fild07": {
+    "name": "Campos de Payon 07",
+    "grid_x": 3,
+    "grid_y": -2,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "OrientalForest",
+    "allowed_weathers": [
+      "CherryBlossom",
+      "ClearSunny",
+      "Rain"
+    ],
+    "default_weather": "CherryBlossom"
+  },
+  "pay_fild08": {
+    "name": "Campos de Payon 08",
+    "grid_x": 4,
+    "grid_y": -2,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "OrientalForest",
+    "allowed_weathers": [
+      "CherryBlossom",
+      "ClearSunny",
+      "Rain"
+    ],
+    "default_weather": "CherryBlossom"
+  },
+  "pay_fild09": {
+    "name": "Campos de Payon 09",
+    "grid_x": 2,
+    "grid_y": -1,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "OrientalForest",
+    "allowed_weathers": [
+      "CherryBlossom",
+      "ClearSunny",
+      "Rain"
+    ],
+    "default_weather": "CherryBlossom"
+  },
+  "pay_fild10": {
+    "name": "Campos de Payon 10",
+    "grid_x": 3,
+    "grid_y": -1,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "OrientalForest",
+    "allowed_weathers": [
+      "CherryBlossom",
+      "ClearSunny",
+      "Rain"
+    ],
+    "default_weather": "CherryBlossom"
+  },
+  "pay_fild11": {
+    "name": "Campos de Payon 11",
+    "grid_x": 4,
+    "grid_y": -1,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "OrientalForest",
+    "allowed_weathers": [
+      "CherryBlossom",
+      "ClearSunny",
+      "Rain"
+    ],
+    "default_weather": "CherryBlossom"
+  },
+  "moc_fild01": {
+    "name": "Campos do Deserto 01",
+    "grid_x": 0,
+    "grid_y": -8,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AridDesert",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "moc_fild02": {
+    "name": "Campos do Deserto 02",
+    "grid_x": 1,
+    "grid_y": -8,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AridDesert",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "moc_fild03": {
+    "name": "Campos do Deserto 03",
+    "grid_x": -1,
+    "grid_y": -7,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AridDesert",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "moc_fild04": {
+    "name": "Campos do Deserto 04",
+    "grid_x": 0,
+    "grid_y": -7,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AridDesert",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "moc_fild05": {
+    "name": "Campos do Deserto 05",
+    "grid_x": 1,
+    "grid_y": -7,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AridDesert",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "moc_fild06": {
+    "name": "Campos do Deserto 06",
+    "grid_x": -1,
+    "grid_y": -6,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AridDesert",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "moc_fild07": {
+    "name": "Campos do Deserto 07",
+    "grid_x": 0,
+    "grid_y": -6,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AridDesert",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "moc_fild08": {
+    "name": "Campos do Deserto 08",
+    "grid_x": 1,
+    "grid_y": -6,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AridDesert",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "moc_fild09": {
+    "name": "Campos do Deserto 09",
+    "grid_x": -1,
+    "grid_y": -5,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AridDesert",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "moc_fild10": {
+    "name": "Campos do Deserto 10",
+    "grid_x": 0,
+    "grid_y": -5,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AridDesert",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "moc_fild11": {
+    "name": "Campos do Deserto 11",
+    "grid_x": 1,
+    "grid_y": -5,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AridDesert",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "moc_fild12": {
+    "name": "Campos do Deserto 12",
+    "grid_x": -1,
+    "grid_y": -4,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AridDesert",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "moc_fild13": {
+    "name": "Campos do Deserto 13",
+    "grid_x": 0,
+    "grid_y": -4,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AridDesert",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "moc_fild14": {
+    "name": "Campos do Deserto 14",
+    "grid_x": 1,
+    "grid_y": -4,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AridDesert",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "moc_fild15": {
+    "name": "Campos do Deserto 15",
+    "grid_x": -1,
+    "grid_y": -3,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AridDesert",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "moc_fild16": {
+    "name": "Campos do Deserto 16",
+    "grid_x": 0,
+    "grid_y": -3,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AridDesert",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "moc_fild17": {
+    "name": "Campos do Deserto 17",
+    "grid_x": 1,
+    "grid_y": -3,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AridDesert",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "moc_fild18": {
+    "name": "Campos do Deserto 18",
+    "grid_x": -1,
+    "grid_y": -2,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AridDesert",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "moc_fild19": {
+    "name": "Campos do Deserto 19",
+    "grid_x": 0,
+    "grid_y": -2,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AridDesert",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "moc_fild20": {
+    "name": "Campos do Deserto 20",
+    "grid_x": 1,
+    "grid_y": -2,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "AridDesert",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Sandstorm",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "cmd_fild01": {
+    "name": "Campos de Comodo 01",
+    "grid_x": -4,
+    "grid_y": -9,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "TropicalFestive",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Rain",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "cmd_fild02": {
+    "name": "Campos de Comodo 02",
+    "grid_x": -3,
+    "grid_y": -9,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "TropicalFestive",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Rain",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "cmd_fild03": {
+    "name": "Campos de Comodo 03",
+    "grid_x": -5,
+    "grid_y": -8,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "TropicalFestive",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Rain",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "cmd_fild04": {
+    "name": "Campos de Comodo 04",
+    "grid_x": -4,
+    "grid_y": -8,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "TropicalFestive",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Rain",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "cmd_fild05": {
+    "name": "Campos de Comodo 05",
+    "grid_x": -3,
+    "grid_y": -8,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "TropicalFestive",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Rain",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "cmd_fild06": {
+    "name": "Campos de Comodo 06",
+    "grid_x": -5,
+    "grid_y": -7,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "TropicalFestive",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Rain",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "cmd_fild07": {
+    "name": "Campos de Comodo 07",
+    "grid_x": -4,
+    "grid_y": -7,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "TropicalFestive",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Rain",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "cmd_fild08": {
+    "name": "Campos de Comodo 08",
+    "grid_x": -3,
+    "grid_y": -7,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "TropicalFestive",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Rain",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  },
+  "cmd_fild09": {
+    "name": "Campos de Comodo 09",
+    "grid_x": -5,
+    "grid_y": -6,
+    "dungeon": false,
+    "perpetual_night": false,
+    "biome": "TropicalFestive",
+    "allowed_weathers": [
+      "ClearSunny",
+      "Rain",
+      "Overcast"
+    ],
+    "default_weather": "ClearSunny"
+  }
+}

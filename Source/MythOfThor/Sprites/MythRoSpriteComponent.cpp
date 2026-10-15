@@ -1,4 +1,5 @@
 #include "Sprites/MythRoSpriteComponent.h"
+#include "TimerManager.h"
 
 #include "World/MythDayNightActor.h"
 #include "World/MythNightLight.h"
@@ -837,6 +838,10 @@ void UMythRoSpriteComponent::RecomputeStatusTint()
 	if (Virtue & 0x10000) { C.R *= 0.7f; C.B *= 0.65f; }
 	if (Virtue & 0x400) { Mul(1.f, 0.34f, 0.71f); }
 	if (Virtue & 0x80) { Mul(1.f, 0.4f, 0.4f); }
+	if (const UWorld* W = GetWorld(); W && W->GetTimeSeconds() < HitFlashUntil)
+	{
+		C.R *= 1.8f; C.G *= 1.8f; C.B *= 1.8f; // hit flash: brighter for a few frames
+	}
 	if (bStatusDim) { Mul(0.55f, 0.55f, 0.55f); }
 	StatusTint = C;
 }
@@ -1475,4 +1480,31 @@ UTexture2D* UMythRoSpriteComponent::RenderPortrait(int32 Width, int32 Height, in
 	Mip.BulkData.Unlock();
 	Tex->UpdateResource();
 	return Tex;
+}
+
+void UMythRoSpriteComponent::TriggerHitFlash(float Duration)
+{
+	UWorld* W = GetWorld();
+	if (!W || Duration <= 0.f)
+	{
+		return;
+	}
+	HitFlashUntil = W->GetTimeSeconds() + Duration;
+	RecomputeStatusTint();
+	W->GetTimerManager().SetTimer(HitFlashTimer, FTimerDelegate::CreateWeakLambda(this, [this]() { RecomputeStatusTint(); }), Duration, false);
+}
+
+void UMythRoSpriteComponent::TriggerHitstop(float Duration)
+{
+	UWorld* W = GetWorld();
+	AActor* Owner = GetOwner();
+	if (!W || !Owner || Duration <= 0.f)
+	{
+		return;
+	}
+	Owner->CustomTimeDilation = 0.05f; // micro-freeze: the unit that was hit holds its frame for a moment
+	W->GetTimerManager().SetTimer(HitstopTimer, FTimerDelegate::CreateWeakLambda(this, [this]()
+	{
+		if (AActor* O = GetOwner()) { O->CustomTimeDilation = 1.f; }
+	}), Duration, false);
 }

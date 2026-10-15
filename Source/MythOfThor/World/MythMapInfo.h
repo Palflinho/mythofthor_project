@@ -64,6 +64,12 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Map")
 	FVector CellToWorld(FIntPoint Cell, float Z = 0.f) const;
 
+	/** Regional environment of this map (timezone, latitude, perpetual night...), or nullptr when the map is not in Config/map_environment_table.json. */
+	const struct FMythMapEnv* GetEnvironment() const;
+
+	/** Local hour of day: the world clock shifted one hour per 4 map columns east/west of Prontera (HD-2D regional time). */
+	float GetLocalHour(float WorldHour) const;
+
 	/** Primeiro AMythMapInfo do mundo, ou nulo. */
 	static AMythMapInfo* Find(const UWorld* World);
 };

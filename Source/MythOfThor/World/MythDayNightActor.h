@@ -118,6 +118,8 @@ private:
 	float TimeOfDay = 9.f;
 	float NightFactor = 0.f;
 
+	TWeakObjectPtr<class AMythMapInfo> MapInfoCache;
+	double NextMapInfoSearch = 0.0;
 	float AppliedNightGlow = -1.f;
 
 	void HideLevelLights();
