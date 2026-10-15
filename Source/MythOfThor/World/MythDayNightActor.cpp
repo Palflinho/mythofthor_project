@@ -41,6 +41,7 @@ AMythDayNightActor::AMythDayNightActor()
 	Sun->SetLightSourceAngle(1.5f); // penumbra: borda das sombras mais macia
 	Sun->SetAtmosphereSunLight(true);
 	Sun->SetAtmosphereSunLightIndex(0);
+	Sun->ForwardShadingPriority = 2;
 
 	Moon = CreateDefaultSubobject<UDirectionalLightComponent>(TEXT("Moon"));
 	Moon->SetupAttachment(Root);
@@ -48,6 +49,7 @@ AMythDayNightActor::AMythDayNightActor()
 	Moon->SetAtmosphereSunLight(true);
 	Moon->SetAtmosphereSunLightIndex(1);
 	Moon->SetLightColor(FLinearColor(0.55f, 0.65f, 1.f));
+	Moon->ForwardShadingPriority = 0;
 
 	SkyLight = CreateDefaultSubobject<USkyLightComponent>(TEXT("SkyLight"));
 	SkyLight->SetupAttachment(Root);
@@ -166,7 +168,10 @@ void AMythDayNightActor::UpdateHD2DLens()
 	const bool bOn = FMythOptions::Get(TEXT("HD2DLook"));
 	for (FWeightedBlendable& B : Grading->Settings.WeightedBlendables.Array)
 	{
-		B.Weight = bOn ? 1.f : 0.f; // the only blendable here is the tilt-shift material
+		if (B.Object && B.Object->GetName().Contains(TEXT("TiltShift")))
+		{
+			B.Weight = bOn ? 1.f : 0.f; // apenas a lente tilt-shift e ligada/desligada por esta opcao
+		}
 	}
 	if (!bOn)
 	{
@@ -224,9 +229,19 @@ void AMythDayNightActor::UpdateLighting()
 		Sun->SetIntensity(0.f);
 		Moon->SetVisibility(false);
 		Moon->SetIntensity(0.f);
-		if (Atmosphere)
+		Sun->ForwardShadingPriority = 0;
+		Moon->ForwardShadingPriority = 0;
+		if (!bDungeonLightingApplied)
 		{
-			Atmosphere->SetVisibility(false);
+			bDungeonLightingApplied = true;
+			if (SkyLight)
+			{
+				SkyLight->SetRealTimeCaptureEnabled(false);
+			}
+			if (Atmosphere)
+			{
+				Atmosphere->SetVisibility(false);
+			}
 		}
 		SkyLight->SetIntensity(0.08f);
 		SkyLight->SetLightColor(FLinearColor(0.25f, 0.30f, 0.42f));
@@ -242,7 +257,7 @@ void AMythDayNightActor::UpdateLighting()
 			AppliedNightGlow = 1.0f;
 			for (TObjectIterator<UStaticMeshComponent> It; It; ++It)
 			{
-				if (It->GetWorld() == GetWorld() && It->GetOwner() && !It->GetOwner()->IsA<APawn>())
+				if (It->IsValidLowLevel() && !It->IsUnreachable() && !It->HasAnyFlags(RF_BeginDestroyed | RF_FinishDestroyed) && It->GetWorld() == GetWorld() && It->GetOwner() && !It->GetOwner()->IsA<APawn>())
 				{
 					It->SetScalarParameterForCustomPrimitiveData(TEXT("NightGlow"), 1.0f);
 				}
@@ -253,9 +268,17 @@ void AMythDayNightActor::UpdateLighting()
 	}
 	else
 	{
-		if (Atmosphere)
+		if (bDungeonLightingApplied)
 		{
-			Atmosphere->SetVisibility(true);
+			bDungeonLightingApplied = false;
+			if (Atmosphere)
+			{
+				Atmosphere->SetVisibility(true);
+			}
+			if (SkyLight)
+			{
+				SkyLight->SetRealTimeCaptureEnabled(true);
+			}
 		}
 	}
 
@@ -293,9 +316,11 @@ void AMythDayNightActor::UpdateLighting()
 	// (evita o aviso de luzes direcionais competindo pelo sombreamento e pela neblina).
 	const bool bSunUp = Daylight > 0.001f;
 	Sun->SetVisibility(bSunUp);
-	Moon->SetVisibility(!bSunUp || S < 0.f);
+	Moon->SetVisibility(!bSunUp);
 	Sun->SetCastShadows(bSunUp);
 	Moon->SetCastShadows(!bSunUp);
+	Sun->ForwardShadingPriority = bSunUp ? 2 : 0;
+	Moon->ForwardShadingPriority = bSunUp ? 0 : 2;
 
 	// Noite de verdade: exposicao abaixo da do dia, cores mais frias e menos saturadas (os postes se destacam).
 	if (Grading)
@@ -323,7 +348,7 @@ void AMythDayNightActor::UpdateLighting()
 		AppliedNightGlow = Glow;
 		for (TObjectIterator<UStaticMeshComponent> It; It; ++It)
 		{
-			if (It->GetWorld() == GetWorld() && It->GetOwner() && !It->GetOwner()->IsA<APawn>())
+			if (It->IsValidLowLevel() && !It->IsUnreachable() && !It->HasAnyFlags(RF_BeginDestroyed | RF_FinishDestroyed) && It->GetWorld() == GetWorld() && It->GetOwner() && !It->GetOwner()->IsA<APawn>())
 			{
 				It->SetScalarParameterForCustomPrimitiveData(TEXT("NightGlow"), Glow);
 			}

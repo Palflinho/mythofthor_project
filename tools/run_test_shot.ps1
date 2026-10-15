@@ -2,26 +2,38 @@ param(
     [string]$Map = '/Game/Maps/Prontera/Lvl_Prontera',
     [string]$ShotName = 'test_gradient_prt',
     [string]$Warp = '',
+    [string[]]$ExtraCmds = @(),
     [float]$Delay = 18.0,
     [float]$Hour = 12.0,
-    [int]$QuitAfter = 24
+    [int]$QuitAfter = 26
 )
 
 $ue = 'C:\Program Files\Epic Games\UE_5.8\Engine\Binaries\Win64\UnrealEditor.exe'
 $proj = 'E:\Dev\mythofthor\mythofthor.uproject'
 
-$cmds = "MythDelayed 4 MythLogin+mythclaude+mythclaude123"
+$cmdList = [System.Collections.Generic.List[string]]::new()
+$cmdList.Add("MythDelayed 4 MythLogin+mythclaude+mythclaude123")
+
 if ($Warp -ne '') {
     $w = $Warp.Replace(' ', '+')
-    $cmds += ", MythDelayed 10 MythSay+@warp+$w"
+    $cmdList.Add("MythDelayed 10 MythSay+@warp+$w")
 }
-$cmds += ", MythDelayed $Delay MythShot+0+$Hour+$ShotName"
-$cmds += ", MythDelayed $QuitAfter quit"
 
-$argsList = @($proj, $Map, '-game', '-windowed', '-ResX=1280', '-ResY=720', '-NoLiveCoding', "-ExecCmds=$cmds")
+foreach ($extra in $ExtraCmds) {
+    if ($extra -ne '') {
+        $cmdList.Add($extra)
+    }
+}
+
+$cmdList.Add("MythDelayed $Delay MythShot+0+$Hour+$ShotName")
+$cmdList.Add("MythDelayed $QuitAfter quit")
+
+$cmds = ($cmdList -join ", ")
+$argString = "`"$proj`" $Map -game -windowed -ResX=1280 -ResY=720 -NoLiveCoding -ExecCmds=`"$cmds`""
 
 Write-Host "Iniciando teste standalone no mapa $Map com print '$ShotName' (Warp: '$Warp')..."
-$p = Start-Process -FilePath $ue -ArgumentList $argsList -PassThru
+Write-Host "Comandos: $cmds"
+$p = Start-Process -FilePath $ue -ArgumentList $argString -PassThru
 Write-Host "Processo UnrealEditor PID: $($p.Id)"
 $finished = $p.WaitForExit(180000)
 if (-not $finished) {

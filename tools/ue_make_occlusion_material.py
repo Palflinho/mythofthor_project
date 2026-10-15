@@ -14,10 +14,15 @@ lib = unreal.MaterialEditingLibrary
 tools = unreal.AssetToolsHelpers.get_asset_tools()
 
 full = f"{PATH}/{NAME}"
+mat = None
 if unreal.EditorAssetLibrary.does_asset_exist(full):
-    unreal.EditorAssetLibrary.delete_asset(full)
+    mat = unreal.EditorAssetLibrary.load_asset(full)
+    if mat:
+        lib.delete_all_material_expressions(mat)
 
-mat = tools.create_asset(NAME, PATH, unreal.Material, unreal.MaterialFactoryNew())
+if not mat:
+    mat = tools.create_asset(NAME, PATH, unreal.Material, unreal.MaterialFactoryNew())
+
 mat.set_editor_property('material_domain', unreal.MaterialDomain.MD_POST_PROCESS)
 
 def expr(cls, x, y, **props):
@@ -42,12 +47,13 @@ custom.set_editor_property('output_type', unreal.CustomMaterialOutputType.CMOT_F
 custom.set_editor_property('description', 'OcclusionSilhouette')
 
 hlsl_code = """
+int StencilVal = (int)(CustomStencil.r + 0.5);
 float CD = CustomDepth.r;
 float SD = SceneDepth.r;
-if (CD > 10.0 && CD > SD + 5.0)
+
+if (StencilVal > 0 && CD < 50000.0 && CD > SD + 5.0)
 {
-    int StencilVal = (int)CustomStencil.r;
-    float3 OutlineColor = float3(0.2, 0.6, 1.0); // Player: Blue
+    float3 OutlineColor = float3(0.2, 0.6, 1.0); // Player: Blue (Stencil 1)
     if (StencilVal == 2)
     {
         OutlineColor = float3(1.0, 0.2, 0.2); // Monster: Red

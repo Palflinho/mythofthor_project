@@ -128,6 +128,7 @@ private:
 	TWeakObjectPtr<class AMythMapInfo> MapInfoCache;
 	double NextMapInfoSearch = 0.0;
 	float AppliedNightGlow = -1.f;
+	bool bDungeonLightingApplied = false;
 
 	void HideLevelLights();
 	void UpdateLighting();

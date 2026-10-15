@@ -1298,7 +1298,7 @@ void UMythRoSpriteComponent::UpdateBillboard(const FRotator& CamRot)
 
 		// Ghost Sprite na Agua (Reflexo dos Sprites 2D HD-2D):
 		float WaterZ = 0.f;
-		if (AMythWater::GetWaterPlane(this, WaterZ))
+		if (!Feet.ContainsNaN() && AMythWater::GetWaterPlane(this, WaterZ) && FMath::IsFinite(WaterZ))
 		{
 			const float DistToWater = Feet.Z - WaterZ;
 			// Se o sprite estiver proximo da superficie da agua (de 50 cm abaixo ate 400 cm acima)
@@ -1310,9 +1310,12 @@ void UMythRoSpriteComponent::UpdateBillboard(const FRotator& CamRot)
 				{
 					FVector ReflFeet = Feet;
 					ReflFeet.Z = 2.f * WaterZ - Feet.Z;
-					ReflectionMesh->SetWorldLocation(ReflFeet - CamForward * BaseFeetOffset);
-					ReflectionMesh->SetWorldRotation(GetComponentRotation());
-					ReflectionMesh->SetVisibility(true);
+					if (!ReflFeet.ContainsNaN() && ReflFeet.SizeSquared() < 1e12)
+					{
+						ReflectionMesh->SetWorldLocation(ReflFeet - CamForward * BaseFeetOffset);
+						ReflectionMesh->SetWorldRotation(GetComponentRotation());
+						ReflectionMesh->SetVisibility(true);
+					}
 				}
 			}
 			else
