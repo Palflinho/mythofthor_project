@@ -35,9 +35,9 @@ Write-Host "Iniciando teste standalone no mapa $Map com print '$ShotName' (Warp:
 Write-Host "Comandos: $cmds"
 $p = Start-Process -FilePath $ue -ArgumentList $argString -PassThru
 Write-Host "Processo UnrealEditor PID: $($p.Id)"
-$finished = $p.WaitForExit(180000)
+$finished = $p.WaitForExit(300000)
 if (-not $finished) {
-    Write-Host "Tempo limite de 180s atingido, finalizando processo..."
+    Write-Host "Tempo limite de 300s atingido, finalizando processo..."
     $p.Kill()
 } else {
     Write-Host "Processo concluido com codigo $($p.ExitCode)."

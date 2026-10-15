@@ -186,9 +186,15 @@ void AMythAura99::BuildRibbons(const FVector&, const FVector&)
 			}
 		}
 	}
-	RibbonMesh->ClearMeshSection(0);
-	RibbonMesh->CreateMeshSection(0, Verts, Tris, TArray<FVector>(), UVs, Colors, TArray<FProcMeshTangent>(), false);
-	if (RibbonMat) { RibbonMesh->SetMaterial(0, RibbonMat); }
+	if (RibbonMesh->GetNumSections() == 0)
+	{
+		RibbonMesh->CreateMeshSection(0, Verts, Tris, TArray<FVector>(), UVs, Colors, TArray<FProcMeshTangent>(), false);
+		if (RibbonMat) { RibbonMesh->SetMaterial(0, RibbonMat); }
+	}
+	else
+	{
+		RibbonMesh->UpdateMeshSection(0, Verts, TArray<FVector>(), UVs, Colors, TArray<FProcMeshTangent>());
+	}
 }
 
 void AMythAura99::BuildGround()
@@ -213,15 +219,21 @@ void AMythAura99::BuildGround()
 		for (const FVector2D& Corner : Corners)
 		{
 			const float X = Corner.X * Size, Y = Corner.Y * Size;
-			Verts.Add(FVector(X * Cs - Y * Sn, X * Sn + Y * Cs, 5.f)); // +5 cm acima do chao (sem Z-fighting)
+			Verts.Add(FVector(X * Cs - Y * Sn, X * Sn + Y * Cs, 8.f)); // +8 cm acima do chao (sem Z-fighting)
 			UVs.Add(FVector2D((Corner.X + 1.f) * 0.5f, (Corner.Y + 1.f) * 0.5f));
 			Colors.Add(C);
 		}
 		Tris.Append({ i, i + 1, i + 2, i + 1, i + 3, i + 2, i, i + 2, i + 1, i + 1, i + 2, i + 3 });
 	}
-	GroundMesh->ClearMeshSection(0);
-	GroundMesh->CreateMeshSection(0, Verts, Tris, TArray<FVector>(), UVs, Colors, TArray<FProcMeshTangent>(), false);
-	if (GroundMat) { GroundMesh->SetMaterial(0, GroundMat); }
+	if (GroundMesh->GetNumSections() == 0)
+	{
+		GroundMesh->CreateMeshSection(0, Verts, Tris, TArray<FVector>(), UVs, Colors, TArray<FProcMeshTangent>(), false);
+		if (GroundMat) { GroundMesh->SetMaterial(0, GroundMat); }
+	}
+	else
+	{
+		GroundMesh->UpdateMeshSection(0, Verts, TArray<FVector>(), UVs, Colors, TArray<FProcMeshTangent>());
+	}
 }
 
 void AMythAura99::BuildBubbles(const FVector& Right, const FVector& Up)
@@ -260,7 +272,13 @@ void AMythAura99::BuildBubbles(const FVector& Right, const FVector& Up)
 		Colors.Append({ C, C, C, C });
 		Tris.Append({ i, i + 1, i + 2, i + 1, i + 3, i + 2 });
 	}
-	BubbleMesh->ClearMeshSection(0);
-	BubbleMesh->CreateMeshSection(0, Verts, Tris, TArray<FVector>(), UVs, Colors, TArray<FProcMeshTangent>(), false);
-	if (BubbleMat) { BubbleMesh->SetMaterial(0, BubbleMat); }
+	if (BubbleMesh->GetNumSections() == 0)
+	{
+		BubbleMesh->CreateMeshSection(0, Verts, Tris, TArray<FVector>(), UVs, Colors, TArray<FProcMeshTangent>(), false);
+		if (BubbleMat) { BubbleMesh->SetMaterial(0, BubbleMat); }
+	}
+	else
+	{
+		BubbleMesh->UpdateMeshSection(0, Verts, TArray<FVector>(), UVs, Colors, TArray<FProcMeshTangent>());
+	}
 }
