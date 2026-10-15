@@ -1,6 +1,7 @@
 #include "Sprites/MythSpiritBalls.h"
 
 #include "UI/MythRoUITextures.h"
+#include "Sprites/MythRoSpriteComponent.h"
 
 #include "Camera/PlayerCameraManager.h"
 #include "Components/CapsuleComponent.h"
@@ -13,8 +14,7 @@
 namespace
 {
 	constexpr float SbCell = 50.f;          // 1 unidade do RO = 1 celula = 50 uu
-	constexpr float SbOrbitRadius = 1.f * SbCell;
-	constexpr float SbOrbitHeight = 2.f * SbCell;
+	constexpr float SbOrbitRadius = 38.f;   // raio do halo em volta da cabeca (cm)
 	constexpr float SbDegreesPerSecond = 1000.f / 64.f; // o cliente soma tick/64 graus
 	FColor SbRgba(float R, float G, float B, float A) { return FLinearColor(R, G, B, A).ToFColor(false); }
 }
@@ -71,6 +71,8 @@ void AMythSpiritBalls::Ensure(AActor* Owner, int32 NewCount)
 	{
 		Balls->AttachToActor(Owner, FAttachmentTransformRules::KeepWorldTransform);
 		Balls->Count = FMath::Min(NewCount, 15);
+		Balls->BaseHeadHeight = HalfHeight * 2.f + 16.f; // Acima da cabeça do Monge / Mestre / Shura (aprox. 196 cm)
+		Balls->CurrentHeight = Balls->BaseHeadHeight;
 		UTexture2D* Tex = FMythRoUITextures::Get(TEXT("../effect/thunder_center.bmp"));
 		UMaterialInterface* Additive = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Myth/M_StrAdditive.M_StrAdditive"));
 		if (Tex && Additive)
@@ -87,6 +89,21 @@ void AMythSpiritBalls::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	Age += DeltaSeconds;
 	Fade = FMath::Min(Fade + DeltaSeconds * 0.5f, 1.f); // o brilho entra em ~2 s (alpha +0,005 por quadro)
+
+	// Acompanha a postura do personagem: se estiver sentado, as esferas descem suavemente acompanhando a cabeça
+	float TargetHeight = BaseHeadHeight;
+	if (const AActor* Parent = GetAttachParentActor())
+	{
+		if (const UMythRoSpriteComponent* Spr = Parent->FindComponentByClass<UMythRoSpriteComponent>())
+		{
+			if (Spr->IsSitting())
+			{
+				TargetHeight = BaseHeadHeight - 45.f;
+			}
+		}
+	}
+	CurrentHeight = FMath::FInterpTo(CurrentHeight, TargetHeight, DeltaSeconds, 8.f);
+
 	FVector Right = FVector::RightVector;
 	FVector Up = FVector::UpVector;
 	if (const APlayerController* PC = GetWorld() ? GetWorld()->GetFirstPlayerController() : nullptr; PC && PC->PlayerCameraManager)
@@ -112,7 +129,7 @@ void AMythSpiritBalls::Tick(float DeltaSeconds)
 	for (int32 i = Count; i > 0; --i)
 	{
 		const float Angle = FMath::DegreesToRadians((i % 5) * 72.f - Age * SbDegreesPerSecond);
-		const FVector Center(FMath::Cos(Angle) * SbOrbitRadius, FMath::Sin(Angle) * SbOrbitRadius, SbOrbitHeight);
+		const FVector Center(FMath::Cos(Angle) * SbOrbitRadius, FMath::Sin(Angle) * SbOrbitRadius, CurrentHeight);
 		if (i > 10)
 		{
 			Quad(Center, 0.55f * SbCell, SbRgba(0.f, 0.f, 1.f, 0.2f * Fade));

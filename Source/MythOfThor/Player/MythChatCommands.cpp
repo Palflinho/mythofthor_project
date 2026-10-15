@@ -12,6 +12,7 @@
 #include "World/MythMapInfo.h"
 #include "World/MythWeatherActor.h"
 #include "World/MythDayNightActor.h"
+#include "Sprites/MythSpiritBalls.h"
 
 bool AMythPlayerController::RunSlashCommand(const FString& Command, const FString& Args)
 {
@@ -174,6 +175,20 @@ bool AMythPlayerController::RunSlashCommand(const FString& Command, const FStrin
 			{
 				Say(FString::Printf(TEXT("Horário atual: %.1fh (Fator noite: %.2f). Use /hora <0-24>."), DN->GetTimeOfDay(), DN->GetNightFactor()));
 			}
+		}
+		return true;
+	}
+	if (Cmd == TEXT("spheres") || Cmd == TEXT("esferas"))
+	{
+		if (Char)
+		{
+			int32 SphereCount = 5;
+			if (!Args.IsEmpty())
+			{
+				SphereCount = FMath::Clamp(FCString::Atoi(*Args), 0, 15);
+			}
+			AMythSpiritBalls::Ensure(Char, SphereCount);
+			Say(FString::Printf(TEXT("Esferas espirituais: %d (orbitando acima da cabeça)."), SphereCount));
 		}
 		return true;
 	}

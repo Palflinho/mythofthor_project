@@ -32,4 +32,6 @@ private:
 	int32 Count = 0;
 	float Age = 0.f;
 	float Fade = 0.f;
+	float BaseHeadHeight = 200.f;
+	float CurrentHeight = 200.f;
 };
