@@ -143,6 +143,16 @@ bool AMythPlayerController::RunSlashCommand(const FString& Command, const FStrin
 		}
 		return true;
 	}
+	if (Cmd == TEXT("nuvens") || Cmd == TEXT("clouds") || Cmd == TEXT("cloud"))
+	{
+		if (AMythDayNightActor* DN = AMythDayNightActor::Find(GetWorld()))
+		{
+			const bool bNewState = !DN->AreCloudShadowsEnabled();
+			DN->SetCloudShadowsEnabled(bNewState);
+			Say(bNewState ? TEXT("Nuvens: Sombras de nuvens ativadas no chão.") : TEXT("Nuvens: Sombras de nuvens desativadas."));
+		}
+		return true;
+	}
 	if (Cmd == TEXT("day") || Cmd == TEXT("dia"))
 	{
 		if (AMythDayNightActor* DN = AMythDayNightActor::Find(GetWorld()))

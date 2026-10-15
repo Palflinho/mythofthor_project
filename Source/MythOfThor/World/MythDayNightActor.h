@@ -53,6 +53,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight|Clouds")
 	FVector CloudShadowScale = FVector(1024.f, 1024.f, 1024.f);
 
+	UFUNCTION(BlueprintCallable, Category = "DayNight|Clouds")
+	void SetCloudShadowsEnabled(bool bEnabled);
+
+	UFUNCTION(BlueprintPure, Category = "DayNight|Clouds")
+	bool AreCloudShadowsEnabled() const { return bEnableCloudShadows; }
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight|Light")
 	float MoonIntensityLux = 3.6f; // luar claro o bastante para enxergar a cidade (o RO a noite e azulado, nao preto)

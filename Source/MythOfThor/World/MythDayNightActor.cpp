@@ -126,6 +126,26 @@ void AMythDayNightActor::BeginPlay()
 	UpdateLighting();
 }
 
+void AMythDayNightActor::SetCloudShadowsEnabled(bool bEnabled)
+{
+	bEnableCloudShadows = bEnabled;
+	if (Sun)
+	{
+		if (bEnableCloudShadows)
+		{
+			if (UMaterialInterface* CloudMat = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Myth/M_CloudShadows.M_CloudShadows")))
+			{
+				Sun->SetLightFunctionMaterial(CloudMat);
+				Sun->SetLightFunctionScale(CloudShadowScale);
+			}
+		}
+		else
+		{
+			Sun->SetLightFunctionMaterial(nullptr);
+		}
+	}
+}
+
 void AMythDayNightActor::HideLevelLights()
 {
 	UWorld* World = GetWorld();
