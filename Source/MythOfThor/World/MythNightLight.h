@@ -42,6 +42,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NightLight")
 	bool bShowFlame = true;
 
+	/** Deslocamento vertical da chama animada em relacao a tocha (cm). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NightLight")
+	float FlameZOffset = -85.f;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "NightLight")
 	TObjectPtr<UPointLightComponent> Light;
 

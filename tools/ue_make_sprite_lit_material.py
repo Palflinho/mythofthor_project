@@ -91,10 +91,10 @@ flash_mult = expr(unreal.MaterialExpressionMultiply, -750, 400)
 lib.connect_material_expressions(hit_flash, '', flash_mult, 'A')
 lib.connect_material_expressions(hit_color, '', flash_mult, 'B')
 
-# Rim Light Parameters
-rim_intensity = expr(unreal.MaterialExpressionScalarParameter, -1100, -500, parameter_name='RimIntensity', default_value=0.75)
+# Rim Light Parameters (desativado por padrao para evitar contorno branco artificial)
+rim_intensity = expr(unreal.MaterialExpressionScalarParameter, -1100, -500, parameter_name='RimIntensity', default_value=0.0)
 rim_color = expr(unreal.MaterialExpressionVectorParameter, -1100, -350, parameter_name='RimColor',
-                 default_value=unreal.LinearColor(0.85, 0.9, 1.0, 1.0))
+                 default_value=unreal.LinearColor(0.0, 0.0, 0.0, 0.0))
 
 # Texel Size for Atlas sampling (approx 1024x1024)
 texel_size = expr(unreal.MaterialExpressionConstant2Vector, -1100, -650, r=0.0009765625, g=0.0009765625)
@@ -102,23 +102,16 @@ texel_size = expr(unreal.MaterialExpressionConstant2Vector, -1100, -650, r=0.000
 # Texture Object for HLSL sampling
 tex_obj = expr(unreal.MaterialExpressionTextureObjectParameter, -1100, -800, parameter_name='SpriteTexture')
 
-# Custom Expression for Rim Light + Dissolve Glow
+# Custom Expression for Dissolve Glow (sem borda branca artificial)
 custom = expr(unreal.MaterialExpressionCustom, -600, -500)
 custom.set_editor_property('output_type', unreal.CustomMaterialOutputType.CMOT_FLOAT3)
-custom.set_editor_property('description', 'SpriteRimAndDissolveGlow')
+custom.set_editor_property('description', 'SpriteDissolveGlow')
 
 hlsl_code = """
 float centerA = Texture2DSample(Tex, TexSampler, UV).a;
 if (centerA < 0.5) return float3(0,0,0);
 
-float aL = Texture2DSample(Tex, TexSampler, UV - float2(TexelSize.x, 0)).a;
-float aR = Texture2DSample(Tex, TexSampler, UV + float2(TexelSize.x, 0)).a;
-float aU = Texture2DSample(Tex, TexSampler, UV - float2(0, TexelSize.y)).a;
-float aD = Texture2DSample(Tex, TexSampler, UV + float2(0, TexelSize.y)).a;
-
-float minN = min(min(aL, aR), min(aU, aD));
-float edge = saturate(1.0 - minN);
-float3 result = RimCol.rgb * (edge * Intensity);
+float3 result = float3(0.0, 0.0, 0.0);
 
 if (Progress > 0.001)
 {

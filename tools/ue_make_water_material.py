@@ -68,8 +68,7 @@ m.set_editor_property('shading_model', unreal.MaterialShadingModel.MSM_SINGLE_LA
 m.set_editor_property('blend_mode', unreal.BlendMode.BLEND_OPAQUE)
 m.set_editor_property('two_sided', True)
 
-# Duas camadas de onda: coordenadas do mapa (UV do mesh = tile / 5), escalas e velocidades diferentes
-uv = expr(m, unreal.MaterialExpressionTextureCoordinate, -1500, 300)
+# Duas camadas de onda de agua cristalina animada
 time = expr(m, unreal.MaterialExpressionTime, -1500, 500)
 
 def layer(y, scale, speed_x, speed_y):
@@ -82,38 +81,50 @@ def layer(y, scale, speed_x, speed_y):
     lib.connect_material_expressions(pan, '', n, 'UVs')
     return n
 
-n1 = layer(0, 3.0, 0.015, 0.008)
-n2 = layer(250, 7.0, -0.011, 0.019)
-add = expr(m, unreal.MaterialExpressionAdd, -500, 120)
-lib.connect_material_expressions(n1, 'RGB', add, 'A')
-lib.connect_material_expressions(n2, 'RGB', add, 'B')
-strength = expr(m, unreal.MaterialExpressionScalarParameter, -500, 320, parameter_name='NormalStrength', default_value=0.6)
-flatvec = expr(m, unreal.MaterialExpressionConstant3Vector, -500, 200, constant=unreal.LinearColor(0.0, 0.0, 1.0, 1.0))
-lerpn = expr(m, unreal.MaterialExpressionLinearInterpolate, -300, 180)
-lib.connect_material_expressions(flatvec, '', lerpn, 'A')
-lib.connect_material_expressions(add, '', lerpn, 'B')
-lib.connect_material_expressions(strength, '', lerpn, 'Alpha')
-norm = expr(m, unreal.MaterialExpressionNormalize, -150, 180)
-lib.connect_material_expressions(lerpn, '', norm, 'VectorInput')
-lib.connect_material_property(norm, '', unreal.MaterialProperty.MP_NORMAL)
+n1 = layer(0, 2.5, 0.016, 0.010)
+n2 = layer(250, 5.5, -0.012, 0.018)
 
-tex2 = expr(m, unreal.MaterialExpressionTextureSampleParameter2D, -800, 560, parameter_name='Tex')
-tint = expr(m, unreal.MaterialExpressionVectorParameter, -800, 760, parameter_name='Tint', default_value=unreal.LinearColor(0.08, 0.45, 0.6, 1.0))
-mix = expr(m, unreal.MaterialExpressionLinearInterpolate, -450, 620)
-lib.connect_material_expressions(tint, 'RGB', mix, 'A')
-lib.connect_material_expressions(tex2, 'RGB', mix, 'B')
-mixamt = expr(m, unreal.MaterialExpressionConstant, -620, 700, r=0.4)
-lib.connect_material_expressions(mixamt, '', mix, 'Alpha')
-lib.connect_material_property(mix, '', unreal.MaterialProperty.MP_BASE_COLOR)
-rough = expr(m, unreal.MaterialExpressionConstant, -450, 820, r=0.06)
+# Custom Expression para mescla de normais com Angle-Corrected Normal Blend
+custom_norm = expr(m, unreal.MaterialExpressionCustom, -450, 150)
+custom_norm.set_editor_property('output_type', unreal.CustomMaterialOutputType.CMOT_FLOAT3)
+custom_norm.set_editor_property('description', 'BlendWaterNormals')
+custom_norm.set_editor_property('code', """
+float3 v1 = N1.xyz;
+float3 v2 = N2.xyz;
+float3 blended = float3(v1.xy + v2.xy, v1.z * v2.z);
+return normalize(lerp(float3(0, 0, 1), blended, Strength));
+""")
+inps = []
+for name in ['N1', 'N2', 'Strength']:
+    inp = unreal.CustomInput()
+    inp.set_editor_property('input_name', name)
+    inps.append(inp)
+custom_norm.set_editor_property('inputs', inps)
+
+strength = expr(m, unreal.MaterialExpressionScalarParameter, -700, 320, parameter_name='NormalStrength', default_value=0.75)
+lib.connect_material_expressions(n1, 'RGB', custom_norm, 'N1')
+lib.connect_material_expressions(n2, 'RGB', custom_norm, 'N2')
+lib.connect_material_expressions(strength, '', custom_norm, 'Strength')
+lib.connect_material_property(custom_norm, '', unreal.MaterialProperty.MP_NORMAL)
+
+# Base Color de agua limpa e vibrante (sem a sujeira do jpeg de 2002)
+tint = expr(m, unreal.MaterialExpressionVectorParameter, -800, 600, parameter_name='Tint',
+            default_value=unreal.LinearColor(0.04, 0.32, 0.48, 1.0))
+lib.connect_material_property(tint, '', unreal.MaterialProperty.MP_BASE_COLOR)
+
+# Roughness super polida (0.025) e Specular alto (0.9) para reflexos vibrantes de sol e ceu
+rough = expr(m, unreal.MaterialExpressionConstant, -450, 750, r=0.025)
 lib.connect_material_property(rough, '', unreal.MaterialProperty.MP_ROUGHNESS)
-opac = expr(m, unreal.MaterialExpressionScalarParameter, -450, 900, parameter_name='Opacity', default_value=0.9)
+spec = expr(m, unreal.MaterialExpressionConstant, -450, 820, r=0.9)
+lib.connect_material_property(spec, '', unreal.MaterialProperty.MP_SPECULAR)
+
+opac = expr(m, unreal.MaterialExpressionScalarParameter, -450, 900, parameter_name='Opacity', default_value=0.88)
 lib.connect_material_property(opac, '', unreal.MaterialProperty.MP_OPACITY)
 
-# saida da agua: espalhamento e absorcao (a cor da agua escurece e fica esverdeada com a profundidade)
+# Saida Single Layer Water: Scattering e Absorption calibrados para agua cristalina de riacho/lago
 out = expr(m, unreal.MaterialExpressionSingleLayerWaterMaterialOutput, 0, 600)
-scat = expr(m, unreal.MaterialExpressionConstant3Vector, -300, 600, constant=unreal.LinearColor(0.05, 0.2, 0.26, 1.0))
-absorb = expr(m, unreal.MaterialExpressionConstant3Vector, -300, 700, constant=unreal.LinearColor(0.25, 0.08, 0.05, 1.0))
+scat = expr(m, unreal.MaterialExpressionConstant3Vector, -300, 600, constant=unreal.LinearColor(0.12, 0.40, 0.52, 1.0))
+absorb = expr(m, unreal.MaterialExpressionConstant3Vector, -300, 700, constant=unreal.LinearColor(0.28, 0.08, 0.04, 1.0))
 lib.connect_material_expressions(scat, '', out, 'ScatteringCoefficients')
 lib.connect_material_expressions(absorb, '', out, 'AbsorptionCoefficients')
 lib.recompile_material(m)

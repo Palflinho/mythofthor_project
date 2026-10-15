@@ -14,11 +14,11 @@ AMythNightLight::AMythNightLight()
 	RootComponent = Light;
 	Light->SetMobility(EComponentMobility::Movable);
 	Light->SetLightColor(FLinearColor(1.0f, 0.58f, 0.16f)); // cor de fogo/tocha viva e quente
-	Light->SetAttenuationRadius(850.f);
+	Light->SetAttenuationRadius(450.f);
 	Light->SetSourceRadius(16.f);
 	Light->SetCastShadows(false); // sem sombras pesadas por tocha para manter alta performance
 	Light->SetIntensityUnits(ELightUnits::Candelas);
-	NightIntensity = 650.f; // intensidade viva (ilumina o ambiente com Lumen)
+	NightIntensity = 75.f; // intensidade aconchegante de tocha sem criar mancha estourada
 	FlickerAmount = 0.22f;  // oscilacao organica de fogo
 	Light->SetIntensity(0.f);
 }
@@ -42,7 +42,7 @@ void AMythNightLight::BeginPlay()
 	// Adiciona a chama animada viva em loop no topo da tocha (torch_01.spr, 7 quadros do RO original)
 	if (bShowFlame)
 	{
-		FlameEffect = AMythSprEffect::Attach(this, TEXT("torch_01"), false, 0.f, 25.f);
+		FlameEffect = AMythSprEffect::Attach(this, TEXT("torch_01"), false, 0.f, FlameZOffset);
 	}
 }
 

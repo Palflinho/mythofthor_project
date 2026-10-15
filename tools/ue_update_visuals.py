@@ -40,7 +40,27 @@ try:
 except Exception as e:
     unreal.log_error(f"Error compiling M_CloudShadows: {e}")
 
-# 3. Add live torches to Lvl_PrtSewb1
+# 3. Recompile M_RoSprite_Lit (without white edge outline)
+unreal.log("--- Recompiling M_RoSprite_Lit ---")
+try:
+    spec = importlib.util.spec_from_file_location("ue_make_sprite_lit_material", "E:/Documentos/Repositórios/mythofthor_project/tools/ue_make_sprite_lit_material.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    unreal.log("M_RoSprite_Lit recompiled successfully.")
+except Exception as e:
+    unreal.log_error(f"Error compiling M_RoSprite_Lit: {e}")
+
+# 4. Recompile M_WaterModern (crystal-clear HD-2D water)
+unreal.log("--- Recompiling M_WaterModern ---")
+try:
+    spec = importlib.util.spec_from_file_location("ue_make_water_material", "E:/Documentos/Repositórios/mythofthor_project/tools/ue_make_water_material.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    unreal.log("M_WaterModern recompiled successfully.")
+except Exception as e:
+    unreal.log_error(f"Error compiling M_WaterModern: {e}")
+
+# 5. Add live torches to Lvl_PrtSewb1
 unreal.log("--- Adding Live Torches to Lvl_PrtSewb1 ---")
 level_path = "/Game/Maps/PrtSewb1/Lvl_PrtSewb1"
 if eal.does_asset_exist(level_path):
@@ -78,7 +98,7 @@ if eal.does_asset_exist(level_path):
             for i, l in enumerate(lights):
                 lx = (l['x'] - cx) * scale
                 ly = -(l['y'] - cy) * scale
-                lz = (l['z'] + 5.0) * scale # 50cm above model base (in the brazier bowl)
+                lz = l['z'] * scale
                 loc = unreal.Vector(lx, ly, lz)
                 actor = eas.spawn_actor_from_class(unreal.MythNightLight, loc)
                 if actor:
@@ -91,14 +111,14 @@ if eal.does_asset_exist(level_path):
                         actor.set_editor_property('show_flame', True)
                     except Exception:
                         pass
-                    actor.set_editor_property('night_intensity', 750.0)
-                    actor.set_editor_property('flicker_amount', 0.25)
+                    actor.set_editor_property('night_intensity', 75.0)
+                    actor.set_editor_property('flicker_amount', 0.22)
                     r, g, b = l.get('color', [1.0, 0.6, 0.2])
                     peak = max(r, g, b, 0.01)
                     comp = actor.get_editor_property('light')
                     if comp:
                         comp.set_editor_property('light_color', unreal.Color(r=int(255 * r / peak), g=int(255 * g / peak), b=int(255 * b / peak), a=255))
-                        comp.set_editor_property('attenuation_radius', 850.0)
+                        comp.set_editor_property('attenuation_radius', 480.0)
                     spawned += 1
 
             unreal.log(f"Spawned {spawned} live torches with animated flames in Lvl_PrtSewb1.")

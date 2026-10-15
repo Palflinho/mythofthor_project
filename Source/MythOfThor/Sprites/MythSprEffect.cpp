@@ -246,7 +246,7 @@ void AMythSprEffect::Tick(float DeltaSeconds)
 		}
 		if (!Mat)
 		{
-			const bool bAdd = D->Opaque.FindRef(L.SprIndex * 2 + L.SprType);
+			const bool bAdd = D->Opaque.FindRef(L.SprIndex * 2 + L.SprType) || Key.Contains(TEXT("torch")) || Key.Contains(TEXT("fire"));
 			Mat = bAdd ? AdditiveMaterials[Section] : Materials[Section];
 			Mat->SetTextureParameterValue(TEXT("Tex"), Tex);
 		}
