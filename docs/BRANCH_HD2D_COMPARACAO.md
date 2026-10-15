@@ -30,3 +30,10 @@ foi reescrito na main (o jogo hoje é online, lê os sprites do GRF em `MythRoSp
 - Estender a tabela de ambiente para os mapas que ficaram de fora (por prefixo: `yuno_fild` -> Yuno, `mjolnir` -> Mjolnir...).
 - Piso molhado ligado ao clima do servidor.
 - Reflexo do sprite na água.
+
+## Resultado dos testes (2026-10-15)
+- **A branch isolada** (worktree em `E:\Dev\mythofthor_hd2d`, já removido): compila sem erros (90 s) e roda, mas não serve como jogo: o mapa padrão dela é o `Lvl_TopDown` do template da Unreal (outro GameMode), e em Prontera com o `MythGameMode` da branch a câmera (pitch -35°, braço 800) mostra só o chão de perto, sem personagem, porque o protótipo offline não tem os sprites do cliente online. O ciclo dia/noite dela funciona (testei 12h e 22h).
+- **O que foi trazido para a main foi testado no jogo online:**
+  - `xmas_fild01` (noite eterna): às 12h do relógio do mundo continua noite azul (OK).
+  - `morocc` (latitude sul): luz dourada quente às 17h; Prontera às 17h mais fria e escura (OK).
+  - Hit-flash/hitstop: compila e roda; o efeito dura 30-60 ms, precisa de olho humano com o mouse para avaliar.
