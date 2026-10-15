@@ -81,3 +81,11 @@ Não copiar do branch: `MythGATGridManager` (servidor decide), subsistema de ski
 - `gdd_hd2d/gdd1.txt` (GDD Expandido), `gdd2.txt` (Plano de Fechamento Fase 2), `gdd3.txt` (Água e Reflexos), `gdd4.txt` (Magias e Habilidades): texto extraído dos PDFs do usuário (`D:\GDD ...pdf`).
 - `docs/`: feedback do amigo, comparação da branch, mapas pendentes, specs dos sistemas próprios, handoff antigo (2026-10-12), roadmap, arquitetura.
 - `tools_lista.txt`: lista dos scripts em `tools/` com a primeira linha de cada (o que fazem).
+
+## 7. Última observação (2026-10-15, fim da sessão)
+- Teste da profundidade de campo com `HD2DFstop = 0.25` (print `hd2_fild`): **sem diferença visível**. A DoF do componente de pós-processo do `AMythDayNightActor`
+  não está surtindo efeito (suspeitas: o `PostProcess` da câmera/nível com prioridade maior sobrescreve; DoF cinematográfica só atua com `FocalDistance>0` e câmera com `PostProcessBlendWeight`;
+  ou o método de AA/`r.DepthOfFieldQuality`). Caminho mais certo: definir a DoF direto em `FollowCamera->PostProcessSettings` (UCameraComponent) ou criar um **material de pós-processo de blur por faixa vertical** (tilt-shift de verdade,
+  independente de profundidade). A câmera de diorama e o bloom estão funcionando.
+- O pacote de handoff foi gerado quando o uso semanal estava em 93% (regra do usuário: parar em 97% e avisar).
+- Importação das masmorras está **pausada** (lista na seção 3). Não há processo do Unreal rodando; o servidor Docker estava no ar.

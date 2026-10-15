@@ -129,7 +129,7 @@ private:
 public:
 	/** HD-2D lens: aperture of the tilt-shift depth of field (lower = blurrier foreground/horizon) and bloom strength. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight|HD2D")
-	float HD2DFstop = 1.2f;
+	float HD2DFstop = 0.25f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight|HD2D")
 	float HD2DBloom = 1.1f;
