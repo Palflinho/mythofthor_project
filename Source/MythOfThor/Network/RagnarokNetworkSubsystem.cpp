@@ -1368,6 +1368,8 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 				if (ActualLen >= 15 && PacketData[14] != 0)
 				{
 					const int32 Idx = *reinterpret_cast<const int16*>(PacketData + 2);
+					const int32 ItemID = *reinterpret_cast<const int32*>(PacketData + 4);
+					const int64 TargetAID = *reinterpret_cast<const uint32*>(PacketData + 8);
 					const int32 Left = *reinterpret_cast<const int16*>(PacketData + 12);
 					const int32 Pos = InventoryItems.IndexOfByPredicate([Idx](const FRagnarokInventoryItem& I) { return I.Index == Idx; });
 					if (Pos != INDEX_NONE)
@@ -1375,6 +1377,7 @@ void URagnarokNetworkSubsystem::ProcessIncomingData()
 						if (Left <= 0) { InventoryItems.RemoveAt(Pos); } else { InventoryItems[Pos].Amount = Left; }
 						OnInventory.Broadcast(InventoryItems);
 					}
+					OnItemUseResult.Broadcast(ItemID, TargetAID, true);
 				}
 				break;
 			case 0x07fa: // ZC_DELETE_ITEM_FROM_BODY: deleteType +2, index +4, count +6

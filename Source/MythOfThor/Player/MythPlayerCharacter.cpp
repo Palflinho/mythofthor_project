@@ -77,6 +77,11 @@ AMythPlayerCharacter::AMythPlayerCharacter()
 void AMythPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	if (Sprite)
+	{
+		Sprite->SetRenderCustomDepth(true);
+		Sprite->SetCustomDepthStencilValue(1);
+	}
 	// HD-2D diorama lens (GDD s.6.2): wider than the RO lens (26.4 deg), lower pitch; the arm is shortened by the tangent ratio so the framing stays the same
 	if (FMythOptions::Get(TEXT("HD2DCamera")) && !bHD2DLensApplied)
 	{

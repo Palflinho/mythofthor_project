@@ -289,6 +289,7 @@ void AMythNetWorld::BeginPlay()
 	Net->OnNotifyEffect.AddDynamic(this, &AMythNetWorld::HandleNotifyEffect);
 	Net->OnEquipChanged.AddDynamic(this, &AMythNetWorld::HandleEquipChanged);
 	Net->OnEquipResult.AddDynamic(this, &AMythNetWorld::HandleEquipResult);
+	Net->OnItemUseResult.AddDynamic(this, &AMythNetWorld::HandleItemUseResult);
 	Net->OnStatusChange.AddDynamic(this, &AMythNetWorld::HandleStatusChange);
 
 	// Chegou num mapa novo por ordem do servidor (portal/warp): termina a entrada no proximo quadro, com o
@@ -1646,6 +1647,8 @@ void AMythNetWorld::HandleSkillEffect(int64 SourceID, int64 TargetID, int32 Skil
 	if ((SkillID == 28 || SkillID == 142) && Target && Value > 0)
 	{
 		UMythCombatText::ShowDamage(this, Target->GetActorLocation() + FVector(0.f, 0.f, 50.f), Value, ECombatTextType::Heal);
+		UMythRoSound::PlayWavAtLocation(this, TEXT("_heal_effect.wav"), Target->GetActorLocation());
+		UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::Success, Target, Target->GetActorLocation(), true, Source);
 	}
 	if (AMythPlayerCharacter* Char = Cast<AMythPlayerCharacter>(Source); Char && Char->Sprite)
 	{
@@ -1900,3 +1903,33 @@ void AMythNetWorld::HandleSkillFailed(int32 SkillID, int32 Cause)
 	}
 	Chat(Reason, NetErrorColor);
 }
+
+void AMythNetWorld::HandleItemUseResult(int32 ItemID, int64 TargetID, bool bSuccess)
+{
+	if (!bSuccess)
+	{
+		return;
+	}
+	AActor* Target = ResolveActor(TargetID);
+	if (!Target)
+	{
+		return;
+	}
+	// Itens de recuperacao / pocoes classicas do RO:
+	// 501..504 Pocoes HP (Vermelha, Laranja, Amarela, Branca)
+	// 505 Pocao Azul (SP), 506 Pocao Verde (Status)
+	// 512..517 Maca, Banana, Uva, Cenoura, Batata-doce, Carne
+	// 526 Peixe Fresco, 545..549 Ervas (Vermelha, Amarela, Branca, Azul, Verde)
+	// 607 Fruto de Yggdrasil, 608 Semente de Yggdrasil, 645 Fruto de Mastela
+	const bool bHpItem = (ItemID >= 501 && ItemID <= 504) || (ItemID >= 512 && ItemID <= 517) || ItemID == 526 || (ItemID >= 545 && ItemID <= 547) || ItemID == 607 || ItemID == 608 || ItemID == 645;
+	const bool bSpItem = ItemID == 505 || ItemID == 514 || ItemID == 548;
+	const bool bStatusItem = ItemID == 506 || ItemID == 549;
+
+	if (bHpItem || bSpItem || bStatusItem)
+	{
+		UMythRoSound::PlayWavAtLocation(this, TEXT("_heal_effect.wav"), Target->GetActorLocation());
+		// Dispara efeito visual de cura (cilindro de luz e brilhos ascendentes)
+		UMythSkillManager::Play(this, 28, EMythSkillEffectStage::Success, Target, Target->GetActorLocation(), true, Target);
+	}
+}
+

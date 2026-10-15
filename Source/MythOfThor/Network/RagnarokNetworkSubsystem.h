@@ -350,6 +350,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnNotifyEffect, int64, UnitID, int
 
 // Equipar / Desequipar (Tarefa A4)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnEquipResult, int32, Index, int32, WearLocation, bool, bSuccess);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnItemUseResult, int32, ItemID, int64, TargetID, bool, bSuccess);
 
 // Ataque fora de alcance (Tarefa A5)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnAttackOutOfRange, int64, TargetID, int32, TargetX, int32, TargetY, int32, Range);
@@ -1253,6 +1254,10 @@ public:
 	/** Resultado de equipar ou desequipar item (ZC_REQ_WEAR_EQUIP_ACK 0x0999, ZC_REQ_TAKEOFF_EQUIP_ACK 0x099a). */
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Inventory")
 	FOnEquipResult OnEquipResult;
+
+	/** Uso de item consumível confirmado pelo servidor (ZC_USE_ITEM_ACK 0x01c8). */
+	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Inventory")
+	FOnItemUseResult OnItemUseResult;
 
 	/** Notificacao de alvo fora de alcance de ataque (ZC_ATTACK_FAILURE_FOR_DISTANCE 0x0139). */
 	UPROPERTY(BlueprintAssignable, Category = "Ragnarok|Combat")

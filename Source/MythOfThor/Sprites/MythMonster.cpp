@@ -82,6 +82,11 @@ void AMythMonster::BeginPlay()
 {
 	Super::BeginPlay();
 	HP = MaxHP;
+	if (Sprite)
+	{
+		Sprite->SetRenderCustomDepth(true);
+		Sprite->SetCustomDepthStencilValue(IsNpc() ? 3 : 2);
+	}
 }
 
 void AMythMonster::EndPlay(const EEndPlayReason::Type EndPlayReason)

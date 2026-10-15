@@ -133,9 +133,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
 	float UnitsPerPixel = 2.f;
 
-	/** Quanto (cm) o sprite e puxado em direcao a camera, pela linha de visao, para nao ser cortado por paredes/chao. */
+	/** Offset base dos pes em direcao a camera (cm). O recuo do corpo para evitar corte em paredes e feito via Gradient Depth. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
-	float CameraDepthOffset = 70.f;
+	float CameraDepthOffset = 2.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RO Sprite")
 	float WalkSpeedThreshold = 10.f;
@@ -362,6 +362,8 @@ private:
 	float StillTime = 0.f;
 	float SmoothedFeetZ = 0.f;
 	bool bFeetZInitialized = false;
+	/** Pitch atual da camera para calcular o Gradient Depth (inclinacao suave de profundidade da base ao topo). */
+	float CurrentCamPitch = -35.f;
 
 	bool IsMonster() const { return !MonsterSpriteName.IsEmpty(); }
 	/** Direcao do sprite pela frente do corpo no mundo e a camera, com histerese em relacao a direcao atual. */

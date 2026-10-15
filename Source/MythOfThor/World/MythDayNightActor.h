@@ -46,6 +46,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight|Light")
 	float SunIntensityLux = 10.f;
 
+	/** Sombras de nuvens projetadas no chao via Light Function (GDD s.7.1). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight|Clouds")
+	bool bEnableCloudShadows = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight|Clouds")
+	FVector CloudShadowScale = FVector(6000.f, 6000.f, 6000.f);
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DayNight|Light")
 	float MoonIntensityLux = 3.6f; // luar claro o bastante para enxergar a cidade (o RO a noite e azulado, nao preto)
 

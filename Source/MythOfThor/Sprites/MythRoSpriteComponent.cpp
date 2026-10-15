@@ -176,7 +176,8 @@ namespace
 		return Groups[FMath::Clamp(Attack, 0, 2)];
 	}
 
-	// Materiais de sprite do Paper2D: textura "SpriteTexture" x cor do vertice, mascarados (com e sem iluminacao).
+	// Materiais de sprite: tenta o M_RoSprite_Lit do HD-2D (com Rim Light e HitFlash) com fallback para Paper2D.
+	const TCHAR* CustomLitMaterialPath = TEXT("/Game/Myth/M_RoSprite_Lit.M_RoSprite_Lit");
 	const TCHAR* LitMaterialPath = TEXT("/Paper2D/MaskedLitSpriteMaterial.MaskedLitSpriteMaterial");
 	const TCHAR* UnlitMaterialPath = TEXT("/Paper2D/MaskedUnlitSpriteMaterial.MaskedUnlitSpriteMaterial");
 }
@@ -223,6 +224,10 @@ void UMythRoSpriteComponent::BeginPlay()
 	Super::BeginPlay();
 	FeetRelativeLocation = GetRelativeLocation();
 	ReloadSprites();
+
+	// Contorno de Oclusao HD-2D: CustomDepth habilitado com Stencil (1 Jogador, 2 Monstro)
+	SetRenderCustomDepth(true);
+	SetCustomDepthStencilValue(IsMonster() ? 2 : 1);
 
 	if (bCastSpriteShadow && GetOwner())
 	{
@@ -645,7 +650,20 @@ bool UMythRoSpriteComponent::LoadSource(FMythRoSpriteSource& Source, const FStri
 	}
 	BuildAtlas(Source);
 
-	if (UMaterialInterface* Base = LoadObject<UMaterialInterface>(nullptr, bLitByScene ? LitMaterialPath : UnlitMaterialPath))
+	const TCHAR* DesiredLit = LitMaterialPath;
+	if (bLitByScene)
+	{
+		static bool bCheckedCustom = false;
+		static bool bHasCustom = false;
+		if (!bCheckedCustom)
+		{
+			bCheckedCustom = true;
+			bHasCustom = (LoadObject<UMaterialInterface>(nullptr, CustomLitMaterialPath) != nullptr);
+		}
+		DesiredLit = bHasCustom ? CustomLitMaterialPath : LitMaterialPath;
+	}
+
+	if (UMaterialInterface* Base = LoadObject<UMaterialInterface>(nullptr, bLitByScene ? DesiredLit : UnlitMaterialPath))
 	{
 		Source.Material = UMaterialInstanceDynamic::Create(Base, this);
 		Source.Material->SetTextureParameterValue(TEXT("SpriteTexture"), Source.Atlas);
@@ -1147,27 +1165,16 @@ void UMythRoSpriteComponent::UpdateBillboard(const FRotator& CamRot)
 			SmoothedFeetZ = FMath::FInterpTo(SmoothedFeetZ, Feet.Z, Dt, FeetHeightSmoothing);
 		}
 		Feet.Z = SmoothedFeetZ;
-		// Puxado para a camera pela linha de visao; a escala compensa a perspectiva (mesmo tamanho na tela).
-		// O puxao segue o RAIO camera->pes (nao o eixo da camera): assim o sprite fica exatamente sobre o ponto do
-		// chao na tela, alinhado com a sombra redonda e com a area de clique, tambem nas bordas da tela.
-		float Scale = 1.f;
-		FVector PullDir = CamForward;
-		// O quad e paralelo a tela, entao a parte de cima fica ATRAS dos pes (altura x sen da inclinacao): o puxao precisa cobrir isso,
-		// senao uma parede logo atras do personagem corta o corpo (o sprite entra nela)
-		const float SpriteHeight = FrameLocalBounds.IsValid ? FMath::Clamp(FrameLocalBounds.Max.Z, 60.f, 500.f) : 190.f;
-		const float DepthPull = FMath::Max(CameraDepthOffset, SpriteHeight * FMath::Abs(FMath::Sin(FMath::DegreesToRadians(CamRot.Pitch))) + 10.f);
-		if (const APlayerController* PC = GetWorld() ? GetWorld()->GetFirstPlayerController() : nullptr)
-		{
-			if (PC->PlayerCameraManager)
-			{
-				const FVector ToFeet = Feet - PC->PlayerCameraManager->GetCameraLocation();
-				const float Dist = ToFeet.Size();
-				Scale = Dist > DepthPull + 1.f ? (Dist - DepthPull) / Dist : 1.f;
-				PullDir = Dist > KINDA_SMALL_NUMBER ? ToFeet / Dist : CamForward;
-			}
-		}
-		SetWorldLocation(Feet - PullDir * DepthPull);
-		SetWorldScale3D(FVector(Scale));
+		CurrentCamPitch = CamRot.Pitch;
+		// Gradient Depth (HD-2D / Shipping Bugs):
+		// Os pes permanecem na posicao 3D real no chao (com offset minimo de 2 cm ao longo da visao
+		// apenas para evitar z-fighting coplanar com o triangulo do piso).
+		// O recuo que impede a cabeca de entrar nas paredes atras do ator e calculado de forma progressiva
+		// (gradiente) nos vertices da malha em AddLayerQuads, eliminando a penetracao em paredes
+		// sem puxar os pes para a frente de balcoes, degraus ou obstaculos dianteiros.
+		const float BaseFeetOffset = FMath::Clamp(CameraDepthOffset, 0.f, 5.f);
+		SetWorldLocation(Feet - CamForward * BaseFeetOffset);
+		SetWorldScale3D(FVector(1.f));
 		UpdateShadowTransform(Feet);
 		UpdateTint(Feet, Dt);
 		if (BlobMesh)
@@ -1319,7 +1326,16 @@ void UMythRoSpriteComponent::AddLayerQuads(const FMythRoSpriteSource& Source, co
 		{
 			const float Px = CenterX + Corners[k].X * C - Corners[k].Y * Sn;
 			const float Py = CenterY + Corners[k].X * Sn + Corners[k].Y * C;
-			Verts.Add(FVector(Px * S, Depth, -Py * S));
+			const float LocalZ = -Py * S;
+			// Gradient Depth (HD-2D / Shipping Bugs):
+			// Cada sprite curva sua profundidade em direcao a camera a medida que sobe.
+			// Na base (pes, LocalZ <= 0): inclinacao = 0, os pes ficam na profundidade 3D exata do chao.
+			// No topo (cabeca, LocalZ > 0): inclina para frente por LocalZ * sin(|pitch|),
+			// igualando a profundidade real de um modelo 3D vertical e impedindo que a cabeca
+			// afunde em paredes ou subidas de morro atras do ator, sem projetar os pes a frente de balcoes.
+			const float HeightAboveFeet = FMath::Max(0.f, LocalZ);
+			const float LeanDepth = HeightAboveFeet * FMath::Abs(FMath::Sin(FMath::DegreesToRadians(CurrentCamPitch)));
+			Verts.Add(FVector(Px * S, Depth + LeanDepth, LocalZ));
 			FrameLocalBounds += Verts.Last();
 			Tex.Add(CornerUV[k]);
 			// Cor da camada (.act) x luz calculada (dia/noite, postes, sombra de predio); o alpha fica o da camada.
@@ -1491,7 +1507,25 @@ void UMythRoSpriteComponent::TriggerHitFlash(float Duration)
 	}
 	HitFlashUntil = W->GetTimeSeconds() + Duration;
 	RecomputeStatusTint();
-	W->GetTimerManager().SetTimer(HitFlashTimer, FTimerDelegate::CreateWeakLambda(this, [this]() { RecomputeStatusTint(); }), Duration, false);
+
+	auto SetHitFlash = [this](float Value)
+	{
+		for (FMythRoSpriteSource* Src : { &Body, &Head, &HatBottom, &HatMid, &HatTop, &WeaponSource, &ShieldSource, &RobeSource, &CartSource })
+		{
+			if (Src && Src->Material)
+			{
+				Src->Material->SetScalarParameterValue(TEXT("HitFlash"), Value);
+			}
+		}
+	};
+
+	SetHitFlash(1.0f);
+
+	W->GetTimerManager().SetTimer(HitFlashTimer, FTimerDelegate::CreateWeakLambda(this, [this, SetHitFlash]()
+	{
+		RecomputeStatusTint();
+		SetHitFlash(0.0f);
+	}), Duration, false);
 }
 
 void UMythRoSpriteComponent::TriggerHitstop(float Duration)

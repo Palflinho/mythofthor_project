@@ -94,7 +94,27 @@ void AMythDayNightActor::BeginPlay()
 		{
 			Grading->Settings.AddBlendable(TS, 1.f);
 		}
+		if (UMaterialInterface* Occ = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Myth/M_OcclusionOutline.M_OcclusionOutline")))
+		{
+			Grading->Settings.AddBlendable(Occ, 1.f);
+		}
 	}
+
+	// Sombras de Nuvens HD-2D (GDD s.7.1): material de Light Function para o sol
+	if (Sun && bEnableCloudShadows)
+	{
+		const AMythMapInfo* MapInfo = AMythMapInfo::Find(GetWorld());
+		const bool bIsIndoor = MapInfo && MapInfo->IsIndoor();
+		if (!bIsIndoor)
+		{
+			if (UMaterialInterface* CloudMat = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Myth/M_CloudShadows.M_CloudShadows")))
+			{
+				Sun->SetLightFunctionMaterial(CloudMat);
+				Sun->SetLightFunctionScale(CloudShadowScale);
+			}
+		}
+	}
+
 	if (bReplaceLevelLights)
 	{
 		HideLevelLights();

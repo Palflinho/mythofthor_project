@@ -158,16 +158,17 @@ FLinearColor FMythSkillEffects::ElementColor(int32 SkillID)
 {
 	const FSkillEntry* S = Tables().Skills.Find(SkillID);
 	const FString Element = S ? S->Element : FString();
-	if (Element == TEXT("Fire"))   { return FLinearColor(1.f, 0.42f, 0.12f); }
-	if (Element == TEXT("Water"))  { return FLinearColor(0.3f, 0.65f, 1.f); }
-	if (Element == TEXT("Wind"))   { return FLinearColor(0.85f, 0.9f, 1.f); }
-	if (Element == TEXT("Earth"))  { return FLinearColor(0.85f, 0.6f, 0.3f); }
-	if (Element == TEXT("Holy"))   { return FLinearColor(1.f, 0.92f, 0.65f); }
-	if (Element == TEXT("Dark"))   { return FLinearColor(0.55f, 0.25f, 0.9f); }
-	if (Element == TEXT("Ghost"))  { return FLinearColor(0.75f, 0.6f, 1.f); }
-	if (Element == TEXT("Poison")) { return FLinearColor(0.45f, 0.95f, 0.35f); }
-	if (Element == TEXT("Undead")) { return FLinearColor(0.5f, 0.35f, 0.6f); }
-	return FLinearColor(1.f, 0.88f, 0.72f);
+	// GDD Tecnico Magias HD-2D s.3 (Matriz Elemental):
+	if (Element == TEXT("Fire"))   { return FColor::FromHex(TEXT("#FF4500")).ReinterpretAsLinear(); } // Laranja Incandescente
+	if (Element == TEXT("Water"))  { return FColor::FromHex(TEXT("#00CED1")).ReinterpretAsLinear(); } // Azul Turquesa
+	if (Element == TEXT("Wind"))   { return FColor::FromHex(TEXT("#00BFFF")).ReinterpretAsLinear(); } // Azul Eletrico
+	if (Element == TEXT("Earth"))  { return FColor::FromHex(TEXT("#8B4513")).ReinterpretAsLinear(); } // Marrom Terra / Ocre
+	if (Element == TEXT("Holy"))   { return FColor::FromHex(TEXT("#FFF8DC")).ReinterpretAsLinear(); } // Dourado Puro
+	if (Element == TEXT("Dark"))   { return FColor::FromHex(TEXT("#4B0082")).ReinterpretAsLinear(); } // Roxo Escuro
+	if (Element == TEXT("Ghost"))  { return FColor::FromHex(TEXT("#8A2BE2")).ReinterpretAsLinear(); } // Violeta Translucido
+	if (Element == TEXT("Poison")) { return FColor::FromHex(TEXT("#32CD32")).ReinterpretAsLinear(); } // Verde Toxico
+	if (Element == TEXT("Undead")) { return FColor::FromHex(TEXT("#8B0000")).ReinterpretAsLinear(); } // Carmesim
+	return FColor::FromHex(TEXT("#E6E6FA")).ReinterpretAsLinear(); // Branco Prateado (Neutro)
 }
 
 bool FMythSkillEffects::PlayEffectId(UObject* WorldContext, int32 EffectID, AActor* Target, const FVector& Location, AActor* Source)
