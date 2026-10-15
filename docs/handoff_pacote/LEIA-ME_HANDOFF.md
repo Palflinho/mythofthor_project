@@ -1,6 +1,6 @@
 # Handoff do projeto Myth of Thor (2026-10-15)
 
-Pasta única com tudo que outro Claude precisa para continuar: este arquivo (estado, ambiente, regras, pendências), a cópia das
+Pasta única com tudo que outro agente (Claude ou Antigravity: veja `HANDOFF_ANTIGRAVITY.md`) precisa para continuar: este arquivo (estado, ambiente, regras, pendências), a cópia das
 **memórias** do assistente (`memoria/`), os **GDDs HD-2D** em texto (`gdd_hd2d/`), as listas de pendências e o resto dos docs
 importantes (`docs/`). O código está no repositório (`E:\Documentos\Repositórios\mythofthor_project`, branch `main`, commits locais sem push).
 
