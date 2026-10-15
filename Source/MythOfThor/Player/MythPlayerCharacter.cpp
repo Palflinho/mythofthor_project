@@ -182,6 +182,23 @@ void AMythPlayerCharacter::Tick(float DeltaSeconds)
 	// Guarda o que o jogador escolheu (destino, nao o valor suavizado) para o proximo mapa do mesmo tipo
 	(bCameraLockedByMap ? SavedIndoor : SavedOutdoor) = FSavedCamera{ DestArm, DestPitch };
 	ApplyCamera();
+	// HD-2D tilt-shift: depth of field on the camera itself (a camera post process wins over level volumes), focused on the character
+	if (FMythOptions::Get(TEXT("HD2DLook")))
+	{
+		FPostProcessSettings& PP = FollowCamera->PostProcessSettings;
+		FollowCamera->PostProcessBlendWeight = 1.f;
+		PP.bOverride_DepthOfFieldFstop = true;
+		PP.bOverride_DepthOfFieldFocalDistance = true;
+		PP.bOverride_DepthOfFieldSensorWidth = true;
+		PP.DepthOfFieldFocalDistance = FMath::Max(CurrentArm, 100.f);
+		PP.DepthOfFieldSensorWidth = 24.576f;
+		PP.DepthOfFieldFstop = 0.3f;
+	}
+	else
+	{
+		FollowCamera->PostProcessSettings.bOverride_DepthOfFieldFstop = false;
+		FollowCamera->PostProcessSettings.bOverride_DepthOfFieldFocalDistance = false;
+	}
 }
 
 void AMythPlayerCharacter::StartQuake(float Seconds, float AmplitudeUU)

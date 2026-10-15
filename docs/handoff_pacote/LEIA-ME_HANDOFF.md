@@ -83,7 +83,8 @@ Não copiar do branch: `MythGATGridManager` (servidor decide), subsistema de ski
 - `tools_lista.txt`: lista dos scripts em `tools/` com a primeira linha de cada (o que fazem).
 
 ## 7. Última observação (2026-10-15, fim da sessão)
-- Teste da profundidade de campo com `HD2DFstop = 0.25` (print `hd2_fild`): **sem diferença visível**. A DoF do componente de pós-processo do `AMythDayNightActor`
+- **Tilt-shift resolvido (print `hd5_fild`)**: a DoF física não aparece com esta câmera; foi trocada por um material de pós-processo `M_TiltShift` (`tools/ue_make_tiltshift_material.py`, blur de 9 taps por faixa vertical; parâmetros FocusY 0.52, ClearBand 0.14, MaxBlurPx 6.5, BlurPower 1.6) ligado no `AMythDayNightActor` (opção "HD-2D lens"). Efeito de miniatura visível. Ajustar parâmetros no material se quiser mais/menos. Texto antigo (DoF cinematográfica) abaixo é histórico:
+  (histórico) teste com `HD2DFstop = 0.25`:
   não está surtindo efeito (suspeitas: o `PostProcess` da câmera/nível com prioridade maior sobrescreve; DoF cinematográfica só atua com `FocalDistance>0` e câmera com `PostProcessBlendWeight`;
   ou o método de AA/`r.DepthOfFieldQuality`). Caminho mais certo: definir a DoF direto em `FollowCamera->PostProcessSettings` (UCameraComponent) ou criar um **material de pós-processo de blur por faixa vertical** (tilt-shift de verdade,
   independente de profundidade). A câmera de diorama e o bloom estão funcionando.

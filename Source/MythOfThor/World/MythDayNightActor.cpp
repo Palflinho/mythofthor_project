@@ -9,6 +9,7 @@
 #include "Components/SkyAtmosphereComponent.h"
 #include "Components/SkyLightComponent.h"
 #include "Components/PostProcessComponent.h"
+#include "Materials/MaterialInterface.h"
 #include "Engine/DirectionalLight.h"
 #include "Engine/SkyLight.h"
 #include "EngineUtils.h"
@@ -86,6 +87,14 @@ void AMythDayNightActor::BeginPlay()
 {
 	Super::BeginPlay();
 	TimeOfDay = FMath::Fmod(StartHour, 24.f);
+	// HD-2D tilt-shift blur (tools/ue_make_tiltshift_material.py): blendable on the global grading volume, weight follows the option
+	if (Grading)
+	{
+		if (UMaterialInterface* TS = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Myth/M_TiltShift.M_TiltShift")))
+		{
+			Grading->Settings.AddBlendable(TS, 1.f);
+		}
+	}
 	if (bReplaceLevelLights)
 	{
 		HideLevelLights();
@@ -135,6 +144,10 @@ void AMythDayNightActor::UpdateHD2DLens()
 	}
 	FPostProcessSettings& PP = Grading->Settings;
 	const bool bOn = FMythOptions::Get(TEXT("HD2DLook"));
+	for (FWeightedBlendable& B : Grading->Settings.WeightedBlendables.Array)
+	{
+		B.Weight = bOn ? 1.f : 0.f; // the only blendable here is the tilt-shift material
+	}
 	if (!bOn)
 	{
 		PP.DepthOfFieldFstop = 32.f; // no blur
