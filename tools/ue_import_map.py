@@ -388,19 +388,105 @@ def add_window_glow(mat, tex):
 def build_parent_materials(folder):
     """Cria M_RO_Opaque e M_RO_Masked (parametro de textura 'Tex'). Devolve {masked: material}."""
     result = {}
+    mpc_asset = unreal.EditorAssetLibrary.load_asset('/Game/Myth/MPC_Environment')
+
     for masked in (False, True):
         mat = make_asset('M_RO_Masked' if masked else 'M_RO_Opaque', folder, unreal.Material, unreal.MaterialFactoryNew())
         mat.set_editor_property('two_sided', True)  # as normais/winding do .obj nao sao confiaveis
-        tex = mel.create_material_expression(mat, unreal.MaterialExpressionTextureSampleParameter2D, -700, 0)
+        tex = mel.create_material_expression(mat, unreal.MaterialExpressionTextureSampleParameter2D, -900, 0)
         tex.set_editor_property('parameter_name', 'Tex')
-        mel.connect_material_property(tex, 'RGB', unreal.MaterialProperty.MP_BASE_COLOR)
 
-        rough = mel.create_material_expression(mat, unreal.MaterialExpressionConstant, -300, 200)
-        rough.set_editor_property('r', 0.95)
-        mel.connect_material_property(rough, '', unreal.MaterialProperty.MP_ROUGHNESS)
-        spec = mel.create_material_expression(mat, unreal.MaterialExpressionConstant, -300, 300)
-        spec.set_editor_property('r', 0.0)
-        mel.connect_material_property(spec, '', unreal.MaterialProperty.MP_SPECULAR)
+        # Parametros para Chuva e Pocas HD-2D (GDD Secao 6.2)
+        if mpc_asset:
+            wetness = mel.create_material_expression(mat, unreal.MaterialExpressionCollectionParameter, -700, 200)
+            wetness.set_editor_property('collection', mpc_asset)
+            wetness.set_editor_property('parameter_name', 'Wetness')
+            world_pos = mel.create_material_expression(mat, unreal.MaterialExpressionWorldPosition, -700, 350)
+            pixel_normal = mel.create_material_expression(mat, unreal.MaterialExpressionPixelNormalWS, -700, 500)
+
+            def add_puddle_inputs(node, names):
+                inputs = []
+                for n in names:
+                    inp = unreal.CustomInput()
+                    inp.set_editor_property('input_name', n)
+                    inputs.append(inp)
+                node.set_editor_property('inputs', inputs)
+
+            # Wet BaseColor
+            wet_base = mel.create_material_expression(mat, unreal.MaterialExpressionCustom, -400, 0)
+            wet_base.set_editor_property('output_type', unreal.CustomMaterialOutputType.CMOT_FLOAT3)
+            wet_base.set_editor_property('description', 'WetBaseColor')
+            wet_base.set_editor_property('code', """
+if (Wetness <= 0.001) return InColor;
+float isGround = saturate((WorldNormal.z - 0.6) * 3.33);
+float2 p = WorldPos.xy * 0.0025;
+float n1 = sin(p.x * 2.3 + sin(p.y * 1.7));
+float n2 = cos(p.y * 2.7 + cos(p.x * 1.9));
+float noise = saturate((n1 + n2) * 0.25 + 0.5);
+float puddleThreshold = saturate(Wetness * 1.4 - 0.2);
+float puddleMask = smoothstep(1.0 - puddleThreshold, 1.0 - puddleThreshold + 0.15, noise) * isGround;
+float3 wetColor = InColor * lerp(1.0, 0.68, Wetness);
+float3 puddleColor = lerp(wetColor * 0.75, float3(0.04, 0.07, 0.1), 0.25);
+return lerp(wetColor, puddleColor, puddleMask);
+""")
+            add_puddle_inputs(wet_base, ['InColor', 'Wetness', 'WorldPos', 'WorldNormal'])
+            mel.connect_material_expressions(tex, 'RGB', wet_base, 'InColor')
+            mel.connect_material_expressions(wetness, '', wet_base, 'Wetness')
+            mel.connect_material_expressions(world_pos, '', wet_base, 'WorldPos')
+            mel.connect_material_expressions(pixel_normal, '', wet_base, 'WorldNormal')
+            mel.connect_material_property(wet_base, '', unreal.MaterialProperty.MP_BASE_COLOR)
+
+            # Wet Roughness
+            wet_rough = mel.create_material_expression(mat, unreal.MaterialExpressionCustom, -400, 200)
+            wet_rough.set_editor_property('output_type', unreal.CustomMaterialOutputType.CMOT_FLOAT1)
+            wet_rough.set_editor_property('description', 'WetRoughness')
+            wet_rough.set_editor_property('code', """
+if (Wetness <= 0.001) return 0.95;
+float isGround = saturate((WorldNormal.z - 0.6) * 3.33);
+float2 p = WorldPos.xy * 0.0025;
+float n1 = sin(p.x * 2.3 + sin(p.y * 1.7));
+float n2 = cos(p.y * 2.7 + cos(p.x * 1.9));
+float noise = saturate((n1 + n2) * 0.25 + 0.5);
+float puddleThreshold = saturate(Wetness * 1.4 - 0.2);
+float puddleMask = smoothstep(1.0 - puddleThreshold, 1.0 - puddleThreshold + 0.15, noise) * isGround;
+float generalRoughness = lerp(0.95, 0.35, Wetness);
+return lerp(generalRoughness, 0.03, puddleMask);
+""")
+            add_puddle_inputs(wet_rough, ['Wetness', 'WorldPos', 'WorldNormal'])
+            mel.connect_material_expressions(wetness, '', wet_rough, 'Wetness')
+            mel.connect_material_expressions(world_pos, '', wet_rough, 'WorldPos')
+            mel.connect_material_expressions(pixel_normal, '', wet_rough, 'WorldNormal')
+            mel.connect_material_property(wet_rough, '', unreal.MaterialProperty.MP_ROUGHNESS)
+
+            # Wet Specular
+            wet_spec = mel.create_material_expression(mat, unreal.MaterialExpressionCustom, -400, 350)
+            wet_spec.set_editor_property('output_type', unreal.CustomMaterialOutputType.CMOT_FLOAT1)
+            wet_spec.set_editor_property('description', 'WetSpecular')
+            wet_spec.set_editor_property('code', """
+if (Wetness <= 0.001) return 0.05;
+float isGround = saturate((WorldNormal.z - 0.6) * 3.33);
+float2 p = WorldPos.xy * 0.0025;
+float n1 = sin(p.x * 2.3 + sin(p.y * 1.7));
+float n2 = cos(p.y * 2.7 + cos(p.x * 1.9));
+float noise = saturate((n1 + n2) * 0.25 + 0.5);
+float puddleThreshold = saturate(Wetness * 1.4 - 0.2);
+float puddleMask = smoothstep(1.0 - puddleThreshold, 1.0 - puddleThreshold + 0.15, noise) * isGround;
+float generalSpecular = lerp(0.05, 0.45, Wetness);
+return lerp(generalSpecular, 0.85, puddleMask);
+""")
+            add_puddle_inputs(wet_spec, ['Wetness', 'WorldPos', 'WorldNormal'])
+            mel.connect_material_expressions(wetness, '', wet_spec, 'Wetness')
+            mel.connect_material_expressions(world_pos, '', wet_spec, 'WorldPos')
+            mel.connect_material_expressions(pixel_normal, '', wet_spec, 'WorldNormal')
+            mel.connect_material_property(wet_spec, '', unreal.MaterialProperty.MP_SPECULAR)
+        else:
+            mel.connect_material_property(tex, 'RGB', unreal.MaterialProperty.MP_BASE_COLOR)
+            rough = mel.create_material_expression(mat, unreal.MaterialExpressionConstant, -300, 200)
+            rough.set_editor_property('r', 0.95)
+            mel.connect_material_property(rough, '', unreal.MaterialProperty.MP_ROUGHNESS)
+            spec = mel.create_material_expression(mat, unreal.MaterialExpressionConstant, -300, 300)
+            spec.set_editor_property('r', 0.0)
+            mel.connect_material_property(spec, '', unreal.MaterialProperty.MP_SPECULAR)
 
         if masked:
             mat.set_editor_property('blend_mode', unreal.BlendMode.BLEND_MASKED)
@@ -410,6 +496,7 @@ def build_parent_materials(folder):
         mel.recompile_material(mat)
         result[masked] = mat
     return result
+
 
 
 def import_textures(mats, tex_index, dest, staging):

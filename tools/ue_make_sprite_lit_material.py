@@ -35,21 +35,31 @@ uv = expr(unreal.MaterialExpressionTextureCoordinate, -1400, -200)
 tex_sample = expr(unreal.MaterialExpressionTextureSampleParameter2D, -1100, -200, parameter_name='SpriteTexture')
 lib.connect_material_expressions(uv, '', tex_sample, 'UVs')
 
-# Base Color
-lib.connect_material_property(tex_sample, 'RGB', unreal.MaterialProperty.MP_BASE_COLOR)
+# Vertex Color (modula luz ambiente dia/noite e alpha da camada do .act)
+vert_color = expr(unreal.MaterialExpressionVertexColor, -1100, -50)
+
+# Base Color = SpriteTexture.RGB * VertexColor.RGB
+base_mult = expr(unreal.MaterialExpressionMultiply, -850, -200)
+lib.connect_material_expressions(tex_sample, 'RGB', base_mult, 'A')
+lib.connect_material_expressions(vert_color, 'RGB', base_mult, 'B')
+lib.connect_material_property(base_mult, '', unreal.MaterialProperty.MP_BASE_COLOR)
 
 # Dissolve Parameters
-dissolve_prog = expr(unreal.MaterialExpressionScalarParameter, -1100, 50, parameter_name='DissolveProgress', default_value=0.0)
-dissolve_color = expr(unreal.MaterialExpressionVectorParameter, -1100, 200, parameter_name='DissolveGlowColor',
+dissolve_prog = expr(unreal.MaterialExpressionScalarParameter, -1100, 100, parameter_name='DissolveProgress', default_value=0.0)
+dissolve_color = expr(unreal.MaterialExpressionVectorParameter, -1100, 220, parameter_name='DissolveGlowColor',
                       default_value=unreal.LinearColor(1.0, 0.45, 0.1, 1.0))
 
-# Opacity Mask Custom Node with Dissolve
+# Opacity Mask Custom Node with Dissolve and Vertex Alpha
+alpha_mult = expr(unreal.MaterialExpressionMultiply, -850, 50)
+lib.connect_material_expressions(tex_sample, 'A', alpha_mult, 'A')
+lib.connect_material_expressions(vert_color, 'A', alpha_mult, 'B')
+
 mask_custom = expr(unreal.MaterialExpressionCustom, -700, 50)
 mask_custom.set_editor_property('output_type', unreal.CustomMaterialOutputType.CMOT_FLOAT1)
 mask_custom.set_editor_property('description', 'DissolveMask')
 
 mask_hlsl = """
-if (Alpha < 0.5) return 0.0;
+if (Alpha < 0.33) return 0.0;
 if (Progress <= 0.001) return 1.0;
 
 float2 p = floor(UV * 512.0);
@@ -66,11 +76,12 @@ for name in ['Alpha', 'UV', 'Progress']:
     mask_inputs.append(inp)
 mask_custom.set_editor_property('inputs', mask_inputs)
 
-lib.connect_material_expressions(tex_sample, 'A', mask_custom, 'Alpha')
+lib.connect_material_expressions(alpha_mult, '', mask_custom, 'Alpha')
 lib.connect_material_expressions(uv, '', mask_custom, 'UV')
 lib.connect_material_expressions(dissolve_prog, '', mask_custom, 'Progress')
 
 lib.connect_material_property(mask_custom, '', unreal.MaterialProperty.MP_OPACITY_MASK)
+
 
 # Hit Flash Parameters
 hit_flash = expr(unreal.MaterialExpressionScalarParameter, -1100, 350, parameter_name='HitFlash', default_value=0.0)

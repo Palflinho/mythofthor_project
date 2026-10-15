@@ -1491,6 +1491,19 @@ void UMythRoSpriteComponent::AddLayerQuads(const FMythRoSpriteSource& Source, co
 		{
 			continue;
 		}
+		// Camadas praticamente invisiveis no .act (alpha zero ou residual) nao geram malha
+		if (L.Color.A <= 15)
+		{
+			continue;
+		}
+		// Na animacao de morte do RO, camadas com escala ampliada e alpha reduzido
+		// sao ondas de choque 2D antigas. No 3D com dissolve procedural e particulas,
+		// elas apareciam como o monstro inflando ate 10x de tamanho antes de sumir.
+		if (State == EMythSpriteState::Dead && (L.Scale.X > 1.15f || L.Scale.Y > 1.15f) && L.Color.A < 220)
+		{
+			continue;
+		}
+
 		const FBox2f UV = UVs[L.SprIndex];
 		const float HalfW = Img->Width * L.Scale.X * 0.5f;
 		const float HalfH = Img->Height * L.Scale.Y * 0.5f;
