@@ -95,6 +95,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
 	float CameraFOV = 26.4f;
 
+	/** HD-2D diorama lens (option "HD-2D camera"): horizontal FOV and pitch from the GDD (35-45 deg and -30..-35 deg). */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
+	float HD2DFOV = 38.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Myth|Camera")
+	float HD2DPitch = -35.f;
+
+private:
+	bool bHD2DLensApplied = false;
+	float HD2DArmRatio = 1.f;
+public:
+
 	virtual void Tick(float DeltaSeconds) override;
 
 	/** Tremor de tela (FUNC quake da EffectTable, docs/ref/11): sacode a camera por Seconds com a amplitude em uu. */

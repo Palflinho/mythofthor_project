@@ -44,6 +44,8 @@ namespace
 			{ TEXT("Fog"), TEXT("Fog effect"), TEXT("Shows fog effects."), false },
 			{ TEXT("Footprint"), TEXT("Footprints"), TEXT("Shows footprints of other players."), false },
 			{ TEXT("RegionalTime"), TEXT("Regional time"), TEXT("Time of day and light color follow the region (east/west timezone, north/south latitude)."), false },
+			{ TEXT("HD2DLook"), TEXT("HD-2D lens"), TEXT("Tilt-shift depth of field, stronger bloom and light shafts (Octopath-style)."), false },
+			{ TEXT("HD2DCamera"), TEXT("HD-2D camera"), TEXT("Diorama lens (wider angle, lower tilt). Takes effect on the next map."), false },
 			{ TEXT("ScreenShake"), TEXT("Screen shake"), TEXT("The screen shakes with powerful skills."), false },
 			{ TEXT("HideSummons"), TEXT("Hide summons"), TEXT("Summons become semi-transparent."), false },
 			{ TEXT("HidePlayers"), TEXT("Hide players"), TEXT("Other players become semi-transparent."), false },

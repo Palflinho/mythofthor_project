@@ -55,7 +55,7 @@ importantes (`docs/`). O código está no repositório (`E:\Documentos\Repositó
   (`Config/map_environment_table.json`, 199 mapas), hora local por fuso, luz por latitude, noite eterna (opção "Regional time"), hit-flash + hitstop.
 
 ## 4. Em andamento (HD-2D, GDDs em `gdd_hd2d/`)
-Código já escrito e **compilado**, teste visual **ainda não visto**: câmera de diorama (FOV 38, pitch -35, opção "HD-2D camera") e lente HD-2D no
+Código escrito, compilado e **visto em jogo (prt_fild08)**: a câmera de diorama e o bloom funcionam; a profundidade de campo ficou quase invisível com fstop 1.2 (precisa de fstop ~0.2-0.4 ou do blur por faixa). Detalhes: câmera de diorama (FOV 38, pitch -35, opção "HD-2D camera") e lente HD-2D no
 `AMythDayNightActor::UpdateHD2DLens` (profundidade de campo tilt-shift com foco no personagem, bloom 1.1, light shafts, contraste; opção "HD-2D lens",
 parâmetros `HD2DFstop`=1.2 e `HD2DBloom`). Falta: olhar os prints (`hd_prt`, `hd_fild`), ajustar o fstop (a DoF física com FOV estreito é fraca; se ficar sutil, baixar o fstop
 ou fazer um material de pós-processo de blur por faixa), conferir cliques/seleção de alvo com a nova câmera.

@@ -77,6 +77,21 @@ AMythPlayerCharacter::AMythPlayerCharacter()
 void AMythPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	// HD-2D diorama lens (GDD s.6.2): wider than the RO lens (26.4 deg), lower pitch; the arm is shortened by the tangent ratio so the framing stays the same
+	if (FMythOptions::Get(TEXT("HD2DCamera")) && !bHD2DLensApplied)
+	{
+		bHD2DLensApplied = true;
+		const float Ratio = FMath::Tan(FMath::DegreesToRadians(CameraFOV * 0.5f)) / FMath::Tan(FMath::DegreesToRadians(HD2DFOV * 0.5f));
+		HD2DArmRatio = Ratio;
+		CameraFOV = HD2DFOV;
+		DefaultArmLength *= Ratio;
+		MinArmLength *= Ratio;
+		MaxArmLength *= Ratio;
+		ZoomStep *= Ratio;
+		CameraPitch = HD2DPitch;
+		MinPitch = -60.f;
+		MaxPitch = -30.f;
+	}
 	FollowCamera->SetFieldOfView(CameraFOV);
 	// Mapa interno (indoorrswtable do cliente): mais perto, inclinacao limitada e giro travado a 45 graus
 	if (const AMythMapInfo* Info = AMythMapInfo::Find(GetWorld()); Info && Info->IsIndoor())
@@ -86,8 +101,8 @@ void AMythPlayerCharacter::BeginPlay()
 		CameraPitch = -40.f;
 		MinPitch = -55.f;
 		MaxPitch = -40.f;
-		DefaultArmLength = 3500.f;
-		MaxArmLength = 3500.f;
+		DefaultArmLength = 3500.f * HD2DArmRatio;
+		MaxArmLength = 3500.f * HD2DArmRatio;
 	}
 	const bool bIndoorMap = bCameraLockedByMap;
 	DestArm = CurrentArm = DefaultArmLength;

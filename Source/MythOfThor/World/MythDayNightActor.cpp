@@ -14,6 +14,8 @@
 #include "EngineUtils.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/Pawn.h"
+#include "GameFramework/PlayerController.h"
+#include "Camera/PlayerCameraManager.h"
 #include "UObject/UObjectIterator.h"
 
 namespace
@@ -66,6 +68,18 @@ AMythDayNightActor::AMythDayNightActor()
 	PP.bOverride_AutoExposureBias = true;
 	PP.bOverride_ColorGain = true;
 	PP.bOverride_ColorSaturation = true;
+	// HD-2D lens (GDD: tilt-shift depth of field focused on the character, strong bloom, light shafts); values are set every frame in UpdateHD2DLens
+	PP.bOverride_DepthOfFieldFstop = true;
+	PP.bOverride_DepthOfFieldFocalDistance = true;
+	PP.bOverride_DepthOfFieldSensorWidth = true;
+	PP.bOverride_BloomIntensity = true;
+	PP.bOverride_BloomThreshold = true;
+	PP.bOverride_ColorContrast = true;
+	Sun->bEnableLightShaftBloom = true;
+	Sun->BloomScale = 0.25f;
+	Sun->BloomThreshold = 0.f;
+	Sun->BloomMaxBrightness = 20.f;
+	Sun->BloomTint = FColor(255, 232, 190);
 }
 
 void AMythDayNightActor::BeginPlay()
@@ -110,6 +124,38 @@ void AMythDayNightActor::Tick(float DeltaSeconds)
 		TimeOfDay = FMath::Fmod(TimeOfDay + DeltaSeconds * 24.f / DayLengthSeconds, 24.f);
 	}
 	UpdateLighting();
+	UpdateHD2DLens();
+}
+
+void AMythDayNightActor::UpdateHD2DLens()
+{
+	if (!Grading)
+	{
+		return;
+	}
+	FPostProcessSettings& PP = Grading->Settings;
+	const bool bOn = FMythOptions::Get(TEXT("HD2DLook"));
+	if (!bOn)
+	{
+		PP.DepthOfFieldFstop = 32.f; // no blur
+		PP.BloomIntensity = 0.675f;
+		PP.BloomThreshold = -1.f;
+		PP.ColorContrast = FVector4(1.f, 1.f, 1.f, 1.f);
+		Sun->bEnableLightShaftBloom = false;
+		return;
+	}
+	Sun->bEnableLightShaftBloom = true;
+	// Focus on the player: the camera-to-character distance is the focal plane, so the foreground and the horizon soften like a miniature
+	if (const APlayerController* PC = GetWorld() ? GetWorld()->GetFirstPlayerController() : nullptr; PC && PC->PlayerCameraManager && PC->GetViewTarget())
+	{
+		const float Dist = FVector::Dist(PC->PlayerCameraManager->GetCameraLocation(), PC->GetViewTarget()->GetActorLocation());
+		PP.DepthOfFieldFocalDistance = FMath::Max(Dist, 100.f);
+	}
+	PP.DepthOfFieldSensorWidth = 24.576f;
+	PP.DepthOfFieldFstop = HD2DFstop;
+	PP.BloomIntensity = HD2DBloom;
+	PP.BloomThreshold = 0.6f;
+	PP.ColorContrast = FVector4(1.05f, 1.05f, 1.05f, 1.f);
 }
 
 void AMythDayNightActor::UpdateLighting()
