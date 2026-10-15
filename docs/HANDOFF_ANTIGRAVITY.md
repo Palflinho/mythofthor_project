@@ -5,7 +5,9 @@ Você **não tem** as memórias do Claude: tudo que importa está aqui, em `docs
 em `gdd_hd2d/`, listas de pendências em `docs/`) e no repositório. Leia este arquivo inteiro antes de mexer em qualquer coisa.
 Mesmo conteúdo operacional (estado, ambiente, comandos) está em `docs/handoff_pacote/LEIA-ME_HANDOFF.md`; este aqui acrescenta regras, armadilhas e o plano.
 
-## 0. Primeiros passos (30 minutos)
+## 0. LEIA PRIMEIRO: `docs/FEEDBACK_TESTE_2026-10-15.md` (3 bloqueadores achados nos últimos commits de HD-2D)
+
+## 0.1 Primeiros passos (30 minutos)
 1. `git log --oneline | head -40` (tudo da última semana está commitado **localmente**, branch `main`; **nada foi enviado ao GitHub**).
 2. Ler `docs/handoff_pacote/LEIA-ME_HANDOFF.md`, `docs/BRANCH_HD2D_COMPARACAO.md`, `docs/FEEDBACK_AMIGO_2026-10-13.md`, `docs/MAPAS_PENDENTES.md`.
 3. Conferir o servidor: no WSL `docker ps` deve listar `mythofthor-{db,login,char,map}` "Up". Manter `wsl.exe -d Ubuntu -- bash -c "sleep 100000000"` aberto.
