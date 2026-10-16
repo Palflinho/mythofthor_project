@@ -1562,17 +1562,20 @@ void AMythNetWorld::HandleSkillDamage(int64 SourceID, int64 TargetID, int32 Skil
 	}
 	const int32 CastFx = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::Cast);
 	const int32 MainFx = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::Effect);
-	if (Target && MainFx > 0 && MainFx != CastFx && Now - LastGroundSkill.FindRef(SkillID) > 0.6)
-	{
-		bAnyFx |= UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::Effect, Target, Target->GetActorLocation(), false, Source);
-	}
 	const bool bProjectile = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::BeforeHit) > 0;
 	const int32 HitFx = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::Hit);
 	const bool bOwnHitFx = HitFx > 0 && HitFx != CastFx && HitFx != MainFx;
-	bAnyFx |= bProjectile || bOwnHitFx;
-
-	// Golpes: um numero por golpe (Rajada de Flechas = 2), como o RO; o dano de skill nao dispara a flecha do ataque comum
 	const int32 Count = (Hits <= 1 || Damage <= 0) ? 1 : Hits;
+	const bool bRepeatMainFxPerHit = (Count > 1 && !bProjectile && MainFx > 0 && MainFx != CastFx && Now - LastGroundSkill.FindRef(SkillID) > 0.6);
+
+	if (Target && MainFx > 0 && MainFx != CastFx && !bRepeatMainFxPerHit && Now - LastGroundSkill.FindRef(SkillID) > 0.6)
+	{
+		bAnyFx |= UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::Effect, Target, Target->GetActorLocation(), false, Source);
+	}
+	bAnyFx |= bProjectile || bOwnHitFx || bRepeatMainFxPerHit;
+
+	// Golpes: cadencia de 0.24s entre cada golpe para que as lancas/raios/golpes multihit caiam espaçados em sincronia com cada hit
+	const float HitInterval = 0.24f;
 	const int32 PerHit = Count > 1 ? Damage / Count : Damage;
 	TWeakObjectPtr<AActor> WSource(Source);
 	for (int32 i = 0; i < Count; ++i)
@@ -1587,14 +1590,25 @@ void AMythNetWorld::HandleSkillDamage(int64 SourceID, int64 TargetID, int32 Skil
 			TGuardValue<bool> SkillHit(bSkillHitInProgress, true);
 			HandleDamage(SourceID, TargetID, Amount, DamageType, 0);
 		};
-		auto Fire = [this, TargetID, SkillID, bProjectile, WSource, Land]()
+		auto Fire = [this, TargetID, SkillID, i, Count, bProjectile, bRepeatMainFxPerHit, WSource, Land]()
 		{
 			AActor* T = ResolveActor(TargetID);
 			if (bProjectile && T)
 			{
 				UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::BeforeHit, T, T->GetActorLocation(), false, WSource.Get());
 				FTimerHandle LandHandle;
-				GetWorldTimerManager().SetTimer(LandHandle, FTimerDelegate::CreateWeakLambda(this, Land), 0.2f, false);
+				GetWorldTimerManager().SetTimer(LandHandle, FTimerDelegate::CreateWeakLambda(this, Land), 0.22f, false);
+				return;
+			}
+			if (bRepeatMainFxPerHit && T)
+			{
+				// Magias multihit que usam o estagio Effect (ex.: Relampago 20, Trovao de Jupiter 84): dispara o efeito sincronizado com os hits
+				if (Count <= 5 || (i % 2) == 0 || i == Count - 1)
+				{
+					UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::Effect, T, T->GetActorLocation(), false, WSource.Get());
+				}
+				FTimerHandle LandHandle;
+				GetWorldTimerManager().SetTimer(LandHandle, FTimerDelegate::CreateWeakLambda(this, Land), 0.14f, false);
 				return;
 			}
 			Land();
@@ -1606,7 +1620,7 @@ void AMythNetWorld::HandleSkillDamage(int64 SourceID, int64 TargetID, int32 Skil
 		else
 		{
 			FTimerHandle Handle;
-			GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateWeakLambda(this, Fire), 0.15f * i, false);
+			GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateWeakLambda(this, Fire), HitInterval * i, false);
 		}
 	}
 	if (!bAnyFx && Target)

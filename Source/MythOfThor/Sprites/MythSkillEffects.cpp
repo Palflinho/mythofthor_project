@@ -526,15 +526,25 @@ namespace
 		const bool bImpactStage = (Stage == EMythSkillEffectStage::Hit || Stage == EMythSkillEffectStage::Effect || Stage == EMythSkillEffectStage::Ground || Stage == EMythSkillEffectStage::Success);
 		const bool bBoltStage = (Stage == EMythSkillEffectStage::BeforeHit || Stage == EMythSkillEffectStage::Hit);
 
+		// Evita empilhar dezenas de cilindros/chifres pesados a cada sub-hit de magias multihit (mantem o impacto individual limpo)
+		static TMap<uint64, double> LastHeavyBurst;
+		const uint64 BurstKey = (static_cast<uint64>(SkillID) << 32) ^ static_cast<uint64>(Target ? Target->GetUniqueID() : 0u);
+		const double Now = World->GetTimeSeconds();
+		const bool bAllowHeavyBurst = (Now - LastHeavyBurst.FindRef(BurstKey)) > 0.75;
+
 		// 14: Cold Bolt (Lancas de Gelo) / 15: Frost Diver (Rajada Congelante)
 		if (SkillID == 14 && bBoltStage)
 		{
 			if (Stage == EMythSkillEffectStage::Hit)
 			{
-				bAdded |= AMythStrEffect::Play(WorldContext, TEXT("freeze"), Feet, Target) != nullptr;
 				bAdded |= AMythStrEffect::Play(WorldContext, TEXT("icecrash"), Feet, Target) != nullptr;
-				SpawnIceHornRing(WorldContext, Feet, 4, 65.f, 2.2f);
-				SpawnCylinderFx(WorldContext, Target, Feet, TEXT("ring_blue"), Col, 1.2f, 3.8f, 0.4f, 650.f, 4, true);
+				if (bAllowHeavyBurst)
+				{
+					LastHeavyBurst.Add(BurstKey, Now);
+					bAdded |= AMythStrEffect::Play(WorldContext, TEXT("freeze"), Feet, Target) != nullptr;
+					SpawnIceHornRing(WorldContext, Feet, 4, 65.f, 2.2f);
+					SpawnCylinderFx(WorldContext, Target, Feet, TEXT("ring_blue"), Col, 1.2f, 3.8f, 0.4f, 650.f, 4, true);
+				}
 			}
 		}
 		else if (SkillID == 15 && bImpactStage)
@@ -545,8 +555,12 @@ namespace
 		// 19: Fire Bolt (Lancas de Fogo) / 17: Fire Ball (Bola de Fogo)
 		else if (SkillID == 19 && Stage == EMythSkillEffectStage::Hit)
 		{
-			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("firepillarbomb"), Feet, Target) != nullptr;
-			SpawnCylinderFx(WorldContext, Target, Feet, TEXT("ring_red"), Col, 1.2f, 3.8f, 0.5f, 600.f, 4, true);
+			if (bAllowHeavyBurst)
+			{
+				LastHeavyBurst.Add(BurstKey, Now);
+				bAdded |= AMythStrEffect::Play(WorldContext, TEXT("firepillarbomb"), Feet, Target) != nullptr;
+				SpawnCylinderFx(WorldContext, Target, Feet, TEXT("ring_red"), Col, 1.2f, 3.8f, 0.5f, 600.f, 4, true);
+			}
 		}
 		else if (SkillID == 17 && bImpactStage)
 		{
@@ -556,8 +570,12 @@ namespace
 		// 20: Lightning Bolt (Relampago) / 21: Thunder Storm (Tempestade de Raios) / 84: Jupitel Thunder (Trovao de Jupiter)
 		else if ((SkillID == 20 || SkillID == 21 || SkillID == 84) && bImpactStage)
 		{
-			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("chainlight"), Feet, Target) != nullptr;
-			SpawnCylinderFx(WorldContext, Target, Feet, TEXT("ring_blue"), Col, 1.5f, 4.5f, 0.6f, 650.f, 4, true);
+			if (bAllowHeavyBurst)
+			{
+				LastHeavyBurst.Add(BurstKey, Now);
+				bAdded |= AMythStrEffect::Play(WorldContext, TEXT("chainlight"), Feet, Target) != nullptr;
+				SpawnCylinderFx(WorldContext, Target, Feet, TEXT("ring_blue"), Col, 1.5f, 4.5f, 0.6f, 650.f, 4, true);
+			}
 		}
 		// 83: Meteor Storm (Chuva de Meteoros)
 		else if (SkillID == 83 && bImpactStage)
@@ -574,7 +592,7 @@ namespace
 				{
 					AMythStrEffect::Play(WorldContext, FString::Printf(TEXT("meteor%d"), (k % 4) + 1), SubAt, nullptr);
 					AMythStrEffect::Play(WorldContext, TEXT("firehit1"), SubAt, nullptr);
-				}), 0.18f * k, false);
+				}), 0.24f * k, false);
 			}
 		}
 		// 85: Lord of Vermilion (Ira de Thor)
@@ -591,7 +609,7 @@ namespace
 				{
 					AMythStrEffect::Play(WorldContext, TEXT("thunderstorm"), SubAt, nullptr);
 					AMythStrEffect::Play(WorldContext, TEXT("windhit1"), SubAt, nullptr);
-				}), 0.12f + 0.14f * k, false);
+				}), 0.16f + 0.22f * k, false);
 			}
 		}
 		// 89 / 723: Storm Gust (Nevasca)
@@ -601,7 +619,15 @@ namespace
 			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("icecrash"), Feet, nullptr) != nullptr;
 			SpawnIceHornRing(WorldContext, Feet, 8, 175.f, 3.2f);
 			SpawnCylinderFx(WorldContext, nullptr, Feet, TEXT("ring_blue"), Col, 3.5f, 6.5f, 4.5f, 1600.f, 1, true);
-			FMythSkillEffects::PlayEffectId(WorldContext, 2001, Target, Feet, Source);
+			for (int32 k = 0; k < 4; ++k)
+			{
+				const FVector SubAt = Feet + FVector(FMath::FRandRange(-120.f, 120.f), FMath::FRandRange(-120.f, 120.f), 0.f);
+				FTimerHandle H;
+				World->GetTimerManager().SetTimer(H, FTimerDelegate::CreateWeakLambda(WorldContext, [WorldContext, SubAt]()
+				{
+					FMythSkillEffects::PlayEffectId(WorldContext, 2001, nullptr, SubAt, nullptr);
+				}), 0.22f * k, false);
+			}
 		}
 		// 271: Asura Strike (Punho Supremo de Asura)
 		else if (SkillID == 271 && (Stage == EMythSkillEffectStage::Hit || Stage == EMythSkillEffectStage::Effect))

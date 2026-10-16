@@ -253,12 +253,12 @@ void AMythDayNightActor::UpdateLighting()
 		Sun->SetCastShadows(false);
 		Sun->ForwardShadingPriority = 0;
 
-		// Preenchimento zenital suave sem sombras pesadas para iluminar pisos e paredes de masmorras uniformemente
+		// Preenchimento zenital suave sem sombras pesadas para iluminar pisos e paredes de masmorras na medida certa (~20% mais escura que antes)
 		Moon->SetWorldRotation(FRotator(-75.f, 45.f, 0.f));
 		Moon->SetVisibility(true);
 		Moon->SetCastShadows(false);
-		Moon->SetLightColor(FLinearColor(0.72f, 0.78f, 0.90f));
-		Moon->SetIntensity(3.5f);
+		Moon->SetLightColor(FLinearColor(0.68f, 0.74f, 0.86f));
+		Moon->SetIntensity(2.45f);
 		Moon->ForwardShadingPriority = 2;
 
 		if (!bDungeonLightingApplied)
@@ -273,15 +273,15 @@ void AMythDayNightActor::UpdateLighting()
 				SkyLight->SetRealTimeCaptureEnabled(true);
 			}
 		}
-		// Luz ambiente de masmorra clara e confortavel
-		SkyLight->SetIntensity(1.45f);
-		SkyLight->SetLightColor(FLinearColor(0.62f, 0.68f, 0.82f));
+		// Luz ambiente de masmorra equilibrada (~20% mais escura para preservar o clima de dungeon)
+		SkyLight->SetIntensity(1.08f);
+		SkyLight->SetLightColor(FLinearColor(0.56f, 0.62f, 0.76f));
 		if (Grading)
 		{
 			FPostProcessSettings& PP = Grading->Settings;
-			PP.AutoExposureBias = 0.35f;
-			PP.ColorGain = FVector4(1.02f, 1.02f, 1.06f, 1.f);
-			PP.ColorSaturation = FVector4(1.f, 1.f, 1.f, 0.96f);
+			PP.AutoExposureBias = 0.0f;
+			PP.ColorGain = FVector4(0.86f, 0.88f, 0.94f, 1.f);
+			PP.ColorSaturation = FVector4(1.f, 1.f, 1.f, 0.95f);
 		}
 		if (!FMath::IsNearlyEqual(1.0f, AppliedNightGlow, 0.01f))
 		{

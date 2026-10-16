@@ -53,11 +53,16 @@ mat.set_editor_property('shading_model', unreal.MaterialShadingModel.MSM_UNLIT)
 mat.set_editor_property('two_sided', True)
 tex = expr(mat, unreal.MaterialExpressionTextureSampleParameter2D, -700, 0, parameter_name='Tex')
 bright = expr(mat, unreal.MaterialExpressionScalarParameter, -700, 250, parameter_name='Brightness', default_value=1.0)
+classic_tint = expr(mat, unreal.MaterialExpressionVectorParameter, -700, 420, parameter_name='ClassicTint',
+                    default_value=unreal.LinearColor(1.0, 1.0, 1.0, 1.0))
 opacity = expr(mat, unreal.MaterialExpressionScalarParameter, -400, 400, parameter_name='Opacity', default_value=0.75)
-mul = expr(mat, unreal.MaterialExpressionMultiply, -350, 100)
+mul = expr(mat, unreal.MaterialExpressionMultiply, -450, 100)
+mul_tint = expr(mat, unreal.MaterialExpressionMultiply, -250, 150)
 lib.connect_material_expressions(tex, 'RGB', mul, 'A')
 lib.connect_material_expressions(bright, '', mul, 'B')
-lib.connect_material_property(mul, '', unreal.MaterialProperty.MP_EMISSIVE_COLOR)
+lib.connect_material_expressions(mul, '', mul_tint, 'A')
+lib.connect_material_expressions(classic_tint, 'RGB', mul_tint, 'B')
+lib.connect_material_property(mul_tint, '', unreal.MaterialProperty.MP_EMISSIVE_COLOR)
 lib.connect_material_property(opacity, '', unreal.MaterialProperty.MP_OPACITY)
 lib.recompile_material(mat)
 unreal.EditorAssetLibrary.save_loaded_asset(mat)
@@ -114,10 +119,10 @@ lib.connect_material_expressions(wp, '', custom_norm, 'WorldPos')
 lib.connect_material_expressions(time, '', custom_norm, 'Time')
 lib.connect_material_property(custom_norm, '', unreal.MaterialProperty.MP_NORMAL)
 
-# Textura animada de causticas da agua do RO (water100..131.jpg) combinada com o tom cristalino
+# Textura animada de causticas da agua do RO (water100..131.jpg) combinada com o tom cristalino (ou esverdeado no esgoto)
 ro_tex = expr(m, unreal.MaterialExpressionTextureSampleParameter2D, -850, 550, parameter_name='Tex')
 tint = expr(m, unreal.MaterialExpressionVectorParameter, -850, 750, parameter_name='Tint',
-            default_value=unreal.LinearColor(0.06, 0.36, 0.55, 1.0))
+            default_value=unreal.LinearColor(0.06, 0.36, 0.55, 0.0))
 
 water_col = expr(m, unreal.MaterialExpressionCustom, -450, 600)
 water_col.set_editor_property('output_type', unreal.CustomMaterialOutputType.CMOT_FLOAT3)
@@ -125,8 +130,12 @@ water_col.set_editor_property('description', 'WaterCausticsColor')
 water_col.set_editor_property('code', """
 float luma = dot(TexColor.rgb, float3(0.299, 0.587, 0.114));
 float caustic = smoothstep(0.42, 0.88, luma);
-float3 base = lerp(Tint.rgb * 0.75, TexColor.rgb * float3(0.55, 0.85, 1.05), 0.52);
-return base + float3(0.22, 0.36, 0.45) * (caustic * 0.65);
+float maxC = max(max(Tint.r, Tint.g), max(Tint.b, 0.01));
+float3 tintHue = Tint.rgb / maxC;
+float3 tintedTex = lerp(TexColor.rgb * float3(0.55, 0.85, 1.05), luma * tintHue * 0.88, Tint.a);
+float3 base = lerp(Tint.rgb * 0.75, tintedTex, 0.52);
+float3 causticCol = lerp(float3(0.22, 0.36, 0.45), tintHue * 0.38, Tint.a);
+return base + causticCol * (caustic * 0.65);
 """)
 col_inps = []
 for name in ['TexColor', 'Tint']:
@@ -135,7 +144,7 @@ for name in ['TexColor', 'Tint']:
     col_inps.append(inp)
 water_col.set_editor_property('inputs', col_inps)
 lib.connect_material_expressions(ro_tex, 'RGB', water_col, 'TexColor')
-lib.connect_material_expressions(tint, '', water_col, 'Tint')
+lib.connect_material_expressions(tint, 'RGBA', water_col, 'Tint')
 lib.connect_material_property(water_col, '', unreal.MaterialProperty.MP_BASE_COLOR)
 
 # Roughness espelhada (0.04) e Specular (0.75) para reflexos suaves de agua real
@@ -147,17 +156,19 @@ lib.connect_material_property(spec, '', unreal.MaterialProperty.MP_SPECULAR)
 opac = expr(m, unreal.MaterialExpressionScalarParameter, -450, 910, parameter_name='Opacity', default_value=0.68)
 lib.connect_material_property(opac, '', unreal.MaterialProperty.MP_OPACITY)
 
-# Refração suave da agua (IOR = 1.333)
+# Refração suave da agua (IOR = 1.08)
 ior = expr(m, unreal.MaterialExpressionConstant, -450, 980, r=1.08)
 lib.connect_material_property(ior, '', unreal.MaterialProperty.MP_REFRACTION)
 
-# Saida Single Layer Water: baixa dispersao leitosa (sem aspecto de massinha!) e absorcao cristalina
+# Saida Single Layer Water: baixa dispersao leitosa e absorcao cristalina (ou esverdeada no esgoto via parametros)
 out = expr(m, unreal.MaterialExpressionSingleLayerWaterMaterialOutput, 0, 600)
-scat = expr(m, unreal.MaterialExpressionConstant3Vector, -300, 600, constant=unreal.LinearColor(0.015, 0.055, 0.085, 1.0))
-absorb = expr(m, unreal.MaterialExpressionConstant3Vector, -300, 700, constant=unreal.LinearColor(0.035, 0.012, 0.003, 1.0))
-phase = expr(m, unreal.MaterialExpressionConstant, -300, 800, r=0.25)
-lib.connect_material_expressions(scat, '', out, 'ScatteringCoefficients')
-lib.connect_material_expressions(absorb, '', out, 'AbsorptionCoefficients')
+scat = expr(m, unreal.MaterialExpressionVectorParameter, -300, 600, parameter_name='Scattering',
+            default_value=unreal.LinearColor(0.015, 0.055, 0.085, 1.0))
+absorb = expr(m, unreal.MaterialExpressionVectorParameter, -300, 780, parameter_name='Absorption',
+              default_value=unreal.LinearColor(0.035, 0.012, 0.003, 1.0))
+phase = expr(m, unreal.MaterialExpressionConstant, -300, 960, r=0.25)
+lib.connect_material_expressions(scat, 'RGB', out, 'ScatteringCoefficients')
+lib.connect_material_expressions(absorb, 'RGB', out, 'AbsorptionCoefficients')
 lib.connect_material_expressions(phase, '', out, 'PhaseG')
 lib.recompile_material(m)
 unreal.EditorAssetLibrary.save_loaded_asset(m)

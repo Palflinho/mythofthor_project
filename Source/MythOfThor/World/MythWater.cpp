@@ -61,6 +61,7 @@ bool AMythWater::Build(const FString& MapName, const FVector2D& Origin)
 	const float Z = -Level * 10.f;
 	WaterZ = Z;
 	bHasWater = true;
+	bSewerWater = MapName.Contains(TEXT("sewb")) || Type == 2 || Type == 3;
 
 	for (int32 i = 0; i < 32; ++i)
 	{
@@ -156,6 +157,21 @@ void AMythWater::ApplyStyle()
 	Material = UMaterialInstanceDynamic::Create(Base, this);
 	Material->SetScalarParameterValue(TEXT("Opacity"), bModern ? 0.68f : BaseOpacity);
 	Material->SetScalarParameterValue(TEXT("Brightness"), 1.1f);
+	if (bSewerWater)
+	{
+		// Agua do esgoto com tom esverdeado musgo/esmeralda
+		Material->SetVectorParameterValue(TEXT("Tint"), FLinearColor(0.07f, 0.38f, 0.16f, 1.0f));
+		Material->SetVectorParameterValue(TEXT("Scattering"), FLinearColor(0.022f, 0.075f, 0.028f, 1.0f));
+		Material->SetVectorParameterValue(TEXT("Absorption"), FLinearColor(0.045f, 0.008f, 0.032f, 1.0f));
+		Material->SetVectorParameterValue(TEXT("ClassicTint"), FLinearColor(0.55f, 0.95f, 0.62f, 1.0f));
+	}
+	else
+	{
+		Material->SetVectorParameterValue(TEXT("Tint"), FLinearColor(0.06f, 0.36f, 0.55f, 0.0f));
+		Material->SetVectorParameterValue(TEXT("Scattering"), FLinearColor(0.015f, 0.055f, 0.085f, 1.0f));
+		Material->SetVectorParameterValue(TEXT("Absorption"), FLinearColor(0.035f, 0.012f, 0.003f, 1.0f));
+		Material->SetVectorParameterValue(TEXT("ClassicTint"), FLinearColor(1.0f, 1.0f, 1.0f, 1.0f));
+	}
 	Material->SetTextureParameterValue(TEXT("Tex"), Frames[FMath::Clamp(LastFrame, 0, Frames.Num() - 1)]);
 	Mesh->SetMaterial(0, Material);
 	if (LastFrame < 0) { LastFrame = 0; }

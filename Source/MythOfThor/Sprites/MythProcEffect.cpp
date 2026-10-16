@@ -304,7 +304,7 @@ bool AMythProcEffect::Setup(const TSharedPtr<FJsonObject>& Part)
 	{
 		// Lancas de Gelo e Fogo: formato alongado de lanca (X = comprimento ao longo da queda, Y = espessura)
 		SizeStart = SizeEnd = FVector2D(220.f, 88.f);
-		Duration = FMath::Clamp(Duration, 0.28f, 0.42f);
+		Duration = 0.22f; // tempo exato de queda ate o impacto do golpe (sincronizado com LandHandle = 0.22s)
 	}
 
 	ZStart = Num(Part, TEXT("poszStart"), Num(Part, TEXT("posz"), Num(Part, TEXT("zOffsetStart"), 1.f))) * ProcCell;
@@ -327,12 +327,13 @@ bool AMythProcEffect::Setup(const TSharedPtr<FJsonObject>& Part)
 		bHasSource = true;
 		bToSrc = true;
 		bMagicSpear = true;
-		ZStart = FMath::Max(ZStart, 11.f * ProcCell); // cai bem do alto (550 uu)
+		ZStart = FMath::Max(ZStart, 10.5f * ProcCell); // cai bem do alto (525 uu)
 		ZEnd = 0.8f * ProcCell;
 	}
 
-	int32 Count = FMath::Clamp(static_cast<int32>(Num(Part, TEXT("duplicate"), bCircle ? 8.f : (bFallingSpear ? 5.f : 1.f))), 1, 40);
-	float Between = Num(Part, TEXT("timeBetweenDupli"), bFallingSpear ? 65.f : 0.f) / 1000.f;
+	// Cada golpe do multihit ja dispara um BeforeHit proprio: 1 lanca por golpe (ou duplicate explicito se houver no JSON)
+	int32 Count = FMath::Clamp(static_cast<int32>(Num(Part, TEXT("duplicate"), bCircle ? 8.f : 1.f)), 1, 40);
+	float Between = Num(Part, TEXT("timeBetweenDupli"), bFallingSpear ? 220.f : 0.f) / 1000.f;
 	const bool bHasRadialEnd = Part->HasField(TEXT("posxEndRand")) || Part->HasField(TEXT("posyEndRand")) || Part->HasField(TEXT("posxEnd")) || Part->HasField(TEXT("posyEnd"));
 	const bool bSwarm = Count > 1 && !bCircle && !bToSrc && !bHasRadialEnd;
 
@@ -343,9 +344,9 @@ bool AMythProcEffect::Setup(const TSharedPtr<FJsonObject>& Part)
 		C.Angle = bCircle ? 360.f * i / Count + FMath::FRandRange(0.f, 35.f) : FMath::FRandRange(0.f, 360.f);
 		if (bFallingSpear)
 		{
-			// Cada lanca da rajada cai com um leve espalhamento ao redor do alvo
-			const float SpreadX = (i == 0) ? 0.f : FMath::FRandRange(-55.f, 55.f);
-			const float SpreadY = (i == 0) ? 0.f : FMath::FRandRange(-45.f, 45.f);
+			// Leve espalhamento aleatorio ao redor do alvo para que as lancas consecutivas do multihit nao caiam empilhadas no mesmo pixel
+			const float SpreadX = FMath::FRandRange(-42.f, 42.f);
+			const float SpreadY = FMath::FRandRange(-34.f, 34.f);
 			C.OffsetEnd = FVector(SpreadX, SpreadY, 0.f);
 			C.OffsetStart = FVector(SpreadX, SpreadY, 0.f);
 		}

@@ -45,6 +45,7 @@ private:
 	float Time = 0.f;
 	float WaterZ = 0.f;
 	bool bHasWater = false;
+	bool bSewerWater = false;
 
 	bool Build(const FString& MapName, const FVector2D& Origin);
 };
