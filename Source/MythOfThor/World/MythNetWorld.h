@@ -125,6 +125,8 @@ private:
 	TMap<int64, FTimerHandle> SkillUnitTimers;
 	/** Quando cada skill de area foi usada no chao: o efeito do chao ja cobre o alvo, entao o do alvo nao repete. */
 	TMap<int32, double> LastGroundSkill;
+	/** Fim previsto da rajada de golpes multihit em cada alvo: adia a morte visual (ZC_NOTIFY_VANISH) ate o ultimo hit cair. */
+	TMap<int64, double> PendingSkillHitsUntil;
 	UFUNCTION() void HandleEquipChanged(int64 UnitID, uint8 Look, int32 Value);
 	UFUNCTION() void HandleEquipResult(int32 Index, int32 WearLocation, bool bSuccess);
 	UFUNCTION() void HandleItemUseResult(int32 ItemID, int64 TargetID, bool bSuccess);

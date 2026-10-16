@@ -154,6 +154,10 @@ bool AMythStrEffect::Setup(const FString& StrFile)
 		MID->SetScalarParameterValue(TEXT("Brightness"), bAdd ? AdditiveBrightness : TranslucentBrightness);
 		LayerMaterials.Add(MID);
 	}
+	if (Rel.Contains(TEXT("stormgust"), ESearchCase::IgnoreCase))
+	{
+		UnitsPerPixel = 1.85f; // Nevasca tem quadros de tela muito amplos no .str: escala proporcional a area 9x9
+	}
 	SectionCreated.Init(false, Str->Layers.Num());
 	return true;
 }

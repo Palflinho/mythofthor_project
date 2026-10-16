@@ -994,7 +994,7 @@ namespace
 					}
 					else
 					{
-						// Mapeia armadilhas e unidades de chao que possuem .str equivalente no GRF ou fallback HD-2D
+						// Mapeia apenas armadilhas e musicas que possuem .str no GRF; celulas invisiveis de magias de area (Nevasca, Ira de Thor, Meteoro) nao desenham cilindro por celula!
 						const int32 UType = FCString::Atoi(*Pair.Key);
 						if (UType == 143)      { V.Str = TEXT("blastmine"); }
 						else if (UType == 144) { V.Str = TEXT("skidtrap"); }
@@ -1005,9 +1005,11 @@ namespace
 						else if (UType == 150) { V.Str = TEXT("Sight"); V.Effect = 22; }
 						else if (UType == 151) { V.Str = TEXT("freezing"); }
 						else if (UType == 152) { V.Str = TEXT("claymore"); }
-						else if (UType >= 158 && UType <= 175) { V.Str = TEXT("note_1"); V.Effect = 319; }
-						else { V.Effect = 319; }
-						Table.Add(UType, V);
+						else if (UType >= 158 && UType <= 175) { V.Str = TEXT("note_1"); }
+						if (V.Effect > 0 || !V.Str.IsEmpty())
+						{
+							Table.Add(UType, V);
+						}
 					}
 				}
 			}
@@ -1019,10 +1021,14 @@ namespace
 void AMythNetWorld::HandleSkillUnitAppear(int64 UnitID, int64 OwnerID, int32 UnitType, int32 X, int32 Y)
 {
 	const FSkillUnitVisual* V = SkillUnitVisuals().Find(UnitType);
-	UE_LOG(LogTemp, Log, TEXT("MythNetWorld: skill unit %lld type %d at (%d,%d): %s"), UnitID, UnitType, X, Y, V ? TEXT("tem efeito") : TEXT("fallback HD-2D"));
+	UE_LOG(LogTemp, Log, TEXT("MythNetWorld: skill unit %lld type %d at (%d,%d): %s"), UnitID, UnitType, X, Y, V ? TEXT("tem efeito") : TEXT("sem visual na tabela"));
+	if (!V || (V->Effect <= 0 && V->Str.IsEmpty()))
+	{
+		return;
+	}
 	const FVector At = CellToGround(X, Y);
-	const int32 EffectId = V ? V->Effect : 319;
-	const FString StrName = V ? V->Str : FString();
+	const int32 EffectId = V->Effect;
+	const FString StrName = V->Str;
 	auto Spawn = [this, At, EffectId, StrName]()
 	{
 		if (!StrName.IsEmpty())

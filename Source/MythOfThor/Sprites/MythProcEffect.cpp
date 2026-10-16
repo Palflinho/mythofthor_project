@@ -304,7 +304,7 @@ bool AMythProcEffect::Setup(const TSharedPtr<FJsonObject>& Part)
 	{
 		// Lancas de Gelo e Fogo: formato alongado de lanca (X = comprimento ao longo da queda, Y = espessura)
 		SizeStart = SizeEnd = FVector2D(220.f, 88.f);
-		Duration = 0.22f; // tempo exato de queda ate o impacto do golpe (sincronizado com LandHandle = 0.22s)
+		Duration = 0.18f; // tempo exato de queda ate o impacto do golpe (sincronizado com LandHandle = 0.18s)
 	}
 
 	ZStart = Num(Part, TEXT("poszStart"), Num(Part, TEXT("posz"), Num(Part, TEXT("zOffsetStart"), 1.f))) * ProcCell;
@@ -330,10 +330,15 @@ bool AMythProcEffect::Setup(const TSharedPtr<FJsonObject>& Part)
 		ZStart = FMath::Max(ZStart, 10.5f * ProcCell); // cai bem do alto (525 uu)
 		ZEnd = 0.8f * ProcCell;
 	}
+	else if (bFromSrc && !bSpriteImage)
+	{
+		// Espiritos Ancioes (Soul Strike / Napalm Vulcan): duracao fluida para desenhar o arco saindo de tras do personagem
+		Duration = FMath::Clamp(Duration, 0.34f, 0.45f);
+	}
 
 	// Cada golpe do multihit ja dispara um BeforeHit proprio: 1 lanca por golpe (ou duplicate explicito se houver no JSON)
 	int32 Count = FMath::Clamp(static_cast<int32>(Num(Part, TEXT("duplicate"), bCircle ? 8.f : 1.f)), 1, 40);
-	float Between = Num(Part, TEXT("timeBetweenDupli"), bFallingSpear ? 220.f : 0.f) / 1000.f;
+	float Between = Num(Part, TEXT("timeBetweenDupli"), bFallingSpear ? 180.f : 0.f) / 1000.f;
 	const bool bHasRadialEnd = Part->HasField(TEXT("posxEndRand")) || Part->HasField(TEXT("posyEndRand")) || Part->HasField(TEXT("posxEnd")) || Part->HasField(TEXT("posyEnd"));
 	const bool bSwarm = Count > 1 && !bCircle && !bToSrc && !bHasRadialEnd;
 
@@ -349,6 +354,13 @@ bool AMythProcEffect::Setup(const TSharedPtr<FJsonObject>& Part)
 			const float SpreadY = FMath::FRandRange(-34.f, 34.f);
 			C.OffsetEnd = FVector(SpreadX, SpreadY, 0.f);
 			C.OffsetStart = FVector(SpreadX, SpreadY, 0.f);
+		}
+		else if (bFromSrc && !bSpriteImage)
+		{
+			// Espiritos Ancioes: cada espirito sai de tras do conjurador com um arco lateral/vertical proprio
+			const float SideSign = (FMath::RandBool() ? 1.f : -1.f);
+			C.OffsetStart = FVector(SideSign * FMath::FRandRange(115.f, 195.f), FMath::FRandRange(125.f, 210.f), FMath::FRandRange(-30.f, 30.f));
+			C.OffsetEnd = FVector(FMath::FRandRange(-18.f, 18.f), FMath::FRandRange(-18.f, 18.f), 0.f);
 		}
 		else if (bHasRadialEnd)
 		{
@@ -469,6 +481,43 @@ void AMythProcEffect::BuildQuads()
 		const float T = Duration > 0.f ? (Time - Copy.Delay) / Duration : 1.f;
 		if (T < 0.f || T > 1.f)
 		{
+			continue;
+		}
+		if (bFromSrc && !bMagicSpear && !bSpriteImage)
+		{
+			// Espiritos Ancioes (Soul Strike): nascem atras do conjurador, fazem um arco curvo amplo (Bezier) e mergulham no inimigo com cauda espiritual!
+			FVector ForwardDir = (Origin - SourcePos).GetSafeNormal2D();
+			if (ForwardDir.IsNearlyZero()) { ForwardDir = FVector(1.f, 0.f, 0.f); }
+			const FVector SideDir(-ForwardDir.Y, ForwardDir.X, 0.f);
+			const FVector P0 = SourcePos - ForwardDir * 95.f + SideDir * (Copy.OffsetStart.Z) + FVector(0.f, 0.f, 65.f);
+			const FVector P2 = Origin + Copy.OffsetEnd + FVector(0.f, 0.f, 65.f);
+			const FVector P1 = FMath::Lerp(P0, P2, 0.35f) - ForwardDir * 45.f + SideDir * Copy.OffsetStart.X + FVector(0.f, 0.f, Copy.OffsetStart.Y);
+			auto EvalBezier = [&](float U) -> FVector
+			{
+				const float Inv = 1.f - U;
+				return Inv * Inv * P0 + 2.f * Inv * U * P1 + U * U * P2;
+			};
+			// Desenha a esfera espiritual principal (s=0) + 3 rastros translucidos na curva (cauda de espirito invocado)
+			for (int32 s = 3; s >= 0; --s)
+			{
+				const float SubT = FMath::Clamp(T - s * 0.045f, 0.f, 1.f);
+				if (T < s * 0.025f) { continue; }
+				const FVector Pos = EvalBezier(SubT) - Base;
+				const float ScaleFactor = 1.f - s * 0.18f;
+				const FVector2D SubSize = FMath::Lerp(SizeStart, SizeEnd, SubT) * ScaleFactor;
+				const FVector HalfX = Right * (SubSize.X * 0.5f);
+				const FVector HalfY = Up * (SubSize.Y * 0.5f);
+				const int32 V0 = Verts.Num();
+				Verts.Add(Pos - HalfX + HalfY);
+				Verts.Add(Pos + HalfX + HalfY);
+				Verts.Add(Pos + HalfX - HalfY);
+				Verts.Add(Pos - HalfX - HalfY);
+				UVs.Append({ FVector2D(0.f, 0.f), FVector2D(1.f, 0.f), FVector2D(1.f, 1.f), FVector2D(0.f, 1.f) });
+				const float SubAlpha = AlphaAt(T) * (s == 0 ? 1.f : (0.55f - s * 0.14f));
+				const FColor C = FLinearColor(Tint.R, Tint.G, Tint.B, FMath::Max(0.f, SubAlpha)).ToFColor(false);
+				Colors.Append({ C, C, C, C });
+				Tris.Append({ V0, V0 + 1, V0 + 2, V0, V0 + 2, V0 + 3 });
+			}
 			continue;
 		}
 		const FVector2D Size = FMath::Lerp(SizeStart, SizeEnd, T);
