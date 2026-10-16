@@ -143,7 +143,7 @@ FString UMythSkillManager::EffectClassOf(int32 SkillID)
 bool UMythSkillManager::Play(UObject* WorldContext, int32 SkillID, EMythSkillEffectStage Stage, AActor* Target, const FVector& Location, bool bFlashIfMissing, AActor* Source)
 {
 	bool bPlayed = FMythSkillEffects::Play(WorldContext, SkillID, Stage, Target, Location, bFlashIfMissing, Source);
-	if (!HasOriginalVisual(SkillID) && FMythOptions::Get(TEXT("ShowEffects")))
+	if ((!bPlayed || !HasOriginalVisual(SkillID)) && FMythOptions::Get(TEXT("ShowEffects")))
 	{
 		bPlayed |= PlayGeneric(WorldContext, SkillID, Stage, Target, Location, Source);
 	}
@@ -160,13 +160,12 @@ bool UMythSkillManager::PlayGeneric(UObject* WorldContext, int32 SkillID, EMythS
 	}
 	// Um unico visual generico por skill e alvo (os momentos da mesma skill chegam juntos)
 	static TMap<uint64, double> Recent;
-	const uint64 Key = (static_cast<uint64>(SkillID) << 32) ^ static_cast<uint64>(Target ? Target->GetUniqueID() : 0u) ^ (static_cast<uint64>(Stage) << 56);
+	const uint64 Key = (static_cast<uint64>(SkillID) << 32) ^ static_cast<uint64>(Target ? Target->GetUniqueID() : 0u);
 	const double Now = World->GetTimeSeconds();
-	if (const double* Last = Recent.Find(Key); Last && Now - *Last < 0.3)
+	if (const double* Last = Recent.Find(Key); Last && Now - *Last < 0.25)
 	{
 		return false;
 	}
-	Recent.Add(Key, Now);
 
 	const FString& Cls = C->Class;
 	FLinearColor Tint = VfxElementTint(C->Element);
@@ -178,9 +177,9 @@ bool UMythSkillManager::PlayGeneric(UObject* WorldContext, int32 SkillID, EMythS
 	{
 		if (const FString* ClassPath = VfxTables().ClassNiagara.Find(Cls)) { NiagaraPath = *ClassPath; }
 	}
-	const bool bBuffStage = Stage == EMythSkillEffectStage::Effect || Stage == EMythSkillEffectStage::Success;
-	const bool bGroundStage = Stage == EMythSkillEffectStage::Ground;
-	const bool bHitStage = Stage == EMythSkillEffectStage::Hit;
+	const bool bBuffStage = Stage == EMythSkillEffectStage::Effect || Stage == EMythSkillEffectStage::Success || Stage == EMythSkillEffectStage::SuccessCaster;
+	const bool bGroundStage = Stage == EMythSkillEffectStage::Ground || Stage == EMythSkillEffectStage::Effect;
+	const bool bHitStage = Stage == EMythSkillEffectStage::Hit || Stage == EMythSkillEffectStage::Effect || Stage == EMythSkillEffectStage::Success;
 	const bool bWantedHere = ((Cls == TEXT("buff_self") || Cls == TEXT("buff_target") || Cls == TEXT("heal") || Cls == TEXT("debuff")) && bBuffStage)
 		|| ((Cls == TEXT("ground_area") || Cls == TEXT("trap")) && bGroundStage)
 		|| ((Cls == TEXT("melee_hit") || Cls == TEXT("ranged_hit") || Cls == TEXT("magic_hit")) && bHitStage);
@@ -188,6 +187,8 @@ bool UMythSkillManager::PlayGeneric(UObject* WorldContext, int32 SkillID, EMythS
 	{
 		return false;
 	}
+	Recent.Add(Key, Now);
+
 	if (!NiagaraPath.IsEmpty())
 	{
 		UNiagaraSystem* System = LoadObject<UNiagaraSystem>(nullptr, *NiagaraPath);
@@ -196,7 +197,7 @@ bool UMythSkillManager::PlayGeneric(UObject* WorldContext, int32 SkillID, EMythS
 			UNiagaraComponent* Comp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(World, System, Feet, FRotator::ZeroRotator);
 			if (Comp)
 			{
-				Comp->SetVariableLinearColor(TEXT("User.Color"), Tint); // so tem efeito se o sistema expoe esse parametro
+				Comp->SetVariableLinearColor(TEXT("User.Color"), Tint);
 				return true;
 			}
 		}
@@ -208,40 +209,78 @@ bool UMythSkillManager::PlayGeneric(UObject* WorldContext, int32 SkillID, EMythS
 	if (Cls == TEXT("heal"))
 	{
 		Tint = FLinearColor(0.45f, 1.f, 0.55f);
+		bAny |= AMythStrEffect::Play(WorldContext, TEXT("cure_min"), Feet, Target) != nullptr;
 	}
 	if (Cls == TEXT("buff_self") || Cls == TEXT("buff_target") || Cls == TEXT("heal") || Cls == TEXT("debuff"))
 	{
 		const bool bDebuff = Cls == TEXT("debuff");
-		if (bDebuff) { Tint = FLinearColor(0.7f, 0.35f, 0.95f); }
-		// anel subindo em volta do alvo
+		if (bDebuff)
+		{
+			Tint = FLinearColor(0.7f, 0.35f, 0.95f);
+			bAny |= AMythStrEffect::Play(WorldContext, TEXT("slowp"), Feet, Target) != nullptr;
+		}
+		else if (Cls != TEXT("heal"))
+		{
+			bAny |= AMythStrEffect::Play(WorldContext, TEXT("concentration"), Feet, Target) != nullptr;
+		}
+		// anel subindo em volta do alvo + onda de choque na base
 		Spawn(VfxPart(TEXT("CYLINDER"), bDebuff ? TEXT("ring_black") : TEXT("ring_white"), Tint,
-			{ { TEXT("alphaMax"), 0.7 }, { TEXT("animation"), 1 }, { TEXT("blendMode"), 8 }, { TEXT("bottomSize"), 1.2 }, { TEXT("topSize"), 1.2 },
-			  { TEXT("height"), 3.5 }, { TEXT("duration"), 1500 } }));
+			{ { TEXT("alphaMax"), 0.8 }, { TEXT("animation"), 1 }, { TEXT("blendMode"), 8 }, { TEXT("bottomSize"), 1.3 }, { TEXT("topSize"), 1.5 },
+			  { TEXT("height"), 3.8 }, { TEXT("duration"), 1200 } }));
+		Spawn(VfxPart(TEXT("CYLINDER"), TEXT("ring_white"), Tint,
+			{ { TEXT("alphaMax"), 0.7 }, { TEXT("animation"), 4 }, { TEXT("blendMode"), 8 }, { TEXT("bottomSize"), 0.8 }, { TEXT("topSize"), 2.8 },
+			  { TEXT("height"), 0.3 }, { TEXT("duration"), 650 } }));
 		// brilhos subindo
 		TSharedPtr<FJsonObject> Sparks = VfxPart(TEXT("3D"), TEXT("effect/ac_center2.tga"), Tint,
-			{ { TEXT("alphaMax"), 1 }, { TEXT("duplicate"), 6 }, { TEXT("duration"), 1000 }, { TEXT("delayLate"), 250 }, { TEXT("posxRand"), 1.5 },
+			{ { TEXT("alphaMax"), 1 }, { TEXT("duplicate"), 10 }, { TEXT("duration"), 950 }, { TEXT("delayLate"), 100 }, { TEXT("posxRand"), 1.5 },
 			  { TEXT("posyRand"), 1 }, { TEXT("poszEndRand"), 1 }, { TEXT("poszEndRandMiddle"), 5 }, { TEXT("poszStartRand"), 1 }, { TEXT("poszStartRandMiddle"), 1 },
-			  { TEXT("sizeRandY"), 15 }, { TEXT("sizeRandYMiddle"), 40 }, { TEXT("sizeX"), 2.0 } });
+			  { TEXT("sizeRandY"), 15 }, { TEXT("sizeRandYMiddle"), 45 }, { TEXT("sizeX"), 2.5 } });
 		Sparks->SetBoolField(TEXT("fadeOut"), true);
 		Spawn(Sparks);
 	}
 	else if (Cls == TEXT("ground_area") || Cls == TEXT("trap"))
 	{
-		const float Side = static_cast<float>(FMath::Max(1, C->Area > 0 ? C->Area : (Cls == TEXT("trap") ? 1 : FMythSkillEffects::AreaSize(SkillID, 1))));
-		AMythCastRing::Spawn(WorldContext, false, Location, Side, 1.4f, nullptr);
+		const float Side = static_cast<float>(FMath::Max(1, C->Area > 0 ? C->Area : (Cls == TEXT("trap") ? 2 : FMythSkillEffects::AreaSize(SkillID, 1))));
+		AMythCastRing::Spawn(WorldContext, false, Location, Side, 1.8f, nullptr);
 		Spawn(VfxPart(TEXT("CYLINDER"), TEXT("ring_white"), Tint,
-			{ { TEXT("alphaMax"), 0.6 }, { TEXT("animation"), 1 }, { TEXT("blendMode"), 8 }, { TEXT("bottomSize"), Side * 0.5 }, { TEXT("topSize"), Side * 0.5 },
-			  { TEXT("height"), 3.0 }, { TEXT("duration"), 1400 } }, false));
+			{ { TEXT("alphaMax"), 0.75 }, { TEXT("animation"), 1 }, { TEXT("blendMode"), 8 }, { TEXT("bottomSize"), Side * 0.55 }, { TEXT("topSize"), Side * 0.65 },
+			  { TEXT("height"), 3.2 }, { TEXT("duration"), 1500 } }, false));
+		Spawn(VfxPart(TEXT("CYLINDER"), TEXT("alpha_down"), Tint,
+			{ { TEXT("alphaMax"), 0.55 }, { TEXT("animation"), 4 }, { TEXT("blendMode"), 2 }, { TEXT("bottomSize"), Side * 0.4 }, { TEXT("topSize"), Side * 0.8 },
+			  { TEXT("height"), 1.5 }, { TEXT("duration"), 1200 } }, false));
 		bAny = true;
 	}
-	else // melee_hit, ranged_hit, magic_hit: clarao de impacto do elemento
+	else // melee_hit, ranged_hit, magic_hit: impacto elemental HD-2D em 3 camadas (.str + cilindro de choque + explosao radial)
 	{
-		TSharedPtr<FJsonObject> Burst = VfxPart(TEXT("3D"), TEXT("effect/lens2.tga"), Tint,
-			{ { TEXT("alphaMax"), 1 }, { TEXT("angle"), 90 }, { TEXT("duration"), 400 }, { TEXT("posz"), 1 }, { TEXT("sizeEndY"), 200 }, { TEXT("sizeStartY"), 10 }, { TEXT("sizeX"), 15 }, { TEXT("toAngle"), 0 } }, false);
+		const TCHAR* HitStr = TEXT("hit");
+		if (C->Element == TEXT("Fire"))        { HitStr = TEXT("firehit1"); }
+		else if (C->Element == TEXT("Water"))  { HitStr = TEXT("freeze"); }
+		else if (C->Element == TEXT("Wind"))   { HitStr = TEXT("windhit1"); }
+		else if (C->Element == TEXT("Earth"))  { HitStr = TEXT("earthhit"); }
+		else if (C->Element == TEXT("Holy"))   { HitStr = TEXT("holyhit"); }
+		else if (C->Element == TEXT("Poison")) { HitStr = TEXT("poison"); }
+		else if (C->Element == TEXT("Dark") || C->Element == TEXT("Undead")) { HitStr = TEXT("devil"); }
+		else if (C->Element == TEXT("Ghost") || Cls == TEXT("magic_hit"))    { HitStr = TEXT("magical"); }
+		else if (Cls == TEXT("melee_hit"))     { HitStr = TEXT("shockwavehit"); }
+
+		bAny |= AMythStrEffect::Play(WorldContext, HitStr, Feet, Target) != nullptr;
+
+		// Onda de choque cilindrica na cor do elemento
+		TSharedPtr<FJsonObject> Ring = VfxPart(TEXT("CYLINDER"), TEXT("ring_white"), Tint,
+			{ { TEXT("alphaMax"), 0.8 }, { TEXT("animation"), 4 }, { TEXT("bottomSize"), 1.0 }, { TEXT("topSize"), 3.4 },
+			  { TEXT("height"), 0.5 }, { TEXT("duration"), 550 } }, false);
+		Ring->SetBoolField(TEXT("fade"), true);
+		Ring->SetBoolField(TEXT("rotate"), true);
+		Spawn(Ring);
+
+		// Explosao radial de 12 feixes luminosos
+		TSharedPtr<FJsonObject> Burst = VfxPart(TEXT("3D"), TEXT("effect/lens1.tga"), Tint,
+			{ { TEXT("alphaMax"), 0.9 }, { TEXT("duplicate"), 12 }, { TEXT("duration"), 450 }, { TEXT("posxEndRand"), 26 }, { TEXT("posyEndRand"), 26 },
+			  { TEXT("sizeStartX"), 12 }, { TEXT("sizeStartY"), 110 }, { TEXT("sizeEndX"), 8 }, { TEXT("sizeEndY"), 140 } }, false);
 		Burst->SetBoolField(TEXT("fadeOut"), true);
-		Burst->SetBoolField(TEXT("rotate"), true);
+		Burst->SetBoolField(TEXT("rotateToTarget"), true);
 		Spawn(Burst);
 	}
-	UE_LOG(LogTemp, Verbose, TEXT("MythSkillManager: skill %d has no client visual -> generic effect '%s' (%s)"), SkillID, *Cls, *C->Element);
+	UE_LOG(LogTemp, Verbose, TEXT("MythSkillManager: skill %d -> HD-2D generic effect '%s' (%s)"), SkillID, *Cls, *C->Element);
 	return bAny;
 }

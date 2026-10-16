@@ -245,35 +245,43 @@ void AMythDayNightActor::UpdateLighting()
 	if (bIsDungeon)
 	{
 		// Sinalizador de Masmorra (HD-2D):
-		// Apaga o sol e a lua; mantem a iluminacao ambiente suave de masmorra sem escuridao absoluta,
-		// e as tochas/cristais (NightGlow) acendem com forca maxima (Lumen).
+		// Desliga o sol direto, mas mantem Atmosphere + SkyLight ativos e usa a Lua como luz de preenchimento zenital
+		// sem sombras para garantir que todas as masmorras tenham luz natural/ambiente clara (+20% mais clara que antes),
+		// destacando ao mesmo tempo o brilho quente das tochas (NightGlow).
 		Sun->SetVisibility(false);
 		Sun->SetIntensity(0.f);
-		Moon->SetVisibility(false);
-		Moon->SetIntensity(0.f);
+		Sun->SetCastShadows(false);
 		Sun->ForwardShadingPriority = 0;
-		Moon->ForwardShadingPriority = 0;
+
+		// Preenchimento zenital suave sem sombras pesadas para iluminar pisos e paredes de masmorras uniformemente
+		Moon->SetWorldRotation(FRotator(-75.f, 45.f, 0.f));
+		Moon->SetVisibility(true);
+		Moon->SetCastShadows(false);
+		Moon->SetLightColor(FLinearColor(0.72f, 0.78f, 0.90f));
+		Moon->SetIntensity(3.5f);
+		Moon->ForwardShadingPriority = 2;
+
 		if (!bDungeonLightingApplied)
 		{
 			bDungeonLightingApplied = true;
-			if (SkyLight)
-			{
-				SkyLight->SetRealTimeCaptureEnabled(false);
-			}
 			if (Atmosphere)
 			{
-				Atmosphere->SetVisibility(false);
+				Atmosphere->SetVisibility(true);
+			}
+			if (SkyLight)
+			{
+				SkyLight->SetRealTimeCaptureEnabled(true);
 			}
 		}
-		// Luz natural/ambiente de masmorra calibrada 20% mais clara para otima legibilidade e atmosfera
-		SkyLight->SetIntensity(0.12f);
-		SkyLight->SetLightColor(FLinearColor(0.32f, 0.38f, 0.50f));
+		// Luz ambiente de masmorra clara e confortavel
+		SkyLight->SetIntensity(1.45f);
+		SkyLight->SetLightColor(FLinearColor(0.62f, 0.68f, 0.82f));
 		if (Grading)
 		{
 			FPostProcessSettings& PP = Grading->Settings;
-			PP.AutoExposureBias = -0.15f;
-			PP.ColorGain = FVector4(0.92f, 0.95f, 1.05f, 1.f);
-			PP.ColorSaturation = FVector4(1.f, 1.f, 1.f, 0.92f);
+			PP.AutoExposureBias = 0.35f;
+			PP.ColorGain = FVector4(1.02f, 1.02f, 1.06f, 1.f);
+			PP.ColorSaturation = FVector4(1.f, 1.f, 1.f, 0.96f);
 		}
 		if (!FMath::IsNearlyEqual(1.0f, AppliedNightGlow, 0.01f))
 		{

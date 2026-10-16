@@ -70,6 +70,19 @@ try:
 except Exception as e:
     unreal.log_error(f"Error compiling M_TiltShift: {e}")
 
+# 5b. Recreate MPC_Environment (Wetness + SnowCoverage) and upgrade map materials
+unreal.log("--- Updating MPC_Environment & Map Materials (Rain Puddles + Snow Accumulation) ---")
+try:
+    spec = importlib.util.spec_from_file_location("ue_make_mpc_environment", "E:/Documentos/Repositórios/mythofthor_project/tools/ue_make_mpc_environment.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    spec2 = importlib.util.spec_from_file_location("ue_upgrade_map_materials", "E:/Documentos/Repositórios/mythofthor_project/tools/ue_upgrade_map_materials.py")
+    mod2 = importlib.util.module_from_spec(spec2)
+    spec2.loader.exec_module(mod2)
+    unreal.log("MPC_Environment and map materials updated successfully.")
+except Exception as e:
+    unreal.log_error(f"Error updating MPC_Environment / map materials: {e}")
+
 # 6. Add live torches to Lvl_PrtSewb1
 unreal.log("--- Adding Live Torches to Lvl_PrtSewb1 ---")
 level_path = "/Game/Maps/PrtSewb1/Lvl_PrtSewb1"

@@ -88,6 +88,7 @@ private:
 	EMythWeather Visible = EMythWeather::Clear;
 
 	float Wetness = 0.f;
+	float SnowAmount = 0.f;
 	float WeatherTimer = 0.f;
 	float NextWeatherChangeTime = 120.f;
 	TArray<EMythWeather> AllowedWeatherList;

@@ -6,6 +6,7 @@
 
 class UProceduralMeshComponent;
 class UMaterialInstanceDynamic;
+class UTexture2D;
 class FJsonObject;
 
 /**
@@ -33,6 +34,9 @@ public:
 private:
 	UPROPERTY() TObjectPtr<UProceduralMeshComponent> Mesh;
 	UPROPERTY() TObjectPtr<UMaterialInstanceDynamic> Material;
+	UPROPERTY() TArray<TObjectPtr<UTexture2D>> FrameTextures;
+	float FrameDelaySec = 0.04f;
+	int32 LastFrameIdx = 0;
 
 	TWeakObjectPtr<AActor> Follow;
 	FVector Origin = FVector::ZeroVector;
@@ -40,6 +44,11 @@ private:
 	bool bHasSource = false;
 	/** Projetil de sprite (.spr): uma imagem, com a ponta girada para o alvo. */
 	bool bSpriteImage = false;
+	bool bMagicSpear = false;
+	bool bRotateToTarget = false;
+	bool bFromSrc = false;
+	float FixedAngle = 0.f;
+	bool bHasFixedAngle = false;
 	FVector2D ImagePixels = FVector2D::ZeroVector;
 
 	FString Type;
@@ -66,7 +75,8 @@ private:
 	struct FCopy
 	{
 		float Delay = 0.f;
-		FVector Offset = FVector::ZeroVector;
+		FVector OffsetStart = FVector::ZeroVector;
+		FVector OffsetEnd = FVector::ZeroVector;
 		float Angle = 0.f;
 	};
 	TArray<FCopy> Copies;

@@ -33,9 +33,29 @@ void AMythNightLight::BeginPlay()
 	if (MapInfo)
 	{
 		const FString Low = MapInfo->MapName.ToLower();
-		if (MapInfo->IsIndoor() || Low.Contains(TEXT("dun")) || Low.Contains(TEXT("sewb")) || Low.Contains(TEXT("cave")) || Low.Contains(TEXT("anthell")) || Low.Contains(TEXT("maze")))
+		const bool bIndoorHouse = MapInfo->IsIndoor() || Low.Contains(TEXT("_in"));
+		const bool bDungeonMap = !bIndoorHouse && (Low.Contains(TEXT("dun")) || Low.Contains(TEXT("sewb")) || Low.Contains(TEXT("cave"))
+			|| Low.Contains(TEXT("anthell")) || Low.Contains(TEXT("maze")) || Low.Contains(TEXT("sphinx")) || Low.Contains(TEXT("pyramid"))
+			|| Low.Contains(TEXT("moc_pryd")) || Low.Contains(TEXT("orcsdun")) || Low.Contains(TEXT("iz_dun")) || Low.Contains(TEXT("treasure")));
+
+		if (bIndoorHouse)
 		{
 			bAlwaysOn = true;
+			bShowFlame = false; // Casas internas usam iluminacao suave de lampada sem labareda de fogo
+			NightIntensity = FMath::Min(NightIntensity, 35.f);
+		}
+		else if (bDungeonMap)
+		{
+			bAlwaysOn = true;
+			// Nas masmorras/esgoto, todas as luzes quentes de tocha exibem o fogo vivo automaticamente
+			if (Light)
+			{
+				const FLinearColor Col = Light->GetLightColor();
+				if (Col.R > 0.65f && Col.B < 0.45f)
+				{
+					bShowFlame = true;
+				}
+			}
 		}
 	}
 

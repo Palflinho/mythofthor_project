@@ -396,12 +396,15 @@ def build_parent_materials(folder):
         tex = mel.create_material_expression(mat, unreal.MaterialExpressionTextureSampleParameter2D, -900, 0)
         tex.set_editor_property('parameter_name', 'Tex')
 
-        # Parametros para Chuva e Pocas HD-2D (GDD Secao 6.2)
+        # Parametros para Chuva (Pocas) e Neve (Acumulo de Neve) HD-2D (GDD Secao 6.2)
         if mpc_asset:
-            wetness = mel.create_material_expression(mat, unreal.MaterialExpressionCollectionParameter, -700, 200)
+            wetness = mel.create_material_expression(mat, unreal.MaterialExpressionCollectionParameter, -700, 180)
             wetness.set_editor_property('collection', mpc_asset)
             wetness.set_editor_property('parameter_name', 'Wetness')
-            world_pos = mel.create_material_expression(mat, unreal.MaterialExpressionWorldPosition, -700, 350)
+            snow_cov = mel.create_material_expression(mat, unreal.MaterialExpressionCollectionParameter, -700, 280)
+            snow_cov.set_editor_property('collection', mpc_asset)
+            snow_cov.set_editor_property('parameter_name', 'SnowCoverage')
+            world_pos = mel.create_material_expression(mat, unreal.MaterialExpressionWorldPosition, -700, 380)
             pixel_normal = mel.create_material_expression(mat, unreal.MaterialExpressionPixelNormalWS, -700, 500)
 
             def add_puddle_inputs(node, names):
@@ -412,70 +415,106 @@ def build_parent_materials(folder):
                     inputs.append(inp)
                 node.set_editor_property('inputs', inputs)
 
-            # Wet BaseColor
+            # Wet & Snow BaseColor
             wet_base = mel.create_material_expression(mat, unreal.MaterialExpressionCustom, -400, 0)
             wet_base.set_editor_property('output_type', unreal.CustomMaterialOutputType.CMOT_FLOAT3)
-            wet_base.set_editor_property('description', 'WetBaseColor')
+            wet_base.set_editor_property('description', 'WeatherBaseColor')
             wet_base.set_editor_property('code', """
-if (Wetness <= 0.001) return InColor;
-float isGround = saturate((WorldNormal.z - 0.6) * 3.33);
-float2 p = WorldPos.xy * 0.0025;
-float n1 = sin(p.x * 2.3 + sin(p.y * 1.7));
-float n2 = cos(p.y * 2.7 + cos(p.x * 1.9));
-float noise = saturate((n1 + n2) * 0.25 + 0.5);
-float puddleThreshold = saturate(Wetness * 1.4 - 0.2);
-float puddleMask = smoothstep(1.0 - puddleThreshold, 1.0 - puddleThreshold + 0.15, noise) * isGround;
-float3 wetColor = InColor * lerp(1.0, 0.68, Wetness);
-float3 puddleColor = lerp(wetColor * 0.75, float3(0.04, 0.07, 0.1), 0.25);
-return lerp(wetColor, puddleColor, puddleMask);
+float3 col = InColor;
+float isGround = saturate((WorldNormal.z - 0.55) * 3.0);
+if (Wetness > 0.001)
+{
+    float2 p = WorldPos.xy * 0.0025;
+    float n1 = sin(p.x * 2.3 + sin(p.y * 1.7));
+    float n2 = cos(p.y * 2.7 + cos(p.x * 1.9));
+    float noise = saturate((n1 + n2) * 0.25 + 0.5);
+    float puddleThreshold = saturate(Wetness * 1.4 - 0.2);
+    float puddleMask = smoothstep(1.0 - puddleThreshold, 1.0 - puddleThreshold + 0.15, noise) * isGround;
+    float3 wetColor = col * lerp(1.0, 0.68, Wetness);
+    float3 puddleColor = lerp(wetColor * 0.75, float3(0.04, 0.07, 0.1), 0.25);
+    col = lerp(wetColor, puddleColor, puddleMask);
+}
+if (SnowCoverage > 0.001)
+{
+    float2 sp = WorldPos.xy * 0.0022;
+    float s1 = sin(sp.x * 1.9 + cos(sp.y * 2.1)) * cos(sp.y * 1.7 - sin(sp.x * 1.5));
+    float s2 = sin(sp.x * 4.3 - sp.y * 3.7) * 0.35;
+    float sNoise = saturate((s1 + s2) * 0.4 + 0.5);
+    float snowThresh = saturate(SnowCoverage * 1.35 - 0.1);
+    float driftMask = smoothstep(1.0 - snowThresh, 1.0 - snowThresh + 0.22, sNoise) * isGround;
+    float frost = SnowCoverage * 0.42 * isGround;
+    float snowFactor = saturate(driftMask * 0.88 + frost);
+    float3 snowColor = float3(0.92, 0.95, 1.0);
+    col = lerp(col, snowColor, snowFactor);
+}
+return col;
 """)
-            add_puddle_inputs(wet_base, ['InColor', 'Wetness', 'WorldPos', 'WorldNormal'])
+            add_puddle_inputs(wet_base, ['InColor', 'Wetness', 'SnowCoverage', 'WorldPos', 'WorldNormal'])
             mel.connect_material_expressions(tex, 'RGB', wet_base, 'InColor')
             mel.connect_material_expressions(wetness, '', wet_base, 'Wetness')
+            mel.connect_material_expressions(snow_cov, '', wet_base, 'SnowCoverage')
             mel.connect_material_expressions(world_pos, '', wet_base, 'WorldPos')
             mel.connect_material_expressions(pixel_normal, '', wet_base, 'WorldNormal')
             mel.connect_material_property(wet_base, '', unreal.MaterialProperty.MP_BASE_COLOR)
 
-            # Wet Roughness
+            # Wet & Snow Roughness
             wet_rough = mel.create_material_expression(mat, unreal.MaterialExpressionCustom, -400, 200)
             wet_rough.set_editor_property('output_type', unreal.CustomMaterialOutputType.CMOT_FLOAT1)
-            wet_rough.set_editor_property('description', 'WetRoughness')
+            wet_rough.set_editor_property('description', 'WeatherRoughness')
             wet_rough.set_editor_property('code', """
-if (Wetness <= 0.001) return 0.95;
-float isGround = saturate((WorldNormal.z - 0.6) * 3.33);
-float2 p = WorldPos.xy * 0.0025;
-float n1 = sin(p.x * 2.3 + sin(p.y * 1.7));
-float n2 = cos(p.y * 2.7 + cos(p.x * 1.9));
-float noise = saturate((n1 + n2) * 0.25 + 0.5);
-float puddleThreshold = saturate(Wetness * 1.4 - 0.2);
-float puddleMask = smoothstep(1.0 - puddleThreshold, 1.0 - puddleThreshold + 0.15, noise) * isGround;
-float generalRoughness = lerp(0.95, 0.35, Wetness);
-return lerp(generalRoughness, 0.03, puddleMask);
+float rough = 0.95;
+float isGround = saturate((WorldNormal.z - 0.55) * 3.0);
+if (Wetness > 0.001)
+{
+    float2 p = WorldPos.xy * 0.0025;
+    float n1 = sin(p.x * 2.3 + sin(p.y * 1.7));
+    float n2 = cos(p.y * 2.7 + cos(p.x * 1.9));
+    float noise = saturate((n1 + n2) * 0.25 + 0.5);
+    float puddleThreshold = saturate(Wetness * 1.4 - 0.2);
+    float puddleMask = smoothstep(1.0 - puddleThreshold, 1.0 - puddleThreshold + 0.15, noise) * isGround;
+    float generalRoughness = lerp(0.95, 0.35, Wetness);
+    rough = lerp(generalRoughness, 0.03, puddleMask);
+}
+if (SnowCoverage > 0.001)
+{
+    rough = lerp(rough, 0.72, saturate(SnowCoverage * isGround));
+}
+return rough;
 """)
-            add_puddle_inputs(wet_rough, ['Wetness', 'WorldPos', 'WorldNormal'])
+            add_puddle_inputs(wet_rough, ['Wetness', 'SnowCoverage', 'WorldPos', 'WorldNormal'])
             mel.connect_material_expressions(wetness, '', wet_rough, 'Wetness')
+            mel.connect_material_expressions(snow_cov, '', wet_rough, 'SnowCoverage')
             mel.connect_material_expressions(world_pos, '', wet_rough, 'WorldPos')
             mel.connect_material_expressions(pixel_normal, '', wet_rough, 'WorldNormal')
             mel.connect_material_property(wet_rough, '', unreal.MaterialProperty.MP_ROUGHNESS)
 
-            # Wet Specular
+            # Wet & Snow Specular
             wet_spec = mel.create_material_expression(mat, unreal.MaterialExpressionCustom, -400, 350)
             wet_spec.set_editor_property('output_type', unreal.CustomMaterialOutputType.CMOT_FLOAT1)
-            wet_spec.set_editor_property('description', 'WetSpecular')
+            wet_spec.set_editor_property('description', 'WeatherSpecular')
             wet_spec.set_editor_property('code', """
-if (Wetness <= 0.001) return 0.05;
-float isGround = saturate((WorldNormal.z - 0.6) * 3.33);
-float2 p = WorldPos.xy * 0.0025;
-float n1 = sin(p.x * 2.3 + sin(p.y * 1.7));
-float n2 = cos(p.y * 2.7 + cos(p.x * 1.9));
-float noise = saturate((n1 + n2) * 0.25 + 0.5);
-float puddleThreshold = saturate(Wetness * 1.4 - 0.2);
-float puddleMask = smoothstep(1.0 - puddleThreshold, 1.0 - puddleThreshold + 0.15, noise) * isGround;
-float generalSpecular = lerp(0.05, 0.45, Wetness);
-return lerp(generalSpecular, 0.85, puddleMask);
+float spec = 0.05;
+float isGround = saturate((WorldNormal.z - 0.55) * 3.0);
+if (Wetness > 0.001)
+{
+    float2 p = WorldPos.xy * 0.0025;
+    float n1 = sin(p.x * 2.3 + sin(p.y * 1.7));
+    float n2 = cos(p.y * 2.7 + cos(p.x * 1.9));
+    float noise = saturate((n1 + n2) * 0.25 + 0.5);
+    float puddleThreshold = saturate(Wetness * 1.4 - 0.2);
+    float puddleMask = smoothstep(1.0 - puddleThreshold, 1.0 - puddleThreshold + 0.15, noise) * isGround;
+    float generalSpecular = lerp(0.05, 0.45, Wetness);
+    spec = lerp(generalSpecular, 0.85, puddleMask);
+}
+if (SnowCoverage > 0.001)
+{
+    spec = lerp(spec, 0.55, saturate(SnowCoverage * isGround));
+}
+return spec;
 """)
-            add_puddle_inputs(wet_spec, ['Wetness', 'WorldPos', 'WorldNormal'])
+            add_puddle_inputs(wet_spec, ['Wetness', 'SnowCoverage', 'WorldPos', 'WorldNormal'])
             mel.connect_material_expressions(wetness, '', wet_spec, 'Wetness')
+            mel.connect_material_expressions(snow_cov, '', wet_spec, 'SnowCoverage')
             mel.connect_material_expressions(world_pos, '', wet_spec, 'WorldPos')
             mel.connect_material_expressions(pixel_normal, '', wet_spec, 'WorldNormal')
             mel.connect_material_property(wet_spec, '', unreal.MaterialProperty.MP_SPECULAR)

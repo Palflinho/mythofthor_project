@@ -44,7 +44,7 @@ public:
 
 	/** Deslocamento vertical da chama animada em relacao a tocha (cm) - posicionado no cesto da tocha. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "NightLight")
-	float FlameZOffset = -115.f;
+	float FlameZOffset = -85.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "NightLight")
 	TObjectPtr<UPointLightComponent> Light;

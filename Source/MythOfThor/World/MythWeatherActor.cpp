@@ -225,10 +225,11 @@ void AMythWeatherActor::InitBiomeWeather()
 void AMythWeatherActor::UpdateWetness(float DeltaSeconds)
 {
 	const bool bRaining = (Visible == EMythWeather::Rain || Weather == EMythWeather::Rain);
+	const bool bSnowing = (Visible == EMythWeather::Snow || Weather == EMythWeather::Snow);
 	if (bRaining)
 	{
 		// Durante a chuva o piso molha progressivamente
-		Wetness = FMath::FInterpTo(Wetness, Intensity, DeltaSeconds, 0.25f);
+		Wetness = FMath::FInterpTo(Wetness, FMath::Max(Intensity, 0.35f), DeltaSeconds, 0.30f);
 	}
 	else
 	{
@@ -236,10 +237,22 @@ void AMythWeatherActor::UpdateWetness(float DeltaSeconds)
 		Wetness = FMath::FInterpTo(Wetness, 0.0f, DeltaSeconds, 0.035f);
 	}
 
+	if (bSnowing)
+	{
+		// Durante a neve o chao acumula neve progressivamente
+		SnowAmount = FMath::FInterpTo(SnowAmount, FMath::Max(Intensity, 0.45f), DeltaSeconds, 0.35f);
+	}
+	else
+	{
+		// Apos a neve parar, derrete suavemente
+		SnowAmount = FMath::FInterpTo(SnowAmount, 0.0f, DeltaSeconds, 0.04f);
+	}
+
 	if (EnvironmentMPC && GetWorld())
 	{
 		UKismetMaterialLibrary::SetScalarParameterValue(GetWorld(), EnvironmentMPC, FName(TEXT("Wetness")), Wetness);
 		UKismetMaterialLibrary::SetScalarParameterValue(GetWorld(), EnvironmentMPC, FName(TEXT("RainIntensity")), Visible == EMythWeather::Rain ? Intensity : 0.f);
+		UKismetMaterialLibrary::SetScalarParameterValue(GetWorld(), EnvironmentMPC, FName(TEXT("SnowCoverage")), SnowAmount);
 	}
 }
 

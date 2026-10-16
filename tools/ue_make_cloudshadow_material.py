@@ -1,7 +1,7 @@
 """
-Creates /Game/Myth/M_CloudShadows: moving cloud shadows (GDD technical, section 7.1). A Light Function material for the sun: world position
-(xy) / scale scrolls with time through a noise and is remapped to 0.45 (in the shadow of a cloud) .. 1.0 (full sun).
-Parameters: Scale (world uu per noise cell, default 6000), SpeedX / SpeedY (default 0.004, 0.0025), Darkness (shadow brightness, default 0.45).
+Creates /Game/Myth/M_CloudShadows: moving cloud shadows (GDD technical, section 7.1). A Light Function material for the sun.
+Uses analytical C-infinity smooth trigonometric FBM in HLSL Custom node (zero texture/simplex lookup grain)
+so cloud shadows are 100% smooth and organic across the terrain.
 
 Usage (UnrealEditor-Cmd): -run=pythonscript -script="tools/ue_make_cloudshadow_material.py"
 """
@@ -25,63 +25,55 @@ if unreal.EditorAssetLibrary.does_asset_exist(full):
 mat = tools.create_asset('M_CloudShadows', PATH, unreal.Material, unreal.MaterialFactoryNew())
 mat.set_editor_property('material_domain', unreal.MaterialDomain.MD_LIGHT_FUNCTION)
 
-wp = expr(mat, unreal.MaterialExpressionWorldPosition, -1200, 0)
-xy = expr(mat, unreal.MaterialExpressionComponentMask, -1000, 0, r=True, g=True, b=False, a=False)
-lib.connect_material_expressions(wp, '', xy, '')
-scale = expr(mat, unreal.MaterialExpressionScalarParameter, -1000, 150, parameter_name='Scale', default_value=22000.0)
-div = expr(mat, unreal.MaterialExpressionDivide, -800, 0)
-lib.connect_material_expressions(xy, '', div, 'A')
-lib.connect_material_expressions(scale, '', div, 'B')
+wp = expr(mat, unreal.MaterialExpressionWorldPosition, -900, 0)
+time = expr(mat, unreal.MaterialExpressionTime, -900, 150)
+scale = expr(mat, unreal.MaterialExpressionScalarParameter, -900, 260, parameter_name='Scale', default_value=3800.0)
+sx = expr(mat, unreal.MaterialExpressionScalarParameter, -900, 360, parameter_name='SpeedX', default_value=0.06)
+sy = expr(mat, unreal.MaterialExpressionScalarParameter, -900, 460, parameter_name='SpeedY', default_value=0.035)
+dark = expr(mat, unreal.MaterialExpressionScalarParameter, -900, 560, parameter_name='Darkness', default_value=0.42)
 
-time = expr(mat, unreal.MaterialExpressionTime, -1000, 300)
-sx = expr(mat, unreal.MaterialExpressionScalarParameter, -1000, 400, parameter_name='SpeedX', default_value=0.008)
-sy = expr(mat, unreal.MaterialExpressionScalarParameter, -1000, 480, parameter_name='SpeedY', default_value=0.004)
+cloud = expr(mat, unreal.MaterialExpressionCustom, -350, 150)
+cloud.set_editor_property('output_type', unreal.CustomMaterialOutputType.CMOT_FLOAT3)
+cloud.set_editor_property('description', 'SmoothCloudShadowsFBM')
+cloud.set_editor_property('code', """
+float2 p = WorldPos.xy / max(Scale, 100.0) + float2(Time * SpeedX, Time * SpeedY);
 
-mx = expr(mat, unreal.MaterialExpressionMultiply, -800, 300)
-lib.connect_material_expressions(time, '', mx, 'A')
-lib.connect_material_expressions(sx, '', mx, 'B')
-my = expr(mat, unreal.MaterialExpressionMultiply, -800, 400)
-lib.connect_material_expressions(time, '', my, 'A')
-lib.connect_material_expressions(sy, '', my, 'B')
-app = expr(mat, unreal.MaterialExpressionAppendVector, -650, 350)
-lib.connect_material_expressions(mx, '', app, 'A')
-lib.connect_material_expressions(my, '', app, 'B')
-add = expr(mat, unreal.MaterialExpressionAdd, -500, 100)
-lib.connect_material_expressions(div, '', add, 'A')
-lib.connect_material_expressions(app, '', add, 'B')
+// Domain warping suave com ondas senoidais analiticas (zero granulado de tabela de ruido)
+float2 warp = float2(
+    sin(p.y * 1.3 + Time * 0.02) + 0.5 * cos(p.x * 2.1 - p.y * 1.1),
+    cos(p.x * 1.5 - Time * 0.015) + 0.5 * sin(p.y * 1.9 + p.x * 1.2)
+);
+float2 q = p + warp * 0.45;
 
-# Noise over the scrolling coordinates (needs a 3-vector position: append a constant z)
-z = expr(mat, unreal.MaterialExpressionConstant, -500, 250, r=0.0)
-pos3 = expr(mat, unreal.MaterialExpressionAppendVector, -350, 150)
-lib.connect_material_expressions(add, '', pos3, 'A')
-lib.connect_material_expressions(z, '', pos3, 'B')
-noise = expr(mat, unreal.MaterialExpressionNoise, -200, 150, scale=1.0, quality=1, levels=3, output_min=0.0, output_max=1.0,
-             level_scale=2.0, turbulence=False)
-lib.connect_material_expressions(pos3, '', noise, 'Position')
+// 3 oitavas suaves de nuvens organicas (Cumulus)
+float c1 = sin(q.x * 1.7 + cos(q.y * 1.4)) * cos(q.y * 1.6 - sin(q.x * 1.3));
+float c2 = sin(q.x * 3.1 - q.y * 2.3 + 1.7) * cos(q.y * 2.9 + q.x * 2.1 - 0.8);
+float c3 = sin(q.x * 5.3 + q.y * 4.7 - 2.4) * cos(q.x * 4.1 - q.y * 5.1 + 1.1);
 
-# remap: soft threshold so that clouds are patches, not a uniform haze
-lo = expr(mat, unreal.MaterialExpressionConstant, -200, 320, r=0.38)
-hi = expr(mat, unreal.MaterialExpressionConstant, -200, 380, r=0.62)
-sub = expr(mat, unreal.MaterialExpressionSubtract, 0, 150)
-lib.connect_material_expressions(noise, '', sub, 'A')
-lib.connect_material_expressions(lo, '', sub, 'B')
-rng = expr(mat, unreal.MaterialExpressionSubtract, 0, 330)
-lib.connect_material_expressions(hi, '', rng, 'A')
-lib.connect_material_expressions(lo, '', rng, 'B')
-dv = expr(mat, unreal.MaterialExpressionDivide, 150, 150)
-lib.connect_material_expressions(sub, '', dv, 'A')
-lib.connect_material_expressions(rng, '', dv, 'B')
-sat = expr(mat, unreal.MaterialExpressionSaturate, 300, 150)
-lib.connect_material_expressions(dv, '', sat, '')
+float fbm = c1 * 0.60 + c2 * 0.28 + c3 * 0.12;
+float density = saturate(fbm * 0.5 + 0.5);
 
-dark = expr(mat, unreal.MaterialExpressionScalarParameter, 300, 300, parameter_name='Darkness', default_value=0.28)
-one = expr(mat, unreal.MaterialExpressionConstant, 300, 360, r=1.0)
-lerp = expr(mat, unreal.MaterialExpressionLinearInterpolate, 500, 150)
-lib.connect_material_expressions(dark, '', lerp, 'A')   # in the cloud
-lib.connect_material_expressions(one, '', lerp, 'B')    # full sun
-lib.connect_material_expressions(sat, '', lerp, 'Alpha')
-lib.connect_material_property(lerp, '', unreal.MaterialProperty.MP_EMISSIVE_COLOR)
+// Transicao macia entre sol pleno (1.0) e sombra de nuvem (Darkness)
+float sunMask = smoothstep(0.42, 0.68, density);
+float val = lerp(Darkness, 1.0, sunMask);
+return float3(val, val, val);
+""")
+
+inps = []
+for name in ['WorldPos', 'Time', 'Scale', 'SpeedX', 'SpeedY', 'Darkness']:
+    inp = unreal.CustomInput()
+    inp.set_editor_property('input_name', name)
+    inps.append(inp)
+cloud.set_editor_property('inputs', inps)
+
+lib.connect_material_expressions(wp, '', cloud, 'WorldPos')
+lib.connect_material_expressions(time, '', cloud, 'Time')
+lib.connect_material_expressions(scale, '', cloud, 'Scale')
+lib.connect_material_expressions(sx, '', cloud, 'SpeedX')
+lib.connect_material_expressions(sy, '', cloud, 'SpeedY')
+lib.connect_material_expressions(dark, '', cloud, 'Darkness')
+lib.connect_material_property(cloud, '', unreal.MaterialProperty.MP_EMISSIVE_COLOR)
 
 lib.recompile_material(mat)
 unreal.EditorAssetLibrary.save_loaded_asset(mat)
-unreal.log('[MythCloudShadows] %s created' % full)
+unreal.log('[MythCloudShadows] %s created (analytical grain-free FBM)' % full)

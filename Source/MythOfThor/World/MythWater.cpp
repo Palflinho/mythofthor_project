@@ -76,6 +76,7 @@ bool AMythWater::Build(const FString& MapName, const FVector2D& Origin)
 	TArray<int32> Tris;
 	TArray<FVector> Normals;
 	TArray<FVector2D> UVs;
+	TArray<FProcMeshTangent> Tangents;
 	const TSharedPtr<FJsonObject>* Rows = nullptr;
 	if (!Root->TryGetObjectField(TEXT("rows"), Rows) || !Rows)
 	{
@@ -103,19 +104,23 @@ bool AMythWater::Build(const FString& MapName, const FVector2D& Origin)
 			UVs.Add(FVector2D((X0 + Len) / 5.f, Ty / 5.f));
 			UVs.Add(FVector2D((X0 + Len) / 5.f, (Ty + 1) / 5.f));
 			UVs.Add(FVector2D(X0 / 5.f, (Ty + 1) / 5.f));
-			for (int32 k = 0; k < 4; ++k) { Normals.Add(FVector::UpVector); }
-			// duas faces (de cima e de baixo): a camera do jogo olha de cima, mas o plano nao pode sumir de baixo
+			for (int32 k = 0; k < 4; ++k)
+			{
+				Normals.Add(FVector::UpVector);
+				Tangents.Add(FProcMeshTangent(1.f, 0.f, 0.f));
+			}
+			// Uma unica malha de face superior (o material ja tem TwoSided=true, evitando Z-fighting de triangulos duplicados)
 			Tris.Append({ Base0, Base0 + 1, Base0 + 2, Base0, Base0 + 2, Base0 + 3 });
-			Tris.Append({ Base0, Base0 + 2, Base0 + 1, Base0, Base0 + 3, Base0 + 2 });
 		}
 	}
 	if (Verts.Num() == 0)
 	{
 		return false;
 	}
-	Mesh->CreateMeshSection(0, Verts, Tris, Normals, UVs, TArray<FColor>(), TArray<FProcMeshTangent>(), false);
-	BaseOpacity = (Type == 4 || Type == 6) ? 1.f : 0.78f;
-	ApplyStyle(); // material depois do CreateMeshSection: o colocado antes se perde	UE_LOG(LogTemp, Log, TEXT("MythWater: %s water level %.1f type %d, %d blocks"), *MapName, Level, Type, Verts.Num() / 4);
+	Mesh->CreateMeshSection(0, Verts, Tris, Normals, UVs, TArray<FColor>(), Tangents, false);
+	BaseOpacity = (Type == 4 || Type == 6) ? 1.f : 0.75f;
+	ApplyStyle(); // material depois do CreateMeshSection: o colocado antes se perde
+	UE_LOG(LogTemp, Log, TEXT("MythWater: %s water level %.1f type %d, %d blocks"), *MapName, Level, Type, Verts.Num() / 4);
 	return true;
 }
 
@@ -149,7 +154,7 @@ void AMythWater::ApplyStyle()
 		return;
 	}
 	Material = UMaterialInstanceDynamic::Create(Base, this);
-	Material->SetScalarParameterValue(TEXT("Opacity"), bModern ? 0.9f : BaseOpacity);
+	Material->SetScalarParameterValue(TEXT("Opacity"), bModern ? 0.68f : BaseOpacity);
 	Material->SetScalarParameterValue(TEXT("Brightness"), 1.1f);
 	Material->SetTextureParameterValue(TEXT("Tex"), Frames[FMath::Clamp(LastFrame, 0, Frames.Num() - 1)]);
 	Mesh->SetMaterial(0, Material);

@@ -992,6 +992,23 @@ namespace
 					{
 						Table.Add(FCString::Atoi(*Pair.Key), V);
 					}
+					else
+					{
+						// Mapeia armadilhas e unidades de chao que possuem .str equivalente no GRF ou fallback HD-2D
+						const int32 UType = FCString::Atoi(*Pair.Key);
+						if (UType == 143)      { V.Str = TEXT("blastmine"); }
+						else if (UType == 144) { V.Str = TEXT("skidtrap"); }
+						else if (UType == 145) { V.Str = TEXT("spring"); }
+						else if (UType == 147) { V.Str = TEXT("landmine"); }
+						else if (UType == 148) { V.Str = TEXT("shockwave"); }
+						else if (UType == 149) { V.Str = TEXT("sandman"); }
+						else if (UType == 150) { V.Str = TEXT("Sight"); V.Effect = 22; }
+						else if (UType == 151) { V.Str = TEXT("freezing"); }
+						else if (UType == 152) { V.Str = TEXT("claymore"); }
+						else if (UType >= 158 && UType <= 175) { V.Str = TEXT("note_1"); V.Effect = 319; }
+						else { V.Effect = 319; }
+						Table.Add(UType, V);
+					}
 				}
 			}
 		}
@@ -1002,30 +1019,26 @@ namespace
 void AMythNetWorld::HandleSkillUnitAppear(int64 UnitID, int64 OwnerID, int32 UnitType, int32 X, int32 Y)
 {
 	const FSkillUnitVisual* V = SkillUnitVisuals().Find(UnitType);
-	UE_LOG(LogTemp, Log, TEXT("MythNetWorld: skill unit %lld type %d at (%d,%d): %s"), UnitID, UnitType, X, Y, V ? TEXT("tem efeito") : TEXT("no effect"));
-	if (!V)
-	{
-		return;
-	}
+	UE_LOG(LogTemp, Log, TEXT("MythNetWorld: skill unit %lld type %d at (%d,%d): %s"), UnitID, UnitType, X, Y, V ? TEXT("tem efeito") : TEXT("fallback HD-2D"));
 	const FVector At = CellToGround(X, Y);
-	const int32 EffectId = V->Effect;
-	const FString StrName = V->Str;
+	const int32 EffectId = V ? V->Effect : 319;
+	const FString StrName = V ? V->Str : FString();
 	auto Spawn = [this, At, EffectId, StrName]()
 	{
+		if (!StrName.IsEmpty())
+		{
+			AMythStrEffect::Play(this, StrName, At);
+		}
 		if (EffectId > 0)
 		{
 			FMythSkillEffects::PlayEffectId(this, EffectId, nullptr, At);
 		}
-		else if (!StrName.IsEmpty())
-		{
-			AMythStrEffect::Play(this, StrName, At);
-		}
 	};
 	Spawn();
-	const float Length = EffectId > 0 ? FMythSkillEffects::EffectLength(EffectId) : FMythSkillEffects::StrLength(StrName);
+	const float Length = FMath::Max(EffectId > 0 ? FMythSkillEffects::EffectLength(EffectId) : 0.f, !StrName.IsEmpty() ? FMythSkillEffects::StrLength(StrName) : 0.f);
 	FTimerHandle& Handle = SkillUnitTimers.FindOrAdd(UnitID);
 	GetWorldTimerManager().ClearTimer(Handle);
-	GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateLambda(Spawn), FMath::Max(Length * 0.95f, 0.6f), true);
+	GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateLambda(Spawn), FMath::Max(Length * 0.95f, 1.2f), true);
 }
 
 void AMythNetWorld::HandleSkillUnitDisappear(int64 UnitID)
@@ -1527,6 +1540,7 @@ void AMythNetWorld::HandleSkillDamage(int64 SourceID, int64 TargetID, int32 Skil
 		if (Source)
 		{
 			bAnyFx |= UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::Cast, Source, Source->GetActorLocation(), false, Source);
+			bAnyFx |= UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::BeforeHitCaster, Source, Source->GetActorLocation(), false, Source);
 			if (Now - LastCastBegin.FindRef(Key) > 4.0) // com conjuracao, o beginCast ja tocou no HandleSkillCast
 			{
 				bAnyFx |= UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::BeginCast, Source, Source->GetActorLocation(), false, Source);
@@ -1535,6 +1549,7 @@ void AMythNetWorld::HandleSkillDamage(int64 SourceID, int64 TargetID, int32 Skil
 		if (Target)
 		{
 			bAnyFx |= UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::Release, Target, Target->GetActorLocation(), false, Source);
+			bAnyFx |= UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::HitCaster, Target, Target->GetActorLocation(), false, Source);
 		}
 		// Ataque Aereo / Assalto do Falcao: o falcao voa ate o alvo e volta (roBrowser: falcon.walkToNonWalkableGround)
 		if ((SkillID == 129 || SkillID == 381) && Source && Target)
@@ -1565,7 +1580,7 @@ void AMythNetWorld::HandleSkillDamage(int64 SourceID, int64 TargetID, int32 Skil
 		const int32 Amount = (i == Count - 1) ? Damage - PerHit * (Count - 1) : PerHit;
 		auto Land = [this, SourceID, TargetID, SkillID, Amount, DamageType, bOwnHitFx, WSource]()
 		{
-			if (AActor* T = ResolveActor(TargetID); T && bOwnHitFx && Amount > 0)
+			if (AActor* T = ResolveActor(TargetID); T && (bOwnHitFx || !FMythSkillEffects::SkillHasVisual(SkillID)) && Amount > 0)
 			{
 				UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::Hit, T, T->GetActorLocation(), false, WSource.Get());
 			}
@@ -1670,16 +1685,13 @@ void AMythNetWorld::HandleSkillGround(int64 SourceID, int32 SkillID, int32 Level
 		Char->Sprite->FaceLocation(At);
 		Char->Sprite->PlayAttack(); // gesto de conjurar
 	}
-	// Efeito no chao da celula, haja alvo ou nao (o dano em quem estiver la chega pelo 0x01de)
+	// Efeito no chao da celula, passando pelo UMythSkillManager para acionar iluminacao elemental, terremoto e VFX HD-2D
 	const int32 GroundFx = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::Ground);
 	const int32 MainFx = FMythSkillEffects::EffectIdFor(SkillID, EMythSkillEffectStage::Effect);
-	if (GroundFx > 0)
+	bool bPlayed = UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::Ground, nullptr, At, true, Source);
+	if (!bPlayed && MainFx > 0 && MainFx != GroundFx)
 	{
-		FMythSkillEffects::PlayEffectId(this, GroundFx, nullptr, At, Source);
-	}
-	else if (MainFx > 0)
-	{
-		FMythSkillEffects::PlayEffectId(this, MainFx, nullptr, At, Source);
+		UMythSkillManager::Play(this, SkillID, EMythSkillEffectStage::Effect, nullptr, At, false, Source);
 	}
 	LastGroundSkill.Add(SkillID, GetWorld()->GetTimeSeconds());
 }

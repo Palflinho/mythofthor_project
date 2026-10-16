@@ -271,8 +271,8 @@ bool FMythSkillEffects::PlayEffectId(UObject* WorldContext, int32 EffectID, AAct
 	bool bAny = false;
 	for (const FEffectPart& P : *Parts)
 	{
-		// Particulas em sprite (3D com spriteName, ex.: o brilho da Bencao): varias copias do sprite subindo perto do alvo
-		if (P.Type == TEXT("3D") && P.File.IsEmpty() && P.Raw.IsValid())
+		// Particulas em sprite (3D com spriteName estacionario, ex.: o brilho da Bencao): varias copias do sprite subindo perto do alvo
+		if (P.Type == TEXT("3D") && P.File.IsEmpty() && P.Raw.IsValid() && !P.Raw->HasField(TEXT("toSrc")) && !P.Raw->HasField(TEXT("fromSrc")))
 		{
 			FString SpriteName;
 			if (P.Raw->TryGetStringField(TEXT("spriteName"), SpriteName) && !SpriteName.IsEmpty() && !SpriteName.StartsWith(TEXT("..")))
@@ -338,7 +338,6 @@ bool FMythSkillEffects::PlayEffectId(UObject* WorldContext, int32 EffectID, AAct
 					const float Pulse = static_cast<float>(Ms) / 1000.f;
 					Char->GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateWeakLambda(Char, [Char, Pulse]() { Char->StartQuake(Pulse); }), FMath::Max(0.001f, static_cast<float>(Between * k) / 1000.f), false);
 				}
-				bAny = true;
 			}
 		}
 		if (P.Type == TEXT("SPR") && !P.File.IsEmpty())
@@ -379,7 +378,7 @@ bool FMythSkillEffects::PlayEffectId(UObject* WorldContext, int32 EffectID, AAct
 		}
 		if (!P.Wav.IsEmpty())
 		{
-			bAny |= UMythRoSound::PlayWavAtLocation(WorldContext, P.Wav + TEXT(".wav"), Feet);
+			UMythRoSound::PlayWavAtLocation(WorldContext, P.Wav + TEXT(".wav"), Feet);
 		}
 	}
 	return bAny;
@@ -467,6 +466,245 @@ bool FMythSkillEffects::HidesCastAura(int32 SkillID)
 	return S && S->bHideCastAura;
 }
 
+namespace
+{
+	void SpawnCylinderFx(UObject* WorldContext, AActor* Target, const FVector& At, const TCHAR* Tex, const FLinearColor& Col, float BottomCells, float TopCells, float HeightCells, float DurationMs, int32 Anim = 4, bool bRot = true)
+	{
+		TSharedPtr<FJsonObject> P = MakeShared<FJsonObject>();
+		P->SetStringField(TEXT("type"), TEXT("CYLINDER"));
+		P->SetStringField(TEXT("file"), Tex);
+		P->SetStringField(TEXT("textureName"), Tex);
+		P->SetBoolField(TEXT("attached"), Target != nullptr);
+		P->SetBoolField(TEXT("fade"), true);
+		P->SetBoolField(TEXT("rotate"), bRot);
+		P->SetNumberField(TEXT("alphaMax"), 0.85);
+		P->SetNumberField(TEXT("animation"), Anim);
+		P->SetNumberField(TEXT("bottomSize"), BottomCells);
+		P->SetNumberField(TEXT("topSize"), TopCells);
+		P->SetNumberField(TEXT("height"), HeightCells);
+		P->SetNumberField(TEXT("duration"), DurationMs);
+		P->SetNumberField(TEXT("red"), Col.R);
+		P->SetNumberField(TEXT("green"), Col.G);
+		P->SetNumberField(TEXT("blue"), Col.B);
+		AMythProcEffect::Spawn(WorldContext, P, Target, At);
+	}
+
+	void SpawnIceHornRing(UObject* WorldContext, const FVector& Center, int32 Count, float RadiusUU, float HeightCells)
+	{
+		for (int32 i = 0; i < Count; ++i)
+		{
+			const float Angle = (2.f * PI * i) / FMath::Max(1, Count) + FMath::FRandRange(-0.25f, 0.25f);
+			const float R = RadiusUU * FMath::FRandRange(0.6f, 1.15f);
+			const FVector Pos = Center + FVector(FMath::Cos(Angle) * R, FMath::Sin(Angle) * R, 0.f);
+			TSharedPtr<FJsonObject> Horn = MakeShared<FJsonObject>();
+			Horn->SetStringField(TEXT("type"), TEXT("QuadHorn"));
+			Horn->SetStringField(TEXT("textureFile"), TEXT("effect/ice.bmp"));
+			Horn->SetNumberField(TEXT("height"), HeightCells * FMath::FRandRange(0.8f, 1.25f));
+			Horn->SetNumberField(TEXT("bottomSize"), 0.45);
+			Horn->SetNumberField(TEXT("animation"), 1);
+			Horn->SetNumberField(TEXT("animationSpeed"), 140);
+			Horn->SetNumberField(TEXT("duration"), 850);
+			Horn->SetNumberField(TEXT("fadeOut"), 300);
+			Horn->SetNumberField(TEXT("rotateX"), FMath::FRandRange(-22.f, 22.f));
+			Horn->SetNumberField(TEXT("rotateY"), FMath::RadiansToDegrees(Angle));
+			AMythQuadHorn::Spawn(WorldContext, Horn, Pos);
+		}
+	}
+
+	/** Camadas extras HD-2D para deixar as magias classicas epicas e cobrir skills que so tinham som no cliente original. */
+	bool PlayHD2DEnhancements(UObject* WorldContext, int32 SkillID, EMythSkillEffectStage Stage, AActor* Target, const FVector& Location, AActor* Source)
+	{
+		UWorld* World = WorldContext ? WorldContext->GetWorld() : nullptr;
+		if (!World)
+		{
+			return false;
+		}
+		const FVector Feet = FeetOf(Target, Location);
+		const FLinearColor Col = FMythSkillEffects::ElementColor(SkillID);
+		bool bAdded = false;
+
+		const bool bImpactStage = (Stage == EMythSkillEffectStage::Hit || Stage == EMythSkillEffectStage::Effect || Stage == EMythSkillEffectStage::Ground || Stage == EMythSkillEffectStage::Success);
+		const bool bBoltStage = (Stage == EMythSkillEffectStage::BeforeHit || Stage == EMythSkillEffectStage::Hit);
+
+		// 14: Cold Bolt (Lancas de Gelo) / 15: Frost Diver (Rajada Congelante)
+		if (SkillID == 14 && bBoltStage)
+		{
+			if (Stage == EMythSkillEffectStage::Hit)
+			{
+				bAdded |= AMythStrEffect::Play(WorldContext, TEXT("freeze"), Feet, Target) != nullptr;
+				bAdded |= AMythStrEffect::Play(WorldContext, TEXT("icecrash"), Feet, Target) != nullptr;
+				SpawnIceHornRing(WorldContext, Feet, 4, 65.f, 2.2f);
+				SpawnCylinderFx(WorldContext, Target, Feet, TEXT("ring_blue"), Col, 1.2f, 3.8f, 0.4f, 650.f, 4, true);
+			}
+		}
+		else if (SkillID == 15 && bImpactStage)
+		{
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("freeze"), Feet, Target) != nullptr;
+			SpawnIceHornRing(WorldContext, Feet, 5, 70.f, 2.4f);
+		}
+		// 19: Fire Bolt (Lancas de Fogo) / 17: Fire Ball (Bola de Fogo)
+		else if (SkillID == 19 && Stage == EMythSkillEffectStage::Hit)
+		{
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("firepillarbomb"), Feet, Target) != nullptr;
+			SpawnCylinderFx(WorldContext, Target, Feet, TEXT("ring_red"), Col, 1.2f, 3.8f, 0.5f, 600.f, 4, true);
+		}
+		else if (SkillID == 17 && bImpactStage)
+		{
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("firepillarbomb"), Feet, Target) != nullptr;
+			SpawnCylinderFx(WorldContext, nullptr, Feet, TEXT("ring_red"), Col, 1.8f, 5.2f, 0.8f, 700.f, 4, true);
+		}
+		// 20: Lightning Bolt (Relampago) / 21: Thunder Storm (Tempestade de Raios) / 84: Jupitel Thunder (Trovao de Jupiter)
+		else if ((SkillID == 20 || SkillID == 21 || SkillID == 84) && bImpactStage)
+		{
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("chainlight"), Feet, Target) != nullptr;
+			SpawnCylinderFx(WorldContext, Target, Feet, TEXT("ring_blue"), Col, 1.5f, 4.5f, 0.6f, 650.f, 4, true);
+		}
+		// 83: Meteor Storm (Chuva de Meteoros)
+		else if (SkillID == 83 && bImpactStage)
+		{
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("firepillarbomb"), Feet, nullptr) != nullptr;
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("crashearth"), Feet, nullptr) != nullptr;
+			SpawnCylinderFx(WorldContext, nullptr, Feet, TEXT("ring_red"), Col, 2.5f, 7.5f, 1.2f, 950.f, 4, true);
+			for (int32 k = 1; k <= 3; ++k)
+			{
+				const FVector Offset(FMath::FRandRange(-180.f, 180.f), FMath::FRandRange(-180.f, 180.f), 0.f);
+				const FVector SubAt = Feet + Offset;
+				FTimerHandle H;
+				World->GetTimerManager().SetTimer(H, FTimerDelegate::CreateWeakLambda(WorldContext, [WorldContext, SubAt, k]()
+				{
+					AMythStrEffect::Play(WorldContext, FString::Printf(TEXT("meteor%d"), (k % 4) + 1), SubAt, nullptr);
+					AMythStrEffect::Play(WorldContext, TEXT("firehit1"), SubAt, nullptr);
+				}), 0.18f * k, false);
+			}
+		}
+		// 85: Lord of Vermilion (Ira de Thor)
+		else if (SkillID == 85 && bImpactStage)
+		{
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("chainlight"), Feet, nullptr) != nullptr;
+			SpawnCylinderFx(WorldContext, nullptr, Feet, TEXT("ring_blue"), Col, 3.0f, 8.5f, 2.5f, 1100.f, 4, true);
+			for (int32 k = 0; k < 4; ++k)
+			{
+				const float Ang = k * PI * 0.5f + 0.4f;
+				const FVector SubAt = Feet + FVector(FMath::Cos(Ang) * 160.f, FMath::Sin(Ang) * 160.f, 0.f);
+				FTimerHandle H;
+				World->GetTimerManager().SetTimer(H, FTimerDelegate::CreateWeakLambda(WorldContext, [WorldContext, SubAt]()
+				{
+					AMythStrEffect::Play(WorldContext, TEXT("thunderstorm"), SubAt, nullptr);
+					AMythStrEffect::Play(WorldContext, TEXT("windhit1"), SubAt, nullptr);
+				}), 0.12f + 0.14f * k, false);
+			}
+		}
+		// 89 / 723: Storm Gust (Nevasca)
+		else if ((SkillID == 89 || SkillID == 723) && bImpactStage)
+		{
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("stormgust"), Feet, nullptr) != nullptr;
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("icecrash"), Feet, nullptr) != nullptr;
+			SpawnIceHornRing(WorldContext, Feet, 8, 175.f, 3.2f);
+			SpawnCylinderFx(WorldContext, nullptr, Feet, TEXT("ring_blue"), Col, 3.5f, 6.5f, 4.5f, 1600.f, 1, true);
+			FMythSkillEffects::PlayEffectId(WorldContext, 2001, Target, Feet, Source);
+		}
+		// 271: Asura Strike (Punho Supremo de Asura)
+		else if (SkillID == 271 && (Stage == EMythSkillEffectStage::Hit || Stage == EMythSkillEffectStage::Effect))
+		{
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("sui_explosion"), Feet, Target) != nullptr;
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("dragon_h"), Feet, Target) != nullptr;
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("sr_flashcombo"), Feet, Target) != nullptr;
+			SpawnCylinderFx(WorldContext, Target, Feet, TEXT("ring_yellow"), FLinearColor(1.f, 0.85f, 0.2f), 1.5f, 7.5f, 1.8f, 750.f, 4, true);
+			SpawnCylinderFx(WorldContext, Target, Feet, TEXT("ring_red"), FLinearColor(1.f, 0.25f, 0.05f), 2.0f, 6.0f, 3.5f, 850.f, 1, true);
+			AMythLightFlash::Flash(WorldContext, Feet + FVector(0.f, 0.f, 90.f), FLinearColor(1.f, 0.55f, 0.15f), 1200.f, 0.65f, Target);
+		}
+		// Skills classicas que nao tinham entrada visual no skill_effects_full.json:
+		else if (SkillID == 10 && bImpactStage) // Sight (Chama Reveladora)
+		{
+			bAdded |= FMythSkillEffects::PlayEffectId(WorldContext, 22, Target ? Target : Source, Feet, Source);
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("fire"), Feet, Target ? Target : Source) != nullptr;
+		}
+		else if ((SkillID == 11 || SkillID == 13) && Stage == EMythSkillEffectStage::Hit) // Napalm Beat / Soul Strike
+		{
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("magical"), Feet, Target) != nullptr;
+		}
+		else if (SkillID == 12 && bImpactStage) // Safety Wall (Escudo Magico)
+		{
+			bAdded |= FMythSkillEffects::PlayEffectId(WorldContext, 315, Target, Feet, Source);
+		}
+		else if (SkillID == 24 && bImpactStage) // Ruwach (Revelacao)
+		{
+			bAdded |= FMythSkillEffects::PlayEffectId(WorldContext, 33, Target ? Target : Source, Feet, Source);
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("holyhit"), Feet, Target ? Target : Source) != nullptr;
+		}
+		else if (SkillID == 26 && bImpactStage) // Teleport
+		{
+			bAdded |= FMythSkillEffects::PlayEffectId(WorldContext, 34, Target ? Target : Source, Feet, Source);
+		}
+		else if (SkillID == 27 && bImpactStage) // Warp Portal
+		{
+			bAdded |= FMythSkillEffects::PlayEffectId(WorldContext, 317, nullptr, Feet, Source);
+		}
+		else if (SkillID == 61 && bImpactStage) // Auto Counter (Contra-Ataque)
+		{
+			bAdded |= FMythSkillEffects::PlayEffectId(WorldContext, 131, Target ? Target : Source, Feet, Source);
+		}
+		else if (SkillID == 111 && bImpactStage) // Adrenaline Rush (Adrenalina Pura)
+		{
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("adrenaline"), Feet, Target ? Target : Source) != nullptr;
+			SpawnCylinderFx(WorldContext, Target ? Target : Source, Feet, TEXT("ring_yellow"), FLinearColor(1.f, 0.75f, 0.2f), 1.4f, 2.8f, 2.5f, 900.f, 1, true);
+		}
+		else if ((SkillID == 113 || SkillID == 486) && bImpactStage) // Power Thrust / Forca Violenta
+		{
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("twohand"), Feet, Target ? Target : Source) != nullptr;
+			SpawnCylinderFx(WorldContext, Target ? Target : Source, Feet, TEXT("ring_red"), FLinearColor(1.f, 0.3f, 0.1f), 1.4f, 2.6f, 2.2f, 850.f, 1, true);
+		}
+		else if ((SkillID == 231 || SkillID == 478) && bImpactStage) // Potion Pitcher / Arremessar Pocao
+		{
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("\xBE68\xAC04\xD3EC\xC158"), Feet, Target) != nullptr; // 빨간포션
+			SpawnCylinderFx(WorldContext, Target, Feet, TEXT("ring_white"), FLinearColor(0.4f, 1.f, 0.55f), 1.2f, 2.2f, 2.0f, 800.f, 1, true);
+		}
+		else if (SkillID == 359 && bImpactStage) // Berserk / Frenesi
+		{
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("mid_frenzy"), Feet, Target ? Target : Source) != nullptr;
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("\xBC84\xC11C\xD06C"), Feet, Target ? Target : Source) != nullptr; // 버서크
+		}
+		else if (SkillID == 370 && bImpactStage) // Palm Strike
+		{
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("shockwavehit"), Feet, Target) != nullptr;
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("firehit1"), Feet, Target) != nullptr;
+		}
+		else if (SkillID == 372 && bImpactStage) // Chain Crush Combo
+		{
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("sr_flashcombo"), Feet, Target ? Target : Source) != nullptr;
+		}
+		else if (SkillID == 378 && bImpactStage) // Enchant Deadly Poison
+		{
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("thief_invenom"), Feet, Target ? Target : Source) != nullptr;
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("poison"), Feet, Target ? Target : Source) != nullptr;
+		}
+		else if (SkillID == 397 && bImpactStage) // Spiral Pierce (Perfurar em Espiral)
+		{
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("pierce"), Feet, Target) != nullptr;
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("spearstab"), Feet, Target) != nullptr;
+			SpawnCylinderFx(WorldContext, Target, Feet, TEXT("ring_blue"), Col, 1.2f, 3.2f, 2.5f, 700.f, 4, true);
+		}
+		else if (SkillID == 400 && bImpactStage) // Napalm Vulcan (Vulcao Napalm)
+		{
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("magical"), Feet, Target) != nullptr;
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("devil"), Feet, Target) != nullptr;
+		}
+		else if (SkillID == 485 && bImpactStage) // Cart Termination (Choque do Carrinho)
+		{
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("cartrevolution"), Feet, Target) != nullptr;
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("black_hammerfall"), Feet, Target) != nullptr;
+			SpawnCylinderFx(WorldContext, Target, Feet, TEXT("ring_yellow"), Col, 1.5f, 4.5f, 1.2f, 750.f, 4, true);
+		}
+		else if (SkillID == 490 && bImpactStage) // Acid Demonstration (Bomba Acida)
+		{
+			bAdded |= FMythSkillEffects::PlayEffectId(WorldContext, 298, Target, Feet, Source);
+			bAdded |= FMythSkillEffects::PlayEffectId(WorldContext, 302, Target, Feet, Source);
+			bAdded |= AMythStrEffect::Play(WorldContext, TEXT("firepillarbomb"), Feet, Target) != nullptr;
+		}
+		return bAdded;
+	}
+}
+
 bool FMythSkillEffects::Play(UObject* WorldContext, int32 SkillID, EMythSkillEffectStage Stage, AActor* Target, const FVector& Location, bool bFlashIfMissing, AActor* Source)
 {
 	const int32 EffectID = EffectIdFor(SkillID, Stage);
@@ -477,6 +715,10 @@ bool FMythSkillEffects::Play(UObject* WorldContext, int32 SkillID, EMythSkillEff
 		{
 			bPlayed |= Id > 0 && PlayEffectId(WorldContext, Id, Target, Location, Source);
 		}
+	}
+	if (FMythOptions::Get(TEXT("ShowEffects")))
+	{
+		bPlayed |= PlayHD2DEnhancements(WorldContext, SkillID, Stage, Target, Location, Source);
 	}
 	UE_LOG(LogTemp, Verbose, TEXT("MythSkillEffects: skill %d estagio %d -> efeito %d (%s)"), SkillID, static_cast<int32>(Stage), EffectID, bPlayed ? TEXT("tocou") : TEXT("no effect"));
 	// Luz Dinamica nas Habilidades por Elemento (GDD HD-2D Secao 4):
@@ -493,7 +735,7 @@ bool FMythSkillEffects::Play(UObject* WorldContext, int32 SkillID, EMythSkillEff
 			{
 				if (AMythPlayerCharacter* QuakeChar = Cast<AMythPlayerCharacter>(PC->GetPawn()))
 				{
-					QuakeChar->StartQuake(0.45f, 65.f);
+					QuakeChar->StartQuake(0.55f, 80.f);
 				}
 			}
 		}
@@ -501,14 +743,14 @@ bool FMythSkillEffects::Play(UObject* WorldContext, int32 SkillID, EMythSkillEff
 	else if (Stage == EMythSkillEffectStage::Ground)
 	{
 		const FVector At = Location + FVector(0.f, 0.f, 40.f);
-		AMythLightFlash::Flash(WorldContext, At, LightColor, 600.f, 0.50f, nullptr);
-		if (SkillID == 89 || SkillID == 723) // Storm Gust
+		AMythLightFlash::Flash(WorldContext, At, LightColor, 650.f, 0.55f, nullptr);
+		if (SkillID == 89 || SkillID == 723 || SkillID == 83 || SkillID == 85) // Storm Gust / Meteor Storm / Lord of Vermilion
 		{
 			if (const APlayerController* PC = WorldContext ? WorldContext->GetWorld()->GetFirstPlayerController() : nullptr)
 			{
 				if (AMythPlayerCharacter* QuakeChar = Cast<AMythPlayerCharacter>(PC->GetPawn()))
 				{
-					QuakeChar->StartQuake(0.25f, 18.f);
+					QuakeChar->StartQuake(0.35f, 28.f);
 				}
 			}
 		}

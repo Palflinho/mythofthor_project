@@ -66,9 +66,9 @@ public:
 	/** Pes da unidade (base da capsula), onde os efeitos e sprites se apoiam. */
 	static FVector FeetOf(const AActor* Unit);
 
-	/** cm por pixel de tela do .str (os sprites usam 2). */
+	/** cm por pixel de tela do .str (calibrado em 2.8 para presença visual epica em HD-2D). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effect")
-	float UnitsPerPixel = 2.f;
+	float UnitsPerPixel = 2.8f;
 
 	/** Puxado para a camera para ficar na frente do sprite (os sprites usam 70). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effect")
@@ -76,15 +76,15 @@ public:
 
 	/** Brilho das camadas aditivas (luz somada) para aparecer na exposicao da cena com Lumen. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effect")
-	float AdditiveBrightness = 6.f;
+	float AdditiveBrightness = 8.0f;
 
 	/** Brilho das camadas com transparencia comum. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effect")
-	float TranslucentBrightness = 2.5f;
+	float TranslucentBrightness = 3.2f;
 
 	/** Intensidade maxima da luz do efeito (candelas). */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effect")
-	float LightIntensity = 70.f;
+	float LightIntensity = 140.f;
 
 	UPROPERTY(VisibleAnywhere, Category = "Effect")
 	TObjectPtr<UProceduralMeshComponent> Mesh;
